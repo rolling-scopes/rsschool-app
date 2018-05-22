@@ -2,14 +2,10 @@
   "extends": "tslint:latest",
   "defaultSeverity": "error",
   "rules": {
-    "quotemark": [
-      true,
-      "single",
-      "avoid-escape"
-    ],
-    "no-implicit-dependencies": [true, "dev"],
-    "no-console": [true, "log"],
     "arrow-parens": false,
+    "interface-over-type-literal": false,
+    "no-console": [true, "log"],
+    "no-implicit-dependencies": [true, "dev"],
     "no-unused-expression": false,
     "ordered-imports": [
       true, 
@@ -17,6 +13,11 @@
         "import-sources-order": "lowercase-last",
         "named-imports-order": "lowercase-last"
       }
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
     ]
   }
 }

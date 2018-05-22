@@ -4,28 +4,41 @@ import * as Koa from 'koa';
 import * as koaBody from 'koa-body';
 import * as serve from 'koa-static';
 import * as mongoose from 'mongoose';
+import { Server } from 'net';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
-const SERVICE_NAME = 'rsschool-api';
 
 import { config } from './config';
 import { ILogger, loggerMiddleware } from './logger';
 import { routesMiddleware } from './routes';
 
-class App {
+function delay(ms = 0): Promise<void> {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), ms);
+    });
+}
+function createDefaultLogger() {
+    return createLogger({ name: config.name }) as ILogger;
+}
+
+export class App {
+    private MONGO_CONNECT_ATTEMPTS = config.mongo.connectAttempts;
+    private RECONNECT_DELAY = config.mongo.reconnectDelayMs;
+
     private koa = new Koa();
-    private logger: ILogger;
+    private appLogger: ILogger;
+    private mongoLogger: ILogger;
+    private server: Server | undefined = undefined;
 
-    private RETRY_ATTEMPTS = 5;
-    private RECONNECT_DELAY = 5000;
+    constructor(logger: ILogger = createDefaultLogger()) {
+        this.appLogger = logger.child({ module: 'app' });
+        this.mongoLogger = this.appLogger.child({ module: 'mongodb' });
 
-    constructor() {
-        this.logger = (createLogger({ name: SERVICE_NAME }) as ILogger).child({ module: 'app' });
-        const routes = routesMiddleware(this.logger);
+        const routes = routesMiddleware(this.appLogger);
 
         this.koa.use(koaBody());
         this.koa.use(cors());
-        this.koa.use(loggerMiddleware(this.logger.child({ module: 'middleware:logger' })));
+        this.koa.use(loggerMiddleware(this.appLogger.child({ module: 'middleware:logger' })));
         this.koa.use(routes.routes());
         this.koa.use(routes.allowedMethods());
         this.koa.use(serve('public'));
@@ -39,33 +52,45 @@ class App {
         );
     }
 
-    public start() {
-        const server = this.koa.listen(config.port);
-        this.logger.info(`Service is running on ${config.port} port`);
-        return server;
+    public start(): Server {
+        this.server = this.koa.listen(config.port);
+        this.appLogger.info(`Service is running on ${config.port} port`);
+        return this.server;
     }
 
-    public connect() {
-        this.connectToMongo().catch(error => {
-            this.logger.error(error, 'Cannot connect to Mongo database');
-            if (this.RETRY_ATTEMPTS > 0) {
-                this.RETRY_ATTEMPTS--;
-                this.logger.info(`Trying to re-connect in ${this.RECONNECT_DELAY / 1000} seconds`);
-                setTimeout(() => this.connect(), this.RECONNECT_DELAY);
-            } else {
-                this.logger.error('Mongo database is not available. Shuting down..');
-            }
-        });
+    public connect(): Promise<boolean> {
+        if (this.server === undefined) {
+            this.appLogger.info('Please start the app using start() method');
+            return Promise.resolve(false);
+        }
+        if (this.MONGO_CONNECT_ATTEMPTS <= 0) {
+            return Promise.resolve(true);
+        }
+
+        return this.connectToMongo()
+            .then(() => {
+                this.mongoLogger.info(`Connected to MongoDB`);
+                return true;
+            })
+            .catch((err: Error) => {
+                this.mongoLogger.error({ err }, 'Cannot connect to MongoDB');
+                return this.reconnect();
+            });
     }
 
-    private connectToMongo() {
-        const options: mongoose.ConnectionOptions = { keepAlive: 1 };
-        mongoose.connection
-            .on('error', e => this.logger.error(e, 'Mongo connection error'))
-            .on('disconnected', () => this.connect())
-            .once('open', () => this.logger.info(`Successfully connected to Mongo database`));
-        return mongoose.connect(config.mongo.connectionString, options);
+    private reconnect() {
+        if (this.MONGO_CONNECT_ATTEMPTS > 0) {
+            this.MONGO_CONNECT_ATTEMPTS--;
+            this.mongoLogger.info(`Re-connecting to MongoDB in ${this.RECONNECT_DELAY / 1000} seconds`);
+            return delay(this.RECONNECT_DELAY).then(() => this.connect());
+        } else {
+            this.mongoLogger.error('MongoDB is not available');
+            return Promise.resolve(false);
+        }
+    }
+
+    private connectToMongo(): Promise<typeof mongoose> {
+        this.mongoLogger.info('Connecting to MongoDB');
+        return mongoose.connect(config.mongo.connectionString, config.mongo.options);
     }
 }
-
-export const app = new App();

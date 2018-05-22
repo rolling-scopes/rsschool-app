@@ -12,11 +12,14 @@ export interface ILog {
 }
 
 type LoggerMiddleware = (logger: ILogger) => Koa.Middleware;
+type ErrorObj = {
+    err: Partial<Error>;
+};
 
 export interface ILogger {
-    info(error: Error | object | string, ...params: any[]): void;
-    warn(error: Error | object | string, ...params: any[]): void;
-    error(error: Error | object | string, ...params: any[]): void;
+    info(obj: object | string, ...params: any[]): void;
+    warn(obj: object | string, ...params: any[]): void;
+    error(obj: Error | ErrorObj | string, ...params: any[]): void;
     child(options: { module: string }): ILogger;
 }
 

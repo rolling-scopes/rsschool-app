@@ -1,0 +1,24 @@
+pipeline:
+  build:
+    image: node:8.11
+    commands:
+      - npm install
+      - npm run lint
+      - npm run test
+      - npm run build
+  docker:
+    image: plugins/docker
+    secrets: [ docker_username, docker_password ]
+    repo: rsschool/api
+    tags: latest
+  deploy:
+    image: appleboy/drone-ssh
+    host: 172.31.2.208
+    secrets: [ ssh_key, ssh_username ]
+    port: 22
+    command_timeout: 60
+    script:
+      - docker pull rsschool/api
+      - docker stop api || true
+      - docker rm api || true
+      - docker run -d -p 8080:8080 --name api --restart on-failure rsschool/api

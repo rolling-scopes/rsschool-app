@@ -1,10 +1,17 @@
 import * as chai from 'chai';
-import { app } from '../../app';
+
+import { App } from '../../app';
 
 chai.use(require('chai-http')); //tslint:disable-line
-const server = app.start();
+
+let server: any;
 
 describe('routes', () => {
+    before(() => {
+        const app = new App();
+        server = app.start();
+    });
+
     after(() => server.close());
 
     describe(`GET /`, () => {
