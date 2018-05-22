@@ -1,0 +1,29 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Padawans API"
+host: "localhost:3000"
+schemes:
+- "http"
+paths:
+  /health:
+    get:
+      description: "Returns service health status"
+      responses:
+        200: 
+          description: |-
+            200 response
+  /api/course/{id}:
+    get:
+      responses:
+        200: 
+          description: |-
+            200 response
+      parameters:
+        - name: id
+          in: path
+          description: Course Identifier
+          required: true
+          type: number
+          format: double
+    
