@@ -3,6 +3,11 @@ export interface IConfig {
         connectAttempts: number;
         connectionString: string;
         options: {
+            auth: {
+                password: string;
+                user: string;
+            };
+            dbName: string;
             keepAlive: number;
         };
         reconnectDelayMs: number;
@@ -14,8 +19,13 @@ export interface IConfig {
 export const config: IConfig = {
     mongo: {
         connectAttempts: 5,
-        connectionString: process.env.MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017/rsschool',
+        connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
         options: {
+            auth: {
+                password: process.env.RSSHCOOL_API_MONGO_PASSWORD || '',
+                user: process.env.RSSHCOOL_API_MONGO_USER || '',
+            },
+            dbName: 'rsschool',
             keepAlive: 1,
         },
         reconnectDelayMs: 5000,

@@ -17,7 +17,7 @@ export function courseRoute(logger: ILogger) {
         ctx.status = 200;
     });
 
-    router.get('/:id', getRoute(CourseDocument, logger));
+    router.get('/:id', getRoute(CourseDocument, { useObjectId: false }));
     router.post('/', postRoute(CourseDocument, logger));
 
     return router;

@@ -6,7 +6,7 @@ import { getRoute, postRoute } from '../generic';
 export function eventRoute(logger: ILogger) {
     const router = new Router({ prefix: '/event' });
 
-    router.get('/:id', getRoute(EventDocument, logger));
+    router.get('/:id', getRoute(EventDocument));
     router.post('/', postRoute(EventDocument, logger));
 
     return router;

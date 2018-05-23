@@ -1,6 +1,7 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../logger';
 import { courseRoute } from './course';
+import { eventRoute } from './event';
 import { healthRoute } from './health';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
@@ -21,6 +22,10 @@ export const routesMiddleware: RoutesMiddleware = logger => {
     const courseRouter = courseRoute(log(logger, 'course'));
     router.use(courseRouter.routes());
     router.use(courseRouter.allowedMethods());
+
+    const eventRouter = eventRoute(log(logger, 'event'));
+    router.use(eventRouter.routes());
+    router.use(eventRouter.allowedMethods());
 
     return router;
 };

@@ -68,12 +68,12 @@ export class App {
         }
 
         return this.connectToMongo()
-            .then(() => {
-                this.mongoLogger.info(`Connected to MongoDB`);
+            .then(_ => {
+                this.mongoLogger.info(`Connected to MongoDB (${mongoose.connection.db.databaseName})`);
                 return true;
             })
             .catch((err: Error) => {
-                this.mongoLogger.error({ err }, 'Cannot connect to MongoDB');
+                this.mongoLogger.error(err, 'Cannot connect to MongoDB');
                 return this.reconnect();
             });
     }

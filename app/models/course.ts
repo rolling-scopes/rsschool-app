@@ -13,6 +13,7 @@ export interface ICourseModel extends ICourse, Document {
 }
 
 export const CourseSchema: Schema = new Schema({
+    _id: String,
     description: String,
     endDateTime: Number,
     name: {
