@@ -21,4 +21,4 @@ pipeline:
       - docker pull rsschool/api
       - docker-compose stop api
       - docker-compose rm api
-      - docker-compose up api
+      - docker-compose up -d api
