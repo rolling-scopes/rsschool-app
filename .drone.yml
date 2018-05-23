@@ -19,6 +19,6 @@ pipeline:
     command_timeout: 60
     script:
       - docker pull rsschool/api
-      - docker stop api || true
-      - docker rm api || true
-      - docker run -d -p 8080:8080 --name api --restart on-failure rsschool/api
+      - docker-compose stop api
+      - docker-compose rm api
+      - docker-compose up api
