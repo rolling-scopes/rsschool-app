@@ -1,4 +1,10 @@
 export interface IConfig {
+    auth: {
+        callback: string;
+        github_client_id: string;
+        github_client_secret: string;
+        successRedirect: string;
+    };
     mongo: {
         connectAttempts: number;
         connectionString: string;
@@ -14,9 +20,16 @@ export interface IConfig {
     };
     port: number;
     name: string;
+    sessionKey: string;
 }
 
 export const config: IConfig = {
+    auth: {
+        callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3000/auth/github/callback',
+        github_client_id: process.env.RSSHCOOL_API_AUTH_CLIENT_ID || 'client-id',
+        github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
+        successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
+    },
     mongo: {
         connectAttempts: 5,
         connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
@@ -25,11 +38,12 @@ export const config: IConfig = {
                 password: process.env.RSSHCOOL_API_MONGO_PASSWORD || '',
                 user: process.env.RSSHCOOL_API_MONGO_USER || '',
             },
-            dbName: 'rsschool',
+            dbName: process.env.RSSHCOOL_API_MONGO_DBNAME || 'rsschool',
             keepAlive: 1,
         },
         reconnectDelayMs: 5000,
     },
     name: 'rsschool-api',
     port: parseInt(process.env.NODE_PORT || '3000', 10),
+    sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || '',
 };

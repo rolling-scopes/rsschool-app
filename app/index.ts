@@ -1,16 +1,17 @@
 import * as cors from '@koa/cors';
 import { createLogger } from 'bunyan';
 import * as Koa from 'koa';
-import * as koaBody from 'koa-body';
+import * as bodyParser from 'koa-bodyparser';
+import * as session from 'koa-session';
 import * as serve from 'koa-static';
 import * as mongoose from 'mongoose';
 import { Server } from 'net';
-
-const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
-
+import { setupPassport } from './auth';
 import { config } from './config';
 import { ILogger, loggerMiddleware } from './logger';
 import { routesMiddleware } from './routes';
+
+const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
 function delay(ms = 0): Promise<void> {
     return new Promise(resolve => {
@@ -36,8 +37,15 @@ export class App {
 
         const routes = routesMiddleware(this.appLogger);
 
-        this.koa.use(koaBody());
+        this.koa.use(bodyParser());
         this.koa.use(cors());
+        this.koa.keys = [config.sessionKey];
+        this.koa.use(session({}, this.koa));
+
+        const passport = setupPassport();
+        this.koa.use(passport.initialize());
+        this.koa.use(passport.session());
+
         this.koa.use(loggerMiddleware(this.appLogger.child({ module: 'middleware:logger' })));
         this.koa.use(routes.routes());
         this.koa.use(routes.allowedMethods());

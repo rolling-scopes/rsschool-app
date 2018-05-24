@@ -18,6 +18,7 @@ pipeline:
     port: 22
     command_timeout: 60
     script:
+      - sleep 20
       - docker pull rsschool/api
       - docker-compose stop api
       - docker-compose rm -f api
