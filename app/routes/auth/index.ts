@@ -5,7 +5,7 @@ import { config } from '../../config';
 import { ILogger } from '../../logger';
 
 export const guard: Middleware = async (ctx: Context, next) => {
-    if (ctx.isAuthenticated()) {
+    if (ctx.isAuthenticated() || config.isDevMode) {
         await next();
     } else {
         ctx.status = 401;

@@ -5,6 +5,7 @@ export interface IConfig {
         github_client_secret: string;
         successRedirect: string;
     };
+    isDevMode: boolean;
     mongo: {
         connectAttempts: number;
         connectionString: string;
@@ -30,6 +31,7 @@ export const config: IConfig = {
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
         successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
     },
+    isDevMode: process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
         connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
