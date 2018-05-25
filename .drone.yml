@@ -1,11 +1,13 @@
 pipeline:
   build:
-    image: node:8.11
+    image: node:10
     commands:
       - npm install
       - npm run lint
       - npm run test
       - npm run build
+    volumes:
+      - /tmp/cache-npm:/root/.npm
   docker:
     image: plugins/docker
     secrets: [ docker_username, docker_password ]
