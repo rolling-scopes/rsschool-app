@@ -36,7 +36,7 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
         const user: IUser = {
             _id: id,
             profile: {
-                emails: profile.emails,
+                emails: profile.emails ? profile.emails.map(e => ({ value: e.value, type: e.type })) : [],
                 familyName: profile.name ? profile.name.familyName : '',
                 givenName: profile.name ? profile.name.givenName : '',
             },

@@ -5,20 +5,22 @@ export interface IUserSession {
     roles: Array<'admin' | 'mentor' | 'student'>;
 }
 
+export interface IUserProfile {
+    education: Array<{ university: string; graduationYear: number; faculty: string }>;
+    emails: Array<{ value: string; type: string | undefined }>;
+    employmentHistory: string;
+    englishLevel: string;
+    familyName: string;
+    givenName: string;
+    familyNameNative: string;
+    givenNameNative: string;
+    isInternshipNeeded: boolean;
+    isWorkNeeded: boolean;
+    notes: string;
+}
+
 export interface IUser extends IUserSession {
-    profile: Partial<{
-        education: Array<{ university: string; graduationYear: number; faculty: string }>;
-        emails: Array<{ email: string; type: string }>;
-        employmentHistory: string;
-        englishLevel: string;
-        familyName: string;
-        givenName: string;
-        familyNameNative: string;
-        givenNameNative: string;
-        isInternshipNeeded: boolean;
-        isWorkNeeded: boolean;
-        notes: string;
-    }>;
+    profile: Partial<IUserProfile>;
 }
 
 export interface IUserModel extends IUser, Document {

@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { IUserSession, UserDocument } from '../../models';
+import { IApiResponse, IUserProfile, IUserSession, UserDocument } from '../../models';
 
 export function profileRoute(_: ILogger) {
     const router = new Router({ prefix: '/profile' });
@@ -16,9 +16,10 @@ export function profileRoute(_: ILogger) {
             ctx.status = 404;
             return;
         }
-        ctx.body = {
-            data: result.profile,
+        const body: IApiResponse<IUserProfile> = {
+            data: result.profile as IUserProfile,
         };
+        ctx.body = body;
         ctx.status = 200;
     });
 
@@ -36,9 +37,11 @@ export function profileRoute(_: ILogger) {
 
         const doc = new UserDocument(result);
         doc.profile = { ...doc.profile, ...ctx.request.body };
-        ctx.body = {
-            data: (await doc.save()).profile,
+
+        const body: IApiResponse<IUserProfile> = {
+            data: (await doc.save()).profile as IUserProfile,
         };
+        ctx.body = body;
         ctx.status = 200;
     });
 
