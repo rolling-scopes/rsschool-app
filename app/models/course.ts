@@ -6,6 +6,7 @@ export interface ICourse {
     endDateTime: number;
     name: string;
     startDateTime: number;
+    isActive: boolean;
 }
 
 export interface ICourseModel extends ICourse, Document {
@@ -14,13 +15,15 @@ export interface ICourseModel extends ICourse, Document {
 
 export const CourseSchema: Schema = new Schema({
     _id: String,
-    description: String,
-    endDateTime: Number,
+    description: { type: String, default: '' },
+    endDateTime: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: false },
     name: {
+        default: '',
         required: true,
         type: String,
     },
-    startDateTime: Number,
+    startDateTime: { type: Number, default: 0 },
 });
 
 export const CourseModelName = 'Course';

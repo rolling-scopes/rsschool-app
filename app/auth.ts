@@ -1,8 +1,9 @@
 import * as octokit from '@octokit/rest';
 import * as passport from 'koa-passport';
-import { Strategy as GitHubStrategy } from 'passport-github';
+import { Profile, Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
-import { IUser } from './models';
+import { ILogger } from './logger';
+import { IUser, IUserSession, UserDocument } from './models';
 
 const adminTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
 const mentorTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
@@ -27,18 +28,39 @@ function getTeamIds(teams: octokit.AnyResponse) {
     return data.map(({ slug, organization }) => `${slug}@${organization.login}`);
 }
 
-function createUser(id: string, teams: octokit.AnyResponse): IUser {
-    return { id, roles: getRoles(getTeamIds(teams)) };
+async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Promise<IUserSession> {
+    const id = profile.username!;
+    const result = await UserDocument.findById(id).exec();
+    const roles = getRoles(getTeamIds(teams));
+    if (result === null) {
+        const user: IUser = {
+            _id: id,
+            profile: {
+                emails: profile.emails,
+                familyName: profile.name ? profile.name.familyName : '',
+                givenName: profile.name ? profile.name.givenName : '',
+            },
+            roles,
+        };
+        const createdUser = await UserDocument.create(user);
+        return {
+            _id: createdUser.id,
+            roles: createdUser.roles,
+        };
+    }
+    result.roles = roles;
+    const savedUser = await result.save();
+    return { _id: savedUser.id, roles: savedUser.roles };
 }
 
-export function setupPassport() {
+export function setupPassport(_1: ILogger) {
     passport.use(
         new GitHubStrategy(
             {
                 callbackURL: config.auth.callback,
                 clientID: config.auth.github_client_id,
                 clientSecret: config.auth.github_client_secret,
-                scope: ['read:user', 'read:org'],
+                scope: ['read:user', 'read:org', 'user:email'],
             },
             (accessToken: string, _, profile, cb) => {
                 const github = new octokit();
@@ -48,7 +70,7 @@ export function setupPassport() {
                 });
                 github.users
                     .getTeams({})
-                    .then(teams => cb(null, createUser(profile.id, teams)))
+                    .then(teams => initializeUser(profile, teams).then(result => cb(null, result)))
                     .catch(error => cb(error, null));
             },
         ),

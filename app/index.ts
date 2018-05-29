@@ -42,7 +42,7 @@ export class App {
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
 
-        const passport = setupPassport();
+        const passport = setupPassport(this.appLogger);
         this.koa.use(passport.initialize());
         this.koa.use(passport.session());
 

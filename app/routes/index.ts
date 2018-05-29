@@ -4,6 +4,7 @@ import { authRoute, guard } from './auth';
 import { courseRoute } from './course';
 import { eventRoute } from './event';
 import { healthRoute } from './health';
+import { profileRoute } from './profile';
 import { sessionRoute } from './session';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
@@ -30,6 +31,7 @@ export const routesMiddleware: RoutesMiddleware = logger => {
     // Requires authentication
     applyRoute(router, courseRoute, log(logger, 'course'));
     applyRoute(router, eventRoute, log(logger, 'event'));
+    applyRoute(router, profileRoute, log(logger, 'profile'));
 
     return router;
 };

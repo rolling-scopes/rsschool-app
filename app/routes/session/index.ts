@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
-import { IUser } from '../../models';
+import { IUserSession } from '../../models';
 
 export function sessionRoute(_: ILogger) {
     const router = new Router();
@@ -9,8 +9,8 @@ export function sessionRoute(_: ILogger) {
     router.get('/session', ctx => {
         if (config.isDevMode) {
             ctx.status = 200;
-            const user: IUser = {
-                id: 'dev-user',
+            const user: IUserSession = {
+                _id: 'dev-user',
                 roles: ['admin', 'mentor'],
             };
             ctx.body = user;

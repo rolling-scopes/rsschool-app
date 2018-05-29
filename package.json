@@ -3,9 +3,8 @@
   "version": "0.0.1",
   "description": "API for accessing rsschool",
   "scripts": {
-    "start": "npm run build && node ./dist/index.js | ./node_modules/.bin/bunyan -o short",
     "build": "tsc",
-    "watch": "nodemon --watch 'app/**/*' -e ts --exec 'ts-node' ./index.ts",
+    "start": "nodemon --watch 'app/**/*' -e ts --exec 'ts-node' ./index.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "pretty": "prettier --config .prettierrc.json --write \"./app/**/*.ts\"",

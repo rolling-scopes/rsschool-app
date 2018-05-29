@@ -26,12 +26,12 @@ export interface IConfig {
 
 export const config: IConfig = {
     auth: {
-        callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3000/auth/github/callback',
+        callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3001/auth/github/callback',
         github_client_id: process.env.RSSHCOOL_API_AUTH_CLIENT_ID || 'client-id',
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
         successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
     },
-    isDevMode: process.env.NODE_ENV !== 'production',
+    isDevMode: false, // process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
         connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
