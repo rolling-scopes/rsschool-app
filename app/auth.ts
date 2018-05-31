@@ -28,6 +28,10 @@ function getTeamIds(teams: octokit.AnyResponse) {
     return data.map(({ slug, organization }) => `${slug}@${organization.login}`);
 }
 
+function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
+    return emails.filter(email => email.primary);
+}
+
 async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Promise<IUserSession> {
     const id = profile.username!;
     const result = await UserDocument.findById(id).exec();
@@ -36,9 +40,10 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
         const user: IUser = {
             _id: id,
             profile: {
-                emails: profile.emails ? profile.emails.map(e => ({ value: e.value, type: e.type })) : [],
-                familyName: profile.name ? profile.name.familyName : '',
-                givenName: profile.name ? profile.name.givenName : '',
+                // We support only 1 email for now and let's select primary only
+                emails: getPrimaryEmail((profile.emails as any) || []),
+                firstName: profile.name ? profile.name.givenName : '',
+                lastName: profile.name ? profile.name.familyName : '',
             },
             roles,
         };

@@ -6,17 +6,23 @@ export interface IUserSession {
 }
 
 export interface IUserProfile {
-    education: Array<{ university: string; graduationYear: number; faculty: string }>;
-    emails: Array<{ value: string; type: string | undefined }>;
+    primaryEducation: {
+        university: string;
+        graduationYear: string;
+        faculty: string;
+    };
+    emails: Array<{ value: string; primary: boolean }>;
     employmentHistory: string;
     englishLevel: string;
-    familyName: string;
-    givenName: string;
-    familyNameNative: string;
-    givenNameNative: string;
+    lastName: string;
+    firstName: string;
+    lastNameNative: string;
+    firstNameNative: string;
     isInternshipNeeded: boolean;
     isWorkNeeded: boolean;
     notes: string;
+    phone: string;
+    city: string;
 }
 
 export interface IUser extends IUserSession {
@@ -30,9 +36,18 @@ export interface IUserModel extends IUser, Document {
 export const UserSchema: Schema = new Schema({
     _id: String,
     profile: {
+        city: { type: String, default: '' },
         emails: { type: Array, default: [] },
-        familyName: { type: String, default: '' },
-        givenName: { type: String, default: '' },
+        firstName: { type: String, default: '' },
+        firstNameNative: { type: String, default: '' },
+        lastName: { type: String, default: '' },
+        lastNameNative: { type: String, default: '' },
+        phone: { type: String, default: '' },
+        primaryEducation: {
+            faculty: { type: String, default: '' },
+            graduationYear: { type: String, default: '' },
+            university: { type: String, default: '' },
+        },
     },
     roles: [String],
 });
