@@ -2,14 +2,15 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2017",
+    "baseUrl": ".",
     "noImplicitAny": true,
     "outDir": "./dist",
     "sourceMap": true,
     "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
+    "typeRoots": [ "./node_modules/@types", "./app/typings/"],
   },
-  "types": ["node"],
   "include": [
     "./**/*.ts",
     "./**/*.js"

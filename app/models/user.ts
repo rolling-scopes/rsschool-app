@@ -2,7 +2,8 @@ import { Document, Schema, model } from 'mongoose';
 
 export interface IUserSession {
     _id: string;
-    roles: Array<'admin' | 'mentor' | 'student'>;
+    role: 'mentor' | 'student';
+    isAdmin: boolean;
 }
 
 export interface IUserProfile {
@@ -25,8 +26,17 @@ export interface IUserProfile {
     city: string;
 }
 
+export interface IUserCourse {
+    id: string;
+    role: 'mentor' | 'student';
+    mates: Array<{ id: string }>;
+    isActive: boolean;
+    excludeReason: string | undefined;
+}
+
 export interface IUser extends IUserSession {
     profile: Partial<IUserProfile>;
+    courses: IUserCourse[];
 }
 
 export interface IUserModel extends IUser, Document {
@@ -35,6 +45,20 @@ export interface IUserModel extends IUser, Document {
 
 export const UserSchema: Schema = new Schema({
     _id: String,
+    courses: {
+        default: [],
+        type: [
+            {
+                _id: false,
+                excludeReason: { type: String, default: undefined },
+                id: { type: String },
+                isActive: { type: Boolean, default: true },
+                mates: [{ id: { type: String, default: '' } }],
+                role: { type: String, default: '' },
+            },
+        ],
+    },
+    isAdmin: Boolean,
     profile: {
         city: { type: String, default: '' },
         emails: { type: Array, default: [] },
@@ -49,7 +73,7 @@ export const UserSchema: Schema = new Schema({
             university: { type: String, default: '' },
         },
     },
-    roles: [String],
+    role: String,
 });
 
 export const UserModelName = 'User';

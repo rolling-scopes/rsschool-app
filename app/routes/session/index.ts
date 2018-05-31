@@ -11,7 +11,8 @@ export function sessionRoute(_: ILogger) {
             ctx.status = 200;
             const user: IUserSession = {
                 _id: 'dev-user',
-                roles: ['admin', 'mentor'],
+                isAdmin: true,
+                role: 'mentor',
             };
             ctx.body = user;
             return;

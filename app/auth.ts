@@ -7,20 +7,16 @@ import { IUser, IUserSession, UserDocument } from './models';
 
 const adminTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
 const mentorTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
-const studentTeams: string[] = [];
 
-function getRoles(teamIds: string[]) {
-    const result: Array<'admin' | 'student' | 'mentor'> = [];
-    if (adminTeams.some(team => teamIds.includes(team))) {
-        result.push('admin');
-    }
+function getRole(teamIds: string[]) {
     if (mentorTeams.some(team => teamIds.includes(team))) {
-        result.push('mentor');
+        return 'mentor';
     }
-    if (studentTeams.some(team => teamIds.includes(team))) {
-        result.push('student');
-    }
-    return result;
+    return 'student';
+}
+
+function getAdminStatus(teamIds: string[]): boolean {
+    return adminTeams.some(team => teamIds.includes(team));
 }
 
 function getTeamIds(teams: octokit.AnyResponse) {
@@ -35,27 +31,33 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Promise<IUserSession> {
     const id = profile.username!;
     const result = await UserDocument.findById(id).exec();
-    const roles = getRoles(getTeamIds(teams));
+    const teamsIds = getTeamIds(teams);
+
+    const role = getRole(teamsIds);
+    const isAdmin = getAdminStatus(teamsIds);
     if (result === null) {
         const user: IUser = {
             _id: id,
+            courses: [],
+            isAdmin,
             profile: {
                 // We support only 1 email for now and let's select primary only
                 emails: getPrimaryEmail((profile.emails as any) || []),
                 firstName: profile.name ? profile.name.givenName : '',
                 lastName: profile.name ? profile.name.familyName : '',
             },
-            roles,
+            role,
         };
         const createdUser = await UserDocument.create(user);
         return {
             _id: createdUser.id,
-            roles: createdUser.roles,
+            isAdmin,
+            role: createdUser.role,
         };
     }
-    result.roles = roles;
+    result.role = role;
     const savedUser = await result.save();
-    return { _id: savedUser.id, roles: savedUser.roles };
+    return { _id: savedUser.id, role: savedUser.role, isAdmin };
 }
 
 export function setupPassport(_1: ILogger) {

@@ -4,6 +4,7 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as serve from 'koa-static';
+import { RateLimit } from 'koa2-ratelimit';
 import * as mongoose from 'mongoose';
 import { Server } from 'net';
 import { setupPassport } from './auth';
@@ -36,6 +37,17 @@ export class App {
         this.mongoLogger = this.appLogger.child({ module: 'mongodb' });
 
         const routes = routesMiddleware(this.appLogger);
+
+        this.koa.use(
+            RateLimit.middleware({
+                getUserId: async ctx => {
+                    const user = ctx.state && ctx.state.user ? ctx.state.user : {};
+                    return user._id;
+                },
+                interval: { min: config.rateLimit.intervalMin }, // 15 minutes = 15*60*1000
+                max: config.rateLimit.max, // limit each IP to 100 requests per interval
+            }),
+        );
 
         this.koa.use(bodyParser());
         this.koa.use(cors());
@@ -99,6 +111,9 @@ export class App {
 
     private connectToMongo(): Promise<typeof mongoose> {
         this.mongoLogger.info('Connecting to MongoDB');
-        return mongoose.connect(config.mongo.connectionString, config.mongo.options);
+        return mongoose.connect(
+            config.mongo.connectionString,
+            config.mongo.options,
+        );
     }
 }

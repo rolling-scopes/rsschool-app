@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { IApiResponse, IUserProfile, IUserSession, UserDocument } from '../../models';
+import { CourseDocument, IApiResponse, ICourse, IUserProfile, IUserSession, UserDocument } from '../../models';
 
 export function profileRoute(_: ILogger) {
     const router = new Router({ prefix: '/profile' });
@@ -18,6 +18,24 @@ export function profileRoute(_: ILogger) {
         }
         const body: IApiResponse<IUserProfile> = {
             data: result.profile as IUserProfile,
+        };
+        ctx.body = body;
+        ctx.status = 200;
+    });
+
+    router.get('/courses', async ctx => {
+        const userSession: IUserSession = ctx.state.user;
+        const user = await UserDocument.findById(userSession._id);
+        if (user === null) {
+            ctx.status = 404;
+            return;
+        }
+        const result = await CourseDocument.find({
+            _id: { $in: user.courses.map(course => course.id) },
+        }).exec();
+
+        const body: IApiResponse<ICourse> = {
+            data: result,
         };
         ctx.body = body;
         ctx.status = 200;

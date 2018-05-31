@@ -5,6 +5,10 @@ export interface IConfig {
         github_client_secret: string;
         successRedirect: string;
     };
+    rateLimit: {
+        intervalMin: number;
+        max: number;
+    };
     isDevMode: boolean;
     mongo: {
         connectAttempts: number;
@@ -31,6 +35,7 @@ export const config: IConfig = {
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
         successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
     },
+
     isDevMode: false, // process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
@@ -47,5 +52,9 @@ export const config: IConfig = {
     },
     name: 'rsschool-api',
     port: parseInt(process.env.NODE_PORT || '3000', 10),
+    rateLimit: {
+        intervalMin: 5,
+        max: 100,
+    },
     sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || '',
 };

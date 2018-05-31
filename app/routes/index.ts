@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import { ILogger } from '../logger';
 import { authRoute, guard } from './auth';
 import { courseRoute } from './course';
+import { coursesRoute } from './courses';
 import { eventRoute } from './event';
 import { healthRoute } from './health';
 import { profileRoute } from './profile';
@@ -30,6 +31,8 @@ export const routesMiddleware: RoutesMiddleware = logger => {
 
     // Requires authentication
     applyRoute(router, courseRoute, log(logger, 'course'));
+    applyRoute(router, coursesRoute, log(logger, 'courses'));
+
     applyRoute(router, eventRoute, log(logger, 'event'));
     applyRoute(router, profileRoute, log(logger, 'profile'));
 
