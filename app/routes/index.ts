@@ -5,8 +5,8 @@ import { courseRoute } from './course';
 import { coursesRoute } from './courses';
 import { eventRoute } from './event';
 import { healthRoute } from './health';
-import { profileRoute } from './profile';
 import { sessionRoute } from './session';
+import { userFeedRoute, userParticipationsRoute, userProfileRoute } from './user';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
 
@@ -34,7 +34,9 @@ export const routesMiddleware: RoutesMiddleware = logger => {
     applyRoute(router, coursesRoute, log(logger, 'courses'));
 
     applyRoute(router, eventRoute, log(logger, 'event'));
-    applyRoute(router, profileRoute, log(logger, 'profile'));
+    applyRoute(router, userProfileRoute, log(logger, 'user/profile'));
+    applyRoute(router, userParticipationsRoute, log(logger, 'user/participations'));
+    applyRoute(router, userFeedRoute, log(logger, 'user/feed'));
 
     return router;
 };

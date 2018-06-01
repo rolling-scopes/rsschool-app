@@ -3,7 +3,7 @@ import * as passport from 'koa-passport';
 import { Profile, Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
 import { ILogger } from './logger';
-import { IUser, IUserSession, UserDocument } from './models';
+import { IUser, IUserSession, UserDocument, saveUserSignupAction } from './models';
 
 const adminTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
 const mentorTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
@@ -38,8 +38,8 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
     if (result === null) {
         const user: IUser = {
             _id: id,
-            courses: [],
             isAdmin,
+            participations: [],
             profile: {
                 // We support only 1 email for now and let's select primary only
                 emails: getPrimaryEmail((profile.emails as any) || []),
@@ -48,7 +48,12 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
             },
             role,
         };
-        const createdUser = await UserDocument.create(user);
+        const [createdUser] = await Promise.all([
+            UserDocument.create(user),
+            saveUserSignupAction(id, {
+                text: 'Signed Up',
+            }),
+        ]);
         return {
             _id: createdUser.id,
             isAdmin,

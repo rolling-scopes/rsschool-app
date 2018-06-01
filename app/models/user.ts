@@ -1,4 +1,9 @@
 import { Document, Schema, model } from 'mongoose';
+import { FeedRecordScheme } from './feed';
+
+export enum UserFeedActionTypes {
+    signedup = 'signedup',
+}
 
 export interface IUserSession {
     _id: string;
@@ -26,17 +31,16 @@ export interface IUserProfile {
     city: string;
 }
 
-export interface IUserCourse {
-    id: string;
-    role: 'mentor' | 'student';
-    mates: Array<{ id: string }>;
+export interface IUserParticipation {
+    _id: string;
     isActive: boolean;
-    excludeReason: string | undefined;
+    courseId: string;
+    role: 'mentor' | 'student';
 }
 
 export interface IUser extends IUserSession {
     profile: Partial<IUserProfile>;
-    courses: IUserCourse[];
+    participations: IUserParticipation[];
 }
 
 export interface IUserModel extends IUser, Document {
@@ -45,20 +49,21 @@ export interface IUserModel extends IUser, Document {
 
 export const UserSchema: Schema = new Schema({
     _id: String,
-    courses: {
+    feed: {
+        default: [],
+        type: [FeedRecordScheme],
+    },
+    isAdmin: Boolean,
+    participations: {
         default: [],
         type: [
             {
-                _id: false,
-                excludeReason: { type: String, default: undefined },
-                id: { type: String },
+                courseId: String,
                 isActive: { type: Boolean, default: true },
-                mates: [{ id: { type: String, default: '' } }],
                 role: { type: String, default: '' },
             },
         ],
     },
-    isAdmin: Boolean,
     profile: {
         city: { type: String, default: '' },
         emails: { type: Array, default: [] },

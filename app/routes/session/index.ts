@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
-import { IUserSession } from '../../models';
+import { IApiResponse, IUserSession } from '../../models';
 
 export function sessionRoute(_: ILogger) {
     const router = new Router();
@@ -9,10 +9,12 @@ export function sessionRoute(_: ILogger) {
     router.get('/session', ctx => {
         if (config.isDevMode) {
             ctx.status = 200;
-            const user: IUserSession = {
-                _id: 'dev-user',
-                isAdmin: true,
-                role: 'mentor',
+            const user: IApiResponse<IUserSession> = {
+                data: {
+                    _id: 'dev-user',
+                    isAdmin: true,
+                    role: 'mentor',
+                },
             };
             ctx.body = user;
             return;
@@ -22,7 +24,10 @@ export function sessionRoute(_: ILogger) {
             return;
         }
         ctx.status = 200;
-        ctx.body = ctx.state.user;
+        const body: IApiResponse<IUserSession> = {
+            data: ctx.state.user,
+        };
+        ctx.body = body;
     });
 
     return router;

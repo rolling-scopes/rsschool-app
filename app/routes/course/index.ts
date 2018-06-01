@@ -2,7 +2,16 @@ import { ACCEPTED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from 'ht
 import * as Router from 'koa-router';
 import { STATES, connection } from 'mongoose';
 import { ILogger } from '../../logger';
-import { CourseDocument, EventDocument, IApiResponse, IEventModel, IUserSession, UserDocument } from '../../models';
+import {
+    CourseDocument,
+    EventDocument,
+    IApiResponse,
+    IEventModel,
+    IUserSession,
+    ParticipationDocument,
+    UserDocument,
+    saveCourseEnrollAction,
+} from '../../models';
 import { getRoute, postRoute } from '../generic';
 
 export function courseRoute(logger: ILogger) {
@@ -50,17 +59,30 @@ export function courseRoute(logger: ILogger) {
                 return;
             }
 
-            const userCourse = user.courses.find(c => c.id === courseId);
+            const userCourse = user.participations.find(p => p.courseId === courseId);
             if (userCourse != null) {
                 ctx.status = ACCEPTED;
                 return;
             }
 
-            user.courses.push({
-                excludeReason: undefined,
-                id: courseId,
+            const participation = new ParticipationDocument({
+                courseId,
                 isActive: true,
-                mates: [],
+                role: user.role,
+                userId: user._id,
+            });
+
+            const [result] = await Promise.all([
+                participation.save(),
+                saveCourseEnrollAction(user._id, courseId, {
+                    text: 'Enrolled',
+                }),
+            ]);
+
+            user.participations.push({
+                _id: result._id,
+                courseId,
+                isActive: true,
                 role: user.role,
             });
             await user.save();

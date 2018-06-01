@@ -7,13 +7,9 @@
     "no-console": [true, "log"],
     "no-implicit-dependencies": [true, "dev"],
     "no-unused-expression": false,
-    "ordered-imports": [
-      true, 
-      {
-        "import-sources-order": "lowercase-last",
-        "named-imports-order": "lowercase-last"
-      }
-    ],
+    "array-type": false,
+    "ordered-imports": false,
+    "no-object-literal-type-assertion": false,
     "quotemark": [
       true,
       "single",
