@@ -10,28 +10,30 @@ const devUserSession: IUserSession = {
     role: 'mentor',
 };
 
+export async function sessionMiddleware(ctx: Router.IRouterContext) {
+    if (config.isDevMode) {
+        ctx.status = OK;
+        const user: IApiResponse<IUserSession> = {
+            data: devUserSession,
+        };
+        ctx.body = user;
+        return;
+    }
+    if (ctx.state.user == null) {
+        ctx.status = NOT_FOUND;
+        return;
+    }
+    ctx.status = OK;
+    const body: IApiResponse<IUserSession> = {
+        data: ctx.state.user as IUserSession,
+    };
+    ctx.body = body;
+}
+
 export function sessionRoute(_: ILogger) {
     const router = new Router();
 
-    router.get('/session', ctx => {
-        if (config.isDevMode) {
-            ctx.status = OK;
-            const user: IApiResponse<IUserSession> = {
-                data: devUserSession,
-            };
-            ctx.body = user;
-            return;
-        }
-        if (ctx.state.user == null) {
-            ctx.status = NOT_FOUND;
-            return;
-        }
-        ctx.status = OK;
-        const body: IApiResponse<IUserSession> = {
-            data: ctx.state.user as IUserSession,
-        };
-        ctx.body = body;
-    });
+    router.get('/session', sessionMiddleware);
 
     return router;
 }

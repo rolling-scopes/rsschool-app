@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Session returns 404 if no user session 1`] = `undefined`;
+
+exports[`Session returns user session 1`] = `
+Object {
+  "data": Object {
+    "_id": "apalchys",
+  },
+}
+`;
