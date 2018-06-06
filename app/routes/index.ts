@@ -36,11 +36,11 @@ export const routesMiddleware: RoutesMiddleware = logger => {
     router.use(guard);
 
     // Requires authentication
-    applyRoute(router, courseImportRoute, log(logger, 'course/import'));
     applyRoute(router, courseRoute, log(logger, 'course'));
     applyRoute(router, courseEnrollRoute, log(logger, 'course/enroll'));
     applyRoute(router, courseEventsRoute, log(logger, 'course/events'));
     applyRoute(router, courseAssignStudentsRoute, log(logger, 'course/assign-students'));
+    applyRoute(router, courseImportRoute, log(logger, 'course/import'));
 
     applyRoute(router, coursesRoute, log(logger, 'courses'));
 
