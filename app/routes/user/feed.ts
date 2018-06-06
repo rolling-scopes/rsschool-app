@@ -1,3 +1,4 @@
+import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { FeedRecordDocument, IApiResponse, IFeedRecord, IUserSession, UserDocument } from '../../models';
@@ -6,10 +7,10 @@ export function userFeedRoute(_: ILogger) {
     const router = new Router({ prefix: '/user' });
 
     router.get('/feed', async ctx => {
-        const userSession: IUserSession = ctx.state.user;
+        const userSession: IUserSession = ctx.state.user!;
         const user = await UserDocument.findById(userSession._id);
         if (user === null) {
-            ctx.status = 404;
+            ctx.status = NOT_FOUND;
             return;
         }
         const feedRecords = await FeedRecordDocument.find({
@@ -23,7 +24,7 @@ export function userFeedRoute(_: ILogger) {
         };
 
         ctx.body = body;
-        ctx.status = 200;
+        ctx.status = OK;
     });
 
     return router;

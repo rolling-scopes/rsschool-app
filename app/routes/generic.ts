@@ -2,6 +2,7 @@ import { IRouterContext } from 'koa-router';
 import { Document, Model, STATES, Types, connection } from 'mongoose';
 import { ILogger } from '../logger';
 import { IApiResponse } from '../models';
+import { NOT_FOUND, OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 
 export function postRoute<T extends Document>(DocumentModel: new (data: any) => T, logger: ILogger) {
     return async (ctx: IRouterContext) => {
@@ -10,14 +11,14 @@ export function postRoute<T extends Document>(DocumentModel: new (data: any) => 
         ctx.body = {};
 
         if (validationResult !== undefined) {
-            ctx.status = 400;
+            ctx.status = BAD_REQUEST;
             return;
         }
         try {
             ctx.body = await model.save();
-            ctx.status = 200;
+            ctx.status = OK;
         } catch (e) {
-            ctx.status = 500;
+            ctx.status = INTERNAL_SERVER_ERROR;
             logger.error(e, 'Failed to save document');
         }
     };
@@ -31,7 +32,7 @@ export function getRoute<T extends Document>(
     return async (ctx: IRouterContext) => {
         try {
             if (connection.readyState !== STATES.connected) {
-                ctx.status = 500;
+                ctx.status = INTERNAL_SERVER_ERROR;
                 return;
             }
             const data = await DocumentModel.findById(
@@ -39,17 +40,17 @@ export function getRoute<T extends Document>(
             ).exec();
             if (data === null) {
                 ctx.body = {};
-                ctx.status = 404;
+                ctx.status = NOT_FOUND;
                 return;
             }
             const body: IApiResponse<T> = {
                 data,
             };
             ctx.body = body;
-            ctx.status = 200;
+            ctx.status = OK;
         } catch (err) {
             logger.error(err);
-            ctx.status = 500;
+            ctx.status = INTERNAL_SERVER_ERROR;
         }
     };
 }

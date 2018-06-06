@@ -2,30 +2,33 @@ import * as Router from 'koa-router';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
 import { IApiResponse, IUserSession } from '../../models';
+import { NOT_FOUND, OK } from 'http-status-codes';
+
+const devUserSession: IUserSession = {
+    _id: 'dev-user',
+    isAdmin: true,
+    role: 'mentor',
+};
 
 export function sessionRoute(_: ILogger) {
     const router = new Router();
 
     router.get('/session', ctx => {
         if (config.isDevMode) {
-            ctx.status = 200;
+            ctx.status = OK;
             const user: IApiResponse<IUserSession> = {
-                data: {
-                    _id: 'dev-user',
-                    isAdmin: true,
-                    role: 'mentor',
-                },
+                data: devUserSession,
             };
             ctx.body = user;
             return;
         }
         if (ctx.state.user == null) {
-            ctx.status = 404;
+            ctx.status = NOT_FOUND;
             return;
         }
-        ctx.status = 200;
+        ctx.status = OK;
         const body: IApiResponse<IUserSession> = {
-            data: ctx.state.user,
+            data: ctx.state.user as IUserSession,
         };
         ctx.body = body;
     });

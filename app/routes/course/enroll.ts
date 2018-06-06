@@ -6,7 +6,7 @@ import {
     CourseStudentDocument,
     IUserSession,
     UserDocument,
-    saveCourseEnrollAction,
+    saveCourseEnrollFeedAction,
 } from '../../models';
 
 export function courseEnrollRoute(logger: ILogger) {
@@ -14,7 +14,7 @@ export function courseEnrollRoute(logger: ILogger) {
 
     router.post('/:id/enroll', async ctx => {
         try {
-            const userSession: IUserSession = ctx.state.user;
+            const userSession: IUserSession = ctx.state.user!;
             if (userSession === null) {
                 ctx.status = UNAUTHORIZED;
                 return;
@@ -48,7 +48,7 @@ export function courseEnrollRoute(logger: ILogger) {
 
             const [result] = await Promise.all([
                 participation.save(),
-                saveCourseEnrollAction(user._id, courseId, {
+                saveCourseEnrollFeedAction(user._id, courseId, {
                     text: 'Enrolled',
                 }),
             ]);

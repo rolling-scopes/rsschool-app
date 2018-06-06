@@ -1,37 +1,38 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { IApiResponse, IUserProfile, IUserSession, UserDocument } from '../../models';
+import { NOT_FOUND, OK, UNAUTHORIZED } from 'http-status-codes';
 
 export function userProfileRoute(_: ILogger) {
     const router = new Router({ prefix: '/user' });
 
     router.get('/profile', async ctx => {
-        const user: IUserSession = ctx.state.user;
+        const user: IUserSession = ctx.state.user!;
         if (user === null) {
-            ctx.status = 401;
+            ctx.status = UNAUTHORIZED;
             return;
         }
         const result = await UserDocument.findById(user._id);
         if (result === null) {
-            ctx.status = 404;
+            ctx.status = NOT_FOUND;
             return;
         }
         const body: IApiResponse<IUserProfile> = {
             data: result.profile as IUserProfile,
         };
         ctx.body = body;
-        ctx.status = 200;
+        ctx.status = OK;
     });
 
     router.patch('/profile', async ctx => {
-        const user: IUserSession = ctx.state.user;
+        const user: IUserSession = ctx.state.user!;
         if (user === null) {
-            ctx.status = 401;
+            ctx.status = UNAUTHORIZED;
             return;
         }
         const result = await UserDocument.findById(user._id);
         if (result === null) {
-            ctx.status = 404;
+            ctx.status = NOT_FOUND;
             return;
         }
 
@@ -42,7 +43,7 @@ export function userProfileRoute(_: ILogger) {
             data: (await doc.save()).profile as IUserProfile,
         };
         ctx.body = body;
-        ctx.status = 200;
+        ctx.status = OK;
     });
 
     return router;

@@ -1,14 +1,15 @@
-import { Context, Middleware } from 'koa';
+import { Middleware } from 'koa';
 import * as passport from 'koa-passport';
 import * as Router from 'koa-router';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
+import { FORBIDDEN, UNAUTHORIZED, OK } from 'http-status-codes';
 
-export const guard: Middleware = async (ctx: Context, next) => {
-    if (ctx.isAuthenticated() || config.isDevMode) {
+export const guard: Middleware = async (ctx: Router.IRouterContext, next) => {
+    if ((ctx.state.user != null && ctx.isAuthenticated()) || config.isDevMode) {
         await next();
     } else {
-        ctx.status = 401;
+        ctx.status = UNAUTHORIZED;
     }
 };
 
@@ -21,12 +22,12 @@ export function authRoute(_: ILogger) {
         if (ctx.isAuthenticated()) {
             ctx.redirect(config.auth.successRedirect);
         } else {
-            ctx.status = 403;
+            ctx.status = FORBIDDEN;
         }
     });
 
     router.get('/success', ctx => {
-        ctx.status = 200;
+        ctx.status = OK;
         ctx.body = ctx.state.user;
     });
 

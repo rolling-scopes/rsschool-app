@@ -1,6 +1,6 @@
 import { FeedRecordDocument, FeedActions, FeedEntities, FeedPriority } from './feed';
 
-export function saveCourseEnrollAction(userId: string, courseId: string, data: { text: string }) {
+export function saveCourseEnrollFeedAction(userId: string, courseId: string, data: { text: string }) {
     return new FeedRecordDocument({
         actionType: FeedActions.ENROLL,
         courseId,
@@ -12,7 +12,7 @@ export function saveCourseEnrollAction(userId: string, courseId: string, data: {
     }).save();
 }
 
-export function saveUserSignupAction(userId: string, data: { text: string }) {
+export function saveUserSignupFeedAction(userId: string, data: { text: string }) {
     return new FeedRecordDocument({
         actionType: FeedActions.SIGNUP,
         data,

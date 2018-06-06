@@ -3,7 +3,7 @@ import * as passport from 'koa-passport';
 import { Profile, Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
 import { ILogger } from './logger';
-import { IUser, IUserSession, UserDocument, saveUserSignupAction } from './models';
+import { IUser, IUserSession, UserDocument, saveUserSignupFeedAction } from './models';
 
 const adminTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
 const mentorTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
@@ -51,7 +51,7 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
         };
         const [createdUser] = await Promise.all([
             UserDocument.create(user),
-            saveUserSignupAction(id, {
+            saveUserSignupFeedAction(id, {
                 text: 'Signed Up',
             }),
         ]);
