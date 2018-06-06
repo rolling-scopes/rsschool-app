@@ -1,0 +1,3 @@
+declare module 'csv-parser' {
+
+}

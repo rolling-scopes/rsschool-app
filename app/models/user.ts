@@ -1,34 +1,37 @@
 import { Document, Schema, model } from 'mongoose';
-import { FeedRecordScheme } from './feed';
 
 export enum UserFeedActionTypes {
     signedup = 'signedup',
 }
 
-export interface IUserSession {
+export interface IUserBase {
     _id: string;
+}
+
+export interface IUserSession extends IUserBase {
     role: 'mentor' | 'student';
     isAdmin: boolean;
 }
 
 export interface IUserProfile {
+    city: string;
+    emails: Array<{ value: string; primary: boolean }>;
+    employmentHistory: string;
+    englishLevel: string;
+    firstName: string;
+    firstNameNative: string;
+    githubId: string;
+    isInternshipNeeded: boolean;
+    isWorkNeeded: boolean;
+    lastName: string;
+    lastNameNative: string;
+    notes: string;
+    phone: string;
     primaryEducation: {
         university: string;
         graduationYear: string;
         faculty: string;
     };
-    emails: Array<{ value: string; primary: boolean }>;
-    employmentHistory: string;
-    englishLevel: string;
-    lastName: string;
-    firstName: string;
-    lastNameNative: string;
-    firstNameNative: string;
-    isInternshipNeeded: boolean;
-    isWorkNeeded: boolean;
-    notes: string;
-    phone: string;
-    city: string;
 }
 
 export interface IUserParticipation {
@@ -49,10 +52,6 @@ export interface IUserModel extends IUser, Document {
 
 export const UserSchema: Schema = new Schema({
     _id: String,
-    feed: {
-        default: [],
-        type: [FeedRecordScheme],
-    },
     isAdmin: Boolean,
     participations: {
         default: [],
@@ -69,6 +68,7 @@ export const UserSchema: Schema = new Schema({
         emails: { type: Array, default: [] },
         firstName: { type: String, default: '' },
         firstNameNative: { type: String, default: '' },
+        githubId: { type: String, default: '' },
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
         phone: { type: String, default: '' },

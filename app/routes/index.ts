@@ -1,7 +1,13 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../logger';
 import { authRoute, guard } from './auth';
-import { courseRoute } from './course';
+import {
+    courseRoute,
+    courseImportRoute,
+    courseAssignStudentsRoute,
+    courseEnrollRoute,
+    courseEventsRoute,
+} from './course';
 import { coursesRoute } from './courses';
 import { eventRoute } from './event';
 import { healthRoute } from './health';
@@ -26,11 +32,16 @@ export const routesMiddleware: RoutesMiddleware = logger => {
     router.use(healthRoute(log(logger, 'health')));
     applyRoute(router, authRoute, log(logger, 'auth'));
     applyRoute(router, sessionRoute, log(logger, 'session'));
+    // applyRoute(router, courseImportRoute, log(logger, 'course/import'));
 
     router.use(guard);
 
     // Requires authentication
     applyRoute(router, courseRoute, log(logger, 'course'));
+    applyRoute(router, courseEnrollRoute, log(logger, 'course/enroll'));
+    applyRoute(router, courseEventsRoute, log(logger, 'course/events'));
+    applyRoute(router, courseAssignStudentsRoute, log(logger, 'course/assign-students'));
+
     applyRoute(router, coursesRoute, log(logger, 'courses'));
 
     applyRoute(router, eventRoute, log(logger, 'event'));

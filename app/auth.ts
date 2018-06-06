@@ -44,6 +44,7 @@ async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Pro
                 // We support only 1 email for now and let's select primary only
                 emails: getPrimaryEmail((profile.emails as any) || []),
                 firstName: profile.name ? profile.name.givenName : '',
+                githubId: id,
                 lastName: profile.name ? profile.name.familyName : '',
             },
             role,

@@ -3,6 +3,10 @@ import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { IApiResponse, IUser, IUserSession, UserDocument } from '../../models';
 
+export * from './profile';
+export * from './participations';
+export * from './feed';
+
 export function userRoute(logger: ILogger) {
     const router = new Router({ prefix: '/user' });
 
@@ -32,7 +36,3 @@ export function userRoute(logger: ILogger) {
 
     return router;
 }
-
-export * from './profile';
-export * from './participations';
-export * from './feed';

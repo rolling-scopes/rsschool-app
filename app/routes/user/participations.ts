@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { IApiResponse, IParticipation, IUserSession, ParticipationDocument, UserDocument } from '../../models';
+import { IApiResponse, IUserParticipation, IUserSession, UserDocument } from '../../models';
 
 export function userParticipationsRoute(_: ILogger) {
     const router = new Router({ prefix: '/user' });
@@ -12,12 +12,8 @@ export function userParticipationsRoute(_: ILogger) {
             ctx.status = 404;
             return;
         }
-        const result = await ParticipationDocument.find({
-            userId: user._id,
-        }).exec();
-
-        const body: IApiResponse<IParticipation> = {
-            data: result,
+        const body: IApiResponse<IUserParticipation[]> = {
+            data: user.participations,
         };
         ctx.body = body;
         ctx.status = 200;

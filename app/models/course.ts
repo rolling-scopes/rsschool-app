@@ -1,7 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 
 export interface ICourse {
-    id: string;
     description: string;
     endDateTime: number;
     name: string;
@@ -10,7 +9,7 @@ export interface ICourse {
 }
 
 export interface ICourseModel extends ICourse, Document {
-    id: string;
+    _id: string;
 }
 
 export const CourseSchema: Schema = new Schema({

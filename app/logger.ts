@@ -35,7 +35,7 @@ export const loggerMiddleware: LoggerMiddleware = (externalLogger: ILogger) => a
     next: () => Promise<any>,
 ) => {
     const data: Partial<ILog> = {
-        data: ctx.request.body,
+        // data: ctx.request.body,
         host: ctx.headers.host,
         method: ctx.method,
         query: ctx.query,

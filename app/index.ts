@@ -49,7 +49,7 @@ export class App {
             }),
         );
 
-        this.koa.use(bodyParser());
+        this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
         this.koa.use(cors());
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
