@@ -50,7 +50,6 @@
     "@types/koa-static": "4.0.0",
     "@types/koa__cors": "2.2.2",
     "@types/lodash": "4.14.109",
-    "@types/mocha": "5.2.1",
     "@types/mongoose": "5.0.15",
     "@types/node": "10.3.1",
     "@types/passport-github": "1.1.3",
