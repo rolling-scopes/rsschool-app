@@ -1,6 +1,6 @@
 import mockingoose from 'mockingoose';
 import { FeedActions, FeedEntities, IFeedRecordModel } from '../../models';
-import { createTestContext, getLoggerMock } from '../../utils';
+import { createTestContext } from '../../utils';
 import { getFeedRoute } from './feed';
 
 describe('User Feed route', () => {

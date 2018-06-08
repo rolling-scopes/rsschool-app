@@ -1,14 +1,7 @@
 import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import * as csvParse from 'csv-parse';
-import {
-    UserDocument,
-    CourseStudentDocument,
-    IUser,
-    ICourseStudent,
-    ICourseMentor,
-    CourseMentorDocument,
-} from '../../models';
+import { UserModel, CourseStudentModel, IUser, ICourseStudent, ICourseMentor, CourseMentorModel } from '../../models';
 
 interface InputMentor {
     FirstName: string;
@@ -68,7 +61,7 @@ export const courseImportMentorsRoute = async (ctx: Router.IRouterContext) => {
             mentors.map(mentor => {
                 const id = getGithubId(mentor.GitHub);
                 return Promise.all([
-                    UserDocument.update(
+                    UserModel.update(
                         { _id: id },
                         {
                             _id: id,
@@ -83,7 +76,7 @@ export const courseImportMentorsRoute = async (ctx: Router.IRouterContext) => {
                         } as IUser,
                         { upsert: true },
                     ),
-                    CourseMentorDocument.create({
+                    CourseMentorModel.create({
                         city: mentor.City,
                         courseId,
                         excludeReason: undefined,
@@ -117,7 +110,7 @@ export const courseImportStudentsRoute = async (ctx: Router.IRouterContext) => {
                 const id = getGithubId(student.Github);
                 const [firstName, lastName] = student.FullName.split(' ');
                 return Promise.all([
-                    UserDocument.update(
+                    UserModel.update(
                         { _id: id },
                         {
                             _id: id,
@@ -132,7 +125,7 @@ export const courseImportStudentsRoute = async (ctx: Router.IRouterContext) => {
                         } as IUser,
                         { upsert: true },
                     ),
-                    CourseStudentDocument.create({
+                    CourseStudentModel.create({
                         city: student.City,
                         courseId,
                         englishLevel: student.English,

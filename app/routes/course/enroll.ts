@@ -1,12 +1,6 @@
 import { ACCEPTED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from 'http-status-codes';
 import * as Router from 'koa-router';
-import {
-    CourseDocument,
-    CourseStudentDocument,
-    IUserSession,
-    saveCourseEnrollFeedAction,
-    UserDocument,
-} from '../../models';
+import { CourseModel, CourseStudentModel, IUserSession, saveCourseEnrollFeedAction, UserModel } from '../../models';
 
 export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
     try {
@@ -17,13 +11,13 @@ export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
         }
 
         const { id: courseId } = ctx.params;
-        const course = await CourseDocument.findById(courseId);
+        const course = await CourseModel.findById(courseId);
         if (course === null) {
             ctx.status = NOT_FOUND;
             return;
         }
 
-        const user = await UserDocument.findById(userSession._id);
+        const user = await UserModel.findById(userSession._id);
         if (user === null) {
             ctx.status = NOT_FOUND;
             return;
@@ -35,7 +29,7 @@ export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
             return;
         }
 
-        const participation = new CourseStudentDocument({
+        const participation = new CourseStudentModel({
             courseId,
             isActive: true,
             role: user.role,

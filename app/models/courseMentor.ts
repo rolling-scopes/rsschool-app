@@ -31,4 +31,4 @@ export const CourseMentorScheme: Schema = new Schema({
 });
 
 export const CourseMentorModelName = 'CourseMentor';
-export const CourseMentorDocument = model<ICourseMentorModel>(CourseMentorModelName, CourseMentorScheme);
+export const CourseMentorModel = model<ICourseMentorModel>(CourseMentorModelName, CourseMentorScheme);

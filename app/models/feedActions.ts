@@ -1,7 +1,7 @@
-import { FeedRecordDocument, FeedActions, FeedEntities, FeedPriority } from './feed';
+import { FeedRecordModel, FeedActions, FeedEntities, FeedPriority } from './feed';
 
 export function saveCourseEnrollFeedAction(userId: string, courseId: string, data: { text: string }) {
-    return new FeedRecordDocument({
+    return new FeedRecordModel({
         actionType: FeedActions.ENROLL,
         courseId,
         data,
@@ -13,7 +13,7 @@ export function saveCourseEnrollFeedAction(userId: string, courseId: string, dat
 }
 
 export function saveUserSignupFeedAction(userId: string, data: { text: string }) {
-    return new FeedRecordDocument({
+    return new FeedRecordModel({
         actionType: FeedActions.SIGNUP,
         data,
         dateTime: Date.now(),

@@ -22,4 +22,4 @@ export const CourseStudentScheme: Schema = new Schema({
 });
 
 export const CourseStudentModelName = 'CourseStudent';
-export const CourseStudentDocument = model<ICourseStudentModel>(CourseStudentModelName, CourseStudentScheme);
+export const CourseStudentModel = model<ICourseStudentModel>(CourseStudentModelName, CourseStudentScheme);

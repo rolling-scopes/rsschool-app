@@ -1,5 +1,5 @@
 import mockingoose from 'mockingoose';
-import { createTestContext, getLoggerMock } from '../../utils';
+import { createTestContext } from '../../utils';
 import { getParticipationsRoute } from './participations';
 
 describe('User Participations route', () => {

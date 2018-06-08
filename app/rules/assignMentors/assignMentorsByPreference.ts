@@ -1,4 +1,4 @@
-import { CourseMentorDocument, CourseStudentDocument, ICourseMentorModel } from '../../models';
+import { CourseMentorModel, CourseStudentModel, ICourseMentorModel } from '../../models';
 import { ILogger } from '../../logger';
 
 export async function assignMentorsByPreference(courseId: string, logger: ILogger) {
@@ -9,7 +9,7 @@ export async function assignMentorsByPreference(courseId: string, logger: ILogge
 }
 
 const selectMentorsWithPreferences = async (courseId: string) => {
-    return CourseMentorDocument.find({
+    return CourseMentorModel.find({
         courseId,
         preferedMentees: { $exists: true, $ne: [] },
     }).exec();
@@ -24,7 +24,7 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string) 
         _id,
     }));
     courseMentor.menteeCapacity = Math.max(courseMentor.menteeCapacity - courseMentor.mentees.length, 0);
-    await CourseStudentDocument.updateMany(
+    await CourseStudentModel.updateMany(
         {
             courseId,
             userId: { $in: courseMentor.preferedMentees.map(({ _id }) => _id) },

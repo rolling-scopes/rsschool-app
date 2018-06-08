@@ -12,7 +12,7 @@ export interface ICourseModel extends ICourse, Document {
     _id: string;
 }
 
-export const CourseSchema: Schema = new Schema({
+const CourseSchema: Schema = new Schema({
     _id: String,
     description: { type: String, default: '' },
     endDateTime: { type: Number, default: 0 },
@@ -25,6 +25,6 @@ export const CourseSchema: Schema = new Schema({
     startDateTime: { type: Number, default: 0 },
 });
 
-export const CourseModelName = 'Course';
+const CourseModelName = 'Course';
 
-export const CourseDocument = model<ICourseModel>(CourseModelName, CourseSchema);
+export const CourseModel = model<ICourseModel>(CourseModelName, CourseSchema);

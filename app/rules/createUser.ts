@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { IUser, IUserSession, saveUserSignupFeedAction, UserDocument } from '../models';
+import { IUser, IUserSession, saveUserSignupFeedAction, UserModel } from '../models';
 
 const adminTeams: string[] = config.roles.adminTeams;
 const mentorTeams: string[] = config.roles.mentorTeams;
@@ -30,7 +30,7 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 
 export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
     const id = profile.username!;
-    const result = await UserDocument.findById(id).exec();
+    const result = await UserModel.findById(id).exec();
 
     const role = getRole(teamsIds);
     const isAdmin = getAdminStatus(teamsIds);
@@ -49,7 +49,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
             role,
         };
         const [createdUser] = await Promise.all([
-            UserDocument.create(user),
+            UserModel.create(user),
             saveUserSignupFeedAction(id, {
                 text: 'Signed Up',
             }),

@@ -81,5 +81,5 @@ export const UserSchema: Schema = new Schema({
     role: String,
 });
 
-export const UserModelName = 'User';
-export const UserDocument = model<IUserModel>(UserModelName, UserSchema);
+const UserModelName = 'User';
+export const UserModel = model<IUserModel>(UserModelName, UserSchema);

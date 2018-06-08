@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { CourseDocument } from '../../models';
+import { CourseModel } from '../../models';
 import { createGetRoute, createPostRoute } from '../generic';
 
 import { courseAssignMentorsRoute } from './assignMentors';
@@ -10,8 +10,8 @@ import { courseImportMentorsRoute, courseImportStudentsRoute } from './import';
 export function courseRouter() {
     const router = new Router({ prefix: '/course' });
 
-    router.get('/:id', createGetRoute(CourseDocument, { useObjectId: false }));
-    router.post('/', createPostRoute(CourseDocument));
+    router.get('/:id', createGetRoute(CourseModel, { useObjectId: false }));
+    router.post('/', createPostRoute(CourseModel));
 
     router.post('/:id/enroll', courseEnrollRoute);
     router.get('/:id/events', courseEventsRoute);

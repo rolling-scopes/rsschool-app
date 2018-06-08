@@ -1,5 +1,17 @@
 import { Schema, model, Document } from 'mongoose';
 
+const FeedRecordScheme: Schema = new Schema({
+    actionType: String,
+    courseId: String,
+    data: Object,
+    dateTime: Number,
+    entityType: String,
+    priority: { type: Number, default: 10 },
+    userId: String,
+});
+
+const FeedRecordModelName = 'FeedRecord';
+
 export enum FeedPriority {
     Critical = 0,
     High = 5,
@@ -19,18 +31,7 @@ export interface IFeedRecord {
 
 export interface IFeedRecordModel extends Document, IFeedRecord {}
 
-export const FeedRecordScheme: Schema = new Schema({
-    actionType: String,
-    courseId: String,
-    data: Object,
-    dateTime: Number,
-    entityType: String,
-    priority: { type: Number, default: 10 },
-    userId: String,
-});
-
-export const FeedRecordModelName = 'FeedRecord';
-export const FeedRecordDocument = model<IFeedRecordModel>(FeedRecordModelName, FeedRecordScheme);
+export const FeedRecordModel = model<IFeedRecordModel>(FeedRecordModelName, FeedRecordScheme);
 
 export enum FeedEntities {
     Course = 'Course',

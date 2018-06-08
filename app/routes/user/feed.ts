@@ -1,11 +1,11 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { FeedRecordDocument } from '../../models';
+import { FeedRecordModel } from '../../models';
 import { userService } from '../../services';
 import { setResponse } from '../utils';
 
 async function getFeedRecords(userId: string) {
-    return FeedRecordDocument.find({
+    return FeedRecordModel.find({
         userId,
     })
         .sort({ dateTime: -1 })

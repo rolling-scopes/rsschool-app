@@ -1,7 +1,7 @@
 import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { STATES, connection } from 'mongoose';
-import { CourseDocument, IApiResponse, ICourseModel } from '../../models';
+import { CourseModel, IApiResponse, ICourseModel } from '../../models';
 
 export function coursesRouter() {
     const router = new Router({ prefix: '/courses' });
@@ -12,7 +12,7 @@ export function coursesRouter() {
             return;
         }
         try {
-            const courses = await CourseDocument.find({}).exec();
+            const courses = await CourseModel.find({}).exec();
             const body: IApiResponse<ICourseModel> = {
                 data: courses,
             };

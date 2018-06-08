@@ -1,5 +1,5 @@
 import { ILogger } from '../../logger';
-import { CourseMentorDocument, CourseStudentDocument, ICourseMentorModel, IUserBase } from '../../models';
+import { CourseMentorModel, CourseStudentModel, ICourseMentorModel, IUserBase } from '../../models';
 
 export async function assignMentorsByCity(courseId: string, logger: ILogger) {
     logger.info('Assign mentors by city', { courseId });
@@ -10,7 +10,7 @@ export async function assignMentorsByCity(courseId: string, logger: ILogger) {
 const groupCourseMentorsByCity = async (
     courseId: string,
 ): Promise<{ city: string; mentors: ICourseMentorModel[] }[]> => {
-    const mentorsWithCities: ICourseMentorModel[] = await CourseMentorDocument.find({
+    const mentorsWithCities: ICourseMentorModel[] = await CourseMentorModel.find({
         city: { $ne: null },
         courseId,
         menteeCapacity: { $gt: 0 },
@@ -31,7 +31,7 @@ const groupCourseMentorsByCity = async (
 };
 
 const doAssigning = async (courseId: string, mentors: ICourseMentorModel[], city: string) => {
-    const studentsCount = await CourseStudentDocument.count({
+    const studentsCount = await CourseStudentModel.count({
         city,
         mentors: [],
     }).exec();
@@ -46,7 +46,7 @@ const doAssigning = async (courseId: string, mentors: ICourseMentorModel[], city
 };
 
 const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string, city: string, num: number) => {
-    const courseStudents = await CourseStudentDocument.find({
+    const courseStudents = await CourseStudentModel.find({
         city,
         courseId,
         mentors: [],
@@ -58,7 +58,7 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string, 
 
     await Promise.all([
         courseMentor.save(),
-        await CourseStudentDocument.updateMany(
+        await CourseStudentModel.updateMany(
             {
                 city,
                 courseId,

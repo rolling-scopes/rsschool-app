@@ -1,5 +1,5 @@
-import { UserDocument } from '../models';
+import { UserModel } from '../models';
 
 export async function getUserById(userId: string) {
-    return UserDocument.findById(userId).exec();
+    return UserModel.findById(userId).exec();
 }

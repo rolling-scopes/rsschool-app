@@ -60,4 +60,4 @@ export const EventSchema: Schema = new Schema({
 });
 
 export const EventModelName = 'Event';
-export const EventDocument = model<IEventModel>(EventModelName, EventSchema);
+export const EventModel = model<IEventModel>(EventModelName, EventSchema);
