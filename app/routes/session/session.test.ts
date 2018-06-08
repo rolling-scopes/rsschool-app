@@ -1,16 +1,11 @@
-import { sessionMiddleware } from './index';
+import { sessionRoute } from './session';
 import { IRouterContext } from 'koa-router';
+import { createTestContext } from '../../utils';
 
-describe('Session', () => {
-    it('returns user session', async () => {
-        const ctx: IRouterContext = {
-            state: {
-                user: {
-                    _id: 'apalchys',
-                },
-            },
-        } as any;
-        await sessionMiddleware(ctx);
+describe('Session route', () => {
+    it('returns data', async () => {
+        const ctx = createTestContext();
+        await sessionRoute(ctx);
         expect(ctx.body).toMatchSnapshot();
         expect(ctx.status).toBe(200);
     });
@@ -19,7 +14,7 @@ describe('Session', () => {
         const ctx: IRouterContext = {
             state: {},
         } as any;
-        await sessionMiddleware(ctx);
+        await sessionRoute(ctx);
         expect(ctx.body).toMatchSnapshot();
         expect(ctx.status).toBe(404);
     });

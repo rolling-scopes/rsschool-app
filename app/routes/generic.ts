@@ -1,10 +1,9 @@
 import { IRouterContext } from 'koa-router';
 import { Document, Model, STATES, Types, connection } from 'mongoose';
-import { ILogger } from '../logger';
 import { IApiResponse } from '../models';
 import { NOT_FOUND, OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 
-export function postRoute<T extends Document>(DocumentModel: new (data: any) => T, logger: ILogger) {
+export function createPostRoute<T extends Document>(DocumentModel: new (data: any) => T) {
     return async (ctx: IRouterContext) => {
         const model = new DocumentModel(ctx.request.body);
         const validationResult = model.validateSync();
@@ -19,15 +18,14 @@ export function postRoute<T extends Document>(DocumentModel: new (data: any) => 
             ctx.status = OK;
         } catch (e) {
             ctx.status = INTERNAL_SERVER_ERROR;
-            logger.error(e, 'Failed to save document');
+            ctx.logger.error(e, 'Failed to save document');
         }
     };
 }
 
-export function getRoute<T extends Document>(
+export function createGetRoute<T extends Document>(
     DocumentModel: Model<T>,
     options: { useObjectId: boolean } = { useObjectId: true },
-    logger: ILogger,
 ) {
     return async (ctx: IRouterContext) => {
         try {
@@ -49,7 +47,7 @@ export function getRoute<T extends Document>(
             ctx.body = body;
             ctx.status = OK;
         } catch (err) {
-            logger.error(err);
+            ctx.logger.error(err);
             ctx.status = INTERNAL_SERVER_ERROR;
         }
     };

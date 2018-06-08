@@ -1,25 +1,16 @@
-import { Middleware } from 'koa';
+import { FORBIDDEN, OK } from 'http-status-codes';
 import * as passport from 'koa-passport';
 import * as Router from 'koa-router';
 import { config } from '../../config';
-import { ILogger } from '../../logger';
-import { FORBIDDEN, UNAUTHORIZED, OK } from 'http-status-codes';
+import { devAuthMiddleware } from './devAuthMiddleware';
 
-export const guard: Middleware = async (ctx: Router.IRouterContext, next) => {
-    if ((ctx.state.user != null && ctx.isAuthenticated()) || config.isDevMode) {
-        await next();
-    } else {
-        ctx.status = UNAUTHORIZED;
-    }
-};
-
-export function authRoute(_: ILogger) {
+export function authRoute() {
     const router = new Router({ prefix: '/auth' });
 
-    router.get('/github', passport.authenticate('github'));
+    router.get('/github', config.isDevMode ? devAuthMiddleware : passport.authenticate('github'));
 
     router.get('/github/callback', passport.authenticate('github'), ctx => {
-        if (ctx.isAuthenticated()) {
+        if (ctx.isAuthenticated() || config.isDevMode) {
             ctx.redirect(config.auth.successRedirect);
         } else {
             ctx.status = FORBIDDEN;

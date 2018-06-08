@@ -1,18 +1,23 @@
 import * as Router from 'koa-router';
-import { ILogger } from '../../logger';
 import { CourseDocument } from '../../models';
-import { getRoute, postRoute } from '../generic';
+import { createGetRoute, createPostRoute } from '../generic';
 
-export * from './import';
-export * from './enroll';
-export * from './events';
-export * from './assignMentors';
+import { courseAssignMentorsRoute } from './assignMentors';
+import { courseEnrollRoute } from './enroll';
+import { courseEventsRoute } from './events';
+import { courseImportMentorsRoute, courseImportStudentsRoute } from './import';
 
-export function courseRoute(logger: ILogger) {
+export function courseRouter() {
     const router = new Router({ prefix: '/course' });
 
-    router.get('/:id', getRoute(CourseDocument, { useObjectId: false }, logger));
-    router.post('/', postRoute(CourseDocument, logger));
+    router.get('/:id', createGetRoute(CourseDocument, { useObjectId: false }));
+    router.post('/', createPostRoute(CourseDocument));
+
+    router.post('/:id/enroll', courseEnrollRoute);
+    router.get('/:id/events', courseEventsRoute);
+    router.post('/:id/mentors/assign', courseAssignMentorsRoute);
+    router.post('/:id/import/mentors', courseImportMentorsRoute);
+    router.post('/:id/import/studens', courseImportStudentsRoute);
 
     return router;
 }

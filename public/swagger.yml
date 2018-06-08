@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "1.0.0"
-  title: "Padawans API"
+  title: "RSSchool API"
 host: "localhost:3000"
 schemes:
 - "http"
@@ -13,7 +13,7 @@ paths:
         200: 
           description: |-
             200 response
-  /api/course/{id}:
+  /course/{id}:
     get:
       responses:
         200: 
@@ -22,8 +22,19 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Course Identifier
+          description: Course Id
           required: true
-          type: number
-          format: double
+          type: string
+  /user/profile:
+    get:
+      responses:
+        200: 
+          description: |-
+            200 response
+  /user/feed:
+    get:
+      responses:
+        200: 
+          description: |-
+            200 response
     

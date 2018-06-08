@@ -1,31 +1,25 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { ILogger } from '../../logger';
-import { FeedRecordDocument, IApiResponse, IFeedRecord, IUserSession, UserDocument } from '../../models';
+import { FeedRecordDocument } from '../../models';
+import { userService } from '../../services';
+import { setResponse } from '../utils';
 
-export function userFeedRoute(_: ILogger) {
-    const router = new Router({ prefix: '/user' });
-
-    router.get('/feed', async ctx => {
-        const userSession: IUserSession = ctx.state.user!;
-        const user = await UserDocument.findById(userSession._id);
-        if (user === null) {
-            ctx.status = NOT_FOUND;
-            return;
-        }
-        const feedRecords = await FeedRecordDocument.find({
-            userId: user._id,
-        })
-            .sort({ dateTime: -1 })
-            .exec();
-
-        const body: IApiResponse<IFeedRecord[]> = {
-            data: feedRecords,
-        };
-
-        ctx.body = body;
-        ctx.status = OK;
-    });
-
-    return router;
+async function getFeedRecords(userId: string) {
+    return FeedRecordDocument.find({
+        userId,
+    })
+        .sort({ dateTime: -1 })
+        .exec();
 }
+
+export const getFeedRoute = async (ctx: Router.IRouterContext) => {
+    const userId = ctx.state.user!._id;
+
+    const user = await userService.getUserById(userId);
+    if (user == null) {
+        setResponse(ctx, NOT_FOUND);
+        return;
+    }
+    const feedRecords = await getFeedRecords(userId);
+    setResponse(ctx, OK, feedRecords);
+};

@@ -17,7 +17,7 @@ export interface IFeedRecord {
     entityType: FeedEntities;
 }
 
-interface IFeedRecordModel extends Document, IFeedRecord {}
+export interface IFeedRecordModel extends Document, IFeedRecord {}
 
 export const FeedRecordScheme: Schema = new Schema({
     actionType: String,

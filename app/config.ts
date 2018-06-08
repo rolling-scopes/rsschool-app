@@ -9,6 +9,10 @@ export interface IConfig {
         intervalMin: number;
         max: number;
     };
+    roles: {
+        mentorTeams: string[];
+        adminTeams: string[];
+    };
     isDevMode: boolean;
     mongo: {
         connectAttempts: number;
@@ -35,8 +39,12 @@ export const config: IConfig = {
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
         successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
     },
+    roles: {
+        adminTeams: ['rsschool-dev-team@rolling-scopes'],
+        mentorTeams: ['rsschool-dev-team@rolling-scopes'],
+    },
 
-    isDevMode: false, // process.env.NODE_ENV !== 'production',
+    isDevMode: process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
         connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
@@ -56,5 +64,5 @@ export const config: IConfig = {
         intervalMin: 5,
         max: 100,
     },
-    sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || '',
+    sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret-session-key',
 };

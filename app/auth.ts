@@ -1,72 +1,16 @@
 import * as octokit from '@octokit/rest';
 import * as passport from 'koa-passport';
-import { Profile, Strategy as GitHubStrategy } from 'passport-github';
+import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
-import { ILogger } from './logger';
-import { IUser, IUserSession, UserDocument, saveUserSignupFeedAction } from './models';
+import { createUser } from './rules';
 
-const adminTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
-const mentorTeams: string[] = ['rsschool-dev-team@rolling-scopes'];
+type Teams = { slug: string; organization: { login: string } }[];
 
-function getRole(teamIds: string[]) {
-    if (mentorTeams.some(team => teamIds.includes(team))) {
-        return 'mentor';
-    }
-    return 'student';
-}
-
-function getAdminStatus(teamIds: string[]): boolean {
-    return adminTeams.some(team => teamIds.includes(team));
-}
-
-function getTeamIds(teams: octokit.AnyResponse) {
-    const data: Array<{ slug: string; organization: { login: string } }> = teams.data;
+function getTeamIds(data: Teams) {
     return data.map(({ slug, organization }) => `${slug}@${organization.login}`);
 }
 
-function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
-    return emails.filter(email => email.primary);
-}
-
-async function initializeUser(profile: Profile, teams: octokit.AnyResponse): Promise<IUserSession> {
-    const id = profile.username!;
-    const result = await UserDocument.findById(id).exec();
-    const teamsIds = getTeamIds(teams);
-
-    const role = getRole(teamsIds);
-    const isAdmin = getAdminStatus(teamsIds);
-    if (result === null) {
-        const user: IUser = {
-            _id: id,
-            isAdmin,
-            participations: [],
-            profile: {
-                // We support only 1 email for now and let's select primary only
-                emails: getPrimaryEmail((profile.emails as any) || []),
-                firstName: profile.name ? profile.name.givenName : '',
-                githubId: id,
-                lastName: profile.name ? profile.name.familyName : '',
-            },
-            role,
-        };
-        const [createdUser] = await Promise.all([
-            UserDocument.create(user),
-            saveUserSignupFeedAction(id, {
-                text: 'Signed Up',
-            }),
-        ]);
-        return {
-            _id: createdUser.id,
-            isAdmin,
-            role: createdUser.role,
-        };
-    }
-    result.role = role;
-    const savedUser = await result.save();
-    return { _id: savedUser.id, role: savedUser.role, isAdmin };
-}
-
-export function setupPassport(_1: ILogger) {
+export function setupPassport() {
     passport.use(
         new GitHubStrategy(
             {
@@ -83,7 +27,7 @@ export function setupPassport(_1: ILogger) {
                 });
                 github.users
                     .getTeams({})
-                    .then(teams => initializeUser(profile, teams).then(result => cb(null, result)))
+                    .then(teams => createUser(profile as any, getTeamIds(teams.data)).then(result => cb(null, result)))
                     .catch(error => cb(error, null));
             },
         ),

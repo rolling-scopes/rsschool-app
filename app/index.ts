@@ -36,7 +36,7 @@ export class App {
         this.appLogger = logger.child({ module: 'app' });
         this.mongoLogger = this.appLogger.child({ module: 'mongodb' });
 
-        const routes = routesMiddleware(this.appLogger);
+        this.koa.use(loggerMiddleware(this.appLogger.child({ module: 'middleware' })));
 
         this.koa.use(
             RateLimit.middleware({
@@ -54,11 +54,11 @@ export class App {
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
 
-        const passport = setupPassport(this.appLogger);
+        const passport = setupPassport();
         this.koa.use(passport.initialize());
         this.koa.use(passport.session());
 
-        this.koa.use(loggerMiddleware(this.appLogger.child({ module: 'middleware:logger' })));
+        const routes = routesMiddleware(this.appLogger);
         this.koa.use(routes.routes());
         this.koa.use(routes.allowedMethods());
         this.koa.use(serve('public'));
@@ -96,6 +96,10 @@ export class App {
                 this.mongoLogger.error(err, 'Cannot connect to MongoDB');
                 return this.reconnect();
             });
+    }
+
+    public disconnect() {
+        return mongoose.disconnect();
     }
 
     private reconnect() {

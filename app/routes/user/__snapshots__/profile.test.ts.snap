@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Profile route allows to patch user profile 1`] = `
+Object {
+  "data": Object {
+    "city": "",
+    "emails": Array [],
+    "firstName": "Foo",
+    "firstNameNative": "",
+    "githubId": "",
+    "lastName": "Bar",
+    "lastNameNative": "",
+    "phone": "",
+  },
+}
+`;
+
+exports[`User Profile route returns data 1`] = `
+Object {
+  "data": Object {
+    "city": "",
+    "emails": Array [],
+    "firstName": "first name",
+    "firstNameNative": "",
+    "githubId": "",
+    "lastName": "",
+    "lastNameNative": "",
+    "phone": "",
+    "primaryEducation": Object {
+      "faculty": "",
+      "graduationYear": "",
+      "university": "",
+    },
+  },
+}
+`;

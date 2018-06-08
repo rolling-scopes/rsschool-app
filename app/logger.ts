@@ -1,4 +1,4 @@
-import * as Koa from 'koa';
+import * as Router from 'koa-router';
 
 export interface ILog {
     method: string;
@@ -11,7 +11,6 @@ export interface ILog {
     statusCode: number;
 }
 
-type LoggerMiddleware = (logger: ILogger) => Koa.Middleware;
 type ErrorObj = {
     err: Partial<Error>;
 };
@@ -30,8 +29,8 @@ export interface ILogger {
  * @param {callback} next
  * @todo make stdout an option for testing and production-level logging
  */
-export const loggerMiddleware: LoggerMiddleware = (externalLogger: ILogger) => async (
-    ctx: Koa.Context,
+export const loggerMiddleware = (externalLogger: ILogger) => async (
+    ctx: Router.IRouterContext,
     next: () => Promise<any>,
 ) => {
     const data: Partial<ILog> = {
@@ -46,6 +45,7 @@ export const loggerMiddleware: LoggerMiddleware = (externalLogger: ILogger) => a
     };
 
     try {
+        ctx.logger = externalLogger;
         await next();
         data.statusCode = ctx.status;
     } catch (e) {

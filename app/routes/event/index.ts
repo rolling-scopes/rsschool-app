@@ -1,13 +1,12 @@
 import * as Router from 'koa-router';
-import { ILogger } from '../../logger';
 import { EventDocument } from '../../models/event';
-import { getRoute, postRoute } from '../generic';
+import { createGetRoute, createPostRoute } from '../generic';
 
-export function eventRoute(logger: ILogger) {
+export function eventRouter() {
     const router = new Router({ prefix: '/event' });
 
-    router.get('/:id', getRoute(EventDocument, undefined, logger));
-    router.post('/', postRoute(EventDocument, logger));
+    router.get('/:id', createGetRoute(EventDocument));
+    router.post('/', createPostRoute(EventDocument));
 
     return router;
 }
