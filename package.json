@@ -13,7 +13,7 @@
     "test:update": "jest --updateSnapshot",
     "lint-staged": "lint-staged",
     "precommit": "npm-run-all lint-staged lint test",
-    "commitmsg": "commitlint"
+    "commitmsg": "commitlint -E GIT_PARAMS"
   },
   "lint-staged": {
     "*.(ts|tsx)": [
