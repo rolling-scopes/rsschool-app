@@ -1,4 +1,9 @@
-# rsschool API
+## Intro
 
-## Swagger
-For a swagger version, see http://localhost:3000/swagger (requires this server to be running).
+Welcome to RS School API project
+
+## Documentation
+Documentation is stored in the separate repository [rsschool-docs](https://github.com/rolling-scopes/rsschool-docs)
+
+## Contributing
+You can find Contributing guide [here](https://github.com/rolling-scopes/rsschool-api/blob/master/CONTRIBUTING.md)
