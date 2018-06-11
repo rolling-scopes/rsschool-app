@@ -1,6 +1,16 @@
 import { ACCEPTED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { CourseModel, CourseStudentModel, IUserSession, saveCourseEnrollFeedAction, UserModel } from '../../models';
+import {
+    CourseModel,
+    CourseStudentModel,
+    ICourseStudentModel,
+    ICouseUser,
+    CourseMentorModel,
+    ICourseMentorModel,
+    IUserSession,
+    saveCourseEnrollFeedAction,
+} from '../../models';
+import { userService } from '../../services';
 
 export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
     try {
@@ -11,14 +21,12 @@ export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
         }
 
         const { id: courseId } = ctx.params;
-        const course = await CourseModel.findById(courseId);
-        if (course === null) {
-            ctx.status = NOT_FOUND;
-            return;
-        }
+        const [course, user] = await Promise.all([
+            CourseModel.findById(courseId).exec(),
+            userService.getUserById(userSession._id),
+        ]);
 
-        const user = await UserModel.findById(userSession._id);
-        if (user === null) {
+        if (course === null || user === null) {
             ctx.status = NOT_FOUND;
             return;
         }
@@ -29,27 +37,42 @@ export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
             return;
         }
 
-        const participation = new CourseStudentModel({
+        const data: ICouseUser = {
+            city: user.profile.city || '',
             courseId,
+            excludeReason: undefined,
             isActive: true,
-            role: user.role,
             userId: user._id,
+        };
+
+        let result: ICourseStudentModel | ICourseMentorModel | undefined;
+
+        switch (user.role) {
+            case 'student': {
+                result = await new CourseStudentModel(data).save();
+                break;
+            }
+            case 'mentor': {
+                result = await new CourseMentorModel(data).save();
+                break;
+            }
+            default:
+                result = undefined;
+        }
+
+        await saveCourseEnrollFeedAction(user._id, courseId, {
+            text: `Enrolled as ${user.role}`,
         });
 
-        const [result] = await Promise.all([
-            participation.save(),
-            saveCourseEnrollFeedAction(user._id, courseId, {
-                text: 'Enrolled',
-            }),
-        ]);
-
-        user.participations.push({
-            _id: result._id,
-            courseId,
-            isActive: true,
-            role: user.role,
-        });
-        await user.save();
+        if (result != null) {
+            user.participations.push({
+                _id: result._id,
+                courseId,
+                isActive: true,
+                role: user.role,
+            });
+            await user.save();
+        }
         ctx.status = OK;
     } catch (err) {
         ctx.logger.error(err);

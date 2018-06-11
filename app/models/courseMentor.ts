@@ -20,14 +20,14 @@ export interface ICourseMentorModel extends ICourseMentor, Document {
 }
 
 export const CourseMentorScheme: Schema = new Schema({
-    city: String,
-    courseId: String,
+    city: { type: String, default: '' },
+    courseId: { type: String, required: true },
     excludeReason: { type: String, default: undefined },
     isActive: { type: Boolean, default: true },
     menteeCapacity: { type: Number, default: 5 },
     mentees: { type: [{ _id: { type: String } }], default: [] },
     preferedMentees: { type: [{ _id: { type: String } }], default: [] },
-    userId: String,
+    userId: { type: String, required: true },
 });
 
 export const CourseMentorModelName = 'CourseMentor';

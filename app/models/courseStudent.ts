@@ -12,13 +12,13 @@ export interface ICourseStudentModel extends ICourseStudent, Document {
 }
 
 export const CourseStudentScheme: Schema = new Schema({
-    city: String,
-    courseId: String,
+    city: { type: String, default: '' },
+    courseId: { type: String, required: true },
     englishLevel: { type: String, default: '' },
     excludeReason: { type: String, default: undefined },
     isActive: { type: Boolean, default: true },
     mentors: { type: [{ _id: { type: String } }], default: [] },
-    userId: String,
+    userId: { type: String, required: true },
 });
 
 export const CourseStudentModelName = 'CourseStudent';
