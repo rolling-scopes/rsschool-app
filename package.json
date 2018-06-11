@@ -90,7 +90,7 @@
       "^.+\\.(ts)$": "ts-jest"
     },
     "testMatch": [
-      "**/*.test.(ts)"
+      "**/*.spec.(ts)"
     ],
     "setupFiles": [
       "./jestsetup.js"
