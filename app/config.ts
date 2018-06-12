@@ -18,10 +18,12 @@ export interface IConfig {
         connectAttempts: number;
         connectionString: string;
         options: {
-            auth: {
-                password: string;
-                user: string;
-            };
+            auth:
+                | {
+                      password: string;
+                      user: string;
+                  }
+                | undefined;
             dbName: string;
             keepAlive: number;
         };
@@ -31,6 +33,9 @@ export interface IConfig {
     name: string;
     sessionKey: string;
 }
+
+const mongoUser = process.env.RSSHCOOL_API_MONGO_USER1 || undefined;
+const mongoPassword = process.env.RSSHCOOL_API_MONGO_PASSWORD1 || undefined;
 
 export const config: IConfig = {
     auth: {
@@ -47,13 +52,16 @@ export const config: IConfig = {
     isDevMode: process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
-        connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://mongodb:27017',
+        connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING1 || 'mongodb://localhost:27017',
         options: {
-            auth: {
-                password: process.env.RSSHCOOL_API_MONGO_PASSWORD || '',
-                user: process.env.RSSHCOOL_API_MONGO_USER || '',
-            },
-            dbName: process.env.RSSHCOOL_API_MONGO_DBNAME || 'rsschool',
+            auth:
+                mongoUser != null && mongoPassword != null
+                    ? {
+                          password: mongoPassword,
+                          user: mongoUser,
+                      }
+                    : undefined,
+            dbName: process.env.RSSHCOOL_API_MONGO_DBNAME1 || 'rsschool',
             keepAlive: 1,
         },
         reconnectDelayMs: 5000,
