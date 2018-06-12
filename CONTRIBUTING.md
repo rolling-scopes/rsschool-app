@@ -63,23 +63,26 @@ $ git checkout -b feature-x master
 $ npm start
 ```
 7. Do hacking 👩‍💻👨‍💻 
+8. You could specify any environment variable during development using `.env` file. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
 
-8. Do not forget to write [Jest](https://facebook.github.io/jest/) specs for your feature following [Specs Styleguide](#specs-styleguide)
-9. Make sure specs, lints pass and code formatted properly (they'll be run on a git pre-commit hook too)
+**IMPORTANT:** Never commit changes to `.env` file
+
+9. Do not forget to write [Jest](https://facebook.github.io/jest/) specs for your feature following [Specs Styleguide](#specs-styleguide)
+10. Make sure specs, lints pass and code formatted properly (they'll be run on a git pre-commit hook too)
 ``` command-line
 $ npm test
 $ npm run lint
 $ npm run pretty
 ```
-10. Commit your changes using a descriptive commit message that follows our [commit message conventions](#git-commit-messages)
+11. Commit your changes using a descriptive commit message that follows our [commit message conventions](#git-commit-messages)
 ``` command-line
 $ git commit -m "feat: implement feature X"
 ```
-11. Push your branch to GitHub: 
+12. Push your branch to GitHub: 
 ``` command-line
 $ git push origin feature-x
 ```
-11. Create a pull request
+13. Create a pull request
 
 ### Pull Requests
 
