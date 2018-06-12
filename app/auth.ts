@@ -3,6 +3,8 @@ import * as passport from 'koa-passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
 import { createUser } from './rules';
+import { ILogger } from './logger';
+import { connection, STATES } from 'mongoose';
 
 type Teams = { slug: string; organization: { login: string } }[];
 
@@ -10,7 +12,7 @@ function getTeamIds(data: Teams) {
     return data.map(({ slug, organization }) => `${slug}@${organization.login}`);
 }
 
-export function setupPassport() {
+export function setupPassport(logger: ILogger) {
     passport.use(
         new GitHubStrategy(
             {
@@ -20,15 +22,28 @@ export function setupPassport() {
                 scope: ['read:user', 'read:org', 'user:email'],
             },
             (accessToken: string, _, profile, cb) => {
+                if (connection.readyState !== STATES.connected) {
+                    cb({ message: 'MongoDB connection is not available' }, null);
+                    return;
+                }
                 const github = new octokit();
                 github.authenticate({
                     token: accessToken,
                     type: 'oauth',
                 });
+                logger.info('Creating user');
                 github.users
                     .getTeams({})
-                    .then(teams => createUser(profile as any, getTeamIds(teams.data)).then(result => cb(null, result)))
-                    .catch(error => cb(error, null));
+                    .then(teams =>
+                        createUser(profile as any, getTeamIds(teams.data)).then(result => {
+                            logger.info('Created user');
+                            cb(null, result);
+                        }),
+                    )
+                    .catch(error => {
+                        logger.error('Failed to create user');
+                        cb(error, null);
+                    });
             },
         ),
     );

@@ -10,7 +10,7 @@ import { Server } from 'net';
 import { setupPassport } from './auth';
 import { config } from './config';
 import { ILogger, loggerMiddleware } from './logger';
-import { routesMiddleware } from './routes';
+import { routesMiddleware, routeLoggerMiddleware } from './routes';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -36,7 +36,7 @@ export class App {
         this.appLogger = logger.child({ module: 'app' });
         this.mongoLogger = this.appLogger.child({ module: 'mongodb' });
 
-        this.koa.use(loggerMiddleware(this.appLogger.child({ module: 'middleware' })));
+        this.koa.use(loggerMiddleware(this.appLogger));
 
         this.koa.use(
             RateLimit.middleware({
@@ -54,11 +54,12 @@ export class App {
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
 
-        const passport = setupPassport();
+        const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
         this.koa.use(passport.initialize());
         this.koa.use(passport.session());
 
         const routes = routesMiddleware(this.appLogger);
+        this.koa.use(routeLoggerMiddleware);
         this.koa.use(routes.routes());
         this.koa.use(routes.allowedMethods());
         this.koa.use(serve('public'));

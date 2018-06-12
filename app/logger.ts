@@ -1,14 +1,15 @@
 import * as Router from 'koa-router';
 
 export interface ILog {
-    method: string;
-    url: string;
-    query: string;
     data?: any;
-    remoteAddress: string;
     host: string;
-    userAgent: string;
+    method: string;
+    query: string;
+    remoteAddress: string;
     statusCode: number;
+    url: string;
+    userAgent: string;
+    userId?: string;
 }
 
 type ErrorObj = {
@@ -19,13 +20,15 @@ export interface ILogger {
     info(obj: object | string, ...params: any[]): void;
     warn(obj: object | string, ...params: any[]): void;
     error(obj: Error | ErrorObj | string, ...params: any[]): void;
-    child(options: { module: string }): ILogger;
+    child(options: { module: string; userId?: string }): ILogger;
 }
 
 export const loggerMiddleware = (externalLogger: ILogger) => async (
     ctx: Router.IRouterContext,
     next: () => Promise<any>,
 ) => {
+    const logger = externalLogger;
+
     const data: Partial<ILog> = {
         data: ctx.request.body,
         host: ctx.headers.host,
@@ -35,14 +38,19 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
         statusCode: ctx.status,
         url: ctx.url,
     };
-
     try {
-        ctx.logger = externalLogger;
+        ctx.logger = logger;
         await next();
         data.statusCode = ctx.status;
     } catch (e) {
-        externalLogger.error(e);
+        logger.error(e);
         data.statusCode = e.status;
     }
-    externalLogger.info(data, 'Processed request');
+    logger.info(
+        {
+            ...data,
+            userId: ctx.state && ctx.state.user ? ctx.state.user._id : undefined,
+        },
+        'Processed request',
+    );
 };
