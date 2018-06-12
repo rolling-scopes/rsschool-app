@@ -22,26 +22,18 @@ export interface ILogger {
     child(options: { module: string }): ILogger;
 }
 
-/**
- * Log to stdout
- *
- * @param {Koa.Context} ctx
- * @param {callback} next
- * @todo make stdout an option for testing and production-level logging
- */
 export const loggerMiddleware = (externalLogger: ILogger) => async (
     ctx: Router.IRouterContext,
     next: () => Promise<any>,
 ) => {
     const data: Partial<ILog> = {
-        // data: ctx.request.body,
+        data: ctx.request.body,
         host: ctx.headers.host,
         method: ctx.method,
         query: ctx.query,
         remoteAddress: ctx.request.ip,
         statusCode: ctx.status,
         url: ctx.url,
-        // userAgent: ctx.headers['user-agent'],
     };
 
     try {

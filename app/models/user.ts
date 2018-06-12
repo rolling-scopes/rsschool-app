@@ -51,8 +51,8 @@ export interface IUserModel extends IUser, Document {
 }
 
 export const UserSchema: Schema = new Schema({
-    _id: String,
-    isAdmin: Boolean,
+    _id: { type: String, required: true },
+    isAdmin: { type: Boolean, default: false },
     participations: {
         default: [],
         type: [
@@ -78,7 +78,7 @@ export const UserSchema: Schema = new Schema({
             university: { type: String, default: '' },
         },
     },
-    role: String,
+    role: { type: String, required: true },
 });
 
 const UserModelName = 'User';
