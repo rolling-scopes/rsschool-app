@@ -38,10 +38,25 @@ $ npm install
 ``` command-line
 $ git checkout -b feature-x master
 ```
-5. The application requires a connection to a MongoDB database. Please specify the following environment variables in order to make it work:
-- RSSHCOOL_API_MONGO_CONNECTION_STRING
-- RSSHCOOL_API_MONGO_USER
-- RSSHCOOL_API_MONGO_PASSWORD
+5. The application requires a connection to a MongoDB database. There are 2 options:
+
+    * You may specify the following environment variables in order to connect to database:
+    ``` command-line
+        RSSHCOOL_API_MONGO_CONNECTION_STRING
+        RSSHCOOL_API_MONGO_USER
+        RSSHCOOL_API_MONGO_PASSWORD
+    ```
+
+    * You may run MongoDB locally with pre-imported test data using [Docker Compose file](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml) from [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts) repository.
+    Following commands will run MongoDB locally binded to 27107 port and will import test `Users` and `Courses` data.
+    ``` command-line
+    
+        git clone git@github.com:rolling-scopes/rsschool-scripts.git
+        cd rsschool-scripts/development
+        docker-compose up
+    ```
+    For more information about Docker Compose, please check [Docker Compose documentation](https://docs.docker.com/compose/)
+    
 
 6. Run the application in development mode with live reload:
 ``` command-line
