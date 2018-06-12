@@ -31,18 +31,17 @@ export function setupPassport(logger: ILogger) {
                     token: accessToken,
                     type: 'oauth',
                 });
-                logger.info('Creating user');
                 github.users
                     .getTeams({})
                     .then(teams =>
                         createUser(profile as any, getTeamIds(teams.data)).then(result => {
-                            logger.info('Created user');
+                            logger.info({ userId: result._id }, 'Created user');
                             cb(null, result);
                         }),
                     )
-                    .catch(error => {
-                        logger.error('Failed to create user');
-                        cb(error, null);
+                    .catch(err => {
+                        logger.error(err, 'Failed to create user');
+                        cb(err, null);
                     });
             },
         ),

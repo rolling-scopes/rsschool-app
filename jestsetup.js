@@ -1,4 +1,5 @@
 process.env.NODE_PORT = 3009;
+process.env.NODE_ENV = 'test';
 
 jest.mock('bunyan', () => {
     const logger = {

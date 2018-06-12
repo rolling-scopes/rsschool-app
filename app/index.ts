@@ -11,6 +11,7 @@ import { setupPassport } from './auth';
 import { config } from './config';
 import { ILogger, loggerMiddleware } from './logger';
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
+import { dbConnectionMiddleware } from './dbConnection';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -51,6 +52,8 @@ export class App {
 
         this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
         this.koa.use(cors());
+        this.koa.use(dbConnectionMiddleware);
+
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
 

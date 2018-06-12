@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { IUser, IUserSession, saveUserSignupFeedAction, UserModel } from '../models';
+import { userService } from '../services';
 
 const adminTeams: string[] = config.roles.adminTeams;
 const mentorTeams: string[] = config.roles.mentorTeams;
@@ -30,7 +31,7 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 
 export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
     const id = profile.username!;
-    const result = await UserModel.findById(id).exec();
+    const result = await userService.getUserById(id);
 
     const role = getRole(teamsIds);
     const isAdmin = getAdminStatus(teamsIds);

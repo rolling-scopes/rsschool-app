@@ -16,7 +16,7 @@
     "commitmsg": "commitlint -E GIT_PARAMS"
   },
   "lint-staged": {
-    "*.(ts|tsx)": [
+    "*.ts": [
       "npm run pretty",
       "git add"
     ]
