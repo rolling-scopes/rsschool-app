@@ -34,8 +34,8 @@ export interface IConfig {
     sessionKey: string;
 }
 
-const mongoUser = process.env.RSSHCOOL_API_MONGO_USER1 || undefined;
-const mongoPassword = process.env.RSSHCOOL_API_MONGO_PASSWORD1 || undefined;
+const mongoUser = process.env.RSSHCOOL_API_MONGO_USER || undefined;
+const mongoPassword = process.env.RSSHCOOL_API_MONGO_PASSWORD || undefined;
 
 export const config: IConfig = {
     auth: {
