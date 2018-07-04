@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../logger';
 
-import { guardMiddleware } from './guardMiddleware';
+import { guard, adminGuard } from './guards';
 
 import { authRoute } from './auth';
 import { courseRouter } from './course';
@@ -33,11 +33,11 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, authRoute());
     applyRouter(router, sessionRouter());
 
-    router.use(guardMiddleware);
+    router.use(guard);
 
     // Requires authentication
     applyRouter(router, userRouter());
-    applyRouter(router, courseRouter());
+    applyRouter(router, courseRouter(adminGuard));
     applyRouter(router, coursesRouter());
     applyRouter(router, eventRouter());
 

@@ -34,6 +34,6 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string) 
                 mentors: [{ _id: courseMentor.userId }],
             },
         },
-    );
+    ).exec();
     await courseMentor.save();
 };

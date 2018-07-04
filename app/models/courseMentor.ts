@@ -1,17 +1,17 @@
 import { Document, Schema, model } from 'mongoose';
-import { IUserBase } from './user';
+import { IUserBase, IUser } from './user';
 
 export interface ICouseUser {
     city: string;
     courseId: string;
     userId: string;
-    excludeReason: string | undefined;
     isActive: boolean;
+    user?: IUser;
 }
 
 export interface ICourseMentor extends ICouseUser {
     menteeCapacity: number;
-    mentees: Array<IUserBase>;
+    mentees: Array<IUserBase | IUser>;
     preferedMentees: Array<IUserBase>;
 }
 
@@ -22,7 +22,6 @@ export interface ICourseMentorModel extends ICourseMentor, Document {
 export const CourseMentorScheme: Schema = new Schema({
     city: { type: String, default: '' },
     courseId: { type: String, required: true },
-    excludeReason: { type: String, default: undefined },
     isActive: { type: Boolean, default: true },
     menteeCapacity: { type: Number, default: 5 },
     mentees: { type: [{ _id: { type: String } }], default: [] },

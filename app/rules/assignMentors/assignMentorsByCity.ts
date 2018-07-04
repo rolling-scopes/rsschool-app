@@ -55,21 +55,20 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string, 
         .exec();
     courseMentor.mentees = courseStudents.map(({ userId }) => ({ _id: userId }));
     courseMentor.menteeCapacity = Math.max(courseMentor.menteeCapacity - courseStudents.length, 0);
-
+    const studentsIds = courseStudents.map(({ userId }) => userId);
     await Promise.all([
         courseMentor.save(),
         await CourseStudentModel.updateMany(
             {
                 city,
                 courseId,
-                mentors: [],
-                userId: { $in: courseMentor.preferedMentees.map(({ _id }) => _id) },
+                userId: { $in: studentsIds },
             },
             {
                 $set: {
                     mentors: [{ _id: courseMentor.userId }] as IUserBase[],
                 },
             },
-        ),
+        ).exec(),
     ]);
 };

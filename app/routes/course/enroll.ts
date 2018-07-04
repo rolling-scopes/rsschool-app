@@ -38,9 +38,8 @@ export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
         }
 
         const data: ICouseUser = {
-            city: user.profile.city || '',
+            city: user.profile.city as string,
             courseId,
-            excludeReason: undefined,
             isActive: true,
             userId: user._id,
         };

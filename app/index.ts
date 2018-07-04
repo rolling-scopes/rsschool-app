@@ -7,11 +7,12 @@ import * as serve from 'koa-static';
 import { RateLimit } from 'koa2-ratelimit';
 import * as mongoose from 'mongoose';
 import { Server } from 'net';
+
 import { setupPassport } from './auth';
 import { config } from './config';
-import { ILogger, loggerMiddleware } from './logger';
-import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { dbConnectionMiddleware } from './dbConnection';
+import { ILogger, loggerMiddleware } from './logger';
+import { routeLoggerMiddleware, routesMiddleware } from './routes';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 

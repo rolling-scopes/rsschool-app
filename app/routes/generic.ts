@@ -1,7 +1,7 @@
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from 'http-status-codes';
 import { IRouterContext } from 'koa-router';
-import { Document, Model, STATES, Types, connection } from 'mongoose';
+import { connection, Document, Model, STATES, Types } from 'mongoose';
 import { IApiResponse } from '../models';
-import { NOT_FOUND, OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 
 export function createPostRoute<T extends Document>(DocumentModel: new (data: any) => T) {
     return async (ctx: IRouterContext) => {
