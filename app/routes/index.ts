@@ -7,6 +7,7 @@ import { authRoute } from './auth';
 import { courseRouter } from './course';
 import { coursesRouter } from './courses';
 import { eventRouter } from './event';
+import { stageRouter } from './stage';
 import { healthRouter } from './health';
 import { sessionRouter } from './session';
 import { userRouter } from './user';
@@ -39,7 +40,8 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, userRouter());
     applyRouter(router, courseRouter(adminGuard));
     applyRouter(router, coursesRouter());
-    applyRouter(router, eventRouter());
+    applyRouter(router, eventRouter(adminGuard));
+    applyRouter(router, stageRouter(adminGuard));
 
     return router;
 };

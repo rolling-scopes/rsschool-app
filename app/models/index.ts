@@ -1,5 +1,6 @@
 export * from './course';
 export * from './event';
+export * from './stage';
 export * from './user';
 export * from './courseStudent';
 export * from './courseMentor';

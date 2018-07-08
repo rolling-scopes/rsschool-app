@@ -5,6 +5,7 @@ import { createGetRoute, createPostRoute } from '../generic';
 import { courseAssignMentorsRoute } from './assignMentors';
 import { courseEnrollRoute } from './enroll';
 import { courseEventsRoute } from './events';
+import { courseStagesRoute } from './stages';
 import { courseStudentsRoute } from './students';
 import { courseImportMentorsRoute, courseImportStudentsRoute } from './import';
 
@@ -16,6 +17,7 @@ export function courseRouter(adminGuard: Router.IMiddleware) {
 
     router.post('/:id/enroll', courseEnrollRoute);
     router.get('/:id/events', courseEventsRoute);
+    router.get('/:id/stages', courseStagesRoute);
 
     router.get('/:id/students', adminGuard, courseStudentsRoute);
     router.post('/:id/mentors/assign', adminGuard, courseAssignMentorsRoute);
