@@ -8,7 +8,7 @@ export interface IStage {
 }
 
 export interface IStageModel extends Document, IStage {
-    id: string;
+    _id: string;
 }
 
 export const StageSchema: Schema = new Schema({
