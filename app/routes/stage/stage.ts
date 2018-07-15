@@ -14,3 +14,15 @@ export const patchStageRoute = async (ctx: Router.IRouterContext) => {
 
     setResponse(ctx, OK, stage);
 };
+
+export const deleteStageRoute = async (ctx: Router.IRouterContext) => {
+    const { id } = ctx.params;
+    const query = await StageModel.findByIdAndRemove(id);
+
+    if (query === null) {
+        setResponse(ctx, NOT_FOUND);
+        return;
+    }
+
+    setResponse(ctx, OK);
+};
