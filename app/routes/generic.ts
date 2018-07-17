@@ -2,6 +2,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from 'http-status-c
 import { IRouterContext } from 'koa-router';
 import { connection, Document, Model, STATES, Types } from 'mongoose';
 import { IApiResponse } from '../models';
+import { setResponse } from './utils';
 
 export function createPostRoute<T extends Document>(DocumentModel: new (data: any) => T) {
     return async (ctx: IRouterContext) => {
@@ -49,6 +50,46 @@ export function createGetRoute<T extends Document>(
         } catch (err) {
             ctx.logger.error(err);
             ctx.status = INTERNAL_SERVER_ERROR;
+        }
+    };
+}
+
+export function createPatchRoute<T extends Document>(DocumentModel: Model<T>) {
+    return async (ctx: IRouterContext) => {
+        const { _id, ...body } = ctx.request.body;
+
+        try {
+            const result = await DocumentModel.findByIdAndUpdate(_id, body, { new: true });
+
+            if (result === null) {
+                setResponse(ctx, NOT_FOUND);
+                return;
+            }
+
+            setResponse(ctx, OK, result);
+        } catch (e) {
+            ctx.status = INTERNAL_SERVER_ERROR;
+            ctx.logger.error(e, 'Failed to update document');
+        }
+    };
+}
+
+export function createDeleteRoute<T extends Document>(DocumentModel: Model<T>) {
+    return async (ctx: IRouterContext) => {
+        const { id } = ctx.params;
+
+        try {
+            const query = await DocumentModel.findByIdAndRemove(id);
+
+            if (query === null) {
+                setResponse(ctx, NOT_FOUND);
+                return;
+            }
+
+            setResponse(ctx, OK);
+        } catch (e) {
+            ctx.status = INTERNAL_SERVER_ERROR;
+            ctx.logger.error(e, 'Failed to remove document');
         }
     };
 }
