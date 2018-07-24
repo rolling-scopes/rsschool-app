@@ -35,7 +35,7 @@ export interface IEvent {
     courseId: string;
     endDateTime?: number;
     location?: string;
-    descriptionFileUrl?: string;
+    urlToDescription?: string;
     startDateTime: number;
     sessionType?: SessionType;
     trainer?: string;
@@ -51,7 +51,6 @@ export interface IEventModel extends Document, IEvent {
 
 export const EventSchema: Schema = new Schema({
     courseId: String,
-    descriptionFileUrl: String,
     endDateTime: Number,
     location: String,
     sessionType: String,
@@ -60,6 +59,7 @@ export const EventSchema: Schema = new Schema({
     title: String,
     trainer: String,
     type: String,
+    urlToDescription: String,
     whoChecks: String,
 });
 
