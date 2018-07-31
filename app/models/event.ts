@@ -1,62 +1,66 @@
 import { Document, Schema, model } from 'mongoose';
 
-export interface IEventVenue {
-    name: string;
-    id: string;
+enum EventType {
+    Session = 'session',
+    Task = 'task',
 }
 
-export interface IEventTag {
-    name: string;
-    id: string;
+enum SessionType {
+    Online = 'Online',
+    Offline = 'Offline',
+    SelfLearning = 'Self-learning',
+    ExtraEvent = 'Extra Event',
 }
 
-export interface IEventSpeaker {
-    name: string;
-    id: string;
+enum TaskType {
+    Task = 'Task',
+    CodeJam = 'Code Jam',
+    Interview = 'Interview',
+    Test = 'Test',
+}
+
+enum WhoChecks {
+    Mentor = 'Mentor',
+    RandomMentor = 'Random Mentor',
+    Trainer = 'Trainer',
+    UnitTest = 'Unit Test',
+    ExternalPerson = 'External Person',
+    WithoutChecking = 'Without Checking',
+    Codewars = 'Codewars',
+    Codecademy = 'Codecademy',
+    Duolingo = 'Duolingo',
 }
 
 export interface IEvent {
     courseId: string;
-    description: string;
-    endDateTime: number;
-    id: string;
-    name: string;
-    speakers: IEventSpeaker[];
-    stage: string;
+    endDateTime?: number;
+    location?: string;
+    urlToDescription?: string;
     startDateTime: number;
-    tags: IEventTag[];
-    venue: IEventVenue;
+    sessionType?: SessionType;
+    trainer?: string;
+    type: EventType;
+    title: string;
+    taskType?: TaskType;
+    whoChecks?: WhoChecks;
 }
 
 export interface IEventModel extends Document, IEvent {
-    id: string;
+    _id: string;
 }
-
-export const EventVenueSchema: Schema = new Schema({
-    name: String,
-});
-
-export const EventSpeakerSchema: Schema = new Schema({
-    name: String,
-});
-
-export const EventTagSchema: Schema = new Schema({
-    name: String,
-});
 
 export const EventSchema: Schema = new Schema({
     courseId: String,
-    description: String,
     endDateTime: Number,
-    name: {
-        required: true,
-        type: String,
-    },
-    speakers: [EventSpeakerSchema],
-    stage: String,
+    location: String,
+    sessionType: String,
     startDateTime: Number,
-    tags: [EventTagSchema],
-    venue: EventVenueSchema,
+    taskType: String,
+    title: String,
+    trainer: String,
+    type: String,
+    urlToDescription: String,
+    whoChecks: String,
 });
 
 export const EventModelName = 'Event';
