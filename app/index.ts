@@ -79,7 +79,7 @@ export class App {
 
     public start(): Server {
         this.server = this.koa.listen(config.port);
-        this.appLogger.info(`Service is running on ${config.port} port`);
+        this.appLogger.info(`The Service is running on ${config.port} port`);
         return this.server;
     }
 
