@@ -63,26 +63,33 @@ $ git checkout -b feature-x master
 $ npm start
 ```
 7. Do hacking 👩‍💻👨‍💻 
-8. You could specify any environment variable during development using `.env` file. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+8. By default locally, you will be logged in as a `mentor` with `admin` access. If you want to change it, need to update [devAuthMiddleware.ts:14](https://github.com/rolling-scopes/rsschool-api/blob/master/app/routes/auth/devAuthMiddleware.ts#L14) locally and specify what team you belong to:
+```
+- config.roles.adminTeams // admin team (default)
+- config.roles.mentorTeams // mentor team
+- [] // no team -> student
+```
+
+9. You could specify any environment variable during development using `.env` file. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
 
 **IMPORTANT:** Never commit changes to `.env` file
 
-9. Do not forget to write [Jest](https://facebook.github.io/jest/) specs for your feature following [Specs Styleguide](#specs-styleguide)
-10. Make sure specs, lints pass and code formatted properly (they'll be run on a git pre-commit hook too)
+10. Do not forget to write [Jest](https://facebook.github.io/jest/) specs for your feature following [Specs Styleguide](#specs-styleguide)
+11. Make sure specs, lints pass and code formatted properly (they'll be run on a git pre-commit hook too)
 ``` command-line
 $ npm test
 $ npm run lint
 $ npm run pretty
 ```
-11. Commit your changes using a descriptive commit message that follows our [commit message conventions](#git-commit-messages)
+12. Commit your changes using a descriptive commit message that follows our [commit message conventions](#git-commit-messages)
 ``` command-line
 $ git commit -m "feat: implement feature X"
 ```
-12. Push your branch to GitHub: 
+13. Push your branch to GitHub: 
 ``` command-line
 $ git push origin feature-x
 ```
-13. Create a pull request
+14. Create a pull request
 
 ### Pull Requests
 
