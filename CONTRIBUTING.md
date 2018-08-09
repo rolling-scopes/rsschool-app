@@ -20,6 +20,7 @@
 - NodeJS LTS
 - Python 2.7+
 - MongoDB 3.6+
+- Git 2.10+
 
 #### Steps
 1. Fork the repository (https://help.github.com/articles/fork-a-repo/)
