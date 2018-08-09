@@ -9,11 +9,15 @@ pipeline:
     volumes:
       - /tmp/cache-npm:/root/.npm
   docker:
+    when:
+      branch: [master]
     image: plugins/docker
     secrets: [ docker_username, docker_password ]
     repo: rsschool/api
     tags: latest
   deploy:
+    when:
+      branch: [master]
     image: appleboy/drone-ssh
     host: 172.31.2.208
     secrets: [ ssh_key, ssh_username ]
