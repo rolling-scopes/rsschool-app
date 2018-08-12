@@ -3,3 +3,4 @@ dist/**
 .vscode
 coverage/**
 .env
+package-lock.json
