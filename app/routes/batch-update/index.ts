@@ -4,8 +4,13 @@ import * as bp from 'koa-body';
 import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import { STATES, connection } from 'mongoose';
 import { setResponse } from '../utils';
+// import * as fs from 'fs';
 // import { UserModel } from '../../models';
-import { parseXLSXTable, checkJSCOREInterviewTable } from '../../services/batchUpdate';
+import {
+    parseXLSXTable,
+    checkJSCOREInterviewTable,
+    makeAssignmentsForJSCoreInterview,
+} from '../../services/batchUpdate';
 // import { isUserExists, getUserById, isUserIsMentor } from '../../services/userService';
 
 export function batchUpdateRouter() {
@@ -34,8 +39,22 @@ export function batchUpdateRouter() {
             const errors = await checkJSCOREInterviewTable(taskResults);
 
             // console.log('ERRORS', errors);
+            const { headers, courseId, taskId } = ctx.request.body;
+            // console.log(ctx.request.body);
 
-            setResponse(ctx, OK, { errors });
+            // fs.writeFileSync(__dirname + '/test.md', assignments[0].mentorComment, { encoding: 'utf-8' });
+            makeAssignmentsForJSCoreInterview(
+                payload,
+                headers.split('<|>').map((h: string) => h.trim()),
+                courseId,
+                taskId,
+            );
+
+            if (!errors.length) {
+                setResponse(ctx, OK, 'Successfully Saved!');
+            } else {
+                setResponse(ctx, OK, { errors });
+            }
             return;
         }
         setResponse(ctx, OK);

@@ -53,7 +53,7 @@ export async function checkJSCOREInterviewTable(table: any) {
         for (const task of taskResults) {
             const mentorName = task[2];
 
-            const isMentor = await isUserIsMentor(mentorName);
+            const isMentor = await isUserIsMentor(mentorName.trim());
 
             if (!isMentor) {
                 errors.push(`MENTOR ${mentorName} DOES NOT EXIST`);
@@ -89,4 +89,115 @@ export async function checkJSCOREInterviewTable(table: any) {
     }, Promise.resolve([]));
 
     return allErrors;
+}
+
+export function makeAssignmentsForJSCoreInterview(
+    table: any,
+    needColumnsForSave: any,
+    courseIdentifier: string,
+    taskIdentifier: string,
+) {
+    interface INeedColumns {
+        [key: string]: number;
+    }
+    interface IAssignment {
+        courseId: string;
+        taskId: string;
+        date: string;
+        studentId: string;
+        mentorId: string;
+        score?: number;
+        mentorComment?: string;
+    }
+
+    function findNeedColumnsPositionInTable(tableColumns: Array<string>, needColumns: Array<string>): INeedColumns {
+        return needColumns.reduce((needColumnsPositionsInTable: any, needColumn: any) => {
+            const needColumnPositionInTableColumns = tableColumns.indexOf(needColumn);
+            if (needColumnPositionInTableColumns !== -1) {
+                needColumnsPositionsInTable[needColumn] = needColumnPositionInTableColumns;
+            }
+            return needColumnsPositionsInTable;
+        }, {});
+    }
+
+    function findNeedMentorCommentsColumnsInTable(
+        needTableColumns: INeedColumns,
+        mentorCommentsColumns: Array<string>,
+    ): INeedColumns {
+        return mentorCommentsColumns.reduce((needMentorCommentsColumns: any, mentorCommentColumn: any) => {
+            if (needTableColumns.hasOwnProperty(mentorCommentColumn)) {
+                needMentorCommentsColumns[mentorCommentColumn] = needTableColumns[mentorCommentColumn];
+            }
+            return needMentorCommentsColumns;
+        }, {});
+    }
+
+    function mergeMentorComments(interviewResult: Array<string>, needMentorComments: INeedColumns): string {
+        return Object.keys(needMentorComments).reduce((mergedMentorComments: string, taskName: string): string => {
+            const commentValue = interviewResult[needMentorComments[taskName]];
+            const comment = `### ${taskName}\n${commentValue}\n\n`;
+            return mergedMentorComments + comment;
+        }, '');
+    }
+
+    function makeAssignment(
+        courseId: string,
+        taskId: string,
+        interviewResult: Array<string>,
+        needColumns: INeedColumns,
+        mentorCommentsFields: Array<string>,
+    ): IAssignment {
+        return {
+            courseId,
+            date: interviewResult[needColumns[time]],
+            mentorComment: mergeMentorComments(
+                interviewResult,
+                findNeedMentorCommentsColumnsInTable(needColumns, mentorCommentsFields),
+            ),
+            mentorId: interviewResult[needColumns[mentorGitHub]],
+            score: parseInt(interviewResult[needColumns[score]], 10),
+            studentId: interviewResult[needColumns[studentGithub]],
+            taskId,
+        } as IAssignment;
+    }
+
+    function makeAssignments(
+        interviewResults: Array<string>,
+        courseId: string,
+        taskId: string,
+        needColumns: INeedColumns,
+        mentorCommentsFields: Array<string>,
+    ): Array<IAssignment> {
+        return interviewResults.map(
+            (interviewResult: any): IAssignment => {
+                return makeAssignment(courseId, taskId, interviewResult, needColumns, mentorCommentsFields);
+            },
+        );
+    }
+
+    const tableColumnsHeaders = table[0].map((h: string) => h.trim());
+    const taskResults = table.slice(1);
+
+    const time = 'Time';
+    const studentGithub = 'GitHub Студента';
+    const mentorGitHub = 'GitHub Ментора';
+    const score = 'Общая оценка';
+
+    const context = 'Знание this/apply/call/bind';
+    const dom = 'Знание DOM/DOM Events';
+    const scope = 'Знание Scope/Closures';
+    const inheritance = 'Знание наследования и классов';
+    const bookmarks = 'Заметки';
+    const mentorComments = [context, dom, scope, inheritance, bookmarks];
+
+    const assignments = makeAssignments(
+        taskResults,
+        courseIdentifier,
+        taskIdentifier,
+        findNeedColumnsPositionInTable(tableColumnsHeaders, needColumnsForSave),
+        mentorComments,
+    );
+
+    // console.log(assignments[0]);
+    return assignments;
 }
