@@ -2,6 +2,18 @@ import { WorkBook, readFile, utils } from 'xlsx';
 
 import { isUserExists, isUserIsMentor } from '../services/userService';
 
+export enum JSCOREInterviewColumns {
+    time = 'Time',
+    studentId = 'GitHub Студента',
+    mentorId = 'GitHub Ментора',
+    score = 'Общая оценка',
+    context = 'Знание this/apply/call/bind',
+    dom = 'Знание DOM/DOM Events',
+    scope = 'Знание Scope/Closures',
+    inheritance = 'Знание наследования и классов',
+    bookmarks = 'Заметки',
+}
+
 export function parseXLSXTable(path: string): Array<any> {
     const table: WorkBook = readFile(path);
     const name: string = table.SheetNames[0];
@@ -149,14 +161,14 @@ export function makeAssignmentsForJSCoreInterview(
     ): IAssignment {
         return {
             courseId,
-            date: interviewResult[needColumns[time]],
+            date: interviewResult[needColumns[JSCOREInterviewColumns.time]],
             mentorComment: mergeMentorComments(
                 interviewResult,
                 findNeedMentorCommentsColumnsInTable(needColumns, mentorCommentsFields),
             ),
-            mentorId: interviewResult[needColumns[mentorGitHub]],
-            score: parseInt(interviewResult[needColumns[score]], 10),
-            studentId: interviewResult[needColumns[studentGithub]],
+            mentorId: interviewResult[needColumns[JSCOREInterviewColumns.mentorId]].trim(),
+            score: parseInt(interviewResult[needColumns[JSCOREInterviewColumns.score]].trim(), 10),
+            studentId: interviewResult[needColumns[JSCOREInterviewColumns.studentId]].trim(),
             taskId,
         } as IAssignment;
     }
@@ -178,17 +190,13 @@ export function makeAssignmentsForJSCoreInterview(
     const tableColumnsHeaders = table[0].map((h: string) => h.trim());
     const taskResults = table.slice(1);
 
-    const time = 'Time';
-    const studentGithub = 'GitHub Студента';
-    const mentorGitHub = 'GitHub Ментора';
-    const score = 'Общая оценка';
-
-    const context = 'Знание this/apply/call/bind';
-    const dom = 'Знание DOM/DOM Events';
-    const scope = 'Знание Scope/Closures';
-    const inheritance = 'Знание наследования и классов';
-    const bookmarks = 'Заметки';
-    const mentorComments = [context, dom, scope, inheritance, bookmarks];
+    const mentorComments = [
+        JSCOREInterviewColumns.context,
+        JSCOREInterviewColumns.dom,
+        JSCOREInterviewColumns.scope,
+        JSCOREInterviewColumns.inheritance,
+        JSCOREInterviewColumns.bookmarks,
+    ];
 
     const assignments = makeAssignments(
         taskResults,
