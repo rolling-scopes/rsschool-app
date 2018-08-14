@@ -51,7 +51,7 @@ export class App {
             }),
         );
 
-        this.koa.use(bodyParser());
+        this.koa.use(bodyParser({ multipart: true }));
         this.koa.use(cors());
         this.koa.use(dbConnectionMiddleware);
 
