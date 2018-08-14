@@ -1,7 +1,7 @@
 import * as cors from '@koa/cors';
 import { createLogger } from 'bunyan';
 import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
+import * as bodyParser from 'koa-body';
 import * as session from 'koa-session';
 import * as serve from 'koa-static';
 import { RateLimit } from 'koa2-ratelimit';
@@ -51,7 +51,7 @@ export class App {
             }),
         );
 
-        this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
+        this.koa.use(bodyParser());
         this.koa.use(cors());
         this.koa.use(dbConnectionMiddleware);
 
