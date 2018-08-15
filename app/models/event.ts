@@ -1,7 +1,7 @@
 import { Document, Schema, model } from 'mongoose';
 
 enum EventType {
-    Session = 'session',
+    Session = 'lecture',
     Task = 'task',
 }
 
@@ -63,5 +63,8 @@ export const EventSchema: Schema = new Schema({
     whoChecks: String,
 });
 
-export const EventModelName = 'Event';
-export const EventModel = model<IEventModel>(EventModelName, EventSchema);
+export const SessionModelName = 'Event';
+export const SessionModel = model<IEventModel>(SessionModelName, EventSchema);
+
+export const TaskModelName = 'Task';
+export const TaskModel = model<IEventModel>(TaskModelName, EventSchema);
