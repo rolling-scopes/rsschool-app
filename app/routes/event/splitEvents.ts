@@ -21,7 +21,6 @@ export const splitEventsRoute = async (ctx: Router.IRouterContext) => {
                 event = new TaskModel({
                     ...ctx.request.body,
                     author: userSession._id,
-                    type: ctx.request.body.taskType,
                 });
                 await event.save();
                 const students: any = await getStudentsByCourseId(ctx.request.body.courseId);

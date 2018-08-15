@@ -25,8 +25,8 @@ export interface ITask {
     mentorCommentTemplate?: string;
     startDateTime: number;
     studentCommentTemplate?: string;
+    taskType: TaskType;
     title: string;
-    type: TaskType;
     urlToDescription: string;
     whoChecks: WhoChecks;
 }
@@ -41,8 +41,8 @@ export const TaskSchema: Schema = new Schema({
     mentorCommentTemplate: String,
     startDateTime: Number,
     studentCommentTemplate: String,
+    taskType: String,
     title: String,
-    type: String,
     urlToDescription: String,
     whoChecks: String,
 });
