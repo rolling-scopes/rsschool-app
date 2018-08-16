@@ -1,5 +1,7 @@
-import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
+import { INTERNAL_SERVER_ERROR, OK, NOT_FOUND } from 'http-status-codes';
 import * as Router from 'koa-router';
+import { setResponse } from '../utils';
+
 import {
     ITaskModel,
     IEventModel,
@@ -12,7 +14,7 @@ import {
     CourseStudentModel,
 } from '../../models';
 
-export const splitEventsRoute = async (ctx: Router.IRouterContext) => {
+export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
         let event: ITaskModel | IEventModel | undefined;
@@ -22,7 +24,9 @@ export const splitEventsRoute = async (ctx: Router.IRouterContext) => {
                     ...ctx.request.body,
                     author: userSession._id,
                 });
-                await event.save();
+                ctx.body = {};
+                ctx.body = await event.save();
+                ctx.status = OK;
                 const students: any = await getStudentsByCourseId(ctx.request.body.courseId);
                 for (const index in students) {
                     if (students[index]) {
@@ -47,16 +51,54 @@ export const splitEventsRoute = async (ctx: Router.IRouterContext) => {
             }
             case 'session': {
                 event = new EventModel(ctx.request.body);
-                await event.save();
+                ctx.body = await event.save();
+                ctx.status = OK;
                 break;
             }
             default:
                 return;
         }
-        ctx.status = OK;
-    } catch (err) {
-        ctx.logger.error(err);
+    } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
+        ctx.logger.error(e, 'Failed to save document');
+    }
+};
+
+export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
+    const { id } = ctx.params;
+
+    try {
+        const eventsQuery = await EventModel.findByIdAndRemove(id);
+        const query = eventsQuery === null ? await TaskModel.findByIdAndRemove(id) : eventsQuery;
+
+        if (query === null) {
+            setResponse(ctx, NOT_FOUND);
+            return;
+        }
+
+        setResponse(ctx, OK);
+    } catch (e) {
+        ctx.status = INTERNAL_SERVER_ERROR;
+        ctx.logger.error(e, 'Failed to remove document');
+    }
+};
+
+export const createPatchEventsRoute = async (ctx: Router.IRouterContext) => {
+    const { _id, ...body } = ctx.request.body;
+
+    try {
+        const taskResult = await TaskModel.findByIdAndUpdate(_id, body, { new: true });
+        const result = taskResult === null ? await EventModel.findByIdAndUpdate(_id, body, { new: true }) : taskResult;
+
+        if (result === null) {
+            setResponse(ctx, NOT_FOUND);
+            return;
+        }
+
+        setResponse(ctx, OK, result);
+    } catch (e) {
+        ctx.status = INTERNAL_SERVER_ERROR;
+        ctx.logger.error(e, 'Failed to update document');
     }
 };
 

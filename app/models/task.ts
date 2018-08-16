@@ -21,12 +21,14 @@ enum WhoChecks {
 
 export interface ITask {
     author: string;
+    courseId: string;
     endDateTime: number;
     mentorCommentTemplate?: string;
     startDateTime: number;
     studentCommentTemplate?: string;
     taskType: TaskType;
     title: string;
+    type: string;
     urlToDescription: string;
     whoChecks: WhoChecks;
 }
@@ -37,12 +39,14 @@ export interface ITaskModel extends Document, ITask {
 
 export const TaskSchema: Schema = new Schema({
     author: String,
+    courseId: String,
     endDateTime: Number,
     mentorCommentTemplate: String,
     startDateTime: Number,
     studentCommentTemplate: String,
     taskType: String,
     title: String,
+    type: String,
     urlToDescription: String,
     whoChecks: String,
 });
