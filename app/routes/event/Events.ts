@@ -1,12 +1,13 @@
 import { INTERNAL_SERVER_ERROR, OK, NOT_FOUND } from 'http-status-codes';
+import { connection, STATES, Types } from 'mongoose';
 import * as Router from 'koa-router';
 import { setResponse } from '../utils';
 
 import {
-    ITaskModel,
+    IApiResponse,
     IEventModel,
     TaskModel,
-    EventModel,
+    SessionModel,
     IUserSession,
     AssignmentModel,
     AssignmentStatus,
@@ -17,10 +18,9 @@ import {
 export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
-        let event: ITaskModel | IEventModel | undefined;
         switch (ctx.request.body.type) {
             case 'task': {
-                event = new TaskModel({
+                const event = new TaskModel({
                     ...ctx.request.body,
                     author: userSession._id,
                 });
@@ -50,7 +50,7 @@ export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
                 break;
             }
             case 'session': {
-                event = new EventModel(ctx.request.body);
+                const event = new SessionModel(ctx.request.body);
                 ctx.body = await event.save();
                 ctx.status = OK;
                 break;
@@ -68,12 +68,15 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
     const { id } = ctx.params;
 
     try {
-        const eventsQuery = await EventModel.findByIdAndRemove(id);
-        const query = eventsQuery === null ? await TaskModel.findByIdAndRemove(id) : eventsQuery;
+        let query = await SessionModel.findByIdAndRemove(id);
 
         if (query === null) {
-            setResponse(ctx, NOT_FOUND);
-            return;
+            query = await TaskModel.findByIdAndRemove(id);
+            await AssignmentModel.remove({ taskId: id });
+            if (query === null) {
+                setResponse(ctx, NOT_FOUND);
+                return;
+            }
         }
 
         setResponse(ctx, OK);
@@ -87,8 +90,9 @@ export const createPatchEventsRoute = async (ctx: Router.IRouterContext) => {
     const { _id, ...body } = ctx.request.body;
 
     try {
-        const taskResult = await TaskModel.findByIdAndUpdate(_id, body, { new: true });
-        const result = taskResult === null ? await EventModel.findByIdAndUpdate(_id, body, { new: true }) : taskResult;
+        const result =
+            (await SessionModel.findByIdAndUpdate(_id, body, { new: true })) ||
+            (await TaskModel.findByIdAndUpdate(_id, body, { new: true }));
 
         if (result === null) {
             setResponse(ctx, NOT_FOUND);
@@ -99,6 +103,32 @@ export const createPatchEventsRoute = async (ctx: Router.IRouterContext) => {
     } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
         ctx.logger.error(e, 'Failed to update document');
+    }
+};
+
+export const createGetEventsRoute = async (ctx: Router.IRouterContext) => {
+    const options: { useObjectId: boolean } = { useObjectId: true };
+    try {
+        if (connection.readyState !== STATES.connected) {
+            ctx.status = INTERNAL_SERVER_ERROR;
+            return;
+        }
+        const data =
+            (await SessionModel.findById(options.useObjectId ? Types.ObjectId(ctx.params.id) : ctx.params.id).exec()) ||
+            (await TaskModel.findById(options.useObjectId ? Types.ObjectId(ctx.params.id) : ctx.params.id).exec());
+        if (data === null) {
+            ctx.body = {};
+            ctx.status = NOT_FOUND;
+            return;
+        }
+        const body: IApiResponse<IEventModel> = {
+            data,
+        };
+        ctx.body = body;
+        ctx.status = OK;
+    } catch (err) {
+        ctx.logger.error(err);
+        ctx.status = INTERNAL_SERVER_ERROR;
     }
 };
 

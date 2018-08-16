@@ -32,6 +32,7 @@ enum WhoChecks {
 }
 
 export interface IEvent {
+    author?: string;
     courseId: string;
     endDateTime?: number;
     location?: string;
@@ -50,6 +51,7 @@ export interface IEventModel extends Document, IEvent {
 }
 
 export const EventSchema: Schema = new Schema({
+    author: String,
     courseId: String,
     endDateTime: Number,
     location: String,
@@ -63,5 +65,8 @@ export const EventSchema: Schema = new Schema({
     whoChecks: String,
 });
 
-export const EventModelName = 'Event';
-export const EventModel = model<IEventModel>(EventModelName, EventSchema);
+export const SessionModelName = 'Session';
+export const SessionModel = model<IEventModel>(SessionModelName, EventSchema);
+
+export const TaskModelName = 'Task';
+export const TaskModel = model<IEventModel>(TaskModelName, EventSchema);
