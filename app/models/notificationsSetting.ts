@@ -7,11 +7,11 @@ export interface INotificationsSetting extends Document {
     telegramId: number;
     isEnable: boolean;
     types?: NotificationTypes[];
-    dateFrom?: {
+    timeFrom?: {
         hours: number;
         minutes: number;
     };
-    dateTo?: {
+    timeTo?: {
         hours: number;
         minutes: number;
     };
@@ -22,18 +22,18 @@ export interface INotificationsSettingModel extends Document, INotificationsSett
 }
 
 export const NotificationsSettingSchema: Schema = new Schema({
-    dateFrom: {
-        hours: { type: Number },
-        minutes: { type: Number },
-    },
-    dateTo: {
-        hours: { type: Number },
-        minutes: { type: Number },
-    },
     isEnable: { type: Boolean, default: true },
     telegramId: { type: Number, required: true },
+    timeFrom: {
+        hours: { type: Number, min: 0, max: 24 },
+        minutes: { type: Number, min: 0, max: 59 },
+    },
+    timeTo: {
+        hours: { type: Number, min: 0, max: 24 },
+        minutes: { type: Number, min: 0, max: 59 },
+    },
     types: { type: Array },
-    userID: { type: String, required: true },
+    userId: { type: String, required: true },
 });
 
 export const NotificationSettingsModelName = 'NotificationsSetting';
