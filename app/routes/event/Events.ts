@@ -72,8 +72,9 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
 
         if (query === null) {
             query = await TaskModel.findByIdAndRemove(id);
-            await AssignmentModel.remove({ taskId: id });
-            if (query === null) {
+            if (query !== null) {
+                await AssignmentModel.remove({ taskId: id });
+            } else {
                 setResponse(ctx, NOT_FOUND);
                 return;
             }
