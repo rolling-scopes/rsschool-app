@@ -13,25 +13,55 @@ export interface IUserSession extends IUserBase {
     isAdmin: boolean;
 }
 
+export enum Gender {
+    'male',
+    'female',
+}
+
+export enum YearsInFrontEnd {
+    'less than 1 year',
+    'less than 2 years',
+    '2-5 years',
+    'more than 5 years',
+}
+
 export interface IUserProfile {
     city: string;
-    emails: Array<{ value: string; primary: boolean }>;
     employmentHistory: string;
     englishLevel: string;
     firstName: string;
     firstNameNative: string;
-    githubId: string;
     isInternshipNeeded: boolean;
     isWorkNeeded: boolean;
     lastName: string;
     lastNameNative: string;
     notes: string;
-    phone: string;
+    contacts: {
+        phone: string;
+        emails: string;
+        skype: string;
+        telegram: string;
+        other: string;
+    };
     primaryEducation: {
         university: string;
-        graduationYear: string;
+        graduationYear: number;
         faculty: string;
     };
+    dateOfBirth: string;
+    gender: Gender;
+    tShirtSize: string;
+    epamDetails: {
+        isEPAMEmployee: boolean;
+        epamEmail?: string;
+        epamUpsaId?: string;
+    };
+    experience: {
+        yearsInFrontEnd?: YearsInFrontEnd;
+        isStudiedAtRSSchool: boolean;
+        hadMentoringExperience: boolean;
+    };
+    githubId: string;
 }
 
 export interface IUserParticipation {
@@ -65,18 +95,41 @@ export const UserSchema: Schema = new Schema({
     },
     profile: {
         city: { type: String, default: '' },
-        emails: { type: Array, default: [] },
+        contacts: {
+            emails: { type: String, default: '' },
+            other: { type: String, default: '' },
+            phone: { type: String, default: '' },
+            skype: { type: String, default: '' },
+            telegram: { type: String, default: '' },
+        },
+        dateOfBirth: { type: String, default: '' },
+        employmentHistory: { type: String, default: '' },
+        englishLevel: { type: String, default: '' },
+        epamDetails: {
+            epamEmail: { type: String, default: '' },
+            epamUpsaId: { type: String, default: '' },
+            isEPAMEmployee: { type: Boolean, default: false },
+        },
+        experience: {
+            hadMentoringExperience: { type: Boolean, default: false },
+            isStudiedAtRSSchool: { type: Boolean, default: false },
+            yearsInFrontEnd: { type: String, default: '' },
+        },
         firstName: { type: String, default: '' },
         firstNameNative: { type: String, default: '' },
+        gender: { type: String, default: 'male' },
         githubId: { type: String, default: '' },
+        isInternshipNeeded: { type: Boolean, default: false },
+        isWorkNeeded: { type: Boolean, default: false },
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
-        phone: { type: String, default: '' },
+        notes: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
-            graduationYear: { type: String, default: '' },
+            graduationYear: { type: Number, default: '' },
             university: { type: String, default: '' },
         },
+        tShirtSize: { type: String, default: '' },
     },
     role: { type: String, required: true },
 });
