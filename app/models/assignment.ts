@@ -16,9 +16,9 @@ export interface IAssignment {
     mentorComment: string;
     score: number;
     assignmentRepo: string;
-    deadlineDate: string;
-    completeDate: string;
-    checkDate: string;
+    deadlineDate: number;
+    completeDate: number;
+    checkDate: number;
     status: AssignmentStatus;
 }
 
@@ -28,10 +28,10 @@ export interface IAssignmentModel extends Document, IAssignment {
 
 export const AssignmentSchema: Schema = new Schema({
     assignmentRepo: String,
-    checkDate: String,
-    completeDate: String,
+    checkDate: Number,
+    completeDate: Number,
     courseId: String,
-    deadlineDate: String,
+    deadlineDate: Number,
     mentorComment: String,
     mentorId: String,
     score: Number,
