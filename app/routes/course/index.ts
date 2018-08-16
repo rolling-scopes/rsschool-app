@@ -7,6 +7,7 @@ import { courseEnrollRoute } from './enroll';
 import { courseEventsRoute } from './events';
 import { courseStagesRoute } from './stages';
 import { courseStudentsRoute } from './students';
+import { courseAssignmentsRoute, courseTasksRoute } from './assignments';
 import { courseImportMentorsRoute, courseImportStudentsRoute } from './import';
 
 export function courseRouter(adminGuard: Router.IMiddleware) {
@@ -18,6 +19,8 @@ export function courseRouter(adminGuard: Router.IMiddleware) {
     router.post('/:id/enroll', courseEnrollRoute);
     router.get('/:id/events', courseEventsRoute);
     router.get('/:id/stages', courseStagesRoute);
+    router.get('/:id/:userId/assignments', courseAssignmentsRoute);
+    router.get('/:id/:userId/tasks', courseTasksRoute);
 
     router.get('/:id/students', adminGuard, courseStudentsRoute);
     router.post('/:id/mentors/assign', adminGuard, courseAssignMentorsRoute);
