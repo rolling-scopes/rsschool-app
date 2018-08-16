@@ -5,9 +5,9 @@ import { SessionModel, IApiResponse, IEventModel, TaskModel } from '../../models
 export const courseEventsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const { id: courseId } = ctx.params;
-        const events: any = await SessionModel.find({ courseId }).exec();
-        const tasks: any = await TaskModel.find({ courseId }).exec();
-        const result: IEventModel = events.concat(tasks);
+        const events = await SessionModel.find({ courseId }).exec();
+        const tasks = await TaskModel.find({ courseId }).exec();
+        const result: IEventModel[] = events.concat(tasks);
         const body: IApiResponse<IEventModel> = {
             data: result,
         };

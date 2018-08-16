@@ -27,21 +27,16 @@ export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
                 ctx.body = {};
                 ctx.body = await event.save();
                 ctx.status = OK;
-                const students: any = await getStudentsByCourseId(ctx.request.body.courseId);
+                const students: ICourseStudent[] = await getStudentsByCourseId(ctx.request.body.courseId);
                 for (const index in students) {
                     if (students[index]) {
+                        const student: ICourseStudent = students[index];
                         const assignment = new AssignmentModel({
-                            assignmentRepo: event.urlToDescription,
-                            checkDate: 0,
-                            completeDate: 0,
                             courseId: ctx.request.body.courseId,
                             deadlineDate: event.endDateTime,
-                            mentorComment: '',
-                            mentorId: students[index].mentors.githubId,
-                            score: 0,
+                            mentorId: student.mentors,
                             status: AssignmentStatus.Assigned,
-                            studentComment: '',
-                            studentId: students[index].user.profile.githubId,
+                            studentId: student.userId,
                             taskId: event.id,
                         });
                         await assignment.save();
@@ -134,7 +129,7 @@ export const createGetEventsRoute = async (ctx: Router.IRouterContext) => {
 };
 
 const getStudentsByCourseId = async (courseId: string) => {
-    const result: ICourseStudent = await CourseStudentModel.aggregate([
+    const result: ICourseStudent[] = await CourseStudentModel.aggregate([
         {
             $match: {
                 courseId,
