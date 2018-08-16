@@ -38,7 +38,8 @@
     "koa2-ratelimit": "0.5.0",
     "koa2-swagger-ui": "2.9.1",
     "mongoose": "5.1.4",
-    "passport-github": "1.1.0"
+    "passport-github": "1.1.0",
+    "telegraf": "^3.22.2"
   },
   "devDependencies": {
     "@commitlint/cli": "7.0.0",
