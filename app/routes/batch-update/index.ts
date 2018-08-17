@@ -37,6 +37,7 @@ export function batchUpdateRouter() {
         if (ctx.request.files !== undefined && ctx.request.files.table) {
             const { headers: headersString, courseId, taskId } = ctx.request.body;
             const headers = headersString.split('<|>');
+            // {'GitHub Студента': 'studentId'}
             if (
                 !headers.includes(JSCOREInterviewColumns.studentId) ||
                 !headers.includes(JSCOREInterviewColumns.mentorId)
@@ -48,6 +49,7 @@ export function batchUpdateRouter() {
             const payload = parseXLSXTable(ctx.request.files.table.path);
             const taskResults = payload.slice(1);
 
+            // TODO
             const errors = await checkJSCOREInterviewTable(taskResults);
             if (errors.length) {
                 setResponse(ctx, OK, { errors });

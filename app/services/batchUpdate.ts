@@ -14,20 +14,22 @@ export enum JSCOREInterviewColumns {
     bookmarks = 'Заметки',
 }
 
+// TODO: rename to getTableColumns
 export function parseXLSXTable(path: string): Array<any> {
     const table: WorkBook = readFile(path);
-    const name: string = table.SheetNames[0];
+    const firstList: number = 0;
+    const name: string = table.SheetNames[firstList];
 
     return utils.sheet_to_json(table.Sheets[name], { header: 1 });
 }
 
-export async function checkJSCOREInterviewTable(table: any) {
-    function checkForStudentsDuplications(taskResults: Array<any>) {
+export function checkForStudentsDuplications({ studentColumn }: any) {
+    return (taskResults: Array<any>) => {
         const errors: Array<string> = [];
 
         const userDuplications: any = {};
         taskResults.forEach((result: any) => {
-            const student = result[1];
+            const student = result[studentColumn];
 
             if (!userDuplications.hasOwnProperty(student)) {
                 userDuplications[student] = 1;
@@ -36,34 +38,39 @@ export async function checkJSCOREInterviewTable(table: any) {
             }
         });
 
-        for (const student in userDuplications) {
+        for (const student of Object.keys(userDuplications)) {
             if (userDuplications[student] > 1) {
                 errors.push(`STUDENT ${student} IS DUPLICATED IN SCORE TABLE`);
             }
         }
 
         return errors;
-    }
+    };
+}
 
-    async function checkStudentsForExisting(taskResults: Array<any>) {
+export function checkStudentsForExisting({ studentColumn }: any) {
+    return async (taskResults: Array<any>) => {
         const errors = [];
 
         for (const task of taskResults) {
-            const student = task[1];
+            const student = task[studentColumn];
             const isStudentExists = await isUserExists(student);
+
             if (!isStudentExists) {
                 errors.push(`STUDENT ${student} DOES NOT EXIST`);
             }
         }
 
         return errors;
-    }
+    };
+}
 
-    async function checkMentorsForExisting(taskResults: Array<any>) {
+export function checkMentorsForExisting({ mentorColumn }: any) {
+    return async (taskResults: Array<any>) => {
         const errors = [];
 
         for (const task of taskResults) {
-            const mentorName = task[2];
+            const mentorName = task[mentorColumn];
 
             const isMentor = await isUserIsMentor(mentorName.trim());
 
@@ -73,14 +80,16 @@ export async function checkJSCOREInterviewTable(table: any) {
         }
 
         return errors;
-    }
+    };
+}
 
-    function checkForFloatingScore(taskResults: Array<any>) {
+export function checkForFloatingScore({ studentColumn, scoreColumn }: any) {
+    return (taskResults: Array<any>) => {
         const errors: Array<string> = [];
 
         taskResults.forEach((result: any) => {
-            const student = result[1];
-            const score = result[7];
+            const student = result[studentColumn];
+            const score = result[scoreColumn];
 
             if (!Number.isInteger(parseFloat(score))) {
                 errors.push(`SCORE FOR ${student} WITH FLOAT POINT`);
@@ -88,16 +97,14 @@ export async function checkJSCOREInterviewTable(table: any) {
         });
 
         return errors;
-    }
+    };
+}
 
-    const interviewResults = table.slice(1);
-    const allErrors = [
-        checkForStudentsDuplications,
-        checkStudentsForExisting,
-        checkMentorsForExisting,
-        checkForFloatingScore,
-    ].reduce(async (errors: any, fn: any) => {
-        return Promise.resolve([...(await Promise.resolve(errors)), ...(await fn(interviewResults))]);
+// TODO columns, checkers
+// @ts-ignore
+export async function checkJSCOREInterviewTable([tableHeaders, ...taskResults]: any, checkers: any) {
+    const allErrors = checkers.reduce(async (errors: any, fn: any) => {
+        return Promise.resolve([...(await Promise.resolve(errors)), ...(await fn(taskResults))]);
     }, Promise.resolve([]));
 
     return allErrors;
