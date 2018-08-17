@@ -1,24 +1,29 @@
 import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { IApiResponse, AssignmentModel, IAssignmentModel, IUserSession, IEventModel, TaskModel } from '../../models';
+import {
+    IApiResponse,
+    AssignmentModel,
+    IAssignmentModel,
+    IUserSession,
+    IEventModel,
+    TaskModel,
+    AssignmentStatus,
+} from '../../models';
 export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
         const { id: courseId } = ctx.params;
-        let studentId: string = userSession._id;
-        studentId = 'brody.moen19';
-
-        const assignments: IAssignmentModel[] = await AssignmentModel.find({ courseId, studentId }).exec();
+        const studentId: string = userSession._id;
+        const assignments: IAssignmentModel[] = await getAssignmentsByCourseIdAndUserId(courseId, studentId);
         const arrayOfTasksId: string[] = [];
         for (const index in assignments) {
             if (assignments[index]) {
                 arrayOfTasksId.push(assignments[index].taskId);
             }
         }
-        const tasks: IEventModel[] = await TaskModel.find({ _id: arrayOfTasksId }).exec();
+        const tasks: IEventModel[] = await getTasksByTaskId(arrayOfTasksId);
         const tasksForCombine: any = tasks;
         const combinedAssignments: any = assignments;
-
         for (const index in combinedAssignments) {
             if (combinedAssignments[index] && tasksForCombine[index]) {
                 combinedAssignments[index]._doc = {
@@ -27,8 +32,8 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
                 };
             }
         }
-        const result: any = getNormalizeAssignmentsData(combinedAssignments);
-        const body: IApiResponse<IAssignmentModel> = {
+        const result: NormalizeAssignmentsData = getNormalizeAssignmentsData(combinedAssignments);
+        const body: IApiResponse<NormalizeAssignmentsData> = {
             data: result,
         };
         ctx.body = body;
@@ -48,10 +53,10 @@ type NormalizeAssignmentsData = {
     assignments: INormalizeAssignments[];
 };
 
-export const getNormalizeAssignmentsData = (assignments: IAssignmentModel[]): NormalizeAssignmentsData[] => {
+export const getNormalizeAssignmentsData = (assignments: IAssignmentModel[]): NormalizeAssignmentsData => {
     const sortedAssignments = assignments
         .reduce<INormalizeAssignments[]>((res, assignment) => {
-            if (assignment.deadlineDate < Date.now() && assignment.score === null) {
+            if (assignment.deadlineDate < Date.now() && assignment.status === AssignmentStatus.Assigned) {
                 res.push({ assignment, isEndAssignment: true });
             } else {
                 res.push({ assignment, isEndAssignment: false });
@@ -63,19 +68,20 @@ export const getNormalizeAssignmentsData = (assignments: IAssignmentModel[]): No
             const b = assignmentB.assignment.deadlineDate!;
             return b - a;
         });
-    const initialData = sortedAssignments.reduce<NormalizeAssignmentsData[]>(
-        res => {
-            return res;
+    const data = sortedAssignments.reduce<NormalizeAssignmentsData>(
+        (prev, next) => {
+            prev.assignments.push(next);
+            return prev;
         },
-        [{ assignments: [] }],
+        { assignments: [] },
     );
-    const data = sortedAssignments.reduce<NormalizeAssignmentsData[]>((res, normalizeAssignment) => {
-        for (const item of res) {
-            if (item) {
-                item.assignments.push(normalizeAssignment);
-            }
-        }
-        return res;
-    }, initialData);
     return data;
+};
+
+const getAssignmentsByCourseIdAndUserId = (courseId: string, studentId: string) => {
+    return AssignmentModel.find({ courseId, studentId }).exec();
+};
+
+const getTasksByTaskId = (arrayOfTasksId: string[]) => {
+    return TaskModel.find({ _id: arrayOfTasksId }).exec();
 };
