@@ -27,8 +27,8 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
         for (const index in combinedAssignments) {
             if (combinedAssignments[index] && tasksForCombine[index]) {
                 combinedAssignments[index]._doc = {
-                    ...combinedAssignments[index]._doc,
                     ...tasksForCombine[index]._doc,
+                    ...combinedAssignments[index]._doc,
                 };
             }
         }

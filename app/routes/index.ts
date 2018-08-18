@@ -4,6 +4,7 @@ import { ILogger } from '../logger';
 import { guard, adminGuard } from './guards';
 
 import { authRoute } from './auth';
+import { assignmentRouter } from './assignment';
 import { courseRouter } from './course';
 import { coursesRouter } from './courses';
 import { eventRouter } from './event';
@@ -42,6 +43,7 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, coursesRouter());
     applyRouter(router, eventRouter(adminGuard));
     applyRouter(router, stageRouter(adminGuard));
+    applyRouter(router, assignmentRouter(adminGuard));
 
     return router;
 };
