@@ -12,7 +12,7 @@ import {
     parseXLSXTable,
     prepareForChecking,
     makeAssignments,
-    defaultRequirenmentsForAssignments,
+    defaultRequirementsForSaving,
 } from '../../services/batchUpdate';
 
 export function batchUpdateRouter() {
@@ -40,14 +40,14 @@ export function batchUpdateRouter() {
             const { headers, courseId, taskId } = ctx.request.body;
             const parsedHeaders = JSON.parse(headers);
 
-            if (!isAllNeedData(parsedHeaders, defaultRequirenmentsForAssignments)) {
+            if (!isAllNeedData(parsedHeaders, defaultRequirementsForSaving)) {
                 setResponse(ctx, OK, { errors: [`studentId, mentorId, score, checkDate are required`] });
                 return;
             }
+
             // @ts-ignore
             const [tableHeaders, ...results] = parseXLSXTable(ctx.request.files.table.path);
             const errors = await checkTable(results, prepareForChecking(parsedHeaders)(baseCheckers));
-
             if (!!errors.length) {
                 setResponse(ctx, OK, { errors });
                 return;

@@ -38,6 +38,7 @@
     "koa-static": "4.0.3",
     "koa2-ratelimit": "0.5.0",
     "koa2-swagger-ui": "2.9.1",
+    "moment": "^2.22.2",
     "mongoose": "5.1.4",
     "passport-github": "1.1.0",
     "xlsx": "^0.13.3"

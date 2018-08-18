@@ -41,13 +41,9 @@ describe('table correctness checker', async () => {
         server = app.start();
         await app.connect();
     });
-    // afterEach(async () => {
-    //     await app.disconnect();
-    //     server.close();
-    // });
     afterAll(async () => {
         await app.disconnect();
-        server.close();
+        await server.close();
     });
 
     it('checks for students duplications', () => {
