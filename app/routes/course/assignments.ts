@@ -64,9 +64,14 @@ export const getNormalizeAssignmentsData = (assignments: IAssignmentModel[]): No
             return res;
         }, [])
         .sort((assignmentA, assignmentB) => {
-            const a = assignmentA.assignment.deadlineDate!;
-            const b = assignmentB.assignment.deadlineDate!;
+            const a = assignmentA.assignment.startDateTime!;
+            const b = assignmentB.assignment.startDateTime!;
             return b - a;
+        })
+        .sort((assignmentA, assignmentB) => {
+            const a: any = assignmentA.isEndAssignment;
+            const b: any = assignmentB.isEndAssignment;
+            return a - b;
         });
     const data = sortedAssignments.reduce<NormalizeAssignmentsData>(
         (prev, next) => {

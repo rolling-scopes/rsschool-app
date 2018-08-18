@@ -28,11 +28,12 @@ export interface IAssignment {
     mentorComment?: string;
     mentorId?: string;
     score?: number;
+    startDateTime: number;
     status: AssignmentStatus;
     studentComment?: string;
     studentId: string;
     taskId: string;
-    title: string;
+    title?: string;
     urlToDescription?: string;
     whoChecks?: WhoChecks;
 }
@@ -50,10 +51,12 @@ export const AssignmentSchema: Schema = new Schema({
     mentorComment: String,
     mentorId: String,
     score: Number,
+    startDateTime: Number,
     status: String,
     studentComment: String,
     studentId: String,
     taskId: String,
+    title: String,
     urlToDescription: String,
     whoChecks: String,
 });
