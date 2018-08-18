@@ -7,18 +7,6 @@ export enum AssignmentStatus {
     Checked = 'Checked',
 }
 
-export enum WhoChecks {
-    Mentor = 'Mentor',
-    RandomMentor = 'Random Mentor',
-    Trainer = 'Trainer',
-    UnitTest = 'Unit Test',
-    ExternalPerson = 'External Person',
-    WithoutChecking = 'Without Checking',
-    Codewars = 'Codewars',
-    Codecademy = 'Codecademy',
-    Duolingo = 'Duolingo',
-}
-
 export interface IAssignment {
     assignmentRepo?: string;
     checkDate?: number;
@@ -28,14 +16,10 @@ export interface IAssignment {
     mentorComment?: string;
     mentorId?: string;
     score?: number;
-    startDateTime: number;
     status: AssignmentStatus;
     studentComment?: string;
     studentId: string;
     taskId: string;
-    title?: string;
-    urlToDescription?: string;
-    whoChecks?: WhoChecks;
 }
 
 export interface IAssignmentModel extends Document, IAssignment {
@@ -51,14 +35,10 @@ export const AssignmentSchema: Schema = new Schema({
     mentorComment: String,
     mentorId: String,
     score: Number,
-    startDateTime: Number,
     status: String,
     studentComment: String,
     studentId: String,
     taskId: String,
-    title: String,
-    urlToDescription: String,
-    whoChecks: String,
 });
 
 export const AssignmentModelName = 'Assignment';

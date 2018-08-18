@@ -9,6 +9,30 @@ import {
     TaskModel,
     AssignmentStatus,
 } from '../../models';
+
+type AssignmentsResponse = {
+    assignmentRepo: string;
+    author?: string;
+    checkDate?: number;
+    completeDate?: number;
+    courseId: string;
+    deadlineDate: number;
+    endDateTime?: number;
+    mentorComment: string;
+    mentorId: string;
+    score: number;
+    startDateTime: number;
+    status: string;
+    studentComment: string;
+    studentId: string;
+    taskId: string;
+    taskType?: string;
+    title: string;
+    type: string;
+    urlToDescription?: string;
+    whoChecks?: string;
+};
+
 export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
@@ -46,14 +70,14 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
 
 type INormalizeAssignments = {
     isEndAssignment: boolean;
-    assignment: IAssignmentModel;
+    assignment: AssignmentsResponse;
 };
 
 type NormalizeAssignmentsData = {
     assignments: INormalizeAssignments[];
 };
 
-export const getNormalizeAssignmentsData = (assignments: IAssignmentModel[]): NormalizeAssignmentsData => {
+export const getNormalizeAssignmentsData = (assignments: AssignmentsResponse[]): NormalizeAssignmentsData => {
     const sortedAssignments = assignments
         .reduce<INormalizeAssignments[]>((res, assignment) => {
             if (assignment.deadlineDate < Date.now() && assignment.status === AssignmentStatus.Assigned) {
