@@ -1,16 +1,18 @@
 import * as Router from 'koa-router';
 import * as bp from 'koa-body';
-// import * as fs from 'fs';
-import { INTERNAL_SERVER_ERROR, OK, BAD_REQUEST } from 'http-status-codes';
-import { STATES, connection } from 'mongoose';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
+import { connection, STATES } from 'mongoose';
 
 import { setResponse } from '../utils';
 
 import {
+    baseCheckers,
+    checkTable,
+    isAllNeedData,
     parseXLSXTable,
-    checkJSCOREInterviewTable,
-    makeAssignmentsForJSCoreInterview,
-    JSCOREInterviewColumns,
+    prepareForChecking,
+    makeAssignments,
+    defaultRequirenmentsForAssignments,
 } from '../../services/batchUpdate';
 
 export function batchUpdateRouter() {
@@ -35,29 +37,25 @@ export function batchUpdateRouter() {
         }
 
         if (ctx.request.files !== undefined && ctx.request.files.table) {
-            const { headers: headersString, courseId, taskId } = ctx.request.body;
-            const headers = headersString.split('<|>');
-            // {'GitHub Студента': 'studentId'}
-            if (
-                !headers.includes(JSCOREInterviewColumns.studentId) ||
-                !headers.includes(JSCOREInterviewColumns.mentorId)
-            ) {
-                setResponse(ctx, OK, { errors: [`Student's and Mentor's GitHub are required columns`] });
+            const { headers, courseId, taskId } = ctx.request.body;
+            const parsedHeaders = JSON.parse(headers);
+
+            if (!isAllNeedData(parsedHeaders, defaultRequirenmentsForAssignments)) {
+                setResponse(ctx, OK, { errors: [`studentId, mentorId, score, checkDate are required`] });
                 return;
             }
+            // @ts-ignore
+            const [tableHeaders, ...results] = parseXLSXTable(ctx.request.files.table.path);
+            const errors = await checkTable(results, prepareForChecking(parsedHeaders)(baseCheckers));
 
-            const payload = parseXLSXTable(ctx.request.files.table.path);
-            const taskResults = payload.slice(1);
-
-            // TODO
-            const errors = await checkJSCOREInterviewTable(taskResults);
-            if (errors.length) {
+            if (!!errors.length) {
                 setResponse(ctx, OK, { errors });
                 return;
             }
 
-            // fs.writeFileSync(__dirname + '/test.md', assignments[0].mentorComment, { encoding: 'utf-8' });
-            makeAssignmentsForJSCoreInterview(payload, headers, courseId, taskId);
+            // TODO save it in db
+            // @ts-ignore
+            const assignments = makeAssignments(results, courseId, taskId, JSON.parse(headers));
 
             setResponse(ctx, OK, 'Successfully Saved!');
             return;

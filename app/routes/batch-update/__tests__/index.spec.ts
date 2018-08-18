@@ -1,36 +1,37 @@
 // import { App } from '../../../';
+//
+import * as request from 'supertest';
 
-// import * as request from 'supertest';
-
+// jest.setTimeout(10000);
 // let server: any = null;
+// let app: any = null;
 // let agent: any = null;
 
 // beforeEach(async () => {
-//     const app = new App();
+//     app = new App();
 //     server = app.start();
 //     await app.connect();
 // });
-// afterEach(() => {
+// afterEach(async () => {
+//     await app.disconnect();
 //     server.close();
 // });
-test('should parse request data correctly', async () => {
-    // const data = {
-    //     courseId: 'course',
-    //     headers: JSON.stringify({ studentId: 'GitHub Студента' }),
-    //     taskId: 'task',
-    // };
-    // const {
-    //     headers: { ['set-cookie']: cookie },
-    // } = await request(server).get('/auth/github');
-    // console.log(cookie);
-    // agent.jar.setCookie(cookie[0]);
-    // console.log(agent.jar.getCookies());
-    // const r = await request(server)
+test.skip('should parse request data correctly', async done => {
+    const data = {
+        courseId: 'course',
+        headers: JSON.stringify({ studentId: 'GitHub Студента' }),
+        taskId: 'task',
+    };
+    const {
+        headers: { ['set-cookie']: cookie },
+    } = await request(server).get('/auth/github');
+    await done();
+
+    // const response = await request(server)
     //     .patch('/batch-update/save-table')
     //     .set('Content-Type', 'application/json')
     //     .set('Accept', 'application/json')
-    //     .set('cookie', cookie);
-    // .send(JSON.stringify(data));
-    // .send(data);
-    // console.log(r);
+    //     .set('Cookie', cookie)
+    //     .send(JSON.stringify(data));
+    // console.log(response.status);
 });
