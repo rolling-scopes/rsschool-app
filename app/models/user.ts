@@ -61,6 +61,11 @@ export interface IUserProfile {
         isStudiedAtRSSchool: boolean;
         hadMentoringExperience: boolean;
     };
+    mentoring: {
+        amountStudents: string;
+        mentoringTogetherWith: string;
+        stages: string;
+    };
     githubId: string;
 }
 
@@ -123,6 +128,11 @@ export const UserSchema: Schema = new Schema({
         isWorkNeeded: { type: Boolean, default: false },
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
+        mentoring: {
+            amountStudents: { type: String, default: '' },
+            mentoringTogetherWith: { type: String, default: '' },
+            stages: { type: String, default: '' },
+        },
         notes: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
