@@ -8,17 +8,17 @@ import { courseEventsRoute } from './events';
 import { courseStagesRoute } from './stages';
 import { courseStudentsRoute } from './students';
 import { courseImportMentorsRoute, courseImportStudentsRoute } from './import';
+import { courseAssignmentsRoute } from './assignments';
 
 export function courseRouter(adminGuard: Router.IMiddleware) {
     const router = new Router({ prefix: '/course' });
 
     router.get('/:id', createGetRoute(CourseModel, { useObjectId: false }));
     router.post('/', createPostRoute(CourseModel));
-
     router.post('/:id/enroll', courseEnrollRoute);
     router.get('/:id/events', courseEventsRoute);
     router.get('/:id/stages', courseStagesRoute);
-
+    router.get('/:id/assignments', courseAssignmentsRoute);
     router.get('/:id/students', adminGuard, courseStudentsRoute);
     router.post('/:id/mentors/assign', adminGuard, courseAssignMentorsRoute);
     router.post('/:id/import/mentors', adminGuard, courseImportMentorsRoute);
