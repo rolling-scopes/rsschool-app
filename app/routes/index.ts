@@ -11,6 +11,7 @@ import { stageRouter } from './stage';
 import { healthRouter } from './health';
 import { sessionRouter } from './session';
 import { userRouter } from './user';
+import { assignmentRouter } from './assignment';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
 
@@ -40,6 +41,7 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, userRouter());
     applyRouter(router, courseRouter(adminGuard));
     applyRouter(router, coursesRouter());
+    applyRouter(router, assignmentRouter(adminGuard));
     applyRouter(router, eventRouter(adminGuard));
     applyRouter(router, stageRouter(adminGuard));
 

@@ -9,9 +9,11 @@ export const devAuthMiddleware = async (ctx: Router.IRouterContext) => {
     try {
         const userSession = await createUser(
             {
-                username: `${userInfo().username}@${hostname()}`,
+                username: `${userInfo().username}123@${hostname()}`,
+                // username: `${userInfo().username}@${hostname()}`,
             },
             config.roles.adminTeams,
+            // [],
         );
 
         // inject dev user into passport's session

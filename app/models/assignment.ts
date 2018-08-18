@@ -9,6 +9,7 @@ export enum AssignmentStatus {
 
 export interface IAssignment {
     taskId: string;
+    title: string;
     courseId: string;
     studentId: string;
     mentorId: string;
@@ -39,6 +40,7 @@ export const AssignmentSchema: Schema = new Schema({
     studentComment: String,
     studentId: String,
     taskId: String,
+    title: String,
 });
 
 const AssignmentModelName = 'Assignment';
