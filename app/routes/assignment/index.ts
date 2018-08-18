@@ -8,7 +8,7 @@ export function assignmentRouter(adminGuard: Router.IMiddleware) {
     const router = new Router({ prefix: '/assignment' });
     router.get('/:id', createGetRoute(AssignmentModel));
     router.post('/', adminGuard, createPostRoute(AssignmentModel));
-    router.patch('/', adminGuard, createPatchAssignmentRoute);
+    router.patch('/', createPatchAssignmentRoute);
     router.delete('/:id', adminGuard, createDeleteRoute(AssignmentModel));
 
     return router;
