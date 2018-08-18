@@ -67,6 +67,7 @@ export interface IUserProfile {
         stages: string;
     };
     githubId: string;
+    subscribe: boolean;
 }
 
 export interface IUserParticipation {
@@ -139,6 +140,7 @@ export const UserSchema: Schema = new Schema({
             graduationYear: { type: Number, default: '' },
             university: { type: String, default: '' },
         },
+        subscribe: { type: Boolean, default: false },
         tShirtSize: { type: String, default: '' },
     },
     role: { type: String, required: true },
