@@ -15,10 +15,10 @@ import {
     defaultRequirementsForSaving,
 } from '../../services/batchUpdate';
 
-export function batchUpdateRouter() {
+export function batchUpdateRouter(adminGuard: Router.IMiddleware) {
     const router = new Router({ prefix: '/batch-update' });
 
-    router.post('/parse-table', bp({ multipart: true }), async ctx => {
+    router.post('/parse-table', adminGuard, bp({ multipart: true }), async ctx => {
         if (ctx.request.files !== undefined && ctx.request.files.table) {
             const payload = parseXLSXTable(ctx.request.files.table.path);
             const tableHeaders = payload[0].map((header: string) => header.trim());
@@ -30,7 +30,7 @@ export function batchUpdateRouter() {
         ctx.status = BAD_REQUEST;
     });
 
-    router.patch('/save-table', bp({ multipart: true }), async ctx => {
+    router.patch('/save-table', adminGuard, bp({ multipart: true }), async ctx => {
         if (connection.readyState !== STATES.connected) {
             ctx.status = INTERNAL_SERVER_ERROR;
             return;

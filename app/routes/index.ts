@@ -43,7 +43,7 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, coursesRouter());
     applyRouter(router, eventRouter(adminGuard));
     applyRouter(router, stageRouter(adminGuard));
-    applyRouter(router, batchUpdateRouter());
+    applyRouter(router, batchUpdateRouter(adminGuard));
 
     return router;
 };
