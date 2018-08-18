@@ -53,7 +53,7 @@ export interface IUserProfile {
     tShirtSize: string;
     epamDetails: {
         isEPAMEmployee: boolean;
-        epamEmail?: string;
+        epamEmail?: Array<{ value: string; primary: boolean }>;
         epamUpsaId?: string;
     };
     experience: {
@@ -111,7 +111,7 @@ export const UserSchema: Schema = new Schema({
         employmentHistory: { type: String, default: '' },
         englishLevel: { type: String, default: '' },
         epamDetails: {
-            epamEmail: { type: String, default: '' },
+            epamEmail: { type: Array, default: [] },
             epamUpsaId: { type: String, default: '' },
             isEPAMEmployee: { type: Boolean, default: false },
         },
