@@ -36,9 +36,9 @@ export interface IUserProfile {
     lastName: string;
     lastNameNative: string;
     notes: string;
+    emails: Array<{ value: string; primary: boolean }>;
     contacts: {
         phone: string;
-        emails: string;
         skype: string;
         telegram: string;
         other: string;
@@ -96,13 +96,13 @@ export const UserSchema: Schema = new Schema({
     profile: {
         city: { type: String, default: '' },
         contacts: {
-            emails: { type: String, default: '' },
             other: { type: String, default: '' },
             phone: { type: String, default: '' },
             skype: { type: String, default: '' },
             telegram: { type: String, default: '' },
         },
         dateOfBirth: { type: String, default: '' },
+        emails: { type: Array, default: [] },
         employmentHistory: { type: String, default: '' },
         englishLevel: { type: String, default: '' },
         epamDetails: {
