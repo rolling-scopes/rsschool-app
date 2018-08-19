@@ -1,75 +1,71 @@
 import { IRouterContext } from 'koa-router';
 import { SessionType } from '../../models/event';
-import { notify, remove } from '../../notificationsSystem';
+import { notify, update, remove } from '../../notificationsSystem';
 
-const hoursToMilliseconds = (hours: number) => hours * 60 * 60 * 1000;
+const hoursToMilliseconds = (hours: number): number => hours * 60 * 60 * 1000;
+
+const getPrettyTime = (dateTime: Date): string => {
+    return `${dateTime.getHours()}:${dateTime.getMinutes()}`;
+};
+
+const getNotifications = (data: any) => {
+    const { title, sessionType, urlToDescription, startDateTime } = data;
+
+    const notifications = [];
+
+    const beforeEventMessage = `${title} started at ${getPrettyTime(new Date(startDateTime))}${
+        urlToDescription ? `\n${urlToDescription}` : ''
+    }`;
+    const onEventMessage = `${title} started${urlToDescription ? `\n${urlToDescription}` : ''}`;
+
+    switch (sessionType) {
+        case SessionType.Online:
+            notifications.push(
+                { dateTime: startDateTime - hoursToMilliseconds(1), message: beforeEventMessage },
+                { dateTime: startDateTime, message: onEventMessage },
+            );
+            break;
+        case SessionType.Offline:
+            notifications.push({ dateTime: startDateTime - hoursToMilliseconds(2), message: beforeEventMessage });
+            break;
+        case SessionType.SelfLearning:
+            data.push({ dateTime: startDateTime, message: onEventMessage });
+            break;
+        case SessionType.ExtraEvent:
+            notifications.push({ dateTime: startDateTime - hoursToMilliseconds(1), message: beforeEventMessage });
+            break;
+        default:
+    }
+
+    return notifications;
+};
 
 export const eventNotificationPostMiddleware = async (ctx: IRouterContext, next: any) => {
     try {
-        const { _id, title, sessionType, urlToDescription } = ctx.body;
-        const startDateTime = new Date(ctx.body.startDateTime);
-
-        const data = [];
-
-        const beforeEventMessage = `${title} started at ${startDateTime.toLocaleString()}${
-            urlToDescription ? `\n${urlToDescription}` : ''
-        }`;
-        const onEventMessage = `${title} started${urlToDescription ? `\n${urlToDescription}` : ''}`;
-
-        switch (sessionType) {
-            case SessionType.Online:
-                data.push({
-                    dateTime: ctx.body.startDateTime - hoursToMilliseconds(1),
-                    eventId: _id,
-                    eventType: 'event',
-                    message: beforeEventMessage,
-                });
-                data.push({
-                    dateTime: ctx.body.startDateTime,
-                    eventId: _id,
-                    eventType: 'event',
-                    message: onEventMessage,
-                });
-                break;
-            case SessionType.Offline:
-                data.push({
-                    dateTime: ctx.body.startDateTime - hoursToMilliseconds(2),
-                    eventId: _id,
-                    eventType: 'event',
-                    message: beforeEventMessage,
-                });
-                break;
-            case SessionType.SelfLearning:
-                data.push({
-                    dateTime: ctx.body.startDateTime,
-                    eventId: _id,
-                    eventType: 'event',
-                    message: onEventMessage,
-                });
-                break;
-            case SessionType.ExtraEvent:
-                data.push({
-                    dateTime: ctx.body.startDateTime - hoursToMilliseconds(1),
-                    eventId: _id,
-                    message: beforeEventMessage,
-                    type: 'event',
-                });
-                break;
-            default:
-        }
-
-        await notify(data);
+        const notifications = getNotifications(ctx.body);
+        await notify('event', ctx.body._id, notifications);
         next();
     } catch (err) {
         ctx.logger.error(err);
     }
 };
 
-// export const eventPatchMiddleware = async (ctx: IRouterContext, next: any) => {
-// };
+export const eventNotificationPatchMiddleware = async (ctx: IRouterContext, next: any) => {
+    try {
+        const notifications = getNotifications(ctx.body.data);
+        await update('event', ctx.body.data._id, notifications);
+        next();
+    } catch (err) {
+        ctx.logger.error(err);
+    }
+};
 
 export const eventNotificationRemoveMiddleware = async (ctx: IRouterContext, next: any) => {
-    const { id } = ctx.params;
-    await remove('event', id);
-    next();
+    try {
+        const { id } = ctx.params;
+        await remove('event', id);
+        next();
+    } catch (err) {
+        ctx.logger.error(err);
+    }
 };

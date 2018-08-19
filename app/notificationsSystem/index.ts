@@ -30,7 +30,7 @@ const schedule = (notification: INotification) => {
     );
 };
 
-const checkIsInTime = (hours: number, minutes: number, timeFrom: any, timeTo: any) => {
+const checkIsInTime = (hours: number, minutes: number, timeFrom: any, timeTo: any): boolean => {
     if (hours >= timeFrom.hours && hours <= timeTo.hours) {
         return true;
     } else if (hours === timeFrom.hours && minutes >= timeFrom.minutes) {
@@ -42,7 +42,7 @@ const checkIsInTime = (hours: number, minutes: number, timeFrom: any, timeTo: an
     return false;
 };
 
-export const notify = async (data: any) => {
+export const notify = async (eventType: string, eventId: string, data: any) => {
     const currentDate = new Date();
 
     await notificationsSettingService.forEach(async (setting: any) => {
@@ -77,9 +77,11 @@ export const notify = async (data: any) => {
                 }
 
                 const notification = await notificationService.save({
-                    telegramId: setting.telegramId,
-                    ...item,
                     dateTime,
+                    eventId,
+                    eventType,
+                    message: item.message,
+                    telegramId: setting.telegramId,
                 });
                 schedule(notification);
             } else if (isCurrentTimeInSettingTime) {
@@ -94,14 +96,21 @@ export const notify = async (data: any) => {
                 );
 
                 const notification = await notificationService.save({
-                    telegramId: setting.telegramId,
-                    ...item,
                     dateTime,
+                    eventId,
+                    eventType,
+                    message: item.message,
+                    telegramId: setting.telegramId,
                 });
                 schedule(notification);
             }
         }
     });
+};
+
+export const update = async (eventType: string, eventId: string, data: any) => {
+    await remove(eventType, eventId);
+    await notify(eventType, eventId, data);
 };
 
 export const remove = async (eventType: string, eventId: string) => {
