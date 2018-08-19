@@ -16,3 +16,8 @@ export async function update(conditions: object, data: object) {
     const result = await NotificationsSettingModel.findOneAndUpdate(conditions, data, { runValidators: true });
     return result;
 }
+
+export async function forEach(cb: any) {
+    const cursor = await NotificationsSettingModel.find();
+    await cursor.forEach(cb);
+}

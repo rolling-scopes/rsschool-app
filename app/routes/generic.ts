@@ -5,7 +5,7 @@ import { IApiResponse } from '../models';
 import { setResponse } from './utils';
 
 export function createPostRoute<T extends Document>(DocumentModel: new (data: any) => T) {
-    return async (ctx: IRouterContext) => {
+    return async (ctx: IRouterContext, next: any) => {
         const model = new DocumentModel(ctx.request.body);
         const validationResult = model.validateSync();
         ctx.body = {};
@@ -17,6 +17,7 @@ export function createPostRoute<T extends Document>(DocumentModel: new (data: an
         try {
             ctx.body = await model.save();
             ctx.status = OK;
+            next();
         } catch (e) {
             ctx.status = INTERNAL_SERVER_ERROR;
             ctx.logger.error(e, 'Failed to save document');
@@ -28,7 +29,7 @@ export function createGetRoute<T extends Document>(
     DocumentModel: Model<T>,
     options: { useObjectId: boolean } = { useObjectId: true },
 ) {
-    return async (ctx: IRouterContext) => {
+    return async (ctx: IRouterContext, next: any) => {
         try {
             if (connection.readyState !== STATES.connected) {
                 ctx.status = INTERNAL_SERVER_ERROR;
@@ -47,6 +48,7 @@ export function createGetRoute<T extends Document>(
             };
             ctx.body = body;
             ctx.status = OK;
+            next();
         } catch (err) {
             ctx.logger.error(err);
             ctx.status = INTERNAL_SERVER_ERROR;
@@ -55,7 +57,7 @@ export function createGetRoute<T extends Document>(
 }
 
 export function createPatchRoute<T extends Document>(DocumentModel: Model<T>) {
-    return async (ctx: IRouterContext) => {
+    return async (ctx: IRouterContext, next: any) => {
         const { _id, ...body } = ctx.request.body;
 
         try {
@@ -67,6 +69,7 @@ export function createPatchRoute<T extends Document>(DocumentModel: Model<T>) {
             }
 
             setResponse(ctx, OK, result);
+            next();
         } catch (e) {
             ctx.status = INTERNAL_SERVER_ERROR;
             ctx.logger.error(e, 'Failed to update document');
@@ -75,7 +78,7 @@ export function createPatchRoute<T extends Document>(DocumentModel: Model<T>) {
 }
 
 export function createDeleteRoute<T extends Document>(DocumentModel: Model<T>) {
-    return async (ctx: IRouterContext) => {
+    return async (ctx: IRouterContext, next: any) => {
         const { id } = ctx.params;
 
         try {
@@ -87,6 +90,7 @@ export function createDeleteRoute<T extends Document>(DocumentModel: Model<T>) {
             }
 
             setResponse(ctx, OK);
+            next();
         } catch (e) {
             ctx.status = INTERNAL_SERVER_ERROR;
             ctx.logger.error(e, 'Failed to remove document');

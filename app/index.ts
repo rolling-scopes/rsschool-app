@@ -14,7 +14,7 @@ import { dbConnectionMiddleware } from './dbConnection';
 import { ILogger, loggerMiddleware } from './logger';
 import { routeLoggerMiddleware, routesMiddleware } from './routes';
 
-import NotificationsSystem from './notificationsSystem';
+import * as notificationsSystem from './notificationsSystem';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -35,7 +35,6 @@ export class App {
     private appLogger: ILogger;
     private mongoLogger: ILogger;
     private server: Server | undefined = undefined;
-    private notificationsSystem: NotificationsSystem;
 
     constructor(logger: ILogger = createDefaultLogger()) {
         this.appLogger = logger.child({ module: 'app' });
@@ -78,8 +77,6 @@ export class App {
                 },
             }),
         );
-
-        this.notificationsSystem = new NotificationsSystem(this.appLogger.child({ module: 'notificationsSystem' }));
     }
 
     public start(): Server {
@@ -100,8 +97,11 @@ export class App {
         return this.connectToMongo()
             .then(_ => {
                 this.mongoLogger.info(`Connected to MongoDB (${mongoose.connection.db.databaseName})`);
-                this.notificationsSystem.start();
-
+            })
+            .then(() => {
+                return notificationsSystem.start(this.appLogger.child({ module: 'notificationsSystem' }));
+            })
+            .then(() => {
                 return true;
             })
             .catch((err: Error) => {

@@ -5,7 +5,7 @@ enum EventType {
     Task = 'task',
 }
 
-enum SessionType {
+export enum SessionType {
     Online = 'Online',
     Offline = 'Offline',
     SelfLearning = 'Self-learning',

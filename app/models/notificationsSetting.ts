@@ -1,12 +1,9 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { NotificationTypes } from './notification';
-
 export interface INotificationsSetting extends Document {
     userId: string;
     telegramId: number;
     isEnable: boolean;
-    types?: NotificationTypes[];
     timeFrom?: {
         hours: number;
         minutes: number;
@@ -25,14 +22,13 @@ export const NotificationsSettingSchema: Schema = new Schema({
     isEnable: { type: Boolean, default: true },
     telegramId: { type: Number, required: true },
     timeFrom: {
-        hours: { type: Number, min: 0, max: 24 },
-        minutes: { type: Number, min: 0, max: 59 },
+        hours: { type: Number, min: 0, max: 24, default: 0 },
+        minutes: { type: Number, min: 0, max: 59, default: 0 },
     },
     timeTo: {
-        hours: { type: Number, min: 0, max: 24 },
-        minutes: { type: Number, min: 0, max: 59 },
+        hours: { type: Number, min: 0, max: 24, default: 24 },
+        minutes: { type: Number, min: 0, max: 59, default: 0 },
     },
-    types: { type: Array },
     userId: { type: String, required: true },
 });
 

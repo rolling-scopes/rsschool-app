@@ -1,9 +1,10 @@
 import Telegraf from 'telegraf';
-import NotificationsSystem from '.';
 
-import { userService, notificationsSettingService } from '../services';
+import { ILogger } from '../../logger';
 
-import config from './botConfig';
+import { userService, notificationsSettingService } from '../../services';
+
+import config from './config';
 
 export default class NotificationsBot {
     private static getTelegramId = (ctx: any) => ctx.update.message.from.id;
@@ -48,10 +49,10 @@ export default class NotificationsBot {
 
     private telegramBot: any;
 
-    private notificationsSystem: NotificationsSystem;
+    private logger: ILogger;
 
-    constructor(notificationsSystem: NotificationsSystem) {
-        this.notificationsSystem = notificationsSystem;
+    constructor(logger: ILogger) {
+        this.logger = logger;
         this.telegramBot = new Telegraf(config.token);
 
         this.telegramBot.use(NotificationsBot.argumentsMiddleware);
@@ -76,6 +77,10 @@ export default class NotificationsBot {
 
     public stop() {
         this.telegramBot.stop();
+    }
+
+    public send(telegramId: number, message: string) {
+        this.telegramBot.telegram.sendMessage(telegramId, message);
     }
 
     private async handleStart(ctx: any) {
@@ -133,7 +138,7 @@ export default class NotificationsBot {
             ctx.reply(config.messages.timeSetted);
         } catch (err) {
             ctx.reply(config.messages.invalidTimeInterval);
-            this.notificationsSystem.logger.error(err);
+            this.logger.error(err);
         }
     }
 
@@ -142,6 +147,6 @@ export default class NotificationsBot {
     }
 
     private handleError(err: any) {
-        this.notificationsSystem.logger.error(err);
+        this.logger.error(err);
     }
 }
