@@ -6,11 +6,12 @@ import { guard, adminGuard } from './guards';
 import { authRoute } from './auth';
 import { courseRouter } from './course';
 import { coursesRouter } from './courses';
-import { eventRouter } from './event';
+import { eventRouter } from './lecture';
 import { stageRouter } from './stage';
 import { healthRouter } from './health';
 import { sessionRouter } from './session';
 import { userRouter } from './user';
+import { taskRouter } from './task';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
 
@@ -41,6 +42,7 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, courseRouter(adminGuard));
     applyRouter(router, coursesRouter());
     applyRouter(router, eventRouter(adminGuard));
+    applyRouter(router, taskRouter(adminGuard));
     applyRouter(router, stageRouter(adminGuard));
 
     return router;

@@ -6,6 +6,7 @@ export * from './courseStudent';
 export * from './courseMentor';
 export * from './feed';
 export * from './feedActions';
+export * from './assignment';
 
 export interface IApiResponse<T> {
     data: T | T[] | null;
