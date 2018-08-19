@@ -65,7 +65,6 @@ export default class NotificationsBot {
         this.telegramBot.help(this.handleHelp);
         this.telegramBot.command('enable', this.handleEnable);
         this.telegramBot.command('disable', this.handleDisable);
-        this.telegramBot.command('chooseevents', this.handleChooseEvents);
         this.telegramBot.command('settime', this.handleSetTime.bind(this));
 
         this.telegramBot.catch(this.handleError.bind(this));
@@ -140,10 +139,6 @@ export default class NotificationsBot {
             ctx.reply(config.messages.invalidTimeInterval);
             this.logger.error(err);
         }
-    }
-
-    private handleChooseEvents(ctx: any) {
-        ctx.reply(config.messages.chooseEvents);
     }
 
     private handleError(err: any) {

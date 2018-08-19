@@ -1,7 +1,6 @@
 export default {
-    knownCommands: new Set(['/start', '/help', '/enable', '/disable', '/chooseevents', '/settime', '/showsettings']),
+    knownCommands: new Set(['/start', '/help', '/enable', '/disable', '/settime', '/showsettings']),
     messages: {
-        chooseEvents: 'Select notification types, which you want to see',
         disable: 'Notifications disabled',
         enable: 'Notifications enabled',
         iDontKnowYou: "I can't find you in app. Please, subscribe on me in your profile in rsschool-app",
