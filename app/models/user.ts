@@ -32,6 +32,18 @@ export interface IUserProfile {
         graduationYear: string;
         faculty: string;
     };
+    notifications: {
+        readyToReceive: string;
+        fromTime: string;
+        toTime: string;
+        typeDeadline: boolean;
+        typeScore: boolean;
+        typeSessionLecturer: boolean;
+        typeSessionStudent: boolean;
+        typeStatusMentor: boolean;
+        typeStatusStudent: boolean;
+        telegramUserName: string;
+    };
 }
 
 export interface IUserParticipation {
@@ -71,6 +83,18 @@ export const UserSchema: Schema = new Schema({
         githubId: { type: String, default: '' },
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
+        notifications: {
+            fromTime: { type: String, default: '' },
+            readyToReceive: { type: String, default: 'no' },
+            telegramUserName: { type: String, default: '' },
+            toTime: { type: String, default: '' },
+            typeDeadline: { type: Boolean, default: false },
+            typeScore: { type: Boolean, default: false },
+            typeSessionLecturer: { type: Boolean, default: false },
+            typeSessionStudent: { type: Boolean, default: false },
+            typeStatusMentor: { type: Boolean, default: false },
+            typeStatusStudent: { type: Boolean, default: false },
+        },
         phone: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },

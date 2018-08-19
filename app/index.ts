@@ -13,6 +13,7 @@ import { config } from './config';
 import { dbConnectionMiddleware } from './dbConnection';
 import { ILogger, loggerMiddleware } from './logger';
 import { routeLoggerMiddleware, routesMiddleware } from './routes';
+import { runNotificationsSchedule } from './notifications';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -32,14 +33,13 @@ export class App {
     private koa = new Koa();
     private appLogger: ILogger;
     private mongoLogger: ILogger;
+    private runNotificationsSchedule = runNotificationsSchedule;
     private server: Server | undefined = undefined;
 
     constructor(logger: ILogger = createDefaultLogger()) {
         this.appLogger = logger.child({ module: 'app' });
         this.mongoLogger = this.appLogger.child({ module: 'mongodb' });
-
         this.koa.use(loggerMiddleware(this.appLogger));
-
         this.koa.use(
             RateLimit.middleware({
                 getUserId: async ctx => {
@@ -75,6 +75,7 @@ export class App {
                 },
             }),
         );
+        this.runNotificationsSchedule();
     }
 
     public start(): Server {

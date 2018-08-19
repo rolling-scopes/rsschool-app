@@ -12,6 +12,18 @@ type Profile = {
         familyName: string;
     };
     emails?: { value: string; primary: boolean }[];
+    notifications?: {
+        fromTime?: string;
+        readyToReceive: string;
+        toTime?: string;
+        telegramUserName?: string;
+        typeDeadline?: boolean;
+        typeScore?: boolean;
+        typeSessionLecturer?: boolean;
+        typeSessionStudent?: boolean;
+        typeStatusMentor?: boolean;
+        typeStatusStudent?: boolean;
+    };
 };
 
 function getRole(teamIds: string[]) {
@@ -46,6 +58,50 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
                 firstName: profile.name ? profile.name.givenName : '',
                 githubId: id,
                 lastName: profile.name ? profile.name.familyName : '',
+                notifications: {
+                    fromTime:
+                        profile.notifications && profile.notifications.readyToReceive && profile.notifications.fromTime
+                            ? profile.notifications.fromTime
+                            : '',
+                    readyToReceive:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? profile.notifications.readyToReceive
+                            : '',
+                    telegramUserName:
+                        profile.notifications &&
+                        profile.notifications.readyToReceive &&
+                        profile.notifications.telegramUserName
+                            ? profile.notifications.telegramUserName
+                            : '',
+                    toTime:
+                        profile.notifications && profile.notifications.readyToReceive && profile.notifications.toTime
+                            ? profile.notifications.toTime
+                            : '',
+                    typeDeadline:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeDeadline
+                            : false,
+                    typeScore:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeScore
+                            : false,
+                    typeSessionLecturer:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeSessionLecturer
+                            : false,
+                    typeSessionStudent:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeSessionStudent
+                            : false,
+                    typeStatusMentor:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeStatusMentor
+                            : false,
+                    typeStatusStudent:
+                        profile.notifications && profile.notifications.readyToReceive
+                            ? !!profile.notifications.typeStatusStudent
+                            : false,
+                },
             },
             role,
         };

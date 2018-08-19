@@ -25,6 +25,18 @@ Object {
     "githubId": "",
     "lastName": "",
     "lastNameNative": "",
+    "notifications": Object {
+      "fromTime": "",
+      "readyToReceive": "no",
+      "telegramUserName": "",
+      "toTime": "",
+      "typeDeadline": false,
+      "typeScore": false,
+      "typeSessionLecturer": false,
+      "typeSessionStudent": false,
+      "typeStatusMentor": false,
+      "typeStatusStudent": false,
+    },
     "phone": "",
     "primaryEducation": Object {
       "faculty": "",

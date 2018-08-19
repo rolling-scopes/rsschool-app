@@ -23,7 +23,7 @@ const NotificationsType: Array<string> = [
 ];
 
 export const runNotificationsSchedule: any = () => {
-    schedule.scheduleJob('15 * * * *', () => {
+    schedule.scheduleJob('00 * * * *', () => {
         const type = NotificationsType[1];
         const query1 = { ['profile.notifications.readyToReceive']: 'yes' };
         const query2 = { [`profile.notifications.${type}`]: true };
@@ -34,10 +34,6 @@ export const runNotificationsSchedule: any = () => {
                 usersInfos.map((userInfo: any) => {
                     axios.get(`${urlBot}${token}/getUpdates?offset={${chatData.update_id}+1}`).then((respons: any) => {
                         if (respons.status === 200) {
-                            // console.log(response.data.result[0].message.chat.id);
-                            // console.log(response.data.result[0].message.chat.username);
-                            // console.log(response.data.result.length);
-                            // console.log(chatData.update_id);
                             const currentTime = Date.now();
                             const fromTime = userInfo.profile.notifications.fromTime.split(':');
                             const minTime = new Date().setHours(fromTime[0], fromTime[1]);
@@ -58,8 +54,6 @@ export const runNotificationsSchedule: any = () => {
                                         })
                                         .catch();
                                 }
-                            } else {
-                                // console.log(respons);
                             }
                         }
                     });

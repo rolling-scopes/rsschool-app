@@ -12,6 +12,8 @@ export const devAuthMiddleware = async (ctx: Router.IRouterContext) => {
                 username: `${userInfo().username}@${hostname()}`,
             },
             config.roles.adminTeams,
+            // config.roles.mentorTeams,
+            // [],
         );
 
         // inject dev user into passport's session
