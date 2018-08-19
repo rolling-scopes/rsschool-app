@@ -7,9 +7,18 @@ export async function save(data: object) {
     return result;
 }
 
-export async function remove(id: string) {
+export async function removeById(id: string) {
     const result = await NotificationModel.findByIdAndRemove(id);
     return result;
+}
+
+export async function removeByEvent(eventType: string, eventId: string) {
+    const removed = await NotificationModel.find({ eventType, eventId })
+        .select('id')
+        .exec();
+    await NotificationModel.remove({ eventType, eventId });
+
+    return removed.map(({ _id }) => _id);
 }
 
 export async function forEach(cb: any) {

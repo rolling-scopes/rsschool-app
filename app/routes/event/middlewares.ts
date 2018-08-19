@@ -1,6 +1,6 @@
 import { IRouterContext } from 'koa-router';
 import { SessionType } from '../../models/event';
-import { notify } from '../../notificationsSystem';
+import { notify, remove } from '../../notificationsSystem';
 
 const hoursToMilliseconds = (hours: number) => hours * 60 * 60 * 1000;
 
@@ -21,30 +21,30 @@ export const eventNotificationPostMiddleware = async (ctx: IRouterContext, next:
                 data.push({
                     dateTime: ctx.body.startDateTime - hoursToMilliseconds(1),
                     eventId: _id,
+                    eventType: 'event',
                     message: beforeEventMessage,
-                    type: 'event',
                 });
                 data.push({
                     dateTime: ctx.body.startDateTime,
                     eventId: _id,
+                    eventType: 'event',
                     message: onEventMessage,
-                    type: 'event',
                 });
                 break;
             case SessionType.Offline:
                 data.push({
                     dateTime: ctx.body.startDateTime - hoursToMilliseconds(2),
                     eventId: _id,
+                    eventType: 'event',
                     message: beforeEventMessage,
-                    type: 'event',
                 });
                 break;
             case SessionType.SelfLearning:
                 data.push({
                     dateTime: ctx.body.startDateTime,
                     eventId: _id,
+                    eventType: 'event',
                     message: onEventMessage,
-                    type: 'event',
                 });
                 break;
             case SessionType.ExtraEvent:
@@ -68,8 +68,8 @@ export const eventNotificationPostMiddleware = async (ctx: IRouterContext, next:
 // export const eventPatchMiddleware = async (ctx: IRouterContext, next: any) => {
 // };
 
-// export const eventRemoveMiddleware = async (ctx: IRouterContext, next: any) => {
-//     const { id } = ctx.params;
-//     await remove('event', id);
-//     next();
-// };
+export const eventNotificationRemoveMiddleware = async (ctx: IRouterContext, next: any) => {
+    const { id } = ctx.params;
+    await remove('event', id);
+    next();
+};

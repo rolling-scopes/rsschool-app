@@ -18,7 +18,7 @@ let logger: ILogger;
 let bot: NotificationsBot;
 
 const getScheduledCallback = (id: string, telegramId: number, message: string) => async () => {
-    await notificationService.remove(id);
+    await notificationService.removeById(id);
     bot.send(telegramId, message);
 };
 
@@ -104,9 +104,14 @@ export const notify = async (data: any) => {
     });
 };
 
-// export const remove = (type: string, eventId: string) => {
-//     // remove all scheduled jobs and all notifications
-// }
+export const remove = async (eventType: string, eventId: string) => {
+    const removedIds = await notificationService.removeByEvent(eventType, eventId);
+    removedIds.forEach((item: string) => {
+        if (nodeSchedule.scheduledJobs[item]) {
+            nodeSchedule.scheduledJobs[item].cancel();
+        }
+    });
+};
 
 const scheduleAll = async () => {
     await notificationService.forEach(schedule);
