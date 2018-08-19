@@ -1,25 +1,32 @@
-//  TODO
+/*  TODO
 
-// 1. tests
-// 2. system works wrong with time setting like 20:00 - 2:00
-// 3. edit notifications if users settings changes
-// 4. user timezone
-// 5. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-// 6. refactor notify func
+1. tests
+2. system works wrong with time setting like 20:00 - 2:00
+3. edit notifications if users settings changes
+4. user timezone
+5. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
+6. refactor notify func
+7. check if notification will never be send  */
 
 import * as nodeSchedule from 'node-schedule';
 import NotificationsBot from './bot';
 import { ILogger } from '../logger';
 import { INotification } from '../models/notification';
+import { ITime, INotificationsSetting } from '../models/notificationsSetting';
 import { notificationService, notificationsSettingService } from '../services/';
 
 let logger: ILogger;
 
 let bot: NotificationsBot;
 
+export interface INotificaionData {
+    dateTime?: number;
+    message: string;
+}
+
 const getScheduledCallback = (id: string, telegramId: number, message: string) => async () => {
-    await notificationService.removeById(id);
     bot.send(telegramId, message);
+    await notificationService.removeById(id);
 };
 
 const schedule = (notification: INotification) => {
@@ -30,7 +37,7 @@ const schedule = (notification: INotification) => {
     );
 };
 
-const checkIsInTime = (hours: number, minutes: number, timeFrom: any, timeTo: any): boolean => {
+const checkIsInTime = (hours: number, minutes: number, timeFrom: ITime, timeTo: ITime): boolean => {
     if (hours >= timeFrom.hours && hours <= timeTo.hours) {
         return true;
     } else if (hours === timeFrom.hours && minutes >= timeFrom.minutes) {
@@ -42,14 +49,11 @@ const checkIsInTime = (hours: number, minutes: number, timeFrom: any, timeTo: an
     return false;
 };
 
-export const notify = async (eventType: string, eventId: string, data: any) => {
+export const notify = async (eventType: string, eventId: string, data: INotificaionData[]) => {
     const currentDate = new Date();
+    const notificationsSettings = await notificationsSettingService.find({ isEnable: true });
 
-    await notificationsSettingService.forEach(async (setting: any) => {
-        if (!setting.isEnable) {
-            return;
-        }
-
+    await notificationsSettings.forEach(async (setting: INotificationsSetting) => {
         const isCurrentTimeInSettingTime = checkIsInTime(
             currentDate.getHours(),
             currentDate.getMinutes(),
@@ -57,12 +61,7 @@ export const notify = async (eventType: string, eventId: string, data: any) => {
             setting.timeTo,
         );
 
-        for (const key in data) {
-            // tslint:disable:forin
-            const item = data[key];
-            if (!data.hasOwnProperty(key)) {
-                return;
-            }
+        await data.forEach(async (item: INotificaionData) => {
             if (item.dateTime) {
                 const dateTime = new Date(item.dateTime);
                 const isEventTimeInSettingTime = checkIsInTime(
@@ -104,11 +103,11 @@ export const notify = async (eventType: string, eventId: string, data: any) => {
                 });
                 schedule(notification);
             }
-        }
+        });
     });
 };
 
-export const update = async (eventType: string, eventId: string, data: any) => {
+export const update = async (eventType: string, eventId: string, data: INotificaionData[]) => {
     await remove(eventType, eventId);
     await notify(eventType, eventId, data);
 };
@@ -123,7 +122,8 @@ export const remove = async (eventType: string, eventId: string) => {
 };
 
 const scheduleAll = async () => {
-    await notificationService.forEach(schedule);
+    const notifications = await notificationService.find();
+    notifications.forEach(schedule);
 };
 
 export const start = async (notificationsLogger: ILogger) => {

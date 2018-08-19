@@ -2,14 +2,16 @@ import Telegraf from 'telegraf';
 
 import { ILogger } from '../../logger';
 
+import { ITime } from '../../models/notificationsSetting';
+
 import { userService, notificationsSettingService } from '../../services';
 
-import config from './config';
+import { config } from './config';
 
 export default class NotificationsBot {
-    private static getTelegramId = (ctx: any) => ctx.update.message.from.id;
+    private static getTelegramId = (ctx: any): number => ctx.from.id;
 
-    private static beautifyTime(time: string) {
+    private static beautifyTime(time: string): ITime {
         const [hours, minutes] = time.split(':').map(it => Number(it));
 
         return { hours, minutes };
@@ -31,7 +33,7 @@ export default class NotificationsBot {
     }
 
     private static unknownCommandMiddleware(ctx: any, next: any) {
-        const isKnownCommand = config.knownCommands.has(ctx.state.command);
+        const isKnownCommand = config.knownCommands.some(item => item === ctx.state.command);
 
         if (isKnownCommand) {
             return next();
@@ -141,7 +143,7 @@ export default class NotificationsBot {
         }
     }
 
-    private handleError(err: any) {
+    private handleError(err: Error) {
         this.logger.error(err);
     }
 }

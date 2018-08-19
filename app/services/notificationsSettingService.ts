@@ -1,4 +1,5 @@
-import { NotificationsSettingModel } from '../models/notificationsSetting';
+// import { QueryCursor } from 'mongoose';
+import { INotificationsSetting, NotificationsSettingModel } from '../models/notificationsSetting';
 
 export async function getByTelegramId(telegramId: number) {
     const result = await NotificationsSettingModel.findOne({ telegramId }).exec();
@@ -17,7 +18,7 @@ export async function update(conditions: object, data: object) {
     return result;
 }
 
-export async function forEach(cb: any) {
-    const cursor = await NotificationsSettingModel.find();
-    await cursor.forEach(cb);
+export async function find(data?: object): Promise<INotificationsSetting[]> {
+    const result = await NotificationsSettingModel.find(data);
+    return result;
 }

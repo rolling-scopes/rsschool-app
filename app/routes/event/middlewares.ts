@@ -1,6 +1,6 @@
-import { IRouterContext } from 'koa-router';
+import { IMiddleware } from 'koa-router';
 import { SessionType } from '../../models/event';
-import { notify, update, remove } from '../../notificationsSystem';
+import { INotificaionData, notify, update, remove } from '../../notificationsSystem';
 
 const hoursToMilliseconds = (hours: number): number => hours * 60 * 60 * 1000;
 
@@ -8,9 +8,12 @@ const getPrettyTime = (dateTime: Date): string => {
     return `${dateTime.getHours()}:${dateTime.getMinutes()}`;
 };
 
-const getNotifications = (data: any) => {
-    const { title, sessionType, urlToDescription, startDateTime } = data;
-
+const getNotifications = (
+    title: string,
+    sessionType: string,
+    startDateTime: number,
+    urlToDescription?: string,
+): INotificaionData[] => {
     const notifications = [];
 
     const beforeEventMessage = `${title} started at ${getPrettyTime(new Date(startDateTime))}${
@@ -29,7 +32,7 @@ const getNotifications = (data: any) => {
             notifications.push({ dateTime: startDateTime - hoursToMilliseconds(2), message: beforeEventMessage });
             break;
         case SessionType.SelfLearning:
-            data.push({ dateTime: startDateTime, message: onEventMessage });
+            notifications.push({ dateTime: startDateTime, message: onEventMessage });
             break;
         case SessionType.ExtraEvent:
             notifications.push({ dateTime: startDateTime - hoursToMilliseconds(1), message: beforeEventMessage });
@@ -40,9 +43,11 @@ const getNotifications = (data: any) => {
     return notifications;
 };
 
-export const eventNotificationPostMiddleware = async (ctx: IRouterContext, next: any) => {
+export const notificationPostMiddleware: IMiddleware = async (ctx, next) => {
     try {
-        const notifications = getNotifications(ctx.body);
+        const { title, sessionType, startDateTime, urlToDescription } = ctx.body;
+        const notifications = getNotifications(title, sessionType, startDateTime, urlToDescription);
+
         await notify('event', ctx.body._id, notifications);
         next();
     } catch (err) {
@@ -50,9 +55,11 @@ export const eventNotificationPostMiddleware = async (ctx: IRouterContext, next:
     }
 };
 
-export const eventNotificationPatchMiddleware = async (ctx: IRouterContext, next: any) => {
+export const notificationPatchMiddleware: IMiddleware = async (ctx, next) => {
     try {
-        const notifications = getNotifications(ctx.body.data);
+        const { title, sessionType, startDateTime, urlToDescription } = ctx.body.data;
+        const notifications = getNotifications(title, sessionType, startDateTime, urlToDescription);
+
         await update('event', ctx.body.data._id, notifications);
         next();
     } catch (err) {
@@ -60,7 +67,7 @@ export const eventNotificationPatchMiddleware = async (ctx: IRouterContext, next
     }
 };
 
-export const eventNotificationRemoveMiddleware = async (ctx: IRouterContext, next: any) => {
+export const notificationRemoveMiddleware: IMiddleware = async (ctx, next) => {
     try {
         const { id } = ctx.params;
         await remove('event', id);

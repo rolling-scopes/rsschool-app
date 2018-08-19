@@ -1,17 +1,16 @@
 import { Document, Schema, model } from 'mongoose';
 
+export interface ITime {
+    hours: number;
+    minutes: number;
+}
+
 export interface INotificationsSetting extends Document {
     userId: string;
     telegramId: number;
     isEnable: boolean;
-    timeFrom?: {
-        hours: number;
-        minutes: number;
-    };
-    timeTo?: {
-        hours: number;
-        minutes: number;
-    };
+    timeFrom: ITime;
+    timeTo: ITime;
 }
 
 export interface INotificationsSettingModel extends Document, INotificationsSetting {

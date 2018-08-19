@@ -17,7 +17,7 @@ export function createPostRoute<T extends Document>(DocumentModel: new (data: an
         try {
             ctx.body = await model.save();
             ctx.status = OK;
-            next();
+            await next();
         } catch (e) {
             ctx.status = INTERNAL_SERVER_ERROR;
             ctx.logger.error(e, 'Failed to save document');

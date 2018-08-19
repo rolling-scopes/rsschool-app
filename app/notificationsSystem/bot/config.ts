@@ -1,5 +1,20 @@
-export default {
-    knownCommands: new Set(['/start', '/help', '/enable', '/disable', '/settime', '/showsettings']),
+export interface IConfig {
+    knownCommands: string[];
+    messages: {
+        disable: string;
+        enable: string;
+        iDontKnowYou: string;
+        iDontUnderstandYou: string;
+        invalidTimeInterval: string;
+        subscribe: string;
+        timeSetted: string;
+        welcome: string;
+    };
+    token: string;
+}
+
+export const config: IConfig = {
+    knownCommands: ['/start', '/help', '/enable', '/disable', '/settime', '/showsettings'],
     messages: {
         disable: 'Notifications disabled',
         enable: 'Notifications enabled',
