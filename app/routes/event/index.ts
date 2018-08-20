@@ -1,6 +1,7 @@
 import * as Router from 'koa-router';
 import { EventModel } from '../../models/event';
-import { createGetRoute, createPostRoute, createPatchRoute, createDeleteRoute } from '../generic';
+import { createPostRoute } from './createPostRoute';
+import { createGetRoute, createPatchRoute, createDeleteRoute } from '../generic';
 
 export function eventRouter(adminGuard: Router.IMiddleware) {
     const router = new Router({ prefix: '/event' });
