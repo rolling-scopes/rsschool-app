@@ -11,6 +11,7 @@ import { stageRouter } from './stage';
 import { healthRouter } from './health';
 import { sessionRouter } from './session';
 import { userRouter } from './user';
+import { batchUpdateRouter } from './batchUpdate';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
 
@@ -33,6 +34,7 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, healthRouter());
     applyRouter(router, authRoute());
     applyRouter(router, sessionRouter());
+    applyRouter(router, batchUpdateRouter());
 
     router.use(guard);
 
