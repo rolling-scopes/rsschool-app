@@ -15,7 +15,7 @@ export interface IAssignment {
     deadlineDate: number;
     mentorComment?: string;
     mentorId?: string;
-    score?: number;
+    score: number;
     status: AssignmentStatus;
     studentComment?: string;
     studentId: string;

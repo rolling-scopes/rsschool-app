@@ -10,20 +10,21 @@ import {
     AssignmentStatus,
 } from '../../models';
 
-type AssignmentsResponse = {
-    assignmentRepo: string;
+type AssignmentResponse = {
+    _id: string;
+    assignmentRepo?: string;
     author?: string;
     checkDate?: number;
     completeDate?: number;
     courseId: string;
     deadlineDate: number;
     endDateTime?: number;
-    mentorComment: string;
-    mentorId: string;
+    mentorComment?: string;
+    mentorId?: string;
     score: number;
     startDateTime: number;
     status: string;
-    studentComment: string;
+    studentComment?: string;
     studentId: string;
     taskId: string;
     taskType?: string;
@@ -31,6 +32,16 @@ type AssignmentsResponse = {
     type: string;
     urlToDescription?: string;
     whoChecks?: string;
+};
+
+type INormalizeAssignments = {
+    isEndAssignment: boolean;
+    isActiveAssignment: boolean;
+    assignment: AssignmentResponse;
+};
+
+type NormalizeAssignmentsData = {
+    assignments: INormalizeAssignments[];
 };
 
 export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
@@ -46,17 +57,13 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
             }
         }
         const tasks: IEventModel[] = await getTasksByTaskId(arrayOfTasksId);
-        const tasksForCombine: any = tasks;
-        const combinedAssignments: any = assignments;
-        for (const index in combinedAssignments) {
-            if (combinedAssignments[index] && tasksForCombine[index]) {
-                combinedAssignments[index]._doc = {
-                    ...tasksForCombine[index]._doc,
-                    ...combinedAssignments[index]._doc,
-                };
+        const combinedAssignmentsAndTasks: AssignmentResponse[] = [];
+        for (const index in assignments) {
+            if (assignments[index] && tasks[index]) {
+                combinedAssignmentsAndTasks[index] = { ...Object.create(null), ...tasks[index], ...assignments[index] };
             }
         }
-        const result: NormalizeAssignmentsData = getNormalizeAssignmentsData(combinedAssignments);
+        const result: NormalizeAssignmentsData = getNormalizeAssignmentsData(combinedAssignmentsAndTasks);
         const body: IApiResponse<NormalizeAssignmentsData> = {
             data: result,
         };
@@ -68,22 +75,15 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
     }
 };
 
-type INormalizeAssignments = {
-    isEndAssignment: boolean;
-    assignment: AssignmentsResponse;
-};
-
-type NormalizeAssignmentsData = {
-    assignments: INormalizeAssignments[];
-};
-
-export const getNormalizeAssignmentsData = (assignments: AssignmentsResponse[]): NormalizeAssignmentsData => {
+export const getNormalizeAssignmentsData = (assignments: AssignmentResponse[]): NormalizeAssignmentsData => {
     const sortedAssignments = assignments
         .reduce<INormalizeAssignments[]>((res, assignment) => {
             if (assignment.deadlineDate < Date.now() && assignment.status === AssignmentStatus.Assigned) {
-                res.push({ assignment, isEndAssignment: true });
+                res.push({ assignment, isEndAssignment: true, isActiveAssignment: true });
+            } else if (assignment.startDateTime > Date.now()) {
+                res.push({ assignment, isEndAssignment: false, isActiveAssignment: false });
             } else {
-                res.push({ assignment, isEndAssignment: false });
+                res.push({ assignment, isEndAssignment: false, isActiveAssignment: true });
             }
             return res;
         }, [])
@@ -93,8 +93,8 @@ export const getNormalizeAssignmentsData = (assignments: AssignmentsResponse[]):
             return b - a;
         })
         .sort((assignmentA, assignmentB) => {
-            const a: any = assignmentA.isEndAssignment;
-            const b: any = assignmentB.isEndAssignment;
+            const a = Number(assignmentA.isEndAssignment!);
+            const b = Number(assignmentB.isEndAssignment!);
             return a - b;
         });
     const data = sortedAssignments.reduce<NormalizeAssignmentsData>(
@@ -108,9 +108,13 @@ export const getNormalizeAssignmentsData = (assignments: AssignmentsResponse[]):
 };
 
 const getAssignmentsByCourseIdAndUserId = (courseId: string, studentId: string) => {
-    return AssignmentModel.find({ courseId, studentId }).exec();
+    return AssignmentModel.find({ courseId, studentId })
+        .lean()
+        .exec();
 };
 
 const getTasksByTaskId = (arrayOfTasksId: string[]) => {
-    return TaskModel.find({ _id: arrayOfTasksId }).exec();
+    return TaskModel.find({ _id: arrayOfTasksId })
+        .lean()
+        .exec();
 };

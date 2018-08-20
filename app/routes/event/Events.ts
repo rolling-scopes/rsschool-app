@@ -18,34 +18,23 @@ import {
 export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
-        switch (ctx.request.body.type) {
+        const body = ctx.request.body;
+        const { _id: userId } = userSession;
+        const { type, courseId } = body;
+        switch (type) {
             case 'task': {
                 const event = new TaskModel({
-                    ...ctx.request.body,
-                    author: userSession._id,
+                    ...body,
+                    author: userId,
                 });
                 ctx.body = {};
                 ctx.body = await event.save();
                 ctx.status = OK;
-                const students: ICourseStudent[] = await getStudentsByCourseId(ctx.request.body.courseId);
-                for (const index in students) {
-                    if (students[index]) {
-                        const student: ICourseStudent = students[index];
-                        const assignment = new AssignmentModel({
-                            courseId: ctx.request.body.courseId,
-                            deadlineDate: event.endDateTime,
-                            mentorId: student.mentors,
-                            status: AssignmentStatus.Assigned,
-                            studentId: student.userId,
-                            taskId: event.id,
-                        });
-                        await assignment.save();
-                    }
-                }
+                await createAssignments(event, courseId);
                 break;
             }
             case 'session': {
-                const event = new SessionModel(ctx.request.body);
+                const event = new SessionModel(body);
                 ctx.body = await event.save();
                 ctx.status = OK;
                 break;
@@ -59,12 +48,30 @@ export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
     }
 };
 
+const createAssignments = async (event: IEventModel, courseId: string) => {
+    const students: ICourseStudent[] = await getStudentsByCourseId(courseId);
+    for (const index in students) {
+        if (students[index]) {
+            const student: ICourseStudent = students[index];
+            const assignment = new AssignmentModel({
+                courseId,
+                deadlineDate: event.endDateTime,
+                mentorId: student.mentors,
+                score: 0,
+                status: AssignmentStatus.Assigned,
+                studentId: student.userId,
+                taskId: event.id,
+            });
+            await assignment.save();
+        }
+    }
+};
+
 export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
     const { id } = ctx.params;
 
     try {
         let query = await SessionModel.findByIdAndRemove(id);
-
         if (query === null) {
             query = await TaskModel.findByIdAndRemove(id);
             if (query !== null) {
@@ -74,7 +81,6 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
                 return;
             }
         }
-
         setResponse(ctx, OK);
     } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
@@ -84,7 +90,6 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
 
 export const createPatchEventsRoute = async (ctx: Router.IRouterContext) => {
     const { _id, ...body } = ctx.request.body;
-
     try {
         const result =
             (await SessionModel.findByIdAndUpdate(_id, body, { new: true })) ||
