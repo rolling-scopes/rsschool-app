@@ -10,6 +10,7 @@
     "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "pretty": "prettier --config .prettierrc.json --write \"./app/**/*.ts\"",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:update": "jest --updateSnapshot",
     "lint-staged": "lint-staged",
     "precommit": "npm-run-all lint-staged lint test",

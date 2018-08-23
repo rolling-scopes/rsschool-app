@@ -1,12 +1,10 @@
 /*  TODO
 
-1. tests
-2. system works wrong with time setting like 20:00 - 2:00
-3. edit notifications if users settings changes
-4. user timezone
-5. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-6. refactor notify func
-7. check if notification will never be send  */
+1. system works wrong with time setting like 20:00 - 2:00
+2. edit notifications if users settings changes
+3. user timezone
+4. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
+5. refactor notify func  */
 
 import * as nodeSchedule from 'node-schedule';
 import NotificationsBot from './bot';
@@ -37,7 +35,10 @@ const schedule = (notification: INotification) => {
     );
 };
 
-const checkIsInTime = (hours: number, minutes: number, timeFrom: ITime, timeTo: ITime): boolean => {
+const isDateTimeInInterval = (dateTime: Date, timeFrom: ITime, timeTo: ITime): boolean => {
+    const hours = dateTime.getHours();
+    const minutes = dateTime.getMinutes();
+
     if (hours >= timeFrom.hours && hours <= timeTo.hours) {
         return true;
     } else if (hours === timeFrom.hours && minutes >= timeFrom.minutes) {
@@ -54,22 +55,16 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
     const notificationsSettings = await notificationsSettingService.find({ isEnable: true });
 
     await notificationsSettings.forEach(async (setting: INotificationsSetting) => {
-        const isCurrentTimeInSettingTime = checkIsInTime(
-            currentDate.getHours(),
-            currentDate.getMinutes(),
-            setting.timeFrom,
-            setting.timeTo,
+        const { timeFrom, timeTo, telegramId } = setting;
+        const isCurrentTimeInSettingTime = isDateTimeInInterval(currentDate, timeFrom, timeTo);
+        const filtered = data.filter(
+            (item: INotificaionData) => !item.dateTime || item.dateTime >= currentDate.valueOf(),
         );
 
-        await data.forEach(async (item: INotificaionData) => {
+        await filtered.forEach(async (item: INotificaionData) => {
             if (item.dateTime) {
                 const dateTime = new Date(item.dateTime);
-                const isEventTimeInSettingTime = checkIsInTime(
-                    dateTime.getHours(),
-                    dateTime.getMinutes(),
-                    setting.timeFrom,
-                    setting.timeTo,
-                );
+                const isEventTimeInSettingTime = isDateTimeInInterval(dateTime, timeFrom, timeTo);
 
                 if (!isEventTimeInSettingTime) {
                     return;
@@ -80,8 +75,9 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
                     eventId,
                     eventType,
                     message: item.message,
-                    telegramId: setting.telegramId,
+                    telegramId,
                 });
+
                 schedule(notification);
             } else if (isCurrentTimeInSettingTime) {
                 bot.send(setting.telegramId, item.message);
@@ -89,9 +85,9 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
                 const dateTime = new Date(
                     currentDate.getFullYear(),
                     currentDate.getMonth(),
-                    currentDate.getDate() + (currentDate.getHours() < setting.timeFrom.hours ? 0 : 1),
-                    setting.timeFrom.hours,
-                    setting.timeFrom.minutes,
+                    currentDate.getDate() + (currentDate.getHours() < timeFrom.hours ? 0 : 1),
+                    timeFrom.hours,
+                    timeFrom.minutes,
                 );
 
                 const notification = await notificationService.save({
@@ -99,7 +95,7 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
                     eventId,
                     eventType,
                     message: item.message,
-                    telegramId: setting.telegramId,
+                    telegramId,
                 });
                 schedule(notification);
             }
