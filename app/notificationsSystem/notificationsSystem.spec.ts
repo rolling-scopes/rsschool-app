@@ -20,6 +20,8 @@ describe('Notification system', () => {
         mockLogger.info = () => undefined;
         mockLogger.warn = () => undefined;
 
+        mockingoose.Notification.toReturn([], 'find');
+
         notificationsSystem.start(mockLogger);
     });
 
