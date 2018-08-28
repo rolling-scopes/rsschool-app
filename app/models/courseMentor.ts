@@ -1,6 +1,10 @@
 import { Document, Schema, model } from 'mongoose';
 import { IUserBase, IUser } from './user';
 
+export enum MentorSettings {
+    ExtraMentees = 2,
+}
+
 export interface ICouseUser {
     city: string;
     courseId: string;

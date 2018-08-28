@@ -11,12 +11,12 @@ const groupCourseMentorsByCity = async (
     courseId: string,
 ): Promise<{ city: string; mentors: ICourseMentorModel[] }[]> => {
     const mentorsWithCities: ICourseMentorModel[] = await CourseMentorModel.find({
+        $expr: { $gt: ['$menteeCapacity', { $size: '$mentees' }] },
         city: { $ne: null },
         courseId,
-        menteeCapacity: { $gt: 0 },
     }).exec();
 
-    const mentorsMap = mentorsWithCities.reduce(
+    const mentorMap = mentorsWithCities.reduce(
         (acc: { [key: string]: ICourseMentorModel[] }, prev: ICourseMentorModel) => {
             if (!acc[prev.city]) {
                 acc[prev.city] = [];
@@ -27,7 +27,7 @@ const groupCourseMentorsByCity = async (
         {} as { [key: string]: ICourseMentorModel[] },
     );
 
-    return Object.keys(mentorsMap).map(key => ({ mentors: mentorsMap[key], city: key }));
+    return Object.keys(mentorMap).map(key => ({ city: key, mentors: mentorMap[key] }));
 };
 
 const doAssigning = async (courseId: string, mentors: ICourseMentorModel[], city: string) => {
@@ -35,11 +35,16 @@ const doAssigning = async (courseId: string, mentors: ICourseMentorModel[], city
         city,
         mentors: [],
     }).exec();
-    const averageStudentsPerMentor = Math.round(studentsCount / mentors.length);
+    const averageStudentsPerMentors = Math.round(studentsCount / mentors.length);
     return mentors.reduce(
         (chain, mentor) =>
             chain.then(() =>
-                assignMentor(mentor, courseId, city, Math.min(mentor.menteeCapacity, averageStudentsPerMentor)),
+                assignMentor(
+                    mentor,
+                    courseId,
+                    city,
+                    Math.min(mentor.menteeCapacity - mentor.mentees.length, averageStudentsPerMentors),
+                ),
             ),
         Promise.resolve(),
     );
@@ -53,8 +58,12 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string, 
     })
         .limit(num)
         .exec();
-    courseMentor.mentees = courseStudents.map(({ userId }) => ({ _id: userId }));
-    courseMentor.menteeCapacity = Math.max(courseMentor.menteeCapacity - courseStudents.length, 0);
+    const studentsByCity = courseStudents.map(({ userId }: { userId: string }) => ({ _id: userId }));
+    await courseMentor.update({
+        $addToSet: {
+            mentees: { $each: studentsByCity },
+        },
+    });
     const studentsIds = courseStudents.map(({ userId }) => userId);
     await Promise.all([
         courseMentor.save(),
@@ -65,8 +74,8 @@ const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string, 
                 userId: { $in: studentsIds },
             },
             {
-                $set: {
-                    mentors: [{ _id: courseMentor.userId }] as IUserBase[],
+                $addToSet: {
+                    mentors: { $each: [{ _id: courseMentor.userId }] as IUserBase[] },
                 },
             },
         ).exec(),
