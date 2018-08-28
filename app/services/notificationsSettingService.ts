@@ -1,4 +1,3 @@
-// import { QueryCursor } from 'mongoose';
 import { INotificationsSetting, NotificationsSettingModel } from '../models/notificationsSetting';
 
 export async function getByTelegramId(telegramId: number) {
@@ -13,8 +12,8 @@ export async function save(data: object) {
     return result;
 }
 
-export async function update(conditions: object, data: object) {
-    const result = await NotificationsSettingModel.findOneAndUpdate(conditions, data, { runValidators: true });
+export async function updateById(id: string, data: object): Promise<INotificationsSetting | null> {
+    const result = await NotificationsSettingModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
     return result;
 }
 

@@ -1,23 +1,28 @@
 import Telegraf from 'telegraf';
 
 import { ILogger } from '../../logger';
-
 import { ITime } from '../../models/notificationsSetting';
-
 import { userService, notificationsSettingService } from '../../services';
-
 import { config } from './config';
 
 export default class NotificationsBot {
-    private static getTelegramId = (ctx: any): number => ctx.from.id;
-
-    private static beautifyTime(time: string): ITime {
+    private static beautifyTime(time: string): ITime | null {
         const [hours, minutes] = time.split(':').map(it => Number(it));
+        if (isNaN(hours) || isNaN(minutes)) {
+            return null;
+        } else if (hours < 0 || hours > 24 || minutes < 0 || minutes > 60) {
+            return null;
+        }
 
         return { hours, minutes };
     }
 
     private static argumentsMiddleware(ctx: any, next: any) {
+        if (!ctx.message.text) {
+            ctx.reply(config.messages.iDontUnderstandYou);
+            return;
+        }
+
         const [command, ...args] = ctx.message.text.split(' ').filter((it: string) => it !== '');
         ctx.state.command = command;
         ctx.state.arguments = args;
@@ -26,10 +31,14 @@ export default class NotificationsBot {
     }
 
     private static async settingMiddleware(ctx: any, next: any) {
-        const telegramId = NotificationsBot.getTelegramId(ctx);
-        const result = await notificationsSettingService.getByTelegramId(telegramId);
-        ctx.state.setting = result;
-        return next();
+        const setting = await notificationsSettingService.getByTelegramId(ctx.from.id);
+
+        if (ctx.state.command === '/start' || setting) {
+            ctx.state.setting = setting;
+            return next();
+        }
+
+        ctx.reply(config.messages.iDontKnowYou);
     }
 
     private static unknownCommandMiddleware(ctx: any, next: any) {
@@ -38,15 +47,8 @@ export default class NotificationsBot {
         if (isKnownCommand) {
             return next();
         }
+
         ctx.reply(config.messages.iDontUnderstandYou);
-    }
-
-    private static unknownUserMiddleware(ctx: any, next: any) {
-        if (ctx.state.command === '/start' || ctx.state.setting) {
-            return next();
-        }
-
-        ctx.reply(config.messages.iDontKnowYou);
     }
 
     private telegramBot: any;
@@ -59,8 +61,6 @@ export default class NotificationsBot {
 
         this.telegramBot.use(NotificationsBot.argumentsMiddleware);
         this.telegramBot.use(NotificationsBot.settingMiddleware);
-
-        this.telegramBot.use(NotificationsBot.unknownUserMiddleware);
         this.telegramBot.use(NotificationsBot.unknownCommandMiddleware);
 
         this.telegramBot.start(this.handleStart);
@@ -96,8 +96,7 @@ export default class NotificationsBot {
         const user = await userService.getUserById(userId);
 
         if (user) {
-            const telegramId = NotificationsBot.getTelegramId(ctx);
-            await notificationsSettingService.save({ userId, telegramId });
+            await notificationsSettingService.save({ userId, telegramId: ctx.from.id });
             ctx.reply(config.messages.subscribe);
         } else {
             ctx.reply(config.messages.iDontKnowYou);
@@ -109,38 +108,35 @@ export default class NotificationsBot {
     }
 
     private async handleEnable(ctx: any) {
-        const telegramId = NotificationsBot.getTelegramId(ctx);
-        await notificationsSettingService.update({ telegramId }, { isEnable: true });
+        await notificationsSettingService.updateById('5b7e8f7042991714f821bc6a', { isEnable: true });
         ctx.reply(config.messages.enable);
     }
 
     private async handleDisable(ctx: any) {
-        const telegramId = NotificationsBot.getTelegramId(ctx);
-        await notificationsSettingService.update({ telegramId }, { isEnable: false });
+        await notificationsSettingService.updateById(ctx.state.setting._id, { isEnable: false });
         ctx.reply(config.messages.disable);
     }
 
     private async handleSetTime(ctx: any) {
-        try {
-            const telegramId = NotificationsBot.getTelegramId(ctx);
-            const [timeFrom, timeTo] = ctx.state.arguments;
+        const [timeFrom, timeTo] = ctx.state.arguments;
 
-            if (!(timeFrom && timeTo)) {
-                ctx.reply(config.messages.invalidTimeInterval);
-                return;
-            }
-            const beautyTimeFrom = NotificationsBot.beautifyTime(timeFrom);
-            const beautyTimeTo = NotificationsBot.beautifyTime(timeTo);
-
-            await notificationsSettingService.update(
-                { telegramId },
-                { timeFrom: beautyTimeFrom, timeTo: beautyTimeTo },
-            );
-            ctx.reply(config.messages.timeSetted);
-        } catch (err) {
+        if (!(timeFrom && timeTo)) {
             ctx.reply(config.messages.invalidTimeInterval);
-            this.logger.error(err);
+            return;
         }
+        const beautyTimeFrom = NotificationsBot.beautifyTime(timeFrom);
+        const beautyTimeTo = NotificationsBot.beautifyTime(timeTo);
+
+        if (beautyTimeFrom === null || beautyTimeTo === null) {
+            ctx.reply(config.messages.invalidTimeInterval);
+            return;
+        }
+
+        await notificationsSettingService.updateById(ctx.state.setting._id, {
+            timeFrom: beautyTimeFrom,
+            timeTo: beautyTimeTo,
+        });
+        ctx.reply(config.messages.timeSetted);
     }
 
     private handleError(err: Error) {
