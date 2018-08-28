@@ -5,7 +5,7 @@ export async function assignMentorsByPreference(courseId: string, logger: ILogge
     logger.info('Assigning mentors by preference', { courseId });
     const mentorsWithPreferedStudents = await selectMentorsWithPreferences(courseId);
     logger.info(`${courseId}: Mentors with prefered students: [${mentorsWithPreferedStudents.length}]`);
-    await doAssinging(mentorsWithPreferedStudents, courseId);
+    await doAssigning(mentorsWithPreferedStudents, courseId);
 }
 
 const selectMentorsWithPreferences = async (courseId: string) => {
@@ -16,7 +16,7 @@ const selectMentorsWithPreferences = async (courseId: string) => {
     }).exec();
 };
 
-const doAssinging = async (mentors: ICourseMentorModel[], courseId: string) => {
+const doAssigning = async (mentors: ICourseMentorModel[], courseId: string) => {
     await mentors.reduce((chain, mentor) => chain.then(() => assignMentor(mentor, courseId)), Promise.resolve());
 };
 
