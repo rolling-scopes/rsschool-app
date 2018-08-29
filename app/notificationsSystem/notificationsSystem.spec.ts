@@ -1,6 +1,7 @@
 import mockingoose from 'mockingoose';
 import * as nodeSchedule from 'node-schedule';
 
+import { StudentsNotificationsType } from '../models/notification';
 import { ILogger } from '../logger';
 import * as notificationsSystem from '.';
 import Bot from './bot';
@@ -48,9 +49,11 @@ describe('Notification system', () => {
     });
 
     it('should not notify when event in the past', async () => {
-        await notificationsSystem.notify('eventName', 'eventId', [
+        await notificationsSystem.notify([
             {
                 dateTime: Date.now() - 10000,
+                eventId: '5b79dd800755343b00c67b19',
+                eventType: StudentsNotificationsType.Session,
                 message: 'Event in the past',
             },
         ]);
@@ -67,9 +70,11 @@ describe('Notification system', () => {
 
         const currentDate = new Date();
 
-        await notificationsSystem.notify('eventName', 'eventId', [
+        await notificationsSystem.notify([
             {
                 dateTime: new Date(`${currentDate.getFullYear() + 1}-01-01 11:00`).valueOf(),
+                eventId: '5b79dd800755343b00c67b19',
+                eventType: StudentsNotificationsType.Session,
                 message: 'Event comes when settings not allowed',
             },
         ]);
@@ -79,15 +84,26 @@ describe('Notification system', () => {
     });
 
     it('should immediately notify', async () => {
-        await notificationsSystem.notify('eventName', 'eventId', [{ message: 'Immediate notification' }]);
+        await notificationsSystem.notify([
+            {
+                eventId: '5b79dd800755343b00c67b19',
+                eventType: StudentsNotificationsType.Session,
+                message: 'Immediate notification',
+            },
+        ]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toBe(0);
         expect(mockSend.mock.calls.length).toBe(1);
     });
 
     it('should schedule on event dateTime', async () => {
-        await notificationsSystem.notify('eventName', 'eventId', [
-            { dateTime: Date.now() + 10000, message: 'Scheduled notification' },
+        await notificationsSystem.notify([
+            {
+                dateTime: Date.now() + 10000,
+                eventId: '5b79dd800755343b00c67b19',
+                eventType: StudentsNotificationsType.Session,
+                message: 'Scheduled notification',
+            },
         ]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(1);
@@ -102,7 +118,13 @@ describe('Notification system', () => {
             setting.timeTo.hours = currentDate.getHours() - 1;
         }
 
-        await notificationsSystem.notify('eventName', 'eventId', [{ message: 'Immediate notification' }]);
+        await notificationsSystem.notify([
+            {
+                eventId: '5b79dd800755343b00c67b19',
+                eventType: StudentsNotificationsType.Session,
+                message: 'Immediate notification',
+            },
+        ]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(1);
         expect(mockSend.mock.calls.length).toBe(0);
@@ -111,6 +133,8 @@ describe('Notification system', () => {
     it('should remove notifications', async () => {
         const data = {
             dateTime: Date.now() + 10000,
+            eventId: '5b79dd800755343b00c67b19',
+            eventType: StudentsNotificationsType.Session,
             message: 'Scheduled notification',
         };
 
@@ -126,11 +150,11 @@ describe('Notification system', () => {
         mockingoose.Notification.toReturn([notification], 'find');
         mockingoose.Notification.toReturn(notification, 'save');
 
-        await notificationsSystem.notify('eventName', 'eventId', [data]);
+        await notificationsSystem.notify([data]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(1);
 
-        await notificationsSystem.remove('eventName', 'eventId');
+        await notificationsSystem.remove(StudentsNotificationsType.Session, data.eventId);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(0);
     });
@@ -138,6 +162,8 @@ describe('Notification system', () => {
     it('should update notifications', async () => {
         const data = {
             dateTime: Date.now() + 10000,
+            eventId: '5b79dd800755343b00c67b19',
+            eventType: StudentsNotificationsType.Session,
             message: 'Scheduled notification',
         };
 
@@ -153,11 +179,17 @@ describe('Notification system', () => {
         mockingoose.Notification.toReturn([notification], 'find');
         mockingoose.Notification.toReturn(notification, 'save');
 
-        await notificationsSystem.notify('eventName', 'eventId', [data]);
+        await notificationsSystem.notify([data]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(1);
 
-        await notificationsSystem.update('eventName', 'eventId', [{ message: 'Immediate notification' }]);
+        await notificationsSystem.update([
+            {
+                eventId: data.eventType,
+                eventType: data.eventType,
+                message: 'Immediate notification',
+            },
+        ]);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(0);
         expect(mockSend.mock.calls.length).toBe(1);

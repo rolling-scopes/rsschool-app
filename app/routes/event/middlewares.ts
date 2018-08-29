@@ -1,5 +1,6 @@
 import { IMiddleware } from 'koa-router';
 import { SessionType } from '../../models/event';
+import { StudentsNotificationsType } from '../../models/notification';
 import { INotificaionData, notify, update, remove } from '../../notificationsSystem';
 
 const hoursToMilliseconds = (hours: number): number => hours * 60 * 60 * 1000;
@@ -8,12 +9,9 @@ const getPrettyTime = (dateTime: Date): string => {
     return `${dateTime.getHours()}:${dateTime.getMinutes()}`;
 };
 
-const getNotifications = (
-    title: string,
-    sessionType: string,
-    startDateTime: number,
-    urlToDescription?: string,
-): INotificaionData[] => {
+const getNotifications = (data: any): INotificaionData[] => {
+    const { _id, title, sessionType, startDateTime, urlToDescription } = data;
+
     const notifications = [];
 
     const beforeEventMessage = `${title} started at ${getPrettyTime(new Date(startDateTime))}${
@@ -24,55 +22,67 @@ const getNotifications = (
     switch (sessionType) {
         case SessionType.Online:
             notifications.push(
-                { dateTime: startDateTime - hoursToMilliseconds(1), message: beforeEventMessage },
-                { dateTime: startDateTime, message: onEventMessage },
+                {
+                    dateTime: startDateTime - hoursToMilliseconds(1),
+                    message: beforeEventMessage,
+                },
+                {
+                    dateTime: startDateTime,
+                    message: onEventMessage,
+                },
             );
             break;
         case SessionType.Offline:
-            notifications.push({ dateTime: startDateTime - hoursToMilliseconds(2), message: beforeEventMessage });
+            notifications.push({
+                dateTime: startDateTime - hoursToMilliseconds(2),
+                message: beforeEventMessage,
+            });
             break;
         case SessionType.SelfLearning:
-            notifications.push({ dateTime: startDateTime, message: onEventMessage });
+            notifications.push({
+                dateTime: startDateTime,
+                message: onEventMessage,
+            });
             break;
         case SessionType.ExtraEvent:
-            notifications.push({ dateTime: startDateTime - hoursToMilliseconds(1), message: beforeEventMessage });
+            notifications.push({
+                dateTime: startDateTime - hoursToMilliseconds(1),
+                message: beforeEventMessage,
+            });
             break;
         default:
     }
-
-    return notifications;
+    return notifications.map(item => ({ ...item, eventId: _id, eventType: StudentsNotificationsType.Session }));
 };
 
 export const notificationPostMiddleware: IMiddleware = async (ctx, next) => {
     try {
-        const { title, sessionType, startDateTime, urlToDescription } = ctx.body;
-        const notifications = getNotifications(title, sessionType, startDateTime, urlToDescription);
+        const notifications = getNotifications(ctx.body);
 
-        await notify('event', ctx.body._id, notifications);
+        await notify(notifications);
         next();
     } catch (err) {
-        ctx.logger.error(err);
+        ctx.logger.error(err, 'Failed to create notifications');
     }
 };
 
 export const notificationPatchMiddleware: IMiddleware = async (ctx, next) => {
     try {
-        const { title, sessionType, startDateTime, urlToDescription } = ctx.body.data;
-        const notifications = getNotifications(title, sessionType, startDateTime, urlToDescription);
+        const notifications = getNotifications(ctx);
 
-        await update('event', ctx.body.data._id, notifications);
+        await update(notifications);
         next();
     } catch (err) {
-        ctx.logger.error(err);
+        ctx.logger.error(err, 'Failed to update notifications');
     }
 };
 
 export const notificationRemoveMiddleware: IMiddleware = async (ctx, next) => {
     try {
         const { id } = ctx.params;
-        await remove('event', id);
+        await remove(StudentsNotificationsType.Session, id);
         next();
     } catch (err) {
-        ctx.logger.error(err);
+        ctx.logger.error(err, 'Failed to remove notifications');
     }
 };

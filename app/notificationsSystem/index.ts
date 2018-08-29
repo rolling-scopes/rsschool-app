@@ -7,9 +7,10 @@
 5. refactor notify func  */
 
 import * as nodeSchedule from 'node-schedule';
+
 import NotificationsBot from './bot';
 import { ILogger } from '../logger';
-import { INotification } from '../models/notification';
+import { INotification, MentorsNotificationsType, StudentsNotificationsType } from '../models/notification';
 import { ITime, INotificationsSetting } from '../models/notificationsSetting';
 import { notificationService, notificationsSettingService } from '../services/';
 
@@ -19,6 +20,8 @@ let bot: NotificationsBot;
 
 export interface INotificaionData {
     dateTime?: number;
+    eventId: string;
+    eventType: MentorsNotificationsType | StudentsNotificationsType;
     message: string;
 }
 
@@ -50,7 +53,7 @@ const isDateTimeInInterval = (dateTime: Date, timeFrom: ITime, timeTo: ITime): b
     return false;
 };
 
-export const notify = async (eventType: string, eventId: string, data: INotificaionData[]) => {
+export const notify = async (data: INotificaionData[]) => {
     const currentDate = new Date();
     const notificationsSettings = await notificationsSettingService.find({ isEnable: true });
 
@@ -62,6 +65,8 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
         );
 
         await filtered.forEach(async (item: INotificaionData) => {
+            const { eventId, eventType, message } = item;
+
             if (item.dateTime) {
                 const dateTime = new Date(item.dateTime);
                 const isEventTimeInSettingTime = isDateTimeInInterval(dateTime, timeFrom, timeTo);
@@ -74,13 +79,13 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
                     dateTime,
                     eventId,
                     eventType,
-                    message: item.message,
+                    message,
                     telegramId,
                 });
 
                 schedule(notification);
             } else if (isCurrentTimeInSettingTime) {
-                bot.send(setting.telegramId, item.message);
+                bot.send(setting.telegramId, message);
             } else {
                 const dateTime = new Date(
                     currentDate.getFullYear(),
@@ -94,7 +99,7 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
                     dateTime,
                     eventId,
                     eventType,
-                    message: item.message,
+                    message,
                     telegramId,
                 });
                 schedule(notification);
@@ -103,12 +108,14 @@ export const notify = async (eventType: string, eventId: string, data: INotifica
     });
 };
 
-export const update = async (eventType: string, eventId: string, data: INotificaionData[]) => {
-    await remove(eventType, eventId);
-    await notify(eventType, eventId, data);
+export const update = async (data: INotificaionData[]) => {
+    await data.forEach(async ({ eventType, eventId }: INotificaionData) => {
+        await remove(eventType, eventId);
+    });
+    await notify(data);
 };
 
-export const remove = async (eventType: string, eventId: string) => {
+export const remove = async (eventType: MentorsNotificationsType | StudentsNotificationsType, eventId: string) => {
     const removedIds = await notificationService.removeByEvent(eventType, eventId);
     removedIds.forEach((item: string) => {
         if (nodeSchedule.scheduledJobs[item]) {
@@ -125,7 +132,6 @@ const scheduleAll = async () => {
 export const start = async (notificationsLogger: ILogger) => {
     logger = notificationsLogger;
 
-    logger.info('Notification system started');
     bot = new NotificationsBot(logger);
     bot.start();
     logger.info('Notifications sheduling');
