@@ -39,17 +39,19 @@ const generateAssignments = async (ctx: Router.IRouterContext) => {
             studentId: item.userId,
             taskId: _id,
         };
-        AssignmentModel.create(assignment, (error: any) => {
-            if (error) {
-                ctx.logger.error(error, 'Failed to save document');
-            }
-        });
+        AssignmentModel.bulkWrite([{ insertOne: { document: assignment } }]);
     });
 };
 
 const groupUsersByCourseId = async (courseId: string) => {
-    const userWithCourseId: ICourseStudentModel[] = await CourseStudentModel.find({
-        courseId,
-    }).exec();
+    const userWithCourseId: ICourseStudentModel[] = await CourseStudentModel.find(
+        {
+            courseId,
+        },
+        {
+            mentorId: 1,
+            userId: 1,
+        },
+    ).exec();
     return userWithCourseId;
 };

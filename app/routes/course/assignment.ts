@@ -5,11 +5,21 @@ import { setResponse } from '../utils';
 
 export const courseAssignmentGetRoute = async (ctx: Router.IRouterContext) => {
     try {
-        const { courseId, studentId } = ctx.params;
-        const assignments = await AssignmentModel.find({
-            courseId,
-            studentId,
-        }).exec();
+        const { courseId } = ctx.params;
+        const studentId: string = ctx.state.user!._id;
+        const assignments = await AssignmentModel.find(
+            {
+                courseId,
+                studentId,
+            },
+            {
+                courseId: 1,
+                score: 1,
+                status: 1,
+                studentId: 1,
+                taskId: 1,
+            },
+        ).exec();
 
         const taskIdCollection: string[] = [];
         for (const index in assignments) {
@@ -44,15 +54,12 @@ export const courseAssignmentGetRoute = async (ctx: Router.IRouterContext) => {
     }
 };
 
-function timeout(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export const courseAssignmentPatchRoute = async (ctx: Router.IRouterContext) => {
     try {
-        const { courseId, studentId, taskId } = ctx.params;
+        const { courseId } = ctx.params;
+        const studentId: string = ctx.state.user!._id;
+        const taskId: string = ctx.request.body.taskId;
         const newAssignment = { ...ctx.request.body };
-        await timeout(2000);
         newAssignment.status = 'Checked';
         newAssignment.score = Math.floor(Math.random() * 100);
         const result = await AssignmentModel.findOneAndUpdate(
