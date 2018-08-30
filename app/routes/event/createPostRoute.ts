@@ -1,43 +1,40 @@
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import { IRouterContext } from 'koa-router';
 import { Document } from 'mongoose';
-import { TaskModel } from '../../models/tasks';
 import { AssignmentsModel } from '../../models/assignments';
 import { CourseStudentModel } from '../../models/courseStudent';
 
 export function createPostRoute<T extends Document>(DocumentModel: new (data: any) => T) {
     return async (ctx: IRouterContext) => {
-        const model = new DocumentModel(ctx.request.body);
-        const validationResult = model.validateSync();
-        ctx.body = {};
-
-        if (validationResult !== undefined) {
-            ctx.status = BAD_REQUEST;
-            return;
-        }
         try {
+            const model: any = new DocumentModel(ctx.request.body);
+            await model.save();
+            const validationResult = model.validateSync();
+            ctx.body = {};
+
+            if (validationResult !== undefined) {
+                ctx.status = BAD_REQUEST;
+                return;
+            }
             if (ctx.request.body.type === 'task') {
-                const documentModelTask = new DocumentModel(ctx.request.body);
-                const modelTask = new TaskModel(documentModelTask);
-                await modelTask.save();
                 const students = await CourseStudentModel.find({
                     courseId: ctx.request.body.courseId,
                 }).exec();
                 students.forEach(async student => {
                     const assignment = {
-                        assigmentRepo: modelTask.urlToDescription,
+                        assigmentRepo: model.urlToDescription,
                         checkDate: 0,
-                        completeDate: modelTask.endDateTime - modelTask.startDateTime,
+                        completeDate: model.endDateTime - model.startDateTime,
                         courseId: student.courseId,
-                        deadlineDate: modelTask.endDateTime,
+                        deadlineDate: model.endDateTime,
                         mentorComment: '',
                         mentorId: '',
                         score: 0,
                         status: 'Assigned',
                         studentComment: '',
                         studentId: student.userId,
-                        taskId: modelTask._id,
-                        title: modelTask.title,
+                        taskId: model._id,
+                        title: model.title,
                     };
                     const assignments = new AssignmentsModel(assignment);
                     await assignments.save();

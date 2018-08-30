@@ -52,7 +52,7 @@ export const config: IConfig = {
     isDevMode: process.env.NODE_ENV !== 'production',
     mongo: {
         connectAttempts: 5,
-        connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://192.168.99.100:27017',
+        connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://localhost:27017',
         options: {
             auth:
                 mongoUser != null && mongoPassword != null
