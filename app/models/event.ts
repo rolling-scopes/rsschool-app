@@ -1,6 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 
-enum EventType {
+export enum EventType {
     Session = 'session',
     Task = 'task',
 }

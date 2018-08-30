@@ -7,12 +7,14 @@ import {
     IEventModel,
     ITaskModel,
     EventModel,
+    EventType,
     TaskModel,
     IUserSession,
     AssignmentModel,
     AssignmentStatus,
     ICourseStudent,
     CourseStudentModel,
+    ICourseStudentModel,
 } from '../../models';
 export const createPostRoute = async (ctx: Router.IRouterContext) => {
     try {
@@ -27,26 +29,13 @@ export const createPostRoute = async (ctx: Router.IRouterContext) => {
                 ctx.body = await task.save();
                 ctx.status = OK;
                 const students: any = await getStudentsByCourseId(ctx.request.body.courseId);
-                for (const index in students) {
-                    if (students[index]) {
-                        const assignment = new AssignmentModel({
-                            assignmentRepo: task.urlToDescription,
-                            checkDate: 0,
-                            completeDate: 0,
-                            courseId: ctx.request.body.courseId,
-                            deadlineDate: task.endDateTime,
-                            mentorComment: '',
-                            mentorId: students[index].mentors.githubId,
-                            score: 0,
-                            status: AssignmentStatus.Assigned,
-                            studentComment: '',
-                            studentId: students[index].user.profile.githubId,
-                            taskId: task.id,
-                            title: task.title,
-                        });
-                        await assignment.save();
-                    }
-                }
+                await students.reduce(async (promise: any, elem: ICourseStudentModel) => {
+                    // This line will wait for the last async function to finish.
+                    // The first iteration uses an already resolved Promise
+                    // so, it will immediately continue.
+                    await promise;
+                    await createAsignment(task, elem, ctx.request.body.courseId, AssignmentStatus);
+                }, Promise.resolve());
                 break;
             }
             case 'session': {
@@ -90,10 +79,11 @@ export const createGetRoute = async (ctx: Router.IRouterContext) => {
 };
 
 export const createDeleteRoute = async (ctx: Router.IRouterContext) => {
-    const { id } = ctx.params;
+    const { id, eventType } = ctx.params;
     try {
-        const queryEvent = await EventModel.findByIdAndRemove(id);
-        if (queryEvent === null) {
+        if (eventType === EventType.Session) {
+            await EventModel.findByIdAndRemove(id);
+        } else {
             const queryTask = await TaskModel.findByIdAndRemove(id);
             if (queryTask !== null) {
                 await AssignmentModel.remove({ taskId: id });
@@ -111,48 +101,40 @@ export const createDeleteRoute = async (ctx: Router.IRouterContext) => {
 
 export const createPatchRoute = async (ctx: Router.IRouterContext) => {
     const { _id, ...body } = ctx.request.body;
-
     try {
         const result =
-            (await EventModel.findByIdAndUpdate(_id, body, { new: true })) ||
-            (await TaskModel.findByIdAndUpdate(_id, body, { new: true }));
-
+            body.type === EventType.Session
+                ? await EventModel.findByIdAndUpdate(_id, body, { new: true })
+                : await TaskModel.findByIdAndUpdate(_id, body, { new: true });
         if (result === null) {
             setResponse(ctx, NOT_FOUND);
             return;
         }
-
         setResponse(ctx, OK, result);
     } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
         ctx.logger.error(e, 'Failed to update document');
     }
 };
-
-const getStudentsByCourseId = async (courseId: string) => {
-    const result: ICourseStudent[] = await CourseStudentModel.aggregate([
-        {
-            $match: {
-                courseId,
-            },
-        },
-        {
-            $lookup: {
-                as: 'user',
-                foreignField: '_id',
-                from: 'users',
-                localField: 'userId',
-            },
-        },
-        {
-            $lookup: {
-                as: 'mentors',
-                foreignField: '_id',
-                from: 'users',
-                localField: 'mentors._id',
-            },
-        },
-        { $unwind: '$user' },
-    ]).exec();
+const createAsignment = async (taskElement: ITaskModel, student: any, ctxCourseId: string, StatusAssignment: any) => {
+    const assignment = new AssignmentModel({
+        assignmentRepo: taskElement.urlToDescription,
+        checkDate: 0,
+        completeDate: 0,
+        courseId: ctxCourseId,
+        deadlineDate: taskElement.endDateTime,
+        mentorComment: '',
+        mentorId: student.mentors.githubId,
+        score: 0,
+        status: StatusAssignment.Assigned,
+        studentComment: '',
+        studentId: student.userId,
+        taskId: taskElement.id,
+        title: taskElement.title,
+    });
+    await assignment.save();
+};
+const getStudentsByCourseId = async (ctxCourseId: string) => {
+    const result: ICourseStudent[] = await CourseStudentModel.find({ courseId: ctxCourseId }).exec();
     return result;
 };
