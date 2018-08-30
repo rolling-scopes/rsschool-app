@@ -7,6 +7,7 @@ import {
     IEventModel,
     ITaskModel,
     EventModel,
+    EventType,
     TaskModel,
     IUserSession,
     AssignmentModel,
@@ -78,10 +79,11 @@ export const createGetRoute = async (ctx: Router.IRouterContext) => {
 };
 
 export const createDeleteRoute = async (ctx: Router.IRouterContext) => {
-    const { id } = ctx.params;
+    const { id, eventType } = ctx.params;
     try {
-        const queryEvent = await EventModel.findByIdAndRemove(id);
-        if (queryEvent === null) {
+        if (eventType === EventType.Session) {
+            await EventModel.findByIdAndRemove(id);
+        } else {
             const queryTask = await TaskModel.findByIdAndRemove(id);
             if (queryTask !== null) {
                 await AssignmentModel.remove({ taskId: id });
@@ -99,17 +101,15 @@ export const createDeleteRoute = async (ctx: Router.IRouterContext) => {
 
 export const createPatchRoute = async (ctx: Router.IRouterContext) => {
     const { _id, ...body } = ctx.request.body;
-
     try {
         const result =
-            (await EventModel.findByIdAndUpdate(_id, body, { new: true })) ||
-            (await TaskModel.findByIdAndUpdate(_id, body, { new: true }));
-
+            body.type === EventType.Session
+                ? await EventModel.findByIdAndUpdate(_id, body, { new: true })
+                : await TaskModel.findByIdAndUpdate(_id, body, { new: true });
         if (result === null) {
             setResponse(ctx, NOT_FOUND);
             return;
         }
-
         setResponse(ctx, OK, result);
     } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
