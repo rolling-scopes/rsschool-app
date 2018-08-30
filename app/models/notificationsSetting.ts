@@ -1,12 +1,15 @@
 import { Document, Schema, model } from 'mongoose';
 
+import { IUserModel } from '../models/user';
+
 export interface ITime {
     hours: number;
     minutes: number;
 }
 
 export interface INotificationsSetting extends Document {
-    userId: string;
+    events: string[];
+    user: IUserModel | string;
     telegramId: number;
     isEnable: boolean;
     timeFrom: ITime;
@@ -18,8 +21,9 @@ export interface INotificationsSettingModel extends Document, INotificationsSett
 }
 
 export const NotificationsSettingSchema: Schema = new Schema({
+    events: { type: Array, default: 'all' },
     isEnable: { type: Boolean, default: true },
-    telegramId: { type: Number, required: true },
+    telegramId: { type: Number, required: true, unique: true },
     timeFrom: {
         hours: { type: Number, min: 0, max: 24, default: 0 },
         minutes: { type: Number, min: 0, max: 59, default: 0 },
@@ -28,7 +32,7 @@ export const NotificationsSettingSchema: Schema = new Schema({
         hours: { type: Number, min: 0, max: 24, default: 24 },
         minutes: { type: Number, min: 0, max: 59, default: 0 },
     },
-    userId: { type: String, required: true },
+    user: { type: String, ref: 'User' },
 });
 
 export const NotificationSettingsModelName = 'NotificationsSetting';

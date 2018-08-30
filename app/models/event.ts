@@ -12,7 +12,7 @@ export enum SessionType {
     ExtraEvent = 'Extra Event',
 }
 
-enum TaskType {
+export enum TaskType {
     Task = 'Task',
     CodeJam = 'Code Jam',
     Interview = 'Interview',

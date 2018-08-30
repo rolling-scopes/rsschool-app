@@ -1,17 +1,19 @@
 /*  TODO
 
-1. system works wrong with time setting like 20:00 - 2:00
-2. edit notifications if users settings changes
-3. user timezone
-4. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-5. refactor notify func  */
+1. notify one student
+2. system works wrong with time setting like 20:00 - 2:00
+3. edit notifications if users settings changes
+4. user timezone
+5. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
+
+*/
 
 import * as nodeSchedule from 'node-schedule';
 
 import NotificationsBot from './bot';
 import { ILogger } from '../logger';
 import { INotification, MentorsNotificationsType, StudentsNotificationsType } from '../models/notification';
-import { ITime, INotificationsSetting } from '../models/notificationsSetting';
+import { INotificationsSetting, ITime } from '../models/notificationsSetting';
 import { notificationService, notificationsSettingService } from '../services/';
 
 let logger: ILogger;
@@ -23,6 +25,7 @@ export interface INotificaionData {
     eventId: string;
     eventType: MentorsNotificationsType | StudentsNotificationsType;
     message: string;
+    role: string;
 }
 
 const getScheduledCallback = (id: string, telegramId: number, message: string) => async () => {
@@ -53,16 +56,21 @@ const isDateTimeInInterval = (dateTime: Date, timeFrom: ITime, timeTo: ITime): b
     return false;
 };
 
-export const notify = async (data: INotificaionData[]) => {
+export const notify = async (data: INotificaionData[], courseId: string) => {
     const currentDate = new Date();
-    const notificationsSettings = await notificationsSettingService.find({ isEnable: true });
+    const notificationsSettings = await notificationsSettingService.findByCoureId(courseId, { isEnable: true });
 
     await notificationsSettings.forEach(async (setting: INotificationsSetting) => {
         const { timeFrom, timeTo, telegramId } = setting;
         const isCurrentTimeInSettingTime = isDateTimeInInterval(currentDate, timeFrom, timeTo);
-        const filtered = data.filter(
-            (item: INotificaionData) => !item.dateTime || item.dateTime >= currentDate.valueOf(),
-        );
+        const filtered = data.filter((item: INotificaionData) => {
+            const isCorrectRole = typeof setting.user === 'object' && item.role === setting.user.role;
+            const isDataNotInThePast = !item.dateTime || item.dateTime >= currentDate.valueOf();
+            const isTypeInSettings =
+                setting.events[0] === 'all' || setting.events.some((event: string) => event === item.eventType);
+
+            return isDataNotInThePast && isCorrectRole && isTypeInSettings;
+        });
 
         await filtered.forEach(async (item: INotificaionData) => {
             const { eventId, eventType, message } = item;
@@ -108,11 +116,11 @@ export const notify = async (data: INotificaionData[]) => {
     });
 };
 
-export const update = async (data: INotificaionData[]) => {
+export const update = async (data: INotificaionData[], courseId: string) => {
     await data.forEach(async ({ eventType, eventId }: INotificaionData) => {
         await remove(eventType, eventId);
     });
-    await notify(data);
+    await notify(data, courseId);
 };
 
 export const remove = async (eventType: MentorsNotificationsType | StudentsNotificationsType, eventId: string) => {

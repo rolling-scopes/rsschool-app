@@ -8,6 +8,7 @@ import { config } from './config';
 export default class NotificationsBot {
     private static beautifyTime(time: string): ITime | null {
         const [hours, minutes] = time.split(':').map(it => Number(it));
+
         if (isNaN(hours) || isNaN(minutes)) {
             return null;
         } else if (hours < 0 || hours > 24 || minutes < 0 || minutes > 60) {
@@ -96,7 +97,7 @@ export default class NotificationsBot {
         const user = await userService.getUserById(userId);
 
         if (user) {
-            await notificationsSettingService.save({ userId, telegramId: ctx.from.id });
+            await notificationsSettingService.save({ user: user._id, telegramId: ctx.from.id });
             ctx.reply(config.messages.subscribe);
         } else {
             ctx.reply(config.messages.iDontKnowYou);

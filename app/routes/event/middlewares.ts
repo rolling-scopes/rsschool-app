@@ -52,14 +52,19 @@ const getNotifications = (data: any): INotificaionData[] => {
             break;
         default:
     }
-    return notifications.map(item => ({ ...item, eventId: _id, eventType: StudentsNotificationsType.Session }));
+    return notifications.map(item => ({
+        ...item,
+        eventId: _id,
+        eventType: StudentsNotificationsType.Session,
+        role: 'student',
+    }));
 };
 
 export const notificationPostMiddleware: IMiddleware = async (ctx, next) => {
     try {
         const notifications = getNotifications(ctx.body);
 
-        await notify(notifications);
+        await notify(notifications, ctx.body.courseId);
         next();
     } catch (err) {
         ctx.logger.error(err, 'Failed to create notifications');
@@ -68,9 +73,9 @@ export const notificationPostMiddleware: IMiddleware = async (ctx, next) => {
 
 export const notificationPatchMiddleware: IMiddleware = async (ctx, next) => {
     try {
-        const notifications = getNotifications(ctx);
+        const notifications = getNotifications(ctx.body.data);
 
-        await update(notifications);
+        await update(notifications, ctx.body.data.courseId);
         next();
     } catch (err) {
         ctx.logger.error(err, 'Failed to update notifications');
