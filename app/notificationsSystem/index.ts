@@ -1,13 +1,3 @@
-/*  TODO
-
-1. notify one student
-2. system works wrong with time setting like 20:00 - 2:00
-3. edit notifications if users settings changes
-4. user timezone
-5. limits: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-
-*/
-
 import * as nodeSchedule from 'node-schedule';
 
 import NotificationsBot from './bot';
@@ -142,7 +132,9 @@ export const start = async (notificationsLogger: ILogger) => {
 
     bot = new NotificationsBot(logger);
     bot.start();
+
     logger.info('Notifications sheduling');
+    await notificationService.removeOverdue();
     await scheduleAll();
     logger.info('Notifications scheduled');
 };

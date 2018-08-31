@@ -20,6 +20,16 @@ export async function removeByEvent(eventType: string, eventId: string): Promise
     return removed.map(({ _id }) => _id);
 }
 
+export async function removeOverdue() {
+    const currentTime = Date.now();
+    const removed = await NotificationModel.find()
+        .where('dateTime')
+        .lt(currentTime)
+        .remove();
+
+    return removed;
+}
+
 export async function find(data?: object): Promise<INotification[]> {
     const result = await NotificationModel.find(data);
     return result;
