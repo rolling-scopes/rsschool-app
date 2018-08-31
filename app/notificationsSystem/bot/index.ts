@@ -131,6 +131,9 @@ export default class NotificationsBot {
         if (beautyTimeFrom === null || beautyTimeTo === null) {
             ctx.reply(config.messages.invalidTimeInterval);
             return;
+        } else if (beautyTimeFrom.hours > beautyTimeTo.hours) {
+            ctx.reply(config.messages.invalidTimeInterval);
+            return;
         }
 
         await notificationsSettingService.updateById(ctx.state.setting._id, {
