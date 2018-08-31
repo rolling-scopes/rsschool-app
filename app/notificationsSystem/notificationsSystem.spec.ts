@@ -1,7 +1,7 @@
 import mockingoose from 'mockingoose';
 import * as nodeSchedule from 'node-schedule';
 
-import { StudentsNotificationsType } from '../models/notification';
+import { StudentsEventsType } from '../models/notification';
 import { UserModel } from '../models/user';
 
 import { ILogger } from '../logger';
@@ -71,10 +71,25 @@ describe('Notification system', () => {
 
         student = await studentModel.save();
         mentor = await mentorModel.save();
+        const courseMentor = {
+            _id: '5b79dd800755343b00c67b19',
+            courseId,
+            isActive: false,
+            userId: mentor._id,
+        };
+
+        const courseStudent = {
+            _id: '5b79dd800755343b00c67b19',
+            courseId,
+            isActive: false,
+            userId: student._id,
+        };
 
         Bot.prototype.send = mockSend;
 
         mockingoose.Notification.toReturn([], 'find');
+        mockingoose.CourseMentor.toReturn(courseMentor, 'findOne');
+        mockingoose.CourseStudent.toReturn(courseStudent, 'findOne');
 
         notificationsSystem.start(mockLogger);
     });
@@ -123,7 +138,7 @@ describe('Notification system', () => {
                 {
                     dateTime: Date.now() - 10000,
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Event in the past',
                     role: 'student',
                 },
@@ -147,7 +162,7 @@ describe('Notification system', () => {
                 {
                     dateTime: new Date(`${currentDate.getFullYear() + 1}-01-01 11:00`).valueOf(),
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Event comes when settings not allowed',
                     role: 'student',
                 },
@@ -165,7 +180,7 @@ describe('Notification system', () => {
             [
                 {
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Immediate notification',
                     role: 'mentor',
                 },
@@ -181,7 +196,7 @@ describe('Notification system', () => {
             [
                 {
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Immediate notification',
                     role: 'student',
                 },
@@ -198,7 +213,7 @@ describe('Notification system', () => {
                 {
                     dateTime: Date.now() + 10000,
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Scheduled notification',
                     role: 'student',
                 },
@@ -222,7 +237,7 @@ describe('Notification system', () => {
             [
                 {
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Immediate notification',
                     role: 'student',
                 },
@@ -234,13 +249,13 @@ describe('Notification system', () => {
     });
 
     it('should notify when specific event in settings', async () => {
-        studentSetting.events = [StudentsNotificationsType.Deadline];
+        studentSetting.events = [StudentsEventsType.Deadline];
 
         await notificationsSystem.notify(
             [
                 {
                     eventId,
-                    eventType: StudentsNotificationsType.Deadline,
+                    eventType: StudentsEventsType.Deadline,
                     message: 'Immediate notification',
                     role: 'student',
                 },
@@ -252,13 +267,13 @@ describe('Notification system', () => {
     });
 
     it('should not notify when specific event not in settings', async () => {
-        studentSetting.events = [StudentsNotificationsType.Deadline];
+        studentSetting.events = [StudentsEventsType.Deadline];
 
         await notificationsSystem.notify(
             [
                 {
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Immediate notification',
                     role: 'student',
                 },
@@ -273,7 +288,7 @@ describe('Notification system', () => {
         const data = {
             dateTime: Date.now() + 10000,
             eventId,
-            eventType: StudentsNotificationsType.Session,
+            eventType: StudentsEventsType.Session,
             message: 'Scheduled notification',
             role: 'student',
         };
@@ -294,7 +309,7 @@ describe('Notification system', () => {
 
         checkIsNotificationSchedule();
 
-        await notificationsSystem.remove(StudentsNotificationsType.Session, data.eventId);
+        await notificationsSystem.remove(StudentsEventsType.Session, data.eventId);
 
         expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(0);
     });
@@ -303,7 +318,7 @@ describe('Notification system', () => {
         const data = {
             dateTime: Date.now() + 10000,
             eventId,
-            eventType: StudentsNotificationsType.Session,
+            eventType: StudentsEventsType.Session,
             message: 'Scheduled notification',
             role: 'student',
         };
@@ -345,7 +360,7 @@ describe('Notification system', () => {
                 {
                     dateTime: Date.now() + 10000,
                     eventId,
-                    eventType: StudentsNotificationsType.Session,
+                    eventType: StudentsEventsType.Session,
                     message: 'Scheduled notification',
                     role: 'student',
                 },
@@ -369,7 +384,7 @@ describe('Notification system', () => {
             _id: '5b7e8f7042991714f821bc6a',
             dateTime: Date.now() + 100000,
             eventId,
-            eventType: StudentsNotificationsType.Deadline,
+            eventType: StudentsEventsType.Deadline,
             message: 'Some message',
             telegramId: studentSetting.telegramId,
         };

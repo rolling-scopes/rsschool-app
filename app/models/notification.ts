@@ -1,11 +1,11 @@
 import { Document, Schema, model } from 'mongoose';
 
-export enum MentorsNotificationsType {
+export enum MentorsEventsType {
     NewTask = 'New task',
     TaskReadyForReview = 'Task ready for review',
 }
 
-export enum StudentsNotificationsType {
+export enum StudentsEventsType {
     NewTask = 'New task',
     Deadline = 'Deadline',
     TaskAccepted = 'Task accepted',
@@ -16,7 +16,7 @@ export enum StudentsNotificationsType {
 export interface INotification extends Document {
     dateTime: number;
     eventId: string;
-    eventType: MentorsNotificationsType | StudentsNotificationsType;
+    eventType: MentorsEventsType | StudentsEventsType;
     message: string;
     telegramId: number;
 }

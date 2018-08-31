@@ -2,7 +2,7 @@ import * as nodeSchedule from 'node-schedule';
 
 import NotificationsBot from './bot';
 import { ILogger } from '../logger';
-import { INotification, MentorsNotificationsType, StudentsNotificationsType } from '../models/notification';
+import { INotification, MentorsEventsType, StudentsEventsType } from '../models/notification';
 import { INotificationsSetting, ITime } from '../models/notificationsSetting';
 import { notificationService, notificationsSettingService } from '../services/';
 
@@ -13,7 +13,7 @@ let bot: NotificationsBot;
 export interface INotificaionData {
     dateTime?: number;
     eventId: string;
-    eventType: MentorsNotificationsType | StudentsNotificationsType;
+    eventType: MentorsEventsType | StudentsEventsType;
     message: string;
     role: string;
 }
@@ -113,7 +113,7 @@ export const update = async (data: INotificaionData[], courseId: string) => {
     await notify(data, courseId);
 };
 
-export const remove = async (eventType: MentorsNotificationsType | StudentsNotificationsType, eventId: string) => {
+export const remove = async (eventType: MentorsEventsType | StudentsEventsType, eventId: string) => {
     const removedIds = await notificationService.removeByEvent(eventType, eventId);
     removedIds.forEach((item: string) => {
         if (nodeSchedule.scheduledJobs[item]) {

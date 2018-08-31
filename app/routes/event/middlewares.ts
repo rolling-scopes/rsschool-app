@@ -1,6 +1,6 @@
 import { IMiddleware } from 'koa-router';
 import { SessionType } from '../../models/event';
-import { StudentsNotificationsType } from '../../models/notification';
+import { StudentsEventsType } from '../../models/notification';
 import { INotificaionData, notify, update, remove } from '../../notificationsSystem';
 
 const hoursToMilliseconds = (hours: number): number => hours * 60 * 60 * 1000;
@@ -55,7 +55,7 @@ const getNotifications = (data: any): INotificaionData[] => {
     return notifications.map(item => ({
         ...item,
         eventId: _id,
-        eventType: StudentsNotificationsType.Session,
+        eventType: StudentsEventsType.Session,
         role: 'student',
     }));
 };
@@ -85,7 +85,7 @@ export const notificationPatchMiddleware: IMiddleware = async (ctx, next) => {
 export const notificationRemoveMiddleware: IMiddleware = async (ctx, next) => {
     try {
         const { id } = ctx.params;
-        await remove(StudentsNotificationsType.Session, id);
+        await remove(StudentsEventsType.Session, id);
         next();
     } catch (err) {
         ctx.logger.error(err, 'Failed to remove notifications');
