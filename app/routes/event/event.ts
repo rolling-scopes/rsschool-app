@@ -100,12 +100,8 @@ export const createDeleteRoute = async (ctx: Router.IRouterContext) => {
 };
 
 export const createPatchRoute = async (ctx: Router.IRouterContext) => {
-    const { _id, ...body } = ctx.request.body;
     try {
-        const result =
-            body.type === EventType.Session
-                ? await EventModel.findByIdAndUpdate(_id, body, { new: true })
-                : await TaskModel.findByIdAndUpdate(_id, body, { new: true });
+        const result = await patcModel(ctx);
         if (result === null) {
             setResponse(ctx, NOT_FOUND);
             return;
@@ -114,6 +110,17 @@ export const createPatchRoute = async (ctx: Router.IRouterContext) => {
     } catch (e) {
         ctx.status = INTERNAL_SERVER_ERROR;
         ctx.logger.error(e, 'Failed to update document');
+    }
+};
+const patcModel = async (ctx: Router.IRouterContext) => {
+    const { _id, ...body } = ctx.request.body;
+    if (body.type === EventType.Session) {
+        const result = await EventModel.findByIdAndUpdate(_id, body, { new: true });
+        return result;
+    } else {
+        const result = await TaskModel.findByIdAndUpdate(_id, body, { new: true });
+        await AssignmentModel.updateMany({ taskId: _id }, body, { new: true });
+        return result;
     }
 };
 const createAsignment = async (taskElement: ITaskModel, student: any, ctxCourseId: string, StatusAssignment: any) => {
