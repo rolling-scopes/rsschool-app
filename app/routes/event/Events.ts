@@ -50,36 +50,31 @@ export const createPostEventsRoute = async (ctx: Router.IRouterContext) => {
 
 const createAssignments = async (event: IEventModel, courseId: string) => {
     const students: ICourseStudent[] = await getStudentsByCourseId(courseId);
-    for (const index in students) {
-        if (students[index]) {
-            const student: ICourseStudent = students[index];
-            const assignment = new AssignmentModel({
-                courseId,
-                deadlineDate: event.endDateTime,
-                mentorId: student.mentors,
-                score: 0,
-                status: AssignmentStatus.Assigned,
-                studentId: student.userId,
-                taskId: event.id,
-            });
-            await assignment.save();
-        }
-    }
+    const assignments: any = students.map((student: ICourseStudent) => {
+        const assignment = new AssignmentModel({
+            courseId,
+            deadlineDate: event.endDateTime,
+            mentorId: student.mentors,
+            score: 0,
+            status: AssignmentStatus.Assigned,
+            studentId: student.userId,
+            taskId: event.id,
+        });
+        return { insertOne: { document: assignment } };
+    });
+    await AssignmentModel.bulkWrite(assignments);
 };
 
 export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
-    const { id } = ctx.params;
-
+    const { id, eventType } = ctx.params;
     try {
-        let query = await SessionModel.findByIdAndRemove(id);
-        if (query === null) {
-            query = await TaskModel.findByIdAndRemove(id);
-            if (query !== null) {
-                await AssignmentModel.remove({ taskId: id });
-            } else {
-                setResponse(ctx, NOT_FOUND);
-                return;
-            }
+        const query =
+            eventType === 'session' ? await SessionModel.findByIdAndRemove(id) : await TaskModel.findByIdAndRemove(id);
+        if (query !== null) {
+            await AssignmentModel.remove({ taskId: id });
+        } else {
+            setResponse(ctx, NOT_FOUND);
+            return;
         }
         setResponse(ctx, OK);
     } catch (e) {
@@ -90,11 +85,12 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
 
 export const createPatchEventsRoute = async (ctx: Router.IRouterContext) => {
     const { _id, ...body } = ctx.request.body;
+    const { eventType } = ctx.params;
     try {
         const result =
-            (await SessionModel.findByIdAndUpdate(_id, body, { new: true })) ||
-            (await TaskModel.findByIdAndUpdate(_id, body, { new: true }));
-
+            eventType === 'session'
+                ? await SessionModel.findByIdAndUpdate(_id, body, { new: true })
+                : await TaskModel.findByIdAndUpdate(_id, body, { new: true });
         if (result === null) {
             setResponse(ctx, NOT_FOUND);
             return;

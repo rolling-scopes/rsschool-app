@@ -6,8 +6,8 @@ export function eventRouter(adminGuard: Router.IMiddleware) {
 
     router.get('/:id', createGetEventsRoute);
     router.post('/', adminGuard, createPostEventsRoute);
-    router.patch('/', adminGuard, createPatchEventsRoute);
-    router.delete('/:id', adminGuard, createDeleteEventsRoute);
+    router.patch('/:eventType', adminGuard, createPatchEventsRoute);
+    router.delete('/:id/:eventType', adminGuard, createDeleteEventsRoute);
 
     return router;
 }
