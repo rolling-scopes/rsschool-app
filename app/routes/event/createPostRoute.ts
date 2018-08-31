@@ -36,8 +36,8 @@ export function createPostRoute<T extends Document>(DocumentModel: new (data: an
                         taskId: model._id,
                         title: model.title,
                     };
-                    const assignments = new AssignmentsModel(assignment);
-                    await assignments.save();
+                    const assignmentStudent = new AssignmentsModel(assignment);
+                    await AssignmentsModel.bulkWrite([{ insertOne: { document: assignmentStudent } }]);
                 });
             }
             ctx.body = await model.save();
