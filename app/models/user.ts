@@ -33,6 +33,7 @@ export interface IUserProfile {
         faculty: string;
     };
     notifications: {
+        chatId: string;
         readyToReceive: string;
         fromTime: string;
         toTime: string;
@@ -84,6 +85,7 @@ export const UserSchema: Schema = new Schema({
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
         notifications: {
+            chatId: { type: String, default: '' },
             fromTime: { type: String, default: '' },
             readyToReceive: { type: String, default: 'no' },
             telegramUserName: { type: String, default: '' },

@@ -26,6 +26,7 @@ Object {
     "lastName": "",
     "lastNameNative": "",
     "notifications": Object {
+      "chatId": "",
       "fromTime": "",
       "readyToReceive": "no",
       "telegramUserName": "",

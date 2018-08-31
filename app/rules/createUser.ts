@@ -13,6 +13,7 @@ type Profile = {
     };
     emails?: { value: string; primary: boolean }[];
     notifications?: {
+        chatId?: string;
         fromTime?: string;
         readyToReceive: string;
         toTime?: string;
@@ -59,6 +60,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
                 githubId: id,
                 lastName: profile.name ? profile.name.familyName : '',
                 notifications: {
+                    chatId: profile.notifications && profile.notifications.chatId ? profile.notifications.chatId : '',
                     fromTime:
                         profile.notifications && profile.notifications.readyToReceive && profile.notifications.fromTime
                             ? profile.notifications.fromTime
