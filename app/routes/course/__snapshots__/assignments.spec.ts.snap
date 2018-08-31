@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`app/routes/course/assignments.ts returns data 1`] = `
+Object {
+  "data": Object {
+    "assignmentRepo": "repo",
+    "checkDate": 123,
+    "completeDate": 123,
+    "courseId": "String",
+    "deadlineDate": 123,
+    "mentorComment": "String",
+    "mentorId": "String",
+    "score": 0,
+    "status": "Assigned",
+    "studentComment": "String",
+    "studentId": "String",
+    "taskId": "String",
+  },
+}
+`;
