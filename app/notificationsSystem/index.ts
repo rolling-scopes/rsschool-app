@@ -127,6 +127,13 @@ const scheduleAll = async () => {
     notifications.forEach(schedule);
 };
 
+export const stop = () => {
+    bot.stop();
+    Object.values(nodeSchedule.scheduledJobs).forEach(item => {
+        item.cancel();
+    });
+};
+
 export const start = async (notificationsLogger: ILogger) => {
     logger = notificationsLogger;
 
@@ -134,7 +141,9 @@ export const start = async (notificationsLogger: ILogger) => {
     bot.start();
 
     logger.info('Notifications sheduling');
+
     await notificationService.removeOverdue();
     await scheduleAll();
+
     logger.info('Notifications scheduled');
 };
