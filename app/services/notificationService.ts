@@ -22,12 +22,12 @@ export async function removeByEvent(eventType: string, eventId: string): Promise
 
 export async function removeOverdue() {
     const currentTime = Date.now();
-    const removed = await NotificationModel.find()
+    const result = await NotificationModel.find()
         .where('dateTime')
         .lt(currentTime)
         .remove();
 
-    return removed;
+    return result;
 }
 
 export async function find(data?: object): Promise<INotification[]> {

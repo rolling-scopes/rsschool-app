@@ -10,12 +10,21 @@ import Bot from './bot';
 
 jest.mock('./bot/index');
 
+const mockLogger = {} as ILogger;
+mockLogger.error = () => undefined;
+mockLogger.info = () => undefined;
+mockLogger.warn = () => undefined;
+
 const courseId = 'rs-course-2018-1';
 const eventId = '5b79dd800755343b00c67b19';
 
 const mockSend = jest.fn();
-let setting: any;
-let user: any;
+
+let mentorSetting: any;
+let studentSetting: any;
+
+let mentor: any;
+let student: any;
 
 const checkIsNotificationSend = () => {
     expect(Object.keys(nodeSchedule.scheduledJobs).length).toBe(0);
@@ -34,7 +43,7 @@ const checkIsNotNotify = () => {
 
 describe('Notification system', () => {
     beforeAll(async () => {
-        const userModel = new UserModel({
+        const studentModel = new UserModel({
             _id: 'brody.moen19',
             isAdmin: false,
             participations: [{ courseId, isActive: true, role: 'student' }],
@@ -46,14 +55,24 @@ describe('Notification system', () => {
             },
             role: 'student',
         });
-        user = await userModel.save();
+
+        const mentorModel = new UserModel({
+            _id: 'eddie79',
+            isAdmin: false,
+            participations: [{ courseId, isActive: true, role: 'mentor' }],
+            profile: {
+                city: 'minsk',
+                firstName: 'Edyth',
+                githubId: 'eddie79',
+                lastName: 'Hills',
+            },
+            role: 'mentor',
+        });
+
+        student = await studentModel.save();
+        mentor = await mentorModel.save();
 
         Bot.prototype.send = mockSend;
-
-        const mockLogger = {} as ILogger;
-        mockLogger.error = () => undefined;
-        mockLogger.info = () => undefined;
-        mockLogger.warn = () => undefined;
 
         mockingoose.Notification.toReturn([], 'find');
 
@@ -61,7 +80,7 @@ describe('Notification system', () => {
     });
 
     beforeEach(async () => {
-        setting = {
+        studentSetting = {
             events: ['all'],
             isEnable: true,
             telegramId: 123456654321,
@@ -73,10 +92,25 @@ describe('Notification system', () => {
                 hours: 24,
                 minutes: 0,
             },
-            user,
+            user: student,
         };
 
-        mockingoose.NotificationsSetting.toReturn([setting], 'find');
+        mentorSetting = {
+            events: ['all'],
+            isEnable: true,
+            telegramId: 123456654321,
+            timeFrom: {
+                hours: 0,
+                minutes: 0,
+            },
+            timeTo: {
+                hours: 24,
+                minutes: 0,
+            },
+            user: mentor,
+        };
+
+        mockingoose.NotificationsSetting.toReturn([studentSetting, mentorSetting], 'find');
 
         mockSend.mockReset();
 
@@ -101,7 +135,7 @@ describe('Notification system', () => {
     });
 
     it('should not notify when event time not in a setting time interval', async () => {
-        setting.timeFrom = {
+        studentSetting.timeFrom = {
             hours: 12,
             minutes: 0,
         };
@@ -125,6 +159,8 @@ describe('Notification system', () => {
     });
 
     it('should not notify when role does not match', async () => {
+        mockingoose.NotificationsSetting.toReturn([studentSetting], 'find');
+
         await notificationsSystem.notify(
             [
                 {
@@ -177,9 +213,9 @@ describe('Notification system', () => {
         const currentDate = new Date();
 
         if (currentDate.getHours() === 0 || currentDate.getHours() === 1) {
-            setting.timeFrom.hours = 2;
+            studentSetting.timeFrom.hours = 2;
         } else {
-            setting.timeTo.hours = currentDate.getHours() - 1;
+            studentSetting.timeTo.hours = currentDate.getHours() - 1;
         }
 
         await notificationsSystem.notify(
@@ -198,7 +234,7 @@ describe('Notification system', () => {
     });
 
     it('should notify when specific event in settings', async () => {
-        setting.events = [StudentsNotificationsType.Deadline];
+        studentSetting.events = [StudentsNotificationsType.Deadline];
 
         await notificationsSystem.notify(
             [
@@ -216,7 +252,7 @@ describe('Notification system', () => {
     });
 
     it('should not notify when specific event not in settings', async () => {
-        setting.events = [StudentsNotificationsType.Deadline];
+        studentSetting.events = [StudentsNotificationsType.Deadline];
 
         await notificationsSystem.notify(
             [
@@ -246,9 +282,9 @@ describe('Notification system', () => {
             _id: '5b7e8f7042991714f821bc6a',
             dateTime: data.dateTime,
             eventId: data.eventId,
-            eventName: 'eventName',
+            eventType: data.eventType,
             message: data.message,
-            telegramId: setting.telegramId,
+            telegramId: studentSetting.telegramId,
         };
 
         mockingoose.Notification.toReturn([notification], 'find');
@@ -276,9 +312,9 @@ describe('Notification system', () => {
             _id: '5b7e8f7042991714f821bc6a',
             dateTime: data.dateTime,
             eventId: data.eventId,
-            eventName: 'eventName',
+            eventType: data.eventType,
             message: data.message,
-            telegramId: setting.telegramId,
+            telegramId: studentSetting.telegramId,
         };
 
         mockingoose.Notification.toReturn([notification], 'find');
@@ -302,4 +338,48 @@ describe('Notification system', () => {
 
         checkIsNotificationSend();
     });
+
+    it('should cancel scheduled notifications when system stop', async () => {
+        await notificationsSystem.notify(
+            [
+                {
+                    dateTime: Date.now() + 10000,
+                    eventId,
+                    eventType: StudentsNotificationsType.Session,
+                    message: 'Scheduled notification',
+                    role: 'student',
+                },
+            ],
+            courseId,
+        );
+
+        checkIsNotificationSchedule();
+
+        notificationsSystem.stop();
+
+        expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(0);
+    });
+
+    it('should schedule notifications when system start', async () => {
+        notificationsSystem.stop();
+
+        expect(Object.keys(nodeSchedule.scheduledJobs).length).toEqual(0);
+
+        const notification = {
+            _id: '5b7e8f7042991714f821bc6a',
+            dateTime: Date.now() + 100000,
+            eventId,
+            eventType: StudentsNotificationsType.Deadline,
+            message: 'Some message',
+            telegramId: studentSetting.telegramId,
+        };
+
+        mockingoose.Notification.toReturn([notification], 'find');
+
+        await notificationsSystem.start(mockLogger);
+
+        checkIsNotificationSchedule();
+    });
+
+    // should notify single user
 });
