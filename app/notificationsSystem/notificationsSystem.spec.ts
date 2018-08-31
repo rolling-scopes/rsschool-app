@@ -395,6 +395,4 @@ describe('Notification system', () => {
 
         checkIsNotificationSchedule();
     });
-
-    // should notify single user
 });

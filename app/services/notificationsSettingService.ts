@@ -27,8 +27,7 @@ export async function find(data?: object): Promise<INotificationsSettingModel[]>
 export async function findByCoureId(courseId: string, data?: object) {
     const result = await NotificationsSettingModel.find(data).populate('user');
     // there is field user.participation with information about courses, but it isn't generated
-    // return setting.user.participations.some(item => item.isActive && item.courseId === courseId);
-    // return await result.filter(
+    // return result.filter(
     //     setting => typeof(setting.user) === 'object' &&
     //         setting.user.participations.some(item => item.isActive && item.courseId === courseId)
     // );
