@@ -29,13 +29,11 @@ export const createPostRoute = async (ctx: Router.IRouterContext) => {
                 ctx.body = await task.save();
                 ctx.status = OK;
                 const students: any = await getStudentsByCourseId(ctx.request.body.courseId);
-                await students.reduce(async (promise: any, elem: ICourseStudentModel) => {
-                    // This line will wait for the last async function to finish.
-                    // The first iteration uses an already resolved Promise
-                    // so, it will immediately continue.
-                    await promise;
-                    await createAsignment(task, elem, ctx.request.body.courseId, AssignmentStatus);
-                }, Promise.resolve());
+                const assignments: any = students.map((elem: ICourseStudentModel) => {
+                    const assignment = createAsignment(task, elem, ctx.request.body.courseId, AssignmentStatus);
+                    return { insertOne: { document: assignment } };
+                });
+                await AssignmentModel.bulkWrite(assignments);
                 break;
             }
             case 'session': {
@@ -123,7 +121,7 @@ const patcModel = async (ctx: Router.IRouterContext) => {
         return result;
     }
 };
-const createAsignment = async (taskElement: ITaskModel, student: any, ctxCourseId: string, StatusAssignment: any) => {
+const createAsignment = (taskElement: ITaskModel, student: any, ctxCourseId: string, StatusAssignment: any) => {
     const assignment = new AssignmentModel({
         assignmentRepo: taskElement.urlToDescription,
         checkDate: 0,
@@ -139,7 +137,7 @@ const createAsignment = async (taskElement: ITaskModel, student: any, ctxCourseI
         taskId: taskElement.id,
         title: taskElement.title,
     });
-    await assignment.save();
+    return assignment;
 };
 const getStudentsByCourseId = async (ctxCourseId: string) => {
     const result: ICourseStudent[] = await CourseStudentModel.find({ courseId: ctxCourseId }).exec();
