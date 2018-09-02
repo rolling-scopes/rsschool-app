@@ -9,6 +9,7 @@ import {
     TaskModel,
     AssignmentStatus,
 } from '../../models';
+import * as _ from 'lodash';
 
 type AssignmentResponse = {
     _id: string;
@@ -50,12 +51,7 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
         const { id: courseId } = ctx.params;
         const studentId: string = userSession._id;
         const assignments: IAssignmentModel[] = await getAssignmentsByCourseIdAndUserId(courseId, studentId);
-        const arrayOfTasksId: string[] = [];
-        for (const index in assignments) {
-            if (assignments[index]) {
-                arrayOfTasksId.push(assignments[index].taskId);
-            }
-        }
+        const arrayOfTasksId: string[] = assignments.map(assignment => assignment.taskId);
         const tasks: IEventModel[] = await getTasksByTaskId(arrayOfTasksId);
         const combinedAssignmentsAndTasks: AssignmentResponse[] = [];
         for (const index in assignments) {
@@ -76,35 +72,21 @@ export const courseAssignmentsRoute = async (ctx: Router.IRouterContext) => {
 };
 
 export const getNormalizeAssignmentsData = (assignments: AssignmentResponse[]): NormalizeAssignmentsData => {
-    const sortedAssignments = assignments
-        .reduce<INormalizeAssignments[]>((res, assignment) => {
-            if (assignment.deadlineDate < Date.now() && assignment.status === AssignmentStatus.Assigned) {
-                res.push({ assignment, isEndAssignment: true, isActiveAssignment: true });
-            } else if (assignment.startDateTime > Date.now()) {
-                res.push({ assignment, isEndAssignment: false, isActiveAssignment: false });
-            } else {
-                res.push({ assignment, isEndAssignment: false, isActiveAssignment: true });
-            }
-            return res;
-        }, [])
-        .sort((assignmentA, assignmentB) => {
-            const a = assignmentA.assignment.startDateTime!;
-            const b = assignmentB.assignment.startDateTime!;
-            return b - a;
-        })
-        .sort((assignmentA, assignmentB) => {
-            const a = Number(assignmentA.isEndAssignment!);
-            const b = Number(assignmentB.isEndAssignment!);
-            return a - b;
-        });
-    const data = sortedAssignments.reduce<NormalizeAssignmentsData>(
-        (prev, next) => {
-            prev.assignments.push(next);
-            return prev;
-        },
-        { assignments: [] },
+    const refactoredAssignments: INormalizeAssignments[] = assignments.map(assignment => {
+        if (assignment.deadlineDate < Date.now() && assignment.status === AssignmentStatus.Assigned) {
+            return { assignment, isEndAssignment: true, isActiveAssignment: true };
+        } else if (assignment.startDateTime > Date.now()) {
+            return { assignment, isEndAssignment: false, isActiveAssignment: false };
+        } else {
+            return { assignment, isEndAssignment: false, isActiveAssignment: true };
+        }
+    }, []);
+    const sortedAssignments: INormalizeAssignments[] = _.orderBy(
+        refactoredAssignments,
+        ['isEndAssignment', 'assignment.startDateTime'],
+        ['asc', 'desc'],
     );
-    return data;
+    return { assignments: sortedAssignments };
 };
 
 const getAssignmentsByCourseIdAndUserId = (courseId: string, studentId: string) => {

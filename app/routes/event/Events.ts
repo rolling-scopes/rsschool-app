@@ -70,9 +70,9 @@ export const createDeleteEventsRoute = async (ctx: Router.IRouterContext) => {
     try {
         const query =
             eventType === 'session' ? await SessionModel.findByIdAndRemove(id) : await TaskModel.findByIdAndRemove(id);
-        if (query !== null) {
+        if (query !== null && eventType === 'task') {
             await AssignmentModel.remove({ taskId: id });
-        } else {
+        } else if (query === null) {
             setResponse(ctx, NOT_FOUND);
             return;
         }
@@ -130,29 +130,7 @@ export const createGetEventsRoute = async (ctx: Router.IRouterContext) => {
 };
 
 const getStudentsByCourseId = async (courseId: string) => {
-    const result: ICourseStudent[] = await CourseStudentModel.aggregate([
-        {
-            $match: {
-                courseId,
-            },
-        },
-        {
-            $lookup: {
-                as: 'user',
-                foreignField: '_id',
-                from: 'users',
-                localField: 'userId',
-            },
-        },
-        {
-            $lookup: {
-                as: 'mentors',
-                foreignField: '_id',
-                from: 'users',
-                localField: 'mentors._id',
-            },
-        },
-        { $unwind: '$user' },
-    ]).exec();
-    return result;
+    return CourseStudentModel.find({ courseId })
+        .lean()
+        .exec();
 };
