@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`./getAssignmentsRouter.ts returns data 1`] = `
+Object {
+  "assigmentRepo": "https://github.com/",
+  "checkDate": 222,
+  "completeDate": 730260000,
+  "courseId": "rs-course-2018-2",
+  "deadlineDate": 1537642920000,
+  "mentorComment": "",
+  "mentorId": "",
+  "score": 20,
+  "status": "Assigned",
+  "studentComment": "",
+  "studentId": "apalchys",
+  "taskId": "5b89b16999fa45417c962ae6",
+  "title": "titleTask",
+}
+`;
