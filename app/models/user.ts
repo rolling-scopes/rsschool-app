@@ -32,6 +32,31 @@ export interface IUserProfile {
         graduationYear: string;
         faculty: string;
     };
+    contacts: {
+        phone: string;
+        emails: string;
+        skype: string;
+        telegram: string;
+        other: string;
+    };
+    dateOfBirth: string;
+    gender: string;
+    tShirtSize: string;
+    epamDetails: {
+        isEPAMEmployee: boolean;
+        epamEmail?: string;
+        epamUpsaId?: string;
+    };
+    experience: {
+        yearsInFrontEnd?: string;
+        isStudiedAtRSSchool: boolean;
+        hadMentoringExperience: boolean;
+    };
+    mentoring: {
+        amountStages?: string;
+        amountStudents?: number;
+        colleague?: string;
+    };
 }
 
 export interface IUserParticipation {
@@ -65,18 +90,43 @@ export const UserSchema: Schema = new Schema({
     },
     profile: {
         city: { type: String, default: '' },
+        contacts: {
+            emails: { type: String, default: '' },
+            other: { type: String, default: '' },
+            phone: { type: String, default: '' },
+            skype: { type: String, default: '' },
+            telegram: { type: String, default: '' },
+        },
+        dateOfBirth: { type: String, default: '' },
         emails: { type: Array, default: [] },
+        epamDetails: {
+            epamEmail: { type: String },
+            epamUpsaId: { type: String },
+            isEPAMEmployee: { type: String, default: false },
+        },
+        experience: {
+            hadMentoringExperience: { type: Boolean },
+            isStudiedAtRSSchool: { type: Boolean },
+            yearsInFrontEnd: { type: String },
+        },
         firstName: { type: String, default: '' },
         firstNameNative: { type: String, default: '' },
+        gender: { type: String, default: '' },
         githubId: { type: String, default: '' },
         lastName: { type: String, default: '' },
         lastNameNative: { type: String, default: '' },
+        mentoring: {
+            amountStages: { type: Number },
+            amountStudents: { type: Number },
+            colleague: { type: String },
+        },
         phone: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
             graduationYear: { type: String, default: '' },
             university: { type: String, default: '' },
         },
+        tShirtSize: { type: String, default: '' },
     },
     role: { type: String, required: true },
 });

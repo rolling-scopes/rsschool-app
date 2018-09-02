@@ -4,13 +4,16 @@ exports[`User Profile route allows to patch user profile 1`] = `
 Object {
   "data": Object {
     "city": "",
+    "dateOfBirth": "",
     "emails": Array [],
     "firstName": "Foo",
     "firstNameNative": "",
+    "gender": "",
     "githubId": "",
     "lastName": "Bar",
     "lastNameNative": "",
     "phone": "",
+    "tShirtSize": "",
   },
 }
 `;
@@ -19,18 +22,33 @@ exports[`User Profile route returns data 1`] = `
 Object {
   "data": Object {
     "city": "",
+    "contacts": Object {
+      "emails": "",
+      "other": "",
+      "phone": "",
+      "skype": "",
+      "telegram": "",
+    },
+    "dateOfBirth": "",
     "emails": Array [],
+    "epamDetails": Object {
+      "isEPAMEmployee": "false",
+    },
+    "experience": Object {},
     "firstName": "first name",
     "firstNameNative": "",
+    "gender": "",
     "githubId": "",
     "lastName": "",
     "lastNameNative": "",
+    "mentoring": Object {},
     "phone": "",
     "primaryEducation": Object {
       "faculty": "",
       "graduationYear": "",
       "university": "",
     },
+    "tShirtSize": "",
   },
 }
 `;
