@@ -99,6 +99,7 @@ export const UserSchema: Schema = new Schema({
         dateOfBirth: { type: String, default: '' },
         emails: { type: Array, default: [] },
         employmentHistory: { type: String, default: '' },
+        englishLevel: { type: String, default: '' },
         epamDetails: {
             epamEmail: { type: String },
             epamUpsaId: { type: String },
