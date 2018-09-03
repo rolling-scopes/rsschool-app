@@ -41,6 +41,7 @@ export interface IUserProfile {
     };
     dateOfBirth: string;
     gender: string;
+    subscribe: boolean;
     tShirtSize: string;
     epamDetails: {
         isEPAMEmployee: boolean;
@@ -99,6 +100,7 @@ export const UserSchema: Schema = new Schema({
         },
         dateOfBirth: { type: String, default: '' },
         emails: { type: Array, default: [] },
+        employmentHistory: { type: String, default: '' },
         epamDetails: {
             epamEmail: { type: String },
             epamUpsaId: { type: String },
@@ -120,12 +122,14 @@ export const UserSchema: Schema = new Schema({
             amountStudents: { type: Number },
             colleague: { type: String },
         },
+        notes: { type: String, default: '' },
         phone: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
             graduationYear: { type: String, default: '' },
             university: { type: String, default: '' },
         },
+        subscribe: { type: Boolean, default: true },
         tShirtSize: { type: String, default: '' },
     },
     role: { type: String, required: true },
