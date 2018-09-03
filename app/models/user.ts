@@ -26,7 +26,6 @@ export interface IUserProfile {
     lastName: string;
     lastNameNative: string;
     notes: string;
-    phone: string;
     primaryEducation: {
         university: string;
         graduationYear: string;
@@ -123,7 +122,6 @@ export const UserSchema: Schema = new Schema({
             colleague: { type: String },
         },
         notes: { type: String, default: '' },
-        phone: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
             graduationYear: { type: String, default: '' },
