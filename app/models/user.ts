@@ -31,8 +31,8 @@ export interface IUserProfile {
         graduationYear: string;
         faculty: string;
     };
+    phone: string;
     contacts: {
-        phone: string;
         emails: string;
         skype: string;
         telegram: string;
@@ -93,7 +93,6 @@ export const UserSchema: Schema = new Schema({
         contacts: {
             emails: { type: String, default: '' },
             other: { type: String, default: '' },
-            phone: { type: String, default: '' },
             skype: { type: String, default: '' },
             telegram: { type: String, default: '' },
         },
@@ -122,6 +121,7 @@ export const UserSchema: Schema = new Schema({
             colleague: { type: String },
         },
         notes: { type: String, default: '' },
+        phone: { type: String, default: '' },
         primaryEducation: {
             faculty: { type: String, default: '' },
             graduationYear: { type: String, default: '' },
