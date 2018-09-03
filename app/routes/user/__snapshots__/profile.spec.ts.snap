@@ -14,6 +14,7 @@ Object {
     "lastName": "Bar",
     "lastNameNative": "",
     "notes": "",
+    "phone": "",
     "subscribe": true,
     "tShirtSize": "",
   },
@@ -27,7 +28,6 @@ Object {
     "contacts": Object {
       "emails": "",
       "other": "",
-      "phone": "",
       "skype": "",
       "telegram": "",
     },
@@ -46,6 +46,7 @@ Object {
     "lastNameNative": "",
     "mentoring": Object {},
     "notes": "",
+    "phone": "",
     "primaryEducation": Object {
       "faculty": "",
       "graduationYear": "",
