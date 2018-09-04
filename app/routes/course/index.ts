@@ -26,7 +26,7 @@ export function courseRouter(adminGuard: Router.IMiddleware) {
     router.post('/:id/import/studens', adminGuard, courseImportStudentsRoute);
 
     router.get('/:courseId/assignment/', courseAssignmentGetRoute);
-    router.patch('/:courseId/assignment/', courseAssignmentPatchRoute);
+    router.patch('/:courseId/assignment/:taskId', courseAssignmentPatchRoute);
 
     return router;
 }
