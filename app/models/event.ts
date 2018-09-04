@@ -50,6 +50,7 @@ export interface IEventModel extends Document, IEvent {
 }
 
 export const EventSchema: Schema = new Schema({
+    _assignment: { type: Schema.Types.ObjectId, ref: 'Assignment' },
     courseId: String,
     endDateTime: Number,
     location: String,

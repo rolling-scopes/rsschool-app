@@ -1,50 +1,20 @@
 import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { AssignmentModel, IApiResponse, IAssignmentModel, TaskModel } from '../../models';
+import { AssignmentModel, IApiResponse, IAssignmentModel } from '../../models';
 import { setResponse } from '../utils';
 
 export const courseAssignmentGetRoute = async (ctx: Router.IRouterContext) => {
     try {
         const { courseId } = ctx.params;
         const studentId: string = ctx.state.user!._id;
-        const assignments = await AssignmentModel.find(
-            {
-                courseId,
-                studentId,
-            },
-            {
-                courseId: 1,
-                score: 1,
-                status: 1,
-                studentId: 1,
-                taskId: 1,
-            },
-        ).exec();
-
-        const taskIdCollection: string[] = [];
-        for (const index in assignments) {
-            if (assignments[index]) {
-                taskIdCollection.push(assignments[index].taskId);
-            }
-        }
-        const tasks = await TaskModel.find({
-            _id: taskIdCollection,
-        }).exec();
-
-        const tasksForAggregationWithAssignments: any = tasks;
-        const aggregatedAssignments: any = assignments;
-
-        for (const index in aggregatedAssignments) {
-            if (aggregatedAssignments.hasOwnProperty(index)) {
-                aggregatedAssignments[index]._doc = {
-                    ...tasksForAggregationWithAssignments[index]._doc,
-                    ...aggregatedAssignments[index]._doc,
-                };
-            }
-        }
-
+        const assignments = await AssignmentModel.find({
+            courseId,
+            studentId,
+        })
+            .populate('taskId')
+            .exec();
         const body: IApiResponse<IAssignmentModel> = {
-            data: aggregatedAssignments,
+            data: assignments,
         };
         ctx.body = body;
         ctx.status = OK;
@@ -56,9 +26,8 @@ export const courseAssignmentGetRoute = async (ctx: Router.IRouterContext) => {
 
 export const courseAssignmentPatchRoute = async (ctx: Router.IRouterContext) => {
     try {
-        const { courseId } = ctx.params;
+        const { courseId, taskId } = ctx.params;
         const studentId: string = ctx.state.user!._id;
-        const taskId: string = ctx.request.body.taskId;
         const newAssignment = { ...ctx.request.body };
         newAssignment.status = 'Checked';
         newAssignment.score = Math.floor(Math.random() * 100);
