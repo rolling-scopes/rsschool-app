@@ -26,7 +26,7 @@ export interface IAssignment extends IAssignmentHalf {
 }
 
 export interface IAssignmentModel extends Document, IAssignment {
-    _id: string;
+    _id: Schema.Types.ObjectId;
 }
 
 export const AssignmentSchema: Schema = new Schema({
@@ -41,7 +41,7 @@ export const AssignmentSchema: Schema = new Schema({
     status: String,
     studentComment: { type: String, required: false, default: '' },
     studentId: String,
-    taskId: String,
+    taskId: { type: Schema.Types.ObjectId, ref: 'Task' },
 });
 
 export const AssignmentModelName = 'Assignment';
