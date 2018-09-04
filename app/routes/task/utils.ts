@@ -49,8 +49,7 @@ export function deleteTaskAndAssignments<T extends Document>(DocumentModel: Mode
 const generateAssignments = async (ctx: Router.IRouterContext) => {
     const { _id, courseId, endDate } = ctx.body;
     const userByCourseId = await groupUsersByCourseId(courseId);
-    const operations: any = [];
-    userByCourseId.forEach((item: any) => {
+    const operations = userByCourseId.map((item: any) => {
         const assignment: IGeneratedAssignment = {
             courseId,
             deadlineDate: endDate,
@@ -59,7 +58,7 @@ const generateAssignments = async (ctx: Router.IRouterContext) => {
             studentId: item.userId,
             taskId: _id,
         };
-        operations.push({ insertOne: { document: assignment } });
+        return { insertOne: { document: assignment } };
     });
     AssignmentModel.bulkWrite(operations);
 };
@@ -91,9 +90,8 @@ const groupAssignmentByTaskId = async (taskId: string) => {
 
 const deleteAssignments = async (id: string) => {
     const assignmentByTaskId = await groupAssignmentByTaskId(id);
-    const operations: any = [];
-    assignmentByTaskId.forEach((item: any) => {
-        operations.push({ deleteOne: { filter: item } });
+    const operations = assignmentByTaskId.map((item: any) => {
+        return { deleteOne: { filter: item } };
     });
     AssignmentModel.bulkWrite(operations);
 };
