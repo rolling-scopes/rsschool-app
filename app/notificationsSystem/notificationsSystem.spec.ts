@@ -126,6 +126,7 @@ describe('Notification system', () => {
         };
 
         mockingoose.NotificationsSetting.toReturn([studentSetting, mentorSetting], 'find');
+        mockingoose.NotificationsSetting.toReturn(studentSetting, 'findOne');
 
         mockSend.mockReset();
 
@@ -394,5 +395,29 @@ describe('Notification system', () => {
         await notificationsSystem.start(mockLogger);
 
         checkIsNotificationSchedule();
+    });
+
+    it('should notify single user', async () => {
+        await notificationsSystem.notify(
+            [
+                {
+                    eventId,
+                    eventType: StudentsEventsType.Session,
+                    message: 'Immediate notification',
+                    role: 'student',
+                },
+                {
+                    eventId,
+                    eventType: StudentsEventsType.Session,
+                    message: 'Immediate notification',
+                    role: 'mentor',
+                },
+            ],
+            courseId,
+            student._id,
+        );
+
+        expect(Object.keys(nodeSchedule.scheduledJobs).length).toBe(0);
+        expect(mockSend.mock.calls.length).toBe(1);
     });
 });

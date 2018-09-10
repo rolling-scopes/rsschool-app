@@ -24,7 +24,12 @@ export async function find(data?: object): Promise<INotificationsSettingModel[]>
     return result;
 }
 
-export async function findByCoureId(courseId: string, data?: object) {
+export async function findOne(data?: object): Promise<INotificationsSettingModel | null> {
+    const result = await NotificationsSettingModel.findOne({ ...data }).populate('user');
+    return result;
+}
+
+export async function findByCoureId(courseId: string, data?: object): Promise<INotificationsSettingModel[]> {
     const result = await NotificationsSettingModel.find(data).populate('user');
     // there is field user.participation with information about courses, but it isn't generated
     // return result.filter(

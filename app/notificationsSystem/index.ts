@@ -46,9 +46,21 @@ const isDateTimeInInterval = (dateTime: Date, timeFrom: ITime, timeTo: ITime): b
     return false;
 };
 
-export const notify = async (data: INotificaionData[], courseId: string) => {
+export const notify = async (data: INotificaionData[], courseId: string, userId?: string) => {
+    let notificationsSettings: INotificationsSetting[];
+
+    if (userId) {
+        const result = await notificationsSettingService.findOne({ user: userId, courseId, isEnable: true });
+        if (result === null) {
+            return;
+        }
+
+        notificationsSettings = [result];
+    } else {
+        notificationsSettings = await notificationsSettingService.findByCoureId(courseId, { isEnable: true });
+    }
+
     const currentDate = new Date();
-    const notificationsSettings = await notificationsSettingService.findByCoureId(courseId, { isEnable: true });
 
     await notificationsSettings.forEach(async (setting: INotificationsSetting) => {
         const { timeFrom, timeTo, telegramId } = setting;
