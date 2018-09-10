@@ -109,7 +109,7 @@ export default class NotificationsBot {
     }
 
     private async handleEnable(ctx: any) {
-        await notificationsSettingService.updateById('5b7e8f7042991714f821bc6a', { isEnable: true });
+        await notificationsSettingService.updateById(ctx.state.setting._id, { isEnable: true });
         ctx.reply(config.messages.enable);
     }
 
