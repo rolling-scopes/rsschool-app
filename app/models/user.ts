@@ -1,5 +1,10 @@
 import { Document, Schema, model } from 'mongoose';
 
+export enum Roles {
+    student = 'student',
+    mentor = 'mentor',
+}
+
 export enum UserFeedActionTypes {
     signedup = 'signedup',
 }

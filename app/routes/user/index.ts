@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import { getProfileRoute, patchProfileRoute } from './profile';
 import { getFeedRoute } from './feed';
 import { getParticipationsRoute } from './participations';
+import { matchUsers } from './match';
 
 export function userRouter() {
     const router = new Router({ prefix: '/user' });
@@ -11,6 +12,8 @@ export function userRouter() {
 
     router.get('/profile', getProfileRoute);
     router.patch('/profile', patchProfileRoute);
+
+    router.post('/match', matchUsers);
 
     return router;
 }
