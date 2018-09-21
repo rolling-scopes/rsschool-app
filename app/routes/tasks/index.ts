@@ -14,11 +14,6 @@ export function tasksRouter(adminGuard: Router.IMiddleware) {
             return;
         }
 
-        // const {
-        //     data: { query },
-        // } = ctx.request.body;
-        // console.log(query);
-
         try {
             const tasks = await taskService.getCourseRelated();
 
