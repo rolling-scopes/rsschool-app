@@ -10,10 +10,6 @@ export const matchUsers = async (ctx: Router.IRouterContext) => {
         data: { role, forCheck },
     } = ctx.request.body;
 
-    /*
-        forCheking can be array of ids or a single id
-        but we will pass always an array
-    */
     const users = await userService.getBunchUsers(toArray(forCheck), Roles[role] as Roles);
 
     if (users.length === 0) {
