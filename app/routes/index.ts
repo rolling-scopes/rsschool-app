@@ -11,7 +11,8 @@ import { stageRouter } from './stage';
 import { healthRouter } from './health';
 import { sessionRouter } from './session';
 import { userRouter } from './user';
-import { batchUpdateRouter } from './batch-update';
+import { assignmentRouter } from './assignment';
+import { tasksRouter } from './tasks';
 
 type RoutesMiddleware = (logger: ILogger) => Router;
 
@@ -43,7 +44,8 @@ export const routesMiddleware: RoutesMiddleware = () => {
     applyRouter(router, coursesRouter());
     applyRouter(router, eventRouter(adminGuard));
     applyRouter(router, stageRouter(adminGuard));
-    applyRouter(router, batchUpdateRouter(adminGuard));
+    applyRouter(router, assignmentRouter(adminGuard));
+    applyRouter(router, tasksRouter(adminGuard));
 
     return router;
 };
