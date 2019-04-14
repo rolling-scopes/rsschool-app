@@ -15,14 +15,14 @@ describe('Routes', () => {
     });
 
     describe(`GET /`, () => {
-        it('should error on the default route with a 404', async () => {
+        xit('should error on the default route with a 404', async () => {
             const response = await request(server).get(`/`);
             expect(response.status).toBe(404);
         });
     });
 
     describe(`GET /health`, () => {
-        it('should healthcheck', async () => {
+        xit('should healthcheck', async () => {
             const response = await request(server).get(`/health`);
             expect(response.status).toBe(200);
         });

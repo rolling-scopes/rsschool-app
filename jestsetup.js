@@ -1,7 +1,7 @@
 process.env.NODE_PORT = 3009;
 process.env.NODE_ENV = 'test';
 
-jest.mock('bunyan', () => {
+jest.mock('pino', () => {
     const logger = {
         child() {
             return logger;
@@ -10,9 +10,7 @@ jest.mock('bunyan', () => {
         warn() {},
         error() {},
     };
-    return {
-        createLogger: () => {
-            return logger;
-        },
+    return () => {
+        return logger;
     };
 });
