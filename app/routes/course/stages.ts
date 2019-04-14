@@ -2,7 +2,7 @@ import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { StageModel, IApiResponse, IStageModel } from '../../models';
 
-export const courseStagesRoute = async (ctx: Router.IRouterContext) => {
+export const courseStagesRoute = async (ctx: Router.RouterContext) => {
     try {
         const { id: courseId } = ctx.params;
         const stages = await StageModel.find({ courseId }).exec();

@@ -10,7 +10,7 @@ function applyRouter(topRouter: Router, router: Router) {
     topRouter.use(router.allowedMethods());
 }
 
-export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.IRouterContext, next: any) => {
+export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.RouterContext, next: any) => {
     const oldLogger = ctx.logger;
     ctx.logger = ctx.logger.child({ module: 'route-pg' });
     await next();

@@ -24,7 +24,7 @@ export interface ILogger {
 }
 
 export const loggerMiddleware = (externalLogger: ILogger) => async (
-    ctx: Router.IRouterContext,
+    ctx: Router.RouterContext,
     next: () => Promise<any>,
 ) => {
     const logger = externalLogger;

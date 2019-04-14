@@ -13,7 +13,7 @@ export function userRouter() {
     return router;
 }
 
-export const getUserRoute = async (ctx: Router.IRouterContext) => {
+export const getUserRoute = async (ctx: Router.RouterContext) => {
     const userId = ctx.params.id;
     const user = await getManager().findOne(User, Number(userId));
     if (user === undefined) {
@@ -23,7 +23,7 @@ export const getUserRoute = async (ctx: Router.IRouterContext) => {
     setResponse(ctx, OK, user);
 };
 
-export const postUserRoute = async (ctx: Router.IRouterContext) => {
+export const postUserRoute = async (ctx: Router.RouterContext) => {
     const users = ctx.request.body as User[];
     console.info(users);
     try {

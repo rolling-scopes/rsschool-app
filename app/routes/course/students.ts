@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { CourseStudentModel, ICourseStudent } from '../../models';
 import { setResponse } from '../utils';
 
-export const courseStudentsRoute = async (ctx: Router.IRouterContext) => {
+export const courseStudentsRoute = async (ctx: Router.RouterContext) => {
     try {
         const { id: courseId } = ctx.params;
         const result: ICourseStudent = await CourseStudentModel.aggregate([

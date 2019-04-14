@@ -12,7 +12,7 @@ async function getFeedRecords(userId: string) {
         .exec();
 }
 
-export const getFeedRoute = async (ctx: Router.IRouterContext) => {
+export const getFeedRoute = async (ctx: Router.RouterContext) => {
     const userId = ctx.state.user!._id;
 
     const user = await userService.getUserById(userId);

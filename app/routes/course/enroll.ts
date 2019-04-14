@@ -12,7 +12,7 @@ import {
 } from '../../models';
 import { userService } from '../../services';
 
-export const courseEnrollRoute = async (ctx: Router.IRouterContext) => {
+export const courseEnrollRoute = async (ctx: Router.RouterContext) => {
     try {
         const userSession: IUserSession = ctx.state.user!;
         if (userSession === null) {

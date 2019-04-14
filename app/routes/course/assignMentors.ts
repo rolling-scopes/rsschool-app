@@ -2,7 +2,7 @@ import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { assignMentorsByCity, assignMentorsByPreference } from '../../rules/assignMentors';
 
-export const courseAssignMentorsRoute = async (ctx: Router.IRouterContext) => {
+export const courseAssignMentorsRoute = async (ctx: Router.RouterContext) => {
     try {
         const { id: courseId } = ctx.params;
         await assignMentorsByPreference(courseId, ctx.logger);

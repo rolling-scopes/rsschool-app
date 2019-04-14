@@ -25,7 +25,7 @@ export interface IConfig {
                   }
                 | undefined;
             dbName: string;
-            keepAlive: number;
+            keepAlive: boolean;
         };
         reconnectDelayMs: number;
     };
@@ -74,7 +74,7 @@ export const config: IConfig = {
                       }
                     : undefined,
             dbName: process.env.RSSHCOOL_API_MONGO_DBNAME1 || 'rsschool',
-            keepAlive: 1,
+            keepAlive: true,
         },
         reconnectDelayMs: 5000,
     },

@@ -1,9 +1,8 @@
 import { UNAUTHORIZED } from 'http-status-codes';
-import { Middleware } from 'koa';
 import * as Router from 'koa-router';
 import { config } from '../config';
 
-export const guard: Middleware = async (ctx: Router.IRouterContext, next) => {
+export const guard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
     if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
         await next();
     } else {
@@ -11,7 +10,7 @@ export const guard: Middleware = async (ctx: Router.IRouterContext, next) => {
     }
 };
 
-export const adminGuard: Middleware = async (ctx: Router.IRouterContext, next) => {
+export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
     if (ctx.state.user != null && ctx.state.user.isAdmin) {
         await next();
     } else {

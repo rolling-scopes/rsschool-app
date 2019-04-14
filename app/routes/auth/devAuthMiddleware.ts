@@ -5,7 +5,7 @@ import * as Router from 'koa-router';
 import { config } from '../../config';
 import { createUser } from '../../rules';
 
-export const devAuthMiddleware = async (ctx: Router.IRouterContext) => {
+export const devAuthMiddleware = async (ctx: Router.RouterContext) => {
     try {
         const userSession = await createUser(
             {

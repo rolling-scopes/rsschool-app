@@ -53,7 +53,7 @@ function getGithubId(githubLikeString: string) {
         .split('(')[0];
 }
 
-export const courseImportMentorsRoute = async (ctx: Router.IRouterContext) => {
+export const courseImportMentorsRoute = async (ctx: Router.RouterContext) => {
     try {
         const courseId = ctx.params.id;
         const mentors: InputMentor[] = await csvToJson<InputMentor>(ctx.request.rawBody);
@@ -101,7 +101,7 @@ export const courseImportMentorsRoute = async (ctx: Router.IRouterContext) => {
     }
 };
 
-export const courseImportStudentsRoute = async (ctx: Router.IRouterContext) => {
+export const courseImportStudentsRoute = async (ctx: Router.RouterContext) => {
     try {
         const courseId = ctx.params.id;
         const students: InputStudent[] = await csvToJson<InputStudent>(ctx.request.rawBody);

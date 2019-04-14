@@ -1,5 +1,5 @@
 import * as cors from '@koa/cors';
-import { createLogger } from 'bunyan';
+import * as pinoLogger from 'pino';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
@@ -26,7 +26,7 @@ function delay(ms = 0): Promise<void> {
     });
 }
 function createDefaultLogger() {
-    return createLogger({ name: config.name }) as ILogger;
+    return pinoLogger({ name: config.name }) as ILogger;
 }
 
 export class App {
@@ -139,7 +139,12 @@ export class App {
         if (this.MONGO_CONNECT_ATTEMPTS > 0) {
             this.MONGO_CONNECT_ATTEMPTS--;
             this.mongoLogger.info(`Re-connecting to MongoDB in ${this.RECONNECT_DELAY / 1000} seconds`);
-            return delay(this.RECONNECT_DELAY).then(() => this.connect());
+            return delay(this.RECONNECT_DELAY)
+                .then(() => this.connect())
+                .catch(e => {
+                    this.mongoLogger.error(e.message);
+                    return Promise.resolve(false);
+                });
         } else {
             this.mongoLogger.error('MongoDB is not available');
             return Promise.resolve(false);
@@ -148,9 +153,6 @@ export class App {
 
     private connectToMongo(): Promise<typeof mongoose> {
         this.mongoLogger.info('Connecting to MongoDB');
-        return mongoose.connect(
-            config.mongo.connectionString,
-            config.mongo.options,
-        );
+        return mongoose.connect(config.mongo.connectionString, config.mongo.options);
     }
 }

@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { userService } from '../../services';
 import { setResponse } from '../utils';
 
-export const getProfileRoute = async (ctx: Router.IRouterContext) => {
+export const getProfileRoute = async (ctx: Router.RouterContext) => {
     const userId = ctx.state.user!._id;
     const user = await userService.getUserById(userId);
     if (user === null) {
@@ -13,7 +13,7 @@ export const getProfileRoute = async (ctx: Router.IRouterContext) => {
     setResponse(ctx, OK, user.profile);
 };
 
-export const patchProfileRoute = async (ctx: Router.IRouterContext) => {
+export const patchProfileRoute = async (ctx: Router.RouterContext) => {
     const userId = ctx.state.user!._id;
     const user = await userService.getUserById(userId);
     if (user === null) {
