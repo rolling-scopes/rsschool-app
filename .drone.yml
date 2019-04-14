@@ -40,7 +40,7 @@ steps:
       port: 22
       script: 
         - "sleep 10"
-        - "docker pull rsschool/api"
+        - "docker pull rsschool/api:pg"
         - "docker-compose stop api"
         - "docker-compose rm -f api"
         - "docker-compose up -d api"
