@@ -10,52 +10,50 @@ export interface EducationRecord {
 export class User {
     @PrimaryGeneratedColumn() id: number;
 
-    @Column({ name: 'github_id', unique: true })
+    @Column({ name: 'githubId', unique: true })
     githubId: string;
 
-    @Column({ name: 'first_name' })
+    @Column()
     firstName: string;
 
-    @Column({ name: 'last_name' })
+    @Column()
     lastName: string;
 
-    @CreateDateColumn({ name: 'created_date' })
+    @CreateDateColumn()
     createdDate = Date.now();
 
-    @CreateDateColumn({ name: 'modified_date' })
+    @CreateDateColumn()
     modifiedDate = Date.now();
 
-    @Column({ name: 'first_name_native' })
+    @Column()
     firstNameNative: string;
 
-    @Column({ name: 'last_name_native' })
+    @Column()
     lastNameNative: string;
 
     @Column({
-        name: 'gender',
         type: 'enum',
         enum: ['male', 'female', 'other'],
         nullable: true,
     })
     gender: 'male' | 'female' | 'other' | null;
 
-    @Column({ name: 'tshirt_size', nullable: true })
+    @Column({ nullable: true })
     tshirtSize: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = 'm';
 
-    @Column({ name: 'tshirt_fashion', nullable: true })
+    @Column({ nullable: true })
     tshirtFashion: 'a' | 'b' = 'a';
 
-    @CreateDateColumn({ name: 'date_of_birth', nullable: true })
+    @CreateDateColumn({ nullable: true })
     dateOfBirth: number;
 
-    @Column({ name: 'city', nullable: true })
+    @Column({ nullable: true })
     city: string;
 
-    @Column({ name: 'country', nullable: true })
+    @Column({ nullable: true })
     country: string;
 
     @Column({
-        name: 'english_level',
         type: 'enum',
         enum: ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'],
         nullable: true,
@@ -63,25 +61,23 @@ export class User {
     englishLevel: 'a1' | 'a2' | 'b1' | 'b2' | 'c1' | 'c2';
 
     @Column({
-        name: 'education_history',
         type: 'json',
         default: [],
     })
     educationHistory: EducationRecord[] = [];
 
     @Column({
-        name: 'employment_history',
         type: 'json',
         default: [],
     })
     employmentHistory: any = [];
 
-    @Column({ name: 'contacts_epam_email', nullable: true })
+    @Column({ nullable: true })
     contactsEpamEmail: string;
 
-    @Column({ name: 'contacts_phone', nullable: true })
+    @Column({ nullable: true })
     contactsPhone: string;
 
-    @Column({ name: 'contacts_email', nullable: true })
+    @Column({ nullable: true })
     contactsEmail: string;
 }

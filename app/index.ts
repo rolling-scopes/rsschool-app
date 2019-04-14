@@ -15,7 +15,7 @@ import { ILogger, loggerMiddleware } from './logger';
 import { routeLoggerMiddleware, routesMiddleware } from './routes';
 
 import { createConnection } from 'typeorm';
-import { User } from './models-pg/user';
+import { models } from './models-pg';
 import { pgRoutesMiddleware } from './routes-pg';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
@@ -101,7 +101,7 @@ export class App {
             username: config.pg.username,
             password: config.pg.password,
             database: config.pg.database,
-            entities: [User],
+            entities: models,
             synchronize: true,
         });
 

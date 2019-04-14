@@ -1,5 +1,6 @@
 import * as Router from 'koa-router';
-import { userRouter } from '../routes-pg/user';
+import { userRouter } from './user';
+import { feedbackRouter } from './feedback';
 import { ILogger } from '../logger';
 import { config } from '../config';
 const auth = require('koa-basic-auth'); //tslint:disable-line
@@ -23,5 +24,6 @@ export const pgRoutesMiddleware: RoutesMiddleware = () => {
 
     router.use(auth({ name: config.admin.username, pass: config.admin.password }));
     applyRouter(router, userRouter());
+    applyRouter(router, feedbackRouter());
     return router;
 };
