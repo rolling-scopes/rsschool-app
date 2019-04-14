@@ -5,6 +5,10 @@ export interface IConfig {
         github_client_secret: string;
         successRedirect: string;
     };
+    admin: {
+        username: string;
+        password: string;
+    };
     rateLimit: {
         intervalMin: number;
         max: number;
@@ -50,11 +54,14 @@ export const config: IConfig = {
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
         successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
     },
+    admin: {
+        username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',
+        password: process.env.RSSHCOOL_API_ADMIN_PASSWORD || '',
+    },
     roles: {
         adminTeams: ['rsschool-dev-team@rolling-scopes'],
         mentorTeams: ['rsschool-dev-team@rolling-scopes'],
     },
-
     isDevMode: process.env.NODE_ENV !== 'production',
     pg: {
         host: process.env.RSSHCOOL_API_PG_HOST || '',

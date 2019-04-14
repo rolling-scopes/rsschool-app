@@ -1,6 +1,7 @@
 import * as Router from 'koa-router';
 import { userRouter } from '../routes-pg/user';
 import { ILogger } from '../logger';
+import { config } from '../config';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 type RoutesMiddleware = (logger: ILogger) => Router;
@@ -20,7 +21,7 @@ export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.Ro
 export const pgRoutesMiddleware: RoutesMiddleware = () => {
     const router = new Router();
 
-    router.use(auth({ name: 'smelnik', pass: 'hello' }));
+    router.use(auth({ name: config.admin.username, pass: config.admin.password }));
     applyRouter(router, userRouter());
     return router;
 };
