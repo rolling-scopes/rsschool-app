@@ -2,6 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "baseUrl": ".",
     "noImplicitAny": true,
     "outDir": "./dist",
@@ -9,7 +13,13 @@
     "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "typeRoots": [ "./node_modules/@types", "./app/typings/"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./app/typings/"
+    ],
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "./**/*.ts",

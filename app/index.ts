@@ -14,6 +14,10 @@ import { dbConnectionMiddleware } from './dbConnection';
 import { ILogger, loggerMiddleware } from './logger';
 import { routeLoggerMiddleware, routesMiddleware } from './routes';
 
+import { createConnection } from 'typeorm';
+import { User } from './models-pg/user';
+import { pgRoutesMiddleware } from './routes-pg';
+
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
 function delay(ms = 0): Promise<void> {
@@ -53,6 +57,11 @@ export class App {
 
         this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
         this.koa.use(cors());
+
+        const pgRoutters = pgRoutesMiddleware(this.appLogger);
+        this.koa.use(pgRoutters.routes());
+        this.koa.use(pgRoutters.allowedMethods());
+
         this.koa.use(dbConnectionMiddleware);
 
         this.koa.keys = [config.sessionKey];
@@ -64,6 +73,7 @@ export class App {
 
         const routes = routesMiddleware(this.appLogger);
         this.koa.use(routeLoggerMiddleware);
+
         this.koa.use(routes.routes());
         this.koa.use(routes.allowedMethods());
         this.koa.use(serve('public'));
@@ -83,9 +93,27 @@ export class App {
         return this.server;
     }
 
+    public async pgConnect(): Promise<boolean> {
+        await createConnection({
+            type: 'postgres',
+            host: config.pg.host,
+            port: 5432,
+            username: config.pg.username,
+            password: config.pg.password,
+            database: config.pg.database,
+            entities: [User],
+            synchronize: true,
+        });
+
+        return true;
+    }
+
     public connect(): Promise<boolean> {
         if (this.server === undefined) {
             this.appLogger.info('Please start the app using start() method');
+            return Promise.resolve(false);
+        }
+        if (!config.mongo.connectionString) {
             return Promise.resolve(false);
         }
         if (this.MONGO_CONNECT_ATTEMPTS <= 0) {

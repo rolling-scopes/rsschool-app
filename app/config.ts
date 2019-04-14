@@ -29,6 +29,12 @@ export interface IConfig {
         };
         reconnectDelayMs: number;
     };
+    pg: {
+        host: string;
+        username: string;
+        password: string;
+        database: string;
+    };
     port: number;
     name: string;
     sessionKey: string;
@@ -50,8 +56,14 @@ export const config: IConfig = {
     },
 
     isDevMode: process.env.NODE_ENV !== 'production',
+    pg: {
+        host: process.env.RSSHCOOL_API_PG_HOST || '',
+        username: process.env.RSSHCOOL_API_PG_USERNAME || '',
+        password: process.env.RSSHCOOL_API_PG_PASSWORD || '',
+        database: process.env.RSSHCOOL_API_PG_DATABASE || 'rs_school',
+    },
     mongo: {
-        connectAttempts: 5,
+        connectAttempts: 1,
         connectionString: process.env.RSSHCOOL_API_MONGO_CONNECTION_STRING || 'mongodb://localhost:27017',
         options: {
             auth:

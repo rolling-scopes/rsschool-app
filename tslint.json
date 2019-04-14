@@ -1,20 +1,29 @@
 {
-  "extends": "tslint:latest",
+  "extends": "tslint:recommended",
   "defaultSeverity": "error",
   "rules": {
     "arrow-parens": false,
     "interface-over-type-literal": false,
-    "no-console": [true, "log"],
-    "no-implicit-dependencies": [true, "dev"],
+    "no-console": [
+      true,
+      "log"
+    ],
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ],
     "no-unused-expression": false,
     "array-type": false,
     "ordered-imports": false,
     "no-object-literal-type-assertion": false,
     "object-literal-key-quotes": false,
+    "object-literal-sort-keys": false,
     "quotemark": [
       true,
       "single",
       "avoid-escape"
-    ]
+    ],
+    "member-access": false,
+    "interface-name": false
   }
 }
