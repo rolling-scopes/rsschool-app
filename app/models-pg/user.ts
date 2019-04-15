@@ -6,6 +6,14 @@ export interface EducationRecord {
     university: string;
 }
 
+export interface EmploymentRecord {
+    title: string;
+    dateTo: string;
+    dateFrom: string;
+    companyName: string;
+    toPresent: boolean;
+}
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn() id: number;
@@ -31,34 +39,27 @@ export class User {
     @Column()
     lastNameNative: string;
 
-    @Column({
-        type: 'enum',
-        enum: ['male', 'female', 'other'],
-        nullable: true,
-    })
-    gender: 'male' | 'female' | 'other' | null;
-
     @Column({ nullable: true })
     tshirtSize: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = 'm';
 
     @Column({ nullable: true })
-    tshirtFashion: 'a' | 'b' = 'a';
+    tshirtFashion: string;
 
     @CreateDateColumn({ nullable: true })
     dateOfBirth: number;
 
     @Column({ nullable: true })
-    city: string;
+    locationName: string;
 
     @Column({ nullable: true })
-    country: string;
+    locationId: string;
 
     @Column({
         type: 'enum',
-        enum: ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'],
+        enum: ['a1', 'a1+', 'a2', 'a2+', 'b1', 'b1+', 'b2', 'b2+', 'c1', 'c1+', 'c2'],
         nullable: true,
     })
-    englishLevel: 'a1' | 'a2' | 'b1' | 'b2' | 'c1' | 'c2';
+    englishLevel: 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
 
     @Column({
         type: 'json',
@@ -70,7 +71,7 @@ export class User {
         type: 'json',
         default: [],
     })
-    employmentHistory: any = [];
+    employmentHistory: EmploymentRecord[] = [];
 
     @Column({ nullable: true })
     contactsEpamEmail: string;
