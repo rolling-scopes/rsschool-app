@@ -7,7 +7,7 @@ describe('User Profile route', () => {
         mockingoose.resetAll();
     });
 
-    it('returns data', async () => {
+    xit('returns data', async () => {
         const ctx = createTestContext();
         mockingoose.User.toReturn(
             {
@@ -22,7 +22,7 @@ describe('User Profile route', () => {
         expect(ctx.body).toMatchSnapshot();
     });
 
-    it('allows to patch user profile', async () => {
+    xit('allows to patch user profile', async () => {
         const oldProfile = {
             email: '',
             firstName: '',

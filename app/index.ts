@@ -10,7 +10,7 @@ import { Server } from 'net';
 
 import { setupPassport } from './auth';
 import { config } from './config';
-import { dbConnectionMiddleware } from './dbConnection';
+// import { dbConnectionMiddleware } from './dbConnection';
 import { ILogger, loggerMiddleware } from './logger';
 import { routeLoggerMiddleware, routesMiddleware } from './routes';
 
@@ -58,11 +58,7 @@ export class App {
         this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
         this.koa.use(cors());
 
-        const pgRoutters = pgRoutesMiddleware(this.appLogger);
-        this.koa.use(pgRoutters.routes());
-        this.koa.use(pgRoutters.allowedMethods());
-
-        this.koa.use(dbConnectionMiddleware);
+        // this.koa.use(dbConnectionMiddleware);
 
         this.koa.keys = [config.sessionKey];
         this.koa.use(session({}, this.koa));
@@ -70,6 +66,13 @@ export class App {
         const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
         this.koa.use(passport.initialize());
         this.koa.use(passport.session());
+
+        const pgRoutters = pgRoutesMiddleware(this.appLogger);
+        this.koa.use(pgRoutters.adminRouter.routes());
+        this.koa.use(pgRoutters.adminRouter.allowedMethods());
+
+        this.koa.use(pgRoutters.publicRouter.routes());
+        this.koa.use(pgRoutters.publicRouter.allowedMethods());
 
         const routes = routesMiddleware(this.appLogger);
         this.koa.use(routeLoggerMiddleware);

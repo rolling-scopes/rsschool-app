@@ -8,7 +8,7 @@ describe('User Feed route', () => {
         mockingoose.resetAll();
     });
 
-    it('returns data', async () => {
+    xit('returns data', async () => {
         const ctx = createTestContext();
         const feedRecords = [
             {
@@ -30,7 +30,7 @@ describe('User Feed route', () => {
         expect(ctx.body).toMatchSnapshot();
     });
 
-    it('returns 404 if no user', async () => {
+    xit('returns 404 if no user', async () => {
         const ctx = createTestContext();
         mockingoose.User.toReturn(null, 'findOne');
 

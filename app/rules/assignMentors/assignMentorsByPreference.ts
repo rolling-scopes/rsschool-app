@@ -1,4 +1,4 @@
-import { CourseMentorModel, CourseStudentModel, ICourseMentorModel } from '../../models';
+import { CourseMentorModel, ICourseMentorModel } from '../../models';
 import { ILogger } from '../../logger';
 
 export async function assignMentorsByPreference(courseId: string, logger: ILogger) {
@@ -19,21 +19,21 @@ const doAssigning = async (mentors: ICourseMentorModel[], courseId: string) => {
     await mentors.reduce((chain, mentor) => chain.then(() => assignMentor(mentor, courseId)), Promise.resolve());
 };
 
-const assignMentor = async (courseMentor: ICourseMentorModel, courseId: string) => {
-    courseMentor.mentees = courseMentor.preferedMentees.map(({ _id }: { _id: string }) => ({
-        _id,
-    }));
-    courseMentor.menteeCapacity = Math.max(courseMentor.menteeCapacity - courseMentor.mentees.length, 0);
-    await CourseStudentModel.updateMany(
-        {
-            courseId,
-            userId: { $in: courseMentor.preferedMentees.map(({ _id }) => _id) },
-        },
-        {
-            $set: {
-                mentors: [{ _id: courseMentor.userId }],
-            },
-        },
-    ).exec();
-    await courseMentor.save();
+const assignMentor = async (_: ICourseMentorModel, _1: string) => {
+    // courseMentor.mentees = courseMentor.preferedMentees.map(({ _id }: { _id: string }) => ({
+    //     _id,
+    // }));
+    // courseMentor.menteeCapacity = Math.max(courseMentor.menteeCapacity - courseMentor.mentees.length, 0);
+    // await CourseStudentModel.updateMany(
+    //     {
+    //         courseId,
+    //         userId: { $in: courseMentor.preferedMentees.map(({ _id }) => _id) },
+    //     },
+    //     {
+    //         $set: {
+    //             mentors: [{ _id: courseMentor.userId }],
+    //         },
+    //     },
+    // ).exec();
+    // await courseMentor.save();
 };

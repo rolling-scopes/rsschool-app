@@ -1,12 +1,13 @@
 import * as Router from 'koa-router';
-import { userRouter } from './user';
+import { adminUserRouter } from './user';
 import { feedbackRouter } from './feedback';
-import { courseRouter } from './course';
+import { publicMeRouter } from './me';
+import { publicCourseRouter, adminCourseRouter } from './course';
 import { ILogger } from '../logger';
 import { config } from '../config';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
-type RoutesMiddleware = (logger: ILogger) => Router;
+type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router; adminRouter: Router };
 
 function applyRouter(topRouter: Router, router: Router) {
     topRouter.use(router.routes());
@@ -21,12 +22,14 @@ export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.Ro
 };
 
 export const pgRoutesMiddleware: RoutesMiddleware = (logger: ILogger) => {
-    const router = new Router();
+    const adminRouter = new Router();
+    adminRouter.use(auth({ name: config.admin.username, pass: config.admin.password }));
+    applyRouter(adminRouter, adminUserRouter(logger));
+    applyRouter(adminRouter, feedbackRouter(logger));
+    applyRouter(adminRouter, adminCourseRouter(logger));
 
-    router.use(auth({ name: config.admin.username, pass: config.admin.password }));
-
-    applyRouter(router, userRouter(logger));
-    applyRouter(router, feedbackRouter(logger));
-    applyRouter(router, courseRouter(logger));
-    return router;
+    const publicRouter = new Router();
+    applyRouter(publicRouter, publicCourseRouter(logger));
+    applyRouter(publicRouter, publicMeRouter(logger));
+    return { publicRouter, adminRouter };
 };

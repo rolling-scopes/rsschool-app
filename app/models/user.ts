@@ -5,7 +5,7 @@ export enum UserFeedActionTypes {
 }
 
 export interface IUserBase {
-    _id: string;
+    id: string;
 }
 
 export interface IUserSession extends IUserBase {
@@ -72,7 +72,7 @@ export interface IUser extends IUserSession {
 }
 
 export interface IUserModel extends IUser, Document {
-    _id: string;
+    id: string;
 }
 
 export const UserSchema: Schema = new Schema({

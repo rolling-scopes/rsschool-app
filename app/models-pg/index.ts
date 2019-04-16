@@ -5,7 +5,10 @@ import { Task } from './task';
 import { TaskResult } from './taskResult';
 import { StudentTask } from './studentTask';
 import { CourseTask } from './courseTask';
+import { Student } from './student';
+import { Mentor } from './mentor';
+import { Stage } from './stage';
 
-export const models = [User, Feedback, Course, Task, TaskResult, StudentTask, CourseTask];
+export const models = [Stage, Mentor, Student, User, Feedback, Course, Task, TaskResult, StudentTask, CourseTask];
 
 export { User, Feedback, Course, Task };

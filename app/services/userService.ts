@@ -1,5 +1,6 @@
-import { UserModel } from '../models';
+import { User } from '../models-pg';
+import { getManager } from 'typeorm';
 
-export async function getUserById(userId: string) {
-    return UserModel.findById(userId).exec();
+export async function getUserByGithubId(userId: string) {
+    return getManager().findOne(User, { where: { githubId: userId } });
 }

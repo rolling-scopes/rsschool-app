@@ -35,7 +35,7 @@ export interface ExternalAccount {
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn() id: number;
+    @PrimaryGeneratedColumn() id?: number;
 
     @Column({ name: 'githubId', unique: true })
     githubId: string;
@@ -47,38 +47,38 @@ export class User {
     lastName: string;
 
     @CreateDateColumn()
-    createdDate: number;
+    createdDate?: number;
 
     @UpdateDateColumn()
-    updatedDate: number;
+    updatedDate?: number;
 
     @Column({ nullable: true })
-    firstNameNative: string;
+    firstNameNative?: string;
 
     @Column({ nullable: true })
-    lastNameNative: string;
+    lastNameNative?: string;
 
     @Column({ nullable: true })
-    tshirtSize: TshirtSize;
+    tshirtSize?: TshirtSize;
 
     @Column({ nullable: true })
-    tshirtFashion: TshirtFashion;
+    tshirtFashion?: TshirtFashion;
 
     @Column({ nullable: true, type: 'date' })
-    dateOfBirth: string;
+    dateOfBirth?: string;
 
     @Column({ nullable: true })
-    locationName: string;
+    locationName?: string;
 
     @Column({ nullable: true })
-    locationId: string;
+    locationId?: string;
 
     @Column({
         type: 'enum',
         enum: ['a1', 'a1+', 'a2', 'a2+', 'b1', 'b1+', 'b2', 'b2+', 'c1', 'c1+', 'c2'],
         nullable: true,
     })
-    englishLevel: EnglishLevel;
+    englishLevel?: EnglishLevel;
 
     @Column({
         type: 'json',
@@ -93,13 +93,13 @@ export class User {
     employmentHistory: EmploymentRecord[] = [];
 
     @Column({ nullable: true })
-    contactsEpamEmail: string;
+    contactsEpamEmail?: string;
 
     @Column({ nullable: true })
-    contactsPhone: string;
+    contactsPhone?: string;
 
     @Column({ nullable: true })
-    contactsEmail: string;
+    contactsEmail?: string;
 
     @Column({
         type: 'json',
@@ -108,12 +108,12 @@ export class User {
     externalAccounts: ExternalAccount[] = [];
 
     @BeforeInsert()
-    beforeInsert() {
+    beforeInsert?() {
         this.githubId = this.githubId.toLowerCase();
     }
 
     @BeforeUpdate()
-    beforeUpdate() {
+    beforeUpdate?() {
         this.githubId = this.githubId.toLowerCase();
     }
 }

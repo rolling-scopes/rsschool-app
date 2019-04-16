@@ -1,4 +1,5 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, OneToMany, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Stage } from './stage';
 
 @Entity()
 export class Course {
@@ -21,4 +22,7 @@ export class Course {
 
     @Column()
     primarySkillName: string;
+
+    @OneToMany(_ => Stage, (stage: Stage) => stage.course)
+    stages: Stage[];
 }

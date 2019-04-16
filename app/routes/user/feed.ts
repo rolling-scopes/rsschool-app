@@ -15,7 +15,7 @@ async function getFeedRecords(userId: string) {
 export const getFeedRoute = async (ctx: Router.RouterContext) => {
     const userId = ctx.state.user!._id;
 
-    const user = await userService.getUserById(userId);
+    const user = await userService.getUserByGithubId(userId);
     if (user == null) {
         setResponse(ctx, NOT_FOUND);
         return;

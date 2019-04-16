@@ -1,6 +1,8 @@
 import { config } from '../config';
-import { IUser, IUserSession, saveUserSignupFeedAction, UserModel } from '../models';
+import { IUserSession } from '../models';
+import { User } from '../models-pg';
 import { userService } from '../services';
+import { getManager } from 'typeorm';
 
 const adminTeams: string[] = config.roles.adminTeams;
 const mentorTeams: string[] = config.roles.mentorTeams;
@@ -31,37 +33,28 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 
 export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
     const id = profile.username!;
-    const result = await userService.getUserById(id);
+    const result = await userService.getUserByGithubId(id);
 
     const role = getRole(teamsIds);
     const isAdmin = getAdminStatus(teamsIds);
-    if (result === null) {
-        const user: IUser = {
-            _id: id,
+    if (result == null) {
+        const email = getPrimaryEmail((profile.emails as any) || [])[0];
+
+        const user: User = {
+            githubId: id,
+            contactsEmail: email ? email.value : undefined,
+            firstName: profile.name ? profile.name.givenName : '',
+            lastName: profile.name ? profile.name.familyName : '',
+            educationHistory: [],
+            employmentHistory: [],
+            externalAccounts: [],
+        };
+        const createdUser = await getManager().save(User, user);
+        return {
+            id: createdUser.githubId,
             isAdmin,
-            participations: [],
-            profile: {
-                // We support only 1 email for now and let's select primary only
-                emails: getPrimaryEmail((profile.emails as any) || []),
-                firstName: profile.name ? profile.name.givenName : '',
-                githubId: id,
-                lastName: profile.name ? profile.name.familyName : '',
-            },
             role,
         };
-        const [createdUser] = await Promise.all([
-            UserModel.create(user),
-            saveUserSignupFeedAction(id, {
-                text: 'Signed Up',
-            }),
-        ]);
-        return {
-            _id: createdUser.id,
-            isAdmin,
-            role: createdUser.role,
-        };
     }
-    result.role = role;
-    const savedUser = await result.save();
-    return { _id: savedUser.id, role: savedUser.role, isAdmin };
+    return { role, id: result.githubId, isAdmin };
 }

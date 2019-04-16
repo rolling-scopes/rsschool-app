@@ -35,7 +35,7 @@ export function setupPassport(logger: ILogger) {
                     .getTeams({})
                     .then(teams =>
                         createUser(profile as any, getTeamIds(teams.data)).then(result => {
-                            logger.info({ userId: result._id }, 'Created user');
+                            logger.info({ userId: result.id }, 'Created user');
                             cb(null, result);
                         }),
                     )

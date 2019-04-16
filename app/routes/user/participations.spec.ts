@@ -7,7 +7,7 @@ describe('User Participations route', () => {
         mockingoose.resetAll();
     });
 
-    it('returns data', async () => {
+    xit('returns data', async () => {
         const ctx = createTestContext();
         mockingoose.User.toReturn(
             {

@@ -52,7 +52,7 @@ export const config: IConfig = {
         callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3001/auth/github/callback',
         github_client_id: process.env.RSSHCOOL_API_AUTH_CLIENT_ID || 'client-id',
         github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
-        successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3001',
+        successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3000/mentor-form',
     },
     admin: {
         username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',
@@ -86,7 +86,7 @@ export const config: IConfig = {
         reconnectDelayMs: 5000,
     },
     name: 'rsschool-api',
-    port: parseInt(process.env.NODE_PORT || '3000', 10),
+    port: parseInt(process.env.NODE_PORT || '3001', 10),
     rateLimit: {
         intervalMin: 5,
         max: 100,
