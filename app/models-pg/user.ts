@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 export interface EducationRecord {
     graduationYear: number;
@@ -14,6 +22,17 @@ export interface EmploymentRecord {
     toPresent: boolean;
 }
 
+type EnglishLevel = 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
+
+type TshirtSize = 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl';
+
+type TshirtFashion = 'male' | 'female' | 'unisex';
+
+export interface ExternalAccount {
+    service: 'htmlacademy' | 'codeacademy' | 'codewars';
+    username: string;
+}
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn() id: number;
@@ -21,32 +40,32 @@ export class User {
     @Column({ name: 'githubId', unique: true })
     githubId: string;
 
-    @Column()
+    @Column({ nullable: true })
     firstName: string;
 
-    @Column()
+    @Column({ nullable: true })
     lastName: string;
 
     @CreateDateColumn()
-    createdDate = Date.now();
+    createdDate: number;
 
-    @CreateDateColumn()
-    modifiedDate = Date.now();
+    @UpdateDateColumn()
+    updatedDate: number;
 
-    @Column()
+    @Column({ nullable: true })
     firstNameNative: string;
 
-    @Column()
+    @Column({ nullable: true })
     lastNameNative: string;
 
     @Column({ nullable: true })
-    tshirtSize: 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = 'm';
+    tshirtSize: TshirtSize;
 
     @Column({ nullable: true })
-    tshirtFashion: string;
+    tshirtFashion: TshirtFashion;
 
-    @CreateDateColumn({ nullable: true })
-    dateOfBirth: number;
+    @Column({ nullable: true, type: 'date' })
+    dateOfBirth: string;
 
     @Column({ nullable: true })
     locationName: string;
@@ -59,7 +78,7 @@ export class User {
         enum: ['a1', 'a1+', 'a2', 'a2+', 'b1', 'b1+', 'b2', 'b2+', 'c1', 'c1+', 'c2'],
         nullable: true,
     })
-    englishLevel: 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
+    englishLevel: EnglishLevel;
 
     @Column({
         type: 'json',
@@ -81,4 +100,20 @@ export class User {
 
     @Column({ nullable: true })
     contactsEmail: string;
+
+    @Column({
+        type: 'json',
+        default: [],
+    })
+    externalAccounts: ExternalAccount[] = [];
+
+    @BeforeInsert()
+    beforeInsert() {
+        this.githubId = this.githubId.toLowerCase();
+    }
+
+    @BeforeUpdate()
+    beforeUpdate() {
+        this.githubId = this.githubId.toLowerCase();
+    }
 }

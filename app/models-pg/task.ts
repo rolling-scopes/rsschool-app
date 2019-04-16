@@ -1,7 +1,7 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Course {
+export class Task {
     @PrimaryGeneratedColumn() id: number;
 
     @CreateDateColumn()
@@ -13,12 +13,12 @@ export class Course {
     @Column()
     name: string;
 
-    @Column()
-    year: number;
+    @Column({ nullable: true })
+    githubRepoUrl: string;
+
+    @Column({ nullable: true })
+    description: string;
 
     @Column()
-    primarySkillId: string;
-
-    @Column()
-    primarySkillName: string;
+    verification: 'auto' | 'manual';
 }

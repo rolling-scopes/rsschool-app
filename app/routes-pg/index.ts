@@ -20,12 +20,13 @@ export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.Ro
     ctx.logger = oldLogger;
 };
 
-export const pgRoutesMiddleware: RoutesMiddleware = () => {
+export const pgRoutesMiddleware: RoutesMiddleware = (logger: ILogger) => {
     const router = new Router();
 
     router.use(auth({ name: config.admin.username, pass: config.admin.password }));
-    applyRouter(router, userRouter());
-    applyRouter(router, feedbackRouter());
-    applyRouter(router, courseRouter());
+
+    applyRouter(router, userRouter(logger));
+    applyRouter(router, feedbackRouter(logger));
+    applyRouter(router, courseRouter(logger));
     return router;
 };

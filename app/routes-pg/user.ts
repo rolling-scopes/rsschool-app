@@ -1,35 +1,13 @@
-import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { setResponse } from '../routes/utils';
-import { getManager } from 'typeorm';
-import { User } from '../models-pg/user';
+import { User } from '../models-pg';
+import { ILogger } from '../logger';
+import { createGetRoute, createPostRoute } from './common';
 
-export function userRouter() {
+export function userRouter(logger: ILogger) {
     const router = new Router({ prefix: '/v2/user' });
 
-    router.get('/:id', getUserRoute);
-    router.post('/', postUserRoute);
+    router.get('/:id', createGetRoute(User, logger));
+    router.post('/', createPostRoute(User, logger));
 
     return router;
 }
-
-export const getUserRoute = async (ctx: Router.RouterContext) => {
-    const userId = ctx.params.id;
-    const user = await getManager().findOne(User, Number(userId));
-    if (user === undefined) {
-        setResponse(ctx, NOT_FOUND);
-        return;
-    }
-    setResponse(ctx, OK, user);
-};
-
-export const postUserRoute = async (ctx: Router.RouterContext) => {
-    const users = ctx.request.body as User[];
-    console.info(users);
-    try {
-        const result = await getManager().save(User, users);
-        setResponse(ctx, OK, result);
-    } catch (e) {
-        setResponse(ctx, BAD_REQUEST, { message: e.message });
-    }
-};

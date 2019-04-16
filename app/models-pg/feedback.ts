@@ -1,4 +1,12 @@
-import { Entity, JoinColumn, CreateDateColumn, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Entity,
+    JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    Column,
+    OneToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
 
@@ -21,6 +29,12 @@ export class Feedback {
     @Column({ type: 'text' })
     text: string;
 
-    @CreateDateColumn()
+    @Column({ type: 'timestamp' })
     timestamp: number;
+
+    @CreateDateColumn()
+    createdDate: number;
+
+    @UpdateDateColumn()
+    updatedDate: number;
 }
