@@ -14,7 +14,7 @@ export class Task {
     name: string;
 
     @Column({ nullable: true })
-    githubRepoUrl: string;
+    descriptionUrl: string;
 
     @Column({ nullable: true })
     description: string;
