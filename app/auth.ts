@@ -4,7 +4,6 @@ import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
 import { createUser } from './rules';
 import { ILogger } from './logger';
-import { connection, STATES } from 'mongoose';
 
 type Teams = { slug: string; organization: { login: string } }[];
 
@@ -22,10 +21,6 @@ export function setupPassport(logger: ILogger) {
                 scope: ['read:user', 'read:org', 'user:email'],
             },
             (accessToken: string, _, profile, cb) => {
-                if (connection.readyState !== STATES.connected) {
-                    cb({ message: 'MongoDB connection is not available' }, null);
-                    return;
-                }
                 const github = new octokit();
                 github.authenticate({
                     token: accessToken,

@@ -7,7 +7,8 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { StudentTask } from './studentTask';
+import { Student } from './student';
+import { CourseTask } from './courseTask';
 
 @Entity()
 export class TaskResult {
@@ -19,12 +20,19 @@ export class TaskResult {
     @UpdateDateColumn()
     updatedDate: number;
 
-    @OneToOne(_ => StudentTask)
-    @JoinColumn({ name: 'studentTaskId', referencedColumnName: 'id' })
-    studentTaskId: number;
+    @OneToOne(_ => Student)
+    @JoinColumn()
+    student: Student;
+
+    @OneToOne(_ => CourseTask)
+    @JoinColumn()
+    courseTask: CourseTask;
 
     @Column({ nullable: true })
     githubPrUrl: string;
+
+    @Column({ nullable: true })
+    githubRepoUrl: string;
 
     @Column()
     score: number;

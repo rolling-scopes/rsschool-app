@@ -30,7 +30,6 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
     const logger = externalLogger;
 
     const data: Partial<ILog> = {
-        data: ctx.request.body,
         host: ctx.headers.host,
         method: ctx.method,
         query: ctx.query,

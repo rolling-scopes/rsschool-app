@@ -24,12 +24,12 @@ export class Student {
     updatedDate: number;
 
     @OneToOne(_ => Course)
-    @JoinColumn({ name: 'courseId', referencedColumnName: 'id' })
-    courseId: number;
+    @JoinColumn()
+    course: Course;
 
     @OneToOne(_ => User)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-    userId: string;
+    @JoinColumn()
+    user: User;
 
     @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students)
     mentor: Mentor;
