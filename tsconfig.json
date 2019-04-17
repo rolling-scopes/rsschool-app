@@ -4,7 +4,8 @@
     "target": "es2017",
     "lib": [
       "es2017",
-      "dom"
+      "dom",
+      "esnext.asynciterable"
     ],
     "baseUrl": ".",
     "noImplicitAny": true,

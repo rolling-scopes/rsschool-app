@@ -10,4 +10,4 @@ import { Stage } from './stage';
 
 export const models = [Stage, Mentor, Student, User, Feedback, Course, Task, TaskResult, CourseTask];
 
-export { User, Feedback, Course, Task };
+export { User, Feedback, Course, Task, Student, Mentor };
