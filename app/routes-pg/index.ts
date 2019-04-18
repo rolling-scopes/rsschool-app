@@ -4,6 +4,7 @@ import { feedbackRouter } from './feedback';
 import { publicMeRouter } from './me';
 import { adminStudentRouter } from './student';
 import { adminStudentsRouter } from './students';
+import { adminMentorsRouter } from './mentors';
 import { publicCourseRouter, adminCourseRouter } from './course';
 
 import { ILogger } from '../logger';
@@ -32,6 +33,7 @@ export const pgRoutesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(adminRouter, adminCourseRouter(logger));
   applyRouter(adminRouter, adminStudentRouter(logger));
   applyRouter(adminRouter, adminStudentsRouter(logger));
+  applyRouter(adminRouter, adminMentorsRouter(logger));
 
   const publicRouter = new Router();
   applyRouter(publicRouter, publicCourseRouter(logger));

@@ -1,13 +1,4 @@
-import {
-  Entity,
-  OneToOne,
-  JoinColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
 import { Mentor } from './mentor';
@@ -26,15 +17,13 @@ export class Student {
   @ManyToOne(_ => Course, (course: Course) => course.students, { nullable: true })
   course: Course | number;
 
-  @OneToOne(_ => User)
-  @JoinColumn()
-  user: User;
+  @ManyToOne(_ => User)
+  user: User | number;
 
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
   mentor: Mentor;
 
-  @OneToOne(_ => Stage, { nullable: true })
-  @JoinColumn()
+  @ManyToOne(_ => Stage, (stage: Stage) => stage.students, { nullable: true })
   stage: Stage;
 
   @Column({ default: false })

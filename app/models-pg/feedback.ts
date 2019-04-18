@@ -1,40 +1,18 @@
-import {
-    Entity,
-    JoinColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
-    Column,
-    OneToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from './user';
-import { Course } from './course';
+import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Feedback {
-    @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn() id: number;
 
-    @OneToOne(_ => User)
-    @JoinColumn({ name: 'toGithubId', referencedColumnName: 'githubId' })
-    toGithubId: string;
+  @Column()
+  text: string;
 
-    @OneToOne(_ => User)
-    @JoinColumn({ name: 'fromGithubId', referencedColumnName: 'githubId' })
-    fromGithubId: string;
+  @Column({ type: 'timestamp' })
+  timestamp: number;
 
-    @OneToOne(_ => Course)
-    @JoinColumn({ name: 'courseId', referencedColumnName: 'id' })
-    courseId: number;
+  @CreateDateColumn()
+  createdDate: number;
 
-    @Column({ type: 'text' })
-    text: string;
-
-    @Column({ type: 'timestamp' })
-    timestamp: number;
-
-    @CreateDateColumn()
-    createdDate: number;
-
-    @UpdateDateColumn()
-    updatedDate: number;
+  @UpdateDateColumn()
+  updatedDate: number;
 }

@@ -1,7 +1,5 @@
 import {
   Entity,
-  OneToOne,
-  JoinColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -24,14 +22,13 @@ export class Mentor {
   updatedDate: number;
 
   @ManyToOne(_ => Course, (course: Course) => course.mentors, { nullable: true })
-  course: Course;
+  course: Course | number;
 
-  @OneToOne(_ => User)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  userId: string;
+  @ManyToOne(_ => User)
+  user: User | number;
 
-  @OneToMany(_ => Student, student => student.mentor)
-  students: Student[];
+  @OneToMany(_ => Student, student => student.mentor, { nullable: true })
+  students: Student[] | null;
 
   @Column({ nullable: true })
   maxStudentsLimit: number;
