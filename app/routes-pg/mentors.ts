@@ -9,7 +9,7 @@ import { createGetAllRoute } from './common';
 export function adminMentorsRouter(logger: ILogger) {
   const router = new Router({ prefix: '/v2/:courseId/mentors' });
 
-  router.get('/', createGetAllRoute(Mentor, { take: 20, skip: 0 }, logger, ['user']));
+  router.get('/', createGetAllRoute(Mentor, { take: 20, skip: 0 }, logger, ['user', 'students', 'students.user']));
 
   router.post('/', async (ctx: Router.RouterContext) => {
     const courseId = Number(ctx.params.courseId);
