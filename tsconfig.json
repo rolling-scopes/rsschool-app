@@ -16,7 +16,7 @@
     "noUnusedLocals": true,
     "typeRoots": [
       "./node_modules/@types",
-      "./app/typings/"
+      "src/typings"
     ],
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,

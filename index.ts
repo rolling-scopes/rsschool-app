@@ -1,5 +1,5 @@
 import 'reflect-metadata'; // for typeorm
-import { App } from './app';
+import { App } from './src';
 
 const app = new App();
 app.start();

@@ -1,40 +1,122 @@
-swagger: "2.0"
 info:
-  version: "1.0.0"
-  title: "RSSchool API"
-host: "localhost:3000"
-schemes:
-- "http"
+  title: rs.school API
+  version: 1.0.0
+  description: ''
+basePath: /
+swagger: '2.0'
 paths:
-  /health:
+  '/course/{courseId}/me':
     get:
-      description: "Returns service health status"
-      responses:
-        200: 
-          description: |-
-            200 response
-  /course/{id}:
-    get:
-      responses:
-        200: 
-          description: |-
-            200 response
+      description: Returns users profile
       parameters:
-        - name: id
+        - name: courseId
           in: path
           description: Course Id
           required: true
-          type: string
-  /user/profile:
-    get:
+          type: number
+      produces:
+        - application/json
       responses:
-        200: 
-          description: |-
-            200 response
-  /user/feed:
+        '200':
+          description: User object
+  '/course/{courseId}/students':
     get:
+      description: Save course students
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
       responses:
-        200: 
-          description: |-
-            200 response
-    
+        '200':
+          description: List of students
+  '/course/{courseId}/mentors':
+    post:
+      description: Saves course mentors
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of mentors
+    get:
+      description: Returns course mentors
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of mentors
+  '/course/{courseId}/tasks':
+    get:
+      description: Returns course tasks
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of tasks object
+  '/course/{courseId}/score':
+    post:
+      description: Save course task score
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+  '/course/{courseId}':
+    get:
+      description: Return info about course
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+  /course:
+    post:
+      description: Create course
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+definitions: {}
+responses: {}
+parameters: {}
+securityDefinitions: {}
+tags: []
