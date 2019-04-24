@@ -97,7 +97,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of mentors
    */
-  router.get('/:courseId/mentors', adminGuard, postMentors(logger));
+  router.get('/:courseId/mentors', adminGuard, getMentors(logger));
 
   /**
    * @swagger
@@ -119,7 +119,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of mentors
    */
-  router.post('/:courseId/mentors', adminGuard, getMentors(logger));
+  router.post('/:courseId/mentors', adminGuard, postMentors(logger));
 
   /**
    * @swagger
