@@ -146,6 +146,16 @@ paths:
       responses:
         '200':
           description: ''
+  /tasks:
+    post:
+      description: Add/Update tasks
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
   /v2/me:
     get:
       description: Returns users profile

@@ -13,7 +13,7 @@ import { ILogger, loggerMiddleware } from './logger';
 
 import { createConnection } from 'typeorm';
 import { models } from './models';
-import { pgRoutesMiddleware, routeLoggerMiddleware } from './routes';
+import { routesMiddleware, routeLoggerMiddleware } from './routes';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -54,7 +54,7 @@ export class App {
     this.koa.use(passport.initialize());
     this.koa.use(passport.session());
 
-    const pgRoutters = pgRoutesMiddleware(this.appLogger);
+    const pgRoutters = routesMiddleware(this.appLogger);
 
     this.koa.use(pgRoutters.publicRouter.routes());
     this.koa.use(pgRoutters.publicRouter.allowedMethods());

@@ -41,4 +41,7 @@ export class CourseTask {
 
   @Column({ type: 'timestamp', nullable: true })
   mentorEndDate: number;
+
+  @Column({ nullable: true })
+  maxScore: number;
 }
