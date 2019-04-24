@@ -57,7 +57,7 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
       continue;
     }
 
-    const exists = (await mentorRepository.count({ where: { user } })) > 0;
+    const exists = (await mentorRepository.count({ where: { user, courseId } })) > 0;
     if (exists) {
       continue;
     }

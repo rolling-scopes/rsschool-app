@@ -33,11 +33,17 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
     try {
       const mentor = await mentorRepository
         .createQueryBuilder('mentor')
-        .innerJoinAndSelect('mentor.user', 'user', 'user.githubId = :id', {
+        .innerJoinAndSelect('mentor.user', 'user')
+        .where('"user"."githubId" = :id AND "mentor"."courseId" = :courseId', {
           id: item.mentorGithubId,
+          courseId,
         })
         .getOne();
 
+      // if (mentor) {
+      //   result.push(mentor);
+      //   continue;
+      // }
       if (mentor == null) {
         result.push(`Cannot find mentor: ${item.mentorGithubId}`);
         continue;
@@ -45,8 +51,10 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
       const student = await studentRepository
         .createQueryBuilder('student')
-        .innerJoinAndSelect('student.user', 'user', 'user.githubId = :id', {
+        .innerJoinAndSelect('student.user', 'user')
+        .where('"user"."githubId" = :id AND "student"."courseId" = :courseId', {
           id: item.studentGithubId,
+          courseId,
         })
         .getOne();
 

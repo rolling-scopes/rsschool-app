@@ -60,7 +60,7 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
       continue;
     }
 
-    const exists = (await studentRepository.count({ where: { user } })) > 0;
+    const exists = (await studentRepository.count({ where: { user, courseId } })) > 0;
     if (exists) {
       continue;
     }
