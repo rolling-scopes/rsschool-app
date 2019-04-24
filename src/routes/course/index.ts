@@ -58,8 +58,8 @@ export function courseRoute(logger: ILogger) {
    * @swagger
    *
    * /course/{courseId}/students:
-   *   get:
-   *      description: Save course students
+   *   post:
+   *      description: Add/Update course students
    *      security:
    *        - cookieAuth: []
    *      parameters:

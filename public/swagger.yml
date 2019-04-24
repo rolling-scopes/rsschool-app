@@ -21,7 +21,22 @@ paths:
           description: User object
   '/course/{courseId}/students':
     get:
-      description: Save course students
+      description: Returns course students
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of students
+    post:
+      description: Add/Update course students
       security:
         - cookieAuth: []
       parameters:
