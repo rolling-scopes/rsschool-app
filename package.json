@@ -13,7 +13,7 @@
     "test:update": "jest --updateSnapshot",
     "lint-staged": "lint-staged",
     "precommit-disabled": "npm-run-all lint-staged lint test",
-    "gen:swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts"
+    "gen:swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts ./src/routes/**.ts"
   },
   "lint-staged": {
     "*.ts": [

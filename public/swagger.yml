@@ -146,6 +146,24 @@ paths:
       responses:
         '200':
           description: ''
+  /v2/me:
+    get:
+      description: Returns users profile
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User object
+  /users:
+    post:
+      description: Add/Update users
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
 definitions: {}
 responses: {}
 parameters: {}
