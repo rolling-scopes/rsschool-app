@@ -1,6 +1,6 @@
 export interface IUserSession {
   id: number;
-  role: 'mentor' | 'student';
   isAdmin: boolean;
   githubId: string;
+  roles: { [key: number]: 'student' | 'mentor' };
 }

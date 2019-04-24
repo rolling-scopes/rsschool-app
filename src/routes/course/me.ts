@@ -1,16 +1,10 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Mentor, User } from '../../models';
-import { getRepository, FindOneOptions } from 'typeorm';
+import { Mentor } from '../../models';
 import { setResponse } from '../utils';
-
-type StudentDTO = {
-  firstName: string;
-  lastName: string;
-  githubId: string;
-  studentId: number;
-};
+import { studentsService } from '../../services';
 
 export const getMe = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const id = ctx.state!.user.id;
@@ -18,7 +12,7 @@ export const getMe = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
-    .where('mentor."courseId" = :courseId', { courseId })
+    .where('"mentor"."courseId" = :courseId', { courseId })
     .innerJoinAndSelect('mentor.user', 'user')
     .where('mentor.user.id = :id', { id })
     .getOne();
@@ -27,24 +21,9 @@ export const getMe = (_: ILogger) => async (ctx: Router.RouterContext) => {
     setResponse(ctx, NOT_FOUND);
     return;
   }
-  const mentorId = mentor.id as number | undefined;
-  const mentorEntity = await getRepository(Mentor).findOne(mentorId, {
-    relations: ['students', 'students.user'],
-  } as FindOneOptions);
 
-  if (mentorEntity == null || mentorEntity.students == null) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const mentorResponse = {
-    students: mentorEntity.students.map<StudentDTO>(student => ({
-      studentId: student.id,
-      firstName: (student.user as User).firstName,
-      lastName: (student.user as User).lastName,
-      githubId: (student.user as User).githubId,
-    })),
-  };
+  const students = await studentsService.getMentorStudents(mentor.id);
+  const mentorResponse = { students };
 
   setResponse(ctx, OK, mentorResponse);
 };

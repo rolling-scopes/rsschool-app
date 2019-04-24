@@ -1,38 +1,15 @@
 import * as Router from 'koa-router';
 import { OK, BAD_REQUEST, NOT_FOUND } from 'http-status-codes';
 import { ILogger } from '../../logger';
-import { User, Student } from '../../models';
+import { Student } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { OperationResult, userService } from '../../services';
-
-type StudentDTO = {
-  firstName: string;
-  lastName: string;
-  githubId: string;
-  studentId: number;
-};
+import { OperationResult, userService, studentsService } from '../../services';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
-
-  const students = await getRepository(Student)
-    .createQueryBuilder('student')
-    .innerJoinAndSelect('student.user', 'user')
-    .innerJoinAndSelect('student.course', 'course')
-    .where('course.id = :courseId', {
-      courseId,
-    })
-    .getMany();
-
-  const response = students.map<StudentDTO>(student => ({
-    studentId: student.id,
-    firstName: (student.user as User).firstName,
-    lastName: (student.user as User).lastName,
-    githubId: (student.user as User).githubId,
-  }));
-
-  setResponse(ctx, OK, response);
+  const students = await studentsService.getCourseStudents(courseId);
+  setResponse(ctx, OK, students);
 };
 
 type StudentInput = {
@@ -64,7 +41,7 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
     console.time(item.githubId);
 
     const user = await userService.getUserByGithubId(item.githubId);
-    if (user == null) {
+    if (user == null || user.id == null) {
       result.push({
         status: 'skipped',
         value: item.githubId,
@@ -72,18 +49,8 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
       continue;
     }
 
-    const exists =
-      (await studentRepository
-        .createQueryBuilder('student')
-        .innerJoinAndSelect('student.user', 'user')
-        .innerJoinAndSelect('student.course', 'course')
-        .where('user.id = :userId AND course.id = :courseId', {
-          userId: user.id,
-          courseId,
-        })
-        .getCount()) > 0;
-
-    if (exists) {
+    const existingStudent = await studentsService.getCourseStudent(courseId, user.id);
+    if (existingStudent) {
       result.push({
         status: 'skipped',
         value: item.githubId,

@@ -88,6 +88,7 @@ export class App {
       entities: models,
       synchronize: true,
     });
+    this.appLogger.info('Connected to Postgres');
 
     return true;
   }

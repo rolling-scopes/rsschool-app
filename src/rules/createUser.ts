@@ -1,11 +1,11 @@
 import { config } from '../config';
-import { IUserSession } from '../models';
+import { IUserSession, Course } from '../models';
 import { User } from '../models';
 import { userService } from '../services';
 import { getManager } from 'typeorm';
 
 const adminTeams: string[] = config.roles.adminTeams;
-const mentorTeams: string[] = config.roles.mentorTeams;
+// const mentorTeams: string[] = config.roles.mentorTeams;
 
 type Profile = {
   username?: string;
@@ -16,12 +16,12 @@ type Profile = {
   emails?: { value: string; primary: boolean }[];
 };
 
-function getRole(teamIds: string[]) {
-  if (mentorTeams.some(team => teamIds.includes(team))) {
-    return 'mentor';
-  }
-  return 'student';
-}
+// function getRole(teamIds: string[]) {
+//   if (mentorTeams.some(team => teamIds.includes(team))) {
+//     return 'mentor';
+//   }
+//   return 'student';
+// }
 
 function getAdminStatus(teamIds: string[]): boolean {
   return adminTeams.some(team => teamIds.includes(team));
@@ -33,9 +33,9 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 
 export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
   const id = profile.username!;
-  const result = await userService.getUserByGithubId(id);
+  const result = await userService.getFullUserByGithubId(id);
 
-  const role = getRole(teamsIds);
+  // const role = getRole(teamsIds);
   const isAdmin = getAdminStatus(teamsIds);
 
   if (result == null) {
@@ -49,6 +49,8 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       educationHistory: [],
       employmentHistory: [],
       externalAccounts: [],
+      mentors: [],
+      students: [],
     };
     const createdUser = await getManager().save(User, user);
     const userId = createdUser.id!;
@@ -56,8 +58,15 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       id: userId,
       githubId: createdUser.githubId,
       isAdmin,
-      role,
+      roles: {},
     };
   }
-  return { role, id: result.id!, githubId: result.githubId, isAdmin };
+  const roles: { [key: number]: 'student' | 'mentor' } = {};
+  result.students!.forEach(student => {
+    roles[(student.course as Course).id] = 'student';
+  });
+  result.mentors!.forEach(mentor => {
+    roles[(mentor.course as Course).id] = 'mentor';
+  });
+  return { roles, id: result.id!, githubId: result.githubId, isAdmin };
 }

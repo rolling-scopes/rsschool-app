@@ -6,7 +6,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Student } from './student';
+import { Mentor } from './mentor';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -106,6 +109,12 @@ export class User {
     default: [],
   })
   externalAccounts: ExternalAccount[] = [];
+
+  @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.user, { nullable: true })
+  mentors: Mentor[] | null;
+
+  @OneToMany(_ => Student, (student: Student) => student.user, { nullable: true })
+  students: Student[] | null;
 
   @BeforeInsert()
   beforeInsert?() {

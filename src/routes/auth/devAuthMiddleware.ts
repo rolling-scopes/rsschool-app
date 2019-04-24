@@ -13,7 +13,6 @@ export const devAuthMiddleware = async (ctx: Router.RouterContext) => {
       },
       config.roles.adminTeams,
     );
-
     // inject dev user into passport's session
     const key = (passport as any)._key;
     ctx.session![key] = {

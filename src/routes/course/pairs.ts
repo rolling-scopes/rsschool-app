@@ -20,8 +20,6 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
   }
 
   const data: PairInput[] = ctx.request.body;
-  const mentorRepository = getRepository(Mentor);
-  const studentRepository = getRepository(Student);
 
   if (data === undefined) {
     setResponse(ctx, NOT_FOUND);
@@ -32,7 +30,7 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   for await (const item of data) {
     try {
-      const mentor = await mentorRepository
+      const mentor = await getRepository(Mentor)
         .createQueryBuilder('mentor')
         .innerJoinAndSelect('mentor.user', 'user')
         .where('"user"."githubId" = :id AND "mentor"."courseId" = :courseId', {
@@ -49,6 +47,7 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         continue;
       }
 
+      const studentRepository = getRepository(Student);
       const student = await studentRepository
         .createQueryBuilder('student')
         .innerJoinAndSelect('student.user', 'user')
