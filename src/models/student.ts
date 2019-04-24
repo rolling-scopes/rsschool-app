@@ -1,8 +1,17 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  OneToMany,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+} from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
 import { Mentor } from './mentor';
 import { Stage } from './stage';
+import { TaskResult } from './taskResult';
 
 @Entity()
 export class Student {
@@ -25,6 +34,9 @@ export class Student {
 
   @ManyToOne(_ => Stage, (stage: Stage) => stage.students, { nullable: true })
   stage: Stage;
+
+  @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.student, { nullable: true })
+  taskResults: TaskResult[] | null;
 
   @Column({ default: false })
   isExpelled: boolean;

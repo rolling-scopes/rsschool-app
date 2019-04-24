@@ -40,10 +40,9 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const id = ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
-    .where('mentor."courseId" = :id', { id: courseId })
-    .innerJoinAndSelect('mentor.user', 'user', 'user.id = :id', {
-      id,
-    })
+    .where('mentor."courseId" = :courseId', { courseId })
+    .innerJoinAndSelect('mentor.user', 'user')
+    .where('mentor.user.id = :id', { id })
     .getOne();
 
   if (mentor == null) {
@@ -62,14 +61,28 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const taskResult = {
-    courseTask: data.courseTaskId,
-    student: data.studentId,
-    score: data.score,
-    githubPrUrl: data.githubPrUrl,
-  } as TaskResult;
+  const existingResult = await getRepository(TaskResult).findOne({
+    where: { studentId: data.studentId, courseTaskId: data.courseTaskId },
+  });
 
-  const result = await getRepository(TaskResult).save(taskResult);
+  if (existingResult == null) {
+    const taskResult = {
+      comment: data.comment,
+      courseTask: data.courseTaskId,
+      student: data.studentId,
+      score: data.score,
+      githubPrUrl: data.githubPrUrl,
+    } as TaskResult;
 
-  setResponse(ctx, OK, result);
+    const addResult = await getRepository(TaskResult).save(taskResult);
+    setResponse(ctx, OK, addResult);
+    return;
+  }
+
+  existingResult.score = data.score;
+  existingResult.githubPrUrl = data.githubPrUrl;
+  existingResult.comment = data.comment;
+  const updateResult = await getRepository(TaskResult).save(existingResult);
+  setResponse(ctx, OK, updateResult);
+  return;
 };

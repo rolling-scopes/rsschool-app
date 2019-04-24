@@ -1,12 +1,4 @@
-import {
-  Entity,
-  JoinColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
@@ -20,12 +12,10 @@ export class TaskResult {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @OneToOne(_ => Student)
-  @JoinColumn()
+  @ManyToOne(_ => Student)
   student: Student | number;
 
-  @OneToOne(_ => CourseTask)
-  @JoinColumn()
+  @ManyToOne(_ => CourseTask)
   courseTask: CourseTask | number;
 
   @Column({ nullable: true })
