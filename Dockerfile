@@ -8,8 +8,8 @@ ENV NODE_PORT 8080
 WORKDIR /server
 
 COPY package.json /server
-COPY dist /server
 COPY public /server/public
+COPY dist /server
 
 RUN npm install --no-optional
 
