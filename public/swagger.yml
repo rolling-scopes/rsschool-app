@@ -2,7 +2,7 @@ info:
   title: rs.school API
   version: 1.0.0
   description: ''
-basePath: /
+basePath: /api
 swagger: '2.0'
 paths:
   '/course/{courseId}/me':
