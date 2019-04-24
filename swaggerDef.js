@@ -5,5 +5,5 @@ module.exports = {
     version: '1.0.0', // Version (required)
     description: '', // Description (optional)
   },
-  basePath: '/', // Base path (optional)
+  basePath: '/api', // Base path (optional)
 };
