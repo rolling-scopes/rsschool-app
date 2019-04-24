@@ -44,6 +44,7 @@ steps:
         - "docker-compose stop api"
         - "docker-compose rm -f api"
         - "docker-compose up -d api"
+        - "docker system prune -f"
     when: 
       branch: 
         - pg
