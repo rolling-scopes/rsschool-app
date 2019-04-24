@@ -1,4 +1,4 @@
 export interface OperationResult {
-  status: 'created' | 'updated' | 'deleted' | 'skipped';
+  status: 'created' | 'updated' | 'deleted' | 'skipped' | 'failed';
   value: any;
 }

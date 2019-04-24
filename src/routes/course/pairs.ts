@@ -4,6 +4,7 @@ import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Mentor, Student } from '../../models';
 import { ILogger } from '../../logger';
+import { OperationResult } from '../../services';
 
 type PairInput = {
   studentGithubId: string;
@@ -27,7 +28,7 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const result: string[] = [];
+  const result: OperationResult[] = [];
 
   for await (const item of data) {
     try {
@@ -40,12 +41,11 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         })
         .getOne();
 
-      // if (mentor) {
-      //   result.push(mentor);
-      //   continue;
-      // }
       if (mentor == null) {
-        result.push(`Cannot find mentor: ${item.mentorGithubId}`);
+        result.push({
+          status: 'skipped',
+          value: `Cannot find mentor: ${item.mentorGithubId}`,
+        });
         continue;
       }
 
@@ -59,16 +59,26 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         .getOne();
 
       if (student == null) {
-        result.push(`Cannot find student: ${item.studentGithubId}`);
+        result.push({
+          status: 'skipped',
+          value: `Cannot find student: ${item.studentGithubId}`,
+        });
         continue;
       }
 
       student.mentor = mentor;
-      studentRepository.save(student);
-      result.push('ok');
+      const savedStudent = await studentRepository.save(student);
+      result.push({
+        status: 'updated',
+        value: savedStudent.id,
+      });
     } catch (e) {
       logger.error(e);
-      result.push(e.message);
+
+      result.push({
+        status: 'failed',
+        value: e.message,
+      });
     }
   }
 
