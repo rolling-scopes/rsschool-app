@@ -13,7 +13,7 @@ type ScoreInput = {
   githubPrUrl: string;
 };
 
-export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
 
   if (isNaN(courseId)) {
@@ -21,7 +21,7 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  console.log(ctx.request.body);
+  logger.info(ctx.request.body);
 
   const data: ScoreInput = ctx.request.body;
 
