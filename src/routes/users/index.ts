@@ -1,12 +1,12 @@
 import * as Router from 'koa-router';
 import { OK } from 'http-status-codes';
-import { ILogger } from '../logger';
-import { User } from '../models';
+import { ILogger } from '../../logger';
+import { User } from '../../models';
 import { getRepository } from 'typeorm';
-import { setResponse } from './utils';
-import { adminGuard } from './guards';
+import { setResponse } from '../utils';
+import { adminGuard } from '../guards';
 
-export const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
+const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body;
 
   const response = [];
