@@ -56,14 +56,22 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     setResponse(ctx, BAD_REQUEST, { message: 'no student' });
     return;
   }
+
   if (student.mentor.id !== mentor.id) {
     setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
     return;
   }
 
-  const existingResult = await getRepository(TaskResult).findOne({
-    where: { studentId: data.studentId, courseTaskId: data.courseTaskId },
-  });
+  const { courseTaskId, studentId } = data;
+  const existingResult = await getRepository(TaskResult)
+    .createQueryBuilder('taskResult')
+    .innerJoinAndSelect('taskResult.student', 'student')
+    .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
+    .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
+      studentId: Number(studentId),
+      courseTaskId: Number(courseTaskId),
+    })
+    .getOne();
 
   if (existingResult == null) {
     const taskResult = {
