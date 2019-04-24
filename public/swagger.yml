@@ -81,6 +81,22 @@ paths:
       responses:
         '200':
           description: List of mentors
+  '/course/{courseId}/pairs':
+    post:
+      description: Assign student to mentor
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of pairs
   '/course/{courseId}/tasks':
     get:
       description: Returns course tasks

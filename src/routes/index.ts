@@ -17,23 +17,14 @@ function applyRouter(topRouter: Router, router: Router) {
 
 export const pgRouteLoggerMiddleware: Router.IMiddleware = async (ctx: Router.RouterContext, next: any) => {
   const oldLogger = ctx.logger;
-  ctx.logger = ctx.logger.child({ module: 'route-pg' });
+  ctx.logger = ctx.logger.child({ module: 'route' });
   await next();
   ctx.logger = oldLogger;
 };
 
 export const pgRoutesMiddleware: RoutesMiddleware = (logger: ILogger) => {
-  // const adminRouter = new Router();
-  // adminRouter.use(auth({ name: config.admin.username, pass: config.admin.password }));
-  // applyRouter(adminRouter, adminUserRouter(logger));
-  // applyRouter(adminRouter, feedbackRouter(logger));
-  // // applyRouter(adminRouter, adminCourseRouter(logger));
-  // applyRouter(adminRouter, adminStudentRouter(logger));
-  // applyRouter(adminRouter, adminStudentsRouter(logger));
-  // applyRouter(adminRouter, adminMentorsRouter(logger));
-  // applyRouter(adminRouter, adminPairsRouter(logger));
-
   const publicRouter = new Router();
+
   applyRouter(publicRouter, authRoute());
   applyRouter(publicRouter, publicMeRouter(logger));
   applyRouter(publicRouter, publicProfileMentorRouter(logger));

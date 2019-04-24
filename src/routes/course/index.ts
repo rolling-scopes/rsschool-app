@@ -4,6 +4,7 @@ import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getTasks } from './tasks';
 import { postScore } from './score';
+import { postPairs } from './pairs';
 import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
 import { Course } from '../../models';
@@ -119,6 +120,28 @@ export function courseRoute(logger: ILogger) {
    *          description: List of mentors
    */
   router.post('/:courseId/mentors', adminGuard, getMentors(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/pairs:
+   *   post:
+   *      description: Assign student to mentor
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          description: Course Id
+   *          required: true
+   *          type: number
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: List of pairs
+   */
+  router.post('/:courseId/pairs', adminGuard, postPairs(logger));
 
   /**
    * @swagger
