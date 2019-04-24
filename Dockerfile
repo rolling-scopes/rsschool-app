@@ -9,6 +9,7 @@ WORKDIR /server
 
 COPY package.json /server
 COPY dist /server
+COPY public /server/public
 
 RUN npm install --no-optional
 
