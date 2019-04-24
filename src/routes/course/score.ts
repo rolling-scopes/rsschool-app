@@ -37,7 +37,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     }
   }
 
-  const id = ctx.state!.user.id;
+  const id = 2572; // ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .where('mentor."courseId" = :courseId', { courseId })
@@ -50,7 +50,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor'] });
+  const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
 
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'no student' });
@@ -76,8 +76,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   if (existingResult == null) {
     const taskResult = {
       comment: data.comment,
-      courseTask: data.courseTaskId,
-      student: data.studentId,
+      courseTask: Number(data.courseTaskId),
+      student: Number(data.studentId),
       score: data.score,
       githubPrUrl: data.githubPrUrl,
     } as TaskResult;
