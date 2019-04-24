@@ -5,6 +5,7 @@ import { publicMeRouter } from './me';
 import { publicProfileMentorRouter } from './profile-mentor';
 import { courseRoute } from './course';
 import { authRoute } from './auth';
+import { usersRoute } from './users';
 
 import { ILogger } from '../logger';
 
@@ -29,6 +30,7 @@ export const pgRoutesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, publicMeRouter(logger));
   applyRouter(publicRouter, publicProfileMentorRouter(logger));
   applyRouter(publicRouter, courseRoute(logger));
+  applyRouter(publicRouter, usersRoute(logger));
 
   return { publicRouter };
 };
