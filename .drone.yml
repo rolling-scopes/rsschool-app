@@ -49,7 +49,7 @@ steps:
         - pg
       event: 
         - push
-
 volumes:
 - name: cache
-  temp: {}
+  host:
+    path: /temp/cache
