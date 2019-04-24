@@ -6,6 +6,7 @@ import { courseRoute } from './course';
 import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { tasksRoute } from './tasks';
+import { sessionRoute } from './session';
 
 import { ILogger } from '../logger';
 
@@ -20,6 +21,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   const publicRouter = new Router();
 
   applyRouter(publicRouter, authRoute());
+  applyRouter(publicRouter, sessionRoute(logger));
   applyRouter(publicRouter, publicMeRouter(logger));
   applyRouter(publicRouter, courseRoute(logger));
   applyRouter(publicRouter, usersRoute(logger));

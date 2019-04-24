@@ -146,6 +146,14 @@ paths:
       responses:
         '200':
           description: ''
+  /session:
+    get:
+      description: Gets current user session
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
   /tasks:
     post:
       description: Add/Update tasks

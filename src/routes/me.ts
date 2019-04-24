@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import { User } from '../models';
 import { ILogger } from '../logger';
-import { getRepository } from 'typeorm';
 import { setResponse } from './utils';
 
 export function publicMeRouter(_: ILogger) {
