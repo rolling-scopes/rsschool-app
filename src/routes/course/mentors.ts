@@ -4,6 +4,7 @@ import { ILogger } from '../../logger';
 import { Mentor, User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
+import { OperationResult, userService } from '../../services';
 
 type MentorDTO = {
   firstName: string;
@@ -41,7 +42,6 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
 
   const data: { githubId: string; maxStudentsLimit: number }[] = ctx.request.body;
 
-  const userRepository = getRepository(User);
   const mentorRepository = getRepository(Mentor);
 
   if (data === undefined) {
@@ -49,28 +49,51 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
     return;
   }
 
+  const result: OperationResult[] = [];
   for await (const item of data) {
-    console.time(item.githubId);
+    const { githubId, maxStudentsLimit } = item;
 
-    const user = await userRepository.findOne({ where: { githubId: item.githubId } });
+    console.time(githubId);
+
+    const user = await userService.getUserByGithubId(item.githubId);
+
     if (user == null) {
+      result.push({
+        status: 'skipped',
+        value: githubId,
+      });
       continue;
     }
 
-    const exists = (await mentorRepository.count({ where: { user, courseId } })) > 0;
+    const exists =
+      (await getRepository(Mentor)
+        .createQueryBuilder('mentor')
+        .innerJoinAndSelect('mentor.user', 'user')
+        .innerJoinAndSelect('mentor.course', 'course')
+        .where('user.id = :userId AND course.id = :courseId', {
+          userId: user.id,
+          courseId,
+        })
+        .getCount()) > 0;
+
     if (exists) {
+      result.push({
+        status: 'skipped',
+        value: item.githubId,
+      });
       continue;
     }
 
-    const mentor = {
-      user,
-      course: courseId,
-      maxStudentsLimit: item.maxStudentsLimit,
-    };
-    await mentorRepository.save(mentor);
+    const mentor: Partial<Mentor> = { user, maxStudentsLimit, course: courseId };
+    const savedMentor = await mentorRepository.save(mentor);
+
+    result.push({
+      status: 'created',
+      value: savedMentor.id,
+    });
 
     console.timeEnd(item.githubId);
   }
 
-  setResponse(ctx, OK, data);
+  setResponse(ctx, OK, result);
 };

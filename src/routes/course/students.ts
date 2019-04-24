@@ -4,6 +4,7 @@ import { ILogger } from '../../logger';
 import { User, Student } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
+import { OperationResult, userService } from '../../services';
 
 type StudentDTO = {
   firstName: string;
@@ -15,7 +16,14 @@ type StudentDTO = {
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
 
-  const students = await getRepository(Student).find({ where: { courseId }, relations: ['user'] });
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('student.user', 'user')
+    .innerJoinAndSelect('student.course', 'course')
+    .where('course.id = :courseId', {
+      courseId,
+    })
+    .getMany();
 
   const response = students.map<StudentDTO>(student => ({
     studentId: student.id,
@@ -44,7 +52,6 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const data: StudentInput[] = ctx.request.body;
 
-  const userRepository = getRepository(User);
   const studentRepository = getRepository(Student);
 
   if (data === undefined) {
@@ -52,25 +59,47 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
     return;
   }
 
+  const result: OperationResult[] = [];
   for await (const item of data) {
     console.time(item.githubId);
 
-    const user = await userRepository.findOne({ where: { githubId: item.githubId } });
+    const user = await userService.getUserByGithubId(item.githubId);
     if (user == null) {
+      result.push({
+        status: 'skipped',
+        value: item.githubId,
+      });
       continue;
     }
 
-    const exists = (await studentRepository.count({ where: { user, courseId } })) > 0;
+    const exists =
+      (await studentRepository
+        .createQueryBuilder('student')
+        .innerJoinAndSelect('student.user', 'user')
+        .innerJoinAndSelect('student.course', 'course')
+        .where('user.id = :userId AND course.id = :courseId', {
+          userId: user.id,
+          courseId,
+        })
+        .getCount()) > 0;
+
     if (exists) {
+      result.push({
+        status: 'skipped',
+        value: item.githubId,
+      });
       continue;
     }
 
     const { githubId, ...restData } = item;
-    const student = { ...restData, user, course: courseId };
-    await studentRepository.save(student);
-
+    const student: Partial<Student> = { ...restData, user, course: courseId };
+    const savedStudent = await studentRepository.save(student);
+    result.push({
+      status: 'created',
+      value: savedStudent.id,
+    });
     console.timeEnd(item.githubId);
   }
 
-  setResponse(ctx, OK, data);
+  setResponse(ctx, OK, result);
 };
