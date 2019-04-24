@@ -40,7 +40,7 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const id = ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
-    .where('mentor."courseId" = :courseId', { courseId })
+    .where('mentor."courseId" = :id', { id: courseId })
     .innerJoinAndSelect('mentor.user', 'user', 'user.id = :id', {
       id,
     })
