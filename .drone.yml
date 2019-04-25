@@ -21,10 +21,10 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      tags: pg
+      tags: latest
     when: 
       branch:
-        - pg
+        - master
       event: 
         - push
   - 
@@ -40,14 +40,14 @@ steps:
       port: 22
       script: 
         - "sleep 10"
-        - "docker pull rsschool/api:pg"
+        - "docker pull rsschool/api:latest"
         - "docker-compose stop api"
         - "docker-compose rm -f api"
         - "docker-compose up -d api"
         - "docker system prune -f"
     when: 
       branch: 
-        - pg
+        - master
       event: 
         - push
 volumes:
