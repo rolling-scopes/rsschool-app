@@ -45,10 +45,10 @@ export class App {
     this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());
 
-    // this.koa.use(dbConnectionMiddleware);
-
     this.koa.keys = [config.sessionKey];
-    this.koa.use(session({}, this.koa));
+
+    const maxAge = 1000 * 60 * 60 * 24 * 5; // 5 days
+    this.koa.use(session({ maxAge }, this.koa));
 
     const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
     this.koa.use(passport.initialize());
