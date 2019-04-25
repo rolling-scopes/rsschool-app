@@ -2,6 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom",
+      "esnext.asynciterable"
+    ],
     "baseUrl": ".",
     "noImplicitAny": true,
     "outDir": "./dist",
@@ -9,7 +14,13 @@
     "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "typeRoots": [ "./node_modules/@types", "./app/typings/"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "src/typings"
+    ],
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "./**/*.ts",

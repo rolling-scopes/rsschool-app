@@ -1,40 +1,189 @@
-swagger: "2.0"
 info:
-  version: "1.0.0"
-  title: "RSSchool API"
-host: "localhost:3000"
-schemes:
-- "http"
+  title: rs.school API
+  version: 1.0.0
+  description: ''
+basePath: /api
+swagger: '2.0'
 paths:
-  /health:
+  '/course/{courseId}/me':
     get:
-      description: "Returns service health status"
-      responses:
-        200: 
-          description: |-
-            200 response
-  /course/{id}:
-    get:
-      responses:
-        200: 
-          description: |-
-            200 response
+      description: Returns users profile
       parameters:
-        - name: id
+        - name: courseId
           in: path
           description: Course Id
           required: true
-          type: string
-  /user/profile:
-    get:
+          type: number
+      produces:
+        - application/json
       responses:
-        200: 
-          description: |-
-            200 response
-  /user/feed:
+        '200':
+          description: User object
+  '/course/{courseId}/students':
     get:
+      description: Returns course students
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
       responses:
-        200: 
-          description: |-
-            200 response
-    
+        '200':
+          description: List of students
+    post:
+      description: Add/Update course students
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of students
+  '/course/{courseId}/mentors':
+    post:
+      description: Saves course mentors
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of mentors
+    get:
+      description: Returns course mentors
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of mentors
+  '/course/{courseId}/pairs':
+    post:
+      description: Assign student to mentor
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of pairs
+  '/course/{courseId}/tasks':
+    get:
+      description: Returns course tasks
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of tasks object
+  '/course/{courseId}/score':
+    post:
+      description: Save course task score
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+  '/course/{courseId}':
+    get:
+      description: Return info about course
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+  /course:
+    post:
+      description: Create course
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+  /session:
+    get:
+      description: Gets current user session
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
+  /tasks:
+    post:
+      description: Add/Update tasks
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
+  /users:
+    post:
+      description: Add/Update users
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
+  /v2/me:
+    get:
+      description: Returns users profile
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User object
+definitions: {}
+responses: {}
+parameters: {}
+securityDefinitions: {}
+tags: []

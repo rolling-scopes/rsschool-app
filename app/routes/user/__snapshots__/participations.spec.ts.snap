@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`User Participations route returns data 1`] = `
-Object {
-  "data": CoreMongooseArray [],
-}
-`;

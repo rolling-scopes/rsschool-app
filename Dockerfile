@@ -1,4 +1,4 @@
-FROM node:8.11.2-alpine
+FROM node:lts-alpine
 
 EXPOSE 8080
 
@@ -8,6 +8,7 @@ ENV NODE_PORT 8080
 WORKDIR /server
 
 COPY package.json /server
+COPY public /server/public
 COPY dist /server
 
 RUN npm install --no-optional
