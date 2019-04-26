@@ -146,6 +146,16 @@ paths:
       responses:
         '200':
           description: ''
+  /profile:
+    get:
+      description: get student profile
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: profile
   /session:
     get:
       description: Gets current user session
