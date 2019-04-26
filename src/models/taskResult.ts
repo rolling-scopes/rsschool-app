@@ -2,18 +2,27 @@ import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedCol
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
+type ScoreRecord = {
+  score: number;
+  dateTime: number;
+  comment: string;
+};
+
 @Entity()
 export class TaskResult {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @ManyToOne(_ => Student)
   student: Student | number;
+
+  @Column()
+  courseTaskId: number;
 
   @ManyToOne(_ => CourseTask)
   courseTask: CourseTask | number;
@@ -26,6 +35,12 @@ export class TaskResult {
 
   @Column()
   score: number;
+
+  @Column({
+    type: 'json',
+    default: [],
+  })
+  historicalScores: ScoreRecord[] = [];
 
   @Column({ nullable: true })
   comment: string;

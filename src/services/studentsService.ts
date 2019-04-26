@@ -6,6 +6,15 @@ type StudentDTO = {
   lastName: string;
   githubId: string;
   studentId: number;
+  taskResults: {
+    courseTaskId: number;
+    createdDate: string;
+    updatedDate: string;
+    githubPrUrl: string | null;
+    githubRepoUrl: string | null;
+    score: number;
+    comment: string;
+  }[];
 };
 
 export async function getCourseStudent(courseId: number, userId: number) {
@@ -30,12 +39,14 @@ export async function getCourseStudents(courseId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
+    taskResults: [],
   }));
 }
 
 export async function getMentorStudents(mentorId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
+    .leftJoinAndSelect('student.taskResults', 'taskResults')
     .innerJoinAndSelect('student.user', 'user')
     .where('"student"."mentorId" = :mentorId', { mentorId })
     .getMany();
@@ -45,5 +56,6 @@ export async function getMentorStudents(mentorId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
+    taskResults: student.taskResults || [],
   }));
 }

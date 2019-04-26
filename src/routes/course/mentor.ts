@@ -6,7 +6,7 @@ import { Mentor } from '../../models';
 import { setResponse } from '../utils';
 import { studentsService } from '../../services';
 
-export const getMe = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const id = ctx.state!.user.id;
   const courseId = Number(ctx.params.courseId);
 

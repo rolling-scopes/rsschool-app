@@ -5,9 +5,9 @@ info:
 basePath: /api
 swagger: '2.0'
 paths:
-  '/course/{courseId}/me':
+  '/course/{courseId}/mentor/students':
     get:
-      description: Returns users profile
+      description: Returns mentors students results
       parameters:
         - name: courseId
           in: path

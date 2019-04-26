@@ -74,22 +74,31 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     .getOne();
 
   if (existingResult == null) {
-    const taskResult = {
+    const taskResult: Partial<TaskResult> = {
       comment: data.comment,
       courseTask: Number(data.courseTaskId),
       student: Number(data.studentId),
       score: data.score,
+      historicalScores: [{ score: data.score, dateTime: Date.now(), comment: data.comment }],
       githubPrUrl: data.githubPrUrl,
-    } as TaskResult;
+    };
 
     const addResult = await getRepository(TaskResult).save(taskResult);
     setResponse(ctx, OK, addResult);
     return;
   }
 
-  existingResult.score = data.score;
   existingResult.githubPrUrl = data.githubPrUrl;
   existingResult.comment = data.comment;
+  if (data.score !== existingResult.score) {
+    existingResult.historicalScores.push({
+      score: data.score,
+      dateTime: Date.now(),
+      comment: data.comment,
+    });
+    existingResult.score = data.score;
+  }
+
   const updateResult = await getRepository(TaskResult).save(existingResult);
   setResponse(ctx, OK, updateResult);
   return;

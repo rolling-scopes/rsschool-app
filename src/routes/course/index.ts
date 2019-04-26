@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { getMe } from './me';
+import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getTasks } from './tasks';
@@ -16,9 +16,9 @@ export function courseRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /course/{courseId}/me:
+   * /course/{courseId}/mentor/students:
    *   get:
-   *      description: Returns users profile
+   *      description: Returns mentors students results
    *      parameters:
    *        - name: courseId
    *          in: path
@@ -31,7 +31,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: User object
    */
-  router.get('/:courseId/me', getMe(logger));
+  router.get('/:courseId/mentor/students', getMentorStudents(logger));
 
   /**
    * @swagger

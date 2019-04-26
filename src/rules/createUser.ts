@@ -5,7 +5,6 @@ import { userService } from '../services';
 import { getManager } from 'typeorm';
 
 const adminTeams: string[] = config.roles.adminTeams;
-// const mentorTeams: string[] = config.roles.mentorTeams;
 
 type Profile = {
   username?: string;
@@ -15,13 +14,6 @@ type Profile = {
   };
   emails?: { value: string; primary: boolean }[];
 };
-
-// function getRole(teamIds: string[]) {
-//   if (mentorTeams.some(team => teamIds.includes(team))) {
-//     return 'mentor';
-//   }
-//   return 'student';
-// }
 
 function getAdminStatus(teamIds: string[]): boolean {
   return adminTeams.some(team => teamIds.includes(team));
