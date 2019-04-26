@@ -5,7 +5,7 @@
   "repository": "github:rolling-scopes/rsschool-api",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon  --inspect --watch 'src/**/*' -e ts --exec node --harmony_async_iteration  -r ts-node/register -r dotenv/config ./index.ts | pino-pretty -i time,hostname,pid",
+    "start": "nodemon  --inspect --watch 'src/**/*' -e ts --exec node  -r ts-node/register -r dotenv/config ./index.ts | pino-pretty -i time,hostname,pid",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\"",
