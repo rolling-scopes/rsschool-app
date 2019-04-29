@@ -17,6 +17,9 @@ export class Course {
   name: string;
 
   @Column()
+  alias: string;
+
+  @Column()
   year: number;
 
   @Column()
