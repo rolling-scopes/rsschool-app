@@ -54,10 +54,10 @@ export class App {
     this.koa.use(passport.initialize());
     this.koa.use(passport.session());
 
-    const pgRoutters = routesMiddleware(this.appLogger);
+    const routes = routesMiddleware(this.appLogger);
 
-    this.koa.use(pgRoutters.publicRouter.routes());
-    this.koa.use(pgRoutters.publicRouter.allowedMethods());
+    this.koa.use(routes.publicRouter.routes());
+    this.koa.use(routes.publicRouter.allowedMethods());
 
     this.koa.use(routeLoggerMiddleware);
     this.koa.use(serve('public'));

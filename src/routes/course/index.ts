@@ -8,7 +8,7 @@ import { postPairs } from './pairs';
 import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
 import { Course } from '../../models';
-import { adminGuard } from '../guards';
+import { adminGuard, guard } from '../guards';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course' });
@@ -31,7 +31,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: User object
    */
-  router.get('/:courseId/mentor/students', getMentorStudents(logger));
+  router.get('/:courseId/mentor/students', guard, getMentorStudents(logger));
 
   /**
    * @swagger
@@ -160,7 +160,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', getTasks(logger));
+  router.get('/:courseId/tasks', guard, getTasks(logger));
 
   /**
    * @swagger
@@ -179,7 +179,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.post('/:courseId/score', postScore(logger));
+  router.post('/:courseId/score', guard, postScore(logger));
 
   /**
    * @swagger
@@ -198,7 +198,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:courseId/score', getScore(logger));
+  router.get('/:courseId/score', guard, getScore(logger));
 
   /**
    * @swagger
@@ -217,7 +217,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:courseId', createGetRoute(Course, logger));
+  router.get('/:courseId', guard, createGetRoute(Course, logger));
 
   /**
    * @swagger

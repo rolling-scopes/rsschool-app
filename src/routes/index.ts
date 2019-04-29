@@ -3,6 +3,7 @@ export * from './logging';
 import * as Router from 'koa-router';
 import { publicMeRouter } from './me';
 import { courseRoute } from './course';
+import { coursesRoute } from './courses';
 import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { tasksRoute } from './tasks';
@@ -25,6 +26,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, sessionRoute(logger));
   applyRouter(publicRouter, publicMeRouter(logger));
   applyRouter(publicRouter, courseRoute(logger));
+  applyRouter(publicRouter, coursesRoute(logger));
   applyRouter(publicRouter, usersRoute(logger));
   applyRouter(publicRouter, tasksRoute(logger));
   applyRouter(publicRouter, profileRoute(logger));
