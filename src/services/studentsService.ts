@@ -43,6 +43,24 @@ export async function getCourseStudents(courseId: number) {
   }));
 }
 
+export async function getCourseStudentsWithTasks(courseId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('student.user', 'user')
+    .leftJoinAndSelect('student.taskResults', 'taskResults')
+    .innerJoinAndSelect('student.course', 'course')
+    .where('course.id = :courseId', { courseId })
+    .getMany();
+
+  return students.map<StudentDTO>(student => ({
+    studentId: student.id,
+    firstName: (student.user as User).firstName,
+    lastName: (student.user as User).lastName,
+    githubId: (student.user as User).githubId,
+    taskResults: student.taskResults || [],
+  }));
+}
+
 export async function getMentorStudents(mentorId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')

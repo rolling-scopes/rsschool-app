@@ -4,6 +4,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { TaskResult, Mentor, Student } from '../../models';
 import { ILogger } from '../../logger';
+import { studentsService } from '../../services';
 
 type ScoreInput = {
   studentId: number;
@@ -102,4 +103,10 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const updateResult = await getRepository(TaskResult).save(existingResult);
   setResponse(ctx, OK, updateResult);
   return;
+};
+
+export const getScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const students = await studentsService.getCourseStudentsWithTasks(courseId);
+  setResponse(ctx, OK, students);
 };

@@ -3,7 +3,7 @@ import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getTasks } from './tasks';
-import { postScore } from './score';
+import { postScore, getScore } from './score';
 import { postPairs } from './pairs';
 import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
@@ -180,6 +180,25 @@ export function courseRoute(logger: ILogger) {
    *          description: ''
    */
   router.post('/:courseId/score', postScore(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/score:
+   *   get:
+   *      description: Get course score data
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: number
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: ''
+   */
+  router.get('/:courseId/score', getScore(logger));
 
   /**
    * @swagger
