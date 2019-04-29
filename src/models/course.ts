@@ -16,7 +16,9 @@ export class Course {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   alias: string;
 
   @Column()
