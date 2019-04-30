@@ -38,7 +38,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     }
   }
 
-  const id = 2572; // ctx.state!.user.id;
+  const id = ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .where('mentor."courseId" = :courseId', { courseId })
@@ -80,7 +80,14 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
       courseTask: Number(data.courseTaskId),
       student: Number(data.studentId),
       score: data.score,
-      historicalScores: [{ score: data.score, dateTime: Date.now(), comment: data.comment }],
+      historicalScores: [
+        {
+          authorId: id,
+          score: data.score,
+          dateTime: Date.now(),
+          comment: data.comment,
+        },
+      ],
       githubPrUrl: data.githubPrUrl,
     };
 
@@ -93,6 +100,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   existingResult.comment = data.comment;
   if (data.score !== existingResult.score) {
     existingResult.historicalScores.push({
+      authorId: id,
       score: data.score,
       dateTime: Date.now(),
       comment: data.comment,
