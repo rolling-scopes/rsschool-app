@@ -96,6 +96,9 @@ export class User {
   employmentHistory: EmploymentRecord[] = [];
 
   @Column({ nullable: true })
+  epamApplicantId?: string;
+
+  @Column({ nullable: true })
   contactsEpamEmail?: string;
 
   @Column({ nullable: true })

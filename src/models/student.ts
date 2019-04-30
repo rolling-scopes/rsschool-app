@@ -51,11 +51,17 @@ export class Student {
   isTopPerformer: boolean;
 
   @Column({ nullable: true })
-  employedOutsideEpam: boolean;
-
-  @Column({ nullable: true })
   preferedMentorGithubId: string;
 
   @Column({ nullable: true })
   readyFullTime: boolean;
+
+  @Column({ nullable: true })
+  cvUrl: string;
+
+  @Column({ nullable: true })
+  hiredById: string;
+
+  @Column({ nullable: true })
+  hiredByName: string;
 }
