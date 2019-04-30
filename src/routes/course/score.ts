@@ -26,17 +26,17 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const data: ScoreInput = ctx.request.body;
 
-  if (!data.githubPrUrl) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no pull request' });
-    return;
-  }
+  // if (!data.githubPrUrl) {
+  //   setResponse(ctx, BAD_REQUEST, { message: 'no pull request' });
+  //   return;
+  // }
 
-  if (data.githubPrUrl.startsWith('https://github.com')) {
-    if (!data.githubPrUrl.includes('/pull/')) {
-      setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
-      return;
-    }
-  }
+  // if (data.githubPrUrl.startsWith('https://github.com')) {
+  //   if (!data.githubPrUrl.includes('/pull/')) {
+  //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
+  //     return;
+  //   }
+  // }
 
   const id = ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
