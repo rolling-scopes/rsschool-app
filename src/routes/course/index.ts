@@ -3,7 +3,7 @@ import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getTasks } from './tasks';
-import { postScore, getScore } from './score';
+import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
 import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
@@ -161,6 +161,44 @@ export function courseRoute(logger: ILogger) {
    *          description: List of tasks object
    */
   router.get('/:courseId/tasks', guard, getTasks(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/scores:
+   *   post:
+   *      description: Save course task score
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: number
+   *        - name: scores
+   *          in: body
+   *          schema:
+   *            type: array
+   *            items:
+   *              type: object
+   *              properties:
+   *                studentGithubId:
+   *                  type: string
+   *                mentorGithubId:
+   *                  type: string
+   *                courseTaskId:
+   *                  type: number
+   *                comment:
+   *                  type: string
+   *                githubPrUrl:
+   *                  type: string
+   *                score:
+   *                  type: number
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: ''
+   */
+  router.post('/:courseId/scores', adminGuard, postScores(logger));
 
   /**
    * @swagger

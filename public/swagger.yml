@@ -110,9 +110,53 @@ paths:
       responses:
         '200':
           description: List of tasks object
+  '/course/{courseId}/scores':
+    post:
+      description: Save course task score
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+        - name: scores
+          in: body
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                studentGithubId:
+                  type: string
+                mentorGithubId:
+                  type: string
+                courseTaskId:
+                  type: number
+                comment:
+                  type: string
+                githubPrUrl:
+                  type: string
+                score:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
   '/course/{courseId}/score':
     post:
       description: Save course task score
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+    get:
+      description: Get course score data
       parameters:
         - name: courseId
           in: path
@@ -146,6 +190,14 @@ paths:
       responses:
         '200':
           description: ''
+  /courses:
+    get:
+      description: Gets courses info
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Courses info
   /profile:
     get:
       description: get student profile
@@ -174,6 +226,15 @@ paths:
       responses:
         '200':
           description: operation status
+    get:
+      description: Gets tasks
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of tasks
   /users:
     post:
       description: Add/Update users

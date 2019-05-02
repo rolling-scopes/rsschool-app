@@ -6,7 +6,7 @@ type ScoreRecord = {
   score: number;
   dateTime: number;
   comment: string;
-  authorId: string;
+  authorId: number;
 };
 
 @Entity()
