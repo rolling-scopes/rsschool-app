@@ -155,7 +155,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       .createQueryBuilder('mentor')
       .where('mentor."courseId" = :courseId', { courseId })
       .innerJoinAndSelect('mentor.user', 'user')
-      .where('mentor.user."githubId" = :mentorGithubId', { mentorGithubId })
+      .where('"user"."githubId" = :mentorGithubId', { mentorGithubId })
       .getOne();
 
     if (mentor == null) {
@@ -171,7 +171,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       .where('student."courseId" = :courseId', { courseId })
       .innerJoinAndSelect('student.mentor', 'mentor')
       .innerJoinAndSelect('student.user', 'user')
-      .where('student.user."githubId" = :studentGithubId', { studentGithubId })
+      .where('"user"."githubId" = :studentGithubId', { studentGithubId })
       .getOne();
 
     if (student == null) {
@@ -204,14 +204,14 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
       .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
         studentId: student.id,
-        courseTaskId: Number(courseTaskId),
+        courseTaskId,
       })
       .getOne();
 
     if (existingResult == null) {
       const taskResult: Partial<TaskResult> = {
         comment: item.comment,
-        courseTask: Number(item.courseTaskId),
+        courseTaskId: item.courseTaskId,
         student: Number(student.id),
         score: item.score,
         historicalScores: [
@@ -224,7 +224,6 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         ],
         githubPrUrl: item.githubPrUrl,
       };
-
       const addResult = await getRepository(TaskResult).save(taskResult);
       result.push({
         status: 'created',
