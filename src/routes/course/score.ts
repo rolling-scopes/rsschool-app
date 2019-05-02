@@ -142,12 +142,12 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
   const result: OperationResult[] = [];
 
   for await (const item of data) {
-    if (item.githubPrUrl && item.githubPrUrl.startsWith('https://github.com')) {
-      if (!item.githubPrUrl.includes('/pull/')) {
-        setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
-        return;
-      }
-    }
+    // if (item.githubPrUrl && item.githubPrUrl.startsWith('https://github.com')) {
+    //   if (!item.githubPrUrl.includes('/pull/')) {
+    //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
+    //     return;
+    //   }
+    // }
 
     const { mentorGithubId, studentGithubId } = item;
 
