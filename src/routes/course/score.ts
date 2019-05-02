@@ -157,7 +157,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       if (mentor == null) {
         result.push({
           status: 'skipped',
-          value: 'no mentor',
+          value: `no mentor: ${mentorGithubId}`,
         });
         continue;
       }
@@ -173,7 +173,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       if (student == null) {
         result.push({
           status: 'skipped',
-          value: 'no student',
+          value: `no student: ${studentGithubId}`,
         });
         continue;
       }
