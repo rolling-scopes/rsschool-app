@@ -143,6 +143,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
   for await (const item of data) {
     try {
+      logger.info(item.studentGithubId);
       // if (item.githubPrUrl && item.githubPrUrl.startsWith('https://github.com')) {
       //   if (!item.githubPrUrl.includes('/pull/')) {
       //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
