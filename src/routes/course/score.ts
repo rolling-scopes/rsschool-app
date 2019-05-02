@@ -146,7 +146,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       logger.info(item.studentGithubId);
 
       const { mentorGithubId, studentGithubId } = item;
-
+      const score = Math.round(item.score);
       const mentor = await getRepository(Mentor)
         .createQueryBuilder('mentor')
         .where('mentor."courseId" = :courseId', { courseId })
@@ -178,13 +178,13 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      if (student.mentor.id !== mentor.id) {
-        result.push({
-          status: 'skipped',
-          value: `incorrect mentor-student relation: ${mentorGithubId} - ${studentGithubId}`,
-        });
-        continue;
-      }
+      // if (student.mentor.id !== mentor.id) {
+      //   result.push({
+      //     status: 'skipped',
+      //     value: `incorrect mentor-student relation: ${mentorGithubId} - ${studentGithubId}`,
+      //   });
+      //   continue;
+      // }
 
       const { courseTaskId } = item;
       const existingResult = await getRepository(TaskResult)
@@ -202,11 +202,11 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
           comment: item.comment,
           courseTaskId: item.courseTaskId,
           student: Number(student.id),
-          score: item.score,
+          score,
           historicalScores: [
             {
               authorId: 0,
-              score: item.score,
+              score,
               dateTime: Date.now(),
               comment: item.comment,
             },
@@ -223,14 +223,14 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
       existingResult.githubPrUrl = item.githubPrUrl;
       existingResult.comment = item.comment;
-      if (item.score !== existingResult.score) {
+      if (score !== existingResult.score) {
         existingResult.historicalScores.push({
           authorId: 0,
-          score: item.score,
+          score,
           dateTime: Date.now(),
           comment: item.comment,
         });
-        existingResult.score = item.score;
+        existingResult.score = score;
       }
 
       const updateResult = await getRepository(TaskResult).save(existingResult);
