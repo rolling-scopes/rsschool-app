@@ -1,4 +1,4 @@
-import { User, Student } from '../models';
+import { User, Student, Mentor } from '../models';
 import { getRepository } from 'typeorm';
 
 type StudentDTO = {
@@ -6,6 +6,7 @@ type StudentDTO = {
   lastName: string;
   githubId: string;
   studentId: number;
+  mentorId: number | null;
   taskResults: {
     courseTaskId: number;
     createdDate: string;
@@ -36,6 +37,7 @@ export async function getCourseStudents(courseId: number) {
 
   return students.map<StudentDTO>(student => ({
     studentId: student.id,
+    mentorId: null,
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
@@ -47,6 +49,7 @@ export async function getCourseStudentsWithTasks(courseId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoinAndSelect('student.user', 'user')
+    .leftJoinAndSelect('student.mentor', 'mentor')
     .leftJoinAndSelect('student.taskResults', 'taskResults')
     .innerJoinAndSelect('student.course', 'course')
     .where('course.id = :courseId', { courseId })
@@ -54,6 +57,7 @@ export async function getCourseStudentsWithTasks(courseId: number) {
 
   return students.map<StudentDTO>(student => ({
     studentId: student.id,
+    mentorId: student.mentor != null ? (student.mentor as Mentor).id : null,
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
@@ -71,6 +75,7 @@ export async function getMentorStudents(mentorId: number) {
 
   return students.map<StudentDTO>(student => ({
     studentId: student.id,
+    mentorId,
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
