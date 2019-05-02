@@ -184,19 +184,12 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      // const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
-
-      // if (student == null) {
-      //   setResponse(ctx, BAD_REQUEST, { message: 'no student' });
-      //   return;
-      // }
-
       if (student.mentor.id !== mentor.id) {
         result.push({
           status: 'skipped',
           value: 'incorrect mentor-student relation',
         });
-        return;
+        continue;
       }
 
       const { courseTaskId } = item;
