@@ -155,7 +155,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       .createQueryBuilder('mentor')
       .where('mentor."courseId" = :courseId', { courseId })
       .innerJoinAndSelect('mentor.user', 'user')
-      .where('mentor.user."githubId = :mentorGithubId', { mentorGithubId })
+      .where('mentor.user."githubId" = :mentorGithubId', { mentorGithubId })
       .getOne();
 
     if (mentor == null) {
@@ -171,7 +171,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       .where('student."courseId" = :courseId', { courseId })
       .innerJoinAndSelect('student.mentor', 'mentor')
       .innerJoinAndSelect('student.user', 'user')
-      .where('student.user."githubId = :studentGithubId', { studentGithubId })
+      .where('student.user."githubId" = :studentGithubId', { studentGithubId })
       .getOne();
 
     if (student == null) {

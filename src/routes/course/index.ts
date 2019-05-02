@@ -168,6 +168,8 @@ export function courseRoute(logger: ILogger) {
    * /course/{courseId}/scores:
    *   post:
    *      description: Save course task score
+   *      security:
+   *        - cookieAuth: []
    *      parameters:
    *        - name: courseId
    *          in: path
