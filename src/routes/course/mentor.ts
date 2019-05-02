@@ -12,9 +12,8 @@ export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContex
 
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
-    .where('"mentor"."courseId" = :courseId', { courseId })
     .innerJoinAndSelect('mentor.user', 'user')
-    .where('mentor.user.id = :id', { id })
+    .where('mentor."courseId" = :courseId AND mentor.user.id = :id', { id, courseId })
     .getOne();
 
   if (mentor === undefined) {
