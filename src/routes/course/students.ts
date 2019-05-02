@@ -31,7 +31,7 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const studentRepository = getRepository(Student);
 
-  if (data === undefined) {
+  if (data == null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
@@ -42,29 +42,21 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
     const user = await userService.getUserByGithubId(item.githubId);
     if (user == null || user.id == null) {
-      result.push({
-        status: 'skipped',
-        value: item.githubId,
-      });
+      result.push({ status: 'skipped', value: `no user: ${item.githubId}` });
       continue;
     }
 
     const existingStudent = await studentsService.getCourseStudent(courseId, user.id);
     if (existingStudent) {
-      result.push({
-        status: 'skipped',
-        value: item.githubId,
-      });
+      result.push({ status: 'skipped', value: `exists already: ${item.githubId}` });
       continue;
     }
 
     const { githubId, ...restData } = item;
     const student: Partial<Student> = { ...restData, user, course: courseId };
     const savedStudent = await studentRepository.save(student);
-    result.push({
-      status: 'created',
-      value: savedStudent.id,
-    });
+    result.push({ status: 'created', value: savedStudent.id });
+
     console.timeEnd(item.githubId);
   }
 

@@ -24,7 +24,7 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -46,7 +46,7 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -68,7 +68,22 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
+   *        - name: students
+   *          in: body
+   *          schema:
+   *            type: array
+   *            items:
+   *              type: object
+   *              properties:
+   *                githubId:
+   *                  type: string
+   *                isExpelled:
+   *                  type: boolean
+   *                expellingReason:
+   *                  type: boolean
+   *                readyFullTime:
+   *                  type: boolean
    *      produces:
    *        - application/json
    *      responses:
@@ -81,7 +96,7 @@ export function courseRoute(logger: ILogger) {
    * @swagger
    *
    * /course/{courseId}/mentors:
-   *   post:
+   *   get:
    *      description: Saves course mentors
    *      security:
    *        - cookieAuth: []
@@ -90,7 +105,7 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -103,7 +118,7 @@ export function courseRoute(logger: ILogger) {
    * @swagger
    *
    * /course/{courseId}/mentors:
-   *   get:
+   *   post:
    *      description: Returns course mentors
    *      security:
    *        - cookieAuth: []
@@ -112,7 +127,18 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
+   *        - name: mentors
+   *          in: body
+   *          schema:
+   *            type: array
+   *            items:
+   *              type: object
+   *              properties:
+   *                githubId:
+   *                  type: string
+   *                maxStudentsLimit:
+   *                  type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -134,7 +160,18 @@ export function courseRoute(logger: ILogger) {
    *          in: path
    *          description: Course Id
    *          required: true
-   *          type: number
+   *          type: integer
+   *        - name: pairs
+   *          in: body
+   *          schema:
+   *            type: array
+   *            items:
+   *              type: object
+   *              properties:
+   *                studentGithubId:
+   *                  type: string
+   *                mentorGithubId:
+   *                  type: string
    *      produces:
    *        - application/json
    *      responses:
@@ -153,7 +190,7 @@ export function courseRoute(logger: ILogger) {
    *        - name: courseId
    *          in: path
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -174,7 +211,7 @@ export function courseRoute(logger: ILogger) {
    *        - name: courseId
    *          in: path
    *          required: true
-   *          type: number
+   *          type: integer
    *        - name: scores
    *          in: body
    *          schema:
@@ -187,13 +224,13 @@ export function courseRoute(logger: ILogger) {
    *                mentorGithubId:
    *                  type: string
    *                courseTaskId:
-   *                  type: number
+   *                  type: integer
    *                comment:
    *                  type: string
    *                githubPrUrl:
    *                  type: string
    *                score:
-   *                  type: number
+   *                  type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -212,7 +249,7 @@ export function courseRoute(logger: ILogger) {
    *        - name: courseId
    *          in: path
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -231,7 +268,7 @@ export function courseRoute(logger: ILogger) {
    *        - name: courseId
    *          in: path
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:
@@ -250,7 +287,7 @@ export function courseRoute(logger: ILogger) {
    *        - name: courseId
    *          in: path
    *          required: true
-   *          type: number
+   *          type: integer
    *      produces:
    *        - application/json
    *      responses:

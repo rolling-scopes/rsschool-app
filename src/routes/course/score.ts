@@ -50,9 +50,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const id = ctx.state!.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
-    .where('mentor."courseId" = :courseId', { courseId })
     .innerJoinAndSelect('mentor.user', 'user')
-    .where('mentor.user.id = :id', { id })
+    .where('mentor."courseId" = :courseId AND mentor.user.id = :id', { id, courseId })
     .getOne();
 
   if (mentor == null) {
@@ -131,14 +130,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
   }
 
   logger.info(ctx.request.body);
-
   const data: ScoresInput[] = ctx.request.body;
-
-  // if (!data.githubPrUrl) {
-  //   setResponse(ctx, BAD_REQUEST, { message: 'no pull request' });
-  //   return;
-  // }
-
   const result: OperationResult[] = [];
 
   for await (const item of data) {
@@ -147,11 +139,11 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
       const { mentorGithubId, studentGithubId } = item;
       const score = Math.round(item.score);
+
       const mentor = await getRepository(Mentor)
         .createQueryBuilder('mentor')
-        .where('mentor."courseId" = :courseId', { courseId })
         .innerJoinAndSelect('mentor.user', 'user')
-        .where('"user"."githubId" = :mentorGithubId', { mentorGithubId })
+        .where('"mentor"."courseId" = :courseId AND "user"."githubId" = :mentorGithubId', { mentorGithubId, courseId })
         .getOne();
 
       if (mentor == null) {
@@ -164,10 +156,12 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
       const student = await getRepository(Student)
         .createQueryBuilder('student')
-        .where('student."courseId" = :courseId', { courseId })
         .innerJoinAndSelect('student.mentor', 'mentor')
         .innerJoinAndSelect('student.user', 'user')
-        .where('"user"."githubId" = :studentGithubId', { studentGithubId })
+        .where('"user"."githubId" = :studentGithubId AND "student"."courseId" = :courseId', {
+          studentGithubId,
+          courseId,
+        })
         .getOne();
 
       if (student == null) {
