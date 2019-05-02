@@ -142,113 +142,120 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
   const result: OperationResult[] = [];
 
   for await (const item of data) {
-    // if (item.githubPrUrl && item.githubPrUrl.startsWith('https://github.com')) {
-    //   if (!item.githubPrUrl.includes('/pull/')) {
-    //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
-    //     return;
-    //   }
-    // }
+    try {
+      // if (item.githubPrUrl && item.githubPrUrl.startsWith('https://github.com')) {
+      //   if (!item.githubPrUrl.includes('/pull/')) {
+      //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
+      //     return;
+      //   }
+      // }
 
-    const { mentorGithubId, studentGithubId } = item;
+      const { mentorGithubId, studentGithubId } = item;
 
-    const mentor = await getRepository(Mentor)
-      .createQueryBuilder('mentor')
-      .where('mentor."courseId" = :courseId', { courseId })
-      .innerJoinAndSelect('mentor.user', 'user')
-      .where('"user"."githubId" = :mentorGithubId', { mentorGithubId })
-      .getOne();
+      const mentor = await getRepository(Mentor)
+        .createQueryBuilder('mentor')
+        .where('mentor."courseId" = :courseId', { courseId })
+        .innerJoinAndSelect('mentor.user', 'user')
+        .where('"user"."githubId" = :mentorGithubId', { mentorGithubId })
+        .getOne();
 
-    if (mentor == null) {
+      if (mentor == null) {
+        result.push({
+          status: 'skipped',
+          value: 'no mentor',
+        });
+        continue;
+      }
+
+      const student = await getRepository(Student)
+        .createQueryBuilder('student')
+        .where('student."courseId" = :courseId', { courseId })
+        .innerJoinAndSelect('student.mentor', 'mentor')
+        .innerJoinAndSelect('student.user', 'user')
+        .where('"user"."githubId" = :studentGithubId', { studentGithubId })
+        .getOne();
+
+      if (student == null) {
+        result.push({
+          status: 'skipped',
+          value: 'no student',
+        });
+        continue;
+      }
+
+      // const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
+
+      // if (student == null) {
+      //   setResponse(ctx, BAD_REQUEST, { message: 'no student' });
+      //   return;
+      // }
+
+      if (student.mentor.id !== mentor.id) {
+        result.push({
+          status: 'skipped',
+          value: 'incorrect mentor-student relation',
+        });
+        return;
+      }
+
+      const { courseTaskId } = item;
+      const existingResult = await getRepository(TaskResult)
+        .createQueryBuilder('taskResult')
+        .innerJoinAndSelect('taskResult.student', 'student')
+        .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
+        .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
+          studentId: student.id,
+          courseTaskId,
+        })
+        .getOne();
+
+      if (existingResult == null) {
+        const taskResult: Partial<TaskResult> = {
+          comment: item.comment,
+          courseTaskId: item.courseTaskId,
+          student: Number(student.id),
+          score: item.score,
+          historicalScores: [
+            {
+              authorId: 0,
+              score: item.score,
+              dateTime: Date.now(),
+              comment: item.comment,
+            },
+          ],
+          githubPrUrl: item.githubPrUrl,
+        };
+        const addResult = await getRepository(TaskResult).save(taskResult);
+        result.push({
+          status: 'created',
+          value: addResult.id,
+        });
+        continue;
+      }
+
+      existingResult.githubPrUrl = item.githubPrUrl;
+      existingResult.comment = item.comment;
+      if (item.score !== existingResult.score) {
+        existingResult.historicalScores.push({
+          authorId: 0,
+          score: item.score,
+          dateTime: Date.now(),
+          comment: item.comment,
+        });
+        existingResult.score = item.score;
+      }
+
+      const updateResult = await getRepository(TaskResult).save(existingResult);
       result.push({
-        status: 'skipped',
-        value: 'no mentor',
+        status: 'updated',
+        value: updateResult.id,
       });
-      continue;
-    }
-
-    const student = await getRepository(Student)
-      .createQueryBuilder('student')
-      .where('student."courseId" = :courseId', { courseId })
-      .innerJoinAndSelect('student.mentor', 'mentor')
-      .innerJoinAndSelect('student.user', 'user')
-      .where('"user"."githubId" = :studentGithubId', { studentGithubId })
-      .getOne();
-
-    if (student == null) {
+    } catch (e) {
       result.push({
-        status: 'skipped',
-        value: 'no student',
+        status: 'failed',
+        value: e.message,
       });
-      continue;
     }
-
-    // const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
-
-    // if (student == null) {
-    //   setResponse(ctx, BAD_REQUEST, { message: 'no student' });
-    //   return;
-    // }
-
-    if (student.mentor.id !== mentor.id) {
-      result.push({
-        status: 'skipped',
-        value: 'incorrect mentor-student relation',
-      });
-      return;
-    }
-
-    const { courseTaskId } = item;
-    const existingResult = await getRepository(TaskResult)
-      .createQueryBuilder('taskResult')
-      .innerJoinAndSelect('taskResult.student', 'student')
-      .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
-      .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
-        studentId: student.id,
-        courseTaskId,
-      })
-      .getOne();
-
-    if (existingResult == null) {
-      const taskResult: Partial<TaskResult> = {
-        comment: item.comment,
-        courseTaskId: item.courseTaskId,
-        student: Number(student.id),
-        score: item.score,
-        historicalScores: [
-          {
-            authorId: 0,
-            score: item.score,
-            dateTime: Date.now(),
-            comment: item.comment,
-          },
-        ],
-        githubPrUrl: item.githubPrUrl,
-      };
-      const addResult = await getRepository(TaskResult).save(taskResult);
-      result.push({
-        status: 'created',
-        value: addResult.id,
-      });
-      continue;
-    }
-
-    existingResult.githubPrUrl = item.githubPrUrl;
-    existingResult.comment = item.comment;
-    if (item.score !== existingResult.score) {
-      existingResult.historicalScores.push({
-        authorId: 0,
-        score: item.score,
-        dateTime: Date.now(),
-        comment: item.comment,
-      });
-      existingResult.score = item.score;
-    }
-
-    const updateResult = await getRepository(TaskResult).save(existingResult);
-    result.push({
-      status: 'updated',
-      value: updateResult.id,
-    });
   }
 
   setResponse(ctx, OK, result);
