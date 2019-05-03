@@ -35,7 +35,7 @@ export class App {
       RateLimit.middleware({
         getUserId: async ctx => {
           const user = ctx.state && ctx.state.user ? ctx.state.user : {};
-          return user._id;
+          return user.id;
         },
         interval: { min: config.rateLimit.intervalMin }, // 15 minutes = 15*60*1000
         max: config.rateLimit.max, // limit each IP to 100 requests per interval

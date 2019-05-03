@@ -8,7 +8,7 @@ export function createTestContext(userId = 'apalchys'): IRouterContext {
     },
     state: {
       user: {
-        _id: userId,
+        id: userId,
       },
     },
   } as any;
