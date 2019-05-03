@@ -48,7 +48,7 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
   logger.info(
     {
       ...data,
-      userId: ctx.state && ctx.state.user ? ctx.state.user._id : undefined,
+      userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
     },
     'Processed request',
   );
