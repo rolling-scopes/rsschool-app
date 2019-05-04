@@ -42,7 +42,7 @@ export class App {
       }),
     );
 
-    this.koa.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
+    this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());
 
     this.koa.keys = [config.sessionKey];
