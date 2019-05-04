@@ -34,7 +34,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
     const email = getPrimaryEmail((profile.emails as any) || [])[0];
 
     const user: User = {
-      githubId: id,
+      githubId: id.toLowerCase(),
       contactsEmail: email ? email.value : undefined,
       firstName: profile.name ? profile.name.givenName : '',
       lastName: profile.name ? profile.name.familyName : '',
@@ -48,7 +48,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
     const userId = createdUser.id!;
     return {
       id: userId,
-      githubId: createdUser.githubId,
+      githubId: createdUser.githubId.toLowerCase(),
       isAdmin,
       roles: {},
     };
@@ -60,5 +60,5 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
   result.mentors!.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
   });
-  return { roles, id: result.id!, githubId: result.githubId, isAdmin };
+  return { roles, id: result.id!, githubId: result.githubId.toLowerCase(), isAdmin };
 }

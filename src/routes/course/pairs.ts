@@ -34,7 +34,7 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         .createQueryBuilder('mentor')
         .innerJoinAndSelect('mentor.user', 'user')
         .where('"user"."githubId" = :id AND "mentor"."courseId" = :courseId', {
-          id: item.mentorGithubId,
+          id: item.mentorGithubId.toLowerCase(),
           courseId,
         })
         .getOne();
@@ -52,7 +52,7 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         .createQueryBuilder('student')
         .innerJoinAndSelect('student.user', 'user')
         .where('"user"."githubId" = :id AND "student"."courseId" = :courseId', {
-          id: item.studentGithubId,
+          id: item.studentGithubId.toLowerCase(),
           courseId,
         })
         .getOne();

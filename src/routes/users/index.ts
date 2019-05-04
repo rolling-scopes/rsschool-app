@@ -7,7 +7,7 @@ import { setResponse } from '../utils';
 import { adminGuard } from '../guards';
 
 const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const data = ctx.request.body;
+  const data = ctx.request.body as { githubId: string }[];
 
   const response = [];
   for await (const item of data) {
@@ -15,7 +15,7 @@ const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
     try {
       const userRepository = getRepository(User);
-      const entity = await userRepository.findOne({ where: { githubId: item.githubId } });
+      const entity = await userRepository.findOne({ where: { githubId: item.githubId.toLowerCase() } });
 
       if (entity == null) {
         await userRepository.save(item);

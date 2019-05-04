@@ -2,12 +2,14 @@ import { User } from '../models';
 import { getRepository } from 'typeorm';
 
 export async function getUserByGithubId(userId: string) {
-  return getRepository(User).findOne({ where: { githubId: userId } });
+  const githubId = userId.toLowerCase();
+  return getRepository(User).findOne({ where: { githubId } });
 }
 
 export async function getFullUserByGithubId(userId: string) {
+  const githubId = userId.toLowerCase();
   return getRepository(User).findOne({
-    where: { githubId: userId },
+    where: { githubId },
     relations: ['mentors', 'students', 'mentors.course', 'students.course'],
   });
 }
