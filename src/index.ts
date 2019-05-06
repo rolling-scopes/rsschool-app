@@ -4,7 +4,7 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as serve from 'koa-static';
-import { RateLimit } from 'koa2-ratelimit';
+// import { RateLimit } from 'koa2-ratelimit';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';
@@ -31,16 +31,16 @@ export class App {
 
     this.koa.use(loggerMiddleware(this.appLogger));
 
-    this.koa.use(
-      RateLimit.middleware({
-        getUserId: async ctx => {
-          const user = ctx.state && ctx.state.user ? ctx.state.user : {};
-          return user.id;
-        },
-        interval: { min: config.rateLimit.intervalMin }, // 15 minutes = 15*60*1000
-        max: config.rateLimit.max, // limit each IP to 100 requests per interval
-      }),
-    );
+    // this.koa.use(
+    //   RateLimit.middleware({
+    //     getUserId: async ctx => {
+    //       const user = ctx.state && ctx.state.user ? ctx.state.user : {};
+    //       return user.id;
+    //     },
+    //     interval: { min: config.rateLimit.intervalMin }, // 15 minutes = 15*60*1000
+    //     max: config.rateLimit.max, // limit each IP to 100 requests per interval
+    //   }),
+    // );
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());

@@ -47,7 +47,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   //   }
   // }
 
-  const id = ctx.state!.user.id;
+  const id = ctx.state.user.id;
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .innerJoinAndSelect('mentor.user', 'user')
@@ -55,14 +55,14 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     .getOne();
 
   if (mentor == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no mentor' });
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
   }
 
   const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
 
   if (student == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no student' });
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
 
