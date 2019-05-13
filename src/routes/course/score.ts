@@ -85,7 +85,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   if (existingResult == null) {
     const taskResult: Partial<TaskResult> = {
       comment: data.comment,
-      courseTask: Number(data.courseTaskId),
+      courseTaskId: Number(data.courseTaskId),
       student: Number(data.studentId),
       score: data.score,
       historicalScores: [
