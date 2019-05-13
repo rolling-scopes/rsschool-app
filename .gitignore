@@ -3,3 +3,4 @@ dist/**
 .vscode
 coverage/**
 .env
+.env.aws

@@ -4,7 +4,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { TaskResult, Mentor, Student } from '../../models';
 import { ILogger } from '../../logger';
-import { studentsService, OperationResult } from '../../services';
+import { studentsService, mentorsService, OperationResult } from '../../services';
 
 type ScoreInput = {
   studentId: number;
@@ -35,24 +35,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const data: ScoreInput = ctx.request.body;
 
-  // if (!data.githubPrUrl) {
-  //   setResponse(ctx, BAD_REQUEST, { message: 'no pull request' });
-  //   return;
-  // }
-
-  // if (data.githubPrUrl.startsWith('https://github.com')) {
-  //   if (!data.githubPrUrl.includes('/pull/')) {
-  //     setResponse(ctx, BAD_REQUEST, { message: 'incorrect pull request link' });
-  //     return;
-  //   }
-  // }
-
   const id = ctx.state.user.id;
-  const mentor = await getRepository(Mentor)
-    .createQueryBuilder('mentor')
-    .innerJoinAndSelect('mentor.user', 'user')
-    .where('mentor."courseId" = :courseId AND mentor.user.id = :id', { id, courseId })
-    .getOne();
+  const mentor = await mentorsService.getCourseMentorWithUser(courseId, id);
 
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });

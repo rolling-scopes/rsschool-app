@@ -62,6 +62,7 @@ export async function getCourseStudentsWithTasks(courseId: number) {
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
     taskResults: student.taskResults || [],
+    isExpelled: student.isExpelled,
   }));
 }
 
@@ -80,5 +81,6 @@ export async function getMentorStudents(mentorId: number) {
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
     taskResults: student.taskResults || [],
+    isExpelled: student.isExpelled,
   }));
 }

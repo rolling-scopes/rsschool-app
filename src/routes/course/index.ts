@@ -3,6 +3,7 @@ import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getTasks } from './tasks';
+import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
 import { ILogger } from '../../logger';
@@ -276,6 +277,37 @@ export function courseRoute(logger: ILogger) {
    *          description: ''
    */
   router.get('/:courseId/score', guard, getScore(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/expulsion:
+   *   post:
+   *      description: Expel student from course by active mentor
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          description: Course Id
+   *          required: true
+   *          type: integer
+   *        - name: data
+   *          in: body
+   *          schema:
+   *            type: object
+   *            properties:
+   *              studentId:
+   *                type: string
+   *              comment:
+   *                  type: string
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: result
+   */
+  router.post('/:courseId/expulsion', guard, postExpulsion(logger));
 
   /**
    * @swagger

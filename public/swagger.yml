@@ -206,6 +206,31 @@ paths:
       responses:
         '200':
           description: ''
+  '/course/{courseId}/expulsion':
+    post:
+      description: Expel student from course by active mentor
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: integer
+        - name: data
+          in: body
+          schema:
+            type: object
+            properties:
+              studentId:
+                type: string
+              comment:
+                type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: result
   '/course/{courseId}':
     get:
       description: Return info about course
