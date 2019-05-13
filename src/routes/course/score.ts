@@ -10,7 +10,7 @@ type ScoreInput = {
   studentId: number;
   courseTaskId: number;
   score: number;
-  comment: string;
+  comment?: string;
   githubPrUrl: string;
 };
 
@@ -93,7 +93,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
           authorId: id,
           score: data.score,
           dateTime: Date.now(),
-          comment: data.comment,
+          comment: data.comment || '',
         },
       ],
       githubPrUrl: data.githubPrUrl,
@@ -111,7 +111,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
       authorId: id,
       score: data.score,
       dateTime: Date.now(),
-      comment: data.comment,
+      comment: data.comment || '',
     });
     existingResult.score = data.score;
   }

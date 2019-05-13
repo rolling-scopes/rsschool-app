@@ -44,5 +44,5 @@ export class TaskResult {
   historicalScores: ScoreRecord[] = [];
 
   @Column({ nullable: true })
-  comment: string;
+  comment?: string;
 }
