@@ -1,6 +1,5 @@
 import * as Router from 'koa-router';
-import { getRepository } from 'typeorm';
-import { User } from '../../models';
+import { userService } from '../../services';
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
@@ -20,14 +19,18 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
     return;
   }
 
-  const profile = await getRepository(User).findOne({ where: { githubId: query.githubId.toLowerCase() } });
+  try {
+    const user = await userService.getFullUserByGithubId(query.githubId.toLowerCase());
 
-  if (profile === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
+    if (user === undefined) {
+            setResponse(ctx, NOT_FOUND);
+            return;
+        }
+
+    logger.info(user);
+
+    setResponse(ctx, OK, user);
+  } catch (e) {
+      logger.info(e);
   }
-
-  logger.info(profile);
-
-  setResponse(ctx, OK, profile);
 };
