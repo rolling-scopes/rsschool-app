@@ -14,7 +14,7 @@ type StudentDTO = {
     githubPrUrl: string | null;
     githubRepoUrl: string | null;
     score: number;
-    comment: string;
+    comment?: string;
   }[];
 };
 
