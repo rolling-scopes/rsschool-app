@@ -39,14 +39,17 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
 
   if (students) {
         const studentsMentor = await Promise.all(
-            students.map(s => getRepository(Mentor).findOne({ where: { id: s.mentor.id }, relations: ['user'] }),
-        ));
+            students
+                .filter(s => !!s.mentor)
+                .map(s => getRepository(Mentor)
+                    .findOne({ where: { id: s.mentor.id }, relations: ['user'] })));
 
         profile.students = students.map(st => ({
             ...st,
             mentor: studentsMentor.find((m: any) => m.id === st.mentor.id),
         })) as Student[];
     }
+
   if (mentors) {
         const mentorForStudentIds = await Promise.all(
             mentors.map(m => getRepository(Mentor).findOne({ where: { id: m.id }, relations: ['students'] }),
@@ -62,7 +65,7 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
 
         profile.mentors = mentors.map(m => ({
             ...m,
-            mentor: mfS.find((st: any) => st.id === m.id),
+            ...mfS.find((st: any) => st.id === m.id),
         })) as unknown as Mentor[];
     }
 
