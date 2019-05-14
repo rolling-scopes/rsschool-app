@@ -29,6 +29,7 @@ export const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
     courseTaskId: item.id,
     name: (item.task as Task).name,
     maxScore: item.maxScore,
+    githubPrRequired: !!(item.task as Task).githubPrRequired,
     description: (item.task as Task).description,
     descriptionUrl: (item.task as Task).descriptionUrl,
     studentStartDate: item.studentStartDate,
