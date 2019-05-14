@@ -7,8 +7,6 @@ import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 
 export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  logger.info('Users');
-
   const query = ctx.query as { githubId: string | undefined };
 
   if (query === undefined) {
@@ -37,17 +35,35 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
             return;
         }
 
-  const { students } = profile;
+  const { students, mentors } = profile;
 
   if (students) {
-        const mentors = await Promise.all(
+        const studentsMentor = await Promise.all(
             students.map(s => getRepository(Mentor).findOne({ where: { id: s.mentor.id }, relations: ['user'] }),
         ));
 
         profile.students = students.map(st => ({
             ...st,
-            mentor: mentors.find((m: any) => m.id === st.mentor.id)
+            mentor: studentsMentor.find((m: any) => m.id === st.mentor.id),
         })) as Student[];
+    }
+  if (mentors) {
+        const mentorForStudentIds = await Promise.all(
+            mentors.map(m => getRepository(Mentor).findOne({ where: { id: m.id }, relations: ['students'] }),
+        ));
+
+        const mentorForStudents = await Promise.all(mentorForStudentIds.map((m: any) => {
+                // tslint:disable-next-line:max-line-length
+                return m.students.map((s: any) => getRepository(Student).findOne({ where: { id: s.id }, relations: ['user'] }));
+            }).reduce((acc, v) => acc.concat(v), []));
+
+        // tslint:disable-next-line:max-line-length
+        const mfS = mentorForStudentIds.map((m: any) => ({...m, students: m.students.map((st: any) => mentorForStudents.find((s: any) => st.id === s.id)) }));
+
+        profile.mentors = mentors.map(m => ({
+            ...m,
+            mentor: mfS.find((st: any) => st.id === m.id),
+        })) as unknown as Mentor[];
     }
 
   logger.info(profile);
