@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
-import { User } from '../../models';
+import { User, Mentor, Student } from '../../models';
 
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { ILogger } from '../../logger';
@@ -27,16 +27,28 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
             'mentors',
             'students',
             'mentors.course',
-            'mentors.user',
             'students.course',
             'students.mentor',
         ],
-        });
+    });
 
   if (profile === undefined) {
             setResponse(ctx, NOT_FOUND);
             return;
         }
+
+  const { students } = profile;
+
+  if (students) {
+        const mentors = await Promise.all(
+            students.map(s => getRepository(Mentor).findOne({ where: { id: s.mentor.id }, relations: ['user'] }),
+        ));
+
+        profile.students = students.map(st => ({
+            ...st,
+            mentor: mentors.find((m: any) => m.id === st.mentor.id)
+        })) as Student[];
+    }
 
   logger.info(profile);
 
