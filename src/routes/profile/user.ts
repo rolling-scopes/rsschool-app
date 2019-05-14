@@ -44,7 +44,9 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
                 .map(s => getRepository(Mentor)
                     .findOne({ where: { id: s.mentor.id }, relations: ['user'] })));
 
-        profile.students = students.map(st => ({
+        profile.students = students
+        .filter(s => !!s.mentor)
+        .map(st => ({
             ...st,
             mentor: studentsMentor.find((m: any) => m.id === st.mentor.id),
         })) as Student[];
