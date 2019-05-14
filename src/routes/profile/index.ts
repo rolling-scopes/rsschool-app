@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { adminGuard } from '../guards';
-import { getProfile } from './student';
+import { getProfile } from './user';
 
 export function profileRoute(logger: ILogger) {
     const router = new Router({ prefix: '/profile' });
