@@ -6,6 +6,7 @@ import { getTasks } from './tasks';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
+import { postFeedback } from './feedback';
 import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
 import { Course } from '../../models';
@@ -308,6 +309,39 @@ export function courseRoute(logger: ILogger) {
    *          description: result
    */
   router.post('/:courseId/expulsion', guard, postExpulsion(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/feedback:
+   *   post:
+   *      description: Post feedback about a mentor or student
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          description: Course Id
+   *          required: true
+   *          type: integer
+   *        - name: data
+   *          in: body
+   *          schema:
+   *            type: object
+   *            properties:
+   *              toUserId:
+   *                type: integer
+   *              text:
+   *                type: string
+   *              badgeId:
+   *                type: string
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: result
+   */
+  router.post('/:courseId/feedback', guard, postFeedback(logger));
 
   /**
    * @swagger

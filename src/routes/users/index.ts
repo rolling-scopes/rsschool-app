@@ -4,7 +4,7 @@ import { ILogger } from '../../logger';
 import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { adminGuard } from '../guards';
+import { adminGuard, guard } from '../guards';
 
 const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body as { githubId: string }[];
@@ -34,6 +34,31 @@ const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, response);
 };
 
+const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const searchText = ctx.params.searchText;
+  if (!searchText) {
+    setResponse(ctx, OK, []);
+    return;
+  }
+
+  const entities = await getRepository(User)
+    .createQueryBuilder('user')
+    .where('user.githubId like :text', { text: searchText.toLowerCase() + '%' })
+    .limit(10)
+    .getMany();
+
+  setResponse(
+    ctx,
+    OK,
+    entities.map(user => ({
+      id: user.id,
+      githubId: user.githubId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    })),
+  );
+};
+
 export function usersRoute(logger: ILogger) {
   const router = new Router({ prefix: '/users' });
 
@@ -52,6 +77,22 @@ export function usersRoute(logger: ILogger) {
    *          description: operation status
    */
   router.post('/', adminGuard, postUsers(logger));
+
+  /**
+   * @swagger
+   *
+   * /users/search/:searchText:
+   *   post:
+   *      description: Search users
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: operation status
+   */
+  router.get('/search/:searchText', guard, getSearchByGithubId(logger));
 
   return router;
 }

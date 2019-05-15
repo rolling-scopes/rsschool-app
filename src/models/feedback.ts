@@ -1,14 +1,25 @@
-import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, CreateDateColumn, ManyToOne, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user';
+import { Course } from './course';
 
 @Entity()
 export class Feedback {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column()
+  @ManyToOne(_ => User)
+  fromUser: User | number;
+
+  @ManyToOne(_ => User)
+  toUser: User | number;
+
+  @Column({ nullable: true })
   text: string;
 
-  @Column({ type: 'timestamp' })
-  timestamp: number;
+  @Column({ nullable: true })
+  badgeId: string;
+
+  @ManyToOne(_ => Course, { nullable: true })
+  course?: Course | number;
 
   @CreateDateColumn()
   createdDate: number;

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Student } from './student';
 import { Mentor } from './mentor';
+import { Feedback } from './feedback';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -118,6 +119,12 @@ export class User {
 
   @OneToMany(_ => Student, (student: Student) => student.user, { nullable: true })
   students: Student[] | null;
+
+  @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.fromUser, { nullable: true })
+  givenFeedback: Feedback[] | null;
+
+  @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.toUser, { nullable: true })
+  receivedFeedback: Feedback[] | null;
 
   @BeforeInsert()
   beforeInsert?() {

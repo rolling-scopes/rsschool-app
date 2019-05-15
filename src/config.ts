@@ -26,6 +26,13 @@ export interface IConfig {
   port: number;
   name: string;
   sessionKey: string;
+  integrations: {
+    heroes: {
+      url?: string;
+      username: string;
+      password: string;
+    };
+  };
 }
 
 export const config: IConfig = {
@@ -48,6 +55,13 @@ export const config: IConfig = {
     username: process.env.RSSHCOOL_API_PG_USERNAME || '',
     password: process.env.RSSHCOOL_API_PG_PASSWORD || '',
     database: process.env.RSSHCOOL_API_PG_DATABASE || 'rs_school',
+  },
+  integrations: {
+    heroes: {
+      url: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_URL,
+      username: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_USERNAME || '',
+      password: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_PASSWORD || '',
+    },
   },
   name: 'rsschool-api',
   port: parseInt(process.env.NODE_PORT || '3001', 10),

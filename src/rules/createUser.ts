@@ -43,6 +43,8 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       externalAccounts: [],
       mentors: [],
       students: [],
+      givenFeedback: [],
+      receivedFeedback: [],
     };
     const createdUser = await getManager().save(User, user);
     const userId = createdUser.id!;
