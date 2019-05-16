@@ -8,7 +8,7 @@ import { HeroesService } from '../../integrations/heroes';
 
 type FeedbackInput = {
   toUserId: number;
-  text: string;
+  comment: string;
   badgeId?: string;
 };
 
@@ -21,6 +21,28 @@ const getUserDisplayName = (data: User) => {
 
 export const postFeedback = (logger: ILogger) => {
   const heroesService = new HeroesService(logger);
+
+  const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
+    if (
+      !fromUser ||
+      !fromUser.contactsEmail ||
+      !toUser ||
+      !toUser.contactsEmail ||
+      !data.badgeId ||
+      !heroesService.isCommentValid(data.comment)
+    ) {
+      return Promise.resolve(null);
+    }
+    return heroesService.assignBadge({
+      assignerEmail: fromUser.contactsEmail,
+      assignerName: getUserDisplayName(fromUser),
+      receiverEmail: toUser!.contactsEmail,
+      receiverName: getUserDisplayName(toUser),
+      comment: data.comment,
+      event: data.badgeId!,
+    });
+  };
+
   return async (ctx: Router.RouterContext) => {
     const courseId = Number(ctx.params.courseId);
     const data: FeedbackInput = ctx.request.body;
@@ -33,32 +55,18 @@ export const postFeedback = (logger: ILogger) => {
     const id = ctx.state.user.id;
     const userRepository = getRepository(User);
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
+
+    const heroesUrl = await postToHeroes(fromUser, toUser, data);
     const feedback: Partial<Feedback> = {
-      text: data.text,
+      comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
       course: courseId,
       fromUser: id,
       toUser: data.toUserId,
+      heroesUrl: heroesUrl || undefined,
     };
     const result = await getRepository(Feedback).save(feedback);
-
-    if (
-      fromUser &&
-      fromUser.contactsEmail &&
-      toUser &&
-      toUser.contactsEmail &&
-      data.badgeId &&
-      heroesService.isCommentValid(data.text)
-    ) {
-      heroesService.assignBadge({
-        assignerEmail: fromUser.contactsEmail,
-        assignerName: getUserDisplayName(fromUser),
-        receiverEmail: toUser.contactsEmail,
-        receiverName: getUserDisplayName(toUser),
-        comment: data.text,
-        event: data.badgeId,
-      });
-    }
     setResponse(ctx, OK, result);
+    return;
   };
 };

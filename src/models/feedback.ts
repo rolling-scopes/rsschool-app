@@ -6,6 +6,9 @@ import { Course } from './course';
 export class Feedback {
   @PrimaryGeneratedColumn() id: number;
 
+  @ManyToOne(_ => Course, { nullable: true })
+  course?: Course | number;
+
   @ManyToOne(_ => User)
   fromUser: User | number;
 
@@ -13,13 +16,13 @@ export class Feedback {
   toUser: User | number;
 
   @Column({ nullable: true })
-  text: string;
+  comment: string;
 
   @Column({ nullable: true })
   badgeId: string;
 
-  @ManyToOne(_ => Course, { nullable: true })
-  course?: Course | number;
+  @Column({ nullable: true })
+  heroesUrl: string;
 
   @CreateDateColumn()
   createdDate: number;

@@ -24,9 +24,9 @@ export class HeroesService {
     return comment && comment.length >= 20;
   }
 
-  public async assignBadge(params: AssignBadgeParams) {
+  public async assignBadge(params: AssignBadgeParams): Promise<string | null> {
     if (!this.isDisabled()) {
-      return;
+      return null;
     }
     const { url, username, password } = config.integrations.heroes;
     const result = await fetch(url!, {
@@ -37,11 +37,24 @@ export class HeroesService {
       },
       body: JSON.stringify(params),
     });
-    const response = await result.json();
+    const response: HeroesResponse = await result.json();
     this.logger.info(response);
+    if (result.ok && response.content) {
+      return response.content;
+    }
+    return null;
   }
 
   private isDisabled() {
     return !config.integrations.heroes.url;
   }
+}
+
+interface HeroesResponse {
+  content: string;
+  errors: {
+    code: string | null;
+    message: string;
+    path: string | null;
+  }[];
 }
