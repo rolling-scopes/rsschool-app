@@ -25,7 +25,7 @@ export class HeroesService {
   }
 
   public async assignBadge(params: AssignBadgeParams): Promise<string | null> {
-    if (!this.isDisabled()) {
+    if (this.isDisabled()) {
       return null;
     }
     const { url, username, password } = config.integrations.heroes;
