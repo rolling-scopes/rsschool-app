@@ -19,6 +19,16 @@ const getUserDisplayName = (data: User) => {
   return data.githubId;
 };
 
+const SUPPORTED_BADGE_IDS = [
+  'Congratulations',
+  'Expert_help',
+  'Great_speaker',
+  'Good_job',
+  'Helping_hand',
+  'Hero',
+  'Thank_you',
+];
+
 export const postFeedback = (logger: ILogger) => {
   const heroesService = new HeroesService(logger);
 
@@ -39,7 +49,7 @@ export const postFeedback = (logger: ILogger) => {
       receiverEmail: toUser!.contactsEmail,
       receiverName: getUserDisplayName(toUser),
       comment: data.comment,
-      event: data.badgeId!,
+      event: data.badgeId,
     });
   };
 
@@ -47,7 +57,7 @@ export const postFeedback = (logger: ILogger) => {
     const courseId = Number(ctx.params.courseId);
     const data: FeedbackInput = ctx.request.body;
 
-    if (isNaN(courseId) || isNaN(data.toUserId)) {
+    if (isNaN(courseId) || isNaN(data.toUserId) || (data.badgeId && !SUPPORTED_BADGE_IDS.includes(data.badgeId))) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
