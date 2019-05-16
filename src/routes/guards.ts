@@ -9,7 +9,7 @@ export const guard = async (ctx: Router.RouterContext, next: () => Promise<void>
     await next();
     return;
   }
-  return basicAuthAdmin(ctx, next);
+  await basicAuthAdmin(ctx, next);
 };
 
 export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
@@ -17,5 +17,5 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
     await next();
     return;
   }
-  return basicAuthAdmin(ctx, next);
+  await basicAuthAdmin(ctx, next);
 };

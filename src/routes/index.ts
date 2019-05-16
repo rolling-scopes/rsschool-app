@@ -1,6 +1,7 @@
 export * from './logging';
 
 import * as Router from 'koa-router';
+import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseRoute } from './course';
 import { coursesRoute } from './courses';
@@ -21,6 +22,8 @@ function applyRouter(topRouter: Router, router: Router) {
 
 export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   const publicRouter = new Router();
+
+  publicRouter.use(errorHandlerMiddleware(logger));
 
   applyRouter(publicRouter, authRoute());
   applyRouter(publicRouter, sessionRoute(logger));

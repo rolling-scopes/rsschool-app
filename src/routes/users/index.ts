@@ -5,11 +5,12 @@ import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 import { adminGuard, guard } from '../guards';
+import { OperationResult } from '../../services';
 
 const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body as { githubId: string }[];
 
-  const response = [];
+  const result: OperationResult[] = [];
   for await (const item of data) {
     console.time(item.githubId);
 
@@ -18,20 +19,20 @@ const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
       const entity = await userRepository.findOne({ where: { githubId: item.githubId.toLowerCase() } });
 
       if (entity == null) {
-        await userRepository.save(item);
-        response.push(`added: ${item.githubId}`);
+        const user = await userRepository.save(item);
+        result.push({ status: 'created', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
       } else {
-        await userRepository.save({ ...entity, ...item });
-        response.push(`updated: ${item.githubId}`);
+        const user = await userRepository.save({ ...entity, ...item });
+        result.push({ status: 'updated', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
       }
     } catch (e) {
-      response.push(`failed: ${item.githubId}`);
+      result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${e.message}` });
     }
 
     console.timeEnd(item.githubId);
   }
 
-  setResponse(ctx, OK, response);
+  setResponse(ctx, OK, result);
 };
 
 const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) => {

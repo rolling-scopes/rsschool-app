@@ -1,4 +1,5 @@
 import * as Router from 'koa-router';
+import { ILogger } from '../logger';
 
 export const routeLoggerMiddleware: Router.IMiddleware = async (ctx: Router.RouterContext, next: any) => {
   const oldLogger = ctx.logger;
@@ -6,4 +7,17 @@ export const routeLoggerMiddleware: Router.IMiddleware = async (ctx: Router.Rout
   ctx.logger = ctx.logger.child({ module: 'route', userId });
   await next();
   ctx.logger = oldLogger;
+};
+
+export const errorHandlerMiddleware = (logger: ILogger) => async (ctx: Router.RouterContext, next: any) => {
+  try {
+    await next();
+  } catch (err) {
+    logger.error(err);
+    ctx.status = err.status || 500;
+    ctx.body = JSON.stringify({
+      message: err.message,
+      details: err.stack,
+    });
+  }
 };
