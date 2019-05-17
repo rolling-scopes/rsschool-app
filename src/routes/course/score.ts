@@ -200,7 +200,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
           status: 'skipped',
           value: `${existingResult.id}. Possible user data override`,
         });
-        return;
+        continue;
       }
 
       if (item.githubPrUrl) {
