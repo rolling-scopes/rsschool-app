@@ -191,6 +191,14 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
+      if (existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
+        result.push({
+          status: 'skipped',
+          value: `${existingResult.id}. Possible user data override`,
+        });
+        return;
+      }
+
       existingResult.githubPrUrl = item.githubPrUrl;
       existingResult.comment = item.comment;
       if (score !== existingResult.score) {
