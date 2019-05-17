@@ -4,7 +4,6 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as serve from 'koa-static';
-// import { RateLimit } from 'koa2-ratelimit';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';

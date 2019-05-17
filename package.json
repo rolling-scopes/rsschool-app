@@ -34,7 +34,6 @@
     "koa-router": "~7.4.0",
     "koa-session": "~5.10.1",
     "koa-static": "~5.0.0",
-    "koa2-ratelimit": "~0.8.0",
     "koa2-swagger-ui": "~2.13.2",
     "node-fetch": "^2.5.0",
     "passport-github": "~1.1.0",
