@@ -1,40 +1,101 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, Task } from '../../models';
+import { Course, CourseTask, Task, Stage, TaskResult } from '../../models';
 import { ILogger } from '../../logger';
-import { getRepository, In } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 
-type CourseTaskDTO = {
-  courseTaskId: number;
-  name: string;
-};
-
-export const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
   const course = await getRepository(Course).findOne(courseId, {
     relations: ['stages', 'stages.courseTasks'],
   });
-  const courseTaskIds: number[] = course!.stages
-    .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
-    .map(task => task.id);
-  const courseTask = await getRepository(CourseTask).find({ where: { id: In(courseTaskIds) }, relations: ['task'] });
 
   if (course === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  const data: CourseTaskDTO[] = courseTask.map(item => ({
-    courseTaskId: item.id,
-    name: (item.task as Task).name,
-    maxScore: item.maxScore,
-    githubPrRequired: !!(item.task as Task).githubPrRequired,
-    description: (item.task as Task).description,
-    descriptionUrl: (item.task as Task).descriptionUrl,
-    studentStartDate: item.studentStartDate,
-    studentEndDate: item.studentEndDate,
-  }));
+  const courseTaskIds: number[] = course!.stages
+    .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
+    .map(task => task.id);
+
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .addSelect('COUNT(taskResult.id)', 'taskResultCount')
+    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+    .innerJoinAndSelect('courseTask.task', 'task')
+    .innerJoinAndSelect('courseTask.stage', 'stage')
+    .where(`courseTask.id IN (${courseTaskIds.join(',')})`)
+    .addGroupBy('courseTask.id')
+    .addGroupBy('task.id')
+    .addGroupBy('stage.id')
+    .getRawAndEntities();
+
+  const data = courseTasks.entities.map(item => {
+    const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
+    return {
+      courseTaskId: item.id,
+      taskId: (item.task as Task).id,
+      name: (item.task as Task).name,
+      maxScore: item.maxScore,
+      scoreWeight: item.scoreWeight,
+      stageId: (item.stage as Stage).id,
+      githubPrRequired: !!(item.task as Task).githubPrRequired,
+      description: (item.task as Task).description,
+      descriptionUrl: (item.task as Task).descriptionUrl,
+      studentStartDate: item.studentStartDate,
+      studentEndDate: item.studentEndDate,
+      taskResultCount: raw ? Number(raw.taskResultCount) : 0,
+    };
+  });
 
   setResponse(ctx, OK, data);
+};
+
+type PostTaskInput = {
+  taskId: number;
+  stageId: number;
+  maxScore?: number;
+  scoreWeight?: number;
+};
+
+export const postCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const data: PostTaskInput = ctx.request.body;
+  const courseTaskRepository = getRepository(CourseTask);
+  const task: Partial<CourseTask> = {
+    task: data.taskId,
+    maxScore: data.maxScore,
+    stage: data.stageId,
+    scoreWeight: data.scoreWeight,
+  };
+  const createdResult = await courseTaskRepository.save(task);
+  setResponse(ctx, OK, createdResult);
+  return;
+};
+
+export const putCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseTaskId = Number(ctx.params.courseTaskId);
+  const data: PostTaskInput = ctx.request.body;
+  const courseTaskRepository = getRepository(CourseTask);
+  const courseTask = await courseTaskRepository.findOne({ where: { id: courseTaskId } });
+  if (courseTask == null) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+  courseTask.stage = data.stageId;
+  if (data.maxScore != null) {
+    courseTask.maxScore = data.maxScore;
+  }
+  if (data.scoreWeight != null) {
+    courseTask.scoreWeight = data.scoreWeight;
+  }
+  const updatedResult = await courseTaskRepository.save(courseTask);
+  setResponse(ctx, OK, updatedResult);
+};
+
+export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseTaskId = Number(ctx.params.courseTaskId);
+  const updatedResult = await getRepository(CourseTask).delete(courseTaskId);
+  setResponse(ctx, OK, updatedResult);
 };

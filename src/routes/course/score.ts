@@ -156,14 +156,6 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      // if (student.mentor.id !== mentor.id) {
-      //   result.push({
-      //     status: 'skipped',
-      //     value: `incorrect mentor-student relation: ${mentorGithubId} - ${studentGithubId}`,
-      //   });
-      //   continue;
-      // }
-
       const { courseTaskId } = item;
       const existingResult = await getRepository(TaskResult)
         .createQueryBuilder('taskResult')

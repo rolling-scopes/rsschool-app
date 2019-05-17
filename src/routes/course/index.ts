@@ -2,7 +2,8 @@ import * as Router from 'koa-router';
 import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
-import { getTasks } from './tasks';
+import { getCourseTasks, postCourseTask, putCourseTask, deleteCourseTask } from './tasks';
+import { getCourseStages } from './stages';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
@@ -199,7 +200,83 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', guard, getTasks(logger));
+  router.get('/:courseId/stages', guard, getCourseStages(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/tasks:
+   *   get:
+   *      description: Returns course tasks
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: List of tasks object
+   */
+  router.get('/:courseId/tasks', guard, getCourseTasks(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/task:
+   *   post:
+   *      description: Assign task to course/stage
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: Result
+   */
+  router.post('/:courseId/task', adminGuard, postCourseTask(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/task/{courseTaskId}:
+   *   put:
+   *      description: Update course task
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: Result
+   */
+  router.put('/:courseId/task/:courseTaskId', adminGuard, putCourseTask(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/task/{courseTaskId}:
+   *   delete:
+   *      description: Delete course task
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: Result
+   */
+  router.delete('/:courseId/task/:courseTaskId', adminGuard, deleteCourseTask(logger));
 
   /**
    * @swagger
@@ -360,7 +437,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:courseId', guard, createGetRoute(Course, logger));
+  router.get('/:id', guard, createGetRoute(Course, logger));
 
   /**
    * @swagger
