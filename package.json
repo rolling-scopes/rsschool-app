@@ -35,13 +35,13 @@
     "koa-session": "~5.10.1",
     "koa-static": "~5.0.0",
     "koa2-swagger-ui": "~2.13.2",
-    "node-fetch": "^2.5.0",
+    "node-fetch": "~2.6.0",
     "passport-github": "~1.1.0",
-    "pg": "~7.10.0",
-    "pino": "~5.12.2",
+    "pg": "~7.11.0",
+    "pino": "~5.12.5",
     "reflect-metadata": "0.1.13",
     "swagger-jsdoc": "^3.2.9",
-    "typeorm": "~0.2.16"
+    "typeorm": "~0.2.17"
   },
   "devDependencies": {
     "@commitlint/cli": "7.5.2",
