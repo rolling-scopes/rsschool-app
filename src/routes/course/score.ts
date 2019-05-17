@@ -88,8 +88,12 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  existingResult.githubPrUrl = data.githubPrUrl;
-  existingResult.comment = data.comment;
+  if (data.githubPrUrl) {
+    existingResult.githubPrUrl = data.githubPrUrl;
+  }
+  if (data.comment) {
+    existingResult.comment = data.comment;
+  }
   if (data.score !== existingResult.score) {
     existingResult.historicalScores.push({
       authorId: id,
@@ -199,8 +203,12 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         return;
       }
 
-      existingResult.githubPrUrl = item.githubPrUrl;
-      existingResult.comment = item.comment;
+      if (item.githubPrUrl) {
+        existingResult.githubPrUrl = item.githubPrUrl;
+      }
+      if (item.comment) {
+        existingResult.comment = item.comment;
+      }
       if (score !== existingResult.score) {
         existingResult.historicalScores.push({
           authorId: 0,
