@@ -66,16 +66,17 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     })
     .getOne();
 
+  const score = Math.round(Number(data.score));
   if (existingResult == null) {
     const taskResult: Partial<TaskResult> = {
       comment: data.comment,
       courseTaskId: Number(data.courseTaskId),
       student: Number(data.studentId),
-      score: data.score,
+      score,
       historicalScores: [
         {
           authorId: id,
-          score: data.score,
+          score,
           dateTime: Date.now(),
           comment: data.comment || '',
         },
@@ -94,14 +95,14 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   if (data.comment) {
     existingResult.comment = data.comment;
   }
-  if (data.score !== existingResult.score) {
+  if (score !== existingResult.score) {
     existingResult.historicalScores.push({
       authorId: id,
-      score: data.score,
+      score,
       dateTime: Date.now(),
       comment: data.comment || '',
     });
-    existingResult.score = data.score;
+    existingResult.score = score;
   }
 
   const updateResult = await getRepository(TaskResult).save(existingResult);
@@ -126,7 +127,6 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       logger.info(item.studentGithubId);
 
       const { mentorGithubId, studentGithubId } = item;
-      const score = Math.round(item.score);
 
       const mentor = await getRepository(Mentor)
         .createQueryBuilder('mentor')
@@ -171,6 +171,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         })
         .getOne();
 
+      const score = Math.round(Number(item.score));
       if (existingResult == null) {
         const taskResult: Partial<TaskResult> = {
           comment: item.comment,
