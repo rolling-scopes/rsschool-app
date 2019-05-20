@@ -31,16 +31,16 @@ export class CourseTask {
   stage: Stage | number;
 
   @Column({ type: 'timestamp', nullable: true })
-  studentStartDate: number;
+  studentStartDate: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  studentEndDate: number;
+  studentEndDate: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  mentorStartDate: number;
+  mentorStartDate: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  mentorEndDate: number;
+  mentorEndDate: string;
 
   @Column({ nullable: true })
   maxScore: number;
