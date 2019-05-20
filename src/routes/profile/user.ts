@@ -27,6 +27,7 @@ export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext)
             'mentors.course',
             'students.course',
             'students.mentor',
+            'students.taskResults',
         ],
     });
 
