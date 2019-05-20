@@ -6,11 +6,11 @@ import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 
 export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
+  const courseId: number = ctx.params.courseId;
+
   const course = await getRepository(Course).findOne(courseId, {
     relations: ['stages', 'stages.courseTasks'],
   });
-
   if (course === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;

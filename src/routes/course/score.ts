@@ -1,15 +1,16 @@
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { OK, BAD_REQUEST } from 'http-status-codes';
+import * as NodeCache from 'node-cache';
 import { setResponse } from '../utils';
 import { TaskResult, Mentor, Student } from '../../models';
 import { ILogger } from '../../logger';
-import { studentsService, mentorsService, OperationResult } from '../../services';
+import { studentsService, mentorsService, OperationResult, taskResultsService } from '../../services';
 
 type ScoreInput = {
-  studentId: number;
-  courseTaskId: number;
-  score: number;
+  studentId: number | string;
+  courseTaskId: number | string;
+  score: number | string;
   comment?: string;
   githubPrUrl: string;
 };
@@ -23,27 +24,29 @@ type ScoresInput = {
   githubPrUrl: string;
 };
 
-export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
+const cache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
+export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
 
-  logger.info(ctx.request.body);
+  const inputData: ScoreInput = ctx.request.body;
+  const data = {
+    studentId: Number(inputData.studentId),
+    courseTaskId: Number(inputData.courseTaskId),
+    score: Math.round(Number(inputData.score)),
+    comment: inputData.comment || '',
+    githubPrUrl: inputData.githubPrUrl,
+  };
 
-  const data: ScoreInput = ctx.request.body;
-
-  const id = ctx.state.user.id;
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, id);
+  const authorId = ctx.state.user.id;
+  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
 
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
   }
 
-  const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
+  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor'] });
 
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
@@ -56,34 +59,10 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   }
 
   const { courseTaskId, studentId } = data;
-  const existingResult = await getRepository(TaskResult)
-    .createQueryBuilder('taskResult')
-    .innerJoinAndSelect('taskResult.student', 'student')
-    .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
-    .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
-      studentId: Number(studentId),
-      courseTaskId: Number(courseTaskId),
-    })
-    .getOne();
+  const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
 
-  const score = Math.round(Number(data.score));
   if (existingResult == null) {
-    const taskResult: Partial<TaskResult> = {
-      comment: data.comment,
-      courseTaskId: Number(data.courseTaskId),
-      student: Number(data.studentId),
-      score,
-      historicalScores: [
-        {
-          authorId: id,
-          score,
-          dateTime: Date.now(),
-          comment: data.comment || '',
-        },
-      ],
-      githubPrUrl: data.githubPrUrl,
-    };
-
+    const taskResult = taskResultsService.createTaskResult(authorId, data);
     const addResult = await getRepository(TaskResult).save(taskResult);
     setResponse(ctx, OK, addResult);
     return;
@@ -95,14 +74,14 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   if (data.comment) {
     existingResult.comment = data.comment;
   }
-  if (score !== existingResult.score) {
+  if (data.score !== existingResult.score) {
     existingResult.historicalScores.push({
-      authorId: id,
-      score,
+      authorId,
+      score: data.score,
       dateTime: Date.now(),
       comment: data.comment || '',
     });
-    existingResult.score = score;
+    existingResult.score = data.score;
   }
 
   const updateResult = await getRepository(TaskResult).save(existingResult);
@@ -118,15 +97,23 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
     return;
   }
 
-  logger.info(ctx.request.body);
-  const data: ScoresInput[] = ctx.request.body;
+  const inputData: ScoresInput[] = ctx.request.body;
   const result: OperationResult[] = [];
 
-  for await (const item of data) {
+  for await (const item of inputData) {
     try {
       logger.info(item.studentGithubId);
 
-      const { mentorGithubId, studentGithubId } = item;
+      const data = {
+        studentGithubId: item.studentGithubId,
+        mentorGithubId: item.mentorGithubId,
+        courseTaskId: Number(item.courseTaskId),
+        score: Math.round(Number(item.score)),
+        comment: item.comment || '',
+        githubPrUrl: item.githubPrUrl,
+      };
+
+      const { mentorGithubId, studentGithubId } = data;
 
       const mentor = await getRepository(Mentor)
         .createQueryBuilder('mentor')
@@ -160,34 +147,13 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      const { courseTaskId } = item;
-      const existingResult = await getRepository(TaskResult)
-        .createQueryBuilder('taskResult')
-        .innerJoinAndSelect('taskResult.student', 'student')
-        .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
-        .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
-          studentId: student.id,
-          courseTaskId,
-        })
-        .getOne();
+      const existingResult = await taskResultsService.getStudentTaskResult(student.id, data.courseTaskId);
 
-      const score = Math.round(Number(item.score));
       if (existingResult == null) {
-        const taskResult: Partial<TaskResult> = {
-          comment: item.comment,
-          courseTaskId: item.courseTaskId,
-          student: Number(student.id),
-          score,
-          historicalScores: [
-            {
-              authorId: 0,
-              score,
-              dateTime: Date.now(),
-              comment: item.comment,
-            },
-          ],
-          githubPrUrl: item.githubPrUrl,
-        };
+        const taskResult = taskResultsService.createTaskResult(0, {
+          ...data,
+          studentId: Number(student.id),
+        });
         const addResult = await getRepository(TaskResult).save(taskResult);
         result.push({
           status: 'created',
@@ -204,20 +170,20 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      if (item.githubPrUrl) {
+      if (data.githubPrUrl) {
         existingResult.githubPrUrl = item.githubPrUrl;
       }
-      if (item.comment) {
+      if (data.comment) {
         existingResult.comment = item.comment;
       }
-      if (score !== existingResult.score) {
+      if (data.score !== existingResult.score) {
         existingResult.historicalScores.push({
           authorId: 0,
-          score,
+          score: data.score,
           dateTime: Date.now(),
           comment: item.comment,
         });
-        existingResult.score = score;
+        existingResult.score = data.score;
       }
 
       const updateResult = await getRepository(TaskResult).save(existingResult);
@@ -236,8 +202,17 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
   setResponse(ctx, OK, result);
 };
 
-export const getScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
+export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = ctx.params.courseId;
+  const cacheKey = `${courseId}_score`;
+  const cachedData = cache.get(cacheKey);
+  if (cachedData) {
+    logger.info(`[Cache]: Score for ${courseId}`);
+    setResponse(ctx, OK, cachedData);
+    return;
+  }
+
   const students = await studentsService.getCourseStudentsWithTasks(courseId);
+  cache.set(cacheKey, students);
   setResponse(ctx, OK, students);
 };

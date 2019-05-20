@@ -17,7 +17,6 @@ export const errorHandlerMiddleware = (logger: ILogger) => async (ctx: Router.Ro
     ctx.status = err.status || 500;
     ctx.body = JSON.stringify({
       message: err.message,
-      details: err.stack,
     });
   }
 };

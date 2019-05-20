@@ -1,4 +1,5 @@
 import * as Router from 'koa-router';
+import { BAD_REQUEST } from 'http-status-codes';
 import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
@@ -12,6 +13,17 @@ import { ILogger } from '../../logger';
 import { createGetRoute, createPostRoute } from '../common';
 import { Course } from '../../models';
 import { adminGuard, guard } from '../guards';
+import { setResponse } from '../utils';
+
+const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
+  const courseId = Number(ctx.params.courseId);
+  if (isNaN(courseId)) {
+    setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
+    return;
+  }
+  ctx.params.courseId = courseId;
+  await next();
+};
 
 export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course' });
@@ -34,7 +46,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: User object
    */
-  router.get('/:courseId/mentor/students', guard, getMentorStudents(logger));
+  router.get('/:courseId/mentor/students', guard, validateCourseId, getMentorStudents(logger));
 
   /**
    * @swagger
@@ -56,7 +68,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of students
    */
-  router.get('/:courseId/students', adminGuard, getStudents(logger));
+  router.get('/:courseId/students', adminGuard, validateCourseId, getStudents(logger));
 
   /**
    * @swagger
@@ -93,7 +105,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of students
    */
-  router.post('/:courseId/students', adminGuard, postStudents(logger));
+  router.post('/:courseId/students', adminGuard, validateCourseId, postStudents(logger));
 
   /**
    * @swagger
@@ -115,7 +127,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of mentors
    */
-  router.get('/:courseId/mentors', adminGuard, getMentors(logger));
+  router.get('/:courseId/mentors', adminGuard, validateCourseId, getMentors(logger));
 
   /**
    * @swagger
@@ -148,7 +160,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of mentors
    */
-  router.post('/:courseId/mentors', adminGuard, postMentors(logger));
+  router.post('/:courseId/mentors', adminGuard, validateCourseId, postMentors(logger));
 
   /**
    * @swagger
@@ -181,7 +193,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of pairs
    */
-  router.post('/:courseId/pairs', adminGuard, postPairs(logger));
+  router.post('/:courseId/pairs', adminGuard, validateCourseId, postPairs(logger));
 
   /**
    * @swagger
@@ -200,7 +212,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/stages', guard, getCourseStages(logger));
+  router.get('/:courseId/stages', guard, validateCourseId, getCourseStages(logger));
 
   /**
    * @swagger
@@ -219,7 +231,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', guard, getCourseTasks(logger));
+  router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
 
   /**
    * @swagger
@@ -238,7 +250,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task', adminGuard, postCourseTask(logger));
+  router.post('/:courseId/task', adminGuard, validateCourseId, postCourseTask(logger));
 
   /**
    * @swagger
@@ -257,7 +269,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.put('/:courseId/task/:courseTaskId', adminGuard, putCourseTask(logger));
+  router.put('/:courseId/task/:courseTaskId', adminGuard, validateCourseId, putCourseTask(logger));
 
   /**
    * @swagger
@@ -316,7 +328,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.post('/:courseId/scores', adminGuard, postScores(logger));
+  router.post('/:courseId/scores', adminGuard, validateCourseId, postScores(logger));
 
   /**
    * @swagger
@@ -335,7 +347,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.post('/:courseId/score', guard, postScore(logger));
+  router.post('/:courseId/score', guard, validateCourseId, postScore(logger));
 
   /**
    * @swagger
@@ -354,7 +366,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:courseId/score', guard, getScore(logger));
+  router.get('/:courseId/score', guard, validateCourseId, getScore(logger));
 
   /**
    * @swagger
@@ -385,7 +397,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: result
    */
-  router.post('/:courseId/expulsion', guard, postExpulsion(logger));
+  router.post('/:courseId/expulsion', guard, validateCourseId, postExpulsion(logger));
 
   /**
    * @swagger
@@ -418,7 +430,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: result
    */
-  router.post('/:courseId/feedback', guard, postFeedback(logger));
+  router.post('/:courseId/feedback', guard, validateCourseId, postFeedback(logger));
 
   /**
    * @swagger

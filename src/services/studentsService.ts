@@ -8,18 +8,14 @@ type StudentDTO = {
   studentId: number;
   mentorId: number | null;
   taskResults: {
+    id: number;
     courseTaskId: number;
-    createdDate: string;
-    updatedDate: string;
-    githubPrUrl: string | null;
-    githubRepoUrl: string | null;
     score: number;
-    comment?: string;
   }[];
 };
 
 export async function getCourseStudent(courseId: number, userId: number) {
-  return await getRepository(Student)
+  return getRepository(Student)
     .createQueryBuilder('student')
     .innerJoinAndSelect('student.user', 'user')
     .innerJoinAndSelect('student.course', 'course')
@@ -61,7 +57,11 @@ export async function getCourseStudentsWithTasks(courseId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
-    taskResults: student.taskResults || [],
+    taskResults: (student.taskResults || []).map(taskResult => ({
+      id: taskResult.id,
+      courseTaskId: taskResult.courseTaskId,
+      score: taskResult.score,
+    })),
     isExpelled: student.isExpelled,
   }));
 }
@@ -80,7 +80,11 @@ export async function getMentorStudents(mentorId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
-    taskResults: student.taskResults || [],
+    taskResults: (student.taskResults || []).map(taskResult => ({
+      id: taskResult.id,
+      courseTaskId: taskResult.courseTaskId,
+      score: taskResult.score,
+    })),
     isExpelled: student.isExpelled,
   }));
 }

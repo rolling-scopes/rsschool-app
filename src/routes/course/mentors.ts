@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { OK, BAD_REQUEST, NOT_FOUND } from 'http-status-codes';
+import { OK, NOT_FOUND } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { Mentor, User } from '../../models';
 import { getRepository } from 'typeorm';
@@ -14,12 +14,7 @@ type MentorDTO = {
 };
 
 export const getMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
-
+  const courseId: number = ctx.params.courseId;
   const mentors = await getRepository(Mentor).find({ where: { courseId }, relations: ['user'] });
 
   const students = mentors.map<MentorDTO>(mentor => ({
@@ -33,15 +28,8 @@ export const getMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
-
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
-
+  const courseId: number = ctx.params.courseId;
   const data: { githubId: string; maxStudentsLimit: number }[] = ctx.request.body;
-
   const mentorRepository = getRepository(Mentor);
 
   if (data === undefined) {

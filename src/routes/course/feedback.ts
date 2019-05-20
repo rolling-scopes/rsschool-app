@@ -54,7 +54,7 @@ export const postFeedback = (logger: ILogger) => {
   };
 
   return async (ctx: Router.RouterContext) => {
-    const courseId = Number(ctx.params.courseId);
+    const courseId: number = ctx.params.courseId;
     const data: FeedbackInput = ctx.request.body;
 
     if (isNaN(courseId) || isNaN(data.toUserId) || (data.badgeId && !SUPPORTED_BADGE_IDS.includes(data.badgeId))) {

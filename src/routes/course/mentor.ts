@@ -8,7 +8,7 @@ import { studentsService } from '../../services';
 
 export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const id = ctx.state!.user.id;
-  const courseId = Number(ctx.params.courseId);
+  const courseId: number = ctx.params.courseId;
 
   const mentor = await getRepository(Mentor)
     .createQueryBuilder('mentor')

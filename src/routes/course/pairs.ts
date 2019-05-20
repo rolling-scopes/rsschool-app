@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
-import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
+import { NOT_FOUND, OK } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Mentor, Student } from '../../models';
 import { ILogger } from '../../logger';
@@ -12,13 +12,7 @@ type PairInput = {
 };
 
 export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
-
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
-
+  const courseId: number = ctx.params.courseId;
   const data: PairInput[] = ctx.request.body;
 
   if (data === undefined) {

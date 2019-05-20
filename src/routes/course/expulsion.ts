@@ -14,11 +14,6 @@ type ExpulsionInput = {
 export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
 
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
-
   logger.info(ctx.request.body);
 
   const data: ExpulsionInput = ctx.request.body;
