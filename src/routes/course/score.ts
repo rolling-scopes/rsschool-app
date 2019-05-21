@@ -2,8 +2,9 @@ import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as NodeCache from 'node-cache';
+
 import { setResponse } from '../utils';
-import { TaskResult, Mentor, Student } from '../../models';
+import { TaskResult, Student } from '../../models';
 import { ILogger } from '../../logger';
 import { studentsService, mentorsService, OperationResult, taskResultsService } from '../../services';
 
@@ -24,7 +25,7 @@ type ScoresInput = {
   githubPrUrl: string;
 };
 
-const cache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
+const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
 export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
@@ -90,12 +91,7 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
-
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
-  }
+  const courseId: number = ctx.params.courseId;
 
   const inputData: ScoresInput[] = ctx.request.body;
   const result: OperationResult[] = [];
@@ -106,7 +102,6 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
       const data = {
         studentGithubId: item.studentGithubId,
-        mentorGithubId: item.mentorGithubId,
         courseTaskId: Number(item.courseTaskId),
         score: Math.round(Number(item.score)),
         comment: item.comment || '',
@@ -117,7 +112,6 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 
       const student = await getRepository(Student)
         .createQueryBuilder('student')
-        .innerJoinAndSelect('student.mentor', 'mentor')
         .innerJoinAndSelect('student.user', 'user')
         .where('"user"."githubId" = :studentGithubId AND "student"."courseId" = :courseId', {
           studentGithubId,
@@ -126,10 +120,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         .getOne();
 
       if (student == null) {
-        result.push({
-          status: 'skipped',
-          value: `no student: ${studentGithubId}`,
-        });
+        result.push({ status: 'skipped', value: `no student: ${studentGithubId}` });
         continue;
       }
 
@@ -141,18 +132,13 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
           studentId: Number(student.id),
         });
         const addResult = await getRepository(TaskResult).save(taskResult);
-        result.push({
-          status: 'created',
-          value: addResult.id,
-        });
+        result.push({ status: 'created', value: addResult.id });
         continue;
       }
 
       if (existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
-        result.push({
-          status: 'skipped',
-          value: `${existingResult.id}. Possible user data override`,
-        });
+        const message = `${existingResult.id}. Possible user data override`;
+        result.push({ status: 'skipped', value: message });
         continue;
       }
 
@@ -173,15 +159,9 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       }
 
       const updateResult = await getRepository(TaskResult).save(existingResult);
-      result.push({
-        status: 'updated',
-        value: updateResult.id,
-      });
+      result.push({ status: 'updated', value: updateResult.id });
     } catch (e) {
-      result.push({
-        status: 'failed',
-        value: e.message,
-      });
+      result.push({ status: 'failed', value: e.message });
     }
   }
 
@@ -191,7 +171,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
 export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
   const cacheKey = `${courseId}_score`;
-  const cachedData = cache.get(cacheKey);
+  const cachedData = memoryCache.get(cacheKey);
   if (cachedData) {
     logger.info(`[Cache]: Score for ${courseId}`);
     setResponse(ctx, OK, cachedData);
@@ -199,6 +179,6 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
   }
 
   const students = await studentsService.getCourseStudentsWithTasks(courseId);
-  cache.set(cacheKey, students);
+  memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students);
 };
