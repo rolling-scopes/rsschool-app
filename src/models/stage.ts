@@ -24,6 +24,9 @@ export class Stage {
   @Column()
   name: string;
 
+  @Column()
+  status: boolean;
+
   @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
 
