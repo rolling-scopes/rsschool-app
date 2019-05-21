@@ -9,7 +9,7 @@ export function stageClose(logger: ILogger) {
     /**
      * @swagger
      *
-     * /stage/:id/close:
+     * /stage/:stageId/close:
      *   get:
      *      description: close stage and shuffle mentors
      *      security:
@@ -20,7 +20,7 @@ export function stageClose(logger: ILogger) {
      *        200:
      *          description: profile
      */
-    router.get('/', adminGuard, shuffleMentors(logger));
+    router.get('/:stageId/close', adminGuard, shuffleMentors(logger));
 
     return router;
   }

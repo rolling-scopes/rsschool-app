@@ -6,9 +6,17 @@ import { getRepository } from 'typeorm';
 import { Stage } from '../../models';
 
 export const shuffleMentors = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-    const stage = await getRepository(Stage).find();
+    const stageId: number = ctx.params.stageId;
 
-    logger.info(stage);
+    const stage = await getRepository(Stage).findOne({
+        where: { stageId },
+        relations: [
+            'students',
+            'students.mentor',
+        ],
+    });
+
+    logger.info(stage || '');
 
     setResponse(ctx, OK, stage);
 };
