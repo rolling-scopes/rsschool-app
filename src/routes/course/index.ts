@@ -217,9 +217,9 @@ export function courseRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /course/{courseId}/tasks:
+   * /course/{courseId}/stage/:stageId/close
    *   post:
-   *      description: Returns course tasks
+   *      description: Close current stage
    *      parameters:
    *        - name: courseId
    *          in: path
