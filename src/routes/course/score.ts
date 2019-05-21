@@ -113,21 +113,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         githubPrUrl: item.githubPrUrl,
       };
 
-      const { mentorGithubId, studentGithubId } = data;
-
-      const mentor = await getRepository(Mentor)
-        .createQueryBuilder('mentor')
-        .innerJoinAndSelect('mentor.user', 'user')
-        .where('"mentor"."courseId" = :courseId AND "user"."githubId" = :mentorGithubId', { mentorGithubId, courseId })
-        .getOne();
-
-      if (mentor == null) {
-        result.push({
-          status: 'skipped',
-          value: `no mentor: ${mentorGithubId}`,
-        });
-        continue;
-      }
+      const { studentGithubId } = data;
 
       const student = await getRepository(Student)
         .createQueryBuilder('student')
