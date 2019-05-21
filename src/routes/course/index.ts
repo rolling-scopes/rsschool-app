@@ -4,7 +4,7 @@ import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getCourseTasks, postCourseTask, putCourseTask, deleteCourseTask } from './tasks';
-import { getCourseStages, closeStage } from './stages';
+import { getCourseStages, postCloseStage } from './stages';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
@@ -214,12 +214,11 @@ export function courseRoute(logger: ILogger) {
    */
   router.get('/:courseId/stages', guard, validateCourseId, getCourseStages(logger));
 
-
   /**
    * @swagger
    *
    * /course/{courseId}/tasks:
-   *   get:
+   *   post:
    *      description: Returns course tasks
    *      parameters:
    *        - name: courseId
@@ -236,7 +235,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/stage/:stageId/close', adminGuard, validateCourseId, closeStage(logger));
+  router.post('/:courseId/stage/:stageId/close', validateCourseId, postCloseStage(logger));
 
   /**
    * @swagger
