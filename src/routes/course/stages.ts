@@ -17,7 +17,9 @@ export const getCourseStages = (_: ILogger) => async (ctx: Router.RouterContext)
 export const closeStage = (logger: ILogger) => async (ctx: Router.RouterContext) => {
     const courseId: number = ctx.params.courseId;
     const stageId: number = ctx.params.stageId;
+    const isForce = ctx.query.force;
 
+    logger.info(isForce.toString());
     logger.info(stageId.toString());
 
     const stages = await getRepository(Stage)

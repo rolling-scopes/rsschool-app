@@ -32,6 +32,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, usersRoute(logger));
   applyRouter(publicRouter, tasksRoute(logger));
   applyRouter(publicRouter, profileRoute(logger));
-  applyRouter(publicRouter, stageClose(logger));
+
   return { publicRouter };
 };
