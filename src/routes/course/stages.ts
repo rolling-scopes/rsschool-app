@@ -15,6 +15,18 @@ function shuffleArray(input: number[]): number[] {
     return input;
 }
 
+function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
+    const res = [];
+
+    for (let i = 0; i < mentorIds.length; i++) {
+        for (let j = i; j < studenIds.length; j++) {
+            const arr = shuffleArray(mentorIds);
+            res[j] = arr[i];
+        }
+    }
+    return res;
+}
+
 export const getCourseStages = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const stages = await getRepository(Stage)
@@ -67,34 +79,29 @@ export const postCloseStage = (logger: ILogger) => async (ctx: Router.RouterCont
         return;
     }
 
-    const mentorIds = mentors.map(m => m.id);
-
-    logger.info(mentorIds || '');
-
-    const mentorIdsNext = shuffleArray(mentorIds);
-
-    logger.info(mentorIdsNext || '');
+    const mentorIdsNext = shuffleMentorIds(mentors.map(m => m.id), students.map(s => s.id));
 
     const studentsWithNextMentor = students.map((st, i) => {
         const mentorId = mentorIdsNext[i];
 
         if (st.mentor) {
             if (st.mentor.id === mentorId) {
-                st.mentor.id = mentorIdsNext[i++];
+                const shuffledMentors = shuffleArray(mentorIdsNext);
+                st.mentor.id = shuffledMentors[i];
             } else {
                 st.mentor.id = mentorId;
             }
             return st;
         }
 
-        const mentor: any = {id: mentorId };
+        const mentor: any = { id: mentorId };
         st = {...st, mentor };
         return st;
     });
 
-    await Promise.all(studentsWithNextMentor.map(student => studentRepository.save(student)));
+    // logger.info(studentsWithNextMentor || '');
 
-    logger.info(studentsWithNextMentor || '');
+    await Promise.all(studentsWithNextMentor.map(student => studentRepository.save(student)));
 
     setResponse(ctx, OK, { mentorIdsNext });
 };
