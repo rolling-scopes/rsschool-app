@@ -1,10 +1,14 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
-import {OK } from 'http-status-codes';
+import { OK } from 'http-status-codes';
+import { getRepository } from 'typeorm';
+import { Stage } from '../../models';
 
-export const getProfile = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-    logger.info(ctx);
+export const shuffleMentors = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+    const stage = await getRepository(Stage).find();
 
-    setResponse(ctx, OK, {});
+    logger.info(stage);
+
+    setResponse(ctx, OK, stage);
 };

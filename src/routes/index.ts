@@ -10,7 +10,7 @@ import { usersRoute } from './users';
 import { tasksRoute } from './tasks';
 import { profileRoute } from './profile';
 import { sessionRoute } from './session';
-
+import { stageClose } from './stage';
 import { ILogger } from '../logger';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
@@ -33,6 +33,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, usersRoute(logger));
   applyRouter(publicRouter, tasksRoute(logger));
   applyRouter(publicRouter, profileRoute(logger));
-
+  applyRouter(publicRouter, stageClose(logger));
   return { publicRouter };
 };
