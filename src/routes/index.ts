@@ -10,7 +10,6 @@ import { usersRoute } from './users';
 import { tasksRoute } from './tasks';
 import { profileRoute } from './profile';
 import { sessionRoute } from './session';
-import { stageClose } from './stage';
 import { ILogger } from '../logger';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
