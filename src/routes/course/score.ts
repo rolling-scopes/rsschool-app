@@ -178,7 +178,7 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const students = await studentsService.getCourseStudentsWithTasks(courseId);
+  const students = await studentsService.getCourseScoreStudents(courseId);
   memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students);
 };
