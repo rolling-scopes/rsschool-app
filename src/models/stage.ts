@@ -11,6 +11,7 @@ import { Course } from './course';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
+type STAGE_STATUS = 'OPEN' | 'CLOSED';
 @Entity()
 export class Stage {
   @PrimaryGeneratedColumn() id: number;
@@ -23,6 +24,11 @@ export class Stage {
 
   @Column()
   name: string;
+
+  @Column({
+    default: 'OPEN',
+  })
+  status: STAGE_STATUS;
 
   @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
