@@ -235,7 +235,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.post('/:courseId/stage/:stageId/close', validateCourseId, postCloseStage(logger));
+  router.post('/:courseId/stage/:stageId/close', adminGuard, validateCourseId, postCloseStage(logger));
 
   /**
    * @swagger
