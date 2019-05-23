@@ -9,7 +9,11 @@ import {
 } from 'typeorm';
 import { Task } from './task';
 import { Stage } from './stage';
+<<<<<<< HEAD
 import { TaskChecker } from './taskChecker';
+=======
+import { Checker } from './checker';
+>>>>>>> feat: update checker
 import { TaskResult } from './taskResult';
 
 @Entity()
