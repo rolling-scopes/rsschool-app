@@ -4,6 +4,7 @@ import { Course, CourseTask, Task, Stage, TaskResult } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
+import { shuffleService } from '../../services';
 
 export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
@@ -107,4 +108,22 @@ export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext
   const courseTaskId = Number(ctx.params.courseTaskId);
   const updatedResult = await getRepository(CourseTask).delete(courseTaskId);
   setResponse(ctx, OK, updatedResult);
+};
+
+export const assignCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+    const courseTaskId = Number(ctx.params.courseTaskId);
+    const courseTaskRepository = getRepository(CourseTask);
+    const courseTask = await courseTaskRepository.findOne({ where: { id: courseTaskId } });
+
+    if (courseTask == null) {
+        setResponse(ctx, NOT_FOUND);
+        return;
+    }
+
+    courseTask.isAssigned = true;
+
+    await shuffleService.shuffleMentors(courseTaskId);
+
+    const updatedResult = await courseTaskRepository.save(courseTask);
+    setResponse(ctx, OK, updatedResult);
 };

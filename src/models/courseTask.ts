@@ -45,6 +45,9 @@ export class CourseTask {
   @Column({ nullable: true })
   maxScore: number;
 
+  @Column({ default: false })
+  isAssigned: boolean;
+
   @Column({ nullable: true, type: 'float', default: 1 })
   scoreWeight: number;
 }
