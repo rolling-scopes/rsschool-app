@@ -3,8 +3,8 @@ import { BAD_REQUEST } from 'http-status-codes';
 import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
-import { getCourseTasks, postCourseTask, putCourseTask, postAssignCourseTask, deleteCourseTask } from './tasks';
-import { getCourseStages, postCloseStage } from './stages';
+import { getCourseTasks, postCourseTask, putCourseTask, postShuffleCourseTask, deleteCourseTask } from './tasks';
+import { getCourseStages } from './stages';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { postPairs } from './pairs';
@@ -217,29 +217,6 @@ export function courseRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /course/{courseId}/stage/{stageId}/close
-   *   post:
-   *      description: Close current stage
-   *      parameters:
-   *        - name: courseId
-   *          in: path
-   *          required: true
-   *          type: integer
-   *        - name: stageId
-   *          in: path
-   *          required: true
-   *          type: integer
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: List of tasks object
-   */
-  router.post('/:courseId/stage/:stageId/close', adminGuard, validateCourseId, postCloseStage(logger));
-
-  /**
-   * @swagger
-   *
    * /course/{courseId}/tasks:
    *   get:
    *      description: Returns course tasks
@@ -265,7 +242,7 @@ export function courseRoute(logger: ILogger) {
    *      parameters:
    *        - name: courseId
    *          in: path
-   *          required: true
+   *          required: postCourseTask
    *          type: integer
    *      produces:
    *        - application/json
@@ -274,25 +251,6 @@ export function courseRoute(logger: ILogger) {
    *          description: Result
    */
   router.post('/:courseId/task', validateCourseId, postCourseTask(logger));
-
-  /**
-   * @swagger
-   *
-   * /course/{courseId}/task/{courseTaskId}:
-   *   post:
-   *      description: Assign course task to mentors
-   *      parameters:
-   *        - name: courseId
-   *          in: path
-   *          required: true
-   *          type: integer
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: Result
-   */
-  router.post('/:courseId/task/:courseTaskId', validateCourseId, postAssignCourseTask(logger));
 
   /**
    * @swagger
@@ -331,6 +289,29 @@ export function courseRoute(logger: ILogger) {
    *          description: Result
    */
   router.delete('/:courseId/task/:courseTaskId', adminGuard, deleteCourseTask(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/task/{courseTaskId}/shuffle:
+   *   post:
+   *      description: Assign course task to checker
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *        - name: courseTaskId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: Result
+   */
+  router.post('/:courseId/task/:courseTaskId/shuffle', validateCourseId, postShuffleCourseTask(logger));
 
   /**
    * @swagger

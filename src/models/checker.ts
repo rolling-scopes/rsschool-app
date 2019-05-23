@@ -1,6 +1,4 @@
-import { Entity, CreateDateColumn, OneToMany, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { CourseTask } from './courseTask';
-import { Mentor } from './mentor';
+import { Entity, CreateDateColumn, Column, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Checker {
@@ -12,9 +10,12 @@ export class Checker {
     @UpdateDateColumn()
     updatedDate: number;
 
-    @OneToMany(_ => CourseTask, (courseTask: CourseTask) => courseTask.checker, { nullable: true })
-    assignedTasks: CourseTask[] | null;
+    @Column()
+    courseTaskId: number;
 
-    @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.checker)
-    mentors: Mentor[];
+    @Column()
+    studentId: number;
+
+    @Column()
+    mentorId: number;
 }

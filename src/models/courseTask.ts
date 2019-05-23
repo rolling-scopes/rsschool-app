@@ -25,8 +25,8 @@ export class CourseTask {
   @ManyToOne(_ => Task, (task: Task) => task.courseTasks)
   task: Task | number;
 
-  @ManyToOne(_ => Checker, (checker: Checker) => checker.assignedTasks)
-  checker: Checker | number;
+  @OneToMany(_ => Checker, (checker: Checker) => checker.courseTaskId, { nullable: true })
+  checker: Checker[] | null;
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;

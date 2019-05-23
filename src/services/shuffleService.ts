@@ -39,7 +39,7 @@ export const shuffleCourseMentors = async (courseId: number) => {
         .getMany();
 
     if (mentors === undefined) {
-        return null;
+        return [];
     }
 
     const students = await studentRepository
@@ -55,7 +55,7 @@ export const shuffleCourseMentors = async (courseId: number) => {
         .getMany();
 
     if (students === undefined) {
-        return null;
+        return [];
     }
 
     const mentorIdsNext = shuffleMentorIds(mentors.map(m => m.id), students.map(s => s.id));
@@ -80,5 +80,5 @@ export const shuffleCourseMentors = async (courseId: number) => {
 
     // logger.info(studentsWithNextMentor || '');
 
-    await Promise.all(studentsWithNextMentor.map(student => studentRepository.save(student)));
+    return studentsWithNextMentor;
 };
