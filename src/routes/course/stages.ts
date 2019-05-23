@@ -22,7 +22,7 @@ export const postCloseStage = (logger: ILogger) => async (ctx: Router.RouterCont
     logger.info(`StageId ${stageId}`);
     logger.info(`CourseId ${courseId}`);
 
-    const mentorIdsNext = await shuffleService.shuffleMentors(courseId);
+    const mentorIdsNext = await shuffleService.shuffleCourseMentors(courseId);
 
     setResponse(ctx, OK, { mentorIdsNext });
 };

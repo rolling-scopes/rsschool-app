@@ -23,7 +23,7 @@ function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
     return res;
 }
 
-export const shuffleMentors = async (courseId: number) => {
+export const shuffleCourseMentors = async (courseId: number) => {
     const studentRepository = getRepository(Student);
     const mentorRepository = getRepository(Mentor);
 
