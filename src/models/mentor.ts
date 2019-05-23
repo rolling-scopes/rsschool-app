@@ -10,6 +10,7 @@ import {
 import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
+import { Checker } from './checker';
 
 @Entity()
 export class Mentor {
@@ -23,6 +24,9 @@ export class Mentor {
 
   @ManyToOne(_ => Course, (course: Course) => course.mentors, { nullable: true })
   course: Course | number;
+
+  @ManyToOne(_ => Checker, (checker: Checker) => checker.mentors, { nullable: true })
+  checker: Checker | number;
 
   @ManyToOne(_ => User)
   user: User | number;

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Task } from './task';
 import { Stage } from './stage';
+import { Checker } from './checker';
 import { TaskResult } from './taskResult';
 
 @Entity()
@@ -23,6 +24,9 @@ export class CourseTask {
 
   @ManyToOne(_ => Task, (task: Task) => task.courseTasks)
   task: Task | number;
+
+  @ManyToOne(_ => Checker, (checker: Checker) => checker.assignedTasks)
+  checker: Checker | number;
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;
