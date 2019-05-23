@@ -42,6 +42,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       scoreWeight: item.scoreWeight,
       stageId: (item.stage as Stage).id,
       githubPrRequired: !!(item.task as Task).githubPrRequired,
+      verification: (item.task as Task).verification,
       description: (item.task as Task).description,
       descriptionUrl: (item.task as Task).descriptionUrl,
       studentStartDate: item.studentStartDate,
