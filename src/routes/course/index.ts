@@ -233,7 +233,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
+  router.get('/:courseId/tasks', validateCourseId, getCourseTasks(logger));
 
   /**
    * @swagger
@@ -252,7 +252,26 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task', adminGuard, validateCourseId, postCourseTask(logger));
+  router.post('/:courseId/task', validateCourseId, postCourseTask(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/task/{courseTaskId}:
+   *   post:
+   *      description: Assign course task to mentors
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: Result
+   */
+  router.post('/:courseId/task/:courseTaskId', validateCourseId, postAssignCourseTask(logger));
 
   /**
    * @swagger
