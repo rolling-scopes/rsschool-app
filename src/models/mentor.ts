@@ -11,10 +11,13 @@ import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { TaskChecker } from './taskChecker';
 =======
 import { Checker } from './checker';
 >>>>>>> feat: update checker
+=======
+>>>>>>> feat: shuffle checkers
 
 @Entity()
 export class Mentor {
@@ -28,9 +31,6 @@ export class Mentor {
 
   @ManyToOne(_ => Course, (course: Course) => course.mentors, { nullable: true })
   course: Course | number;
-
-  @ManyToOne(_ => Checker, (checker: Checker) => checker.mentors, { nullable: true })
-  checker: Checker | number;
 
   @ManyToOne(_ => User)
   user: User | number;

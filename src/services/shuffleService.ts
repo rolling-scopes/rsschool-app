@@ -24,13 +24,8 @@ function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
 }
 
 export const shuffleCourseMentors = async (courseId: number) => {
-<<<<<<< HEAD
   const studentRepository = getRepository(Student);
   const mentorRepository = getRepository(Mentor);
-=======
-    const studentRepository = getRepository(Student);
-    const mentorRepository = getRepository(Mentor);
->>>>>>> feat: update
 
   const mentors = await mentorRepository
     .createQueryBuilder('mentor')
