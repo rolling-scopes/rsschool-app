@@ -311,7 +311,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task/:courseTaskId/shuffle', validateCourseId, postShuffleCourseTask(logger));
+  router.post('/:courseId/task/:courseTaskId/shuffle', adminGuard, validateCourseId, postShuffleCourseTask(logger));
 
   /**
    * @swagger
