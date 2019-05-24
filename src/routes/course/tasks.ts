@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, Task, Stage, TaskResult } from '../../models';
+import { Course, CourseTask, Task, Stage, TaskResult, TaskChecker } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
@@ -122,7 +122,7 @@ export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterCo
     const courseTaskId = Number(ctx.params.courseTaskId);
     const courseId = Number(ctx.params.courseId);
     const courseTaskRepository = getRepository(CourseTask);
-    const checkerRepository = getRepository(Checker);
+    const checkerRepository = getRepository(TaskChecker);
 
     const courseTask = await courseTaskRepository.findOne(
         { where: { id: courseTaskId },
@@ -135,14 +135,14 @@ export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterCo
 
     const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
 
-    const studentWithChecker: Partial<Checker>[] = studentsWithMentor.map((stm) => ({
+    const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map((stm) => ({
         courseTaskId: courseTask.id,
-        studentId: stm.id,
-        mentorId: stm.mentor.id,
+        student: stm.id,
+        mentor: stm.mentor.id,
     }));
 
     const result = await Promise.all(
-        studentWithChecker.map((checker: Partial<Checker>) => checkerRepository.save(checker)),
+        studentWithChecker.map((checker: Partial<TaskChecker>) => checkerRepository.save(checker)),
     );
 
     setResponse(ctx, OK, result);

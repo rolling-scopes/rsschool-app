@@ -15,8 +15,8 @@ export class TaskChecker {
     courseTaskId: number;
 
     @ManyToOne(_ => Student)
-    student: Student;
+    student: Student | number;
 
     @ManyToOne(_ => Mentor)
-    mentor: Mentor;
+    mentor: Mentor | number;
 }
