@@ -43,7 +43,7 @@ export class TaskChecker {
     courseTaskId: number;
 
     @ManyToOne(_ => Student)
-    student: Student;
+    student: Student | number;
 
 <<<<<<< HEAD
     @Column()
@@ -51,6 +51,10 @@ export class TaskChecker {
 >>>>>>> feat: update task checker
 =======
     @ManyToOne(_ => Mentor)
+<<<<<<< HEAD
     mentor: Mentor;
 >>>>>>> feat: add task checker
+=======
+    mentor: Mentor | number;
+>>>>>>> feat: update tasks
 }
