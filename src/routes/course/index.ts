@@ -236,7 +236,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', validateCourseId, getCourseTasks(logger));
+  router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
 
   /**
    * @swagger
@@ -247,7 +247,7 @@ export function courseRoute(logger: ILogger) {
    *      parameters:
    *        - name: courseId
    *          in: path
-   *          required: postCourseTask
+   *          required: true
    *          type: integer
    *      produces:
    *        - application/json
@@ -255,7 +255,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task', validateCourseId, postCourseTask(logger));
+  router.post('/:courseId/task', adminGuard, validateCourseId, postCourseTask(logger));
 
   /**
    * @swagger
