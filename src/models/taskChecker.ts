@@ -1,7 +1,7 @@
 import { Entity, CreateDateColumn, Column, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Checker {
+export class TaskChecker {
     @PrimaryGeneratedColumn() id: number;
 
     @CreateDateColumn()

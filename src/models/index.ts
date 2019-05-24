@@ -7,13 +7,13 @@ import { CourseTask } from './courseTask';
 import { Student } from './student';
 import { Mentor } from './mentor';
 import { Stage } from './stage';
-import { Checker } from './checker';
+import { TaskChecker } from './taskChecker';
 
 export * from './session';
 
-export const models = [Stage, Mentor, Checker, Student, User, Feedback, Course, Task, TaskResult, CourseTask];
+export const models = [Stage, Mentor, TaskChecker, Student, User, Feedback, Course, Task, TaskResult, CourseTask];
 
-export { Stage, User, Checker, Feedback, CourseTask, Course, Task, Student, Mentor, TaskResult };
+export { Stage, User, TaskChecker, Feedback, CourseTask, Course, Task, Student, Mentor, TaskResult };
 
 export interface IApiResponse<T> {
   data: T | T[] | null;

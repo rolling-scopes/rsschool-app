@@ -52,7 +52,7 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
       descriptionUrl: (item.task as Task).descriptionUrl,
       studentStartDate: item.studentStartDate,
       studentEndDate: item.studentEndDate,
-      taskResultCount: raw ? Number(raw.taskResultCount) : 0,
+      taskResultCount: raw ? Number(raw.taskResultCount) : 0
     };
   });
 
