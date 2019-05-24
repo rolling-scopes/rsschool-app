@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, Task, Stage, Checker, TaskResult } from '../../models';
+import { Course, CourseTask, Task, Stage, TaskResult } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
