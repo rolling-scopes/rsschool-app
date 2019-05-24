@@ -147,6 +147,61 @@ paths:
       responses:
         '200':
           description: List of tasks object
+  '/course/{courseId}/task':
+    post:
+      description: Assign task to course/stage
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Result
+  '/course/{courseId}/task/{courseTaskId}':
+    put:
+      description: Update course task
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Result
+    delete:
+      description: Delete course task
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Result
+  '/course/{courseId}/task/{courseTaskId}/shuffle':
+    post:
+      description: Assign course task to checker
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          type: integer
+        - name: courseTaskId
+          in: path
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Result
   '/course/{courseId}/scores':
     post:
       description: Save course task score
@@ -231,6 +286,33 @@ paths:
       responses:
         '200':
           description: result
+  '/course/{courseId}/feedback':
+    post:
+      description: Post feedback about a mentor or student
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: integer
+        - name: data
+          in: body
+          schema:
+            type: object
+            properties:
+              toUserId:
+                type: integer
+              text:
+                type: string
+              badgeId:
+                type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: result
   '/course/{courseId}':
     get:
       description: Return info about course
@@ -302,6 +384,16 @@ paths:
   /users:
     post:
       description: Add/Update users
+      security:
+        - cookieAuth: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: operation status
+  '/users/search/:searchText':
+    post:
+      description: Search users
       security:
         - cookieAuth: []
       produces:

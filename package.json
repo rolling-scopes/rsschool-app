@@ -17,6 +17,7 @@
   },
   "lint-staged": {
     "*.ts": [
+      "npm run lint:fix",
       "npm run format",
       "git add"
     ]
@@ -106,6 +107,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }

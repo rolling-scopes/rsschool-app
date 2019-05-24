@@ -12,7 +12,7 @@ import { Course } from './course';
 import { Mentor } from './mentor';
 import { Stage } from './stage';
 import { TaskResult } from './taskResult';
-
+import { TaskChecker } from './taskChecker';
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn() id: number;
@@ -37,6 +37,9 @@ export class Student {
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.student, { nullable: true })
   taskResults: TaskResult[] | null;
+
+  @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.student, { nullable: true })
+  taskChecker: TaskChecker[] | null;
 
   @Column({ default: false })
   isExpelled: boolean;

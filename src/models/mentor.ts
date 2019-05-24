@@ -10,6 +10,7 @@ import {
 import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
+import { TaskChecker } from './taskChecker';
 
 @Entity()
 export class Mentor {
@@ -29,6 +30,9 @@ export class Mentor {
 
   @OneToMany(_ => Student, student => student.mentor, { nullable: true })
   students: Student[] | null;
+
+  @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.mentor, { nullable: true })
+  taskChecker: TaskChecker[] | null;
 
   @Column({ nullable: true })
   maxStudentsLimit: number;

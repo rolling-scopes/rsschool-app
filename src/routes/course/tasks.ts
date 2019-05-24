@@ -1,11 +1,12 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, Task, Stage, TaskResult } from '../../models';
+import { Course, CourseTask, Task, Stage, TaskResult, TaskChecker } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
+import { shuffleService } from '../../services';
 
-export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
 
   const course = await getRepository(Course).findOne(courseId, {
@@ -16,9 +17,13 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
+  logger.info(course);
+
   const courseTaskIds: number[] = course!.stages
     .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
     .map(task => task.id);
+
+  logger.info(courseTaskIds);
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
@@ -62,7 +67,7 @@ type PostTaskInput = {
   studentEndDate?: string;
 };
 
-export const postCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const data: PostTaskInput = ctx.request.body;
   const courseTaskRepository = getRepository(CourseTask);
   const task: Partial<CourseTask> = {
@@ -72,7 +77,11 @@ export const postCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) 
     scoreWeight: data.scoreWeight,
     studentEndDate: data.studentEndDate,
   };
+
   const createdResult = await courseTaskRepository.save(task);
+
+  logger.info(createdResult);
+
   setResponse(ctx, OK, createdResult);
   return;
 };
@@ -107,4 +116,34 @@ export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext
   const courseTaskId = Number(ctx.params.courseTaskId);
   const updatedResult = await getRepository(CourseTask).delete(courseTaskId);
   setResponse(ctx, OK, updatedResult);
+};
+
+export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+    const courseTaskId = Number(ctx.params.courseTaskId);
+    const courseId = Number(ctx.params.courseId);
+    const courseTaskRepository = getRepository(CourseTask);
+    const checkerRepository = getRepository(TaskChecker);
+
+    const courseTask = await courseTaskRepository.findOne(
+        { where: { id: courseTaskId },
+    });
+
+    if (courseTask == null) {
+        setResponse(ctx, NOT_FOUND);
+        return;
+    }
+
+    const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
+
+    const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map((stm) => ({
+        courseTaskId: courseTask.id,
+        student: stm.id,
+        mentor: stm.mentor.id,
+    }));
+
+    const result = await Promise.all(
+        studentWithChecker.map((checker: Partial<TaskChecker>) => checkerRepository.save(checker)),
+    );
+
+    setResponse(ctx, OK, result);
 };
