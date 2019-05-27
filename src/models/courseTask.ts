@@ -26,7 +26,7 @@ export class CourseTask {
   task: Task | number;
 
   @OneToMany(_ => TaskChecker, (checker: TaskChecker) => checker.courseTaskId, { nullable: true })
-  taskChecker?: TaskChecker[] | null;
+  taskCheckers: TaskChecker[] | null;
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;

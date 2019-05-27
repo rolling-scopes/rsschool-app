@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, Task, Stage, TaskResult, TaskChecker } from '../../models';
+import { Course, CourseTask, TaskChecker, TaskResult, Task, Stage } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
@@ -39,6 +39,7 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
 
   const data = courseTasks.entities.map(item => {
     const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
+
     return {
       courseTaskId: item.id,
       taskId: (item.task as Task).id,
@@ -54,10 +55,22 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
       studentEndDate: item.studentEndDate,
       taskResultCount: raw ? Number(raw.taskResultCount) : 0,
       allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
+      taskCheckers: [],
     };
   });
 
-  setResponse(ctx, OK, data);
+  const dataWithCheckers = await Promise.all(
+    data.map(async d => {
+      const taskCheckers = await getRepository(TaskChecker).find({
+        where: { courseTaskId: d.courseTaskId },
+        relations: ['student', 'student.user', 'mentor', 'mentor.user'],
+      });
+
+      return { ...d, taskCheckers };
+    }),
+  );
+
+  setResponse(ctx, OK, dataWithCheckers);
 };
 
 type PostTaskInput = {
