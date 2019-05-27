@@ -5,10 +5,7 @@ import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getCourseTasks, postCourseTask, putCourseTask, postShuffleCourseTask, deleteCourseTask } from './tasks';
 import { getCourseStages } from './stages';
-<<<<<<< HEAD
 import { postTaskArtefact } from './taskArtefact';
-=======
->>>>>>> feat: shuffle checkers
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { getMe } from './me';

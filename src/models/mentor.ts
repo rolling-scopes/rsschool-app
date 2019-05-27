@@ -10,18 +10,7 @@ import {
 import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { TaskChecker } from './taskChecker';
-=======
-import { Checker } from './checker';
->>>>>>> feat: update checker
-=======
->>>>>>> feat: shuffle checkers
-=======
-import { TaskChecker } from './taskChecker';
->>>>>>> feat: add task checker
 
 @Entity()
 export class Mentor {
