@@ -4,16 +4,16 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as NodeCache from 'node-cache';
 
 import { setResponse } from '../utils';
-import { TaskResult, Student } from '../../models';
+import { TaskResult, Student, Task } from '../../models';
 import { ILogger } from '../../logger';
-import { studentsService, mentorsService, OperationResult, taskResultsService } from '../../services';
+import { studentsService, mentorsService, OperationResult, taskService, taskResultsService } from '../../services';
 
 type ScoreInput = {
   studentId: number | string;
   courseTaskId: number | string;
   score: number | string;
   comment?: string;
-  githubPrUrl: string;
+  githubPrUrl?: string;
 };
 
 type ScoresInput = {
@@ -27,10 +27,11 @@ type ScoresInput = {
 
 const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
-export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
 
   const inputData: ScoreInput = ctx.request.body;
+
   const data = {
     studentId: Number(inputData.studentId),
     courseTaskId: Number(inputData.courseTaskId),
@@ -38,19 +39,26 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
     comment: inputData.comment || '',
     githubPrUrl: inputData.githubPrUrl,
   };
+  logger.info(data);
 
   const authorId = ctx.state.user.id;
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
-
-  if (mentor == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
+  const courseTask = await taskService.getCourseTask(data.courseTaskId);
+  if (courseTask == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
+    return;
+  }
+  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor', 'user'] });
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
 
-  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor'] });
+  const { courseTaskId, studentId } = data;
+  const task = courseTask.task as Task;
 
-  if (student == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
+  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
+  if (mentor == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
   }
 
@@ -59,9 +67,39 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const { courseTaskId, studentId } = data;
-  const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
+  if (task.useJury) {
+    if (!data.score) {
+      setResponse(ctx, BAD_REQUEST, { message: 'no score' });
+      return;
+    }
+    const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
+    if (existingResult == null) {
+      const taskResult = taskResultsService.createJuryTaskResult(authorId, data);
+      const addResult = await getRepository(TaskResult).save(taskResult);
+      setResponse(ctx, OK, addResult);
+      return;
+    }
 
+    const existingAuthor = existingResult.juryScores.find(score => score.authorId === authorId);
+    if (existingAuthor) {
+      existingAuthor.score = data.score;
+    } else {
+      existingResult.juryScores.push({
+        authorId,
+        score: data.score,
+        dateTime: Date.now(),
+        comment: data.comment || '',
+      });
+    }
+    existingResult.score = Math.round(
+      existingResult.juryScores.reduce((acc, record) => acc + record.score, 0) / existingResult.juryScores.length,
+    );
+    const updateResult = await getRepository(TaskResult).save(existingResult);
+    setResponse(ctx, OK, updateResult);
+    return;
+  }
+
+  const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
     const taskResult = taskResultsService.createTaskResult(authorId, data);
     const addResult = await getRepository(TaskResult).save(taskResult);
@@ -87,7 +125,6 @@ export const postScore = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const updateResult = await getRepository(TaskResult).save(existingResult);
   setResponse(ctx, OK, updateResult);
-  return;
 };
 
 export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext) => {

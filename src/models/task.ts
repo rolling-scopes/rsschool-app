@@ -28,4 +28,10 @@ export class Task {
 
   @Column()
   verification: 'auto' | 'manual';
+
+  @Column({ default: false })
+  useJury: boolean;
+
+  @Column({ default: false })
+  allowStudentArtefacts: boolean;
 }

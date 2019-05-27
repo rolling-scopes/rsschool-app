@@ -53,6 +53,7 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
       studentStartDate: item.studentStartDate,
       studentEndDate: item.studentEndDate,
       taskResultCount: raw ? Number(raw.taskResultCount) : 0,
+      allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
     };
   });
 
@@ -119,31 +120,29 @@ export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext
 };
 
 export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
-    const courseTaskId = Number(ctx.params.courseTaskId);
-    const courseId = Number(ctx.params.courseId);
-    const courseTaskRepository = getRepository(CourseTask);
-    const checkerRepository = getRepository(TaskChecker);
+  const courseTaskId = Number(ctx.params.courseTaskId);
+  const courseId = Number(ctx.params.courseId);
+  const courseTaskRepository = getRepository(CourseTask);
+  const checkerRepository = getRepository(TaskChecker);
 
-    const courseTask = await courseTaskRepository.findOne(
-        { where: { id: courseTaskId },
-    });
+  const courseTask = await courseTaskRepository.findOne({ where: { id: courseTaskId } });
 
-    if (courseTask == null) {
-        setResponse(ctx, NOT_FOUND);
-        return;
-    }
+  if (courseTask == null) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
 
-    const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
+  const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
 
-    const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map((stm) => ({
-        courseTaskId: courseTask.id,
-        student: stm.id,
-        mentor: stm.mentor.id,
-    }));
+  const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map(stm => ({
+    courseTaskId: courseTask.id,
+    student: stm.id,
+    mentor: stm.mentor.id,
+  }));
 
-    const result = await Promise.all(
-        studentWithChecker.map((checker: Partial<TaskChecker>) => checkerRepository.save(checker)),
-    );
+  const result = await Promise.all(
+    studentWithChecker.map((checker: Partial<TaskChecker>) => checkerRepository.save(checker)),
+  );
 
-    setResponse(ctx, OK, result);
+  setResponse(ctx, OK, result);
 };

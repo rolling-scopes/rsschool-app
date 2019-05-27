@@ -5,8 +5,10 @@ import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getCourseTasks, postCourseTask, putCourseTask, postShuffleCourseTask, deleteCourseTask } from './tasks';
 import { getCourseStages } from './stages';
+import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
+import { getMe } from './me';
 import { postPairs } from './pairs';
 import { postFeedback } from './feedback';
 import { ILogger } from '../../logger';
@@ -454,6 +456,10 @@ export function courseRoute(logger: ILogger) {
    *          description: result
    */
   router.post('/:courseId/feedback', guard, validateCourseId, postFeedback(logger));
+
+  router.get('/:courseId/me', guard, validateCourseId, getMe(logger));
+
+  router.post('/:courseId/taskArtefact', guard, validateCourseId, postTaskArtefact(logger));
 
   /**
    * @swagger

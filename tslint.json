@@ -2,6 +2,7 @@
   "extends": "tslint:recommended",
   "defaultSeverity": "error",
   "rules": {
+    "no-shadowed-variable": false,
     "arrow-parens": false,
     "interface-over-type-literal": false,
     "no-console": [

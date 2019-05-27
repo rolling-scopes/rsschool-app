@@ -37,11 +37,11 @@ export class TaskResult {
   @Column()
   score: number;
 
-  @Column({
-    type: 'json',
-    default: [],
-  })
+  @Column({ type: 'json', default: [] })
   historicalScores: ScoreRecord[] = [];
+
+  @Column({ type: 'json', default: [] })
+  juryScores: ScoreRecord[] = [];
 
   @Column({ nullable: true })
   comment?: string;

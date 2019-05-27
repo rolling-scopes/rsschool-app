@@ -3,20 +3,20 @@ import { Mentor } from './mentor';
 import { Student } from './student';
 @Entity()
 export class TaskChecker {
-    @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn() id: number;
 
-    @CreateDateColumn()
-    createdDate: number;
+  @CreateDateColumn()
+  createdDate: number;
 
-    @UpdateDateColumn()
-    updatedDate: number;
+  @UpdateDateColumn()
+  updatedDate: number;
 
-    @Column()
-    courseTaskId: number;
+  @Column()
+  courseTaskId: number;
 
-    @ManyToOne(_ => Student)
-    student: Student | number;
+  @ManyToOne(_ => Student)
+  student: Student | number;
 
-    @ManyToOne(_ => Mentor)
-    mentor: Mentor | number;
+  @ManyToOne(_ => Mentor)
+  mentor: Mentor | number;
 }
