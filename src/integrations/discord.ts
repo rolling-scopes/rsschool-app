@@ -29,7 +29,7 @@ export class DiscordService {
     const { gratitudeUrl } = config.integrations.discord;
     const message: DiscordMessage = {
       username: params.fromGithubId,
-      content: `${params.toGithubId}: ${params.comment}`,
+      content: `@${params.toGithubId}\n${params.comment}`,
     };
     const result = await fetch(gratitudeUrl!, {
       method: 'POST',
@@ -38,8 +38,7 @@ export class DiscordService {
       },
       body: JSON.stringify(message),
     });
-    const response = await result.json();
-    this.logger.info(response);
+    this.logger.info(result.status.toString());
   }
 
   private isDisabled() {
