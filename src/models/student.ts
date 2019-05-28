@@ -32,6 +32,9 @@ export class Student {
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
   mentor: Mentor;
 
+  @Column({ nullable: true })
+  mentorId: number;
+
   @ManyToOne(_ => Stage, (stage: Stage) => stage.students, { nullable: true })
   stage: Stage;
 

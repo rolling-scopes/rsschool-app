@@ -37,17 +37,17 @@ export async function getCourseStudent(courseId: number, userId: number) {
     .getOne();
 }
 
-export async function getCourseStudents(courseId: number) {
+export async function getActiveCourseStudents(courseId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoinAndSelect('student.user', 'user')
     .innerJoinAndSelect('student.course', 'course')
-    .where('course.id = :courseId', { courseId })
+    .where('course.id = :courseId AND student."isExpelled" = false', { courseId })
     .getMany();
 
   return students.map<StudentDTO>(student => ({
     studentId: student.id,
-    mentorId: null,
+    mentorId: student.mentorId,
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,

@@ -8,7 +8,7 @@ import { OperationResult, userService, studentsService } from '../../services';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
-  const students = await studentsService.getCourseStudents(courseId);
+  const students = await studentsService.getActiveCourseStudents(courseId);
   setResponse(ctx, OK, students);
 };
 
