@@ -337,29 +337,6 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task/:courseTaskId/shuffle', validateCourseId, postShuffleCourseTask(logger));
-
-  /**
-   * @swagger
-   *
-   * /course/{courseId}/task/{courseTaskId}/shuffle:
-   *   post:
-   *      description: Assign course task to checker
-   *      parameters:
-   *        - name: courseId
-   *          in: path
-   *          required: true
-   *          type: integer
-   *        - name: courseTaskId
-   *          in: path
-   *          required: true
-   *          type: integer
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: Result
-   */
   router.post('/:courseId/task/:courseTaskId/shuffle', adminGuard, validateCourseId, postShuffleCourseTask(logger));
 
   /**
