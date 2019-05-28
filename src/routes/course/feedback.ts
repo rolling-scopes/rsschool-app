@@ -4,7 +4,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Feedback, User } from '../../models';
 import { ILogger } from '../../logger';
-import { HeroesService } from '../../integrations/heroes';
+import { HeroesService, DiscordService } from '../../integrations';
 
 type FeedbackInput = {
   toUserId: number;
@@ -31,6 +31,7 @@ const SUPPORTED_BADGE_IDS = [
 
 export const postFeedback = (logger: ILogger) => {
   const heroesService = new HeroesService(logger);
+  const discordService = new DiscordService(logger);
 
   const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
     if (
@@ -53,6 +54,17 @@ export const postFeedback = (logger: ILogger) => {
     });
   };
 
+  const postToDiscord = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
+    if (!fromUser || !toUser || !data.comment) {
+      return Promise.resolve(null);
+    }
+    return discordService.pushGratitude({
+      toGithubId: toUser.githubId,
+      fromGithubId: fromUser.githubId,
+      comment: data.comment,
+    });
+  };
+
   return async (ctx: Router.RouterContext) => {
     const courseId: number = ctx.params.courseId;
     const data: FeedbackInput = ctx.request.body;
@@ -67,6 +79,7 @@ export const postFeedback = (logger: ILogger) => {
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
     const heroesUrl = await postToHeroes(fromUser, toUser, data);
+    await postToDiscord(fromUser, toUser, data);
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
@@ -76,6 +89,7 @@ export const postFeedback = (logger: ILogger) => {
       heroesUrl: heroesUrl || undefined,
     };
     const result = await getRepository(Feedback).save(feedback);
+
     setResponse(ctx, OK, result);
     return;
   };

@@ -32,6 +32,9 @@ export interface IConfig {
       username: string;
       password: string;
     };
+    discord: {
+      gratitudeUrl?: string;
+    };
   };
 }
 
@@ -61,6 +64,9 @@ export const config: IConfig = {
       url: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_URL,
       username: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_USERNAME || '',
       password: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_PASSWORD || '',
+    },
+    discord: {
+      gratitudeUrl: process.env.RSSHCOOL_API_INTEGRATIONS_DISCORD_GRATITUDE_URL,
     },
   },
   name: 'rsschool-api',
