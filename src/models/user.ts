@@ -126,6 +126,9 @@ export class User {
   @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.toUser, { nullable: true })
   receivedFeedback: Feedback[] | null;
 
+  @Column({ nullable: true })
+  activist: boolean;
+
   @BeforeInsert()
   beforeInsert?() {
     this.githubId = this.githubId.toLowerCase();

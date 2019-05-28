@@ -1,11 +1,11 @@
 import * as Router from 'koa-router';
-import { OK } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 import { adminGuard, guard } from '../guards';
-import { OperationResult } from '../../services';
+import { OperationResult, userService } from '../../services';
 
 const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body as { githubId: string }[];
@@ -60,6 +60,19 @@ const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) =>
   );
 };
 
+const postUserActivist = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const data = ctx.request.body as { activist: boolean };
+  const userId: number = ctx.params.userId;
+  const user = await userService.getUserById(userId);
+  if (user == null) {
+    setResponse(ctx, BAD_REQUEST, 'no user');
+    return;
+  }
+  user.activist = !!data.activist;
+  await userService.saveUser(user);
+  setResponse(ctx, OK);
+};
+
 export function usersRoute(logger: ILogger) {
   const router = new Router({ prefix: '/users' });
 
@@ -78,6 +91,22 @@ export function usersRoute(logger: ILogger) {
    *          description: operation status
    */
   router.post('/', adminGuard, postUsers(logger));
+
+  /**
+   * @swagger
+   *
+   * /users:
+   *   post:
+   *      description: Update user activist status
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: operation status
+   */
+  router.post('/{userId}/activist', adminGuard, postUserActivist(logger));
 
   /**
    * @swagger
