@@ -41,4 +41,7 @@ export class Course {
 
   @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.course)
   mentors: Mentor[];
+
+  @Column({ default: false })
+  completed: boolean;
 }
