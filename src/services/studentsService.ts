@@ -55,6 +55,22 @@ export async function getActiveCourseStudents(courseId: number) {
   }));
 }
 
+export async function getExternalAccounts(courseId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('student.user', 'user')
+    .innerJoinAndSelect('student.course', 'course')
+    .where('course.id = :courseId', { courseId })
+    .getMany();
+
+  return students.map(student => ({
+    externalAccounts: (student.user as User).externalAccounts,
+    githubId: (student.user as User).githubId,
+    studentId: student.id,
+    userId: (student.user as User).id,
+  }));
+}
+
 export async function getCourseScoreStudents(courseId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')

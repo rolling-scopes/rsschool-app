@@ -65,6 +65,22 @@ paths:
       responses:
         '200':
           description: List of students
+  '/course/{courseId}/externalAccounts':
+    get:
+      description: Returns external accounts of students
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          description: Course Id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of students with external accounts
   '/course/{courseId}/mentors':
     get:
       description: Saves course mentors
@@ -383,7 +399,7 @@ paths:
           description: List of tasks
   /users:
     post:
-      description: Add/Update users
+      description: Update user activist status
       security:
         - cookieAuth: []
       produces:

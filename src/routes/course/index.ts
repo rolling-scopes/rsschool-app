@@ -8,6 +8,8 @@ import { getCourseStages } from './stages';
 import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
+import { getExternalAccounts } from './externalAccounts';
+
 import { getMe } from './me';
 import { postPairs } from './pairs';
 import { postFeedback } from './feedback';
@@ -71,6 +73,28 @@ export function courseRoute(logger: ILogger) {
    *          description: List of students
    */
   router.get('/:courseId/students', guard, validateCourseId, getStudents(logger));
+
+  /**
+   * @swagger
+   *
+   * /course/{courseId}/externalAccounts:
+   *   get:
+   *      description: Returns external accounts of students
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - name: courseId
+   *          in: path
+   *          description: Course Id
+   *          required: true
+   *          type: integer
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: List of students with external accounts
+   */
+  router.get('/:courseId/externalAccounts', adminGuard, validateCourseId, getExternalAccounts(logger));
 
   /**
    * @swagger
