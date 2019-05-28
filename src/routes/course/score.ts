@@ -32,6 +32,14 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const inputData: ScoreInput = ctx.request.body;
 
+  if (!inputData.studentId || !inputData.courseTaskId) {
+    setResponse(ctx, BAD_REQUEST, 'invalid [studentId] or [courseTaskId]');
+    return;
+  }
+  if (!inputData.score) {
+    setResponse(ctx, BAD_REQUEST, 'no score');
+    return;
+  }
   const data = {
     studentId: Number(inputData.studentId),
     courseTaskId: Number(inputData.courseTaskId),
@@ -56,17 +64,6 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const { courseTaskId, studentId } = data;
   const task = courseTask.task as Task;
 
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
-  if (mentor == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
-    return;
-  }
-
-  if (student.mentor.id !== mentor.id) {
-    setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
-    return;
-  }
-
   if (task.useJury) {
     if (!data.score) {
       setResponse(ctx, BAD_REQUEST, { message: 'no score' });
@@ -80,9 +77,9 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
       return;
     }
 
-    const existingAuthor = existingResult.juryScores.find(score => score.authorId === authorId);
-    if (existingAuthor) {
-      existingAuthor.score = data.score;
+    const existingJuryScore = existingResult.juryScores.find(score => score.authorId === authorId);
+    if (existingJuryScore) {
+      existingJuryScore.score = data.score;
     } else {
       existingResult.juryScores.push({
         authorId,
@@ -96,6 +93,17 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     );
     const updateResult = await getRepository(TaskResult).save(existingResult);
     setResponse(ctx, OK, updateResult);
+    return;
+  }
+
+  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
+  if (mentor == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
+    return;
+  }
+
+  if (student.mentor.id !== mentor.id) {
+    setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
     return;
   }
 

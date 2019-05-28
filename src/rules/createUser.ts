@@ -53,6 +53,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       id: userId,
       githubId: createdUser.githubId.toLowerCase(),
       isAdmin,
+      isActivist: false,
       roles: {},
     };
   }
@@ -63,5 +64,5 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
   result.mentors!.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
   });
-  return { roles, id: result.id!, githubId: result.githubId.toLowerCase(), isAdmin };
+  return { roles, id: result.id!, isActivist: result.activist, githubId: result.githubId.toLowerCase(), isAdmin };
 }

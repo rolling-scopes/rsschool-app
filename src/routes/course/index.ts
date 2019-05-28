@@ -70,7 +70,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of students
    */
-  router.get('/:courseId/students', adminGuard, validateCourseId, getStudents(logger));
+  router.get('/:courseId/students', guard, validateCourseId, getStudents(logger));
 
   /**
    * @swagger
