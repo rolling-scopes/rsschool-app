@@ -9,6 +9,7 @@ interface BadgeParams {
 }
 
 interface DiscordMessage {
+  avatar_url: string;
   content: string;
   username: string;
 }
@@ -28,6 +29,7 @@ export class DiscordService {
     }
     const { gratitudeUrl } = config.integrations.discord;
     const message: DiscordMessage = {
+      avatar_url: `https://github.com/${params.fromGithubId}.png`,
       username: params.fromGithubId,
       content: `@${params.toGithubId}\n${params.comment}`,
     };
