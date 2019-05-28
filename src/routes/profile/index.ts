@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-// import { adminGuard } from '../guards';
+import { adminGuard } from '../guards';
 import { getProfile } from './user';
 
 export function profileRoute(logger: ILogger) {
@@ -20,7 +20,7 @@ export function profileRoute(logger: ILogger) {
    *        200:
    *          description: profile
    */
-  router.get('/', getProfile(logger));
+  router.get('/', adminGuard, getProfile(logger));
 
   return router;
 }
