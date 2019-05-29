@@ -12,6 +12,7 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
   const course = await getRepository(Course).findOne(courseId, {
     relations: ['stages', 'stages.courseTasks'],
   });
+
   if (course === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
@@ -148,7 +149,7 @@ export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.Rou
 
   const studentsWithMentor = await shuffleService.shuffleCourseMentors(logger)(courseId);
 
-  const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map(stm => ({
+  const studentWithChecker = studentsWithMentor.map(stm => ({
     courseTaskId: courseTask.id,
     student: stm.id,
     mentor: stm.mentor.id,

@@ -12,16 +12,32 @@ function shuffleArray(input: number[]): number[] {
   return input;
 }
 
-function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
+function shuffleMentorIds(mentorIds: number[], studentIds: number[]): number[] {
   const res = [];
-
   for (let i = 0; i < mentorIds.length; i++) {
-    for (let j = i; j < studenIds.length; j++) {
+    for (let j = i; j < studentIds.length; j++) {
       const arr = shuffleArray(mentorIds);
       res[j] = arr[i];
     }
   }
   return res;
+}
+
+function findNextAvalibleMentor(studentWithMentors: any[], mentorsWithMaxStudents: any[], i: number) {
+  const data = [];
+
+  for (let j = i + 1; studentWithMentors.length < 0; j++) {
+    const result: Student = studentWithMentors[j];
+    const restriction = mentorsWithMaxStudents.find((m: any) => result.mentor && result.mentor.id === m.id);
+
+    const students = studentWithMentors.filter((v: any) => v.mentor && v.mentor.id === result.mentor.id);
+
+    if (restriction && restriction.maxStudents >= students.length) {
+      data.push(result);
+    }
+  }
+
+  return data;
 }
 
 export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number) => {
@@ -31,6 +47,7 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
   const mentors = await mentorRepository
     .createQueryBuilder('mentor')
     .innerJoinAndSelect('mentor.course', 'course')
+    .innerJoinAndSelect('mentor.students', 'students')
     .where('mentor.course.id = :courseId', {
       courseId,
     })
@@ -43,7 +60,6 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
   const students = await studentRepository
     .createQueryBuilder('student')
     .innerJoinAndSelect('student.course', 'course')
-    .innerJoinAndSelect('student.mentor', 'mentor')
     .where('student."isExpelled" = :isExpelled and student.course.id = :courseId', {
       courseId,
       isExpelled: false,
@@ -54,13 +70,12 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
     return [];
   }
 
-  const ids = students.map(v => v.mentor.id);
-
-  logger.info(`Ids ${ids.length}`);
-
   const mentorIdsNext = shuffleMentorIds(mentors.map(m => m.id), students.map(s => s.id));
 
-  logger.info(`Mentor ${mentorIdsNext.length}`);
+  const mentorsWithMaxStudents = mentors.map(v => ({
+    id: v.id,
+    maxStudents: (v.students || []).length,
+  }));
 
   const studentsWithNextMentor = students.map((st, i) => {
     const mentorId = mentorIdsNext[i];
@@ -80,7 +95,31 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
     return st;
   });
 
-  // logger.info(studentsWithNextMentor || '');
+  const data = [];
 
-  return studentsWithNextMentor;
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < studentsWithNextMentor.length; i++) {
+    const result = studentsWithNextMentor[i];
+
+    const restriction = mentorsWithMaxStudents.find((m: any) => result.mentor && result.mentor.id === m.id);
+
+    if (!restriction) {
+      logger.info(result);
+      data.push(result);
+    }
+
+    const students = studentsWithNextMentor.filter((v: any) => v.mentor && v.mentor.id === result.mentor.id);
+
+    if (restriction && restriction.maxStudents >= students.length) {
+      data.push(result);
+    } else if (restriction && restriction.maxStudents <= students.length) {
+      const mentors = findNextAvalibleMentor(studentsWithNextMentor, mentorsWithMaxStudents, i) || [];
+      const result = mentors.find((m: any) => !!m.id);
+      if (result) {
+        data.push(result);
+      }
+    }
+  }
+
+  return data;
 };
