@@ -133,7 +133,7 @@ export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext
   setResponse(ctx, OK, updatedResult);
 };
 
-export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseTaskId = Number(ctx.params.courseTaskId);
   const courseId = Number(ctx.params.courseId);
   const courseTaskRepository = getRepository(CourseTask);
@@ -146,7 +146,7 @@ export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterCo
     return;
   }
 
-  const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
+  const studentsWithMentor = await shuffleService.shuffleCourseMentors(logger)(courseId);
 
   const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map(stm => ({
     courseTaskId: courseTask.id,

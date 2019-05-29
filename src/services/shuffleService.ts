@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import { Student, Mentor } from '../models';
+import { ILogger } from '../logger';
 
 function shuffleArray(input: number[]): number[] {
   for (let i = input.length - 1; i >= 0; i--) {
@@ -23,7 +24,7 @@ function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
   return res;
 }
 
-export const shuffleCourseMentors = async (courseId: number) => {
+export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number) => {
   const studentRepository = getRepository(Student);
   const mentorRepository = getRepository(Mentor);
 
@@ -42,6 +43,7 @@ export const shuffleCourseMentors = async (courseId: number) => {
   const students = await studentRepository
     .createQueryBuilder('student')
     .innerJoinAndSelect('student.course', 'course')
+    .innerJoinAndSelect('student.mentor', 'mentor')
     .where('student."isExpelled" = :isExpelled and student.course.id = :courseId', {
       courseId,
       isExpelled: false,
@@ -52,7 +54,13 @@ export const shuffleCourseMentors = async (courseId: number) => {
     return [];
   }
 
+  const ids = students.map(v => v.mentor.id);
+
+  logger.info(`Ids ${ids.length}`);
+
   const mentorIdsNext = shuffleMentorIds(mentors.map(m => m.id), students.map(s => s.id));
+
+  logger.info(`Mentor ${mentorIdsNext.length}`);
 
   const studentsWithNextMentor = students.map((st, i) => {
     const mentorId = mentorIdsNext[i];
