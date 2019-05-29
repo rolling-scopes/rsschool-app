@@ -154,8 +154,12 @@ export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterCo
     mentor: stm.mentor.id,
   }));
 
+  await checkerRepository.delete({ courseTaskId });
+
   const result = await Promise.all(
-    studentWithChecker.map((checker: Partial<TaskChecker>) => checkerRepository.save(checker)),
+    studentWithChecker.map(async (checker: Partial<TaskChecker>) => {
+      return await checkerRepository.save({ ...checker });
+    }),
   );
 
   setResponse(ctx, OK, result);
