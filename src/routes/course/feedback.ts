@@ -12,11 +12,14 @@ type FeedbackInput = {
   badgeId?: string;
 };
 
+const isValidName = (name: string) => typeof name === 'string' && name.trim().length > 0;
+
 const getUserDisplayName = (data: User) => {
-  if (data.firstName || data.lastName) {
-    return `${data.firstName} ${data.lastName}`;
+  let name = data.githubId;
+  if (isValidName(data.firstName) || isValidName(data.lastName)) {
+    name = `${data.firstName} ${data.lastName}`;
   }
-  return data.githubId;
+  return name;
 };
 
 const SUPPORTED_BADGE_IDS = [

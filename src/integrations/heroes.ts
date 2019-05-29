@@ -37,8 +37,9 @@ export class HeroesService {
       },
       body: JSON.stringify(params),
     });
+    this.logger.info('request', params);
     const response: HeroesResponse = await result.json();
-    this.logger.info(response);
+    this.logger.info('response', response);
     if (result.ok && response.content) {
       return response.content;
     }
