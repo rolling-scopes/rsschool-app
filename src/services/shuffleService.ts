@@ -36,7 +36,7 @@ export const shuffleCourseMentors = (_: ILogger) => async (courseId: number) => 
   for (let i = 0; i < studentRestrictions.length; i++) {
     const maxStudents = studentRestrictions[i];
 
-    const students = randomStudents.splice(maxStudents);
+    const students = randomStudents.slice(0, maxStudents);
     mentors[i].students = students;
   }
 

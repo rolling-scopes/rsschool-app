@@ -149,11 +149,17 @@ export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.Rou
 
   const studentsWithMentor = await shuffleService.shuffleCourseMentors(logger)(courseId);
 
-  const studentWithChecker = studentsWithMentor.map((stm: any) => ({
-    courseTaskId: courseTask.id,
-    student: stm.id,
-    mentor: stm.mentorId,
-  }));
+  const studentWithChecker = studentsWithMentor
+    .map((stm: any) =>
+      stm.students.map((s: any) => ({
+        courseTaskId,
+        mentor: stm.id,
+        student: s.id,
+      })),
+    )
+    .reduce((acc: any, v: any) => acc.concat(v), []);
+
+  logger.info(JSON.stringify(studentWithChecker));
 
   await checkerRepository.delete({ courseTaskId });
 
