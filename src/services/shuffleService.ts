@@ -12,7 +12,7 @@ function shuffleArray(input: any[]): any[] {
   return input;
 }
 
-export const shuffleCourseMentors = (_: ILogger) => async (courseId: number) => {
+export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number) => {
   const mentorRepository = getRepository(Mentor);
 
   const mentors = await mentorRepository
@@ -29,16 +29,23 @@ export const shuffleCourseMentors = (_: ILogger) => async (courseId: number) => 
   }
 
   const students = mentors.map(m => m.students).reduce((acc: any, v) => acc.concat(v), []);
-  const studentRestrictions = mentors.map(v => (v.students || []).length);
-  const randomStudents = shuffleArray(students);
+  const notExpeledStudents = students.filter((std: any) => std.isExpelled === false);
+  const studentRestrictions = mentors.map(v => ({
+    id: v.id,
+    maxStudents: (v.students || []).length,
+  }));
+
+  const randomStudents = shuffleArray(notExpeledStudents);
 
   // tslint:disable-next-line:prefer-for-of
-  for (let i = 0; i < studentRestrictions.length; i++) {
-    const maxStudents = studentRestrictions[i];
+  for (let i = 0; i < mentors.length; i++) {
+    const d = studentRestrictions.find(str => str.id === mentors[i].id) || { maxStudents: 1 };
+    const students = randomStudents.splice(0, d.maxStudents);
 
-    const students = randomStudents.slice(0, maxStudents);
     mentors[i].students = students;
   }
+
+  logger.info(`${randomStudents.length}`);
 
   return mentors;
 };
