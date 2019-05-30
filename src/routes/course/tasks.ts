@@ -12,6 +12,7 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
   const course = await getRepository(Course).findOne(courseId, {
     relations: ['stages', 'stages.courseTasks'],
   });
+
   if (course === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
@@ -133,7 +134,7 @@ export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext
   setResponse(ctx, OK, updatedResult);
 };
 
-export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseTaskId = Number(ctx.params.courseTaskId);
   const courseId = Number(ctx.params.courseId);
   const courseTaskRepository = getRepository(CourseTask);
@@ -146,13 +147,19 @@ export const postShuffleCourseTask = (_: ILogger) => async (ctx: Router.RouterCo
     return;
   }
 
-  const studentsWithMentor = await shuffleService.shuffleCourseMentors(courseId);
+  const studentsWithMentor = await shuffleService.shuffleCourseMentors(logger)(courseId);
 
-  const studentWithChecker: Partial<TaskChecker>[] = studentsWithMentor.map(stm => ({
-    courseTaskId: courseTask.id,
-    student: stm.id,
-    mentor: stm.mentor.id,
-  }));
+  const studentWithChecker = studentsWithMentor
+    .map((stm: any) =>
+      stm.students.map((s: any) => ({
+        courseTaskId,
+        mentor: stm.id,
+        student: s.id,
+      })),
+    )
+    .reduce((acc: any, v: any) => acc.concat(v), []);
+
+  logger.info(JSON.stringify(studentWithChecker));
 
   await checkerRepository.delete({ courseTaskId });
 

@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm';
-import { Student, Mentor } from '../models';
+import { Mentor } from '../models';
+import { ILogger } from '../logger';
 
-function shuffleArray(input: number[]): number[] {
+function shuffleArray(input: any[]): any[] {
   for (let i = input.length - 1; i >= 0; i--) {
     const randIndx = Math.floor(Math.random() * (i + 1));
     const itemAtIndx = input[randIndx];
@@ -11,25 +12,13 @@ function shuffleArray(input: number[]): number[] {
   return input;
 }
 
-function shuffleMentorIds(mentorIds: number[], studenIds: number[]): number[] {
-  const res = [];
-
-  for (let i = 0; i < mentorIds.length; i++) {
-    for (let j = i; j < studenIds.length; j++) {
-      const arr = shuffleArray(mentorIds);
-      res[j] = arr[i];
-    }
-  }
-  return res;
-}
-
-export const shuffleCourseMentors = async (courseId: number) => {
-  const studentRepository = getRepository(Student);
+export const shuffleCourseMentors = (_: ILogger) => async (courseId: number) => {
   const mentorRepository = getRepository(Mentor);
 
   const mentors = await mentorRepository
     .createQueryBuilder('mentor')
     .innerJoinAndSelect('mentor.course', 'course')
+    .innerJoinAndSelect('mentor.students', 'students')
     .where('mentor.course.id = :courseId', {
       courseId,
     })
@@ -39,40 +28,17 @@ export const shuffleCourseMentors = async (courseId: number) => {
     return [];
   }
 
-  const students = await studentRepository
-    .createQueryBuilder('student')
-    .innerJoinAndSelect('student.course', 'course')
-    .where('student."isExpelled" = :isExpelled and student.course.id = :courseId', {
-      courseId,
-      isExpelled: false,
-    })
-    .getMany();
+  const students = mentors.map(m => m.students).reduce((acc: any, v) => acc.concat(v), []);
+  const studentRestrictions = mentors.map(v => (v.students || []).length);
+  const randomStudents = shuffleArray(students);
 
-  if (students === undefined) {
-    return [];
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < studentRestrictions.length; i++) {
+    const maxStudents = studentRestrictions[i];
+
+    const students = randomStudents.slice(0, maxStudents);
+    mentors[i].students = students;
   }
 
-  const mentorIdsNext = shuffleMentorIds(mentors.map(m => m.id), students.map(s => s.id));
-
-  const studentsWithNextMentor = students.map((st, i) => {
-    const mentorId = mentorIdsNext[i];
-
-    if (st.mentor) {
-      if (st.mentor.id === mentorId) {
-        const shuffledMentors = shuffleArray(mentorIdsNext);
-        st.mentor.id = shuffledMentors[i];
-      } else {
-        st.mentor.id = mentorId;
-      }
-      return st;
-    }
-
-    const mentor: any = { id: mentorId };
-    st = { ...st, mentor };
-    return st;
-  });
-
-  // logger.info(studentsWithNextMentor || '');
-
-  return studentsWithNextMentor;
+  return mentors;
 };
