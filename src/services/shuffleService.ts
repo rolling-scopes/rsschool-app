@@ -33,7 +33,7 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
 
   const studentRestrictions = mentors.map(v => ({
     id: v.id,
-    maxStudents: (v.students || []).filter((std: any) => Boolean(std.isExpelled) === true).length,
+    maxStudents: (v.students || []).filter((std: any) => Boolean(std.isExpelled) === false).length,
   }));
 
   const randomStudents = shuffleArray(notExpeledStudents);
