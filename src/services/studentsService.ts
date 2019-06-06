@@ -99,6 +99,29 @@ export async function getCourseScoreStudents(courseId: number) {
   }));
 }
 
+export async function getInterviewStudents(courseId: number, userId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('task_checker', 'taskChecker', '"taskChecker"."studentId" = "student"."id"')
+    .innerJoinAndSelect('student.user', 'user')
+    .leftJoin('mentor', 'mentor', '"mentor"."userId" = :userId')
+    .where('mentor."courseId" = :courseId AND "taskChecker"."mentorId" = "mentor"."id"', {
+      userId,
+      courseId,
+    })
+    .getMany();
+
+  return students.map<StudentDTO>(student => ({
+    studentId: student.id,
+    mentorId: null,
+    firstName: (student.user as User).firstName,
+    lastName: (student.user as User).lastName,
+    githubId: (student.user as User).githubId,
+    taskResults: [],
+    isExpelled: student.isExpelled,
+  }));
+}
+
 export async function getMentorStudents(mentorId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')

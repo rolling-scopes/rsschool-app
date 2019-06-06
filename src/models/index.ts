@@ -9,24 +9,39 @@ import { Mentor } from './mentor';
 import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskArtefact } from './taskArtefact';
+import { TaskInterviewResult } from './taskInterviewResult';
 
 export * from './session';
 
 export const models = [
-  Stage,
-  Mentor,
-  TaskChecker,
-  TaskArtefact,
-  Student,
-  User,
-  Feedback,
   Course,
-  Task,
-  TaskResult,
   CourseTask,
+  Feedback,
+  Mentor,
+  Stage,
+  Student,
+  Task,
+  TaskArtefact,
+  TaskChecker,
+  TaskInterviewResult,
+  TaskResult,
+  User,
 ];
 
-export { Stage, User, TaskChecker, Feedback, TaskArtefact, CourseTask, Course, Task, Student, Mentor, TaskResult };
+export {
+  Course,
+  CourseTask,
+  Feedback,
+  Mentor,
+  Stage,
+  Student,
+  Task,
+  TaskArtefact,
+  TaskChecker,
+  TaskInterviewResult,
+  TaskResult,
+  User,
+};
 
 export interface IApiResponse<T> {
   data: T | T[] | null;
