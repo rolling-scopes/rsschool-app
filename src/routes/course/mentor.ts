@@ -7,7 +7,7 @@ import { setResponse } from '../utils';
 import { studentsService } from '../../services';
 
 export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const id = 2508; // ctx.state!.user.id;
+  const id = ctx.state!.user.id;
   const courseId: number = ctx.params.courseId;
 
   const mentor = await getRepository(Mentor)
