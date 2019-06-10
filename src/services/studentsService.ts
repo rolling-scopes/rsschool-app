@@ -77,6 +77,7 @@ export async function getCourseScoreStudents(courseId: number) {
     .innerJoinAndSelect('student.user', 'user')
     .leftJoinAndSelect('student.mentor', 'mentor')
     .leftJoinAndSelect('student.taskResults', 'taskResults')
+    .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .leftJoinAndSelect('mentor.user', 'mentorUser')
     .innerJoinAndSelect('student.course', 'course')
     .where('course.id = :courseId', { courseId })
@@ -90,11 +91,19 @@ export async function getCourseScoreStudents(courseId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
-    taskResults: (student.taskResults || []).map(taskResult => ({
-      id: taskResult.id,
-      courseTaskId: taskResult.courseTaskId,
-      score: taskResult.score,
-    })),
+    taskResults: (student.taskResults || [])
+      .map(taskResult => ({
+        id: taskResult.id,
+        courseTaskId: taskResult.courseTaskId,
+        score: taskResult.score,
+      }))
+      .concat(
+        (student.taskInterviewResults || []).map(interviewResult => ({
+          id: interviewResult.id,
+          courseTaskId: interviewResult.courseTaskId,
+          score: interviewResult.score || 0,
+        })),
+      ),
     isExpelled: student.isExpelled,
   }));
 }
