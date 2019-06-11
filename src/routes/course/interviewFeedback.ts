@@ -5,12 +5,25 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Student, TaskInterviewResult } from '../../models';
 import { ILogger } from '../../logger';
-import { mentorsService, taskService } from '../../services';
+import { mentorsService, taskService, OperationResult, studentsService } from '../../services';
 
 type Input = {
   studentId: number | string;
   courseTaskId: number | string;
   score: number | string;
+  comment: string;
+  formAnswers: {
+    questionId: string;
+    questionText: string;
+    answer: string;
+  }[];
+};
+
+type InputApi = {
+  studentGithubId: string;
+  mentorGithubId: string;
+  courseTaskId: number;
+  score: number;
   comment: string;
   formAnswers: {
     questionId: string;
@@ -85,5 +98,89 @@ export const postInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterCo
     courseTaskId: data.courseTaskId,
   };
   const result = await repository.save(entry);
+  setResponse(ctx, OK, result);
+};
+
+export const postInterviewFeedbacks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const inputData: InputApi[] = ctx.request.body;
+  const result: OperationResult[] = [];
+
+  for await (const item of inputData) {
+    if (!item.studentGithubId || !item.courseTaskId || !item.mentorGithubId) {
+      result.push({
+        status: 'skipped',
+        value: `no student: ${item.studentGithubId} or mentor: ${item.mentorGithubId}`,
+      });
+      continue;
+    }
+
+    if (!item.score) {
+      result.push({
+        status: 'skipped',
+        value: `no score`,
+      });
+      continue;
+    }
+
+    const courseTask = await taskService.getCourseTask(item.courseTaskId);
+    if (courseTask == null) {
+      result.push({
+        status: 'skipped',
+        value: 'not valid course task',
+      });
+      continue;
+    }
+
+    const student = await studentsService.getCourseStudentByGithubId(item.studentGithubId);
+    if (student == null) {
+      result.push({
+        status: 'skipped',
+        value: 'not valid student',
+      });
+      continue;
+    }
+
+    const { courseTaskId } = item;
+    const mentor = await mentorsService.getMentorByGithubId(item.mentorGithubId);
+    if (mentor == null) {
+      result.push({
+        status: 'skipped',
+        value: 'not valid mentor',
+      });
+      continue;
+    }
+
+    const repository = getRepository(TaskInterviewResult);
+    const existingResult = await repository
+      .createQueryBuilder('interviewFeedback')
+      .innerJoinAndSelect('interviewFeedback.student', 'student')
+      .innerJoinAndSelect('interviewFeedback.courseTask', 'courseTask')
+      .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
+        studentId: student.id,
+        courseTaskId,
+      })
+      .getOne();
+
+    if (existingResult != null) {
+      result.push({
+        status: 'skipped',
+        value: 'feedback already submitted',
+      });
+      continue;
+    }
+    const entry: Partial<TaskInterviewResult> = {
+      mentorId: mentor.id,
+      studentId: student.id,
+      formAnswers: item.formAnswers,
+      score: item.score,
+      comment: item.comment,
+      courseTaskId: item.courseTaskId,
+    };
+    await repository.save(entry);
+    result.push({
+      status: 'created',
+      value: `student ${item.studentGithubId}`,
+    });
+  }
   setResponse(ctx, OK, result);
 };

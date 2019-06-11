@@ -37,6 +37,15 @@ export async function getCourseStudent(courseId: number, userId: number) {
     .getOne();
 }
 
+export async function getCourseStudentByGithubId(githubId: string) {
+  return getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('student.user', 'user')
+    .innerJoinAndSelect('student.course', 'course')
+    .where('user.githubId = :githubId', { githubId })
+    .getOne();
+}
+
 export async function getActiveCourseStudents(courseId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
