@@ -24,7 +24,10 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
     .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
     .map(task => task.id);
 
-  logger.info(courseTaskIds);
+  if (courseTaskIds.length === 0) {
+    setResponse(ctx, OK, []);
+    return;
+  }
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
