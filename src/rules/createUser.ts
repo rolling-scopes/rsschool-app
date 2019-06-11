@@ -1,10 +1,10 @@
+import { getRepository } from 'typeorm';
 import { config } from '../config';
-import { IUserSession, Course } from '../models';
-import { User } from '../models';
+import { Course, IUserSession, User } from '../models';
 import { userService } from '../services';
-import { getManager } from 'typeorm';
 
 const adminTeams: string[] = config.roles.adminTeams;
+const hirers: string[] = config.roles.hirers;
 
 type Profile = {
   username?: string;
@@ -24,17 +24,16 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
 }
 
 export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
-  const id = profile.username!;
+  const id = profile.username!.toLowerCase();
   const result = await userService.getFullUserByGithubId(id);
 
-  // const role = getRole(teamsIds);
   const isAdmin = getAdminStatus(teamsIds);
-
+  const isHirer = hirers.includes(id);
   if (result == null) {
     const email = getPrimaryEmail((profile.emails as any) || [])[0];
 
     const user: User = {
-      githubId: id.toLowerCase(),
+      githubId: id,
       contactsEmail: email ? email.value : undefined,
       firstName: profile.name ? profile.name.givenName : '',
       lastName: profile.name ? profile.name.familyName : '',
@@ -47,12 +46,13 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       receivedFeedback: [],
       activist: false,
     };
-    const createdUser = await getManager().save(User, user);
+    const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;
     return {
       id: userId,
       githubId: createdUser.githubId.toLowerCase(),
       isAdmin,
+      isHirer,
       isActivist: false,
       roles: {},
     };
@@ -64,5 +64,12 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
   result.mentors!.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
   });
-  return { roles, id: result.id!, isActivist: result.activist, githubId: result.githubId.toLowerCase(), isAdmin };
+  return {
+    roles,
+    id: result.id!,
+    isActivist: result.activist,
+    githubId: result.githubId.toLowerCase(),
+    isAdmin,
+    isHirer,
+  };
 }
