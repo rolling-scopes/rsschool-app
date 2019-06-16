@@ -1,4 +1,5 @@
 import { User } from './user';
+import { Registry } from './registry';
 import { Feedback } from './feedback';
 import { Course } from './course';
 import { Task } from './task';
@@ -19,6 +20,7 @@ export const models = [
   TaskArtefact,
   Student,
   User,
+  Registry,
   Feedback,
   Course,
   Task,
@@ -26,7 +28,20 @@ export const models = [
   CourseTask,
 ];
 
-export { Stage, User, TaskChecker, Feedback, TaskArtefact, CourseTask, Course, Task, Student, Mentor, TaskResult };
+export {
+  Stage,
+  User,
+  Registry,
+  TaskChecker,
+  Feedback,
+  TaskArtefact,
+  CourseTask,
+  Course,
+  Task,
+  Student,
+  Mentor,
+  TaskResult,
+};
 
 export interface IApiResponse<T> {
   data: T | T[] | null;

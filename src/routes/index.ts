@@ -9,6 +9,7 @@ import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { tasksRoute } from './tasks';
 import { profileRoute } from './profile';
+import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { ILogger } from '../logger';
 
@@ -27,6 +28,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, authRoute());
   applyRouter(publicRouter, sessionRoute(logger));
   applyRouter(publicRouter, publicMeRouter(logger));
+  applyRouter(publicRouter, registryRouter(logger));
   applyRouter(publicRouter, courseRoute(logger));
   applyRouter(publicRouter, coursesRoute(logger));
   applyRouter(publicRouter, usersRoute(logger));
