@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 import { shuffleService } from '../../services';
 
-export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
 
   const course = await getRepository(Course).findOne(courseId, {
@@ -17,8 +17,6 @@ export const getCourseTasks = (logger: ILogger) => async (ctx: Router.RouterCont
     setResponse(ctx, NOT_FOUND);
     return;
   }
-
-  logger.info(course);
 
   const courseTaskIds: number[] = course!.stages
     .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])

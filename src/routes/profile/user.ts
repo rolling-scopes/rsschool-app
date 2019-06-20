@@ -26,7 +26,15 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: string) => {
   const profile = await getRepository(User).findOne({
     where: { githubId },
-    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'students.mentor', 'students.taskResults'],
+    relations: [
+      'receivedFeedback',
+      'mentors',
+      'students',
+      'mentors.course',
+      'students.course',
+      'students.mentor',
+      'students.taskResults',
+    ],
   });
 
   if (profile === undefined) {
