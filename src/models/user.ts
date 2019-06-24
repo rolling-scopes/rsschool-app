@@ -125,9 +125,6 @@ export class User {
   @Column({ nullable: true })
   activist: boolean;
 
-  @Column({ nullable: true })
-  mentorFeedback?: string;
-
   @BeforeInsert()
   beforeInsert?() {
     this.githubId = this.githubId.toLowerCase();
