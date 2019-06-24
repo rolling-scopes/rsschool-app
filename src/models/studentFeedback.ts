@@ -1,6 +1,5 @@
 import { Entity, CreateDateColumn, Column, ManyToOne, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Student } from './student';
-
 @Entity()
 export class StudentFeedback {
   @PrimaryGeneratedColumn() id: number;
@@ -15,5 +14,5 @@ export class StudentFeedback {
   student: Student | number;
 
   @Column()
-  text: string;
+  comment?: string;
 }

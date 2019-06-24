@@ -14,6 +14,7 @@ import { Stage } from './stage';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
+import { StudentFeedback } from './studentFeedback';
 
 @Entity()
 export class Student {
@@ -77,4 +78,7 @@ export class Student {
 
   @Column({ nullable: true })
   hiredByName: string;
+
+  @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
+  feedback: StudentFeedback[] | null;
 }
