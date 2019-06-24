@@ -34,6 +34,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
       'students.course',
       'students.mentor',
       'students.taskResults',
+      'students.feedback',
     ],
   });
 
