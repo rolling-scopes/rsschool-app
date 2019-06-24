@@ -11,7 +11,7 @@ import { postScore, getScore, postScores } from './score';
 import { getExternalAccounts } from './externalAccounts';
 import { getMentorContacts } from './mentorContacts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
-
+import { postStudentsFeedbacks } from './studentFeedback';
 import { getMe } from './me';
 import { postPairs } from './pairs';
 import { postFeedback } from './feedback';
@@ -493,6 +493,7 @@ export function courseRoute(logger: ILogger) {
 
   router.post('/:courseId/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
 
+  router.post('/:courseId/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
   /**
    * @swagger
    *

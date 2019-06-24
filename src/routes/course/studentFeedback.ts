@@ -11,7 +11,7 @@ interface StudentInput {
   comment: string;
 }
 
-export const postStudentsFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postStudentsFeedbacks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const data: StudentInput[] = ctx.request.body;
 

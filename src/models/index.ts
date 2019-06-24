@@ -27,6 +27,7 @@ export const models = [
   TaskInterviewResult,
   TaskResult,
   User,
+  StudentFeedback,
 ];
 
 export {
