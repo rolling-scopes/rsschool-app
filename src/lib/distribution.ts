@@ -1,9 +1,14 @@
-export function shuffleStudents(input: any[]): any[] {
-  for (let i = input.length - 1; i >= 0; i--) {
-    const randIndx = Math.random() % (i + 1);
-    const itemAtIndx = input[randIndx];
-    input[randIndx] = input[i];
-    input[i] = itemAtIndx;
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function shuffleStudents(input) {
+  const copy = [...input];
+  for (let i = copy.length - 1; i >= 0; i--) {
+    const randIndx = getRandomInt(0, i + 1);
+    const itemAtIndx = copy[randIndx];
+    copy[randIndx] = copy[i];
+    copy[i] = itemAtIndx;
   }
-  return input;
+  return copy;
 }
