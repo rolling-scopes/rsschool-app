@@ -10,6 +10,7 @@ import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskArtefact } from './taskArtefact';
 import { TaskInterviewResult } from './taskInterviewResult';
+import { StudentFeedback } from './studentFeedback';
 
 export * from './session';
 
@@ -26,6 +27,7 @@ export const models = [
   TaskInterviewResult,
   TaskResult,
   User,
+  StudentFeedback,
 ];
 
 export {
@@ -41,6 +43,7 @@ export {
   TaskInterviewResult,
   TaskResult,
   User,
+  StudentFeedback,
 };
 
 export interface IApiResponse<T> {
