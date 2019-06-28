@@ -1,14 +1,18 @@
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+import * as crypto from 'crypto';
 
-function shuffleStudents(input) {
-  const copy = [...input];
-  for (let i = copy.length - 1; i >= 0; i--) {
-    const randIndx = getRandomInt(0, i + 1);
-    const itemAtIndx = copy[randIndx];
-    copy[randIndx] = copy[i];
-    copy[i] = itemAtIndx;
+export function shuffle(arr: any[]): any[] {
+  const copy = [...arr];
+  let n = copy.length;
+  const random = new Uint8Array(n);
+  const bytes = crypto.randomBytes(random.length);
+  random.set(bytes);
+
+  while (n > 1) {
+    const k = random[n - 1] % n;
+    const t = copy[--n];
+    arr[n] = arr[k];
+    arr[k] = t;
   }
-  return copy;
+
+  return arr;
 }
