@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { Mentor } from '../models';
 import { ILogger } from '../logger';
-import { shuffle } from '../lib/distribution';
+import { shuffleRec } from '../lib/distribution';
 
 const defaultStudentRestrictions = { maxStudents: 1 };
 
@@ -24,7 +24,7 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
     .reduce((acc: any, v) => acc.concat(v), [])
     .filter((std: any) => Boolean(std.isExpelled) === false);
 
-  const nextStudents = shuffle(students);
+  const nextStudents = shuffleRec(students);
 
   const studentRestrictions = mentors.map(v => ({
     id: v.id,
