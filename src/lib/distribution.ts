@@ -10,9 +10,9 @@ export function shuffle(arr: any[]): any[] {
   while (n > 1) {
     const k = random[n - 1] % n;
     const t = copy[--n];
-    arr[n] = arr[k];
-    arr[k] = t;
+    copy[n] = copy[k];
+    copy[k] = t;
   }
 
-  return arr;
+  return copy;
 }
