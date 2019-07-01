@@ -2,7 +2,8 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { User, Course, Registry } from './../models';
 import { getManager, getRepository } from 'typeorm';
-import { ILogger } from '../logger';
+import { ILogger } from './../logger';
+import { adminGuard } from './guards';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
 
@@ -47,6 +48,19 @@ export function registryRouter(logger?: ILogger) {
         user,
         course,
       };
+      const registry = await getManager().save(Registry, registryPayload);
+
+      setResponse(ctx, OK, { registry });
+    } catch (e) {
+      handleError({ logger, errorMsg: e.message, ctx });
+    }
+  });
+
+  router.put('/:id', adminGuard, async (ctx: Router.RouterContext) => {
+    try {
+      const id = ctx.params.id;
+      const status = ctx.request.body.status;
+      const registryPayload = { ...(await getManager().findOne(Registry, id)), status };
       const registry = await getManager().save(Registry, registryPayload);
 
       setResponse(ctx, OK, { registry });
