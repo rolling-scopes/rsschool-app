@@ -15,6 +15,7 @@ export interface IConfig {
   };
   roles: {
     adminTeams: string[];
+    hirers: string[];
   };
   isDevMode: boolean;
   pg: {
@@ -51,6 +52,7 @@ export const config: IConfig = {
   },
   roles: {
     adminTeams: ['rsschool-dev-team@rolling-scopes'],
+    hirers: process.env.RSSHCOOL_API_HIRERS ? process.env.RSSHCOOL_API_HIRERS.split(',') : [],
   },
   isDevMode: process.env.NODE_ENV !== 'production',
   pg: {

@@ -19,9 +19,23 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
+  const githubId = query.githubId.toLowerCase();
+  await getProfileByGithubId(ctx, githubId);
+};
+
+export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: string) => {
   const profile = await getRepository(User).findOne({
-    where: { githubId: query.githubId.toLowerCase() },
-    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'students.mentor', 'students.taskResults'],
+    where: { githubId },
+    relations: [
+      'receivedFeedback',
+      'mentors',
+      'students',
+      'mentors.course',
+      'students.course',
+      'students.mentor',
+      'students.taskResults',
+      'students.feedback',
+    ],
   });
 
   if (profile === undefined) {
@@ -66,7 +80,6 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     const mentorForStudents = await Promise.all(
       mentorForStudentIds
         .map((m: any) => {
-          // tslint:disable-next-line:max-line-length
           return m.students.map((s: any) =>
             getRepository(Student).findOne({ where: { id: s.id }, relations: ['user'] }),
           );
@@ -74,7 +87,6 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
         .reduce((acc, v) => acc.concat(v), []),
     );
 
-    // tslint:disable-next-line:max-line-length
     const mfS = mentorForStudentIds.map((m: any) => ({
       ...m,
       students: m.students.map((st: any) => mentorForStudents.find((s: any) => st.id === s.id)),
@@ -85,8 +97,6 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
       ...mfS.find((st: any) => st.id === m.id),
     })) as unknown) as Mentor[];
   }
-
-  // logger.info(profile);
 
   setResponse(ctx, OK, profile);
 };

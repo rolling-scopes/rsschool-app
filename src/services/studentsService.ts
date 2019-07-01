@@ -37,6 +37,15 @@ export async function getCourseStudent(courseId: number, userId: number) {
     .getOne();
 }
 
+export async function getCourseStudentByGithubId(githubId: string) {
+  return getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('student.user', 'user')
+    .innerJoinAndSelect('student.course', 'course')
+    .where('user.githubId = :githubId', { githubId })
+    .getOne();
+}
+
 export async function getActiveCourseStudents(courseId: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
@@ -77,6 +86,7 @@ export async function getCourseScoreStudents(courseId: number) {
     .innerJoinAndSelect('student.user', 'user')
     .leftJoinAndSelect('student.mentor', 'mentor')
     .leftJoinAndSelect('student.taskResults', 'taskResults')
+    .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .leftJoinAndSelect('mentor.user', 'mentorUser')
     .innerJoinAndSelect('student.course', 'course')
     .where('course.id = :courseId', { courseId })
@@ -90,11 +100,42 @@ export async function getCourseScoreStudents(courseId: number) {
     firstName: (student.user as User).firstName,
     lastName: (student.user as User).lastName,
     githubId: (student.user as User).githubId,
-    taskResults: (student.taskResults || []).map(taskResult => ({
-      id: taskResult.id,
-      courseTaskId: taskResult.courseTaskId,
-      score: taskResult.score,
-    })),
+    taskResults: (student.taskResults || [])
+      .map(taskResult => ({
+        id: taskResult.id,
+        courseTaskId: taskResult.courseTaskId,
+        score: taskResult.score,
+      }))
+      .concat(
+        (student.taskInterviewResults || []).map(interviewResult => ({
+          id: interviewResult.id,
+          courseTaskId: interviewResult.courseTaskId,
+          score: interviewResult.score || 0,
+        })),
+      ),
+    isExpelled: student.isExpelled,
+  }));
+}
+
+export async function getInterviewStudents(courseId: number, userId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoinAndSelect('task_checker', 'taskChecker', '"taskChecker"."studentId" = "student"."id"')
+    .innerJoinAndSelect('student.user', 'user')
+    .leftJoin('mentor', 'mentor', '"mentor"."userId" = :userId')
+    .where('mentor."courseId" = :courseId AND "taskChecker"."mentorId" = "mentor"."id"', {
+      userId,
+      courseId,
+    })
+    .getMany();
+
+  return students.map<StudentDTO>(student => ({
+    studentId: student.id,
+    mentorId: null,
+    firstName: (student.user as User).firstName,
+    lastName: (student.user as User).lastName,
+    githubId: (student.user as User).githubId,
+    taskResults: [],
     isExpelled: student.isExpelled,
   }));
 }

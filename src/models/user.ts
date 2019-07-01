@@ -78,11 +78,7 @@ export class User {
   @Column({ nullable: true })
   locationId?: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['a1', 'a1+', 'a2', 'a2+', 'b1', 'b1+', 'b2', 'b2+', 'c1', 'c1+', 'c2'],
-    nullable: true,
-  })
+  @Column({ nullable: true })
   englishLevel?: EnglishLevel;
 
   @Column({

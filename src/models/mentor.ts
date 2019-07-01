@@ -11,7 +11,6 @@ import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
 import { TaskChecker } from './taskChecker';
-
 @Entity()
 export class Mentor {
   @PrimaryGeneratedColumn() id: number;

@@ -10,37 +10,43 @@ import { Mentor } from './mentor';
 import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskArtefact } from './taskArtefact';
+import { TaskInterviewResult } from './taskInterviewResult';
+import { StudentFeedback } from './studentFeedback';
 
 export * from './session';
 
 export const models = [
-  Stage,
-  Mentor,
-  TaskChecker,
-  TaskArtefact,
-  Student,
-  User,
-  Registry,
-  Feedback,
   Course,
-  Task,
-  TaskResult,
   CourseTask,
+  Feedback,
+  Mentor,
+  Stage,
+  Student,
+  Registry,
+  Task,
+  TaskArtefact,
+  TaskChecker,
+  TaskInterviewResult,
+  TaskResult,
+  User,
+  StudentFeedback,
 ];
 
 export {
-  Stage,
-  User,
-  Registry,
-  TaskChecker,
-  Feedback,
-  TaskArtefact,
-  CourseTask,
   Course,
-  Task,
-  Student,
+  CourseTask,
+  Feedback,
   Mentor,
+  Stage,
+  Student,
+  Registry,
+  Task,
+  TaskArtefact,
+  TaskChecker,
+  TaskInterviewResult,
   TaskResult,
+  User,
+  StudentFeedback,
 };
 
 export interface IApiResponse<T> {

@@ -13,6 +13,9 @@ import { Mentor } from './mentor';
 import { Stage } from './stage';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
+import { TaskInterviewResult } from './taskInterviewResult';
+import { StudentFeedback } from './studentFeedback';
+
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn() id: number;
@@ -44,6 +47,11 @@ export class Student {
   @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.student, { nullable: true })
   taskChecker: TaskChecker[] | null;
 
+  @OneToMany(_ => TaskInterviewResult, (taskInterviewResult: TaskInterviewResult) => taskInterviewResult.student, {
+    nullable: true,
+  })
+  taskInterviewResults: TaskInterviewResult[] | null;
+
   @Column({ default: false })
   isExpelled: boolean;
 
@@ -70,4 +78,7 @@ export class Student {
 
   @Column({ nullable: true })
   hiredByName: string;
+
+  @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
+  feedback: StudentFeedback[] | null;
 }

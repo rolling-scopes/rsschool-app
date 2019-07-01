@@ -9,7 +9,9 @@ import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { getExternalAccounts } from './externalAccounts';
-
+import { getMentorContacts } from './mentorContacts';
+import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
+import { postStudentsFeedbacks } from './studentFeedback';
 import { getMe } from './me';
 import { postPairs } from './pairs';
 import { postFeedback } from './feedback';
@@ -485,6 +487,13 @@ export function courseRoute(logger: ILogger) {
 
   router.post('/:courseId/taskArtefact', guard, validateCourseId, postTaskArtefact(logger));
 
+  router.get('/:courseId/mentorContacts', guard, validateCourseId, getMentorContacts(logger));
+
+  router.post('/:courseId/interviewFeedback', guard, validateCourseId, postInterviewFeedback(logger));
+
+  router.post('/:courseId/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
+
+  router.post('/:courseId/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
   /**
    * @swagger
    *

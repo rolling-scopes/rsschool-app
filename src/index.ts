@@ -68,6 +68,8 @@ export class App {
         },
       }),
     );
+
+    process.on('unhandledRejection', reason => this.appLogger.error(reason));
   }
 
   public start(): Server {
