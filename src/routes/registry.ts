@@ -1,7 +1,7 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { User, Registry } from './../models';
-import { getManager } from 'typeorm';
+import { User, Course, Registry } from './../models';
+import { getManager, getRepository } from 'typeorm';
 import { ILogger } from '../logger';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
@@ -23,27 +23,33 @@ const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
 
-  router.get('/:id', createGetRoute(User, logger));
+  router.get('/:id', createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const { userPayload, coursePayload } = ctx.request.body || { userPayload: '', coursePayload: '' };
+    const defaultBody = { githubId: '', courseId: '', comment: '', type: '' };
+    const { githubId, courseId, comment, type } = ctx.request.body || defaultBody;
 
-    if (!userPayload || !coursePayload) {
-      const errorMsg = 'Wrong payload: both userPayload & coursePayload are required';
+    if (!githubId || !courseId || !type) {
+      const errorMsg = 'Wrong payload: githubId courseId & type are required';
 
       handleError({ logger, errorMsg, ctx });
     }
 
     try {
-      const user = await getManager().save(User, userPayload);
+      const [user, course] = await Promise.all([
+        getRepository(User).findOne({ where: { githubId } }),
+        getManager().findOne(Course, courseId),
+      ]);
+      const registryPayload = {
+        status: 'pending',
+        comment,
+        type,
+        user,
+        course,
+      };
+      const registry = await getManager().save(Registry, registryPayload);
 
-      coursePayload.userId = user.id;
-      coursePayload.comment = user.comment;
-      coursePayload.status = 'pending';
-
-      const registry = await getManager().save(Registry, coursePayload);
-
-      setResponse(ctx, OK, { user, registry });
+      setResponse(ctx, OK, { registry });
     } catch (e) {
       handleError({ logger, errorMsg: e.message, ctx });
     }

@@ -45,6 +45,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       students: [],
       givenFeedback: [],
       receivedFeedback: [],
+      registries: [],
       activist: false,
     };
     const createdUser = await getManager().save(User, user);

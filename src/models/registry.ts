@@ -1,14 +1,16 @@
-import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from './user';
+import { Course } from './course';
 
 @Entity()
 export class Registry {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column({ name: 'userId', unique: true })
-  userId: number;
+  @ManyToOne(_ => User, (user: User) => user.registries, { nullable: true })
+  user: User | number;
 
-  @Column({ name: 'courseId', enum: ['js', 'ios'] })
-  courseId: string;
+  @ManyToOne(_ => Course, (course: Course) => course.registries, { nullable: true })
+  course: Course | number;
 
   @Column({ name: 'type', enum: ['mentor', 'mentee'] })
   type: string;
