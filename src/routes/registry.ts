@@ -27,7 +27,7 @@ export function registryRouter(logger?: ILogger) {
   router.get('/:id', createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const defaultBody = { githubId: '', courseId: '', comment: '', type: '' };
+    const defaultBody = { githubId: '', courseId: '', comment: '', type: 'mentee' };
     const { githubId, courseId, comment, type } = ctx.request.body || defaultBody;
 
     if (!githubId || !courseId || !type) {
@@ -42,7 +42,6 @@ export function registryRouter(logger?: ILogger) {
         getManager().findOne(Course, courseId),
       ]);
       const registryPayload = {
-        status: 'pending',
         comment,
         type,
         user,
