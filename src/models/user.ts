@@ -11,6 +11,7 @@ import {
 import { Student } from './student';
 import { Mentor } from './mentor';
 import { Feedback } from './feedback';
+import { Registry } from './registry';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -121,6 +122,9 @@ export class User {
 
   @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.toUser, { nullable: true })
   receivedFeedback: Feedback[] | null;
+
+  @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
+  registries: Registry[] | null;
 
   @Column({ nullable: true })
   activist: boolean;

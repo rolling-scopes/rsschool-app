@@ -1,4 +1,5 @@
 import { User } from './user';
+import { Registry } from './registry';
 import { Feedback } from './feedback';
 import { Course } from './course';
 import { Task } from './task';
@@ -21,6 +22,7 @@ export const models = [
   Mentor,
   Stage,
   Student,
+  Registry,
   Task,
   TaskArtefact,
   TaskChecker,
@@ -37,6 +39,7 @@ export {
   Mentor,
   Stage,
   Student,
+  Registry,
   Task,
   TaskArtefact,
   TaskChecker,
