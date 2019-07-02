@@ -96,9 +96,6 @@
     "transform": {
       "^.+\\.(ts)$": "ts-jest"
     },
-    "testMatch": [
-      "**/*.spec.(ts)"
-    ],
     "setupFiles": [
       "./jestsetup.js"
     ]
