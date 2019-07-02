@@ -4,7 +4,7 @@ import { getMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import { getCourseTasks, postCourseTask, putCourseTask, postShuffleCourseTask, deleteCourseTask } from './tasks';
-import { getCourseStages } from './stages';
+import { getCourseStages, postCourseStages } from './stages';
 import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
@@ -241,6 +241,8 @@ export function courseRoute(logger: ILogger) {
    *          description: List of tasks object
    */
   router.get('/:courseId/stages', guard, validateCourseId, getCourseStages(logger));
+
+  router.post('/:courseId/stages', adminGuard, validateCourseId, postCourseStages(logger));
 
   /**
    * @swagger

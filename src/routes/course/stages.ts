@@ -13,3 +13,15 @@ export const getCourseStages = (_: ILogger) => async (ctx: Router.RouterContext)
     .getMany();
   setResponse(ctx, OK, stages);
 };
+
+export const postCourseStages = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const inputData: { name: string }[] = ctx.request.body;
+  const result = await getRepository(Stage).save(
+    inputData.map(d => ({
+      name: d.name,
+      courseId,
+    })),
+  );
+  setResponse(ctx, OK, result);
+};
