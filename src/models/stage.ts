@@ -33,6 +33,9 @@ export class Stage {
   @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
 
+  @Column()
+  courseId: number;
+
   @OneToMany(_ => Student, student => student.stage, { nullable: true })
   students: Student[] | null;
 
