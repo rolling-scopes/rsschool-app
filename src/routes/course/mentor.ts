@@ -22,8 +22,29 @@ export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContex
   }
 
   const students = await studentsService.getMentorStudents(mentor.id);
-  const interviewStudents = await studentsService.getInterviewStudents(courseId, id);
-  const mentorResponse = { students, interviewStudents };
+  const mentorResponse = { students };
 
   setResponse(ctx, OK, mentorResponse);
+};
+
+export const getMentorOtherStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const id = ctx.state!.user.id;
+  const courseId: number = ctx.params.courseId;
+  const query = ctx.query as { courseTaskId: string | undefined };
+  const courseTaskId = Number(query.courseTaskId);
+
+  const mentor = await getRepository(Mentor)
+    .createQueryBuilder('mentor')
+    .innerJoinAndSelect('mentor.user', 'user')
+    .where('mentor."courseId" = :courseId AND mentor.user.id = :id', { id, courseId })
+    .getOne();
+
+  if (mentor === undefined || !courseTaskId) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const students = await studentsService.getMentorOtherStudents(courseId, id, courseTaskId);
+
+  setResponse(ctx, OK, { students });
 };

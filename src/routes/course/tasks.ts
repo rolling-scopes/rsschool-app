@@ -62,6 +62,65 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     };
   });
 
+  setResponse(ctx, OK, data);
+};
+
+export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+
+  const course = await getRepository(Course).findOne(courseId, {
+    relations: ['stages', 'stages.courseTasks'],
+  });
+
+  if (course === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const courseTaskIds: number[] = course!.stages
+    .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
+    .map(task => task.id);
+
+  if (courseTaskIds.length === 0) {
+    setResponse(ctx, OK, []);
+    return;
+  }
+
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .addSelect('COUNT(taskResult.id)', 'taskResultCount')
+    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+    .innerJoinAndSelect('courseTask.task', 'task')
+    .innerJoinAndSelect('courseTask.stage', 'stage')
+    .where(`courseTask.id IN (${courseTaskIds.join(',')})`)
+    .addGroupBy('courseTask.id')
+    .addGroupBy('task.id')
+    .addGroupBy('stage.id')
+    .getRawAndEntities();
+
+  const data = courseTasks.entities.map(item => {
+    const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
+
+    return {
+      courseTaskId: item.id,
+      taskId: (item.task as Task).id,
+      name: (item.task as Task).name,
+      maxScore: item.maxScore,
+      scoreWeight: item.scoreWeight,
+      stageId: (item.stage as Stage).id,
+      githubPrRequired: !!(item.task as Task).githubPrRequired,
+      verification: (item.task as Task).verification,
+      description: (item.task as Task).description,
+      descriptionUrl: (item.task as Task).descriptionUrl,
+      studentStartDate: item.studentStartDate,
+      studentEndDate: item.studentEndDate,
+      taskResultCount: raw ? Number(raw.taskResultCount) : 0,
+      allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
+      useJury: (item.task as Task).useJury,
+      taskCheckers: [],
+    };
+  });
+
   const dataWithCheckers = await Promise.all(
     data.map(async d => {
       const taskCheckers = await getRepository(TaskChecker).find({

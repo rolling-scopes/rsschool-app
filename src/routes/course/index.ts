@@ -1,9 +1,16 @@
 import * as Router from 'koa-router';
 import { BAD_REQUEST } from 'http-status-codes';
-import { getMentorStudents } from './mentor';
+import { getMentorStudents, getMentorOtherStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
-import { getCourseTasks, postCourseTask, putCourseTask, postShuffleCourseTask, deleteCourseTask } from './tasks';
+import {
+  getCourseTasks,
+  getCourseTasksWithTaskCheckers,
+  postCourseTask,
+  putCourseTask,
+  postShuffleCourseTask,
+  deleteCourseTask,
+} from './tasks';
 import { getCourseStages, postCourseStages } from './stages';
 import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
@@ -53,6 +60,8 @@ export function courseRoute(logger: ILogger) {
    *          description: User object
    */
   router.get('/:courseId/mentor/students', guard, validateCourseId, getMentorStudents(logger));
+
+  router.get('/:courseId/mentor/otherStudents', guard, validateCourseId, getMentorOtherStudents(logger));
 
   /**
    * @swagger
@@ -262,6 +271,8 @@ export function courseRoute(logger: ILogger) {
    *          description: List of tasks object
    */
   router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
+
+  router.get('/:courseId/tasksCheckers', guard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
 
   /**
    * @swagger

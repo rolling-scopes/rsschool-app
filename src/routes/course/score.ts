@@ -102,10 +102,10 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  if (student.mentor.id !== mentor.id) {
-    setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
-    return;
-  }
+  // if (student.mentor.id !== mentor.id) {
+  //   setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
+  //   return;
+  // }
 
   const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
