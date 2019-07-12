@@ -44,8 +44,10 @@ const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const entities = await getRepository(User)
     .createQueryBuilder('user')
-    .where('user.githubId like :text', { text: searchText.toLowerCase() + '%' })
-    .limit(10)
+    .where('user.githubId like :text OR user.firstName ilike :text OR user.lastName ilike :text', {
+      text: searchText.toLowerCase() + '%',
+    })
+    .limit(20)
     .getMany();
 
   setResponse(
