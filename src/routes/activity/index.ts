@@ -20,7 +20,7 @@ const postActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
 const getActivity = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const userId = ctx.state.user.id;
   const { lastActivityTime, isActive } = (await getRepository(User).findOne(userId))!;
-  setResponse(ctx, OK, { lastActivityTime, isActive });
+  setResponse(ctx, OK, { lastActivityTime: Number(lastActivityTime), isActive });
 };
 
 export function activityRoute(logger: ILogger) {
