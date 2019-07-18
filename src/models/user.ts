@@ -129,6 +129,12 @@ export class User {
   @Column({ nullable: true })
   activist: boolean;
 
+  @Column({ default: 0, type: 'bigint' })
+  lastActivityTime: number;
+
+  @Column({ default: true })
+  isActive: boolean;
+
   @BeforeInsert()
   beforeInsert?() {
     this.githubId = this.githubId.toLowerCase();

@@ -46,6 +46,8 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       receivedFeedback: [],
       registries: [],
       activist: false,
+      lastActivityTime: Date.now(),
+      isActive: true,
     };
     const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;

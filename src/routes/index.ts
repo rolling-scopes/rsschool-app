@@ -11,6 +11,7 @@ import { tasksRoute } from './tasks';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { sessionRoute } from './session';
+import { activityRoute } from './activity';
 import { ILogger } from '../logger';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
@@ -34,6 +35,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(publicRouter, usersRoute(logger));
   applyRouter(publicRouter, tasksRoute(logger));
   applyRouter(publicRouter, profileRoute(logger));
+  applyRouter(publicRouter, activityRoute(logger));
 
   return { publicRouter };
 };
