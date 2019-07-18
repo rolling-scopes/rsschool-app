@@ -1,14 +1,14 @@
+import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
-import { User, Mentor, Student, CourseTask } from '../../models';
-
-import { NOT_FOUND, OK } from 'http-status-codes';
 import { ILogger } from '../../logger';
+import { CourseTask, Mentor, Student, User } from '../../models';
+import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { isAdmin, githubId: userGithubId } = ctx.state!.user as IUserSession;
   const query = ctx.query as { githubId: string | undefined };
-
   if (query === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
@@ -20,6 +20,25 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   }
 
   const githubId = query.githubId.toLowerCase();
+
+  if (!isAdmin) {
+    const students = await getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoinAndSelect('student.user', 'user')
+      .innerJoinAndSelect('student.course', 'course')
+      .innerJoinAndSelect('student.mentor', 'mentor')
+      .innerJoinAndSelect('mentor.user', 'mentorUser')
+      .where('user.githubId = :githubId AND course.completed = false', { githubId })
+      .getMany();
+
+    const isMentor = students.some(
+      student => student.mentor && student.mentor.user && (student.mentor.user as User).githubId === userGithubId,
+    );
+    if (!isMentor) {
+      return;
+    }
+  }
+
   await getProfileByGithubId(ctx, githubId);
 };
 

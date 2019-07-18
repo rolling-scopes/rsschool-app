@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { adminGuard, guard } from '../guards';
+import { guard } from '../guards';
 import { getProfile } from './user';
-import { getMyProfile } from './me';
+import { getMyProfile, updateMyProfile } from './me';
 
 export function profileRoute(logger: ILogger) {
   const router = new Router({ prefix: '/profile' });
@@ -21,7 +21,7 @@ export function profileRoute(logger: ILogger) {
    *        200:
    *          description: profile
    */
-  router.get('/', adminGuard, getProfile(logger));
+  router.get('/', guard, getProfile(logger));
 
   /**
    * @swagger
@@ -38,6 +38,22 @@ export function profileRoute(logger: ILogger) {
    *          description: profile
    */
   router.get('/me', guard, getMyProfile(logger));
+
+  /**
+   * @swagger
+   *
+   * /profile/me:
+   *   get:
+   *      description: get current user profile
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: profile
+   */
+  router.post('/me', guard, updateMyProfile(logger));
 
   return router;
 }

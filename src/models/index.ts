@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User, ExternalAccount } from './user';
 import { Registry } from './registry';
 import { Feedback } from './feedback';
 import { Course } from './course';
@@ -47,6 +47,7 @@ export {
   TaskResult,
   User,
   StudentFeedback,
+  ExternalAccount,
 };
 
 export interface IApiResponse<T> {
