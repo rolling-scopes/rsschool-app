@@ -23,7 +23,7 @@ function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
   return emails.filter(email => email.primary);
 }
 
-export async function createUser(profile: Profile, teamsIds: string[]): Promise<IUserSession> {
+export async function createUser(profile: Profile, teamsIds: string[] = []): Promise<IUserSession> {
   const id = profile.username!.toLowerCase();
   const result = await userService.getFullUserByGithubId(id);
 
@@ -48,6 +48,7 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       activist: false,
       lastActivityTime: Date.now(),
       isActive: true,
+      courseManagers: [],
     };
     const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;
@@ -60,12 +61,15 @@ export async function createUser(profile: Profile, teamsIds: string[]): Promise<
       roles: {},
     };
   }
-  const roles: { [key: number]: 'student' | 'mentor' } = {};
+  const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' } = {};
   result.students!.forEach(student => {
     roles[(student.course as Course).id] = 'student';
   });
   result.mentors!.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
+  });
+  result.courseManagers!.forEach(courseManager => {
+    roles[(courseManager.course as Course).id] = 'coursemanager';
   });
   return {
     roles,

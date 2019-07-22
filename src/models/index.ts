@@ -10,6 +10,7 @@ import { Mentor } from './mentor';
 import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskArtefact } from './taskArtefact';
+import { CourseManager } from './courseManager';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
 
@@ -30,6 +31,7 @@ export const models = [
   TaskResult,
   User,
   StudentFeedback,
+  CourseManager,
 ];
 
 export {
@@ -48,6 +50,7 @@ export {
   User,
   StudentFeedback,
   ExternalAccount,
+  CourseManager,
 };
 
 export interface IApiResponse<T> {

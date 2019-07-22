@@ -2,12 +2,12 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { CourseTask, Mentor, Student, User } from '../../models';
+import { CourseTask, Mentor, Student, User, Course } from '../../models';
 import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { isAdmin, githubId: userGithubId } = ctx.state!.user as IUserSession;
+  const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
   const query = ctx.query as { githubId: string | undefined };
   if (query === undefined) {
     setResponse(ctx, NOT_FOUND);
@@ -20,7 +20,6 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   }
 
   const githubId = query.githubId.toLowerCase();
-
   if (!isAdmin) {
     const students = await getRepository(Student)
       .createQueryBuilder('student')
@@ -34,7 +33,8 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     const isMentor = students.some(
       student => student.mentor && student.mentor.user && (student.mentor.user as User).githubId === userGithubId,
     );
-    if (!isMentor) {
+    const isCourseManager = students.some(student => roles[(student.course as Course)!.id] === 'coursemanager');
+    if (!isMentor && !isCourseManager) {
       return;
     }
   }

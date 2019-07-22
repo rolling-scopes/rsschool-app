@@ -12,6 +12,7 @@ import { Student } from './student';
 import { Mentor } from './mentor';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
+import { CourseManager } from './courseManager';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -134,6 +135,9 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(_ => CourseManager, (courseManager: CourseManager) => courseManager.user, { nullable: true })
+  courseManagers: CourseManager[] | null;
 
   @BeforeInsert()
   beforeInsert?() {
