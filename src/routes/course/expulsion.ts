@@ -4,7 +4,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Student } from '../../models';
 import { ILogger } from '../../logger';
-import { mentorsService } from '../../services';
+import { courseService } from '../../services';
 
 type ExpulsionInput = {
   studentId: number;
@@ -19,28 +19,29 @@ export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterConte
   const data: ExpulsionInput = ctx.request.body;
 
   const id = ctx.state.user.id;
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, id);
+  const mentor = await courseService.getCourseMentorWithUser(courseId, id);
 
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
   }
 
-  const student = await getRepository(Student).findOne(Number(data.studentId), { relations: ['mentor'] });
+  const student = await courseService.getStudent(data.studentId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
 
-  if (student.mentor.id !== mentor.id) {
+  if (student.mentor!.id !== mentor.id) {
     setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
     return;
   }
 
-  student.isExpelled = true;
-  student.expellingReason = data.comment || '';
+  const result = await getRepository(Student).update(student.id, {
+    isExpelled: true,
+    expellingReason: data.comment || '',
+  });
 
-  const result = await getRepository(Student).save(student);
   setResponse(ctx, OK, result);
   return;
 };

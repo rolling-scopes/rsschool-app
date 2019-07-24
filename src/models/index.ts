@@ -13,6 +13,7 @@ import { TaskArtefact } from './taskArtefact';
 import { CourseManager } from './courseManager';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
+import { PrivateFeedback } from './privateFeedback';
 
 export * from './session';
 
@@ -32,6 +33,7 @@ export const models = [
   User,
   StudentFeedback,
   CourseManager,
+  PrivateFeedback,
 ];
 
 export {
@@ -51,6 +53,7 @@ export {
   StudentFeedback,
   ExternalAccount,
   CourseManager,
+  PrivateFeedback,
 };
 
 export interface IApiResponse<T> {

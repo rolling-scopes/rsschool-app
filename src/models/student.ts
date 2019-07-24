@@ -29,6 +29,9 @@ export class Student {
   @ManyToOne(_ => Course, (course: Course) => course.students, { nullable: true })
   course: Course | number;
 
+  @Column({ nullable: true })
+  courseId: number;
+
   @ManyToOne(_ => User)
   user: User | number;
 
@@ -51,6 +54,9 @@ export class Student {
     nullable: true,
   })
   taskInterviewResults: TaskInterviewResult[] | null;
+
+  @Column({ default: false })
+  isFailed: boolean;
 
   @Column({ default: false })
   isExpelled: boolean;
@@ -78,6 +84,9 @@ export class Student {
 
   @Column({ nullable: true })
   hiredByName: string;
+
+  @Column({ default: 0, type: 'float' })
+  totalScore: number;
 
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
   feedback: StudentFeedback[] | null;

@@ -5,7 +5,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Student, TaskInterviewResult } from '../../models';
 import { ILogger } from '../../logger';
-import { mentorsService, taskService, OperationResult, studentsService } from '../../services';
+import { courseService, taskService, OperationResult, studentsService } from '../../services';
 
 type Input = {
   studentId: number | string;
@@ -20,6 +20,7 @@ type Input = {
 };
 
 type InputApi = {
+  courseId: number;
   studentGithubId: string;
   mentorGithubId: string;
   courseTaskId: number;
@@ -68,7 +69,7 @@ export const postInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterCo
   }
 
   const { courseTaskId, studentId } = data;
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, userId);
+  const mentor = await courseService.getCourseMentorWithUser(courseId, userId);
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
@@ -141,7 +142,7 @@ export const postInterviewFeedbacks = (_: ILogger) => async (ctx: Router.RouterC
     }
 
     const { courseTaskId } = item;
-    const mentor = await mentorsService.getMentorByGithubId(item.mentorGithubId);
+    const mentor = await courseService.getMentorByGithubId(item.courseId, item.mentorGithubId);
     if (mentor == null) {
       result.push({
         status: 'skipped',

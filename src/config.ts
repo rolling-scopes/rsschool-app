@@ -5,6 +5,9 @@ export interface IConfig {
     github_client_secret: string;
     successRedirect: string;
   };
+  dev: {
+    username: string;
+  };
   admin: {
     username: string;
     password: string;
@@ -45,6 +48,9 @@ export const config: IConfig = {
     github_client_id: process.env.RSSHCOOL_API_AUTH_CLIENT_ID || 'client-id',
     github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
     successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3000',
+  },
+  dev: {
+    username: process.env.RSSHCOOL_DEV_USERNAME || '',
   },
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',

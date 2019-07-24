@@ -2,9 +2,9 @@ import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { setResponse } from '../utils';
-import { Mentor, Student } from '../../models';
+import { Student } from '../../models';
 import { ILogger } from '../../logger';
-import { OperationResult } from '../../services';
+import { OperationResult, courseService } from '../../services';
 
 type PairInput = {
   studentGithubId: string;
@@ -24,14 +24,8 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   for await (const item of data) {
     try {
-      const mentor = await getRepository(Mentor)
-        .createQueryBuilder('mentor')
-        .innerJoinAndSelect('mentor.user', 'user')
-        .where('"user"."githubId" = :id AND "mentor"."courseId" = :courseId', {
-          id: item.mentorGithubId.toLowerCase(),
-          courseId,
-        })
-        .getOne();
+      const githubId = item.mentorGithubId.toLowerCase();
+      const mentor = await courseService.getMentorByGithubId(courseId, githubId);
 
       if (mentor == null) {
         result.push({
@@ -59,12 +53,8 @@ export const postPairs = (logger: ILogger) => async (ctx: Router.RouterContext) 
         continue;
       }
 
-      student.mentor = mentor;
-      const savedStudent = await studentRepository.save(student);
-      result.push({
-        status: 'updated',
-        value: savedStudent.id,
-      });
+      await studentRepository.update(student.id, { mentorId: mentor.id });
+      result.push({ status: 'updated', value: student.id });
     } catch (e) {
       logger.error(e);
 

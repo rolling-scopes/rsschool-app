@@ -22,7 +22,10 @@ export class Mentor {
   updatedDate: number;
 
   @ManyToOne(_ => Course, (course: Course) => course.mentors, { nullable: true })
-  course: Course | number;
+  course: Course;
+
+  @Column({ nullable: true })
+  courseId: number;
 
   @ManyToOne(_ => User)
   user: User | number;

@@ -3,5 +3,6 @@ import { App } from './src';
 
 const app = new App();
 app.start();
-// app.connect();
-app.pgConnect();
+app.pgConnect().then(() => {
+  app.startBackgroundJobs();
+});

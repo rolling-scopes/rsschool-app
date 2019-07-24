@@ -58,6 +58,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       taskResultCount: raw ? Number(raw.taskResultCount) : 0,
       allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
       useJury: (item.task as Task).useJury,
+      checker: item.checker,
       taskCheckers: [],
     };
   });

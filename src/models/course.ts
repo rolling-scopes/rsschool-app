@@ -17,10 +17,14 @@ export class Course {
   @Column()
   name: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   alias: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  descriptionUrl: string;
 
   @Column()
   year: number;
@@ -46,6 +50,6 @@ export class Course {
   @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
   registries: Registry[] | null;
 
-  @Column({ default: false })
-  completed: boolean;
+  @Column({ default: 'planned' })
+  status: 'planned' | 'active' | 'completed';
 }

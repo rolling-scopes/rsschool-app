@@ -72,7 +72,7 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
       continue;
     }
 
-    const mentor: Partial<Mentor> = { user, maxStudentsLimit, course: courseId };
+    const mentor: Partial<Mentor> = { user, maxStudentsLimit, courseId };
     const savedMentor = await mentorRepository.save(mentor);
 
     result.push({

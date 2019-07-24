@@ -4,11 +4,11 @@ import { ILogger } from '../../logger';
 import { Student } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { OperationResult, userService, studentsService } from '../../services';
+import { OperationResult, userService, studentsService, courseService } from '../../services';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
-  const students = await studentsService.getActiveCourseStudents(courseId);
+  const students = await courseService.getActiveStudents(courseId);
   setResponse(ctx, OK, students);
 };
 
