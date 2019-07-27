@@ -2,7 +2,7 @@ import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { guard } from '../guards';
 import { getProfile } from './user';
-import { getMyProfile, updateMyProfile } from './me';
+import { getMyProfile, updateMyProfile, updateProfileByRegistry } from './me';
 
 export function profileRoute(logger: ILogger) {
   const router = new Router({ prefix: '/profile' });
@@ -54,6 +54,8 @@ export function profileRoute(logger: ILogger) {
    *          description: profile
    */
   router.post('/me', guard, updateMyProfile(logger));
+
+  router.post('/registry', guard, updateProfileByRegistry(logger));
 
   return router;
 }

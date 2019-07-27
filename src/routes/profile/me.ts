@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { ExternalAccount, User } from '../../models';
 import { IUserSession } from '../../models/session';
+import { EducationRecord, EmploymentRecord } from './../../models/user';
 import { setResponse } from '../utils';
 import { getProfileByGithubId } from './user';
 
@@ -18,6 +19,20 @@ type UserInput = {
   firstNameNative?: string;
   lastNameNative?: string;
   externalAccounts?: ExternalAccount[];
+};
+
+type RegistryInput = {
+  firstName?: string;
+  lastName?: string;
+  firstNameNative?: string;
+  lastNameNative?: string;
+  dateOfBirth?: string;
+  locationName?: string;
+  contactsPhone?: string;
+  contactsEmail?: string;
+  contactsEpamEmail?: string;
+  educationHistory?: [EducationRecord];
+  employmentHistory?: [EmploymentRecord];
 };
 
 export const updateMyProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -49,5 +64,22 @@ export const updateMyProfile = (_: ILogger) => async (ctx: Router.RouterContext)
     user.externalAccounts = inputData.externalAccounts;
   }
   const result = await userRepository.save(user);
+  setResponse(ctx, OK, result);
+};
+
+export const updateProfileByRegistry = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId } = ctx.state!.user as IUserSession;
+  const inputData: RegistryInput = ctx.request.body;
+  if (!inputData) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({ where: { githubId } });
+  if (!user) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+  const result = await userRepository.save({ ...user, ...inputData });
   setResponse(ctx, OK, result);
 };
