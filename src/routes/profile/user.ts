@@ -28,7 +28,7 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
       .innerJoinAndSelect('student.course', 'course')
       .innerJoinAndSelect('student.mentor', 'mentor')
       .innerJoinAndSelect('mentor.user', 'mentorUser')
-      .where('user.githubId = :githubId AND course.status = :status ', { githubId, status: 'active' })
+      .where('user.githubId = :githubId AND course.completed=false ', { githubId })
       .getMany();
 
     const isMentor = students.some(

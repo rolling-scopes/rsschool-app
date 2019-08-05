@@ -93,7 +93,7 @@ function studentQuery() {
 export async function getCourses() {
   const records = await getRepository(Course)
     .createQueryBuilder('course')
-    .where('course.status = :status', { status: 'active' })
+    .where('course.completed = false')
     .getMany();
   return records;
 }
