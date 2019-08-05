@@ -51,4 +51,7 @@ export class CourseTask {
 
   @Column({ nullable: true, type: 'float', default: 1 })
   scoreWeight: number;
+
+  @Column({ default: 'mentor' })
+  checker: 'assigned' | 'mentor';
 }

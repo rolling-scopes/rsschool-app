@@ -17,10 +17,14 @@ export class Course {
   @Column()
   name: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   alias: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  descriptionUrl: string;
 
   @Column()
   year: number;
@@ -48,4 +52,7 @@ export class Course {
 
   @Column({ default: false })
   completed: boolean;
+
+  @Column({ default: false })
+  planned: boolean;
 }

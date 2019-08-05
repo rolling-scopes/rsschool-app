@@ -9,7 +9,7 @@ export const devAuthMiddleware = async (ctx: Router.RouterContext) => {
   try {
     const userSession = await createUser(
       {
-        username: `${userInfo().username}@${hostname()}`,
+        username: config.dev.username || `${userInfo().username}@${hostname()}`,
       },
       config.roles.adminTeams,
     );

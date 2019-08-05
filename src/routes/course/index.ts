@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { BAD_REQUEST } from 'http-status-codes';
-import { getMentorStudents, getMentorOtherStudents } from './mentor';
+import { getMentorStudents, getAllMentorStudents } from './mentor';
 import { getStudents, postStudents } from './students';
 import { getMentors, postMentors } from './mentors';
 import {
@@ -16,10 +16,11 @@ import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
 import { postScore, getScore, postScores } from './score';
 import { getExternalAccounts } from './externalAccounts';
-import { getMentorContacts } from './mentorContacts';
+// import { getMentorContacts } from './mentorContacts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
 import { postStudentsFeedbacks } from './studentFeedback';
-import { getMe } from './me';
+import { getStudentProfile } from './student';
+import { getMe, getMyMentors } from './me';
 import { postPairs } from './pairs';
 import { postFeedback } from './feedback';
 import { ILogger } from '../../logger';
@@ -61,7 +62,7 @@ export function courseRoute(logger: ILogger) {
    */
   router.get('/:courseId/mentor/students', guard, validateCourseId, getMentorStudents(logger));
 
-  router.get('/:courseId/mentor/otherStudents', guard, validateCourseId, getMentorOtherStudents(logger));
+  router.get('/:courseId/mentor/students/all', guard, validateCourseId, getAllMentorStudents(logger));
 
   /**
    * @swagger
@@ -84,6 +85,8 @@ export function courseRoute(logger: ILogger) {
    *          description: List of students
    */
   router.get('/:courseId/students', guard, validateCourseId, getStudents(logger));
+
+  router.get('/:courseId/student/profile', guard, validateCourseId, getStudentProfile(logger));
 
   /**
    * @swagger
@@ -498,9 +501,11 @@ export function courseRoute(logger: ILogger) {
 
   router.get('/:courseId/me', guard, validateCourseId, getMe(logger));
 
+  router.get('/:courseId/me/mentors', guard, validateCourseId, getMyMentors(logger));
+
   router.post('/:courseId/taskArtefact', guard, validateCourseId, postTaskArtefact(logger));
 
-  router.get('/:courseId/mentorContacts', guard, validateCourseId, getMentorContacts(logger));
+  // router.get('/:courseId/mentorContacts', guard, validateCourseId, getMentorContacts(logger));
 
   router.post('/:courseId/interviewFeedback', guard, validateCourseId, postInterviewFeedback(logger));
 

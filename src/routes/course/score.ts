@@ -1,12 +1,12 @@
+import { BAD_REQUEST, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { getRepository } from 'typeorm';
-import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as NodeCache from 'node-cache';
-
-import { setResponse } from '../utils';
-import { TaskResult, Student, Task } from '../../models';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { studentsService, mentorsService, OperationResult, taskService, taskResultsService } from '../../services';
+import { Student, Task, TaskResult } from '../../models';
+import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
+import { getScoreStudents } from '../../services/courseService';
+import { setResponse } from '../utils';
 
 type ScoreInput = {
   studentId: number | string;
@@ -96,7 +96,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const mentor = await mentorsService.getCourseMentorWithUser(courseId, authorId);
+  const mentor = await courseService.getCourseMentorWithUser(courseId, authorId);
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
@@ -223,7 +223,7 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const students = await studentsService.getCourseScoreStudents(courseId);
+  const students = await getScoreStudents(courseId);
   memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students);
 };

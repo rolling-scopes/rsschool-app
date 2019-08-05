@@ -13,6 +13,7 @@ import { ILogger, loggerMiddleware } from './logger';
 import { createConnection } from 'typeorm';
 import { models } from './models';
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
+import { startBackgroundJobs } from './schedule';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
 
@@ -29,17 +30,6 @@ export class App {
     this.appLogger = logger.child({ module: 'app' });
 
     this.koa.use(loggerMiddleware(this.appLogger));
-
-    // this.koa.use(
-    //   RateLimit.middleware({
-    //     getUserId: async ctx => {
-    //       const user = ctx.state && ctx.state.user ? ctx.state.user : {};
-    //       return user.id;
-    //     },
-    //     interval: { min: config.rateLimit.intervalMin }, // 15 minutes = 15*60*1000
-    //     max: config.rateLimit.max, // limit each IP to 100 requests per interval
-    //   }),
-    // );
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());
@@ -92,5 +82,9 @@ export class App {
     this.appLogger.info('Connected to Postgres');
 
     return true;
+  }
+
+  public async startBackgroundJobs() {
+    return startBackgroundJobs(this.appLogger.child({ module: 'schedule' }));
   }
 }

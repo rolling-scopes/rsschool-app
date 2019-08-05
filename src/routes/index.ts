@@ -12,6 +12,7 @@ import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
+import { feedbackRoute } from './feedback';
 import { ILogger } from '../logger';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
@@ -22,20 +23,21 @@ function applyRouter(topRouter: Router, router: Router) {
 }
 
 export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
-  const publicRouter = new Router();
+  const router = new Router();
 
-  publicRouter.use(errorHandlerMiddleware(logger));
+  router.use(errorHandlerMiddleware(logger));
 
-  applyRouter(publicRouter, authRoute());
-  applyRouter(publicRouter, sessionRoute(logger));
-  applyRouter(publicRouter, publicMeRouter(logger));
-  applyRouter(publicRouter, registryRouter(logger));
-  applyRouter(publicRouter, courseRoute(logger));
-  applyRouter(publicRouter, coursesRoute(logger));
-  applyRouter(publicRouter, usersRoute(logger));
-  applyRouter(publicRouter, tasksRoute(logger));
-  applyRouter(publicRouter, profileRoute(logger));
-  applyRouter(publicRouter, activityRoute(logger));
+  applyRouter(router, authRoute());
+  applyRouter(router, sessionRoute(logger));
+  applyRouter(router, publicMeRouter(logger));
+  applyRouter(router, registryRouter(logger));
+  applyRouter(router, courseRoute(logger));
+  applyRouter(router, coursesRoute(logger));
+  applyRouter(router, usersRoute(logger));
+  applyRouter(router, tasksRoute(logger));
+  applyRouter(router, profileRoute(logger));
+  applyRouter(router, activityRoute(logger));
+  applyRouter(router, feedbackRoute(logger));
 
-  return { publicRouter };
+  return { publicRouter: router };
 };

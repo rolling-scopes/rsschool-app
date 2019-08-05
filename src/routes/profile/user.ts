@@ -5,6 +5,7 @@ import { ILogger } from '../../logger';
 import { CourseTask, Mentor, Student, User, Course } from '../../models';
 import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
+import { courseService } from '../../services';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
@@ -27,7 +28,7 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
       .innerJoinAndSelect('student.course', 'course')
       .innerJoinAndSelect('student.mentor', 'mentor')
       .innerJoinAndSelect('mentor.user', 'mentorUser')
-      .where('user.githubId = :githubId AND course.completed = false', { githubId })
+      .where('user.githubId = :githubId AND course.completed=false ', { githubId })
       .getMany();
 
     const isMentor = students.some(
@@ -66,9 +67,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
 
   if (students) {
     const studentsMentor = await Promise.all(
-      students
-        .filter(s => !!s.mentor)
-        .map(s => getRepository(Mentor).findOne({ where: { id: s.mentor.id }, relations: ['user'] })),
+      students.filter(s => !!s.mentor).map(s => courseService.getMentor(s.mentor.id)),
     );
 
     const studentTasks = await Promise.all(
