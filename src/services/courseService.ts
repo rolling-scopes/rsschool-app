@@ -127,7 +127,7 @@ export async function getMentorByGithubId(courseId: number, githubId: string): P
     .innerJoin('mentor.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('mentor.course', 'course')
-    .where('user."githubId" = :githubId AND course.id = :courseId', {
+    .where('user.githubId = :githubId AND course.id = :courseId', {
       githubId,
       courseId,
     })
