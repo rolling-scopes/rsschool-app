@@ -26,8 +26,10 @@
   "dependencies": {
     "@koa/cors": "~3.0.0",
     "@octokit/rest": "15.8.1",
+    "@types/json2csv": "^4.5.0",
     "@types/node-cache": "^4.1.3",
     "http-status-codes": "~1.3.2",
+    "json2csv": "^4.5.2",
     "koa": "~2.7.0",
     "koa-basic-auth": "~4.0.0",
     "koa-bodyparser": "~4.2.1",

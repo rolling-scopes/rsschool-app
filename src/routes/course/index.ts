@@ -14,7 +14,7 @@ import {
 import { getCourseStages, postCourseStages } from './stages';
 import { postTaskArtefact } from './taskArtefact';
 import { postExpulsion } from './expulsion';
-import { postScore, getScore, postScores } from './score';
+import { postScore, getScore, postScores, getScoreAsCsv } from './score';
 import { getExternalAccounts } from './externalAccounts';
 // import { getMentorContacts } from './mentorContacts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
@@ -434,6 +434,8 @@ export function courseRoute(logger: ILogger) {
    *          description: ''
    */
   router.get('/:courseId/score', guard, validateCourseId, getScore(logger));
+
+  router.get('/:courseId/score/csv', adminGuard, validateCourseId, getScoreAsCsv(logger));
 
   /**
    * @swagger

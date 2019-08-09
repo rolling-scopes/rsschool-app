@@ -7,14 +7,14 @@ export function startBackgroundJobs(logger: ILogger) {
   scheduleJob('*/5 * * * *', async () => {
     logger.info('update scores');
 
-    const [courses, courseTasks] = await Promise.all([getCourses(), getCourseTasks()]);
-    const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
+    const courses = await getCourses();
 
     for await (const course of courses) {
       logger.info(`update course = [${course.id}]`);
 
       const courseId = course.id;
-      const students = await getScoreStudents(courseId);
+      const [students, courseTasks] = await Promise.all([getScoreStudents(courseId), getCourseTasks(courseId)]);
+      const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
       const scores = students.map(({ id, taskResults }) => {
         const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));

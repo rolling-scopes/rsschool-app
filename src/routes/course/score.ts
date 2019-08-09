@@ -1,12 +1,14 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
+import { keyBy, mapValues, round, sum } from 'lodash';
 import * as NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
+import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
-import { Student, Task, TaskResult } from '../../models';
+import { Student, Task, TaskResult, CourseTask } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
-import { getScoreStudents } from '../../services/courseService';
-import { setResponse } from '../utils';
+import { getCourseTasks, getScoreStudents } from '../../services/courseService';
+import { setResponse, setCsvResponse } from '../utils';
 
 type ScoreInput = {
   studentId: number | string;
@@ -227,3 +229,37 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
   memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students);
 };
+
+export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = ctx.params.courseId;
+  const students = await getScoreStudents(courseId);
+  const courseTasks = await getCourseTasks(courseId);
+  const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
+
+  const result = students.map(student => {
+    const score = sum(student.taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
+    const totalScore = round(score, 1);
+    return {
+      githubId: student.githubId,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      mentorGithubId: student.mentor ? student.mentor.githubId : '',
+      totalScore,
+      ...getTasksResults(student.taskResults, courseTasks),
+    };
+  });
+  const csv = await parseAsync(result);
+  setCsvResponse(ctx, OK, csv, 'score');
+};
+
+function getTasksResults(taskResults: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
+  return courseTasks.reduce(
+    (acc, courseTask) => {
+      const r = taskResults.find(r => r.courseTaskId === courseTask.id);
+      acc[(courseTask.task as Task).name] = r ? r.score : 0;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+  return {};
+}

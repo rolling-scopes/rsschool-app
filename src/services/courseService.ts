@@ -279,10 +279,12 @@ export async function getScoreStudents(courseId: number) {
     });
 }
 
-export async function getCourseTasks() {
+export async function getCourseTasks(courseId: number) {
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
+    .innerJoin('courseTask.stage', 'stage')
+    .where('stage.courseId = :courseId', { courseId })
     .getMany();
   return courseTasks;
 }
