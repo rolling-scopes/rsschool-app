@@ -1,6 +1,5 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { keyBy, mapValues, round, sum } from 'lodash';
 import * as NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
@@ -98,16 +97,12 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const mentor = await courseService.getCourseMentorWithUser(courseId, authorId);
-  if (mentor == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
+  const mentor = await courseService.getMentorByUserId(courseId, authorId);
+  const session = ctx.state.user;
+  if (mentor == null && !session.isAdmin && session.roles[courseId] !== 'coursemanager') {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
-
-  // if (student.mentor.id !== mentor.id) {
-  //   setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
-  //   return;
-  // }
 
   const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
@@ -234,17 +229,14 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
   const courseId = ctx.params.courseId;
   const students = await getScoreStudents(courseId);
   const courseTasks = await getCourseTasks(courseId);
-  const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
   const result = students.map(student => {
-    const score = sum(student.taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
-    const totalScore = round(score, 1);
     return {
       githubId: student.githubId,
       firstName: student.firstName,
       lastName: student.lastName,
       mentorGithubId: student.mentor ? student.mentor.githubId : '',
-      totalScore,
+      totalScore: student.totalScore,
       ...getTasksResults(student.taskResults, courseTasks),
     };
   });
