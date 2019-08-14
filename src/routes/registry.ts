@@ -6,6 +6,7 @@ import { ILogger } from './../logger';
 import { adminGuard } from './guards';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
+import { IUserSession } from '../models/session';
 
 interface LoggingError {
   logger?: ILogger;
@@ -27,13 +28,14 @@ export function registryRouter(logger?: ILogger) {
   router.get('/:id', createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const defaultBody = { githubId: '', courseId: '', comment: '', type: 'mentee' };
-    const { githubId, courseId, comment, type } = ctx.request.body || defaultBody;
+    const { githubId } = ctx.state!.user as IUserSession;
+    const { courseId, comment, type } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {
       const errorMsg = 'Wrong payload: githubId courseId & type are required';
 
       handleError({ logger, errorMsg, ctx });
+      return;
     }
 
     try {

@@ -2,10 +2,10 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { CourseTask, Mentor, Student, User, Course } from '../../models';
+import { Course, CourseTask, Student, Task, User } from '../../models';
 import { IUserSession } from '../../models/session';
-import { setResponse } from '../utils';
 import { courseService } from '../../services';
+import { setResponse } from '../utils';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
@@ -49,12 +49,20 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     relations: [
       'receivedFeedback',
       'mentors',
+      'mentors.user',
+      'mentors.students',
+      'mentors.students.user',
       'students',
       'mentors.course',
       'students.course',
+      'students.course.stages',
+      'students.course.stages.courseTasks',
+      'students.course.stages.courseTasks.task',
       'students.mentor',
+      'students.mentor.user',
       'students.taskResults',
       'students.feedback',
+      'students.taskInterviewResults',
     ],
   });
 
@@ -63,58 +71,64 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     return;
   }
 
-  const { students, mentors } = profile;
+  const { students, mentors, receivedFeedback, ...user } = profile;
+  const result = {
+    user,
+    students: [] as any[],
+    mentors: [] as any[],
+    receivedFeedback: [] as any[],
+  };
 
   if (students) {
-    const studentsMentor = await Promise.all(
-      students.filter(s => !!s.mentor).map(s => courseService.getMentor(s.mentor.id)),
-    );
-
-    const studentTasks = await Promise.all(
-      students
-        .filter(s => !!s.mentor)
-        .map(s => s.taskResults || [])
-        .reduce((acc, v) => acc.concat(v), [])
-        .map(s => getRepository(CourseTask).findOne({ where: { id: s.courseTaskId }, relations: ['task'] })),
-    );
-
-    profile.students = (students
-      .filter(s => !!s.mentor)
-      .map(st => ({
-        ...st,
+    result.receivedFeedback = receivedFeedback || [];
+    result.students = students.map(st => {
+      const course = st.course as Course;
+      const courseTasks = course.stages
+        .reduce((acc, stage) => acc.concat(stage.courseTasks || []), [] as CourseTask[])
+        .map(t => ({
+          id: t.id,
+          name: (t.task as Task).name,
+          descriptionUrl: (t.task as Task).descriptionUrl,
+        }));
+      return {
+        id: st.id,
+        course: {
+          id: course.id,
+          name: course.name,
+        },
+        totalScore: st.totalScore,
+        completed: !st.isExpelled && !st.isFailed,
+        expellingReason: st.expellingReason,
         taskResults: (st.taskResults || []).map(t => ({
-          ...t,
-          ...studentTasks.find((st: any) => st.id === t.courseTaskId),
+          score: t.score,
+          githubPrUrl: t.githubPrUrl,
+          comment: t.comment,
+          courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
         })),
-        mentor: studentsMentor.find((m: any) => m.id === st.mentor.id),
-      })) as unknown) as Student[];
+        interviews: (st.taskInterviewResults || []).map(t => ({
+          formAnswers: t.formAnswers,
+          score: t.score,
+          comment: t.comment,
+          courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
+        })),
+        mentor: st.mentor ? courseService.convertToMentorBasic(st.mentor) : null,
+      };
+    });
   }
 
   if (mentors) {
-    const mentorForStudentIds = await Promise.all(
-      mentors.map(m => getRepository(Mentor).findOne({ where: { id: m.id }, relations: ['students'] })),
-    );
-
-    const mentorForStudents = await Promise.all(
-      mentorForStudentIds
-        .map((m: any) => {
-          return m.students.map((s: any) =>
-            getRepository(Student).findOne({ where: { id: s.id }, relations: ['user'] }),
-          );
-        })
-        .reduce((acc, v) => acc.concat(v), []),
-    );
-
-    const mfS = mentorForStudentIds.map((m: any) => ({
-      ...m,
-      students: m.students.map((st: any) => mentorForStudents.find((s: any) => st.id === s.id)),
-    }));
-
-    profile.mentors = (mentors.map(m => ({
-      ...m,
-      ...mfS.find((st: any) => st.id === m.id),
-    })) as unknown) as Mentor[];
+    result.mentors = mentors.map(m => {
+      const course = m.course as Course;
+      return {
+        id: m.id,
+        course: {
+          id: course.id,
+          name: course.name,
+        },
+        students: (m.students || []).map(s => courseService.convertToStudentBasic(s)),
+      };
+    });
   }
 
-  setResponse(ctx, OK, profile);
+  setResponse(ctx, OK, result);
 };

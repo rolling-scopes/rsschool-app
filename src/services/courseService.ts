@@ -55,7 +55,7 @@ export interface StudentWithScore extends StudentBasic {
   }[];
 }
 
-function convertToMentorBasic(mentor: Mentor): MentorBasic {
+export function convertToMentorBasic(mentor: Mentor): MentorBasic {
   const user = (mentor.user as User)!;
   return {
     lastName: user.lastName,
@@ -68,7 +68,7 @@ function convertToMentorBasic(mentor: Mentor): MentorBasic {
   };
 }
 
-function convertToStudentBasic(student: Student): StudentBasic {
+export function convertToStudentBasic(student: Student): StudentBasic {
   const user = (student.user as User)!;
   return {
     lastName: user.lastName,
