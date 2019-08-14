@@ -6,14 +6,24 @@ phases:
       nodejs: 10
   build:
     commands:
-      - cd ./api
-      - yarn cache dir
       - yarn
-      - yarn run build
+      - yarn api:build
+      - cd ./api
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/api:latest .
       - docker push rsschool/api:latest
+      - echo "$SSH_EC2_KEY" >> key.pem && chmod 400 key.pem
+      - ssh-keyscan $RSSCHOOL_API_HOST >> /root/.ssh/known_hosts
+      - >
+        ssh -tt -i "key.pem" $RSSCHOOL_API_EC2_USER@$RSSCHOOL_API_HOST "
+          sleep 10
+          docker pull rsschool/api:latest 
+          docker-compose stop api
+          docker-compose rm -f api
+          docker-compose up -d api
+          docker system prune -f "
 
 cache:
   paths:
-    - "/root/.npm/**/*"
+    - /root/.npm/**/*
+    - /usr/local/share/.cache/**/*

@@ -5,6 +5,9 @@
     "client",
     "lambdas/*"
   ],
+  "scripts": {
+    "api:build": "yarn workspace rsschool-api build"
+  },
   "dependencies": {
     "serverless": "^1.50.0"
   }
