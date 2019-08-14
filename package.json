@@ -10,6 +10,7 @@
     "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",
     "api:build": "yarn workspace api build",
     "api:start": "yarn workspace api start",
+    "ui:build": "yarn workspace ui build",
     "ui:start": "yarn workspace ui start"
   },
   "dependencies": {

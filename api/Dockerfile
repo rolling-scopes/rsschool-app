@@ -8,9 +8,9 @@ ENV NODE_PORT 8080
 WORKDIR /server
 
 COPY package.json /server
+RUN npm install --production --no-optional
+
 COPY public /server/public
 COPY dist /server
-
-RUN npm install --no-optional
 
 CMD [ "node", "./index.js" ]
