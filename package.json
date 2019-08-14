@@ -7,7 +7,7 @@
     "tools/rs-checkist"
   ],
   "scripts": {
-    "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx}' 'lambdas/**/*.{ts,tsx,js}'",
+    "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",
     "api:build": "yarn workspace api build"
   },
   "dependencies": {

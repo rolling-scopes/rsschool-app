@@ -11,16 +11,7 @@
     "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\"",
     "test": "jest",
     "test:update": "jest --updateSnapshot",
-    "lint-staged": "lint-staged",
-    "precommit-disabled": "npm-run-all lint-staged lint test",
     "swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts ./src/routes/**.ts"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "npm run lint:fix",
-      "npm run format",
-      "git add"
-    ]
   },
   "license": "MIT",
   "dependencies": {
@@ -73,18 +64,10 @@
     "husky": "3.0.0",
     "lint-staged": "8.1.5",
     "nodemon": "1.18.11",
-    "npm-run-all": "4.1.5",
     "pino-pretty": "~2.6.1",
-    "prettier": "~1.18.2",
     "source-map-support": "~0.5.12",
     "ts-node": "~8.2.0",
     "tslint": "~5.18.0",
     "typescript": "~3.5.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit-disabled": "lint-staged",
-      "commit-msg-disabled": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   }
 }

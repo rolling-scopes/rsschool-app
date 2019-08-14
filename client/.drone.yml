@@ -1,0 +1,55 @@
+kind: pipeline
+name: rsschool-ui
+steps:
+  -
+    name: build
+    image: node:10
+    commands:
+      - npm ci
+      - npm run lint
+      - npm run test
+      - npm run build
+    volumes: 
+      - name: cache
+        path: /root/.npm
+  - 
+    name: docker
+    image: plugins/docker
+    settings:
+      repo: rsschool/ui
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      tags: latest
+    when:
+      branch:
+        - master
+      event: 
+        - push
+  - 
+    name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      username:
+        from_secret: ssh_username
+      key:
+        from_secret: ssh_key
+      command_timeout: 2m
+      host: "172.31.2.208"
+      port: 22
+      script:
+        - "sleep 10"
+        - "docker pull rsschool/ui:latest"
+        - "docker-compose stop ui"
+        - "docker-compose rm -f ui"
+        - "docker-compose up -d ui"
+    when:
+      branch: 
+        - master
+      event: 
+        - push
+volumes:
+- name: cache
+  host:
+    path: /temp/cache
