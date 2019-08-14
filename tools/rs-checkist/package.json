@@ -1,0 +1,55 @@
+{
+  "name": "rs-checkist",
+  "version": "0.0.1",
+  "description": "This is command line tool with set of parsers for Rolling Scopes School",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/rs-checkist.js",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "lint": "tslint --project tsconfig.json --config tslint.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikhama/rs-checkist.git"
+  },
+  "author": "Dzmitry Tsebruk <mikhama@tut.by>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikhama/rs-checkist/issues"
+  },
+  "homepage": "https://github.com/mikhama/rs-checkist#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "dotenv-webpack": "^1.7.0",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.15.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.4.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "@types/cli-progress": "^1.8.1",
+    "@types/lodash": "^4.14.123",
+    "@types/node": "^11.13.0",
+    "@types/node-fetch": "^2.3.0",
+    "@types/node-xlsx": "^0.12.1",
+    "cli-progress": "^2.1.1",
+    "commander": "^2.20.0",
+    "google-spreadsheet": "^2.0.7",
+    "googleapis": "^39.2.0",
+    "lodash": "^4.17.11",
+    "node-fetch": "^2.3.0",
+    "node-html-parser": "^1.1.15",
+    "node-xlsx": "^0.14.1"
+  }
+}

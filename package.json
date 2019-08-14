@@ -3,7 +3,8 @@
   "workspaces": [
     "api",
     "client",
-    "lambdas/*"
+    "lambdas/*",
+    "tools/rs-checkist"
   ],
   "scripts": {
     "api:build": "yarn workspace api build"
