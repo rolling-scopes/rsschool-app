@@ -2,13 +2,15 @@
   "private": true,
   "workspaces": [
     "api",
-    "client",
+    "ui",
     "lambdas/*",
     "tools/rs-checkist"
   ],
   "scripts": {
     "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",
-    "api:build": "yarn workspace api build"
+    "api:build": "yarn workspace api build",
+    "api:start": "yarn workspace api start",
+    "ui:start": "yarn workspace ui start"
   },
   "dependencies": {
     "serverless": "^1.50.0",

@@ -5,8 +5,8 @@ coverage/**
 .env
 .env.aws
 
-client/node_modules
-client/src/.next
+ui/node_modules
+ui/src/.next
 api/dist
 api/node_modules
 lambdas/**/node_modules
