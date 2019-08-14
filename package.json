@@ -8,14 +8,16 @@
   ],
   "scripts": {
     "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",
+    "start": "concurrently -n api,ui 'yarn api:start' 'yarn ui:start'",
     "api:build": "yarn workspace api build",
     "api:start": "yarn workspace api start",
     "ui:build": "yarn workspace ui build",
     "ui:start": "yarn workspace ui start"
   },
   "dependencies": {
-    "serverless": "^1.50.0",
-    "prettier": "^1.18.2"
+    "concurrently": "^4.1.1",
+    "prettier": "^1.18.2",
+    "serverless": "^1.50.0"
   },
   "prettier": {
     "trailingComma": "all",

@@ -20,10 +20,6 @@
     "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\" \"./src/**/*.tsx\""
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.0-14",
-    "@fortawesome/free-brands-svg-icons": "5.1.0-11",
-    "@fortawesome/free-solid-svg-icons": "5.1.0-11",
-    "@fortawesome/react-fontawesome": "0.1.4",
     "@zeit/next-css": "~1.0.1",
     "@zeit/next-sass": "~1.0.1",
     "@zeit/next-typescript": "~1.1.1",
@@ -36,9 +32,9 @@
     "is-url": "1.2.4",
     "lodash.round": "^4.0.4",
     "next": "~8.1.0",
-    "react": "~16.8.6",
+    "react": "~16.9.0",
     "react-datepicker": "~2.8.0",
-    "react-dom": "~16.8.6",
+    "react-dom": "~16.9.0",
     "react-final-form": "~4.1.0",
     "react-select": "~3.0.3",
     "react-table": "~6.10.0",
