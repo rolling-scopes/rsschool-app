@@ -81,27 +81,6 @@
     "tslint": "~5.18.0",
     "typescript": "~3.5.3"
   },
-  "jest": {
-    "collectCoverage": false,
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "!**/*.d.ts"
-    ],
-    "coverageReporters": [
-      "text",
-      "text-summary"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts)$": "ts-jest"
-    },
-    "setupFiles": [
-      "./jestsetup.js"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit-disabled": "lint-staged",
