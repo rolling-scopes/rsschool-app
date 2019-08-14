@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  build:
+    commands:
+      - cd ./api
+      - yarn i
+      - yarn run build
+      - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - docker build -t rsschool/api:latest .
+      - docker push rsschool/api:latest
+
+cache:
+  paths:
+    - "/root/.npm/**/*"

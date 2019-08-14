@@ -4,3 +4,8 @@ dist/**
 coverage/**
 .env
 .env.aws
+
+client/node_modules
+client/src/.next
+api/node_modules
+lambdas/node_modules
