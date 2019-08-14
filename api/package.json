@@ -61,8 +61,6 @@
     "@types/supertest": "^2.0.7",
     "cross-env": "5.1.6",
     "dotenv": "6.0.0",
-    "husky": "3.0.0",
-    "lint-staged": "8.1.5",
     "nodemon": "1.18.11",
     "pino-pretty": "~2.6.1",
     "source-map-support": "~0.5.12",
