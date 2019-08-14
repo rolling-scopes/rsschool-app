@@ -9,4 +9,4 @@ client/node_modules
 client/src/.next
 api/dist
 api/node_modules
-lambdas/node_modules
+lambdas/**/node_modules

@@ -1,8 +1,7 @@
 {
-  "name": "rsschool-ui",
-  "version": "0.0.1",
-  "description": "UI for rsschool",
-  "license": "MIT",
+  "name": "client",
+  "private": true,
+  "version": "1.0.0",
   "repository": "github:rolling-scopes/rsschool-ui",
   "browserslist": [
     "chrome 45",

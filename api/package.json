@@ -1,7 +1,7 @@
 {
-  "name": "rsschool-api",
-  "version": "0.0.2",
-  "description": "rs.school API",
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
   "repository": "github:rolling-scopes/rsschool-api",
   "scripts": {
     "build": "tsc",
