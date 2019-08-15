@@ -17,7 +17,7 @@ type State = {
   activeCourseId: number | null;
 };
 
-const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-api/issues';
+const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
