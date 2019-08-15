@@ -7,8 +7,8 @@ phases:
   build:
     commands:
       - yarn
-      - yarn ui:build
-      - cd ./ui
+      - yarn client:build
+      - cd ./client
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/ui:latest .
       - docker push rsschool/ui:latest

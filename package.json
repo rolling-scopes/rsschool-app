@@ -1,17 +1,17 @@
 {
   "private": true,
   "workspaces": [
-    "api",
-    "ui",
-    "lambdas/*"
+    "client",
+    "server",
+    "serverless/*"
   ],
   "scripts": {
-    "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",
-    "start": "concurrently -n api,ui 'yarn api:start' 'yarn ui:start'",
-    "api:build": "yarn workspace api build",
-    "api:start": "yarn workspace api start",
-    "ui:build": "yarn workspace ui build",
-    "ui:start": "yarn workspace ui start"
+    "format": "prettier --write 'server/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'serverless/**/*.{ts,tsx,js}'",
+    "start": "concurrently -n server,client 'yarn server:start' 'yarn client:start'",
+    "server:build": "yarn workspace server build",
+    "server:start": "yarn workspace server start",
+    "client:build": "yarn workspace client build",
+    "client:start": "yarn workspace client start"
   },
   "dependencies": {
     "concurrently": "^4.1.1",
