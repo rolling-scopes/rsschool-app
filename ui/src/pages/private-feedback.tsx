@@ -6,13 +6,13 @@ import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
 import { Form, SubsetFormApi } from 'react-final-form';
 import { Alert, Button, FormGroup } from 'reactstrap';
-import { withRouter, RouterProps } from 'next/router';
+import { withRouter, NextRouter } from 'next/router';
 
 import { UserService } from 'services/user';
 import '../index.scss';
 
 type Props = {
-  router: RouterProps;
+  router: NextRouter;
   session: Session;
 };
 

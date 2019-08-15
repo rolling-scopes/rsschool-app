@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { NextContext } from 'next';
+import { NextPageContext } from 'next';
 import { Course, CourseService } from 'services/course';
 import { Session } from './withSession';
 
 function withCourseData(WrappedComponent: React.ComponentType<any>) {
   return class extends React.PureComponent<{ course?: Course; session: Session }> {
-    static async getInitialProps(context: NextContext) {
+    static async getInitialProps(context: NextPageContext) {
       try {
         const service = new CourseService();
         const alias = context.query.course;

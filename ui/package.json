@@ -4,12 +4,10 @@
   "version": "1.0.0",
   "repository": "github:rolling-scopes/rsschool-ui",
   "browserslist": [
-    "chrome 45",
-    "chrome 49",
     "chrome >= 61",
     "firefox >= 56",
     "ie >= 11",
-    "safari >= 9",
+    "safari >= 10",
     "edge >= 14"
   ],
   "scripts": {
@@ -22,7 +20,6 @@
   "dependencies": {
     "@zeit/next-css": "~1.0.1",
     "@zeit/next-sass": "~1.0.1",
-    "@zeit/next-typescript": "~1.1.1",
     "axios": "^0.19.0",
     "bootstrap": "~4.3.1",
     "date-fns": "~1.30.1",
@@ -30,7 +27,7 @@
     "final-form": "~4.13.0",
     "is-url": "1.2.4",
     "lodash.round": "^4.0.4",
-    "next": "~8.1.0",
+    "next": "~9.0.3",
     "react": "~16.9.0",
     "react-datepicker": "~2.8.0",
     "react-dom": "~16.9.0",

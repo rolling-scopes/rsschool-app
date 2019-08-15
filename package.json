@@ -3,8 +3,7 @@
   "workspaces": [
     "api",
     "ui",
-    "lambdas/*",
-    "tools/rs-checkist"
+    "lambdas/*"
   ],
   "scripts": {
     "format": "prettier --write 'api/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'lambdas/**/*.{ts,tsx,js}'",

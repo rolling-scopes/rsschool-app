@@ -5,7 +5,7 @@
   "repository": "github:rolling-scopes/rsschool-api",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon  --inspect --watch 'src/**/*' -e ts --exec node  -r ts-node/register -r dotenv/config ./index.ts | pino-pretty -i time,hostname,pid",
+    "start": "nodemon  --inspect --watch 'src/**/*' -e ts --exec node  -r ts-node/register -r dotenv/config ./index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\"",
@@ -41,8 +41,6 @@
     "typeorm": "~0.2.17"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.1.0",
-    "@commitlint/config-conventional": "8.1.0",
     "@types/koa": "^2.0.48",
     "@types/koa-basic-auth": "2.0.3",
     "@types/koa-bodyparser": "4.2.0",

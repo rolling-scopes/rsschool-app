@@ -3,13 +3,13 @@ import { Table, Button, Card, CardBody, CardTitle } from 'reactstrap';
 import { Header } from 'components/Header';
 import axios from 'axios';
 import { LoadingScreen } from '../components/LoadingScreen';
-import { withRouter, RouterProps } from 'next/router';
+import { withRouter, NextRouter } from 'next/router';
 import withSession, { Session } from '../components/withSession';
 
 import '../index.scss';
 
 type Props = {
-  router: RouterProps;
+  router: NextRouter;
   session: Session;
 };
 

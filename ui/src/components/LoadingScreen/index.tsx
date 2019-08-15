@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './index.scss';
 
-export const LoadingScreen = (props: { show: boolean; children: any }) => {
+export const LoadingScreen = (props: React.PropsWithChildren<{ show: boolean }>) => {
   if (!props.show) {
     return <>{props.children}</>;
   }

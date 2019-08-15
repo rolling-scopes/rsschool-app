@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form } from 'react-final-form';
 import { Button, FormGroup } from 'reactstrap';
 import axios from 'axios';
-import { withRouter, RouterProps } from 'next/router';
+import { withRouter, NextRouter } from 'next/router';
 
 import { TextInput } from 'components/Forms';
 import { Header } from 'components/Header';
@@ -12,7 +12,7 @@ import withSession, { Session } from 'components/withSession';
 import '../index.scss';
 
 type Props = {
-  router: RouterProps;
+  router: NextRouter;
   session: Session;
 };
 

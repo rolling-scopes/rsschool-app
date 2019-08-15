@@ -196,7 +196,7 @@ export const UNIVERSITIES = [
 ];
 
 const range = (start: number, count: number): number[] => {
-  return Array.apply(0, Array(count)).map((_: number, index: number) => {
+  return (Array.apply(0, Array(count)) as number[]).map((_: number, index: number) => {
     return index + start;
   });
 };
