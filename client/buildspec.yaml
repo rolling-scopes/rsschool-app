@@ -18,8 +18,6 @@ phases:
         ssh -tt -i "key.pem" $RSSCHOOL_API_EC2_USER@$RSSCHOOL_API_HOST "
           sleep 10
           docker pull rsschool/ui:latest 
-          docker-compose stop ui
-          docker-compose rm -f ui
           docker-compose up -d ui
           docker system prune -f "
 
