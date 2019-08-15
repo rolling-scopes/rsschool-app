@@ -1,0 +1,57 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "1.0.0",
+  "repository": "github:rolling-scopes/rsschool-ui",
+  "browserslist": [
+    "chrome >= 61",
+    "firefox >= 56",
+    "ie >= 11",
+    "safari >= 10",
+    "edge >= 14"
+  ],
+  "scripts": {
+    "start": "node server.js",
+    "build": "next build src",
+    "prod": "next start -p 8080",
+    "lint": "tslint -c tslint.json --project tsconfig.json",
+    "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\" \"./src/**/*.tsx\""
+  },
+  "dependencies": {
+    "@zeit/next-css": "~1.0.1",
+    "@zeit/next-sass": "~1.0.1",
+    "axios": "^0.19.0",
+    "bootstrap": "~4.3.1",
+    "date-fns": "~1.30.1",
+    "express": "~4.17.1",
+    "final-form": "~4.13.0",
+    "is-url": "1.2.4",
+    "lodash.round": "^4.0.4",
+    "next": "~9.0.3",
+    "react": "~16.9.0",
+    "react-datepicker": "~2.8.0",
+    "react-dom": "~16.9.0",
+    "react-final-form": "~4.1.0",
+    "react-select": "~3.0.4",
+    "react-table": "~6.10.0",
+    "reactstrap": "~8.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@types/is-url": "1.2.28",
+    "@types/lodash.round": "^4.0.6",
+    "@types/next": "~8.0.4",
+    "@types/node": "~8.0.47",
+    "@types/react": "~16.9.1",
+    "@types/react-datepicker": "~2.3.0",
+    "@types/react-dom": "~16.8.5",
+    "@types/react-select": "~2.0.19",
+    "@types/react-table": "~6.8.1",
+    "@types/reactstrap": "~8.0.1",
+    "http-proxy-middleware": "~0.19.1",
+    "node-sass": "~4.12.0",
+    "tslint": "~5.18.0",
+    "tslint-react": "~4.0.0",
+    "typescript": "~3.5.3"
+  }
+}

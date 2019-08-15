@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  build:
+    commands:
+      - yarn
+      - yarn client:build
+      - cd ./client
+      - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - docker build -t rsschool/ui:latest .
+      - docker push rsschool/ui:latest
+      - echo "$SSH_EC2_KEY" >> key.pem && chmod 400 key.pem
+      - ssh-keyscan $RSSCHOOL_API_HOST >> /root/.ssh/known_hosts
+      - >
+        ssh -tt -i "key.pem" $RSSCHOOL_API_EC2_USER@$RSSCHOOL_API_HOST "
+          sleep 10
+          docker pull rsschool/ui:latest 
+          docker-compose up -d ui
+          docker system prune -f "
+
+cache:
+  paths:
+    - /root/.npm/**/*
+    - /usr/local/share/.cache/**/*
