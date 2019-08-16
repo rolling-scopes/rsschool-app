@@ -2,18 +2,13 @@
   "name": "server",
   "version": "1.0.0",
   "private": true,
-  "repository": "github:rolling-scopes/rsschool-api",
   "scripts": {
     "build": "tsc",
     "start": "nodemon  --inspect --watch 'src/**/*' -e ts --exec node  -r ts-node/register -r dotenv/config ./index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\"",
-    "test": "jest",
-    "test:update": "jest --updateSnapshot",
     "swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts ./src/routes/**.ts"
   },
-  "license": "MIT",
   "dependencies": {
     "@koa/cors": "~3.0.0",
     "@octokit/rest": "15.8.1",

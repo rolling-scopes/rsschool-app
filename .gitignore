@@ -1,12 +1,11 @@
-node_modules/**
-dist/**
 .vscode
-coverage/**
-.env
-.env.aws
-
+client/dist
 client/node_modules
 client/src/.next
+node_modules/
+server/.env
+server/.env.aws
+server/dist
 server/dist
 server/node_modules
 serverless/**/node_modules

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getConfig from 'next/config';
+import { Session } from '../components/withSession';
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -123,6 +124,10 @@ export class CourseService {
   async getMentorStudents(courseId: number) {
     const result = await axios.get<{ data: { students: StudentBasic[] } }>(`/api/course/${courseId}/mentor/students`);
     return result.data.data.students;
+  }
+
+  isPowerUser(courseId: number, session: Session) {
+    return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }
 }
 

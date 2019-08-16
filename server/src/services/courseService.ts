@@ -1,5 +1,6 @@
 import { Mentor, User, Student, CourseTask, Course } from '../models';
 import { getRepository } from 'typeorm';
+import { IUserSession } from '../models/session';
 
 const primaryUserFields = ['user.id', 'user.firstName', 'user.lastName', 'user.githubId'];
 
@@ -292,4 +293,8 @@ export async function getCourseTasks(courseId: number) {
 export async function updateScoreStudents(data: { id: number; totalScore: number }[]) {
   const result = await getRepository(Student).save(data);
   return result;
+}
+
+export function isPowerUser(courseId: number, session: IUserSession) {
+  return session.isAdmin || session.roles[courseId] === 'coursemanager';
 }

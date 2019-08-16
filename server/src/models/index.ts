@@ -14,6 +14,8 @@ import { CourseManager } from './courseManager';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
 import { PrivateFeedback } from './privateFeedback';
+import { Lecture } from './lecture';
+import { CourseLecture } from './courseLecture';
 
 export * from './session';
 
@@ -34,6 +36,8 @@ export const models = [
   StudentFeedback,
   CourseManager,
   PrivateFeedback,
+  CourseLecture,
+  Lecture,
 ];
 
 export {

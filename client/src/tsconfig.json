@@ -1,15 +1,31 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "allowJs": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "module": "esnext",
-    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "esModuleInterop": true
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016",
+      "es2017"
+    ]
   },
   "include": [
     "next-env.d.ts",
