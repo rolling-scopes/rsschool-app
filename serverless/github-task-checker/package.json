@@ -1,5 +1,5 @@
 {
-  "name": "github-task-checker",
+  "name": "test3",
   "version": "1.0.0",
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
@@ -7,15 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "source-map-support": "^0.5.10"
+    "child-proc": "0.0.1",
+    "source-map-support": "^0.5.10",
+    "unzipper": "^0.10.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.5.3",
-    "webpack": "4.38.0"
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
