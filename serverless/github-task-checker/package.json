@@ -1,5 +1,5 @@
 {
-  "name": "test3",
+  "name": "github-task-checker",
   "version": "1.0.0",
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
@@ -16,8 +16,8 @@
     "@types/node": "^10.12.18",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0"
+    "typescript": "^3.5.3",
+    "webpack": "4.38.0"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
