@@ -25,6 +25,9 @@ export class CourseTask {
   @ManyToOne(_ => Task, (task: Task) => task.courseTasks)
   task: Task | number;
 
+  @Column()
+  taskId: number;
+
   @OneToMany(_ => TaskChecker, (checker: TaskChecker) => checker.courseTaskId, { nullable: true })
   taskCheckers: TaskChecker[] | null;
 
@@ -33,6 +36,9 @@ export class CourseTask {
 
   @ManyToOne(_ => Stage, (stage: Stage) => stage.courseTasks, { nullable: true })
   stage: Stage | number;
+
+  @Column()
+  stageId: number;
 
   @Column({ type: 'timestamp', nullable: true })
   studentStartDate: string;

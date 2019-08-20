@@ -1,6 +1,6 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { User, Course, Registry } from './../models';
+import { User, Student, Course, Registry } from './../models';
 import { RegistryStatus } from './../models/registry';
 import { getManager, getRepository } from 'typeorm';
 import { ILogger } from './../logger';
@@ -53,7 +53,12 @@ export function registryRouter(logger?: ILogger) {
         status,
       };
       const registry = await getManager().save(Registry, registryPayload);
-
+      if (type === 'student') {
+        const existing = await await getRepository(Student).find({ where: { userId: user!.id, courseId: course!.id } });
+        if (existing == null) {
+          await getRepository(Student).save({ userId: user!.id, courseId: course!.id });
+        }
+      }
       setResponse(ctx, OK, { registry });
     } catch (e) {
       handleError({ logger, errorMsg: e.message, ctx });

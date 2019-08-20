@@ -35,6 +35,9 @@ export class Student {
   @ManyToOne(_ => User)
   user: User | number;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
   mentor: Mentor;
 
@@ -96,4 +99,7 @@ export class Student {
 
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date;
+
+  @Column({ nullable: true })
+  certificateUrl: string;
 }

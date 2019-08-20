@@ -1,6 +1,7 @@
 const withSass = require('@zeit/next-sass');
 const path = require('path');
 const withCSS = require('@zeit/next-css');
+const webpack = require('webpack');
 
 const nextConfig = {
   serverRuntimeConfig: {
@@ -13,6 +14,7 @@ const nextConfig = {
   webpack: config => {
     config.resolve.alias['components'] = path.join(__dirname, 'components');
     config.resolve.alias['services'] = path.join(__dirname, 'services');
+    config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
     return config;
   },
 };

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { DropdownToggle, DropdownMenu, DropdownItem, ButtonDropdown } from 'reactstrap';
-import Router from 'next/router';
-import { GithubAvatar } from 'components/UserSelect';
+import { Dropdown, Menu, PageHeader } from 'antd';
+import { GithubAvatar } from 'components/GithubAvatar';
 
 type Props = {
   username: string;
@@ -9,46 +8,42 @@ type Props = {
   title?: string;
 };
 
-type State = {
-  isProfileMenuOpen: boolean;
-};
-
-class Header extends React.Component<Props, State> {
-  state: State = {
-    isProfileMenuOpen: false,
-  };
-
-  private onProfileMenuToggle = () => {
-    this.setState({ isProfileMenuOpen: !this.state.isProfileMenuOpen });
-  };
-
+class Header extends React.PureComponent<Props> {
   render() {
     return (
-      <nav className="navbar navbar-light header-nav p-2">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+      <nav className="p-2 d-flex justify-content-between">
+        <div>
+          <a href="/">
             <img
               style={{ height: 60 }}
               className="header-logo"
-              src="/static/images/logo-rsschool.svg"
+              src="/static/images/logo-rsschool3.png"
               alt="Rolling Scopes School Logo"
             />
           </a>
-          {this.props.title && <h4>{this.props.title}</h4>}
-
-          <div className="d-flex align-items-center">
-            <div className="text-primary">{this.props.courseName}</div>
-            <ButtonDropdown isOpen={this.state.isProfileMenuOpen} toggle={this.onProfileMenuToggle}>
-              <DropdownToggle caret={true}>
-                <GithubAvatar githubId={this.props.username} />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={() => Router.push('/profile')}>My Profile</DropdownItem>
-              </DropdownMenu>
-            </ButtonDropdown>
-          </div>
+        </div>
+        <div>
+          <PageHeader title={this.props.title} subTitle={this.props.courseName} />
+        </div>
+        <div>
+          <Dropdown overlay={this.getMenu()}>
+            <div className="d-flex flex-column align-items-center">
+              <GithubAvatar githubId={this.props.username} size={24} />
+              <div>{this.props.username}</div>
+            </div>
+          </Dropdown>
         </div>
       </nav>
+    );
+  }
+
+  getMenu() {
+    return (
+      <Menu>
+        <Menu.Item>
+          <a href="/profile">My Profile</a>
+        </Menu.Item>
+      </Menu>
     );
   }
 }

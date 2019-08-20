@@ -1,72 +1,73 @@
-import axios from 'axios';
-import Link from 'next/link';
 import * as React from 'react';
-import { Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
-import { Header } from 'components/Header';
-import { GithubAvatar } from 'components/UserSelect';
-import withSession, { Session } from 'components/withSession';
-
-import '../../index.scss';
+import { Button, Col, Form, Input, List, Row } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
+import { GithubAvatar, Header, Session, withSession } from 'components';
+import { UserService } from 'services/user';
 
 type Props = {
   session: Session;
-};
+} & FormComponentProps;
 
 type State = {
-  users: any[];
-  searchText: string;
+  users: any[] | null;
 };
 
 class Users extends React.Component<Props, State> {
   state: State = {
-    users: [],
-    searchText: '',
+    users: null,
   };
 
-  doSearch = async (event: any) => {
+  private userService = new UserService();
+
+  handleSearch = async (event: any) => {
     event.preventDefault();
-    if (!this.state.searchText) {
+    const values = this.props.form.getFieldsValue();
+    if (!values.searchText) {
       return;
     }
-    const response = await axios.get(`/api/users/search/${this.state.searchText}`);
-    const users = response.data.data;
+    const users = await this.userService.searchUser(values.searchText);
     this.setState({ users });
   };
 
   render() {
+    const { getFieldDecorator: field } = this.props.form;
     return (
       <>
-        <Header username={this.props.session.githubId} />
-        <div className="m-5">
-          <h3>Search Users</h3>
-          <Form onSubmit={this.doSearch}>
-            <FormGroup>
-              <InputGroup>
-                <Input
-                  onChange={e => {
-                    this.setState({ searchText: e.target.value });
-                  }}
-                  placeholder="search text ..."
-                />
-                <InputGroupAddon addonType="append">
-                  <Button color="primary">Search</Button>
-                </InputGroupAddon>
-              </InputGroup>
-            </FormGroup>
+        <Header title="Users" username={this.props.session.githubId} />
+        <div className="mt-4">
+          <Form layout="horizontal" onSubmit={this.handleSearch}>
+            <Row gutter={24}>
+              <Col offset={1} xs={16} sm={12} md={8} lg={6}>
+                <Form.Item>
+                  {field('searchText')(<Input width={200} placeholder="Search by github or name" />)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item>
+                  <Button type="primary">Search</Button>
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
           {this.state.users && (
-            <ListGroup>
-              {this.state.users.map(user => (
-                <ListGroupItem key={user.githubId}>
-                  <GithubAvatar githubId={user.githubId} />
-                  <Link href={{ pathname: '/profile', query: { githubId: user.githubId } }}>
-                    <a>
-                      {user.githubId} ({user.firstName} {user.lastName})
-                    </a>
-                  </Link>
-                </ListGroupItem>
-              ))}
-            </ListGroup>
+            <Row>
+              <Col offset={2} xs={20} sm={16} md={10} lg={8}>
+                <List
+                  rowKey="id"
+                  locale={{ emptyText: 'No results' }}
+                  dataSource={this.state.users}
+                  renderItem={(user: any) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<GithubAvatar size={48} githubId={user.githubId} />}
+                        title={<a href={`/profile?githubId=${user.githubId}`}>{user.githubId}</a>}
+                        description={`${user.firstName} ${user.lastName}`}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
           )}
         </div>
       </>
@@ -74,4 +75,4 @@ class Users extends React.Component<Props, State> {
   }
 }
 
-export default withSession(Users);
+export default withSession(Form.create()(Users));

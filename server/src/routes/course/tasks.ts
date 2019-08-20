@@ -43,6 +43,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
 
     return {
+      id: item.id,
       courseTaskId: item.id,
       taskId: (item.task as Task).id,
       name: (item.task as Task).name,
@@ -103,6 +104,7 @@ export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router
     const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
 
     return {
+      id: item.id,
       courseTaskId: item.id,
       taskId: (item.task as Task).id,
       name: (item.task as Task).name,
@@ -134,65 +136,6 @@ export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router
   );
 
   setResponse(ctx, OK, dataWithCheckers);
-};
-
-type PostTaskInput = {
-  taskId: number;
-  stageId: number;
-  maxScore?: number;
-  scoreWeight?: number;
-  studentEndDate?: string;
-};
-
-export const postCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const data: PostTaskInput = ctx.request.body;
-  const courseTaskRepository = getRepository(CourseTask);
-  const task: Partial<CourseTask> = {
-    task: data.taskId,
-    maxScore: data.maxScore,
-    stage: data.stageId,
-    scoreWeight: data.scoreWeight,
-    studentEndDate: data.studentEndDate,
-  };
-
-  const createdResult = await courseTaskRepository.save(task);
-
-  logger.info(createdResult);
-
-  setResponse(ctx, OK, createdResult);
-  return;
-};
-
-export const putCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseTaskId: number = ctx.params.courseTaskId;
-  const data: PostTaskInput = ctx.request.body;
-
-  const courseTaskRepository = getRepository(CourseTask);
-  const courseTask = await courseTaskRepository.findOne({ where: { id: courseTaskId } });
-  if (courseTask == null) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  courseTask.stage = data.stageId;
-  if (data.maxScore != null) {
-    courseTask.maxScore = data.maxScore;
-  }
-  if (data.scoreWeight != null) {
-    courseTask.scoreWeight = data.scoreWeight;
-  }
-  if (data.studentEndDate) {
-    courseTask.studentEndDate = data.studentEndDate;
-  }
-
-  const updatedResult = await courseTaskRepository.save(courseTask);
-  setResponse(ctx, OK, updatedResult);
-};
-
-export const deleteCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseTaskId = Number(ctx.params.courseTaskId);
-  const updatedResult = await getRepository(CourseTask).delete(courseTaskId);
-  setResponse(ctx, OK, updatedResult);
 };
 
 export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {

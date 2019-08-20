@@ -1,26 +1,20 @@
-import * as React from 'react';
-import axios from 'axios';
-import { Form, SubsetFormApi } from 'react-final-form';
-import { Alert, Button, FormGroup } from 'reactstrap';
-
-import { CommentInput, StudentSelect } from 'components/Forms';
+import { Button, Form, Input, message, Col, Typography } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
-import { LoadingScreen } from 'components/LoadingScreen';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
-
+import * as React from 'react';
 import { Course, CourseService, StudentBasic } from 'services/course';
-import '../../../index.scss';
+
+import { PersonSelect } from 'components/PersonSelect';
 
 type Props = {
   session: Session;
   course: Course;
-};
+} & FormComponentProps;
 
 type State = {
   students: StudentBasic[];
-  submitted: boolean;
-  resultMessage: string | undefined;
   isLoading: boolean;
 };
 
@@ -28,11 +22,8 @@ class ExpelPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     students: [],
-    submitted: false,
-    resultMessage: undefined,
   };
-  formRef = React.createRef();
-  courseService = new CourseService();
+  private courseService = new CourseService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -43,57 +34,54 @@ class ExpelPage extends React.Component<Props, State> {
     this.setState({ students: activeStudents });
   }
 
-  handleSubmit = async (values: any, form: SubsetFormApi) => {
-    this.setState({ isLoading: true });
+  handleSubmit = async (e: any) => {
+    e.preventDefault();
 
-    try {
-      await axios.post(`/api/course/${this.props.course.id}/expulsion`, values);
-      this.setState({
-        isLoading: false,
-        submitted: true,
-        resultMessage: 'The student has been expelled',
-      });
-      form.reset();
-    } catch (e) {
-      this.setState({ isLoading: false, resultMessage: 'An error occurred' });
-    }
+    this.props.form.validateFields(async (err: any, values: any) => {
+      if (err || !values.studentId) {
+        return;
+      }
+      try {
+        this.setState({ isLoading: true });
+        this.courseService.expelStudent(this.props.course.id, Number(values.studentId), values.comment);
+        message.success('The student has been expelled');
+        this.setState({ isLoading: false });
+        this.props.form.resetFields();
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+        this.setState({ isLoading: false });
+      }
+    });
   };
 
   render() {
+    const { getFieldDecorator: field } = this.props.form;
     return (
       <>
         <Header username={this.props.session.githubId} courseName={this.props.course.name} />
-        <div className="m-3">
-          <h4 className="mb-3">
-            <Alert color="danger">Expel student from {this.props.course.name}</Alert>
-          </h4>
-
-          {this.state.submitted && <Alert color="info">{this.state.resultMessage}</Alert>}
-
-          <Form
-            onSubmit={this.handleSubmit}
-            render={({ handleSubmit }) => (
-              <LoadingScreen show={this.state.isLoading}>
-                <form onSubmit={handleSubmit}>
-                  <FormGroup className="col-md-6">
-                    <StudentSelect name="studentId" data={this.state.students} />
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <CommentInput />
-                  </FormGroup>
-                  <div className="form-group col-md-6 text-left">
-                    <Button type="submit" color="success">
-                      Submit
-                    </Button>
-                  </div>
-                </form>
-              </LoadingScreen>
-            )}
-          />
-        </div>
+        <Col className="m-2" sm={12}>
+          <div className="mb-3">
+            <Typography.Text type="warning">This page allows to expel a student from the course</Typography.Text>
+          </div>
+          <Form onSubmit={this.handleSubmit} layout="vertical">
+            <Form.Item label="Student">
+              {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
+                <PersonSelect data={this.state.students} />,
+              )}
+            </Form.Item>
+            <Form.Item label="Reason for expelling">
+              {field('comment', {
+                rules: [{ required: true, message: 'Please give us a couple words why you are expelling the student' }],
+              })(<Input.TextArea />)}
+            </Form.Item>
+            <Button size="large" type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form>
+        </Col>
       </>
     );
   }
 }
 
-export default withCourseData(withSession(ExpelPage, 'mentor'));
+export default withCourseData(withSession(Form.create({ name: 'expelPage' })(ExpelPage), 'mentor'));

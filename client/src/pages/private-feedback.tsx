@@ -1,38 +1,31 @@
-import { commentValidator, TextArea, UserSearchInput, UserSelect } from 'components/Forms';
-import {} from 'components/Forms';
+import { Button, Col, Form, Input, message, Typography } from 'antd';
+
+import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
+import { PersonSelect } from 'components/PersonSelect';
+import { UserSearch } from 'components/UserSearch';
 import withSession, { Session } from 'components/withSession';
+import { NextRouter, withRouter } from 'next/router';
 import * as React from 'react';
-import { Form, SubsetFormApi } from 'react-final-form';
-import { Alert, Button, FormGroup } from 'reactstrap';
-import { withRouter, NextRouter } from 'next/router';
-
 import { UserService } from 'services/user';
-import '../index.scss';
 
 type Props = {
   router: NextRouter;
   session: Session;
-};
+} & FormComponentProps;
 
 type State = {
   user: { id: number; githubId: string } | null;
   isLoading: boolean;
-  submitStatus: {
-    success: boolean;
-    message: string;
-  } | null;
 };
 
 class PrivateFeedbackPage extends React.Component<Props, State> {
   state: State = {
     user: null,
     isLoading: false,
-    submitStatus: null,
   };
 
-  private timerRef: any;
   private userService = new UserService();
 
   componentDidMount() {
@@ -44,76 +37,76 @@ class PrivateFeedbackPage extends React.Component<Props, State> {
     });
   }
 
-  private loadUsers = async (searchText: string) => {
-    return this.userService.search(searchText);
-  };
-
-  private handleSubmit = async (values: any, form: SubsetFormApi) => {
-    this.setState({ isLoading: true });
-    try {
-      await this.userService.submitPrivateFeedback({
-        toUserId: values.userId,
-        comment: values.comment,
-      });
-      form.reset();
-      const submitStatus = {
-        success: true,
-        message: `Your feedback has been submitted.`,
-      };
-      this.setState({ isLoading: false, submitStatus });
-      this.timerRef = setTimeout(() => this.setState({ submitStatus: null }), 5000);
-    } catch (e) {
-      this.setState({ isLoading: false, submitStatus: { success: false, message: 'An error occurred' } });
-    }
-  };
-
-  renderSubmitStatus() {
-    if (!this.state.submitStatus) {
-      return null;
-    }
-    return <Alert color={this.state.submitStatus.success ? 'info' : 'danger'}>{this.state.submitStatus.message}</Alert>;
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timerRef);
-  }
-
   render() {
+    const { getFieldDecorator: field } = this.props.form;
     return (
       <>
         <Header username={this.props.session.githubId} title="Private Feedback" />
-        <div className="m-3">
-          <Alert color="warning">Your feedback will be visible to course administrator/manager only</Alert>
-          {this.renderSubmitStatus()}
-          <Form
-            initialValues={{ userId: this.state.user ? this.state.user.id : null }}
-            onSubmit={this.handleSubmit}
-            render={({ handleSubmit }) => (
-              <LoadingScreen show={this.state.isLoading}>
-                <form onSubmit={handleSubmit}>
-                  <FormGroup className="col-md-6">
-                    {this.state.user ? (
-                      <UserSelect data={[this.state.user]} field="userId" />
-                    ) : (
-                      <UserSearchInput field="userId" searchUsers={this.loadUsers} />
-                    )}
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <TextArea field="comment" label="Comment" validate={commentValidator(10)} />
-                  </FormGroup>
-                  <div className="form-group col-md-6 text-left">
-                    <Button type="submit" color="success">
-                      Submit
-                    </Button>
-                  </div>
-                </form>
-              </LoadingScreen>
-            )}
-          />
-        </div>
+        <Col className="m-2" sm={12}>
+          <Typography.Text type="secondary">
+            Your feedback will be visible to course administrator/manager only
+          </Typography.Text>
+          <LoadingScreen show={this.state.isLoading}>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Item label="Person">
+                {field('userId', {
+                  initialValue: this.state.user ? this.state.user.id : undefined,
+                  rules: [{ required: true, message: 'Please select a person' }],
+                })(
+                  this.state.user ? (
+                    <PersonSelect data={[this.state.user]} />
+                  ) : (
+                    <UserSearch searchFn={this.loadUsers} />
+                  ),
+                )}
+              </Form.Item>
+              <Form.Item label="Comment">
+                {field('comment', {
+                  rules: [
+                    {
+                      required: true,
+                      min: 20,
+                      whitespace: true,
+                      message: 'Please give us more details',
+                    },
+                  ],
+                })(<Input.TextArea />)}
+              </Form.Item>
+              <Button size="large" type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form>
+          </LoadingScreen>
+        </Col>
       </>
     );
   }
+
+  private loadUsers = async (searchText: string) => {
+    return this.userService.searchUser(searchText);
+  };
+
+  private handleSubmit = async (e: any) => {
+    e.preventDefault();
+    this.props.form.validateFields(async (err: any, values: any) => {
+      if (err) {
+        return;
+      }
+      try {
+        this.setState({ isLoading: true });
+        await this.userService.submitPrivateFeedback({
+          toUserId: values.userId,
+          comment: values.comment,
+        });
+        this.props.form.resetFields();
+        message.success('Your feedback has been submitted.');
+        this.setState({ isLoading: false });
+      } catch (e) {
+        message.success('An error occured. Please try later.');
+        this.setState({ isLoading: false });
+      }
+    });
+  };
 }
 
-export default withRouter(withSession(PrivateFeedbackPage));
+export default withRouter(withSession(Form.create({ name: 'privateFeadback' })(PrivateFeedbackPage)));

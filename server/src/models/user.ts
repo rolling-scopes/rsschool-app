@@ -43,6 +43,9 @@ export interface ExternalAccount {
 export class User {
   @PrimaryGeneratedColumn() id?: number;
 
+  @Column({ nullable: true })
+  primaryEmail?: string;
+
   @Column({ name: 'githubId', unique: true })
   githubId: string;
 
@@ -105,6 +108,12 @@ export class User {
 
   @Column({ nullable: true })
   contactsEmail?: string;
+
+  @Column({ nullable: true })
+  contactsTelegram?: string;
+
+  @Column({ nullable: true })
+  contactsSkype?: string;
 
   @Column({
     type: 'json',

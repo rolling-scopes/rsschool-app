@@ -1,214 +1,285 @@
-import * as React from 'react';
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Result,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import axios from 'axios';
-
-import { Alert, Button, Container, FormGroup, Input, Label, Row } from 'reactstrap';
-import { Form } from 'react-final-form';
-import Select from 'react-select';
-
 import { Header } from 'components/Header';
-import InputField from 'components/Registry/InputField';
-import DropdownField from 'components/Registry/DropdownField';
-
 import withCourses from 'components/withCourses';
 import withSession from 'components/withSession';
-
-import { TYPES, Props, SelectCourse, citiesOptions } from './../../configs/registry';
+import * as React from 'react';
 import { Course } from 'services/course';
+import { UserService, UserFull } from 'services/user';
+import { formatMonth, formatMonthFriendly } from 'services/formatter';
+import { Props, TYPES } from './../../configs/registry';
+import { emailPattern, epamEmailPattern, englishNamePattern } from 'services/validators';
+import { LocationSelect } from 'components/LocationSelect';
+import { NoCourses } from 'components/Registry/NoCourses';
 
 type State = {
-  selectedCourse: SelectCourse;
-  courses: SelectCourse[];
+  courses: Course[];
   submitted: boolean;
-  isAgree: boolean;
+  initialData: Partial<UserFull>;
 };
+
+const defaultColumnSizes = {
+  xs: 18,
+  sm: 10,
+  md: 8,
+  lg: 6,
+};
+const defaultRowGutter = 24;
 
 class CourseRegistryPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const courses: SelectCourse[] = (this.props.courses || [])
-      .filter((course: Course) => course.planned)
-      .map((course: Course): SelectCourse => ({ label: course.name, value: course.id }));
+    const courses = (props.courses || []).filter((course: Course) => course.planned);
 
     this.state = {
-      selectedCourse: courses[0],
       courses,
       submitted: false,
-      isAgree: false,
+      initialData: {},
     };
   }
 
-  private changeCourse = (course: any) => {
-    this.setState({ selectedCourse: course });
-  };
+  async componentDidMount() {
+    const userService = new UserService();
+    const profile = await userService.getProfile();
+    this.setState({ initialData: profile.user });
+  }
 
-  private changeIsAgree = (e: any) => {
-    this.setState({ isAgree: e.target.checked });
-  };
-
-  private handleSubmit = async (model: any) => {
-    const { selectedCourse: course } = this.state;
-    const { comment, locationName } = model;
-    const courseId = course.value;
-    const registryModel = {
-      type: TYPES.STUDENT,
-      courseId,
-      comment,
-    };
-    const userModel = {
-      firstName: model.firstName,
-      lastName: model.lastName,
-      firstNameNative: model.firstNameNative,
-      lastNameNative: model.lastNameNative,
-      locationName: locationName === 'other' ? model.otherLocationName : locationName,
-      contactsEmail: model.contactsEmail,
-      contactsEpamEmail: model.contactsEpamEmail,
-      educationHistory: [
-        {
-          graduationYear: model.graduationYear,
-          faculty: model.faculty,
-          university: model.university,
-        },
-      ],
-      employmentHistory: [
-        {
-          title: model.title,
-          dateFrom: model.dateFrom,
-          dateTo: model.dateTo,
-          toPresent: model.toPresent,
-        },
-      ],
-    };
-
-    try {
-      const userResponse = await axios.post('/api/profile/registry', userModel);
-      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-
-      if (githubId) {
-        const requests = [
-          axios.post('/api/registry', registryModel),
-          axios.post(`/api/course/${courseId}/students`, [{ githubId }]),
-        ];
-
-        await Promise.all(requests);
-        this.setState({ submitted: true });
-      } else {
-        console.error('Invalid githubId');
+  private handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    this.props.form.validateFields(async (err: any, model: any) => {
+      if (err) {
+        return;
       }
-    } catch (e) {
-      console.error(e);
-    }
+      const { comment, location, courseId } = model;
+      const registryModel = {
+        type: TYPES.STUDENT,
+        courseId,
+        comment,
+      };
+      const [dateFrom, dateTo] = model.employmentPeriod;
+      const userModel = {
+        locationId: location.key ? location.key : undefined,
+        locationName: !location.key ? model.otherLocationName : location.label,
+        primaryEmail: model.primaryEmail,
+        firstName: model.firstName,
+        lastName: model.lastName,
+        firstNameNative: model.firstNameNative,
+        lastNameNative: model.lastNameNative,
+
+        contactsEpamEmail: model.contactsEpamEmail,
+        educationHistory: [
+          {
+            graduationYear: model.graduationYear,
+            faculty: model.faculty,
+            university: model.university,
+          },
+        ],
+        employmentHistory: [
+          {
+            companyName: model.employmentCompanyName,
+            title: model.employmentTitle,
+            dateFrom: dateFrom ? formatMonth(dateFrom) : null,
+            dateTo: dateTo ? formatMonth(dateTo) : null,
+          },
+        ],
+      };
+
+      try {
+        const userResponse = await axios.post('/api/profile/registry', userModel);
+        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+
+        if (githubId) {
+          await axios.post('/api/registry', registryModel);
+          this.setState({ submitted: true });
+        } else {
+          console.error('Invalid githubId');
+        }
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      }
+    });
   };
 
   render() {
-    if (!this.props.session) {
-      return null;
+    const { courses, initialData } = this.state;
+    const { getFieldDecorator: field, getFieldValue } = this.props.form;
+    let content: React.ReactNode;
+    const location = getFieldValue('location');
+    if (!courses.length) {
+      content = <NoCourses />;
+    } else if (this.state.submitted) {
+      content = <Result status="success" title="Your request has been submitted successfully." />;
+    } else {
+      const courseId = getFieldValue('courseId');
+      const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
+      content = (
+        <Form className="m-2" onSubmit={this.handleSubmit}>
+          <Col offset={1}>
+            <Row>
+              <Typography.Title level={4}>Course</Typography.Title>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col span={10}>
+                <Form.Item>
+                  {field('courseId', { initialValue: courses[0].id })(
+                    <Select placeholder="Select course...">
+                      {courses.map(course => (
+                        <Select.Option key={course.id} value={course.id}>
+                          {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                        </Select.Option>
+                      ))}
+                    </Select>,
+                  )}
+                </Form.Item>
+                <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Title level={4}>General</Typography.Title>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="First Name (in English, as in passport)">
+                  {field('firstName', {
+                    initialValue: initialData.firstName,
+                    rules: [
+                      { required: true, message: 'First name is required' },
+                      { pattern: englishNamePattern, message: 'First name should be in English' },
+                    ],
+                  })(<Input placeholder="Dzmitry" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Last Name (in English, as in passport)">
+                  {field('lastName', {
+                    initialValue: initialData.lastName,
+                    rules: [
+                      { required: true, message: 'Last name is required' },
+                      { pattern: englishNamePattern, message: 'Last name should be in English' },
+                    ],
+                  })(<Input placeholder="Varabei" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="First Name Native">
+                  {field('firstNameNative')(<Input placeholder="Дмитрий" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Last Name Native ">
+                  {field('lastNameNative')(<Input placeholder="Воробей" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Location">
+                  {field('location', {
+                    initialValue: { key: initialData.locationId },
+                    rules: [{ required: true, message: 'Please select city or "Other"' }],
+                  })(<LocationSelect placeholder="Select city" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Other Location">
+                  {field('otherLocationName', {
+                    rules: [{ required: location && !location.key, message: 'Location name is required' }],
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Primary Email">
+                  {field('primaryEmail', {
+                    initialValue: initialData.primaryEmail,
+                    rules: [{ required: true, pattern: emailPattern, message: 'Email is required' }],
+                  })(<Input placeholder="user@example.com" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="EPAM Email">
+                  {field('contactsEpamEmail', { rules: [{ pattern: epamEmailPattern }] })(
+                    <Input placeholder="first_last@epam.com" />,
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Title level={4}>Education</Typography.Title>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="University / College / School">{field('university')(<Input />)}</Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Faculty">{field('faculty')(<Input />)}</Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Graduation Year">
+                  {field('graduationYear')(<InputNumber min={1950} max={new Date().getUTCFullYear() + 10} />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Title level={4}>Work Experience</Typography.Title>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Title">{field('employmentTitle')(<Input />)}</Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Company">{field('employmentCompanyName')(<Input />)}</Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Period">
+                  {field('employmentPeriod', { initialValue: [null, null] })(
+                    <DatePicker.RangePicker mode={['month', 'month']} />,
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Paragraph>
+                I give my consent to the processing of my personal data and sharing it with companies for the purpose of
+                hiring only.
+              </Typography.Paragraph>
+              <Typography.Paragraph>
+                Я согласен на обработку моих личных данные и даю согласию на предоставление их компаниям только для
+                целей найма.
+              </Typography.Paragraph>
+              <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
+            </Row>
+            <Button size="large" type="primary" disabled={!getFieldValue('gdpr')} htmlType="submit">
+              Submit
+            </Button>
+          </Col>
+        </Form>
+      );
     }
 
-    const { selectedCourse, courses, isAgree } = this.state;
-
     return (
-      <div>
-        <Header username={this.props.session.githubId} />
-        {!selectedCourse && <Alert color="warning">There are no planned courses</Alert>}
-        {selectedCourse && (
-          <Container>
-            <FormGroup>
-              <h3>Course Registry (student)</h3>
-            </FormGroup>
-            {this.state.submitted ? (
-              <Alert color="info">Registration has been submitted</Alert>
-            ) : (
-              <>
-                <Row className="align-items-center">
-                  <FormGroup className="col-md-6">
-                    <Select
-                      placeholder="Select course..."
-                      value={selectedCourse}
-                      options={courses}
-                      onChange={this.changeCourse}
-                    />
-                  </FormGroup>
-                </Row>
-
-                <Form
-                  onSubmit={this.handleSubmit}
-                  render={({ handleSubmit }) => (
-                    <form onSubmit={handleSubmit}>
-                      <Row className="align-items-center">
-                        <InputField name="firstName" label="First Name" />
-                        <InputField name="lastName" label="Last Name" />
-                      </Row>
-                      <Row className="align-items-center">
-                        <InputField name="lastNameNative" label="Native Last Name" isRequired={false} />
-                        <InputField name="firstNameNative" label="Native First Name" isRequired={false} />
-                      </Row>
-                      <Row className="align-items-center">
-                        <DropdownField name="locationName" label="LocationName" options={citiesOptions} />
-                        <InputField name="otherLocationName" label="Location Name (If Other)" isRequired={false} />
-                      </Row>
-                      <Row className="align-items-center">
-                        <InputField name="contactsEmail" label="Contacts E-mail" type="email" />
-                        <InputField
-                          name="contactsEpamEmail"
-                          label="Contacts EPAM E-mail"
-                          type="email"
-                          isRequired={false}
-                        />
-                      </Row>
-                      <Row className="align-items-center">
-                        <Container>
-                          <h5>Education History</h5>
-                          <Row className="align-items-center">
-                            <InputField name="graduationYear" label="Graduation Year" type="number" />
-                          </Row>
-                          <Row className="align-items-center">
-                            <InputField name="faculty" label="Faculty" />
-                            <InputField name="university" label="University" />
-                          </Row>
-                        </Container>
-                        <Container>
-                          <h5>Employment History</h5>
-                          <Row className="align-items-center">
-                            <InputField name="title" label="Title" isRequired={false} />
-                            <InputField name="toPresent" label="Is Present" type="checkbox" isRequired={false} />
-                          </Row>
-                          <Row className="align-items-center">
-                            <InputField name="dateFrom" label="From" isRequired={false} />
-                            <InputField name="dateTo" label="To" isRequired={false} />
-                          </Row>
-                          <Row className="align-items-center">
-                            <InputField name="companyName" label="Company Name" isRequired={false} />
-                          </Row>
-                        </Container>
-                      </Row>
-                      <Row className="align-items-center">
-                        <InputField name="comment" label="Comment" type="textarea" isRequired={false} />
-                      </Row>
-                      <Row className="align-items-center">
-                        <FormGroup className="col-md">
-                          <div className="form-check">
-                            <Input type="checkbox" checked={isAgree} id="gdpr" onChange={this.changeIsAgree} />
-                            <Label check for="gdpr">
-                              GDPR checkbox
-                            </Label>
-                          </div>
-                        </FormGroup>
-                        <FormGroup className="col-md">
-                          <Button type="submit" color="success" disabled={!isAgree}>
-                            Submit
-                          </Button>
-                        </FormGroup>
-                      </Row>
-                    </form>
-                  )}
-                />
-              </>
-            )}
-          </Container>
-        )}
-      </div>
+      <>
+        <Header courseName="Registration" username={this.props.session.githubId} />
+        {content}
+      </>
     );
   }
 }
 
-export default withCourses(withSession(CourseRegistryPage));
+export default withCourses(withSession(Form.create()(CourseRegistryPage)));

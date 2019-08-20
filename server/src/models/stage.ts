@@ -40,4 +40,10 @@ export class Stage {
 
   @OneToMany(_ => CourseTask, (courseTask: CourseTask) => courseTask.stage, { nullable: true })
   courseTasks: CourseTask[] | null;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  startDate: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  endDate: Date;
 }

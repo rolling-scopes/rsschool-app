@@ -3,8 +3,6 @@ import axios from 'axios';
 import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
 
-import '../index.scss';
-
 export type Role = 'student' | 'mentor' | 'coursemanager';
 export interface Session {
   id: number;
@@ -66,3 +64,4 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
 }
 
 export default withSession;
+export { withSession };

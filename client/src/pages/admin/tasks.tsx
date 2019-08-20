@@ -1,194 +1,165 @@
 import * as React from 'react';
+import { Button, Checkbox, message, Form, Input, Modal, Radio, Table } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
 
-import { Header } from 'components/Header';
-import withSession, { Session } from 'components/withSession';
-import { FormGroup, Label, Button, Input } from 'reactstrap';
-import { Field } from 'react-final-form';
-import ReactTable from 'react-table';
-import { TaskService } from 'services/task';
-import { requiredValidator } from 'components/Forms';
-import { TaskEditModal } from 'components/TasksForm/TaskEditModal';
-import { ValidationError } from 'components/ValidationError';
+import { Header, Session, withSession } from 'components';
+import { boolRenderer, stringSorter } from 'components/Table';
+import { Task, TaskService } from 'services/task';
+import { PageWithModalState } from 'services/models';
+import { urlPattern } from 'services/validators';
 
-import '../../index.scss';
+type Props = { session: Session } & FormComponentProps;
+interface State extends PageWithModalState<Task> {}
 
-type Props = {
-  session: Session;
-};
-
-type State = {
-  submitted: boolean;
-  tasks: any[];
-  modalValues: any | null;
-};
-
-class Tasks extends React.Component<Props, State> {
+class TasksPage extends React.Component<Props, State> {
   state: State = {
-    submitted: false,
-    tasks: [],
-    modalValues: null,
+    data: [],
+    modalData: null,
+    modalAction: 'update',
   };
 
-  taskService = new TaskService();
-
-  async loadTasks() {
-    const tasks = await this.taskService.getTasks();
-    this.setState({ tasks });
-  }
+  private taskService = new TaskService();
 
   async componentDidMount() {
-    await this.loadTasks();
+    const data = await this.taskService.getTasks();
+    this.setState({ data });
   }
-
-  stringFilter = (filter: any, row: any) => (row[filter.id] || '').toLowerCase().startsWith(filter.value.toLowerCase());
-
-  handleSubmit = async (values: any) => {
-    await this.taskService.updateTasks([values]);
-    this.setState({ submitted: true });
-    await this.loadTasks();
-    this.setState({ modalValues: null });
-  };
-
-  renderModal() {
-    return (
-      <TaskEditModal
-        onApply={this.handleSubmit}
-        onClose={() => {
-          this.setState({ modalValues: null });
-        }}
-        isOpen={this.state.modalValues != null}
-        initialValues={{
-          verification: 'auto',
-          ...this.state.modalValues,
-        }}
-      >
-        <Field name="name" validate={requiredValidator}>
-          {({ input, meta }) => (
-            <FormGroup className="col-md-auto">
-              <Label>Task Name</Label>
-              <Input {...input} name="name" type="text" />
-              <ValidationError meta={meta} />
-            </FormGroup>
-          )}
-        </Field>
-        <Field name="description">
-          {({ input }) => (
-            <FormGroup className="col-md-auto">
-              <Label>Description</Label>
-              <Input {...input} name="description" type="textarea" />
-            </FormGroup>
-          )}
-        </Field>
-
-        <Field name="descriptionUrl">
-          {({ input }) => (
-            <FormGroup className="col-md-auto">
-              <Label>Description Url</Label>
-              <Input {...input} name="descriptionUrl" type="text" />
-            </FormGroup>
-          )}
-        </Field>
-
-        <Field name="verification">
-          {({ input, meta }) => (
-            <FormGroup className="col-md-auto">
-              <Label>Verification</Label>
-              <Input {...input} name="descriptionUrl" type="select">
-                <option value="auto">Auto</option>
-                <option value="manual">Manual</option>
-              </Input>
-              <ValidationError meta={meta} />
-            </FormGroup>
-          )}
-        </Field>
-
-        <Field name="allowStudentArtefacts" type="checkbox">
-          {({ input, meta }) => (
-            <FormGroup className="col-md-auto">
-              <Label>
-                <Input {...input} name="allowStudentArtefacts" type="checkbox" />
-                Allow Student Artefacts
-              </Label>
-              <ValidationError meta={meta} />
-            </FormGroup>
-          )}
-        </Field>
-      </TaskEditModal>
-    );
-  }
-
-  handleRowClick(row: any) {
-    this.setState({ modalValues: row.original });
-  }
-
-  handleAddTaskClick = () => {
-    this.setState({ modalValues: {} });
-  };
 
   render() {
     return (
       <div>
-        <Header username={this.props.session.githubId} />
-        <div className="m-3">
-          {this.renderModal()}
-          <Button color="success" onClick={this.handleAddTaskClick}>
-            Add
-          </Button>
-          <ReactTable
-            className="-striped -highlight"
-            defaultSorted={[{ id: 'name', desc: false }]}
-            filterable={true}
-            defaultPageSize={50}
-            defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
-            data={this.state.tasks}
-            columns={[
-              {
-                Header: 'Task Id',
-                accessor: 'id',
-                maxWidth: 100,
-                sortMethod: (a, b) => b - a,
-              },
-              {
-                Header: 'Name',
-                accessor: 'name',
-                maxWidth: 360,
-                filterMethod: this.stringFilter,
-              },
-              {
-                Header: 'Description',
-                accessor: 'description',
-                maxWidth: 100,
-                filterMethod: this.stringFilter,
-              },
-              {
-                Header: 'Description Url',
-                accessor: 'descriptionUrl',
-                filterMethod: this.stringFilter,
-              },
-              {
-                Header: 'Verification',
-                accessor: 'verification',
-                maxWidth: 100,
-                filterMethod: this.stringFilter,
-              },
-              {
-                Header: 'Actions',
-                filterable: false,
-                maxWidth: 100,
-                Cell: row => (
-                  <>
-                    <Button color="link" onClick={() => this.handleRowClick(row)}>
-                      Edit
-                    </Button>
-                  </>
-                ),
-              },
-            ]}
-          />
-        </div>
+        <Header title="Manage Tasks" username={this.props.session.githubId} />
+        <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
+          Add Task
+        </Button>
+        <Table
+          size="small"
+          className="m-3"
+          dataSource={this.state.data}
+          pagination={{ pageSize: 100 }}
+          rowKey="id"
+          columns={[
+            {
+              title: 'Id',
+              dataIndex: 'id',
+            },
+            {
+              title: 'Name',
+              dataIndex: 'name',
+              sorter: stringSorter<Task>('name'),
+            },
+            {
+              title: 'Description URL',
+              dataIndex: 'descriptionUrl',
+            },
+            {
+              title: 'Github PR Required',
+              dataIndex: 'githubPrRequired',
+              render: boolRenderer,
+            },
+            {
+              title: 'Verification',
+              dataIndex: 'verification',
+            },
+            {
+              title: 'Actions',
+              dataIndex: 'actions',
+              render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
+            },
+          ]}
+        />
+        {this.renderModal()}
       </div>
     );
   }
+
+  private renderModal() {
+    const { getFieldDecorator: field } = this.props.form;
+    const modalData = this.state.modalData as Task;
+    if (modalData == null) {
+      return null;
+    }
+    return (
+      <Modal
+        visible={!!modalData}
+        title="Task"
+        okText="Save"
+        onOk={this.handleModalSubmit}
+        onCancel={() => this.setState({ modalData: null })}
+      >
+        <Form layout="vertical">
+          <Form.Item label="Name">
+            {field('name', {
+              initialValue: modalData.name,
+              rules: [{ required: true, message: 'Please enter stage name' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="Description URL">
+            {field('descriptionUrl', {
+              initialValue: modalData.descriptionUrl,
+              rules: [
+                {
+                  required: true,
+                  message: 'Please enter description URL',
+                },
+                {
+                  message: 'Please enter valid URL',
+                  pattern: urlPattern,
+                },
+              ],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="Github">
+            {field('githubPrRequired', { initialValue: modalData.githubPrRequired })(
+              <Checkbox>Github Pull Request required</Checkbox>,
+            )}
+          </Form.Item>
+          <Form.Item label="Verification">
+            {field('verification', {
+              initialValue: modalData.verification || 'manual',
+            })(
+              <Radio.Group>
+                <Radio value="manual">Manual</Radio>
+                <Radio value="auto">Auto</Radio>
+              </Radio.Group>,
+            )}
+          </Form.Item>
+        </Form>
+      </Modal>
+    );
+  }
+
+  private handleModalSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    this.props.form.validateFields(async (err: any, values: any) => {
+      if (err) {
+        return;
+      }
+      const data: Partial<Task> = {
+        name: values.name,
+        verification: values.verification,
+        githubPrRequired: !!values.githubPrRequired,
+        descriptionUrl: values.descriptionUrl,
+      };
+      try {
+        const task =
+          this.state.modalAction === 'update'
+            ? await this.taskService.updateTask(this.state.modalData!.id!, data)
+            : await this.taskService.createTask(data);
+        const updatedData =
+          this.state.modalAction === 'update'
+            ? this.state.data.map(d => (d.id === task.id ? { ...d, ...task } : d))
+            : this.state.data.concat([task]);
+        this.setState({ modalData: null, data: updatedData });
+      } catch (e) {
+        message.error('An error occurred. Can not save the task.');
+      }
+    });
+  };
+
+  private handleAddItem = () => this.setState({ modalData: {}, modalAction: 'create' });
+
+  private handleEditItem = (record: Task) => this.setState({ modalData: record, modalAction: 'update' });
 }
 
-export default withSession(Tasks);
+export default withSession(Form.create()(TasksPage));

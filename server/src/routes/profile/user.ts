@@ -40,10 +40,10 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     }
   }
 
-  await getProfileByGithubId(ctx, githubId);
+  await getProfileByGithubId(ctx, githubId, githubId === userGithubId);
 };
 
-export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: string) => {
+export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: string, excludeFeedback: boolean) => {
   const profile = await getRepository(User).findOne({
     where: { githubId },
     relations: [
@@ -97,6 +97,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
           name: course.name,
         },
         totalScore: st.totalScore,
+        certificateUrl: st.certificateUrl,
         completed: !st.isExpelled && !st.isFailed,
         expellingReason: st.expellingReason,
         taskResults: (st.taskResults || []).map(t => ({
@@ -105,12 +106,14 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
           comment: t.comment,
           courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
         })),
-        interviews: (st.taskInterviewResults || []).map(t => ({
-          formAnswers: t.formAnswers,
-          score: t.score,
-          comment: t.comment,
-          courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
-        })),
+        interviews: excludeFeedback
+          ? []
+          : (st.taskInterviewResults || []).map(t => ({
+              formAnswers: t.formAnswers,
+              score: t.score,
+              comment: t.comment,
+              courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
+            })),
         mentor: st.mentor ? courseService.convertToMentorBasic(st.mentor) : null,
       };
     });

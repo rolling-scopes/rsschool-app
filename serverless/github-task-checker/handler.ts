@@ -25,7 +25,6 @@ interface Event {
   repository: RepositoryInfo;
 }
 
-
 const download = async (url: string, dest: string, cb: Function): Promise<any> => {
   const file = fs.createWriteStream(dest);
   https
@@ -49,10 +48,10 @@ const mkDir = (dir: string): void => {
   }
 };
 
-const testRunner = (path: string, result: TestResult):Promise<any> => {
-  return new Promise((resolve) => {
-    const command_install = `cd ${path} && ls -d $PWD/*  && export HOME=/tmp && npm install`
-    //const childInstallModules = 
+const testRunner = (path: string, result: TestResult): Promise<any> => {
+  return new Promise(resolve => {
+    const command_install = `cd ${path} && ls -d $PWD/*  && export HOME=/tmp && npm install`;
+    //const childInstallModules =
     exec(command_install).on('exit', (/* code */) => {
       const command_run_test = `cd ${path} && export PATH=$PATH:$PWD/node_modules/mocha/bin && npm test`;
       const childRunTests = exec(command_run_test).on('exit', code => {
@@ -74,8 +73,8 @@ const testRunner = (path: string, result: TestResult):Promise<any> => {
   });
 };
 
-const worker = (event:Event): Promise<string> => {
-  return new Promise((resolve) => {
+const worker = (event: Event): Promise<string> => {
+  return new Promise(resolve => {
     const githubId: string = event.student.githubId;
     const repositoryName: string = event.repository.name;
     const url: string = `https://codeload.github.com/${githubId}/${repositoryName}/zip/master`;
@@ -93,7 +92,7 @@ const worker = (event:Event): Promise<string> => {
     mkDir(tempDir);
     download(url, dest, function() {
       fs.createReadStream(dest)
-        .pipe(unzipper.Extract({ path: tempDir}))
+        .pipe(unzipper.Extract({ path: tempDir }))
         .on('close', async () => {
           testRunner(extractedFolder, result).then(res => resolve(res));
         });
@@ -101,10 +100,10 @@ const worker = (event:Event): Promise<string> => {
   });
 };
 
-export const hello: APIGatewayProxyHandler = async (event:Event, _context:any) => {
+export const hello: APIGatewayProxyHandler = async (event: Event, _context: any) => {
   const resp = await worker(event);
   return {
     statusCode: 200,
-    body: resp
+    body: resp,
   };
 };

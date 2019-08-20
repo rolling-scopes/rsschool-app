@@ -1,7 +1,7 @@
 import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { setResponse } from './utils';
-import { getManager } from 'typeorm';
+import { getManager, getRepository } from 'typeorm';
 import { ILogger } from '../logger';
 
 export const createGetRoute = <T = any>(entity: T, _?: ILogger, relations?: string[]) => async (
@@ -36,6 +36,33 @@ export const createPostRoute = <T = any>(entity: T, logger?: ILogger) => async (
   const data = ctx.request.body;
   try {
     const result = await getManager().save(entity as any, data);
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    if (logger) {
+      logger.error(e.message);
+    }
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const createPutRoute = <T = any>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
+  const data = ctx.request.body;
+  const id: number = Number(ctx.params.id);
+  try {
+    const result = await getRepository(entity as any).save({ ...data, id });
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    if (logger) {
+      logger.error(e.message);
+    }
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const createDeleteRoute = <T = any>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
+  const id: number = ctx.params.id;
+  try {
+    const result = await getRepository(entity as any).delete(id);
     setResponse(ctx, OK, result);
   } catch (e) {
     if (logger) {

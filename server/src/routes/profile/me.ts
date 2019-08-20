@@ -2,7 +2,7 @@ import { BAD_REQUEST, OK } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { ExternalAccount, User } from '../../models';
+import { User } from '../../models';
 import { IUserSession } from '../../models/session';
 import { EducationRecord, EmploymentRecord } from './../../models/user';
 import { setResponse } from '../utils';
@@ -10,15 +10,7 @@ import { getProfileByGithubId } from './user';
 
 export const getMyProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const githubId = ctx.state.user.githubId.toLowerCase();
-  await getProfileByGithubId(ctx, githubId);
-};
-
-type UserInput = {
-  firstName?: string;
-  lastName?: string;
-  firstNameNative?: string;
-  lastNameNative?: string;
-  externalAccounts?: ExternalAccount[];
+  await getProfileByGithubId(ctx, githubId, true);
 };
 
 type RegistryInput = {
@@ -36,34 +28,21 @@ type RegistryInput = {
 };
 
 export const updateMyProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
-  const inputData: UserInput = ctx.request.body;
+  const sessionUser = ctx.state!.user as IUserSession;
+  const inputData: User = ctx.request.body;
   if (!inputData) {
     setResponse(ctx, BAD_REQUEST);
     return;
   }
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ where: { githubId } });
+  const user = await userRepository.findOne({ where: { githubId: sessionUser.githubId } });
   if (!user) {
     setResponse(ctx, BAD_REQUEST);
     return;
   }
-  if (inputData.firstName) {
-    user.firstName = inputData.firstName;
-  }
-  if (inputData.lastName) {
-    user.lastName = inputData.lastName;
-  }
-  if (inputData.firstNameNative) {
-    user.firstNameNative = inputData.firstNameNative;
-  }
-  if (inputData.lastNameNative) {
-    user.lastNameNative = inputData.lastNameNative;
-  }
-  if (inputData.externalAccounts) {
-    user.externalAccounts = inputData.externalAccounts;
-  }
-  const result = await userRepository.save(user);
+  const { id, githubId, ...other } = inputData;
+  const updatedUser = { ...user, ...other };
+  const result = await userRepository.save(updatedUser);
   setResponse(ctx, OK, result);
 };
 

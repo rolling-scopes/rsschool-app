@@ -39,18 +39,18 @@ export const postFeedback = (logger: ILogger) => {
   const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
     if (
       !fromUser ||
-      !fromUser.contactsEmail ||
+      !fromUser.primaryEmail ||
       !toUser ||
-      !toUser.contactsEmail ||
+      !toUser.primaryEmail ||
       !data.badgeId ||
       !heroesService.isCommentValid(data.comment)
     ) {
       return Promise.resolve(null);
     }
     return heroesService.assignBadge({
-      assignerEmail: fromUser.contactsEmail,
+      assignerEmail: fromUser.primaryEmail,
       assignerName: getUserDisplayName(fromUser),
-      receiverEmail: toUser!.contactsEmail,
+      receiverEmail: toUser!.primaryEmail,
       receiverName: getUserDisplayName(toUser),
       comment: data.comment,
       event: data.badgeId,

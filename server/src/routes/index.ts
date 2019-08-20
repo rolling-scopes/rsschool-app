@@ -5,14 +5,20 @@ import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseRoute } from './course';
 import { coursesRoute } from './courses';
+import { stageRoute } from './stage';
+import { stagesRoute } from './stages';
 import { authRoute } from './auth';
 import { usersRoute } from './users';
+import { taskRoute } from './task';
+import { studentRoute } from './student';
 import { tasksRoute } from './tasks';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
+import { certificateRoute } from './certificate';
+
 import { ILogger } from '../logger';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
@@ -34,10 +40,15 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, coursesRoute(logger));
   applyRouter(router, usersRoute(logger));
+  applyRouter(router, taskRoute(logger));
+  applyRouter(router, studentRoute(logger));
   applyRouter(router, tasksRoute(logger));
   applyRouter(router, profileRoute(logger));
   applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
+  applyRouter(router, stageRoute(logger));
+  applyRouter(router, stagesRoute(logger));
+  applyRouter(router, certificateRoute(logger));
 
   return { publicRouter: router };
 };
