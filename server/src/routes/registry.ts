@@ -1,12 +1,13 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { User, Course, Registry } from './../models';
+import { RegistryStatus } from './../models/registry';
 import { getManager, getRepository } from 'typeorm';
 import { ILogger } from './../logger';
 import { adminGuard } from './guards';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
-import { IUserSession } from '../models/session';
+import { IUserSession } from './../models/session';
 
 interface LoggingError {
   logger?: ILogger;
@@ -25,7 +26,7 @@ const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
 
-  router.get('/:id', createGetRoute(Registry, logger));
+  router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
     const { githubId } = ctx.state!.user as IUserSession;
@@ -43,11 +44,13 @@ export function registryRouter(logger?: ILogger) {
         getRepository(User).findOne({ where: { githubId } }),
         getManager().findOne(Course, courseId),
       ]);
+      const status: RegistryStatus = type === 'student' ? 'approved' : 'pending'
       const registryPayload = {
         comment,
         type,
         user,
         course,
+        status,
       };
       const registry = await getManager().save(Registry, registryPayload);
 
