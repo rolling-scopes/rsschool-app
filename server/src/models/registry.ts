@@ -2,9 +2,9 @@ import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedCol
 import { User } from './user';
 import { Course } from './course';
 
-type ParticipantType = 'mentor' | 'mentee';
+type ParticipantType = 'mentor' | 'student';
 
-type RegistryStatus = 'inactive' | 'pending' | 'approved' | 'rejected';
+export type RegistryStatus = 'inactive' | 'pending' | 'approved' | 'rejected';
 
 @Entity()
 export class Registry {

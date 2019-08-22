@@ -1,4 +1,4 @@
-import { ActivityBanner, Header } from 'components';
+import { ActivityBanner, Header, RegistryBanner } from 'components';
 import { Dropdown, DropdownToggle, Alert, Nav, NavItem, ListGroupItem, DropdownMenu, DropdownItem } from 'reactstrap';
 import Router from 'next/router';
 import * as React from 'react';
@@ -189,6 +189,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div>
         <ActivityBanner />
+        <RegistryBanner />
 
         <Header username={this.props.session.githubId} />
 
