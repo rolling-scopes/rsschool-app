@@ -113,7 +113,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
         {selectedCourse && (
           <Container>
             <FormGroup>
-              <h3>Course Registry (mentee)</h3>
+              <h3>Course Registry (student)</h3>
             </FormGroup>
             {this.state.submitted ? <Alert color="info">Registration has been submitted</Alert> : (
               <>

@@ -10,13 +10,13 @@ class RegistryBanner extends React.Component<any, any> {
           </div>
           <a href="/registry/mentor">
             <button type="button" className="btn btn-primary">
-              Yes, as mentor
+              Yes, as a mentor
             </button>
           </a>
           <div style={{ width: 20 }} />
-          <a href="/registry/mentee">
+          <a href="/registry/student">
             <button type="button" className="btn btn-primary">
-              Yes, as mentee
+              Yes, as a student
             </button>
           </a>
           <div style={{ width: 20 }} />
