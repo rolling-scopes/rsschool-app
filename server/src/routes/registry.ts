@@ -44,7 +44,7 @@ export function registryRouter(logger?: ILogger) {
         getRepository(User).findOne({ where: { githubId } }),
         getManager().findOne(Course, courseId),
       ]);
-      const status: RegistryStatus = type === 'student' ? 'approved' : 'pending'
+      const status: RegistryStatus = type === 'student' ? 'approved' : 'pending';
       const registryPayload = {
         comment,
         type,

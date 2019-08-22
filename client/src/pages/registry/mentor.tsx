@@ -35,14 +35,14 @@ class CourseRegistryPage extends React.Component<Props, State> {
       submitted: false,
       isAgree: false,
     };
-  };
+  }
 
   private changeCourse = (course: any) => {
     this.setState({ selectedCourse: course });
   };
 
   private changeIsAgree = (e: any) => {
-    this.setState({isAgree: e.target.checked})
+    this.setState({ isAgree: e.target.checked });
   };
 
   private handleSubmit = async (model: any) => {
@@ -95,8 +95,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <FormGroup>
               <h3>Course Registry (mentor)</h3>
             </FormGroup>
-            {
-              this.state.submitted ? <Alert color="info">Registration has been submitted</Alert> : (
+            {this.state.submitted ? (
+              <Alert color="info">Registration has been submitted</Alert>
+            ) : (
               <>
                 <Row className="align-items-center">
                   <FormGroup className="col-md-6">
@@ -123,7 +124,12 @@ class CourseRegistryPage extends React.Component<Props, State> {
                       </Row>
                       <Row className="align-items-center">
                         <InputField name="contactsEmail" label="Contacts E-mail" type="email" />
-                        <InputField name="contactsEpamEmail" label="Contacts EPAM E-mail" type="email" isRequired={false} />
+                        <InputField
+                          name="contactsEpamEmail"
+                          label="Contacts EPAM E-mail"
+                          type="email"
+                          isRequired={false}
+                        />
                       </Row>
                       <Row className="align-items-center">
                         <Container>
@@ -148,7 +154,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
                         <FormGroup className="col-md">
                           <div className="form-check">
                             <Input type="checkbox" checked={isAgree} id="gdpr" onChange={this.changeIsAgree} />
-                            <Label check for="gdpr">GDPR checkbox</Label>
+                            <Label check for="gdpr">
+                              GDPR checkbox
+                            </Label>
                           </div>
                         </FormGroup>
                         <FormGroup className="col-md">

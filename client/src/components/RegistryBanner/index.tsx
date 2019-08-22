@@ -5,9 +5,7 @@ class RegistryBanner extends React.Component<any, any> {
     return (
       <div className="activity-banner">
         <div className="alert alert-primary d-flex" role="alert">
-          <div className="flex-grow-1 align-self-center alert-message">
-            Do you want to take part in RS School ?
-          </div>
+          <div className="flex-grow-1 align-self-center alert-message">Do you want to take part in RS School ?</div>
           <a href="/registry/mentor">
             <button type="button" className="btn btn-primary">
               Yes, as a mentor
@@ -29,4 +27,4 @@ class RegistryBanner extends React.Component<any, any> {
   }
 }
 
-export { RegistryBanner }
+export { RegistryBanner };
