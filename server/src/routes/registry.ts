@@ -1,4 +1,4 @@
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { OK, NOT_FOUND, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { User, Student, Course, Registry } from './../models';
 import { RegistryStatus } from './../models/registry';
@@ -25,6 +25,22 @@ const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
 
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
+
+  router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
+    const {skip, take} = ctx.query;
+    const registries = await getRepository(Registry).find({
+      skip: skip || 0,
+      take: take || 20,
+      order: { id: 'ASC' },
+    });
+
+    if (registries === undefined) {
+      setResponse(ctx, NOT_FOUND);
+      return;
+    }
+
+    setResponse(ctx, OK, registries);
+  });
 
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
@@ -65,17 +81,16 @@ export function registryRouter(logger?: ILogger) {
     }
   });
 
-  router.put('/:id', adminGuard, async (ctx: Router.RouterContext) => {
-    try {
-      const id = ctx.params.id;
-      const status = ctx.request.body.status;
-      const registryPayload = { ...(await getManager().findOne(Registry, id)), status };
-      const registry = await getManager().save(Registry, registryPayload);
+  router.put('/', adminGuard, async (ctx: Router.RouterContext) => {
+    const ids = ctx.request.body.ids
+    const status = ctx.request.body.status;
 
-      setResponse(ctx, OK, { registry });
-    } catch (e) {
-      handleError({ logger, errorMsg: e.message, ctx });
-    }
+    const registries = await Promise.all(ids.map(async (id: string) => {
+      const registryPayload = { ...(await getManager().findOne(Registry, id)), status };
+      return await getManager().save(Registry, registryPayload);
+    }));
+
+    setResponse(ctx, OK, { registries });
   });
 
   return router;
