@@ -12,6 +12,20 @@ interface TestResult {
   exitCode: number;
 }
 
+interface StudentInfo {
+  githubId: string;
+}
+
+interface RepositoryInfo {
+  name: string;
+}
+
+interface Event {
+  student: StudentInfo;
+  repository: RepositoryInfo;
+}
+
+
 const download = async (url: string, dest: string, cb: Function): Promise<any> => {
   const file = fs.createWriteStream(dest);
   https
@@ -60,7 +74,7 @@ const testRunner = (path: string, result: TestResult):Promise<any> => {
   });
 };
 
-const worker = (event): Promise<string> => {
+const worker = (event:Event): Promise<string> => {
   return new Promise((resolve) => {
     const githubId: string = event.student.githubId;
     const repositoryName: string = event.repository.name;
@@ -87,7 +101,7 @@ const worker = (event): Promise<string> => {
   });
 };
 
-export const hello: APIGatewayProxyHandler = async (event, _context) => {
+export const hello: APIGatewayProxyHandler = async (event:Event, _context:any) => {
   const resp = await worker(event);
   return {
     statusCode: 200,
