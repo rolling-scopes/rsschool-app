@@ -25,6 +25,9 @@ export class Registry {
   @Column({ nullable: true })
   comment: string;
 
+  @Column({ nullable: true })
+  studentsAmount: number;
+
   @CreateDateColumn()
   createdDate: number;
 
