@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "source-map-support": "^0.5.10"
+    "child-proc": "0.0.1",
+    "source-map-support": "^0.5.10",
+    "unzipper": "^0.10.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
