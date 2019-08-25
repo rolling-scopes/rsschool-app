@@ -1,11 +1,12 @@
 import * as Router from 'koa-router';
 import * as AWS from 'aws-sdk';
+import { OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { guard, adminGuard } from '../guards';
-import { createPostRoute } from '../common';
 import { getRepository } from 'typeorm';
 import { Certificate } from '../../models';
 import { config } from '../../config';
+import { setResponse } from '../utils';
 
 AWS.config.update({
   region: 'eu-central-1',
@@ -34,7 +35,22 @@ export function certificateRoute(logger: ILogger) {
     }
   });
 
-  router.post('/', adminGuard, createPostRoute(Certificate, logger));
+  router.post('/', adminGuard, async (ctx: Router.RouterContext) => {
+    const data = ctx.request.body;
+    try {
+      const existing = await getRepository(Certificate).findOne({
+        where: { studentId: data.studentId },
+      });
+      const result = await getRepository(Certificate).save(existing == null ? data : { ...existing, ...data });
+      setResponse(ctx, OK, result);
+      return;
+    } catch (e) {
+      if (logger) {
+        logger.error(e.message);
+      }
+      setResponse(ctx, INTERNAL_SERVER_ERROR, { message: e.message });
+    }
+  });
 
   return router;
 }
