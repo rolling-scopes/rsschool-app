@@ -30,7 +30,6 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       })
       .getMany();
   } else {
-    students = [];
     students = await initialQuery
       .where('student."courseId" = :courseId AND student."isExpelled" = false AND student."isFailed" = false', {
         courseId,
@@ -42,10 +41,12 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
     const course = student.course!;
     const user = student.user!;
     return {
+      courseId,
+      courseName: course.name,
+      coursePrimarySkill: course.primarySkillName,
       studentId: student.id,
-      course: `${course.name} (${course.primarySkillName})`,
-      name: `${user.firstName} ${user.lastName}`,
-      date: Date.now(),
+      studentName: `${user.firstName} ${user.lastName}`,
+      timestamp: Date.now(),
     };
   });
   await axios.post(config.aws.certificateGenerationUrl, result, {
