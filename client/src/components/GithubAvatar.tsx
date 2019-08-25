@@ -7,5 +7,5 @@ type Props = {
 };
 
 export function GithubAvatar({ githubId, size }: Props) {
-  return <Avatar src={`https://github.com/${githubId}.png?size${size * 2}`} size={size} />;
+  return <Avatar src={`https://github.com/${githubId}.png?size=${size * 2}`} size={size} />;
 }
