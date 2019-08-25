@@ -135,10 +135,12 @@ class IndexPage extends React.PureComponent<Props, State> {
     if (courses.length === 0) {
       return null;
     }
-    if (this.state.activeCourseId == null) {
+    const savedActiveCourseId = localStorage.getItem('activeCourseId');
+    const activeCourseId = this.state.activeCourseId || Number(savedActiveCourseId);
+    if (!activeCourseId) {
       return courses[0];
     }
-    return courses.find(course => course.id === this.state.activeCourseId);
+    return courses.find(course => course.id === activeCourseId);
   }
 
   private getStatus = (course: Course) => {
@@ -173,6 +175,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   private handleChange = (courseId: number) => {
+    localStorage.setItem('activeCourseId', courseId as any);
     this.setState({ activeCourseId: courseId });
   };
 
