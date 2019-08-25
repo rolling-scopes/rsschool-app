@@ -1,5 +1,13 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Student } from './student';
+import {
+  Entity,
+  JoinColumn,
+  Column,
+  CreateDateColumn,
+  OneToOne,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Student } from '.';
 
 @Entity()
 export class Certificate {
@@ -14,11 +22,12 @@ export class Certificate {
   @Column()
   publicId: string;
 
-  @ManyToOne(_ => Student)
-  student: Student;
-
   @Column()
   studentId: number;
+
+  @OneToOne(() => Student, student => student.certificate)
+  @JoinColumn()
+  student: Student;
 
   @Column({ default: 'rsschool-certificates' })
   s3Bucket: string;

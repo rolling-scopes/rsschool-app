@@ -47,7 +47,7 @@ export class UserService {
 export type ResponseStudent = {
   id: number;
   totalScore: number;
-  certificateUrl: string;
+  certificatePublicId: string;
   completed: boolean;
   interviews: {
     score: number;

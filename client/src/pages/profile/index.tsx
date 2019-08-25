@@ -291,10 +291,10 @@ class ProfilePage extends React.Component<Props, State> {
     );
     return (
       <Card bordered={false} size="small" title={title}>
-        {student.certificateUrl && (
+        {student.certificatePublicId && (
           <div>
             <Icon style={{ fontSize: '16px' }} type="safety-certificate" twoToneColor="#52c41a" theme="twoTone" />{' '}
-            <a href={student.certificateUrl}>{student.certificateUrl}</a>
+            <a href={`/certificate/${student.certificatePublicId}`}>Certificate</a>
           </div>
         )}
         <div>

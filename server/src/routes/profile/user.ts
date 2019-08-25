@@ -63,6 +63,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
       'students.taskResults',
       'students.feedback',
       'students.taskInterviewResults',
+      'students.certificate',
     ],
   });
 
@@ -97,7 +98,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
           name: course.name,
         },
         totalScore: st.totalScore,
-        certificateUrl: st.certificateUrl,
+        certificatePublicId: st.certificate ? st.certificate.publicId : null,
         completed: !st.isExpelled && !st.isFailed,
         expellingReason: st.expellingReason,
         taskResults: (st.taskResults || []).map(t => ({

@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
 import { Mentor } from './mentor';
 import { Stage } from './stage';
+import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
@@ -94,12 +96,15 @@ export class Student {
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
   feedback: StudentFeedback[] | null;
 
+  @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
+  certificates: StudentFeedback[] | null;
+
   @Column({ default: new Date(0), type: 'timestamptz' })
   startDate: Date;
 
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date;
 
-  @Column({ nullable: true })
-  certificateUrl: string;
+  @OneToOne(() => Certificate, certificate => certificate.student)
+  certificate: Certificate;
 }
