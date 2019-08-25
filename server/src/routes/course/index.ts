@@ -17,6 +17,7 @@ import { postPairs } from './pairs';
 import { getScore, getScoreAsCsv, postScore, postScores } from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { getStudentProfile } from './student';
+import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
 import { getStudents, postStudents } from './students';
 import { postTaskArtefact } from './taskArtefact';
@@ -517,6 +518,9 @@ export function courseRoute(logger: ILogger) {
   router.post('/:courseId/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
 
   router.post('/:courseId/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
+
+  router.post('/:courseId/certificates', adminGuard, validateCourseId, postCertificates(logger));
+
   /**
    * @swagger
    *

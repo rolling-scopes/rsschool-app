@@ -16,6 +16,7 @@ import { StudentFeedback } from './studentFeedback';
 import { PrivateFeedback } from './privateFeedback';
 import { Lecture } from './lecture';
 import { CourseLecture } from './courseLecture';
+import { Certificate } from './certificate';
 
 export * from './session';
 
@@ -38,6 +39,7 @@ export const models = [
   PrivateFeedback,
   CourseLecture,
   Lecture,
+  Certificate,
 ];
 
 export {
@@ -58,6 +60,7 @@ export {
   ExternalAccount,
   CourseManager,
   PrivateFeedback,
+  Certificate,
 };
 
 export interface IApiResponse<T> {
