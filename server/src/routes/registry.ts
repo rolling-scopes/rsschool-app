@@ -54,7 +54,7 @@ export function registryRouter(logger?: ILogger) {
       };
       const registry = await getManager().save(Registry, registryPayload);
       if (type === 'student') {
-        const existing = await await getRepository(Student).find({ where: { userId: user!.id, courseId: course!.id } });
+        const existing = await getRepository(Student).find({ where: { userId: user!.id, courseId: course!.id } });
         if (existing == null) {
           await getRepository(Student).save({ userId: user!.id, courseId: course!.id });
         }
