@@ -190,7 +190,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Location">
                   {field('location', {
-                    initialValue: { key: initialData.locationId },
+                    initialValue: initialData.locationId ? { key: initialData.locationId } : undefined,
                     rules: [{ required: true, message: 'Please select city or "Other"' }],
                   })(<LocationSelect placeholder="Select city" />)}
                 </Form.Item>
@@ -256,12 +256,12 @@ class CourseRegistryPage extends React.Component<Props, State> {
             </Row>
             <Row>
               <Typography.Paragraph>
-                I give my consent to the processing of my personal data and sharing it with companies for the purpose of
-                hiring only.
+                I hereby agree to the processing of my personal data contained in the application and sharing it with
+                companies only for employment purposes.
               </Typography.Paragraph>
               <Typography.Paragraph>
-                Я согласен на обработку моих личных данные и даю согласию на предоставление их компаниям только для
-                целей найма.
+                Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
+                только в целях трудоустройства.
               </Typography.Paragraph>
               <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
             </Row>
