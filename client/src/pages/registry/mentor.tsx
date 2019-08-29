@@ -312,11 +312,11 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Row>
               <Typography.Paragraph>
                 I hereby agree to the processing of my personal data contained in the application and sharing it with
-                companies only for employment purposes.
+                companies only for students employment purposes.
               </Typography.Paragraph>
               <Typography.Paragraph>
                 Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-                только в целях трудоустройства.
+                только в целях трудоустройства студентов.
               </Typography.Paragraph>
               <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
             </Row>
