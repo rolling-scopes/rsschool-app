@@ -256,7 +256,7 @@ class EditProfilePage extends React.Component<Props, State> {
                 <Form.Item label="Contact Notes">
                   {field('contactsNotes', {
                     initialValue: initialData.contactsNotes,
-                  })(<Input placeholder="+375297775533" />)}
+                  })(<Input.TextArea placeholder="Any additional information how to contact you..." />)}
                 </Form.Item>
               </Col>
             </Row>
