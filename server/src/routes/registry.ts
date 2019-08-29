@@ -47,7 +47,7 @@ export function registryRouter(logger?: ILogger) {
     try {
       const [user, course, existingRegistry] = (await Promise.all([
         getRepository(User).findOne({ where: { githubId }, relations: ['mentors', 'students'] }),
-        getRepository(Course).findOne(courseId),
+        getRepository(Course).findOne(Number(courseId)),
         getRepository(Registry).findOne({ where: { userId: id, courseId: Number(courseId) } }),
       ])) as [User, Course, Registry];
 
