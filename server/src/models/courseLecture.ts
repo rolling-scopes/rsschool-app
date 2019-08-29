@@ -1,9 +1,9 @@
 import { Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Lecture } from './lecture';
+import { Event } from './lecture';
 import { Course } from './course';
 
 @Entity()
-export class CourseLecture {
+export class CourseEvent {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
@@ -12,8 +12,8 @@ export class CourseLecture {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Lecture, (lecture: Lecture) => lecture.courseLectures)
-  lecture: Lecture | number;
+  @ManyToOne(_ => Event, (lecture: Event) => lecture.courseLectures)
+  event: Event | number;
 
   @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;

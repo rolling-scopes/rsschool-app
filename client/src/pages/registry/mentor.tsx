@@ -17,6 +17,7 @@ import { formatDateFriendly } from 'services/formatter';
 type State = {
   courses: Course[];
   submitted: boolean;
+  isLoading: boolean;
   initialData: Partial<UserFull>;
 };
 
@@ -33,13 +34,14 @@ class CourseRegistryPage extends React.Component<Props, State> {
       courses,
       submitted: false,
       initialData: {} as any,
+      isLoading: true,
     };
   }
 
   async componentDidMount() {
     const userService = new UserService();
     const profile = await userService.getProfile();
-    this.setState({ initialData: profile.user });
+    this.setState({ initialData: profile.user, isLoading: false });
   }
 
   render() {
@@ -320,7 +322,12 @@ class CourseRegistryPage extends React.Component<Props, State> {
               </Typography.Paragraph>
               <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
             </Row>
-            <Button size="large" type="primary" disabled={!getFieldValue('gdpr')} htmlType="submit">
+            <Button
+              size="large"
+              type="primary"
+              disabled={!getFieldValue('gdpr') || this.state.isLoading}
+              htmlType="submit"
+            >
               Submit
             </Button>
           </Col>
@@ -343,6 +350,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
       if (err) {
         return;
       }
+      this.setState({ isLoading: true });
       const { comment, location, courseId, maxStudentsLimit, experienceInYears } = model;
       const registryModel = {
         courseId,
@@ -374,6 +382,8 @@ class CourseRegistryPage extends React.Component<Props, State> {
         this.setState({ submitted: true });
       } catch (e) {
         message.error('An error occured. Please try later');
+      } finally {
+        this.setState({ isLoading: false });
       }
     });
   };

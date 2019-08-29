@@ -218,6 +218,9 @@ class IndexPage extends React.PureComponent<Props, State> {
                 <a href="/admin/tasks">Tasks</a>
               </Button>
               <Button type="link">
+                <a href="/admin/events">Events</a>
+              </Button>
+              <Button type="link">
                 <a href="/admin/users">Users</a>
               </Button>
             </div>

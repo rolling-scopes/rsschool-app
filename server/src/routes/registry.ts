@@ -28,7 +28,7 @@ export function registryRouter(logger?: ILogger) {
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const { githubId, id } = ctx.state!.user as IUserSession;
+    const { githubId, id: userId } = ctx.state!.user as IUserSession;
     const { courseId, comment, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {
@@ -48,10 +48,10 @@ export function registryRouter(logger?: ILogger) {
       const [user, course, existingRegistry] = (await Promise.all([
         getRepository(User).findOne({ where: { githubId }, relations: ['mentors', 'students'] }),
         getRepository(Course).findOne(Number(courseId)),
-        getRepository(Registry).findOne({ where: { userId: id, courseId: Number(courseId) } }),
+        getRepository(Registry).findOne({ where: { userId, courseId: Number(courseId) } }),
       ])) as [User, Course, Registry];
 
-      if (existingRegistry && existingRegistry.userId === id) {
+      if (existingRegistry && existingRegistry.userId === userId) {
         setResponse(ctx, OK, { existingRegistry });
         return;
       }
