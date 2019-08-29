@@ -31,9 +31,18 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       .getMany();
   } else {
     students = await initialQuery
-      .where('student."courseId" = :courseId AND student."isExpelled" = false AND student."isFailed" = false', {
-        courseId,
-      })
+      .leftJoinAndSelect('student.certificate', 'certificate')
+      .where(
+        [
+          'certificate.id IS NULL',
+          'student."courseId" = :courseId',
+          'student."isExpelled" = false',
+          'student."isFailed" = false',
+        ].join(' AND '),
+        {
+          courseId,
+        },
+      )
       .getMany();
   }
 
