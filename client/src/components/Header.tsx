@@ -26,7 +26,7 @@ class Header extends React.PureComponent<Props> {
           <PageHeader title={this.props.title} subTitle={this.props.courseName} />
         </div>
         <div>
-          <Button type="dashed" size="large">
+          <Button href="/profile" type="dashed" size="large">
             <GithubAvatar githubId={this.props.username} size={24} />
             <span style={{ marginLeft: '12px' }}>My Profile</span>
           </Button>
