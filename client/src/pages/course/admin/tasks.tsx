@@ -38,12 +38,10 @@ class CourseTasksPage extends React.Component<Props, State> {
     this.setState({ data, stages, tasks });
   }
 
-  private formRef = React.createRef<any>();
+  private handleModalSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-  private handleModalSubmit = () => {
-    const { form } = this.formRef.current.props;
-
-    form.validateFields(async (err: any, values: any) => {
+    this.props.form.validateFields(async (err: any, values: any) => {
       if (err) {
         return;
       }
