@@ -76,9 +76,6 @@ class CourseRegistryPage extends React.Component<Props, State> {
         primaryEmail: model.primaryEmail,
         firstName: model.firstName,
         lastName: model.lastName,
-        firstNameNative: model.firstNameNative,
-        lastNameNative: model.lastNameNative,
-
         contactsEpamEmail: model.contactsEpamEmail,
         educationHistory: [
           {
@@ -171,18 +168,6 @@ class CourseRegistryPage extends React.Component<Props, State> {
                       { pattern: englishNamePattern, message: 'Last name should be in English' },
                     ],
                   })(<Input placeholder="Varabei" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={defaultRowGutter}>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="First Name Native">
-                  {field('firstNameNative')(<Input placeholder="Дмитрий" />)}
-                </Form.Item>
-              </Col>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="Last Name Native ">
-                  {field('lastNameNative')(<Input placeholder="Воробей" />)}
                 </Form.Item>
               </Col>
             </Row>

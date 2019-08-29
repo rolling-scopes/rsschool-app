@@ -26,8 +26,9 @@ export class Registry {
   comment: string;
 
   @Column({ type: 'json', default: {} })
-  preferences: {
+  attributes: {
     maxStudentsLimit: number;
+    experienceInYears: string;
   };
 
   @CreateDateColumn()

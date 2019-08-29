@@ -29,7 +29,7 @@ export function registryRouter(logger?: ILogger) {
 
   router.post('/', async (ctx: Router.RouterContext) => {
     const { githubId, id } = ctx.state!.user as IUserSession;
-    const { courseId, comment, type, maxStudentsLimit } = ctx.request.body;
+    const { courseId, comment, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {
       const errorMsg = 'Wrong payload: githubId courseId & type are required';
@@ -71,8 +71,9 @@ export function registryRouter(logger?: ILogger) {
       } else if (type === 'mentor') {
         registryPayload = {
           ...registryPayload,
-          preferences: {
+          attributes: {
             maxStudentsLimit,
+            experienceInYears,
           },
         };
         if ((user!.mentors || [])!.length > 0) {

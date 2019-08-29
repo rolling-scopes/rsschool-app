@@ -110,8 +110,10 @@ export interface UserFull extends UserBasic {
   primaryEmail: string;
   contactsEpamEmail: string;
   contactsPhone: string;
+  contactsNotes: string;
   locationId: number;
   locationName: string;
+  aboutMyself: string;
 }
 
 export interface ProfileResponse {
