@@ -52,6 +52,8 @@ class CourseTasksPage extends React.Component<Props, State> {
         taskId: values.taskId,
         stageId: values.stageId,
         checker: values.checker,
+        scoreWeight: values.scoreWeight,
+        maxScore: values.maxScore,
       };
       const courseTask =
         this.state.modalAction === 'update'
