@@ -86,7 +86,8 @@ class EditProfilePage extends React.Component<Props, State> {
           lastNameNative: values.lastNameNative,
           contactsTelegram: values.contactsTelegram,
           contactsSkype: values.contactsSkype,
-          contactsEmail: values.contactsEmail,
+          contactsPhone: values.contactsPhone,
+          contactsNotes: values.contactsNotes,
           primaryEmail: values.primaryEmail,
           contactsEpamEmail: values.contactsEpamEmail,
           externalAccounts,
@@ -113,11 +114,11 @@ class EditProfilePage extends React.Component<Props, State> {
     return {
       codeacademy: codeacademy ? codeacademy.username : '',
       codewars: codewars ? codewars.username : '',
-      contactsEmail: values.contactsEmail,
       contactsEpamEmail: values.contactsEpamEmail,
       contactsPhone: values.contactsPhone,
       contactsSkype: values.contactsSkype,
       contactsTelegram: values.contactsTelegram,
+      contactsNotes: values.contactsNotes,
       firstName: values.firstName,
       firstNameNative: values.firstNameNative,
       htmlacademy: htmlacademy ? htmlacademy.username : '',
@@ -222,14 +223,6 @@ class EditProfilePage extends React.Component<Props, State> {
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
-                <Form.Item label="Email">
-                  {field('contactsEmail', {
-                    initialValue: initialData.contactsEmail,
-                    rules: [{ message: 'Please enter a valid email', pattern: emailPattern }],
-                  })(<Input placeholder="user@example.com" />)}
-                </Form.Item>
-              </Col>
-              <Col {...defaultColumnSizes}>
                 <Form.Item label="EPAM Email (if applicable)">
                   {field('contactsEpamEmail', {
                     initialValue: initialData.contactsEpamEmail,
@@ -256,6 +249,13 @@ class EditProfilePage extends React.Component<Props, State> {
                   {field('contactsPhone', {
                     initialValue: initialData.contactsPhone,
                     rules: [{ pattern: phonePattern, message: 'Please enter a valid phone' }],
+                  })(<Input placeholder="+375297775533" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Contact Notes">
+                  {field('contactsNotes', {
+                    initialValue: initialData.contactsNotes,
                   })(<Input placeholder="+375297775533" />)}
                 </Form.Item>
               </Col>

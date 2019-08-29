@@ -1,6 +1,6 @@
 import { Button, List, Select, Result } from 'antd';
 
-import { ActivityBanner, Header } from 'components';
+import { ActivityBanner, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
@@ -15,6 +15,7 @@ type Props = {
 type State = {
   dropdownOpen: boolean;
   activeCourseId: number | null;
+  hasRegistryBanner: boolean;
 };
 
 const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
@@ -95,6 +96,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   state: State = {
     dropdownOpen: false,
     activeCourseId: null,
+    hasRegistryBanner: false,
   };
 
   private hasAccessToCourse = (session: Session, course: Course) => {
@@ -153,6 +155,13 @@ class IndexPage extends React.PureComponent<Props, State> {
     return 'Active';
   };
 
+  componentDidMount() {
+    const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
+    const plannedCourses = (this.props.courses || []).filter(course => course.planned && !course.completed);
+    const hasRegistryBanner = wasMentor && plannedCourses.every(course => this.props.session.roles[course.id] == null);
+    this.setState({ hasRegistryBanner });
+  }
+
   renderNoCourse() {
     const hasPlanned = (this.props.courses || []).some(course => course.planned && !course.completed);
     return (
@@ -166,8 +175,14 @@ class IndexPage extends React.PureComponent<Props, State> {
         }
         extra={
           <>
-            <Button type="link">Register as Mentor</Button>
-            {hasPlanned && <Button type="link">Register as Student</Button>}
+            <Button type="primary" href="/registry/mentor">
+              Register as Mentor
+            </Button>
+            {/* {hasPlanned && (
+              <Button href="/registry/student" type="primary">
+                Register as Student
+              </Button>
+            )} */}
           </>
         }
       />
@@ -205,6 +220,11 @@ class IndexPage extends React.PureComponent<Props, State> {
               <Button type="link">
                 <a href="/admin/users">Users</a>
               </Button>
+            </div>
+          )}
+          {this.state.hasRegistryBanner && activeCourse && (
+            <div className="mb-3">
+              <RegistryBanner />
             </div>
           )}
           {activeCourse && courses.length > 1 && (

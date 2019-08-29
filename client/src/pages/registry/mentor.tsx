@@ -62,7 +62,28 @@ class CourseRegistryPage extends React.Component<Props, State> {
         />
       );
     } else if (this.state.submitted) {
-      content = <Result status="success" title="Your request has been submitted successfully." />;
+      content = (
+        <Result
+          status="success"
+          title={
+            <>
+              <Row gutter={24} type="flex" justify="center">
+                <Col xs={18} sm={16} md={12}>
+                  <p>Thanks a lot for registration!</p>
+                  <p>
+                    We will review your request and send you an invintation to the introduction meeting when the course
+                    is started. Stay tuned!
+                  </p>
+                  <p>
+                    Join our <a href="https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ">RSSchool Mentors FAQ</a> Telegram
+                    group.
+                  </p>
+                </Col>
+              </Row>
+            </>
+          }
+        />
+      );
     } else {
       const location = getFieldValue('location');
       const courseId = getFieldValue('courseId');
@@ -340,6 +361,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
         primaryEmail: model.primaryEmail,
         contactsTelegram: model.contactsTelegram,
         contactsSkype: model.contactsSkype,
+        contactsPhone: model.contactsPhone,
         contactsEpamEmail: model.contactsEpamEmail,
         contactsNotes: model.contactsNotes,
         aboutMyself: model.aboutMyself,
