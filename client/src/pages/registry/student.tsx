@@ -101,7 +101,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
           await axios.post('/api/registry', registryModel);
           this.setState({ submitted: true });
         } else {
-          console.error('Invalid githubId');
+          message.error('Invalid github id');
         }
       } catch (e) {
         message.error('An error occured. Please try later.');

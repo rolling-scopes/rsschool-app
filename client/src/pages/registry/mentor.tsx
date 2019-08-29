@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Radio, Form, Icon, Input, Result, Row, Select, Typography } from 'antd';
+import { Button, Checkbox, message, Col, Radio, Form, Icon, Input, Result, Row, Select, Typography } from 'antd';
 
 import axios from 'axios';
 import { Header } from 'components/Header';
@@ -373,7 +373,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
         await Promise.all(requests);
         this.setState({ submitted: true });
       } catch (e) {
-        console.error(e);
+        message.error('An error occured. Please try later');
       }
     });
   };
