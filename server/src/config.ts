@@ -4,6 +4,7 @@ export interface IConfig {
     github_client_id: string;
     github_client_secret: string;
     successRedirect: string;
+    activityWebhookSecret: string;
   };
   dev: {
     username: string;
@@ -48,6 +49,7 @@ export const config: IConfig = {
     github_client_id: process.env.RSSHCOOL_API_AUTH_CLIENT_ID || 'client-id',
     github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
     successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3000',
+    activityWebhookSecret: process.env.ACTIVITY_WEBHOOK_SECRET || 'activity-webhook',
   },
   dev: {
     username: process.env.RSSHCOOL_DEV_USERNAME || '',
