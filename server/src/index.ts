@@ -36,7 +36,7 @@ export class App {
 
     this.koa.keys = [config.sessionKey];
 
-    const maxAge = 1000 * 60 * 60 * 24 * 5; // 5 days
+    const maxAge = 1000 * 60 * 60 * 24 * 2; // 2 days
     this.koa.use(session({ maxAge }, this.koa));
 
     const passport = setupPassport(this.appLogger.child({ module: 'passport' }));

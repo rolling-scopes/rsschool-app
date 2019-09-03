@@ -1,33 +1,27 @@
-import * as Router from 'koa-router';
 import { BAD_REQUEST } from 'http-status-codes';
-import { getMentorStudents, getAllMentorStudents } from './mentor';
-import { getStudents, postStudents } from './students';
-import { getMentors, postMentors } from './mentors';
-import {
-  getCourseTasks,
-  getCourseTasksWithTaskCheckers,
-  postCourseTask,
-  putCourseTask,
-  postShuffleCourseTask,
-  deleteCourseTask,
-} from './tasks';
-import { getCourseStages, postCourseStages } from './stages';
-import { postTaskArtefact } from './taskArtefact';
-import { postExpulsion } from './expulsion';
-import { postScore, getScore, postScores, getScoreAsCsv } from './score';
-import { getExternalAccounts } from './externalAccounts';
-// import { getMentorContacts } from './mentorContacts';
-import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
-import { postStudentsFeedbacks } from './studentFeedback';
-import { getStudentProfile } from './student';
-import { getMe, getMyMentors } from './me';
-import { postPairs } from './pairs';
-import { postFeedback } from './feedback';
+import * as Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { createGetRoute, createPostRoute } from '../common';
-import { Course } from '../../models';
+import { Course, CourseTask } from '../../models';
+import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
 import { adminGuard, guard } from '../guards';
 import { setResponse } from '../utils';
+import { postExpulsion } from './expulsion';
+import { getExternalAccounts } from './externalAccounts';
+import { postFeedback } from './feedback';
+// import { getMentorContacts } from './mentorContacts';
+import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
+import { getMe, getMyMentors } from './me';
+import { getAllMentorStudents, getMentorStudents } from './mentor';
+import { getMentors, postMentors } from './mentors';
+import { postPairs } from './pairs';
+import { getScore, getScoreAsCsv, postScore, postScores } from './score';
+import { getCourseStages, postCourseStages } from './stages';
+import { getStudentProfile } from './student';
+import { postCertificates } from './certificates';
+import { postStudentsFeedbacks } from './studentFeedback';
+import { getStudents, postStudents } from './students';
+import { postTaskArtefact } from './taskArtefact';
+import { getCourseTasks, getCourseTasksWithTaskCheckers, postShuffleCourseTask } from './tasks';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -36,6 +30,16 @@ const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
     return;
   }
   ctx.params.courseId = courseId;
+  await next();
+};
+
+const validateId = async (ctx: Router.RouterContext, next: any) => {
+  const id = Number(ctx.params.id);
+  if (isNaN(id)) {
+    setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
+    return;
+  }
+  ctx.params.id = id;
   await next();
 };
 
@@ -294,7 +298,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.post('/:courseId/task', adminGuard, validateCourseId, postCourseTask(logger));
+  router.post('/:courseId/task', adminGuard, validateCourseId, createPostRoute(CourseTask, logger));
 
   /**
    * @swagger
@@ -313,7 +317,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.put('/:courseId/task/:courseTaskId', adminGuard, validateCourseId, putCourseTask(logger));
+  router.put('/:courseId/task/:id', adminGuard, validateCourseId, createPutRoute(CourseTask, logger));
 
   /**
    * @swagger
@@ -332,7 +336,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: Result
    */
-  router.delete('/:courseId/task/:courseTaskId', adminGuard, deleteCourseTask(logger));
+  router.delete('/:courseId/task/:id', adminGuard, validateCourseId, createDeleteRoute(CourseTask, logger));
 
   /**
    * @swagger
@@ -514,6 +518,9 @@ export function courseRoute(logger: ILogger) {
   router.post('/:courseId/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
 
   router.post('/:courseId/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
+
+  router.post('/:courseId/certificates', adminGuard, validateCourseId, postCertificates(logger));
+
   /**
    * @swagger
    *
@@ -531,7 +538,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:id', guard, createGetRoute(Course, logger));
+  router.get('/:id', guard, validateId, createGetRoute(Course, logger));
 
   /**
    * @swagger
@@ -548,6 +555,8 @@ export function courseRoute(logger: ILogger) {
    *          description: ''
    */
   router.post('/', adminGuard, createPostRoute(Course, logger));
+
+  router.put('/:id', adminGuard, validateId, createPutRoute(Course, logger));
 
   return router;
 }

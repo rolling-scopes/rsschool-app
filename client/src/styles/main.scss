@@ -1,74 +1,11 @@
 @import '_variables';
-@import 'bootswatch/_variables.scss';
-
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/reboot';
-@import '~bootstrap/scss/transitions';
 @import '~bootstrap/scss/utilities';
 
-@import '~bootstrap/scss/buttons';
-@import '~bootstrap/scss/card';
-@import '~bootstrap/scss/forms';
-@import '~bootstrap/scss/list-group';
-@import '~bootstrap/scss/input-group';
-@import '~bootstrap/scss/nav';
-@import '~bootstrap/scss/navbar';
-@import '~bootstrap/scss/tables';
-@import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/type';
-@import '~bootstrap/scss/badge';
-@import '~bootstrap/scss/modal';
-@import '~bootstrap/scss/close';
-@import '~bootstrap/scss/alert';
-@import '~bootstrap/scss/dropdown';
-@import '~bootstrap/scss/button-group';
-
-@import 'bootswatch/theme.scss';
-
-@import '_profile.scss';
-
-html, body, #root {
-    height: 100%;
-}
-
-// REACT TABLES
-.rt-th {
-    font-size: $font-size-base;
-    text-transform: uppercase;
-    background-color: $gray-900;
-    color: $white;
-}
-
-/*------------------------------------*\
-   COMMON Styles
-\*------------------------------------*/
-
-.field-required:after {
-    content: "*";
-    color: #f00;
-}
-
-main.container {
-    padding: 80px 15px;
-}
-
-h4.badge-info {
-    line-height: 1rem;
-}
-
-.badge-secondary-gray {
-    color: #1a1a1a;
-    background-color: #eee;
-}
-
-.badge-secondary-gray[href]:hover, .badge-secondary-gray[href]:focus {
-    color: #1a1a1a;
-    text-decoration: none;
-    background-color: #e6e5e5;
-}
-
-.badge-primary a {
-    color: #fff;
+html,
+body,
+#root {
+  height: 100%;
 }

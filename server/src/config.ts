@@ -5,6 +5,12 @@ export interface IConfig {
     github_client_secret: string;
     successRedirect: string;
   };
+  aws: {
+    secretAccessKey: string;
+    accessKeyId: string;
+    certificateGenerationUrl: string;
+    certificateGenerationApiKey: string;
+  };
   dev: {
     username: string;
   };
@@ -66,6 +72,12 @@ export const config: IConfig = {
     username: process.env.RSSHCOOL_API_PG_USERNAME || '',
     password: process.env.RSSHCOOL_API_PG_PASSWORD || '',
     database: process.env.RSSHCOOL_API_PG_DATABASE || 'rs_school',
+  },
+  aws: {
+    secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',
+    accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
+    certificateGenerationUrl: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_URL || '',
+    certificateGenerationApiKey: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_API_KEY || '',
   },
   integrations: {
     heroes: {

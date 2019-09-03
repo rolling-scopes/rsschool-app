@@ -26,13 +26,19 @@ export class Course {
   @Column({ nullable: true })
   descriptionUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   year: number;
 
-  @Column()
+  @Column({ type: 'timestamptz', nullable: true })
+  startDate: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  endDate: Date;
+
+  @Column({ nullable: true })
   primarySkillId: string;
 
-  @Column()
+  @Column({ nullable: true })
   primarySkillName: string;
 
   @Column({ nullable: true })

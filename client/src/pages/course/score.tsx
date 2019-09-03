@@ -1,20 +1,14 @@
-import Link from 'next/link';
 import * as React from 'react';
-import ReactTable, { RowInfo } from 'react-table';
-import { Alert, Button } from 'reactstrap';
-import { Header } from 'components/Header';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { Table, Typography, Button } from 'antd';
+import { Header, withSession, LoadingScreen, GithubAvatar } from 'components';
 import withCourseData from 'components/withCourseData';
-import { Course, CourseTask, CourseService, StudentScore } from 'services/course';
-import withSession, { Session } from 'components/withSession';
+import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
+import { CourseTask, CourseService, StudentScore } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
+import { CoursePageProps } from 'services/models';
+import css from 'styled-jsx/css';
 
-import '../../index.scss';
-
-type Props = {
-  session: Session;
-  course: Course;
-};
+const { Text } = Typography;
 
 type State = {
   students: StudentScore[];
@@ -22,21 +16,22 @@ type State = {
   courseTasks: CourseTask[];
 };
 
-class ScorePage extends React.Component<Props, State> {
+class ScorePage extends React.Component<CoursePageProps, State> {
   state: State = {
     isLoading: false,
     students: [],
     courseTasks: [],
   };
 
-  courseService = new CourseService();
+  private courseService = new CourseService();
 
   async componentDidMount() {
     this.setState({ isLoading: true });
 
+    const courseId = this.props.course.id;
     const [courseScore, courseTasks] = await Promise.all([
-      this.courseService.getCourseScore(this.props.course.id),
-      this.courseService.getCourseTasks(this.props.course.id),
+      this.courseService.getCourseScore(courseId),
+      this.courseService.getCourseTasks(courseId),
     ]);
 
     const sortedTasks = courseTasks
@@ -46,10 +41,102 @@ class ScorePage extends React.Component<Props, State> {
     this.setState({ students: courseScore, courseTasks: sortedTasks, isLoading: false });
   }
 
-  getColumns() {
+  render() {
+    const { isAdmin, isHirer } = this.props.session;
+    const csvEnabled = isAdmin || isHirer;
+    return (
+      <>
+        <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
+        <LoadingScreen show={this.state.isLoading}>
+          <div className="d-flex justify-content-between align-items-center m-2">
+            <Text mark>Score is refreshed every 5 minutes</Text>
+
+            {csvEnabled && (
+              <Button
+                icon="file-excel"
+                onClick={() => (window.location.href = `/api/course/${this.props.course.id}/score/csv`)}
+              >
+                Export CSV
+              </Button>
+            )}
+          </div>
+          <Table<StudentScore>
+            className="m-3"
+            bordered
+            scroll={{ x: 2000 }}
+            style={{ overflowY: 'scroll' }}
+            pagination={{ pageSize: 100 }}
+            size="small"
+            rowKey="githubId"
+            rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
+            dataSource={this.state.students}
+            columns={[
+              {
+                title: '#',
+                dataIndex: 'rank',
+                key: 'rank',
+                width: 50,
+              },
+              {
+                title: 'Github',
+                dataIndex: 'githubId',
+                key: 'githubId',
+                sorter: stringSorter('githubId'),
+                width: 100,
+                render: (value: string) => (
+                  <div className="d-flex flex-row">
+                    <GithubAvatar githubId={value} size={24} />
+                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
+                  </div>
+                ),
+                ...getColumnSearchProps('githubId'),
+              },
+              {
+                title: 'Name',
+                dataIndex: 'lastName',
+                key: 'lastName',
+                width: 150,
+                sorter: stringSorter('firstName'),
+                render: (_: any, record: StudentScore) => `${record.firstName} ${record.lastName}`,
+                ...getColumnSearchProps('lastName'),
+              },
+              {
+                title: 'Mentor',
+                dataIndex: 'mentor.githubId',
+                key: 'mentor.githubId',
+                width: 100,
+                render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
+                ...getColumnSearchProps('mentor.githubId'),
+              },
+              {
+                title: 'Location',
+                dataIndex: 'locationName',
+                key: 'locationName',
+                width: 100,
+                sorter: stringSorter('locationName'),
+              },
+              {
+                title: 'Total',
+                dataIndex: 'totalScore',
+                key: 'totalScore',
+                width: 100,
+                sorter: numberSorter('totalScore'),
+                render: value => <Text strong>{value}</Text>,
+              },
+              ...this.getColumns(),
+            ]}
+          />
+        </LoadingScreen>
+        <style jsx>{styles}</style>
+      </>
+    );
+  }
+
+  private getColumns() {
     const columns = this.state.courseTasks.map(task => ({
-      id: task.courseTaskId.toString(),
-      Header: () => {
+      dataIndex: task.id.toString(),
+      key: task.id.toString(),
+      title: () => {
         return task.descriptionUrl ? (
           <a className="table-header-link" href={task.descriptionUrl}>
             {task.name}
@@ -58,123 +145,21 @@ class ScorePage extends React.Component<Props, State> {
           <div>{task.name}</div>
         );
       },
+      width: 75,
       className: 'align-right',
-      sortMethod: this.numberSort,
-      accessor: (d: StudentScore) => {
+      render: (_: any, d: StudentScore) => {
         const currentTask = d.taskResults.find((taskResult: any) => taskResult.courseTaskId === task.courseTaskId);
         return currentTask ? <div>{currentTask.score}</div> : 0;
       },
     }));
     return columns;
   }
-
-  stringFilter = (filter: any, row: any) => (row[filter.id] || '').toLowerCase().startsWith(filter.value.toLowerCase());
-
-  numberSort = (a: number, b: number) => b - a;
-
-  render() {
-    const { isAdmin, isHirer } = this.props.session;
-    const csvEnabled = isAdmin || isHirer;
-    return (
-      <LoadingScreen show={this.state.isLoading}>
-        <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
-
-        <div className="d-flex justify-content-between mr-1 mb-2">
-          <Alert color="warning" className="mb-0">
-            Score is refreshed every 5 minutes
-          </Alert>
-          {csvEnabled && (
-            <Button
-              size="sm"
-              color="info"
-              onClick={() => (window.location.href = `/api/course/${this.props.course.id}/score/csv`)}
-            >
-              Export CSV
-            </Button>
-          )}
-        </div>
-        <ReactTable
-          defaultSorted={[{ id: 'totalScore', desc: false }]}
-          defaultPageSize={100}
-          className="-striped"
-          getTrProps={(_: any, rowInfo?: RowInfo) => {
-            if (!rowInfo || !rowInfo.original) {
-              return {};
-            }
-            return { className: !(rowInfo.original as StudentScore).isActive ? 'rt-expelled' : '' };
-          }}
-          data={this.state.students}
-          columns={[
-            {
-              Header: '#',
-              accessor: 'rank',
-              maxWidth: 50,
-              filterable: false,
-            },
-            {
-              Header: 'Github Id',
-              accessor: 'githubId',
-              minWidth: 160,
-              maxWidth: 200,
-              filterable: true,
-              Cell: (props: any) => (
-                <>
-                  <img src={`https://github.com/${props.value}.png`} className="cell-avatar" height={24} width={24} />
-                  <Link href={{ pathname: '/profile', query: { githubId: props.value } }}>
-                    <a>{props.value}</a>
-                  </Link>
-                </>
-              ),
-              filterMethod: this.stringFilter,
-            },
-            {
-              Header: 'First Name',
-              accessor: 'firstName',
-              maxWidth: 160,
-              filterable: true,
-              filterMethod: this.stringFilter,
-            },
-            {
-              Header: 'Last Name',
-              accessor: 'lastName',
-              maxWidth: 160,
-              filterable: true,
-              filterMethod: this.stringFilter,
-            },
-            {
-              Header: 'Location',
-              accessor: 'locationName',
-              maxWidth: 120,
-              filterable: true,
-              filterMethod: this.stringFilter,
-            },
-            {
-              Header: 'Mentor Github Id',
-              accessor: 'mentor.githubId',
-              maxWidth: 160,
-              filterable: true,
-              Cell: (props: any) => (
-                <Link href={{ pathname: '/profile', query: { githubId: props.value } }}>
-                  <a>{props.value}</a>
-                </Link>
-              ),
-              filterMethod: this.stringFilter,
-            },
-            {
-              Header: 'Total',
-              accessor: 'totalScore',
-              maxWidth: 80,
-              filterable: false,
-              className: 'align-right',
-              sortMethod: this.numberSort,
-              Cell: (props: any) => <span className="td-selected">{props.value}</span>,
-            },
-            ...this.getColumns(),
-          ]}
-        />
-      </LoadingScreen>
-    );
-  }
 }
+
+const styles = css`
+  :global(.rs-table-row-disabled) {
+    opacity: 0.25;
+  }
+`;
 
 export default withCourseData(withSession(ScorePage));

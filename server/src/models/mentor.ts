@@ -28,7 +28,10 @@ export class Mentor {
   courseId: number;
 
   @ManyToOne(_ => User)
-  user: User | number;
+  user: User;
+
+  @Column()
+  userId: number;
 
   @OneToMany(_ => Student, student => student.mentor, { nullable: true })
   students: Student[] | null;

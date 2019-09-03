@@ -1,29 +1,18 @@
-import * as React from 'react';
-import { Field, Form, SubsetFormApi } from 'react-final-form';
-import { Alert, Button, FormGroup, Input, Label } from 'reactstrap';
-
-import { requiredValidator, taskGithubPrValidator } from 'components/Forms';
-import { StudentSelect, TextArea } from 'components/Forms';
-import { Header } from 'components/Header';
-import { LoadingScreen } from 'components/LoadingScreen';
-import { ValidationError } from 'components/ValidationError';
+import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
+import { Header, PersonSelect, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { Session } from 'components/withSession';
-import { Course, CourseService, CourseTask, StudentBasic, AssignedStudent } from 'services/course';
+import * as React from 'react';
+import { AssignedStudent, CourseService, CourseTask, StudentBasic } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
+import { CoursePageProps } from 'services/models';
 
-import '../../../index.scss';
-
-type Props = {
-  session: Session;
-  course: Course;
-};
+type Props = CoursePageProps & FormComponentProps;
 
 type State = {
   students: StudentBasic[];
   courseTasks: CourseTask[];
   isLoading: boolean;
-  submitted: boolean;
   isPowerMentor: boolean;
 };
 
@@ -33,7 +22,6 @@ class TaskScorePage extends React.Component<Props, State> {
     isPowerMentor: false,
     students: [],
     courseTasks: [],
-    submitted: false,
   };
 
   allStudents: {
@@ -54,6 +42,7 @@ class TaskScorePage extends React.Component<Props, State> {
           assignedStudents: [],
         }))
       : this.courseService.getAllMentorStudents(courseId);
+
     const [allStudents, courseTasks] = await Promise.all([students, this.courseService.getCourseTasks(courseId)]);
     this.allStudents = allStudents;
 
@@ -64,7 +53,60 @@ class TaskScorePage extends React.Component<Props, State> {
     this.setState({ isPowerMentor, courseTasks: filteredCourseTasks });
   }
 
-  onChangeTask = async (value: any) => {
+  render() {
+    const { getFieldDecorator: field, getFieldValue } = this.props.form;
+    return (
+      <>
+        <Header title="Check Task" courseName={this.props.course.name} username={this.props.session.githubId} />
+        <Col className="m-2" sm={12}>
+          <Form onSubmit={this.handleSubmit} layout="vertical">
+            <Form.Item label="Task">
+              {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
+                <Select size="large" placeholder="Select task" onChange={this.handleTaskChange}>
+                  {this.state.courseTasks.map(task => (
+                    <Select.Option key={task.id} value={task.id}>
+                      {task.name}
+                    </Select.Option>
+                  ))}
+                </Select>,
+              )}
+            </Form.Item>
+            <Form.Item label="Student">
+              {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
+                <PersonSelect data={this.state.students} disabled={!getFieldValue('courseTaskId')} />,
+              )}
+            </Form.Item>
+            <Form.Item label="Github Pull Request URL">
+              {field('githubPrUrl', {
+                rules: [
+                  {
+                    message: 'Please enter a valid Github Pull Request URL',
+                    pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
+                  },
+                ],
+              })(<Input size="large" />)}
+            </Form.Item>
+            <Form.Item label="Score">
+              {field('score', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please enter task score',
+                  },
+                ],
+              })(<InputNumber size="large" step={1} />)}
+            </Form.Item>
+            <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
+            <Button size="large" type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form>
+        </Col>
+      </>
+    );
+  }
+
+  private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
     const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
     if (courseTask == null || this.allStudents == null) {
@@ -82,104 +124,30 @@ class TaskScorePage extends React.Component<Props, State> {
       });
       return;
     }
-    this.setState({
-      students: this.allStudents.students.filter(student => student.isActive),
+    this.setState({ students: this.allStudents.students.filter(student => student.isActive) });
+  };
+
+  private handleSubmit = async (e: any) => {
+    e.preventDefault();
+    this.props.form.validateFields(async (err: any, values: any) => {
+      if (err) {
+        return;
+      }
+      try {
+        this.setState({ isLoading: true });
+        const courseId = this.props.course.id;
+        const { studentId, ...data } = values;
+        await this.courseService.postStudentScore(courseId, studentId, data);
+
+        this.setState({ isLoading: false });
+        message.success('Score has been submitted.');
+        this.props.form.resetFields();
+      } catch (e) {
+        this.setState({ isLoading: false });
+        message.error('An error occured. Please try later.');
+      }
     });
   };
-
-  handleSubmit = async (values: any, formApi: SubsetFormApi) => {
-    this.setState({ isLoading: true });
-    try {
-      const courseId = this.props.course.id;
-      const { studentId, ...data } = values;
-      this.courseService.postStudentScore(courseId, studentId, data);
-
-      formApi.reset();
-      this.setState({ submitted: true, isLoading: false });
-    } catch (e) {
-      this.setState({ submitted: false, isLoading: false });
-    }
-  };
-
-  render() {
-    return (
-      <>
-        <Header title="Check Task" courseName={this.props.course.name} username={this.props.session.githubId} />
-        <div className="m-3">
-          {this.state.submitted && <Alert color="info">Score has been submitted</Alert>}
-
-          <Form
-            onSubmit={this.handleSubmit}
-            render={({ handleSubmit }) => (
-              <LoadingScreen show={this.state.isLoading}>
-                <form onSubmit={handleSubmit}>
-                  <FormGroup className="col-md-6">
-                    <Field name="courseTaskId">
-                      {({ input, meta }) => (
-                        <>
-                          <Label>Task</Label>
-                          <Input
-                            {...input}
-                            name="tasks"
-                            type="select"
-                            onChange={e => {
-                              input.onChange(e);
-                              this.onChangeTask(e.target.value);
-                            }}
-                          >
-                            <option value="">(Empty)</option>
-                            {this.state.courseTasks.map((task, i) => (
-                              <option value={task.courseTaskId} key={i}>
-                                {task.name}
-                              </option>
-                            ))}
-                          </Input>
-                          <ValidationError meta={meta} />
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <StudentSelect name="studentId" data={this.state.students} />
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <Field name="githubPrUrl" validate={taskGithubPrValidator(this.state.courseTasks)}>
-                      {({ input, meta }) => (
-                        <>
-                          <Label>Github PR</Label>
-                          <Input {...input} placeholder="https://github.com/...." name="github-pr" type="text" />
-                          <ValidationError meta={meta} />{' '}
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <Field name="score" validate={requiredValidator}>
-                      {({ input, meta }) => (
-                        <>
-                          <Label>Score</Label>
-                          <Input {...input} name="score" type="number" />
-                          <ValidationError meta={meta} />{' '}
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
-                  <FormGroup className="col-md-6">
-                    <TextArea field="comment" label="Comment" />
-                  </FormGroup>
-                  <div className="form-group col-md-6 text-left">
-                    <Button type="submit" color="success">
-                      Submit
-                    </Button>
-                  </div>
-                </form>
-              </LoadingScreen>
-            )}
-          />
-        </div>
-      </>
-    );
-  }
 }
 
-export default withCourseData(withSession(TaskScorePage, 'mentor'));
+export default withCourseData(withSession(Form.create()(TaskScorePage), 'mentor'));

@@ -34,7 +34,7 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
 
     const user: User = {
       githubId: id,
-      contactsEmail: email ? email.value : undefined,
+      primaryEmail: email ? email.value : undefined,
       firstName: profile.name ? profile.name.givenName : '',
       lastName: profile.name ? profile.name.familyName : '',
       educationHistory: [],

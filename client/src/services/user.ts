@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export interface User {
+export interface UserBasic {
   firstName: string;
   lastName: string;
   githubId: string;
@@ -8,11 +8,11 @@ export interface User {
 }
 
 type SearchResponse = {
-  data: User[];
+  data: UserBasic[];
 };
 
 export class UserService {
-  async search(query: string | null) {
+  async searchUser(query: string | null) {
     try {
       if (!query) {
         return [];
@@ -30,4 +30,94 @@ export class UserService {
       comment: data.comment,
     });
   }
+
+  async getProfile(githubId?: string) {
+    const response = await axios.get<{ data: ProfileResponse }>(`/api/profile${githubId ? '' : '/me'}`, {
+      params: { githubId },
+    });
+    return response.data.data;
+  }
+
+  async updateUser(data: Partial<UserFull>) {
+    const response = await axios.post<{ data: UserFull }>(`/api/profile/me`, data);
+    return response.data.data;
+  }
+}
+
+export type ResponseStudent = {
+  id: number;
+  totalScore: number;
+  certificatePublicId: string;
+  completed: boolean;
+  interviews: {
+    score: number;
+    comment: string;
+    formAnswers: {
+      questionText: string;
+      answer: string;
+    }[];
+    courseTask: {
+      id: number;
+      name: string;
+      descriptionUrl: string;
+    };
+  }[];
+  taskResults: {
+    score: number;
+    githubPrUrl: string;
+    comment: string;
+    courseTask: {
+      id: number;
+      name: string;
+      descriptionUrl: string;
+    };
+  }[];
+  mentor: {
+    id: number;
+    githubId: string;
+    lastName: string;
+    firstName: string;
+  } | null;
+};
+
+export type ResponseMentor = {
+  id: number;
+  students: {
+    id: number;
+    userId: number;
+    githubId: string;
+    lastName: string;
+    firstName: string;
+  }[];
+};
+
+export type ResponseCourse = {
+  id: number;
+  name: string;
+};
+
+export interface UserFull extends UserBasic {
+  externalAccounts: any[];
+  englishLevel: string;
+  readyFullTime: string;
+  educationHistory: any[];
+  employmentHistory: any[];
+  firstNameNative: string;
+  lastNameNative: string;
+  contactsTelegram: string;
+  contactsSkype: string;
+  contactsEmail: string;
+  primaryEmail: string;
+  contactsEpamEmail: string;
+  contactsPhone: string;
+  contactsNotes: string;
+  locationId: number;
+  locationName: string;
+  aboutMyself: string;
+}
+
+export interface ProfileResponse {
+  user: UserFull;
+  students: (ResponseStudent & { course: ResponseCourse })[];
+  mentors: (ResponseMentor & { course: ResponseCourse })[];
 }

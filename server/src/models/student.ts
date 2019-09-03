@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
 import { Mentor } from './mentor';
 import { Stage } from './stage';
+import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
@@ -27,13 +29,16 @@ export class Student {
   updatedDate: number;
 
   @ManyToOne(_ => Course, (course: Course) => course.students, { nullable: true })
-  course: Course | number;
+  course: Course;
 
   @Column({ nullable: true })
   courseId: number;
 
   @ManyToOne(_ => User)
-  user: User | number;
+  user: User;
+
+  @Column()
+  userId: number;
 
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
   mentor: Mentor;
@@ -96,4 +101,7 @@ export class Student {
 
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date;
+
+  @OneToOne(() => Certificate, certificate => certificate.student)
+  certificate: Certificate;
 }

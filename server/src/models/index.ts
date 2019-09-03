@@ -14,8 +14,9 @@ import { CourseManager } from './courseManager';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
 import { PrivateFeedback } from './privateFeedback';
-import { Lecture } from './lecture';
-import { CourseLecture } from './courseLecture';
+import { Event } from './lecture';
+import { CourseEvent } from './courseLecture';
+import { Certificate } from './certificate';
 
 export * from './session';
 
@@ -36,8 +37,9 @@ export const models = [
   StudentFeedback,
   CourseManager,
   PrivateFeedback,
-  CourseLecture,
-  Lecture,
+  CourseEvent,
+  Event,
+  Certificate,
 ];
 
 export {
@@ -58,6 +60,8 @@ export {
   ExternalAccount,
   CourseManager,
   PrivateFeedback,
+  Certificate,
+  Event,
 };
 
 export interface IApiResponse<T> {

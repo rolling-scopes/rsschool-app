@@ -9,3 +9,5 @@ server/dist
 server/dist
 server/node_modules
 serverless/**/node_modules
+serverless/**/.serverless
+serverless/**/.build

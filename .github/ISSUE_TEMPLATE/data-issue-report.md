@@ -2,7 +2,7 @@
 name: Data issue report
 about: Create a report to fix data
 title: ''
-labels: ''
+labels: data issue
 assignees: apalchys
 
 ---

@@ -5,7 +5,8 @@ import { Session } from '../components/withSession';
 const { serverRuntimeConfig } = getConfig();
 
 export interface CourseTask {
-  courseTaskId: number;
+  id: number;
+  courseTaskId?: number;
   taskId: number;
   name: string;
   maxScore: number | null;
@@ -29,19 +30,17 @@ export interface CreateCourseTask {
   stageId: number;
 }
 
-export interface Stage {
-  id: number;
-  createdDate: string;
-  updatedDate: string;
-  name: string;
-}
-
 export interface Course {
   id: number;
   name: string;
   alias: string;
   completed: boolean;
+  description: string;
+  endDate: string;
   planned: boolean;
+  primarySkillId: string;
+  primarySkillName: string;
+  startDate: string;
 }
 
 export interface MentorWithContacts {
@@ -53,9 +52,19 @@ export interface MentorWithContacts {
 export class CourseService {
   private host = serverRuntimeConfig.rsHost || '';
 
+  async updateCourse(id: number, data: Partial<Course>) {
+    const result = await axios.put<{ data: Course }>(`${this.host}/api/course/${id}`, data);
+    return result.data.data;
+  }
+
+  async createCourse(data: Partial<Course>) {
+    const result = await axios.post<{ data: Course }>(`${this.host}/api/course/`, data);
+    return result.data.data;
+  }
+
   async getCourses() {
     const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`);
-    return result.data.data;
+    return result.data.data.sort((a, b) => b.id - a.id);
   }
 
   async getCourseTasks(courseId: number) {
@@ -73,18 +82,16 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getStages(courseId: number) {
-    const result = await axios.get<{ data: Stage[] }>(`${this.host}/api/course/${courseId}/stages`);
-    return result.data.data;
-  }
-
   async createCourseTask(courseId: number, data: CreateCourseTask) {
-    const result = await axios.post(`${this.host}/api/course/${courseId}/task`, data);
+    const result = await axios.post<{ data: CourseTask }>(`${this.host}/api/course/${courseId}/task`, data);
     return result.data.data;
   }
 
   async updateCourseTask(courseId: number, courseTaskId: number, data: any) {
-    const result = await axios.put(`${this.host}/api/course/${courseId}/task/${courseTaskId}`, data);
+    const result = await axios.put<{ data: CourseTask }>(
+      `${this.host}/api/course/${courseId}/task/${courseTaskId}`,
+      data,
+    );
     return result.data.data;
   }
 
@@ -124,6 +131,18 @@ export class CourseService {
   async getMentorStudents(courseId: number) {
     const result = await axios.get<{ data: { students: StudentBasic[] } }>(`/api/course/${courseId}/mentor/students`);
     return result.data.data.students;
+  }
+
+  async postPublicFeedback(courseId: number, data: { toUserId: number; badgeId?: string; comment: string }) {
+    const result = await axios.post<{ data: { heroesUrl: string } }>(`/api/course/${courseId}/feedback`, data);
+    return result.data.data;
+  }
+
+  async expelStudent(courseId: number, studentId: number, comment: string = '') {
+    await axios.post(`/api/course/${courseId}/expulsion`, {
+      studentId,
+      comment,
+    });
   }
 
   isPowerUser(courseId: number, session: Session) {

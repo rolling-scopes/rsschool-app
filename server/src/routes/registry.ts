@@ -1,12 +1,12 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
-import { User, Course, Registry } from './../models';
+import { User, Student, Course, Registry, Mentor } from './../models';
 import { getManager, getRepository } from 'typeorm';
 import { ILogger } from './../logger';
 import { adminGuard } from './guards';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
-import { IUserSession } from '../models/session';
+import { IUserSession } from './../models/session';
 
 interface LoggingError {
   logger?: ILogger;
@@ -25,11 +25,11 @@ const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
 
-  router.get('/:id', createGetRoute(Registry, logger));
+  router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
-    const { githubId } = ctx.state!.user as IUserSession;
-    const { courseId, comment, type } = ctx.request.body;
+    const { githubId, id: userId } = ctx.state!.user as IUserSession;
+    const { courseId, comment, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {
       const errorMsg = 'Wrong payload: githubId courseId & type are required';
@@ -38,19 +38,52 @@ export function registryRouter(logger?: ILogger) {
       return;
     }
 
+    if (type === 'mentor' && (isNaN(maxStudentsLimit) || maxStudentsLimit < 2)) {
+      const errorMsg = 'Incorrect maxStudentsLimit';
+      handleError({ logger, errorMsg, ctx });
+      return;
+    }
+
     try {
-      const [user, course] = await Promise.all([
-        getRepository(User).findOne({ where: { githubId } }),
-        getManager().findOne(Course, courseId),
-      ]);
-      const registryPayload = {
+      const [user, course, existingRegistry] = (await Promise.all([
+        getRepository(User).findOne({ where: { githubId }, relations: ['mentors', 'students'] }),
+        getRepository(Course).findOne(Number(courseId)),
+        getRepository(Registry).findOne({ where: { userId, courseId: Number(courseId) } }),
+      ])) as [User, Course, Registry];
+
+      if (existingRegistry && existingRegistry.userId === userId) {
+        setResponse(ctx, OK, { existingRegistry });
+        return;
+      }
+
+      let registryPayload: Partial<Registry> = {
         comment,
         type,
         user,
         course,
+        status: 'pending',
       };
-      const registry = await getManager().save(Registry, registryPayload);
 
+      if (type === 'student') {
+        registryPayload.status = 'approved';
+        if ((user.students || []).every(s => s.courseId !== courseId)) {
+          await getRepository(Student).save({ userId: user!.id, courseId: course!.id });
+        }
+      } else if (type === 'mentor') {
+        registryPayload = {
+          ...registryPayload,
+          attributes: {
+            maxStudentsLimit,
+            experienceInYears,
+          },
+        };
+        if ((user!.mentors || [])!.length > 0) {
+          registryPayload.status = 'approved';
+          await getRepository(Mentor).save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
+        }
+      }
+
+      const registry = await getRepository(Registry).save(registryPayload);
       setResponse(ctx, OK, { registry });
     } catch (e) {
       handleError({ logger, errorMsg: e.message, ctx });

@@ -30,7 +30,8 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "quotemark": false,
-    "semicolon": false
+    "semicolon": false,
+    "max-classes-per-file": false
   },
   "rulesDirectory": []
 }

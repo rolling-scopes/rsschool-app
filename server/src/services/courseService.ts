@@ -229,7 +229,7 @@ export async function getActiveStudents(courseId: number) {
     .innerJoin('student.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('student.course', 'course')
-    .where('course.id = :courseId AND student."isExpelled" = false AND student."isFailed" = false', { courseId })
+    .where('course.id = :courseId AND student."isExpelled" = false', { courseId })
     .getMany();
 
   const students = records.map(convertToStudentBasic);
