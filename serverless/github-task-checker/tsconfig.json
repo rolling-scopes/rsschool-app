@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
-    "lib": ["es2017"],
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "allowJs": true,
+    "target": "es5",
+    "outDir": ".build",
     "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "sourceMap": true,
-    "target": "es2017",
-    "outDir": "lib"
+    "esModuleInterop": true,
+    "lib": [
+      "es2015"
+    ],
+    "rootDir": "./"
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
