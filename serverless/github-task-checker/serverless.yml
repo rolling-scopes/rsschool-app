@@ -5,16 +5,58 @@ service:
 
 # Add the serverless-webpack plugin
 plugins:
-  - serverless-webpack
+  - serverless-plugin-typescript
+
+package:
+  individually: true
 
 provider:
   name: aws
   runtime: nodejs10.x
 
+resources:
+  Resources:
+    JsTasksQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: tasks-js
+        VisibilityTimeout: 61
+    # HtmlTasksQueue:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: tasks-html
+    #     VisibilityTimeout: 61
+
 functions:
-  hello:
-    handler: handler.hello
+  # CheckHtmlTask:
+  #   handler: handler.checkHtmlTask
+  #   events:
+  #     - sqs:
+  #         batchSize: 1
+  #         arn:
+  #           Fn::GetAtt: [HtmlTasksQueue, Arn]
+
+  CheckJsTask:
+    handler: handler.checkJsTask
+    events:
+      - sqs:
+          batchSize: 1
+          arn:
+            Fn::GetAtt: [JsTasksQueue, Arn]
+
+  SubmitTask:
+    handler: handler.submit
+    package:
+      exclude:
+        - node_modules/**
+        - '!node_modules/lodash/**'
+    environment:
+      JSTASK_SQS_URL:
+        Ref: JsTasksQueue
+      # HTMLTASK_SQS_URL:
+      #   Ref: HtmlTasksQueue
     events:
       - http:
-          method: get
-          path: hello
+          method: post
+          path: task
+          private: true
