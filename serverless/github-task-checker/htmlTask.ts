@@ -97,9 +97,3 @@ module.exports.runTests = async (pageUrl:string, spec:string):Promise<TestResult
   return formatResults(pageUrl, report);
 };
 
-module.exports.runTests('https://k0smm0s.github.io/rsschool-2019Q1-cv/cv', "cvTests").then(r =>
-  console.log(r),
-);
-module.exports.runTests('https://slnchn.github.io/rsschool-2019Q1-cv/cv', "cvTests").then(r =>
-  console.log(r),
-);
