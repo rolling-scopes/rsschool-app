@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const tests = require('./tests.js').tests;
+const tests = require('./htmlTaskTests').tests;
 
 declare const mocha: any;
 declare const prepareSpec: any;
@@ -46,7 +46,7 @@ const formatResults = (pageUrl: string, results: string): TestResult => {
   return result;
 };
 
-const closeBrowserByException = async (browser, pageUrl, errorNumber) => {
+const closeBrowserByException = async (browser, pageUrl, errorNumber):Promise<TestError> => {
   await browser.close();
   let result: TestError = {url: pageUrl};
   switch (errorNumber) {
@@ -61,7 +61,7 @@ const closeBrowserByException = async (browser, pageUrl, errorNumber) => {
   return result;
 };
 
-export const runTests = async (pageUrl, spec) => {
+module.exports.runTests = async (pageUrl:string, spec:string):Promise<TestResult|TestError> => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -79,7 +79,7 @@ export const runTests = async (pageUrl, spec) => {
     .addScriptTag({url: 'https://unpkg.com/mocha@4.0.1/mocha.js'})
     .catch(e => (error404 = true));
   await page
-    .addScriptTag({content: `;var prepareSpec = ${spec};`})
+    .addScriptTag({content: `;var prepareSpec = ${tests[spec]};`})
     .catch(e => (error404 = true));
   if (error404) return closeBrowserByException(browser, pageUrl, 404);
 
@@ -96,3 +96,10 @@ export const runTests = async (pageUrl, spec) => {
   await browser.close();
   return formatResults(pageUrl, report);
 };
+
+module.exports.runTests('https://k0smm0s.github.io/rsschool-2019Q1-cv/cv', "cvTests").then(r =>
+  console.log(r),
+);
+module.exports.runTests('https://slnchn.github.io/rsschool-2019Q1-cv/cv', "cvTests").then(r =>
+  console.log(r),
+);
