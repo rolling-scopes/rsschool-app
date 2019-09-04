@@ -26,6 +26,7 @@ export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
 
   router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
+<<<<<<< HEAD
     const { type, courseId } = ctx.query;
     const registries = await getRepository(Registry).find({
       skip: 0,
@@ -33,6 +34,13 @@ export function registryRouter(logger?: ILogger) {
       order: { id: 'ASC' },
       relations: ['user', 'course'],
       where: [{ type: type || 'mentor', course: { id: courseId } }],
+=======
+    const {skip, take} = ctx.query;
+    const registries = await getRepository(Registry).find({
+      skip: skip || 0,
+      take: take || 20,
+      order: { id: 'ASC' },
+>>>>>>> bee443219998d961924a02d909424e1ea672e94d
     });
 
     if (registries === undefined) {
@@ -131,21 +139,6 @@ export function registryRouter(logger?: ILogger) {
         }, []),
       ),
     );
-
-    // const registries = await Promise.all(ids.reduce(async (promises: any, id: string) => {
-    //   const registryPayload: any = { ...(await getManager().findOne(Registry, id)), status };
-
-    //   if (status === 'approve') {
-    //     const { userId, course, maxStudentsLimit } = registryPayload;
-    //     promises.push(
-    //       getRepository(Mentor).save({ userId, courseId: course!.id, maxStudentsLimit }),
-    //     )
-    //   }
-
-    //   promises.push(getManager().save(Registry, registryPayload));
-    //   console.log(promises);
-    //   return promises;
-    // }, []));
 
     setResponse(ctx, OK, { registries });
   });
