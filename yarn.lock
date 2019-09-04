@@ -1313,7 +1313,7 @@
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
-"@types/styled-jsx@^2.2.8":
+"@types/styled-jsx@~2.2.8":
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/@types/styled-jsx/-/styled-jsx-2.2.8.tgz#b50d13d8a3c34036282d65194554cf186bab7234"
   integrity sha512-Yjye9VwMdYeXfS71ihueWRSxrruuXTwKCbzue4+5b2rjnQ//AtyM7myZ1BEhNhBQ/nL/RE7bdToUoLln2miKvg==
@@ -1676,10 +1676,10 @@ ansi@^0.3.0, ansi@~0.3.1:
   resolved "https://registry.yarnpkg.com/ansi/-/ansi-0.3.1.tgz#0c42d4fb17160d5a9af1e484bace1c66922c1b21"
   integrity sha1-DELU+xcWDVqa8eSEus4cZpIsGyE=
 
-antd@~3.22.0:
-  version "3.22.0"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.22.0.tgz#07828fddd40db3516e92868b5e4689215c67a197"
-  integrity sha512-6hqsmPmUU9xYWtbNlgudmVYTFHw5hQY2AKP+68CWY6Q4LGtEuUEgl0d/bkRdrjnVsHXsH4ua4+Nic+TfqU8WLw==
+antd@~3.23.1:
+  version "3.23.1"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.23.1.tgz#a251b0cdc2072a91a8c157f8b31de8ad92ce5d18"
+  integrity sha512-+PHcFqApsla7bm8h9FHVuD3CloAAl4FW1J5D7m5ghCC1GWodwQFDgLjAx4lU21TSGCxVhlv1me525dKsYXHQuw==
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.1.1"
@@ -1707,7 +1707,7 @@ antd@~3.22.0:
     rc-dropdown "~2.4.1"
     rc-editor-mention "^1.1.13"
     rc-form "^2.4.5"
-    rc-input-number "~4.4.5"
+    rc-input-number "~4.5.0"
     rc-mentions "~0.4.0"
     rc-menu "~7.4.23"
     rc-notification "~3.3.1"
@@ -7936,10 +7936,10 @@ rc-hammerjs@~0.6.0:
     hammerjs "^2.0.8"
     prop-types "^15.5.9"
 
-rc-input-number@~4.4.5:
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-4.4.5.tgz#81473d2885a6b312e486c4f2ba3f441c1ab88520"
-  integrity sha512-Dt20e8Ylc/N/6oXiPUlwDVdx3fz7W5umUOa4z5pBuWFG7NPlBVXRWkq7+nbnTyaK24UxN67PVpmD3+Omo+QRZQ==
+rc-input-number@~4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-4.5.0.tgz#0e1728101fcec2ee0bce4e20bf84c669895c4fb9"
+  integrity sha512-0igTdXuxVykBB82jafUmhbRVmgtd0FuGSIX4SbrynGNrLDOyze3EUKsZl+LyQ4JMRXLrcuZKJg385880RVLA2w==
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.0"
@@ -7959,7 +7959,7 @@ rc-mentions@~0.4.0:
     rc-util "^4.6.0"
     react-lifecycles-compat "^3.0.4"
 
-rc-menu@^7.3.0, rc-menu@^7.4.22, rc-menu@~7.4.23:
+rc-menu@7.4.23, rc-menu@^7.3.0, rc-menu@^7.4.22, rc-menu@~7.4.23:
   version "7.4.23"
   resolved "https://registry.yarnpkg.com/rc-menu/-/rc-menu-7.4.23.tgz#e07d497864274076299d7d8a84d14fc86b6bd30d"
   integrity sha512-d0pUMN0Zr3GCFxNpas8p7AUTeX8viItUOQXku4AsyX82ZzUz79HgGul2Nk17BIFTtLzqdB7/NT6WVb5PAOOILw==
@@ -9927,6 +9927,11 @@ typescript@^3.5.3, typescript@~3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
+
+typescript@~3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.2.tgz#105b0f1934119dde543ac8eb71af3a91009efe54"
+  integrity sha512-lmQ4L+J6mnu3xweP8+rOrUwzmN+MRAj7TgtJtDaXE5PMyX2kCrklhg3rvOsOIfNeAWMQWO2F1GPc1kMD2vLAfw==
 
 ua-parser-js@^0.7.18:
   version "0.7.20"
