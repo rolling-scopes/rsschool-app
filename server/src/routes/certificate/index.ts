@@ -2,7 +2,7 @@ import * as Router from 'koa-router';
 import * as AWS from 'aws-sdk';
 import { OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { ILogger } from '../../logger';
-import { guard, adminGuard } from '../guards';
+import { adminGuard } from '../guards';
 import { getRepository } from 'typeorm';
 import { Certificate } from '../../models';
 import { config } from '../../config';
@@ -18,7 +18,7 @@ const s3 = new AWS.S3();
 export function certificateRoute(logger: ILogger) {
   const router = new Router({ prefix: '/certificate' });
 
-  router.get('/:id', guard, async (ctx: Router.RouterContext) => {
+  router.get('/:id', async (ctx: Router.RouterContext) => {
     try {
       const certificate = await getRepository(Certificate).findOne({ where: { publicId: ctx.params.id } });
       if (certificate == null) {

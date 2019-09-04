@@ -96,9 +96,6 @@ export class Student {
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
   feedback: StudentFeedback[] | null;
 
-  @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
-  certificates: StudentFeedback[] | null;
-
   @Column({ default: new Date(0), type: 'timestamptz' })
   startDate: Date;
 

@@ -113,7 +113,13 @@ export class User {
   contactsTelegram?: string;
 
   @Column({ nullable: true })
+  contactsNotes?: string;
+
+  @Column({ nullable: true })
   contactsSkype?: string;
+
+  @Column({ nullable: true })
+  aboutMyself?: string;
 
   @Column({
     type: 'json',

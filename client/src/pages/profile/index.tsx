@@ -325,6 +325,7 @@ class ProfilePage extends React.Component<Props, State> {
                 {
                   title: 'Github PR Url',
                   dataIndex: 'githubPrUrl',
+                  render: (value: string) => (value ? <a href={value}>{value}</a> : value),
                 },
               ]}
             />

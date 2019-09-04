@@ -21,7 +21,7 @@ import { Course } from 'services/course';
 import { UserService, UserFull } from 'services/user';
 import { formatMonth, formatMonthFriendly } from 'services/formatter';
 import { Props, TYPES } from './../../configs/registry';
-import { emailPattern, epamEmailPattern, englishNamePattern } from 'services/validators';
+import { emailPattern, epamEmailPattern, phonePattern, englishNamePattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
 import { NoCourses } from 'components/Registry/NoCourses';
 
@@ -31,12 +31,8 @@ type State = {
   initialData: Partial<UserFull>;
 };
 
-const defaultColumnSizes = {
-  xs: 18,
-  sm: 10,
-  md: 8,
-  lg: 6,
-};
+const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
+const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
 class CourseRegistryPage extends React.Component<Props, State> {
@@ -76,9 +72,6 @@ class CourseRegistryPage extends React.Component<Props, State> {
         primaryEmail: model.primaryEmail,
         firstName: model.firstName,
         lastName: model.lastName,
-        firstNameNative: model.firstNameNative,
-        lastNameNative: model.lastNameNative,
-
         contactsEpamEmail: model.contactsEpamEmail,
         educationHistory: [
           {
@@ -95,6 +88,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
             dateTo: dateTo ? formatMonth(dateTo) : null,
           },
         ],
+        contactsTelegram: model.contactsTelegram,
+        contactsSkype: model.contactsSkype,
+        contactsPhone: model.contactsPhone,
       };
 
       try {
@@ -105,7 +101,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
           await axios.post('/api/registry', registryModel);
           this.setState({ submitted: true });
         } else {
-          console.error('Invalid githubId');
+          message.error('Invalid github id');
         }
       } catch (e) {
         message.error('An error occured. Please try later.');
@@ -121,7 +117,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
     if (!courses.length) {
       content = <NoCourses />;
     } else if (this.state.submitted) {
-      content = <Result status="success" title="Your request has been submitted successfully." />;
+      content = <Result status="success" title="Thanks for the registration." />;
     } else {
       const courseId = getFieldValue('courseId');
       const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
@@ -176,21 +172,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
-                <Form.Item label="First Name Native">
-                  {field('firstNameNative')(<Input placeholder="Дмитрий" />)}
-                </Form.Item>
-              </Col>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="Last Name Native ">
-                  {field('lastNameNative')(<Input placeholder="Воробей" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={defaultRowGutter}>
-              <Col {...defaultColumnSizes}>
                 <Form.Item label="Location">
                   {field('location', {
-                    initialValue: { key: initialData.locationId },
+                    initialValue: initialData.locationId ? { key: initialData.locationId } : undefined,
                     rules: [{ required: true, message: 'Please select city or "Other"' }],
                   })(<LocationSelect placeholder="Select city" />)}
                 </Form.Item>
@@ -217,6 +201,34 @@ class CourseRegistryPage extends React.Component<Props, State> {
                   {field('contactsEpamEmail', { rules: [{ pattern: epamEmailPattern }] })(
                     <Input placeholder="first_last@epam.com" />,
                   )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Title level={4}>Contacts</Typography.Title>
+              <Typography.Text type="warning">Your contacts will be shared with your mentor.</Typography.Text>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Telegram">
+                  {field('contactsTelegram', {
+                    initialValue: initialData.contactsTelegram,
+                  })(<Input addonBefore="@" placeholder="durov" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Skype">
+                  {field('contactsSkype', {
+                    initialValue: initialData.contactsSkype,
+                  })(<Input placeholder="johnsmith" />)}
+                </Form.Item>
+              </Col>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="Phone">
+                  {field('contactsPhone', {
+                    initialValue: initialData.contactsPhone,
+                    rules: [{ pattern: phonePattern, message: 'Please enter a valid phone' }],
+                  })(<Input placeholder="+375297775533" />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -254,14 +266,21 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 </Form.Item>
               </Col>
             </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...textColumnSizes}>
+                <Form.Item label="Comments / Feedback / Questions">
+                  {field('comment', {})(<Input.TextArea placeholder="" />)}
+                </Form.Item>
+              </Col>
+            </Row>
             <Row>
               <Typography.Paragraph>
-                I give my consent to the processing of my personal data and sharing it with companies for the purpose of
-                hiring only.
+                I hereby agree to the processing of my personal data contained in the application and sharing it with
+                companies only for employment purposes.
               </Typography.Paragraph>
               <Typography.Paragraph>
-                Я согласен на обработку моих личных данные и даю согласию на предоставление их компаниям только для
-                целей найма.
+                Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
+                только в целях трудоустройства.
               </Typography.Paragraph>
               <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
             </Row>

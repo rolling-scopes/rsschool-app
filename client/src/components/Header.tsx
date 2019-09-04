@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dropdown, Menu, PageHeader } from 'antd';
+import { PageHeader, Button } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 
 type Props = {
@@ -26,24 +26,12 @@ class Header extends React.PureComponent<Props> {
           <PageHeader title={this.props.title} subTitle={this.props.courseName} />
         </div>
         <div>
-          <Dropdown overlay={this.getMenu()}>
-            <div className="d-flex flex-column align-items-center">
-              <GithubAvatar githubId={this.props.username} size={24} />
-              <div>{this.props.username}</div>
-            </div>
-          </Dropdown>
+          <Button href="/profile" type="dashed" size="large">
+            <GithubAvatar githubId={this.props.username} size={24} />
+            <span style={{ marginLeft: '12px' }}>My Profile</span>
+          </Button>
         </div>
       </nav>
-    );
-  }
-
-  getMenu() {
-    return (
-      <Menu>
-        <Menu.Item>
-          <a href="/profile">My Profile</a>
-        </Menu.Item>
-      </Menu>
     );
   }
 }

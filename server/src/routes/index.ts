@@ -18,6 +18,8 @@ import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
 import { certificateRoute } from './certificate';
+import { lectureRoute } from './event';
+import { lecturesRoute } from './events';
 
 import { ILogger } from '../logger';
 
@@ -49,6 +51,8 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, stageRoute(logger));
   applyRouter(router, stagesRoute(logger));
   applyRouter(router, certificateRoute(logger));
+  applyRouter(router, lectureRoute(logger));
+  applyRouter(router, lecturesRoute(logger));
 
   return { publicRouter: router };
 };

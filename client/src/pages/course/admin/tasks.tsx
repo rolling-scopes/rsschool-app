@@ -38,12 +38,10 @@ class CourseTasksPage extends React.Component<Props, State> {
     this.setState({ data, stages, tasks });
   }
 
-  private formRef = React.createRef<any>();
+  private handleModalSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-  private handleModalSubmit = () => {
-    const { form } = this.formRef.current.props;
-
-    form.validateFields(async (err: any, values: any) => {
+    this.props.form.validateFields(async (err: any, values: any) => {
       if (err) {
         return;
       }
@@ -54,6 +52,8 @@ class CourseTasksPage extends React.Component<Props, State> {
         taskId: values.taskId,
         stageId: values.stageId,
         checker: values.checker,
+        scoreWeight: values.scoreWeight,
+        maxScore: values.maxScore,
       };
       const courseTask =
         this.state.modalAction === 'update'

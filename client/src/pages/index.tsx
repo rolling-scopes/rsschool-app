@@ -1,6 +1,6 @@
 import { Button, List, Select, Result } from 'antd';
 
-import { ActivityBanner, Header } from 'components';
+import { ActivityBanner, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
@@ -15,6 +15,7 @@ type Props = {
 type State = {
   dropdownOpen: boolean;
   activeCourseId: number | null;
+  hasRegistryBanner: boolean;
 };
 
 const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
@@ -34,6 +35,11 @@ const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: S
 //   checks.some(check => check(course, role, session));
 
 const routes = [
+  {
+    name: `📜 Registrations`,
+    getLink: (_: Course) => `/admin/registrations`,
+    access: isAdminRole,
+  },
   {
     name: `🔥 Score`,
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
@@ -95,6 +101,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   state: State = {
     dropdownOpen: false,
     activeCourseId: null,
+    hasRegistryBanner: false,
   };
 
   private hasAccessToCourse = (session: Session, course: Course) => {
@@ -135,10 +142,12 @@ class IndexPage extends React.PureComponent<Props, State> {
     if (courses.length === 0) {
       return null;
     }
-    if (this.state.activeCourseId == null) {
+    const savedActiveCourseId = localStorage.getItem('activeCourseId');
+    const activeCourseId = this.state.activeCourseId || Number(savedActiveCourseId);
+    if (!activeCourseId) {
       return courses[0];
     }
-    return courses.find(course => course.id === this.state.activeCourseId);
+    return courses.find(course => course.id === activeCourseId);
   }
 
   private getStatus = (course: Course) => {
@@ -150,6 +159,13 @@ class IndexPage extends React.PureComponent<Props, State> {
     }
     return 'Active';
   };
+
+  componentDidMount() {
+    const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
+    const plannedCourses = (this.props.courses || []).filter(course => course.planned && !course.completed);
+    const hasRegistryBanner = wasMentor && plannedCourses.every(course => this.props.session.roles[course.id] == null);
+    this.setState({ hasRegistryBanner });
+  }
 
   renderNoCourse() {
     const hasPlanned = (this.props.courses || []).some(course => course.planned && !course.completed);
@@ -164,8 +180,14 @@ class IndexPage extends React.PureComponent<Props, State> {
         }
         extra={
           <>
-            <Button type="link">Register as Mentor</Button>
-            {hasPlanned && <Button type="link">Register as Student</Button>}
+            <Button type="primary" href="/registry/mentor">
+              Register as Mentor
+            </Button>
+            {/* {hasPlanned && (
+              <Button href="/registry/student" type="primary">
+                Register as Student
+              </Button>
+            )} */}
           </>
         }
       />
@@ -173,6 +195,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   private handleChange = (courseId: number) => {
+    localStorage.setItem('activeCourseId', courseId as any);
     this.setState({ activeCourseId: courseId });
   };
 
@@ -200,8 +223,16 @@ class IndexPage extends React.PureComponent<Props, State> {
                 <a href="/admin/tasks">Tasks</a>
               </Button>
               <Button type="link">
+                <a href="/admin/events">Events</a>
+              </Button>
+              <Button type="link">
                 <a href="/admin/users">Users</a>
               </Button>
+            </div>
+          )}
+          {this.state.hasRegistryBanner && activeCourse && (
+            <div className="mb-3">
+              <RegistryBanner />
             </div>
           )}
           {activeCourse && courses.length > 1 && (

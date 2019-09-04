@@ -1,8 +1,8 @@
 import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { CourseLecture } from './courseLecture';
+import { CourseEvent } from './courseLecture';
 
 @Entity()
-export class Lecture {
+export class Event {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
@@ -20,6 +20,9 @@ export class Lecture {
   @Column({ nullable: true })
   description: string;
 
-  @OneToMany(_ => CourseLecture, (courseLecture: CourseLecture) => courseLecture.lecture, { nullable: true })
-  courseLectures: CourseLecture[] | null;
+  @Column({ default: 'regular' })
+  type: string;
+
+  @OneToMany(_ => CourseEvent, (courseLecture: CourseEvent) => courseLecture.event, { nullable: true })
+  courseLectures: CourseEvent[] | null;
 }

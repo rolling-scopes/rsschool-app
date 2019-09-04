@@ -13,6 +13,9 @@ export class Registry {
   @ManyToOne(_ => User, (user: User) => user.registries, { nullable: true })
   user: User | number;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(_ => Course, (course: Course) => course.registries, { nullable: true })
   course: Course | number;
 
@@ -25,8 +28,11 @@ export class Registry {
   @Column({ nullable: true })
   comment: string;
 
-  @Column({ nullable: true })
-  studentsAmount: number;
+  @Column({ type: 'json', default: {} })
+  attributes: {
+    maxStudentsLimit: number;
+    experienceInYears: string;
+  };
 
   @CreateDateColumn()
   createdDate: number;
