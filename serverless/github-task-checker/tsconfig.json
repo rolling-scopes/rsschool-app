@@ -3,7 +3,7 @@
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "allowJs": true,
-    "target": "es2019",
+    "target": "es5",
     "outDir": ".build",
     "moduleResolution": "node",
     "esModuleInterop": true,
