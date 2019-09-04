@@ -6,8 +6,8 @@
     "serverless/*"
   ],
   "scripts": {
-    "format": "prettier --write 'server/**/*.{ts,tsx}' 'client/**/*.{ts,tsx,js}' 'serverless/**/*.{ts,tsx,js}'",
-    "start": "concurrently -n server,client 'yarn server:start' 'yarn client:start'",
+    "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
+    "start": "concurrently -n server,client \"yarn server:start\" \"yarn client:start\"",
     "server:build": "yarn workspace server build",
     "server:start": "yarn workspace server start",
     "client:build": "yarn workspace client build",
