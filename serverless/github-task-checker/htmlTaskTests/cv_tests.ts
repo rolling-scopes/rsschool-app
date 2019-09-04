@@ -2,7 +2,7 @@ declare const chai: any;
 declare const describe: any;
 declare const it: any;
 
-module.exports.cvTests = ():void => {
+module.exports.tests = ():void => {
   describe('check if exist specific ids', function () {
     it('should find header with id="name"', function () {
         let element :any = document.querySelector("#name");
