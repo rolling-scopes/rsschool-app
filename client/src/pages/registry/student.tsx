@@ -1,17 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  message,
-  Result,
-  Row,
-  Select,
-  Typography,
-} from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
 import { Header } from 'components/Header';
 import withCourses from 'components/withCourses';
@@ -19,9 +6,9 @@ import withSession from 'components/withSession';
 import * as React from 'react';
 import { Course } from 'services/course';
 import { UserService, UserFull } from 'services/user';
-import { formatMonth, formatMonthFriendly } from 'services/formatter';
+import { formatMonthFriendly } from 'services/formatter';
 import { Props, TYPES } from './../../configs/registry';
-import { emailPattern, epamEmailPattern, phonePattern, englishNamePattern } from 'services/validators';
+import { emailPattern, englishNamePattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
 import { NoCourses } from 'components/Registry/NoCourses';
 
@@ -34,6 +21,12 @@ type State = {
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
+
+const noticeStyle = {
+  lineHeight: '20px',
+  display: 'block',
+  fontStyle: 'italic',
+};
 
 class CourseRegistryPage extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -65,32 +58,12 @@ class CourseRegistryPage extends React.Component<Props, State> {
         courseId,
         comment,
       };
-      const [dateFrom, dateTo] = model.employmentPeriod;
       const userModel = {
         locationId: location.key ? location.key : undefined,
         locationName: !location.key ? model.otherLocationName : location.label,
         primaryEmail: model.primaryEmail,
         firstName: model.firstName,
         lastName: model.lastName,
-        contactsEpamEmail: model.contactsEpamEmail,
-        educationHistory: [
-          {
-            graduationYear: model.graduationYear,
-            faculty: model.faculty,
-            university: model.university,
-          },
-        ],
-        employmentHistory: [
-          {
-            companyName: model.employmentCompanyName,
-            title: model.employmentTitle,
-            dateFrom: dateFrom ? formatMonth(dateFrom) : null,
-            dateTo: dateTo ? formatMonth(dateTo) : null,
-          },
-        ],
-        contactsTelegram: model.contactsTelegram,
-        contactsSkype: model.contactsSkype,
-        contactsPhone: model.contactsPhone,
       };
 
       try {
@@ -151,10 +124,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 <Form.Item label="First Name (in English, as in passport)">
                   {field('firstName', {
                     initialValue: initialData.firstName,
-                    rules: [
-                      { required: true, message: 'First name is required' },
-                      { pattern: englishNamePattern, message: 'First name should be in English' },
-                    ],
+                    rules: [{ pattern: englishNamePattern, message: 'First name should be in English' }],
                   })(<Input placeholder="Dzmitry" />)}
                 </Form.Item>
               </Col>
@@ -162,10 +132,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 <Form.Item label="Last Name (in English, as in passport)">
                   {field('lastName', {
                     initialValue: initialData.lastName,
-                    rules: [
-                      { required: true, message: 'Last name is required' },
-                      { pattern: englishNamePattern, message: 'Last name should be in English' },
-                    ],
+                    rules: [{ pattern: englishNamePattern, message: 'Last name should be in English' }],
                   })(<Input placeholder="Varabei" />)}
                 </Form.Item>
               </Col>
@@ -173,6 +140,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Location">
+                  <span style={noticeStyle}>
+                    We need your location for understanding audience and use it for mentor distribution.
+                  </span>
                   {field('location', {
                     initialValue: initialData.locationId ? { key: initialData.locationId } : undefined,
                     rules: [{ required: true, message: 'Please select city or "Other"' }],
@@ -190,21 +160,15 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Primary Email">
+                  <span style={noticeStyle}>We will use your email only for course purposes. No spam emails.</span>
                   {field('primaryEmail', {
                     initialValue: initialData.primaryEmail,
                     rules: [{ required: true, pattern: emailPattern, message: 'Email is required' }],
                   })(<Input placeholder="user@example.com" />)}
                 </Form.Item>
               </Col>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="EPAM Email">
-                  {field('contactsEpamEmail', { rules: [{ pattern: epamEmailPattern }] })(
-                    <Input placeholder="first_last@epam.com" />,
-                  )}
-                </Form.Item>
-              </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Typography.Title level={4}>Contacts</Typography.Title>
               <Typography.Text type="warning">Your contacts will be shared with your mentor.</Typography.Text>
             </Row>
@@ -231,8 +195,8 @@ class CourseRegistryPage extends React.Component<Props, State> {
                   })(<Input placeholder="+375297775533" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row>
+            </Row> */}
+            {/* <Row>
               <Typography.Title level={4}>Education</Typography.Title>
             </Row>
             <Row gutter={defaultRowGutter}>
@@ -247,8 +211,8 @@ class CourseRegistryPage extends React.Component<Props, State> {
                   {field('graduationYear')(<InputNumber min={1950} max={new Date().getUTCFullYear() + 10} />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row>
+            </Row> */}
+            {/* <Row>
               <Typography.Title level={4}>Work Experience</Typography.Title>
             </Row>
             <Row gutter={defaultRowGutter}>
@@ -260,12 +224,10 @@ class CourseRegistryPage extends React.Component<Props, State> {
               </Col>
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Period">
-                  {field('employmentPeriod', { initialValue: [null, null] })(
-                    <DatePicker.RangePicker mode={['month', 'month']} />,
-                  )}
+                  {field('employmentPeriod')(<DatePicker.RangePicker format="YYYY-MM" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={defaultRowGutter}>
               <Col {...textColumnSizes}>
                 <Form.Item label="Comments / Feedback / Questions">

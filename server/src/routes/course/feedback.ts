@@ -4,7 +4,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Feedback, User } from '../../models';
 import { ILogger } from '../../logger';
-import { HeroesService, DiscordService } from '../../integrations';
+import { DiscordService } from '../../integrations';
 
 type FeedbackInput = {
   toUserId: number;
@@ -12,15 +12,15 @@ type FeedbackInput = {
   badgeId?: string;
 };
 
-const isValidName = (name: string) => typeof name === 'string' && name.trim().length > 0;
+// const isValidName = (name: string) => typeof name === 'string' && name.trim().length > 0;
 
-const getUserDisplayName = (data: User) => {
-  let name = data.githubId;
-  if (isValidName(data.firstName) || isValidName(data.lastName)) {
-    name = `${data.firstName} ${data.lastName}`;
-  }
-  return name;
-};
+// const getUserDisplayName = (data: User) => {
+//   let name = data.githubId;
+//   if (isValidName(data.firstName) || isValidName(data.lastName)) {
+//     name = `${data.firstName} ${data.lastName}`;
+//   }
+//   return name;
+// };
 
 const SUPPORTED_BADGE_IDS = [
   'Congratulations',
@@ -33,29 +33,29 @@ const SUPPORTED_BADGE_IDS = [
 ];
 
 export const postFeedback = (logger: ILogger) => {
-  const heroesService = new HeroesService(logger);
+  // const heroesService = new HeroesService(logger);
   const discordService = new DiscordService(logger);
 
-  const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
-    if (
-      !fromUser ||
-      !fromUser.primaryEmail ||
-      !toUser ||
-      !toUser.primaryEmail ||
-      !data.badgeId ||
-      !heroesService.isCommentValid(data.comment)
-    ) {
-      return Promise.resolve(null);
-    }
-    return heroesService.assignBadge({
-      assignerEmail: fromUser.primaryEmail,
-      assignerName: getUserDisplayName(fromUser),
-      receiverEmail: toUser!.primaryEmail,
-      receiverName: getUserDisplayName(toUser),
-      comment: data.comment,
-      event: data.badgeId,
-    });
-  };
+  // const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
+  //   if (
+  //     !fromUser ||
+  //     !fromUser.primaryEmail ||
+  //     !toUser ||
+  //     !toUser.primaryEmail ||
+  //     !data.badgeId ||
+  //     !heroesService.isCommentValid(data.comment)
+  //   ) {
+  //     return Promise.resolve(null);
+  //   }
+  //   return heroesService.assignBadge({
+  //     assignerEmail: fromUser.primaryEmail,
+  //     assignerName: getUserDisplayName(fromUser),
+  //     receiverEmail: toUser!.primaryEmail,
+  //     receiverName: getUserDisplayName(toUser),
+  //     comment: data.comment,
+  //     event: data.badgeId,
+  //   });
+  // };
 
   const postToDiscord = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
     if (!fromUser || !toUser || !data.comment) {
@@ -81,7 +81,7 @@ export const postFeedback = (logger: ILogger) => {
     const userRepository = getRepository(User);
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
-    const heroesUrl = await postToHeroes(fromUser, toUser, data);
+    // const heroesUrl = await postToHeroes(fromUser, toUser, data);
     await postToDiscord(fromUser, toUser, data);
     const feedback: Partial<Feedback> = {
       comment: data.comment,
@@ -89,7 +89,7 @@ export const postFeedback = (logger: ILogger) => {
       course: courseId,
       fromUser: id,
       toUser: data.toUserId,
-      heroesUrl: heroesUrl || undefined,
+      heroesUrl: undefined,
     };
     const result = await getRepository(Feedback).save(feedback);
 

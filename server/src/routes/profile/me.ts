@@ -60,5 +60,5 @@ export const updateProfileByRegistry = (_: ILogger) => async (ctx: Router.Router
     return;
   }
   const result = await userRepository.save({ ...user, ...inputData });
-  setResponse(ctx, OK, result);
+  setResponse(ctx, OK, { id: result.id });
 };

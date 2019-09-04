@@ -228,7 +228,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
                       fontStyle: 'italic',
                     }}
                   >
-                    If you EPAM employee, please specify your email to avoid some manual processes later
+                    If you are EPAM employee, please specify your email to avoid some manual processes later
                   </span>
                   {field('contactsEpamEmail', {
                     initialValue: initialData.contactsEpamEmail,

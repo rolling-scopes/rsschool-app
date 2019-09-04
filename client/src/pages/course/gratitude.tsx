@@ -1,4 +1,4 @@
-import { Button, Form, message, Typography, Col, Select, Input } from 'antd';
+import { Button, Form, message, Typography, Col, Input } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -49,10 +49,7 @@ class GratitudePage extends React.Component<Props, State> {
       <>
         <Header title="#gratitude" username={this.props.session.githubId} courseName={this.props.course.name} />
         <Col className="m-2" sm={12}>
-          <Typography.Text type="secondary">
-            Your feedback will be posted to #gratitude channel and to <a href="https://heroes.by">heroes.by</a> (if
-            badge is selected)
-          </Typography.Text>
+          <Typography.Text type="secondary">Your feedback will be posted to #gratitude channel</Typography.Text>
           <LoadingScreen show={this.state.isLoading}>
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="Person">
@@ -60,7 +57,7 @@ class GratitudePage extends React.Component<Props, State> {
                   <UserSearch searchFn={this.loadUsers} />,
                 )}
               </Form.Item>
-              <Form.Item label="Badge">
+              {/* <Form.Item label="Badge">
                 {field('badgeId')(
                   <Select size="large" placeholder="Select a badge">
                     {this.state.badges.map(badge => (
@@ -70,7 +67,7 @@ class GratitudePage extends React.Component<Props, State> {
                     ))}
                   </Select>,
                 )}
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item label="Comment">
                 {field('comment', {
                   rules: [
@@ -109,7 +106,7 @@ class GratitudePage extends React.Component<Props, State> {
         this.setState({ isLoading: true });
         await this.courseService.postPublicFeedback(this.props.course.id, {
           toUserId: values.userId,
-          badgeId: values.badgeId,
+          // badgeId: values.badgeId,
           comment: values.comment,
         });
         this.props.form.resetFields();
