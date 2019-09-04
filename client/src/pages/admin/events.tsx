@@ -108,10 +108,6 @@ class EventsPage extends React.Component<Props, State> {
               initialValue: modalData.descriptionUrl,
               rules: [
                 {
-                  required: true,
-                  message: 'Please enter description URL',
-                },
-                {
                   message: 'Please enter valid URL',
                   pattern: urlPattern,
                 },
@@ -121,7 +117,6 @@ class EventsPage extends React.Component<Props, State> {
           <Form.Item label="Description">
             {field<Event>('description', {
               initialValue: modalData.description,
-              rules: [{ required: true, message: 'Please event description' }],
             })(<Input.TextArea />)}
           </Form.Item>
           <Form.Item label="Event Type">
