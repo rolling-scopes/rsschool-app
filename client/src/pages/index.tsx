@@ -131,7 +131,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     const { isAdmin } = session;
     return courses
       .filter(course => session.roles[course.id] || isAdmin)
-      .sort((a, b) => (a.startDate ? a.startDate.localeCompare(b.startDate) : 0));
+      .sort((a, b) => (a.startDate && b.startDate ? a.startDate.localeCompare(b.startDate) : 0));
   }
 
   private getActiveCourse() {
