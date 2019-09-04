@@ -26,7 +26,6 @@ export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
 
   router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
-<<<<<<< HEAD
     const { type, courseId } = ctx.query;
     const registries = await getRepository(Registry).find({
       skip: 0,
@@ -34,13 +33,6 @@ export function registryRouter(logger?: ILogger) {
       order: { id: 'ASC' },
       relations: ['user', 'course'],
       where: [{ type: type || 'mentor', course: { id: courseId } }],
-=======
-    const {skip, take} = ctx.query;
-    const registries = await getRepository(Registry).find({
-      skip: skip || 0,
-      take: take || 20,
-      order: { id: 'ASC' },
->>>>>>> bee443219998d961924a02d909424e1ea672e94d
     });
 
     if (registries === undefined) {
