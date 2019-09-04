@@ -4,11 +4,12 @@
     "strictNullChecks": true,
     "allowJs": true,
     "target": "es2019",
+    "module": "commonjs",
     "outDir": ".build",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "lib": [
-      "es2015"
+      "es2019"
     ],
     "rootDir": "./"
   },

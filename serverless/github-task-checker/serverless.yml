@@ -1,9 +1,6 @@
 service:
   name: github-task-checker
-#app: your-app-name
-#tenant: your-tenant-name
 
-# Add the serverless-webpack plugin
 plugins:
   - serverless-plugin-typescript
 
@@ -12,7 +9,30 @@ package:
 
 provider:
   name: aws
+  stage: prod
   runtime: nodejs10.x
+  profile: rsschool
+  region: eu-central-1
+  memorySize: 128
+  timeout: 60
+  apiKeys:
+    - github-task-checker
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        Fn::GetAtt: [JsTasksQueue, Arn]
+    # - Effect: Allow
+    #   Action:
+    #     - sqs:SendMessage
+    #   Resource:
+    #     Fn::GetAtt: [HtmlTasksQueue, Arn]
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        Fn::GetAtt: [ExternalTasksQueue, Arn]
 
 resources:
   Resources:
@@ -20,6 +40,11 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: tasks-js
+        VisibilityTimeout: 61
+    ExternalTasksQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: tasks-external
         VisibilityTimeout: 61
     # HtmlTasksQueue:
     #   Type: AWS::SQS::Queue
@@ -29,23 +54,37 @@ resources:
 
 functions:
   # CheckHtmlTask:
-  #   handler: handler.checkHtmlTask
+  #   handler: handlers/htmlTask.handler
   #   events:
   #     - sqs:
   #         batchSize: 1
   #         arn:
   #           Fn::GetAtt: [HtmlTasksQueue, Arn]
 
+  CheckExternalTask:
+    handler: handlers/externalTask.handler
+    memorySize: 256
+    timeout: 30
+    events:
+      - sqs:
+          batchSize: 1
+          arn:
+            Fn::GetAtt: [ExternalTasksQueue, Arn]
+
   CheckJsTask:
-    handler: handler.checkJsTask
+    handler: handlers/jsTask.handler
+    memorySize: 256
+    timeout: 30
     events:
       - sqs:
           batchSize: 1
           arn:
             Fn::GetAtt: [JsTasksQueue, Arn]
+    environment:
+      RS_APP_AUTHORIZATION: '{{resolve:ssm:rs-app-authorization:1}}'
 
   SubmitTask:
-    handler: handler.submit
+    handler: handlers/submitTask.handler
     package:
       exclude:
         - node_modules/**
@@ -55,6 +94,8 @@ functions:
         Ref: JsTasksQueue
       # HTMLTASK_SQS_URL:
       #   Ref: HtmlTasksQueue
+      EXTERNAL_TASK_SQS_URL:
+        Ref: ExternalTasksQueue
     events:
       - http:
           method: post

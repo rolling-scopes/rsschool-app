@@ -61,6 +61,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       useJury: (item.task as Task).useJury,
       checker: item.checker,
       taskCheckers: [],
+      githubRepoName: (item.task as Task).githubRepoName,
     };
   });
 

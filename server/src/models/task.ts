@@ -29,6 +29,12 @@ export class Task {
   @Column()
   verification: 'auto' | 'manual';
 
+  @Column({ nullable: true })
+  githubRepoName: string;
+
+  @Column({ nullable: true })
+  type: 'jstask' | 'htmltask';
+
   @Column({ default: false })
   useJury: boolean;
 

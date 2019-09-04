@@ -58,6 +58,10 @@ class TasksPage extends React.Component<Props, State> {
               render: boolRenderer,
             },
             {
+              title: 'Github Repo Name',
+              dataIndex: 'githubRepoName',
+            },
+            {
               title: 'Verification',
               dataIndex: 'verification',
             },
@@ -74,11 +78,12 @@ class TasksPage extends React.Component<Props, State> {
   }
 
   private renderModal() {
-    const { getFieldDecorator: field } = this.props.form;
+    const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const modalData = this.state.modalData as Task;
     if (modalData == null) {
       return null;
     }
+    const isAutoTask = (getFieldValue('verification') || modalData.verification) === 'auto';
     return (
       <Modal
         visible={!!modalData}
@@ -109,6 +114,7 @@ class TasksPage extends React.Component<Props, State> {
               ],
             })(<Input />)}
           </Form.Item>
+
           <Form.Item label="Github">
             {field('githubPrRequired', { initialValue: modalData.githubPrRequired })(
               <Checkbox>Github Pull Request required</Checkbox>,
@@ -124,6 +130,13 @@ class TasksPage extends React.Component<Props, State> {
               </Radio.Group>,
             )}
           </Form.Item>
+          {isAutoTask && (
+            <Form.Item label="Github Repo Name">
+              {field('githubRepoName', {
+                initialValue: modalData.githubRepoName,
+              })(<Input />)}
+            </Form.Item>
+          )}
         </Form>
       </Modal>
     );
@@ -140,6 +153,7 @@ class TasksPage extends React.Component<Props, State> {
         verification: values.verification,
         githubPrRequired: !!values.githubPrRequired,
         descriptionUrl: values.descriptionUrl,
+        githubRepoName: values.githubRepoName,
       };
       try {
         const task =
