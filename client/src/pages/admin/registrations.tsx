@@ -1,8 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Button, Checkbox, Col, Form, Icon, Result, Row, Select, Table, Typography } from 'antd';
+import { Button, Col, Form, Icon, Result, Row, Select, Table, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import { Course } from 'services/course';
 import { formatMonthFriendly } from 'services/formatter';
@@ -14,7 +13,6 @@ import { stringSorter } from 'components/Table';
 
 const defaultRowGutter = 24;
 const PAGINATION = 100;
-const notCheckboxFields = ['all', 'courseId'];
 
 type Props = {
   courses?: Course[];
@@ -25,6 +23,7 @@ type State = {
   data: any[];
   courses: Course[];
   showSuccess: boolean;
+  selectedIds: number[];
   isLoading: boolean;
 };
 
@@ -50,6 +49,7 @@ class RegistrationsPage extends React.Component<Props, State> {
       courses,
       data: [],
       showSuccess: false,
+      selectedIds: [],
       isLoading: true,
     };
   }
@@ -60,24 +60,8 @@ class RegistrationsPage extends React.Component<Props, State> {
     }
   }
 
-  changeAll = ({ target: { checked } }: CheckboxChangeEvent) => {
-    const { form } = this.props;
-    const ids = Object.keys(form.getFieldsValue()).filter(key => !notCheckboxFields.includes(key));
-    const newValues: any = {};
-
-    for (let id of ids) {
-      newValues[id] = checked;
-    }
-
-    form.setFieldsValue(newValues);
-  };
-
-  changeOne = ({ target: { checked, id } }: CheckboxChangeEvent) => {
-    const { form } = this.props;
-    const isAllChecked = this.props.form.getFieldValue('all');
-    const newValue = !checked && isAllChecked ? { all: false } : {};
-
-    form.setFieldsValue({ ...newValue, ...(id && { [id]: checked }) });
+  changeSelection = (_: any, selectedRows: any) => {
+    this.setState({ selectedIds: selectedRows.map((row: any) => row.id) });
   };
 
   getRegistrations = async (id?: number) => {
@@ -108,20 +92,18 @@ class RegistrationsPage extends React.Component<Props, State> {
           user: { name: `${firstName} ${lastName}`, profileUrl: `/profile?githubId=${githubId}` },
         };
       }),
+      selectedIds: [],
     });
   };
 
-  handleSubmit = async (e: any, status: string) => {
-    e.preventDefault;
-    const { form } = this.props;
-    const formData = form.getFieldsValue();
-    const courseId = form.getFieldValue('courseId');
-    const ids = Object.keys(formData).filter(key => formData[key] && !notCheckboxFields.includes(key));
+  handleSubmit = async (_: any, status: string) => {
+    const { selectedIds } = this.state;
+    const courseId = this.props.form.getFieldValue('courseId');
 
-    if (ids.length) {
+    if (selectedIds.length) {
       try {
         this.setState({ isLoading: true });
-        await axios.put('/api/registry', { ids, status });
+        await axios.put('/api/registry', { ids: selectedIds, status });
         this.getRegistrations(courseId);
       } catch (e) {
         console.error(e);
@@ -144,9 +126,12 @@ class RegistrationsPage extends React.Component<Props, State> {
 
     const { session } = this.props;
     const { courses, isLoading, data } = this.state;
-    const { getFieldDecorator: field, getFieldValue, getFieldDecorator } = this.props.form;
+    const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const courseId = getFieldValue('courseId');
     const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
+    const rowSelection = {
+      onChange: this.changeSelection,
+    };
 
     return (
       <div>
@@ -189,15 +174,13 @@ class RegistrationsPage extends React.Component<Props, State> {
                 </Row>
                 <Row gutter={defaultRowGutter}>
                   <Col span={10}>
-                    <Form.Item>
-                      <Button size="large" type="primary" onClick={this.approve}>
-                        Approve
-                      </Button>
-                      <span>&nbsp;</span>
-                      <Button size="large" type="danger" onClick={this.reject}>
-                        Reject
-                      </Button>
-                    </Form.Item>
+                    <Button size="large" type="primary" onClick={this.approve}>
+                      Approve
+                    </Button>
+                    <span>&nbsp;</span>
+                    <Button size="large" type="danger" onClick={this.reject}>
+                      Reject
+                    </Button>
                   </Col>
                 </Row>
                 <Row gutter={defaultRowGutter}>
@@ -209,26 +192,8 @@ class RegistrationsPage extends React.Component<Props, State> {
                       size="small"
                       rowKey="id"
                       dataSource={data}
+                      rowSelection={rowSelection}
                       columns={[
-                        {
-                          title: (
-                            <Form.Item>
-                              {getFieldDecorator('all', { valuePropName: 'checked' })(
-                                <Checkbox onChange={this.changeAll} />,
-                              )}
-                            </Form.Item>
-                          ),
-                          dataIndex: 'id',
-                          key: 'id',
-                          width: 50,
-                          render: (value: number) => (
-                            <Form.Item>
-                              {getFieldDecorator(`${value}`, { valuePropName: 'checked' })(
-                                <Checkbox onChange={this.changeOne} />,
-                              )}
-                            </Form.Item>
-                          ),
-                        },
                         {
                           title: 'Name',
                           dataIndex: 'lastName',
