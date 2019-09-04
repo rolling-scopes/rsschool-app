@@ -1,5 +1,5 @@
-const cvTests = require('./cv_tests');
+const cvTests = require('./cv_tests').tests;
 
 module.exports.tests = {
-  cvTests  
+  cvTests
 }
