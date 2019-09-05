@@ -1,4 +1,4 @@
-import googleSpreadsheet from '../types/google-spreadsheet';
+import googleSpreadsheet from 'google-spreadsheet';
 import gssCredsJson from '../../gss-creds.json';
 import { filterLogin } from '../utils/text-utils';
 import { Result } from '../interfaces';
