@@ -28,7 +28,7 @@ const defaultRowGutter = 24;
 class CourseRegistryPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const courses = (this.props.courses || []).filter((course: Course) => !course.planned);
+    const courses = (this.props.courses || []).filter((course: Course) => course.planned);
 
     this.state = {
       courses,
