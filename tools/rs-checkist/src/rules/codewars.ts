@@ -1,6 +1,6 @@
-import { uniq } from "lodash";
+import { uniq } from 'lodash';
 
-const LANGUAGE = "javascript";
+const LANGUAGE = 'javascript';
 
 export default (data: any[]) => {
   const answers = data

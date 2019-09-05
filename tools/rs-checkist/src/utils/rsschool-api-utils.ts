@@ -1,10 +1,33 @@
 import nodeFetch from 'node-fetch';
 import { Student, Result, Service } from '../interfaces';
-import { AUTH_TOKEN, REQUESTS } from '../constants/rsschool-api';
+import { AUTH_TOKEN, REQUESTS, REQUEST_REPLACES } from '../constants/rsschool-api';
 import { filterLogin } from './text-utils';
 import logger from './logger';
 
+let courseId: number;
+
+export const setUpCourseId = async (courseAlias: string) => {
+  try {
+    const courses = await apiRequest(REQUESTS.getCourses);
+
+    const course = courses.data.find((course: any) => course.alias === courseAlias);
+
+    if (course) {
+      courseId = course.id;
+    } else {
+      courseId = courses.data && courses.data[courses.data.length - 1].id || undefined;
+    }
+
+    console.log(`\t=> courseId is ${courseId}`);
+  } catch (error) {
+    console.log('Error with getting courseId was occured:');
+    console.log(error);
+  }
+};
+
 const apiRequest = async (uri: string, param: string = '', body: any = '') => {
+  const apiUri = uri.replace(REQUEST_REPLACES.COURSE_ID, String(courseId)) + param;
+
   const options: any = {
     headers: {
       Authorization: AUTH_TOKEN,
@@ -17,7 +40,7 @@ const apiRequest = async (uri: string, param: string = '', body: any = '') => {
     options.body = body;
   }
 
-  const data = await nodeFetch(uri + param, options);
+  const data = await nodeFetch(apiUri, options);
 
   let result;
   try {
@@ -31,7 +54,8 @@ const apiRequest = async (uri: string, param: string = '', body: any = '') => {
 
 const findTaskByName = async (name: string) => {
   const rawTasks = await apiRequest(REQUESTS.getTasks);
-  const task = rawTasks.data.find((task: any) => task.name.toLowerCase() === name.toLowerCase());
+  const task = rawTasks.data
+    .find((task: any) => task.name.trim().toLowerCase() === name.trim().toLowerCase());
 
   return task;
 };
@@ -64,7 +88,12 @@ export const getStudents = async (service: string) => {
 
 export const prepareScores = async (service: Service, results: Result[], altName?: string) => {
   const taskName = altName || service.name;
-  const courseTaskId = (await findTaskByName(taskName)).courseTaskId;
+  const foundTask = await findTaskByName(taskName);
+  const courseTaskId = foundTask && foundTask.courseTaskId || null;
+
+  if (!courseTaskId) {
+    console.log('\n\nError: Task not found in database!');
+  }
 
   const scores = results.map((student: Result) => ({
     courseTaskId,

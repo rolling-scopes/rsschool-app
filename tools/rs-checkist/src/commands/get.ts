@@ -1,19 +1,10 @@
-import services from '../constants/services';
-import { getStudents, writeStudentResults } from '../utils/file-utils';
-import { getDataFromService } from '../utils/parse-utils';
+import commandFlow from '../helpers/command-flow';
 
-export default async (service: string, input: string, output: string) => {
-  const config = services[service];
+export default commandFlow((scores: any) => {
+  const results = scores
+    .map(({ studentGithubId, score }: any) => `${studentGithubId}: ${score}`)
+    .join('\n');
 
-  if (!config) {
-    return console.log('Undefined service name!');
-  }
-
-  console.log('Stage: fetching students from file');
-  const students = getStudents(config, input);
-  console.log(`Stage: fetching ${service} data:\n`);
-  const results = await getDataFromService(config, students);
-
-  console.log('\nStage: writing to file');
-  writeStudentResults(service, results, output, 'xlsx');
-};
+  console.log('\nResults could be written to file/db:\n');
+  console.log(results);
+});
