@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Row, Col, Result, Form, Input, Typography, Button, message } from 'antd';
+import { Row, Col, Result, Form, Input, Typography, Button, message, Select } from 'antd';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
@@ -7,6 +7,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { UserService, UserFull } from 'services/user';
 import { emailPattern, phonePattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
+import { TSHIRT_SIZES } from 'services/reference-data';
 
 type Props = {
   session: Session;
@@ -82,14 +83,13 @@ class EditProfilePage extends React.Component<Props, State> {
           locationName: !location.key ? values.otherLocationName : location.label,
           firstName: values.firstName,
           lastName: values.lastName,
-          firstNameNative: values.firstNameNative,
-          lastNameNative: values.lastNameNative,
           contactsTelegram: values.contactsTelegram,
           contactsSkype: values.contactsSkype,
           contactsPhone: values.contactsPhone,
           contactsNotes: values.contactsNotes,
           primaryEmail: values.primaryEmail,
           contactsEpamEmail: values.contactsEpamEmail,
+          tshirtSize: values.tshirtSize,
           externalAccounts,
         };
 
@@ -120,13 +120,12 @@ class EditProfilePage extends React.Component<Props, State> {
       contactsTelegram: values.contactsTelegram,
       contactsNotes: values.contactsNotes,
       firstName: values.firstName,
-      firstNameNative: values.firstNameNative,
       htmlacademy: htmlacademy ? htmlacademy.username : '',
       lastName: values.lastName,
-      lastNameNative: values.lastNameNative,
       locationId: values.locationId,
       locationName: values.locationName,
       primaryEmail: values.primaryEmail,
+      tshirtSize: values.tshirtSize,
     };
   };
 
@@ -183,22 +182,6 @@ class EditProfilePage extends React.Component<Props, State> {
                       { pattern: englishNamePattern, message: 'Last name should be in English' },
                     ],
                   })(<Input placeholder="Varabei" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={defaultRowGutter}>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="First Name Native">
-                  {field('firstNameNative', {
-                    initialValue: initialData.firstNameNative,
-                  })(<Input placeholder="Дмитрий" />)}
-                </Form.Item>
-              </Col>
-              <Col {...defaultColumnSizes}>
-                <Form.Item label="Last Name Native ">
-                  {field('lastNameNative', {
-                    initialValue: initialData.lastNameNative,
-                  })(<Input placeholder="Воробей" />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -283,6 +266,26 @@ class EditProfilePage extends React.Component<Props, State> {
                   {field('htmlacademy', {
                     initialValue: initialData.htmlacademy,
                   })(<Input />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Typography.Title level={4}>Other</Typography.Title>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+                <Form.Item label="T-Shirt Size">
+                  {field('tshirtSize', {
+                    initialValue: initialData.tshirtSize,
+                  })(
+                    <Select>
+                      {TSHIRT_SIZES.map(size => (
+                        <Select.Option key={size.id} value={size.id}>
+                          {size.name}
+                        </Select.Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
             </Row>

@@ -114,6 +114,7 @@ export interface UserFull extends UserBasic {
   locationId: number;
   locationName: string;
   aboutMyself: string;
+  tshirtSize: string;
 }
 
 export interface ProfileResponse {
