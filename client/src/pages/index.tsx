@@ -36,6 +36,11 @@ const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: S
 
 const routes = [
   {
+    name: `📜 Registrations`,
+    getLink: (_: Course) => `/admin/registrations`,
+    access: isAdminRole,
+  },
+  {
     name: `🔥 Score`,
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,

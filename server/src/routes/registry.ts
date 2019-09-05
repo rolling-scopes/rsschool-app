@@ -1,4 +1,4 @@
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { OK, NOT_FOUND, BAD_REQUEST } from 'http-status-codes';
 import * as Router from 'koa-router';
 import { User, Student, Course, Registry, Mentor } from './../models';
 import { getManager, getRepository } from 'typeorm';
@@ -24,6 +24,24 @@ const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
 
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
+
+  router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
+    const { type, courseId } = ctx.query;
+    const registries = await getRepository(Registry).find({
+      skip: 0,
+      take: 1000,
+      order: { id: 'ASC' },
+      relations: ['user', 'course'],
+      where: [{ type: type || 'mentor', course: { id: courseId } }],
+    });
+
+    if (registries === undefined) {
+      setResponse(ctx, NOT_FOUND);
+      return;
+    }
+
+    setResponse(ctx, OK, registries);
+  });
 
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
@@ -90,17 +108,31 @@ export function registryRouter(logger?: ILogger) {
     }
   });
 
-  router.put('/:id', adminGuard, async (ctx: Router.RouterContext) => {
-    try {
-      const id = ctx.params.id;
-      const status = ctx.request.body.status;
-      const registryPayload = { ...(await getManager().findOne(Registry, id)), status };
-      const registry = await getManager().save(Registry, registryPayload);
+  router.put('/', adminGuard, async (ctx: Router.RouterContext) => {
+    const ids = ctx.request.body.ids;
+    const status = ctx.request.body.status;
 
-      setResponse(ctx, OK, { registry });
-    } catch (e) {
-      handleError({ logger, errorMsg: e.message, ctx });
-    }
+    const registries = await Promise.all(
+      ids.map((id: number) => getRepository(Registry).findOne({ where: { id }, relations: ['course'] })),
+    ).then((oldRegistries: any) =>
+      Promise.all(
+        oldRegistries.reduce((requests: any, registry: any) => {
+          const registryPayload = { ...registry, status };
+          const { userId, course, maxStudentsLimit } = registryPayload;
+
+          delete registryPayload.course;
+          requests.push(getManager().save(Registry, registryPayload));
+
+          if (status === 'approve') {
+            requests.push(getRepository(Mentor).save({ userId, courseId: course!.id, maxStudentsLimit }));
+          }
+
+          return requests;
+        }, []),
+      ),
+    );
+
+    setResponse(ctx, OK, { registries });
   });
 
   return router;
