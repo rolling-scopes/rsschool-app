@@ -90,7 +90,17 @@ class CourseRegistryPage extends React.Component<Props, State> {
     if (!courses.length) {
       content = <NoCourses />;
     } else if (this.state.submitted) {
-      content = <Result status="success" title="Thanks for the registration." />;
+      content = (
+        <Result
+          status="success"
+          title="You have successfully registered."
+          extra={
+            <Button type="primary" href="/">
+              Go to Home
+            </Button>
+          }
+        />
+      );
     } else {
       const courseId = getFieldValue('courseId');
       const [description] = courses.filter(c => c.id === courseId).map(c => c.description);

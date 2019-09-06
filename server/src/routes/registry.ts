@@ -7,6 +7,7 @@ import { adminGuard } from './guards';
 import { createGetRoute } from './common';
 import { setResponse } from './utils';
 import { IUserSession } from './../models/session';
+import { updateSession } from '../session';
 
 interface LoggingError {
   logger?: ILogger;
@@ -99,6 +100,11 @@ export function registryRouter(logger?: ILogger) {
           registryPayload.status = 'approved';
           await getRepository(Mentor).save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
         }
+      }
+
+      // update session
+      if (registryPayload.status === 'approved') {
+        updateSession(ctx, { roles: { [courseId]: type } });
       }
 
       const registry = await getRepository(Registry).save(registryPayload);

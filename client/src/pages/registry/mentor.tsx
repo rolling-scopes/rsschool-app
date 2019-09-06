@@ -58,7 +58,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
           subTitle="Please come back later."
           extra={
             <Button type="primary" href="/">
-              Back to Home
+              Go to Home
             </Button>
           }
         />
@@ -73,12 +73,17 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 <Col xs={18} sm={16} md={12}>
                   <p>Thanks a lot for registration!</p>
                   <p>
-                    We will review your request and send you an invintation to the introduction meeting when the course
+                    We will review your request and send you an invitation to the introduction meeting when the course
                     is started. Stay tuned!
                   </p>
                   <p>
                     Join our <a href="https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ">RSSchool Mentors FAQ</a> Telegram
                     group.
+                  </p>
+                  <p>
+                    <Button type="primary" href="/">
+                      Go to Home
+                    </Button>
                   </p>
                 </Col>
               </Row>

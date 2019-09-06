@@ -185,11 +185,11 @@ class IndexPage extends React.PureComponent<Props, State> {
             <Button type="primary" href="/registry/mentor">
               Register as Mentor
             </Button>
-            {/* {hasPlanned && (
+            {hasPlanned && (
               <Button href="/registry/student" type="primary">
                 Register as Student
               </Button>
-            )} */}
+            )}
           </>
         }
       />
@@ -237,7 +237,7 @@ class IndexPage extends React.PureComponent<Props, State> {
               <RegistryBanner />
             </div>
           )}
-          {activeCourse && courses.length > 1 && (
+          {activeCourse && (
             <Select style={{ width: 250 }} className="mb-2" defaultValue={activeCourse.id} onChange={this.handleChange}>
               {courses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
