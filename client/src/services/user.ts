@@ -102,8 +102,6 @@ export interface UserFull extends UserBasic {
   readyFullTime: string;
   educationHistory: any[];
   employmentHistory: any[];
-  firstNameNative: string;
-  lastNameNative: string;
   contactsTelegram: string;
   contactsSkype: string;
   contactsEmail: string;

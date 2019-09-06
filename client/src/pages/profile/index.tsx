@@ -212,9 +212,6 @@ class ProfilePage extends React.Component<Props, State> {
           <Descriptions.Item label="Name">
             {profile.firstName} {profile.lastName}
           </Descriptions.Item>
-          <Descriptions.Item label="Native Name">
-            {profile.firstNameNative} {profile.lastNameNative}
-          </Descriptions.Item>
           <Descriptions.Item label="Primary Email">{profile.primaryEmail}</Descriptions.Item>
           <Descriptions.Item label="Location">{profile.locationName}</Descriptions.Item>
           <Descriptions.Item label="Estimated english level">
