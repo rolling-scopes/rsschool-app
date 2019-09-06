@@ -28,5 +28,5 @@ export const updateMyProfile = (_: ILogger) => async (ctx: Router.RouterContext)
   // remove immutable fields from the payload
   const { id, githubId: gId, createdDate, updatedDate, ...data } = inputData;
   const result = await userRepository.save({ ...user, ...data });
-  setResponse(ctx, OK, { id: result.id, githubId });
+  setResponse(ctx, OK, result);
 };
