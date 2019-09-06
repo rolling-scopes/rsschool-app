@@ -26,7 +26,5 @@ export function updateSession(ctx: Router.RouterContext, session: Partial<IUserS
       ...currentSession.roles,
       ...session.roles,
     },
-    isAdmin: session.isAdmin || currentSession.isAdmin,
-    isHirer: session.isHirer || currentSession.isHirer,
   };
 }
