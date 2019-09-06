@@ -21,11 +21,13 @@ export function setupPassport(logger: ILogger) {
         scope: ['read:user', 'read:org', 'user:email'],
       },
       (accessToken: string, _, profile, cb) => {
+        logger.info('token', { accessToken });
         const github = new octokit();
         github.authenticate({
           token: accessToken,
           type: 'oauth',
         });
+        logger.info('request users');
         github.users
           .getTeams({})
           .then(teams =>
