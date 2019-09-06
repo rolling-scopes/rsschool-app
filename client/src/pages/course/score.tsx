@@ -75,14 +75,17 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: '#',
                 dataIndex: 'rank',
                 key: 'rank',
-                width: 50,
+                width: 60,
+                fixed: 'left',
+                sorter: numberSorter('rank'),
               },
               {
                 title: 'Github',
                 dataIndex: 'githubId',
-                key: 'githubId',
                 sorter: stringSorter('githubId'),
-                width: 100,
+                width: 120,
+                key: 'githubId',
+                fixed: 'left',
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
