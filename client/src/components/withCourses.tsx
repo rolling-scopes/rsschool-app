@@ -6,7 +6,7 @@ function withCourses(WrappedComponent: React.ComponentType<any>) {
   return class extends React.PureComponent {
     static async getInitialProps(context: NextPageContext) {
       try {
-        CourseService.headers = context && context.req ? context.req.headers : undefined;
+        CourseService.cookie = context && context.req ? context.req.headers.cookie : undefined;
         const service = new CourseService();
         const courses = await service.getCourses();
         return { courses };

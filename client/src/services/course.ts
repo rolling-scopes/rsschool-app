@@ -1,6 +1,5 @@
 import axios from 'axios';
 import getConfig from 'next/config';
-import { IncomingHttpHeaders } from 'http';
 import { Session } from '../components/withSession';
 
 const { serverRuntimeConfig } = getConfig();
@@ -53,7 +52,7 @@ export interface MentorWithContacts {
 export class CourseService {
   private host = serverRuntimeConfig.rsHost || '';
 
-  static headers?: IncomingHttpHeaders;
+  static cookie?: any;
 
   async updateCourse(id: number, data: Partial<Course>) {
     const result = await axios.put<{ data: Course }>(`${this.host}/api/course/${id}`, data);
@@ -66,7 +65,11 @@ export class CourseService {
   }
 
   async getCourses() {
-    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`, { headers: CourseService.headers });
+    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`, {
+      headers: {
+        cookie: CourseService.cookie,
+      },
+    });
     return result.data.data.sort((a, b) => b.id - a.id);
   }
 
