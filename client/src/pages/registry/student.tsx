@@ -141,7 +141,8 @@ class CourseRegistryPage extends React.Component<Props, State> {
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Location">
                   <span style={noticeStyle}>
-                    We need your location for understanding audience and use it for mentor distribution.
+                    We need your location for understanding audience and use it for mentor distribution. If you live
+                    close to any city from the list, please choose it.
                   </span>
                   {field('location', {
                     initialValue: initialData.locationId ? { key: initialData.locationId } : undefined,
