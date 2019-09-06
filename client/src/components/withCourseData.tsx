@@ -14,6 +14,7 @@ function withCourseData(WrappedComponent: React.ComponentType<any>) {
         const course = courses.find(c => c.alias === alias);
         return { course };
       } catch (e) {
+        console.error(e);
         return {};
       }
     }
