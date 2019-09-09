@@ -1,6 +1,6 @@
 import { Button, List, Select, Result } from 'antd';
 
-import { ActivityBanner, Header, RegistryBanner } from 'components';
+import { Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
@@ -227,7 +227,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     const courses = this.getCourses();
     return (
       <div>
-        <ActivityBanner />
+        {/* <ActivityBanner /> */}
 
         <Header username={this.props.session.githubId} />
 
@@ -272,7 +272,9 @@ class IndexPage extends React.PureComponent<Props, State> {
               dataSource={this.getLinks(activeCourse)}
               renderItem={(linkInfo: LinkInfo) => (
                 <List.Item key={linkInfo.link}>
-                  <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>{linkInfo.name}</a>
+                  <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+                    {linkInfo.name}
+                  </a>
                 </List.Item>
               )}
             />
@@ -283,6 +285,6 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 }
 
-type LinkInfo = { name: string; link: string, newTab: boolean };
+type LinkInfo = { name: string; link: string; newTab: boolean };
 
 export default withCourses(withSession(IndexPage));
