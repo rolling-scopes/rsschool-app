@@ -39,61 +39,79 @@ const routes = [
     name: `📜 Registrations`,
     getLink: (_: Course) => `/admin/registrations`,
     access: isAdminRole,
+    newTab: false,
   },
   {
     name: `🔥 Score`,
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,
+    newTab: false,
   },
   {
     name: `✅ Check Task`,
     getLink: (course: Course) => `/course/mentor/check-task?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
   },
   // {
   //   name: `👨‍🏫 Rate Task By Jury`,
   //   getLink: (course: Course) => `/course/rate-task-jury?course=${course.alias}`,
   //   access: combineAnd(isCourseNotCompleted, combineOr(isAdminRole, isActivist, isCourseManager)),
+  //   newTab: false,
   // },
   {
-    name: `👏 Public Feedback (#gratitude)`,
+    name: `👏 Say Thank you (Discord >> #gratitude)`,
     getLink: (course: Course) => `/course/gratitude?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, anyAccess),
+    newTab: false,
   },
   {
-    name: `💌 Private Feedback`,
+    name: `💌 Feedback on Student/Mentor`,
     getLink: (_: Course) => `/private-feedback`,
     access: combineAnd(isCourseNotCompleted, anyAccess),
+    newTab: false,
+  },
+  {
+    name: `📝 Feedback on RS School`,
+    getLink: (_: Course) => `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
+    access: anyAccess,
+    newTab: true,
   },
   // {
   //   name: `🎤 Interview Feedback`,
   //   getLink: (course: Course) => `/course/mentor/interview-feedback?course=${course.alias}`,
   //   access: combine(isCourseNotCompleted, isMentor),
+  //   newTab: false,
   // },
   {
     name: `😞 Expel Student`,
     getLink: (course: Course) => `/course/mentor/expel?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
   },
   {
     name: `🗂 Course Tasks`,
     getLink: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
     access: isAdminRole,
+    newTab: false,
   },
   {
     name: `🐞 Submit "Bug"`,
     getLink: (_: Course) => `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
     access: combineAnd(isCourseNotCompleted, anyAccess),
+    newTab: false,
   },
   {
     name: `🔢 Submit "Data Issue"`,
     getLink: (_: Course) => `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=data-issue-report.md&title=`,
     access: anyAccess,
+    newTab: false,
   },
   // {
   //   name: `➡️ Assign Tasks`,
   //   getLink: (course: Course) => `/course/admin/task-assign?course=${course.alias}`,
   //   access: combine(isCourseNotCompleted, isAdmin),
+  //   newTab: false,
   // },
 ];
 
@@ -125,6 +143,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       .map(route => ({
         name: route.name,
         link: route.getLink(course),
+        newTab: route.newTab,
       }));
   };
 
@@ -253,7 +272,7 @@ class IndexPage extends React.PureComponent<Props, State> {
               dataSource={this.getLinks(activeCourse)}
               renderItem={(linkInfo: LinkInfo) => (
                 <List.Item key={linkInfo.link}>
-                  <a href={linkInfo.link}>{linkInfo.name}</a>
+                  <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>{linkInfo.name}</a>
                 </List.Item>
               )}
             />
@@ -264,6 +283,6 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 }
 
-type LinkInfo = { name: string; link: string };
+type LinkInfo = { name: string; link: string, newTab: boolean };
 
 export default withCourses(withSession(IndexPage));
