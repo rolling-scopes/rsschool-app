@@ -18,6 +18,7 @@ type State = {
   courses: Course[];
   submitted: boolean;
   isLoading: boolean;
+  isApproved: boolean;
   initialData: Partial<UserFull>;
 };
 
@@ -35,6 +36,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
       submitted: false,
       initialData: {} as any,
       isLoading: true,
+      isApproved: false,
     };
   }
 
@@ -66,20 +68,24 @@ class CourseRegistryPage extends React.Component<Props, State> {
     } else if (this.state.submitted) {
       content = (
         <Result
-          status="success"
+          status={this.state.isApproved ? 'success' : 'info'}
           title={
             <>
               <Row gutter={24} type="flex" justify="center">
                 <Col xs={18} sm={16} md={12}>
                   <p>Thanks a lot for registration!</p>
+                  {!this.state.isApproved && (
+                    <p>We got your request and will review it soon. After that you will get an access to the course</p>
+                  )}
+                  {this.state.isApproved && <p>Your request has been approved. </p>}
                   <p>
-                    We will review your request and send you an invitation to the introduction meeting when the course
-                    is started. Stay tuned!
+                    We will send you an invitation to the introduction meeting when the course is started. Stay tuned!
                   </p>
                   <p>
                     Join our <a href="https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ">RSSchool Mentors FAQ</a> Telegram
                     group.
                   </p>
+                  {!this.state.isApproved && <p>P.S. Please do not try to submit another request</p>}
                   <p>
                     <Button type="primary" href="/">
                       Go to Home
@@ -120,31 +126,29 @@ class CourseRegistryPage extends React.Component<Props, State> {
                     Dates: {formatDateFriendly(course.startDate)} - {formatDateFriendly(course.endDate)}
                   </Typography.Title>
                 )}
+
                 <Typography.Paragraph>
-                  <p>
-                    <ul>
-                      <li>Темы менторинга: html/css/vanillajs.</li>
-                      <li>
-                        С вашей стороны требуется возможность уделять 4-8 часов в неделю или более (по вашему желанию).
-                      </li>
-                      <li>Можно менторить от 2 до 6 студентов.</li>
-                      <li>Менторить можно удаленно.</li>
-                    </ul>
-                  </p>
-                  <p>
-                    <ul>
-                      <b>Задачи ментора:</b>
-                      <li>
-                        Еженедельно встречаться с вашей группой студентов (можно в Skype, Google Hangouts, Gitter, Slack
-                        и т.д.)
-                      </li>
-                      <li>Отвечать на вопросы студентов</li>
-                      <li>Давать советы (code style, разбор заданий)</li>
-                      <li>Проверять и оценивать работы студентов (~7 заданий)</li>
-                      <li>Проводить учебные интервью (по 2 для каждого студента)</li>
-                      <li>Проводить дополнительные лекции (по желанию)</li>
-                    </ul>
-                  </p>
+                  <ul>
+                    <li>Темы менторинга: html/css/vanillajs.</li>
+                    <li>
+                      С вашей стороны требуется возможность уделять 4-8 часов в неделю или более (по вашему желанию).
+                    </li>
+                    <li>Можно менторить от 2 до 6 студентов.</li>
+                    <li>Менторить можно удаленно.</li>
+                  </ul>
+                  <ul>
+                    <b>Задачи ментора:</b>
+                    <li>
+                      Еженедельно встречаться с вашей группой студентов (можно в Skype, Google Hangouts, Gitter, Slack и
+                      т.д.)
+                    </li>
+                    <li>Отвечать на вопросы студентов</li>
+                    <li>Давать советы (code style, разбор заданий)</li>
+                    <li>Проверять и оценивать работы студентов (~7 заданий)</li>
+                    <li>Проводить учебные интервью (по 2 для каждого студента)</li>
+                    <li>Проводить дополнительные лекции (по желанию)</li>
+                  </ul>
+                  <p></p>
                 </Typography.Paragraph>
               </Col>
             </Row>
@@ -325,7 +329,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
                 только в целях трудоустройства студентов.
               </Typography.Paragraph>
-              <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
+              <Form.Item>
+                {field('gdpr', { valuePropName: 'checked' })(<Checkbox>I agree / Я согласен</Checkbox>)}
+              </Form.Item>
             </Row>
             <Button
               size="large"
@@ -383,8 +389,10 @@ class CourseRegistryPage extends React.Component<Props, State> {
       const requests = [axios.post('/api/profile/registry', userModel), axios.post('/api/registry', registryModel)];
 
       try {
-        await Promise.all(requests);
-        this.setState({ submitted: true });
+        const [, registryResponse] = await Promise.all(requests);
+        const response = registryResponse.data;
+        const isApproved = response ? response.data.status === 'approved' : false;
+        this.setState({ isApproved, submitted: true });
       } catch (e) {
         message.error('An error occured. Please try later');
       } finally {

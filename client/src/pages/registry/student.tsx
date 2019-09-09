@@ -255,7 +255,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
                 Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
                 только в целях трудоустройства.
               </Typography.Paragraph>
-              <Form.Item>{field('gdpr')(<Checkbox>I agree / Я согласен</Checkbox>)}</Form.Item>
+              <Form.Item>
+                {field('gdpr', { valuePropName: 'checked' })(<Checkbox>I agree / Я согласен</Checkbox>)}
+              </Form.Item>
             </Row>
             <Button size="large" type="primary" disabled={!getFieldValue('gdpr')} htmlType="submit">
               Submit

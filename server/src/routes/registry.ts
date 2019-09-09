@@ -71,7 +71,7 @@ export function registryRouter(logger?: ILogger) {
       ])) as [User, Course, Registry];
 
       if (existingRegistry && existingRegistry.userId === userId) {
-        setResponse(ctx, OK, { existingRegistry });
+        setResponse(ctx, OK, existingRegistry);
         return;
       }
 
@@ -108,7 +108,7 @@ export function registryRouter(logger?: ILogger) {
       }
 
       const registry = await getRepository(Registry).save(registryPayload);
-      setResponse(ctx, OK, { registry });
+      setResponse(ctx, OK, registry);
     } catch (e) {
       handleError({ logger, errorMsg: e.message, ctx });
     }

@@ -11,7 +11,7 @@ function withCourses(WrappedComponent: React.ComponentType<any>) {
         const courses = await service.getCourses();
         return { courses };
       } catch (e) {
-        console.error(e);
+        console.error(e.message);
         return { courses: [] };
       }
     }

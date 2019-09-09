@@ -66,9 +66,11 @@ export class CourseService {
 
   async getCourses() {
     const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`, {
-      headers: {
-        cookie: CourseService.cookie,
-      },
+      headers: CourseService.cookie
+        ? {
+            cookie: CourseService.cookie,
+          }
+        : undefined,
     });
     return result.data.data.sort((a, b) => b.id - a.id);
   }
