@@ -51,6 +51,11 @@ class CoursesPage extends React.Component<Props, State> {
               sorter: stringSorter<Course>('name'),
             },
             {
+              title: 'Full Name',
+              dataIndex: 'fullName',
+              sorter: stringSorter<Course>('fullName'),
+            },
+            {
               title: 'Alias',
               dataIndex: 'alias',
               sorter: stringSorter<Course>('alias'),
@@ -122,6 +127,14 @@ class CoursesPage extends React.Component<Props, State> {
               </Form.Item>
             </Col>
             <Col span={12}>
+              <Form.Item label="Full Name">
+                {field<Course>('fullName', {
+                  initialValue: modalData.fullName,
+                  rules: [{ required: true, message: 'Please enter full name' }],
+                })(<Input />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
               <Form.Item label="Alias">
                 {field<Course>('alias', {
                   initialValue: modalData.alias,
@@ -168,6 +181,12 @@ class CoursesPage extends React.Component<Props, State> {
             })(<DatePicker.RangePicker />)}
           </Form.Item>
 
+          <Form.Item label="Registration End Date">
+            {field('registrationEndDate', {
+              initialValue: modalData.registrationEndDate ? moment(modalData.registrationEndDate) : null,
+            })(<DatePicker />)}
+          </Form.Item>
+
           <Form.Item label="Attributes">
             {field('state', { initialValue: modalData.completed ? 'completed' : modalData.planned ? 'planned' : null })(
               <Radio.Group>
@@ -196,9 +215,11 @@ class CoursesPage extends React.Component<Props, State> {
 
       const data: Partial<Course> = {
         name: values.name,
+        fullName: values.fullName,
         alias: values.alias,
         startDate: startDate ? startDate.toISOString() : null,
         endDate: endDate ? endDate.toISOString() : null,
+        registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
         completed: values.state === 'completed',
         planned: values.state === 'planned',
         description: values.description,

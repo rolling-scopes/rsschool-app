@@ -33,6 +33,7 @@ export interface CreateCourseTask {
 export interface Course {
   id: number;
   name: string;
+  fullName: string;
   alias: string;
   completed: boolean;
   description: string;
@@ -41,6 +42,7 @@ export interface Course {
   primarySkillId: string;
   primarySkillName: string;
   startDate: string;
+  registrationEndDate: string;
 }
 
 export interface MentorWithContacts {

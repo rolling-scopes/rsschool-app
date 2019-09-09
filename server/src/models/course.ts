@@ -18,6 +18,9 @@ export class Course {
   name: string;
 
   @Column({ nullable: true })
+  fullName: string;
+
+  @Column({ nullable: true })
   alias: string;
 
   @Column({ nullable: true })
@@ -34,6 +37,9 @@ export class Course {
 
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  registrationEndDate: Date;
 
   @Column({ nullable: true })
   primarySkillId: string;
