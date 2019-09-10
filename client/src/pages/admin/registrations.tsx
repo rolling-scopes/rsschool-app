@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Button, Col, Form, Icon, Result, Row, Select, Table, Typography } from 'antd';
+import { Button, Col, Form, Icon, Result, Row, Select, Statistic, Table, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { Course } from 'services/course';
@@ -13,6 +13,7 @@ import { stringSorter } from 'components/Table';
 
 const defaultRowGutter = 24;
 const PAGINATION = 100;
+const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
 
 type Props = {
   courses?: Course[];
@@ -25,6 +26,11 @@ type State = {
   showSuccess: boolean;
   selectedIds: number[];
   isLoading: boolean;
+  statistics: {
+    approved: number;
+    rejected: number;
+    pending: number;
+  };
 };
 
 interface Registration {
@@ -51,6 +57,7 @@ class RegistrationsPage extends React.Component<Props, State> {
       showSuccess: false,
       selectedIds: [],
       isLoading: true,
+      statistics: { ...DEFAULT_STATISTICS },
     };
   }
 
@@ -70,6 +77,23 @@ class RegistrationsPage extends React.Component<Props, State> {
     const {
       data: { data: registrations },
     } = await axios.get(Url);
+    const statistics = { ...DEFAULT_STATISTICS };
+
+    for (let registration of registrations) {
+      switch (registration.status) {
+        case 'approved':
+          statistics.approved += 1;
+          break;
+        case 'rejected':
+          statistics.rejected += 1;
+          break;
+        case 'pending':
+          statistics.pending += 1;
+          break;
+      }
+    }
+
+    console.log(statistics);
 
     this.setState({
       isLoading: false,
@@ -81,7 +105,13 @@ class RegistrationsPage extends React.Component<Props, State> {
           comment,
           attributes: { maxStudentsLimit },
         } = registration;
-        const { firstName, lastName, githubId } = user || { firstName: '', lastName: '', githubId: '' };
+        const { firstName, lastName, githubId, contactsEpamEmail, locationName: city } = user || {
+          firstName: '',
+          lastName: '',
+          githubId: '',
+          contactsEpamEmail: '',
+          locationName: '',
+        };
 
         return {
           id,
@@ -90,9 +120,12 @@ class RegistrationsPage extends React.Component<Props, State> {
           githubId,
           maxStudentsLimit,
           user: { name: `${firstName} ${lastName}`, profileUrl: `/profile?githubId=${githubId}` },
+          isFromEpam: !!contactsEpamEmail,
+          city,
         };
       }),
       selectedIds: [],
+      statistics,
     });
   };
 
@@ -112,11 +145,11 @@ class RegistrationsPage extends React.Component<Props, State> {
   };
 
   approve = (e: any) => {
-    this.handleSubmit(e, 'approve');
+    this.handleSubmit(e, 'approved');
   };
 
   reject = async (e: any) => {
-    this.handleSubmit(e, 'reject');
+    this.handleSubmit(e, 'rejected');
   };
 
   render() {
@@ -125,7 +158,7 @@ class RegistrationsPage extends React.Component<Props, State> {
     }
 
     const { session } = this.props;
-    const { courses, isLoading, data } = this.state;
+    const { courses, isLoading, data, statistics } = this.state;
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const courseId = getFieldValue('courseId');
     const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
@@ -173,7 +206,7 @@ class RegistrationsPage extends React.Component<Props, State> {
                   </Col>
                 </Row>
                 <Row gutter={defaultRowGutter}>
-                  <Col span={10}>
+                  <Col span={12}>
                     <Button size="large" type="primary" onClick={this.approve}>
                       Approve
                     </Button>
@@ -181,6 +214,25 @@ class RegistrationsPage extends React.Component<Props, State> {
                     <Button size="large" type="danger" onClick={this.reject}>
                       Reject
                     </Button>
+                  </Col>
+                  <Col span={4}>
+                    <Statistic
+                      title="Approved"
+                      value={statistics.approved}
+                      valueStyle={{ color: '#3f8600' }}
+                      prefix={<Icon type="like" />}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Statistic
+                      title="Rejected"
+                      value={statistics.rejected}
+                      valueStyle={{ color: '#cf1322' }}
+                      prefix={<Icon type="dislike" />}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Statistic title="Pending" value={statistics.pending} prefix={<Icon type="hourglass" />} />
                   </Col>
                 </Row>
                 <Row gutter={defaultRowGutter}>
@@ -216,19 +268,32 @@ class RegistrationsPage extends React.Component<Props, State> {
                           ),
                         },
                         {
-                          title: 'Max students amount',
-                          dataIndex: 'maxStudentsLimit',
-                          key: 'maxStudentsLimit',
-                          width: 100,
-                        },
-                        { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
-                        {
                           title: 'Status',
                           dataIndex: 'status',
                           key: 'status',
                           sorter: stringSorter('status'),
                           width: 50,
                         },
+                        {
+                          title: 'City',
+                          dataIndex: 'city',
+                          key: 'city',
+                          width: 50,
+                        },
+                        {
+                          title: 'Max students amount',
+                          dataIndex: 'maxStudentsLimit',
+                          key: 'maxStudentsLimit',
+                          width: 100,
+                        },
+                        {
+                          title: 'From EPAM',
+                          dataIndex: 'isFromEpam',
+                          key: 'isFromEpam',
+                          width: 30,
+                          render: (value: boolean) => (value ? 'Y' : 'N'),
+                        },
+                        { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
                       ]}
                     />
                   </Col>
