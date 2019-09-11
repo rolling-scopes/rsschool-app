@@ -129,7 +129,7 @@ export function registryRouter(logger?: ILogger) {
           delete registryPayload.course;
           requests.push(getManager().save(Registry, registryPayload));
 
-          if (status === 'approve') {
+          if (status === 'approved') {
             requests.push(getRepository(Mentor).save({ userId, courseId: course!.id, maxStudentsLimit }));
           }
 
