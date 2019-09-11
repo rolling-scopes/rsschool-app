@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';

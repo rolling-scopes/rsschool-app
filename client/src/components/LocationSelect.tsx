@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Select } from 'antd';
-import { CITIES } from 'services/reference-data/cities';
+import { CITIES } from 'services/reference-data';
 
 type Props = {
   [key: string]: any;
 };
 
-type LocationOption = { id: undefined | string; name: string };
+type LocationOption = { id?: string; name: string };
 const defaultOption: LocationOption = { id: undefined, name: 'Other' };
 const options: LocationOption[] = [defaultOption].concat(CITIES);
 

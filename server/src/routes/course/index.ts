@@ -1,9 +1,9 @@
 import { BAD_REQUEST } from 'http-status-codes';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Course, CourseTask } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard } from '../guards';
+import { adminGuard, guard, courseManagerGuard } from '../guards';
 import { setResponse } from '../utils';
 import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
@@ -439,7 +439,7 @@ export function courseRoute(logger: ILogger) {
    */
   router.get('/:courseId/score', guard, validateCourseId, getScore(logger));
 
-  router.get('/:courseId/score/csv', adminGuard, validateCourseId, getScoreAsCsv(logger));
+  router.get('/:courseId/score/csv', courseManagerGuard, validateCourseId, getScoreAsCsv(logger));
 
   /**
    * @swagger

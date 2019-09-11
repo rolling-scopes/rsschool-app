@@ -1,5 +1,5 @@
 import { BAD_REQUEST } from 'http-status-codes';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Stage } from '../../models';
 import { createGetRoute, createPostRoute, createPutRoute } from '../common';

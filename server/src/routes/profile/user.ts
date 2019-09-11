@@ -1,5 +1,5 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, Student, Task, User } from '../../models';

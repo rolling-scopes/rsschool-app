@@ -1,5 +1,5 @@
-import * as octokit from '@octokit/rest';
-import * as passport from 'koa-passport';
+import octokit from '@octokit/rest';
+import passport from 'koa-passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
 import { createUser } from './rules';

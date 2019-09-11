@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import axios from 'axios';
 import { OK } from 'http-status-codes';

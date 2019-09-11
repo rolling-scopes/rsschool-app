@@ -13,7 +13,12 @@ export function stringSorter<T>(field: keyof T) {
     }
     return get(a, field)
       .toString()
-      .localeCompare(get(b, field).toString());
+      .toLowerCase()
+      .localeCompare(
+        get(b, field)
+          .toString()
+          .toLowerCase(),
+      );
   };
 }
 

@@ -1,13 +1,17 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import * as Router from 'koa-router';
-import * as NodeCache from 'node-cache';
-import { getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
+import Router from 'koa-router';
+import _ from 'lodash';
+import NodeCache from 'node-cache';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Student, Task, TaskResult, CourseTask } from '../../models';
+import { CourseTask, Student, Task, TaskResult } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
 import { getCourseTasks, getScoreStudents } from '../../services/courseService';
-import { setResponse, setCsvResponse } from '../utils';
+import countries from '../../services/reference-data/countries.json';
+import cities from '../../services/reference-data/cities.json';
+
+import { setCsvResponse, setResponse } from '../utils';
 
 type ScoreInput = {
   studentId: number | string;
@@ -26,6 +30,8 @@ type ScoresInput = {
   githubPrUrl: string;
 };
 
+const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
+const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
 export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -236,6 +242,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
       firstName: student.firstName,
       lastName: student.lastName,
       locationName: student.locationName,
+      countryName: countriesMap[citiesMap[student.locationName]] || 'Other',
       mentorGithubId: student.mentor ? student.mentor.githubId : '',
       totalScore: student.totalScore,
       ...getTasksResults(student.taskResults, courseTasks),
