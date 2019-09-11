@@ -1,9 +1,9 @@
-import * as cors from '@koa/cors';
-import * as pinoLogger from 'pino';
-import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
-import * as session from 'koa-session';
-import * as serve from 'koa-static';
+import cors from '@koa/cors';
+import pinoLogger from 'pino';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import session from 'koa-session';
+import serve from 'koa-static';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';

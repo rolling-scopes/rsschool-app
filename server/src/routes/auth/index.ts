@@ -1,6 +1,6 @@
 import { FORBIDDEN, OK } from 'http-status-codes';
-import * as passport from 'koa-passport';
-import * as Router from 'koa-router';
+import passport from 'koa-passport';
+import Router from 'koa-router';
 
 import { config } from '../../config';
 import { devAuthMiddleware } from './devAuthMiddleware';

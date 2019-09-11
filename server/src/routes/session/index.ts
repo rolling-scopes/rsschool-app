@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { OK, NOT_FOUND, UNAUTHORIZED } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { User, IUserSession } from '../../models';

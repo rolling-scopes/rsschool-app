@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { User } from '../models';

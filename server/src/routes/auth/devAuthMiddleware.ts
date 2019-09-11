@@ -1,6 +1,6 @@
 import { INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { userInfo, hostname } from 'os';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { config } from '../../config';
 import { createUser } from '../../rules';
 import { replaceSession } from '../../session';

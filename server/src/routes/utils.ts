@@ -1,5 +1,5 @@
 import { IApiResponse } from '../models';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import * as crypto from 'crypto';
 
 export function setResponse<T>(ctx: Router.RouterContext, status: number, data?: T) {

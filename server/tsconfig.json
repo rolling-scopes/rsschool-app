@@ -12,7 +12,9 @@
     "outDir": "./dist",
     "sourceMap": true,
     "strict": true,
+    "resolveJsonModule": true,
     "noUnusedParameters": true,
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "typeRoots": [
       "./node_modules/@types",

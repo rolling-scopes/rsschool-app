@@ -42,8 +42,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   }
 
   render() {
-    const { isAdmin, isHirer } = this.props.session;
-    const csvEnabled = isAdmin || isHirer;
+    const { isAdmin, isHirer, roles } = this.props.session;
+    const csvEnabled = isAdmin || isHirer || roles[this.props.course.id] === 'coursemanager';
     return (
       <>
         <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -115,6 +115,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 key: 'locationName',
                 width: 100,
                 sorter: stringSorter('locationName'),
+                ...getColumnSearchProps('locationName'),
               },
               {
                 title: 'Total',

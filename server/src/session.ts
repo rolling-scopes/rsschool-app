@@ -1,5 +1,5 @@
 import * as passport from 'koa-passport';
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import { IUserSession } from './models';
 
 export function replaceSession(ctx: Router.RouterContext, session: Partial<IUserSession>) {
