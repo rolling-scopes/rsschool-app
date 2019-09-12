@@ -106,7 +106,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
       const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
       content = (
         <Form className="m-2" onSubmit={this.handleSubmit}>
-          <Col offset={1}>
+          <Col style={{ margin: '0 20px' }}>
             <Row>
               <Typography.Title level={4}>Course</Typography.Title>
             </Row>

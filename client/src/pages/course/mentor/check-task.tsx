@@ -37,7 +37,7 @@ class TaskScorePage extends React.Component<Props, State> {
     const isPowerMentor = isAdmin || isCourseManager;
 
     const students = isPowerMentor
-      ? this.courseService.getCourseStudents(courseId).then(students => ({
+      ? this.courseService.getCourseStudents(courseId, true).then(students => ({
           students,
           assignedStudents: [],
         }))

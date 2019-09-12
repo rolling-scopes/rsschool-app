@@ -1,8 +1,14 @@
-import { Mentor, User, Student, CourseTask, Course } from '../models';
+import _ from 'lodash';
 import { getRepository } from 'typeorm';
+import { Course, CourseTask, Mentor, Student, User } from '../models';
 import { IUserSession } from '../models/session';
+import cities from './reference-data/cities.json';
+import countries from './reference-data/countries.json';
 
-const primaryUserFields = ['user.id', 'user.firstName', 'user.lastName', 'user.githubId'];
+const primaryUserFields = ['user.id', 'user.firstName', 'user.lastName', 'user.githubId', 'user.locationName'];
+
+const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
+const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 
 export async function getCourseMentorWithUser(courseId: number, userId: number) {
   return await getRepository(Mentor)
@@ -39,6 +45,23 @@ export interface StudentBasic {
   userId: number;
   courseId: number;
 
+  totalScore: number;
+
+  mentor: MentorBasic | null;
+}
+
+export interface StudentBasic {
+  lastName: string;
+  firstName: string;
+  githubId: string;
+  isActive: boolean;
+
+  id: number;
+  userId: number;
+  courseId: number;
+
+  totalScore: number;
+
   mentor: MentorBasic | null;
 }
 
@@ -46,9 +69,13 @@ export interface AssignedStudent extends StudentBasic {
   courseTaskId: number | null;
 }
 
-export interface StudentWithScore extends StudentBasic {
+export interface StudentDetails extends StudentBasic {
+  locationName: string | null;
+  countryName: string;
+}
+
+export interface StudentWithResults extends StudentBasic {
   rank: number;
-  totalScore: number;
   locationName: string;
   taskResults: {
     courseTaskId: number;
@@ -80,6 +107,17 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     userId: user.id!,
     courseId: student.courseId,
     mentor: null,
+    totalScore: student.totalScore,
+  };
+}
+
+export function convertToStudentDetails(student: Student): StudentDetails {
+  const studentBasic = convertToStudentBasic(student);
+  const user = (student.user as User)!;
+  return {
+    ...studentBasic,
+    locationName: user.locationName || null,
+    countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
   };
 }
 
@@ -169,7 +207,6 @@ export async function getStudentByUserId(courseId: number, userId: number): Prom
 
 export async function getStudentsByMentorId(mentorId: number) {
   const records = await studentQuery()
-    .leftJoinAndSelect('student.taskResults', 'taskResults')
     .innerJoin('student.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoinAndSelect('student.mentor', 'mentor')
@@ -224,15 +261,15 @@ export async function getMentorWithContacts(mentorId: number): Promise<MentorWit
   return mentorWithContacts;
 }
 
-export async function getActiveStudents(courseId: number) {
+export async function getStudents(courseId: number, activeOnly: boolean) {
   const records = await studentQuery()
     .innerJoin('student.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('student.course', 'course')
-    .where('course.id = :courseId AND student."isExpelled" = false', { courseId })
+    .where(`course.id = :courseId ${activeOnly ? 'AND student."isExpelled" = false' : ''}`, { courseId })
     .getMany();
 
-  const students = records.map(convertToStudentBasic);
+  const students = records.map(convertToStudentDetails);
   return students;
 }
 
@@ -251,7 +288,7 @@ export async function getScoreStudents(courseId: number) {
 
   return students
     .sort((a, b) => b.totalScore - a.totalScore)
-    .map<StudentWithScore>((student, i) => {
+    .map<StudentWithResults>((student, i) => {
       const user = student.user as User;
       return {
         rank: i + 1,

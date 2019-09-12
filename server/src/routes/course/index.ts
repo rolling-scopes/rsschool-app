@@ -7,8 +7,6 @@ import { adminGuard, guard, courseManagerGuard } from '../guards';
 import { setResponse } from '../utils';
 import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
-import { postFeedback } from './feedback';
-// import { getMentorContacts } from './mentorContacts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
 import { getMe, getMyMentors } from './me';
 import { getAllMentorStudents, getMentorStudents } from './mentor';
@@ -16,7 +14,6 @@ import { getMentors, postMentors } from './mentors';
 import { postPairs } from './pairs';
 import { getScore, getScoreAsCsv, postScore, postScores } from './score';
 import { getCourseStages, postCourseStages } from './stages';
-import { getStudentProfile } from './student';
 import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
 import { getStudents, postStudents } from './students';
@@ -64,9 +61,9 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: User object
    */
-  router.get('/:courseId/mentor/students', guard, validateCourseId, getMentorStudents(logger));
+  router.get('/:courseId/mentor/me/students', guard, validateCourseId, getMentorStudents(logger));
 
-  router.get('/:courseId/mentor/students/all', guard, validateCourseId, getAllMentorStudents(logger));
+  router.get('/:courseId/mentor/me/students/all', guard, validateCourseId, getAllMentorStudents(logger));
 
   /**
    * @swagger
@@ -88,9 +85,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of students
    */
-  router.get('/:courseId/students', guard, validateCourseId, getStudents(logger));
-
-  router.get('/:courseId/student/profile', guard, validateCourseId, getStudentProfile(logger));
+  router.get('/:courseId/students', courseManagerGuard, validateCourseId, getStudents(logger));
 
   /**
    * @swagger
@@ -156,7 +151,7 @@ export function courseRoute(logger: ILogger) {
    *
    * /course/{courseId}/mentors:
    *   get:
-   *      description: Saves course mentors
+   *      description: Returns course mentors
    *      security:
    *        - cookieAuth: []
    *      parameters:
@@ -178,7 +173,7 @@ export function courseRoute(logger: ILogger) {
    *
    * /course/{courseId}/mentors:
    *   post:
-   *      description: Returns course mentors
+   *      description: Save course mentors
    *      security:
    *        - cookieAuth: []
    *      parameters:
@@ -471,39 +466,6 @@ export function courseRoute(logger: ILogger) {
    *          description: result
    */
   router.post('/:courseId/expulsion', guard, validateCourseId, postExpulsion(logger));
-
-  /**
-   * @swagger
-   *
-   * /course/{courseId}/feedback:
-   *   post:
-   *      description: Post feedback about a mentor or student
-   *      security:
-   *        - cookieAuth: []
-   *      parameters:
-   *        - name: courseId
-   *          in: path
-   *          description: Course Id
-   *          required: true
-   *          type: integer
-   *        - name: data
-   *          in: body
-   *          schema:
-   *            type: object
-   *            properties:
-   *              toUserId:
-   *                type: integer
-   *              text:
-   *                type: string
-   *              badgeId:
-   *                type: string
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: result
-   */
-  router.post('/:courseId/feedback', guard, validateCourseId, postFeedback(logger));
 
   router.get('/:courseId/me', guard, validateCourseId, getMe(logger));
 

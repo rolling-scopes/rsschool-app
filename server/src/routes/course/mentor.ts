@@ -15,9 +15,7 @@ export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContex
   }
 
   const students = await courseService.getStudentsByMentorId(mentor.id);
-  const mentorResponse = { students };
-
-  setResponse(ctx, OK, mentorResponse);
+  setResponse(ctx, OK, students);
 };
 
 export const getAllMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {

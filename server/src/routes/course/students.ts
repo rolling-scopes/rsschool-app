@@ -1,14 +1,15 @@
+import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
-import { OK, NOT_FOUND } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { Student } from '../../models';
-import { getRepository } from 'typeorm';
+import { courseService, OperationResult, studentsService, userService } from '../../services';
 import { setResponse } from '../utils';
-import { OperationResult, userService, studentsService, courseService } from '../../services';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
-  const students = await courseService.getActiveStudents(courseId);
+  const status: string = ctx.query.status;
+  const students = await courseService.getStudents(courseId, status === 'active');
   setResponse(ctx, OK, students);
 };
 

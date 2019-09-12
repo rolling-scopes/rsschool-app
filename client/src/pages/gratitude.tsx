@@ -1,17 +1,15 @@
-import { Button, Form, message, Typography, Col, Input } from 'antd';
+import { Button, Col, Form, Input, message, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { UserSearch } from 'components/UserSearch';
-import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService } from 'services/course';
+import { GratitudeService } from 'services/gratitude';
 import { UserService } from 'services/user';
 
 type Props = {
   session: Session;
-  course: Course;
 } & FormComponentProps;
 
 type Badge = {
@@ -41,13 +39,13 @@ class GratitudePage extends React.Component<Props, State> {
   };
 
   private userService = new UserService();
-  private courseService = new CourseService();
+  private gratitudeService = new GratitudeService();
 
   render() {
     const { getFieldDecorator: field } = this.props.form;
     return (
       <>
-        <Header title="#gratitude" username={this.props.session.githubId} courseName={this.props.course.name} />
+        <Header title="#gratitude" username={this.props.session.githubId} />
         <Col className="m-2" sm={12}>
           <Typography.Text type="secondary">Your feedback will be posted to #gratitude channel</Typography.Text>
           <LoadingScreen show={this.state.isLoading}>
@@ -104,20 +102,19 @@ class GratitudePage extends React.Component<Props, State> {
 
       try {
         this.setState({ isLoading: true });
-        await this.courseService.postPublicFeedback(this.props.course.id, {
+        await this.gratitudeService.postGratitude({
           toUserId: values.userId,
-          // badgeId: values.badgeId,
           comment: values.comment,
         });
         this.props.form.resetFields();
         message.success('Your feedback has been submitted.');
         this.setState({ isLoading: false });
       } catch (e) {
-        message.success('An error occured. Please try later.');
+        message.error('An error occured. Please try later.');
         this.setState({ isLoading: false });
       }
     });
   };
 }
 
-export default withCourseData(withSession(Form.create({ name: 'gratitude' })(GratitudePage)));
+export default withSession(Form.create()(GratitudePage));

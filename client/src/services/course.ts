@@ -82,8 +82,10 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseStudents(courseId: number) {
-    const result = await axios.get<{ data: StudentBasic[] }>(`${this.host}/api/course/${courseId}/students`);
+  async getCourseStudents(courseId: number, activeOnly?: boolean) {
+    const result = await axios.get<{ data: StudentDetails[] }>(
+      `${this.host}/api/course/${courseId}/students?status=${activeOnly ? 'active' : 'all'}`,
+    );
     return result.data.data;
   }
 
@@ -110,17 +112,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getStudentProfile(courseId: number) {
-    const result = await axios.get<{
-      data: StudentProfile;
-    }>(`/api/course/${courseId}/student/profile`);
-    return result.data.data;
-  }
-
   async getCourseScore(courseId: number) {
-    const result = await axios.get<{
-      data: StudentScore[];
-    }>(`/api/course/${courseId}/score`);
+    const result = await axios.get<{ data: StudentScore[] }>(`/api/course/${courseId}/score`);
     return result.data.data;
   }
 
@@ -133,14 +126,14 @@ export class CourseService {
 
   async getAllMentorStudents(courseId: number) {
     const result = await axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
-      `/api/course/${courseId}/mentor/students/all`,
+      `/api/course/${courseId}/mentor/me/students/all`,
     );
     return result.data.data;
   }
 
   async getMentorStudents(courseId: number) {
-    const result = await axios.get<{ data: { students: StudentBasic[] } }>(`/api/course/${courseId}/mentor/students`);
-    return result.data.data.students;
+    const result = await axios.get<{ data: StudentBasic[] }>(`/api/course/${courseId}/mentor/me/students`);
+    return result.data.data;
   }
 
   async postPublicFeedback(courseId: number, data: { toUserId: number; badgeId?: string; comment: string }) {
@@ -200,6 +193,12 @@ export interface StudentScore extends StudentBasic {
     score: number;
   }[];
   rank: number;
+  locationName: string;
+  totalScore: number;
+}
+
+export interface StudentDetails extends StudentBasic {
+  countryName: string;
   locationName: string;
   totalScore: number;
 }

@@ -1,4 +1,4 @@
-import { Button, List, Select, Result } from 'antd';
+import { Button, List, Select, Result, Divider } from 'antd';
 
 import { Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
@@ -34,13 +34,35 @@ const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: S
 // const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
 //   checks.some(check => check(course, role, session));
 
-const routes = [
+const publicRoutes = [
   {
-    name: `📜 Registrations`,
-    getLink: (_: Course) => `/admin/registrations`,
-    access: isAdminRole,
+    name: `👏 Say Thank you (Discord >> #gratitude)`,
+    link: `/gratitude`,
     newTab: false,
   },
+  {
+    name: `💌 Feedback on Student/Mentor`,
+    link: `/private-feedback`,
+    newTab: false,
+  },
+  {
+    name: `📝 Feedback on RS School`,
+    link: `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
+    newTab: true,
+  },
+  {
+    name: `🐞 Submit "Bug"`,
+    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
+    newTab: false,
+  },
+  {
+    name: `🔢 Submit "Data Issue"`,
+    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=data-issue-report.md&title=`,
+    newTab: false,
+  },
+];
+
+const routes = [
   {
     name: `🔥 Score`,
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
@@ -59,24 +81,7 @@ const routes = [
   //   access: combineAnd(isCourseNotCompleted, combineOr(isAdminRole, isActivist, isCourseManager)),
   //   newTab: false,
   // },
-  {
-    name: `👏 Say Thank you (Discord >> #gratitude)`,
-    getLink: (course: Course) => `/course/gratitude?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, anyAccess),
-    newTab: false,
-  },
-  {
-    name: `💌 Feedback on Student/Mentor`,
-    getLink: (_: Course) => `/private-feedback`,
-    access: combineAnd(isCourseNotCompleted, anyAccess),
-    newTab: false,
-  },
-  {
-    name: `📝 Feedback on RS School`,
-    getLink: (_: Course) => `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
-    access: anyAccess,
-    newTab: true,
-  },
+
   // {
   //   name: `🎤 Interview Feedback`,
   //   getLink: (course: Course) => `/course/mentor/interview-feedback?course=${course.alias}`,
@@ -96,17 +101,12 @@ const routes = [
     newTab: false,
   },
   {
-    name: `🐞 Submit "Bug"`,
-    getLink: (_: Course) => `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
-    access: combineAnd(isCourseNotCompleted, anyAccess),
-    newTab: false,
-  },
-  {
-    name: `🔢 Submit "Data Issue"`,
-    getLink: (_: Course) => `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=data-issue-report.md&title=`,
+    name: `👩‍🎓 Course Students`,
+    getLink: (course: Course) => `/course/admin/students?course=${course.alias}`,
     access: anyAccess,
     newTab: false,
   },
+
   // {
   //   name: `➡️ Assign Tasks`,
   //   getLink: (course: Course) => `/course/admin/task-assign?course=${course.alias}`,
@@ -193,7 +193,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     const hasPlanned = (this.props.courses || []).some(course => course.planned && !course.completed);
     return (
       <Result
-        status="404"
+        status="info"
         title="You are not student or mentor in any active course"
         subTitle={
           hasPlanned
@@ -232,7 +232,6 @@ class IndexPage extends React.PureComponent<Props, State> {
         <Header username={this.props.session.githubId} />
 
         <div className="m-3">
-          {!activeCourse && this.renderNoCourse()}
           {isAdmin && (
             <div className="mb-3">
               <Button type="link">
@@ -250,8 +249,12 @@ class IndexPage extends React.PureComponent<Props, State> {
               <Button type="link">
                 <a href="/admin/users">Users</a>
               </Button>
+              <Button type="link">
+                <a href="/admin/registrations">Registrations</a>
+              </Button>
             </div>
           )}
+          {!activeCourse && this.renderNoCourse()}
           {this.state.hasRegistryBanner && activeCourse && (
             <div className="mb-3">
               <RegistryBanner />
@@ -279,6 +282,19 @@ class IndexPage extends React.PureComponent<Props, State> {
               )}
             />
           )}
+          <Divider dashed />
+          <h4>Feedback</h4>
+          <List
+            bordered
+            dataSource={publicRoutes}
+            renderItem={(linkInfo: LinkInfo) => (
+              <List.Item key={linkInfo.link}>
+                <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+                  {linkInfo.name}
+                </a>
+              </List.Item>
+            )}
+          />
         </div>
       </div>
     );
