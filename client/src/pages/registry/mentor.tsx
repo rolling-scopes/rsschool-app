@@ -12,7 +12,6 @@ import { formatMonthFriendly } from 'services/formatter';
 import { Props, TYPES } from './../../configs/registry';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
-import { formatDateFriendly } from 'services/formatter';
 
 type State = {
   courses: Course[];
@@ -121,12 +120,9 @@ class CourseRegistryPage extends React.Component<Props, State> {
                   )}
                 </Form.Item>
                 {course && <Typography.Paragraph type="secondary">{course.description}</Typography.Paragraph>}
-                {course && (
-                  <Typography.Title level={4}>
-                    Dates: {formatDateFriendly(course.startDate)} - {formatDateFriendly(course.endDate)}
-                  </Typography.Title>
-                )}
-
+                <Row>
+                  <Typography.Title level={4}>О менторинге</Typography.Title>
+                </Row>
                 <Typography.Paragraph>
                   <ul>
                     <li>Темы менторинга: html/css/vanillajs.</li>
