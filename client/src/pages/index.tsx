@@ -22,7 +22,7 @@ const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
-// const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
+const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
 // const isActivist = (_1: Course, _2: Role, session: Session) => session.isActivist;
 
 const isAdminRole = (_1: Course, _2: Role, session: Session) => session.isAdmin;
@@ -31,8 +31,8 @@ const isCourseNotCompleted = (course: Course) => !course.completed;
 const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
   checks.every(check => check(course, role, session));
 
-// const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
-//   checks.some(check => check(course, role, session));
+const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
+  checks.some(check => check(course, role, session));
 
 const publicRoutes = [
   {
@@ -103,7 +103,7 @@ const routes = [
   {
     name: `👩‍🎓 Course Students`,
     getLink: (course: Course) => `/course/admin/students?course=${course.alias}`,
-    access: anyAccess,
+    access: combineOr(isAdminRole, isCourseManager),
     newTab: false,
   },
 
