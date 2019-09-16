@@ -1,24 +1,24 @@
 {
   "name": "github-task-checker",
   "version": "1.0.0",
-  "description": "Serverless webpack example using Typescript",
+  "description": "Github Task Checker",
   "main": "handler.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "private": true,
   "dependencies": {
+    "axios": "0.19.0",
     "child-proc": "0.0.1",
-    "source-map-support": "^0.5.10",
-    "unzipper": "^0.10.3"
+    "chrome-aws-lambda": "^1.19.0",
+    "lodash": "^4.17.15",
+    "puppeteer-core": "^1.19.0",
+    "unzipper": "^0.10.5"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
-    "serverless-webpack": "^5.2.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.5.3",
-    "webpack": "4.38.0"
-  },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+    "@types/puppeteer-core": "1.9.0",
+    "aws-sdk": "^2.507.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.6.2"
+  }
 }

@@ -9,6 +9,7 @@ export interface Task {
   description: string | null;
   githubPrRequired: boolean | null;
   verification: 'manual' | 'auto';
+  githubRepoName: string;
 }
 
 export class TaskService {
