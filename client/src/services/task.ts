@@ -9,7 +9,7 @@ export interface Task {
   description: string | null;
   githubPrRequired: boolean | null;
   verification: 'manual' | 'auto';
-  type: 'jstask' | 'htmltask' | 'codecademy' | 'htmlacademy' | 'udemy';
+  type: 'jstask' | 'htmltask' | 'external';
   githubRepoName: string;
 }
 

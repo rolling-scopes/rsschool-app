@@ -135,13 +135,6 @@ class TasksPage extends React.Component<Props, State> {
             )}
           </Form.Item>
           {isAutoTask && (
-            <Form.Item label="Github Repo Name">
-              {field('githubRepoName', {
-                initialValue: modalData.githubRepoName,
-              })(<Input />)}
-            </Form.Item>
-          )}
-          {isAutoTask && (
             <Form.Item label="Type">
               {field('type', {
                 initialValue: modalData.type,
@@ -149,11 +142,16 @@ class TasksPage extends React.Component<Props, State> {
                 <Select placeholder="Please select a type">
                   <Select.Option value="jstask">JS Task</Select.Option>
                   <Select.Option value="htmltask">HTML Task</Select.Option>
-                  <Select.Option value="codecademy">Codecademy</Select.Option>
-                  <Select.Option value="htmlacademy">HTML academy</Select.Option>
-                  <Select.Option value="udemy">Udemy</Select.Option>
+                  <Select.Option value="external">External</Select.Option>
                 </Select>,
               )}
+            </Form.Item>
+          )}
+          {isAutoTask && (
+            <Form.Item label="Github Repo Name">
+              {field('githubRepoName', {
+                initialValue: modalData.githubRepoName,
+              })(<Input />)}
             </Form.Item>
           )}
         </Form>

@@ -33,7 +33,7 @@ export class Task {
   githubRepoName: string;
 
   @Column({ nullable: true })
-  type: 'jstask' | 'htmltask' | 'codecademy' | 'htmlacademy' | 'udemy';
+  type: 'jstask' | 'htmltask' | 'external';
 
   @Column({ default: false })
   useJury: boolean;

@@ -13,7 +13,7 @@ type Input = {
 type TaskCheckEvent = {
   courseTask: {
     id: number;
-    type: 'jstask' | 'htmltask' | 'codecademy' | 'htmlacademy' | 'udemy';
+    type: 'jstask' | 'htmltask' | 'external';
     githubRepoName: string;
   };
   studentId: number;
