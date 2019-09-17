@@ -15,7 +15,7 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
     score,
     studentId: data.studentId,
     courseTaskId: data.courseTask.id,
-  }
+  };
 
   const requestConfig = {
     headers: {

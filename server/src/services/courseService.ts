@@ -83,6 +83,11 @@ export interface StudentWithResults extends StudentBasic {
   }[];
 }
 
+export interface MentorDetails extends MentorBasic {
+  locationName: string | null;
+  countryName: string;
+}
+
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
   const user = (mentor.user as User)!;
   return {
@@ -116,6 +121,16 @@ export function convertToStudentDetails(student: Student): StudentDetails {
   const user = (student.user as User)!;
   return {
     ...studentBasic,
+    locationName: user.locationName || null,
+    countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
+  };
+}
+
+export function convertToMentorDetails(mentor: Mentor): MentorDetails {
+  const mentorBasic = convertToMentorBasic(mentor);
+  const user = (mentor.user as User)!;
+  return {
+    ...mentorBasic,
     locationName: user.locationName || null,
     countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
   };
@@ -245,6 +260,18 @@ export async function getAssignedStudentsByMentorId(mentorId: number) {
   });
 
   return students;
+}
+
+export async function getMentors(courseId: number): Promise<MentorDetails[]> {
+  const records = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(primaryUserFields)
+    .innerJoin('mentor.course', 'course')
+    .where(`course.id = :courseId`, { courseId })
+    .getMany();
+
+  const mentors = records.map(convertToMentorDetails);
+  return mentors;
 }
 
 export async function getMentorWithContacts(mentorId: number): Promise<MentorWithContacts> {

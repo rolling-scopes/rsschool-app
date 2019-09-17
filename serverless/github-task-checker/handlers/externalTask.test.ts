@@ -14,7 +14,7 @@ const context = {
 
 const callback = () => {};
 
-describe('externalTask.handler()',() => {
+describe('externalTask.handler()', () => {
   it('This is a test case for checking lambda input parameters', async () => {
     const event = {
       Records: [

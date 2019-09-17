@@ -1,30 +1,17 @@
 import Router from 'koa-router';
 import { OK, NOT_FOUND } from 'http-status-codes';
 import { ILogger } from '../../logger';
-import { Mentor, User } from '../../models';
+import { Mentor } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { OperationResult, userService } from '../../services';
-
-type MentorDTO = {
-  firstName: string;
-  lastName: string;
-  githubId: string;
-  mentorId: number;
-};
+import { OperationResult, userService, courseService } from '../../services';
 
 export const getMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
-  const mentors = await getRepository(Mentor).find({ where: { courseId }, relations: ['user'] });
 
-  const students = mentors.map<MentorDTO>(mentor => ({
-    mentorId: mentor.id,
-    firstName: (mentor.user as User).firstName,
-    lastName: (mentor.user as User).lastName,
-    githubId: (mentor.user as User).githubId,
-  }));
+  const result = await courseService.getMentors(courseId);
 
-  setResponse(ctx, OK, students);
+  setResponse(ctx, OK, result);
 };
 
 export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -40,8 +27,6 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
   const result: OperationResult[] = [];
   for await (const item of data) {
     const { githubId, maxStudentsLimit } = item;
-
-    console.time(githubId);
 
     const user = await userService.getUserByGithubId(item.githubId);
 
@@ -79,8 +64,6 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
       status: 'created',
       value: savedMentor.id,
     });
-
-    console.timeEnd(item.githubId);
   }
 
   setResponse(ctx, OK, result);

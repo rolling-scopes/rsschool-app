@@ -361,13 +361,14 @@ class ProfilePage extends React.Component<Props, State> {
       comment: string;
       badgeId: string;
       createdDate: string;
-
     }[] = profile.receivedFeedback;
 
     const dataSource = receivedFeedback.map((f, i) => (
       <div key={i}>
-        <h4>{formatDate(f.createdDate)} from {this.renderGithubLink(f.fromUser.githubId)}:</h4>
-         {f.comment}
+        <h4>
+          {formatDate(f.createdDate)} from {this.renderGithubLink(f.fromUser.githubId)}:
+        </h4>
+        {f.comment}
       </div>
     ));
     if (dataSource.length === 0) {

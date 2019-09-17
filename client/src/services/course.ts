@@ -91,6 +91,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getCourseMentors(courseId: number) {
+    const result = await axios.get<{ data: MentorDetails[] }>(`${this.host}/api/course/${courseId}/mentors`);
+    return result.data.data;
+  }
+
   async getCourseTasksWithTaskCheckers(courseId: number) {
     const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasksCheckers`);
     return result.data.data;
@@ -203,6 +208,11 @@ export interface StudentDetails extends StudentBasic {
   countryName: string;
   locationName: string;
   totalScore: number;
+}
+
+export interface MentorDetails extends MentorBasic {
+  countryName: string;
+  locationName: string;
 }
 
 export interface PostScore {

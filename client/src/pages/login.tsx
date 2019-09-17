@@ -10,7 +10,7 @@ class LoginPage extends React.PureComponent {
     return (
       <main>
         <div className="login-form">
-          <img className="login-image" src="/static/images/logo-rs-school.svg" alt="RS School Logo"/>
+          <img className="login-image" src="/static/images/logo-rs-school.svg" alt="RS School Logo" />
 
           <Card
             style={{ width: 320 }}
@@ -37,7 +37,6 @@ class LoginPage extends React.PureComponent {
               description="In order to access the RS School App, you need to login with your GitHub account"
             />
           </Card>
-
         </div>
         <style jsx>{styles}</style>
       </main>
@@ -54,23 +53,23 @@ const styles = css`
     transform: translate(-50%, -65%);
     text-align: center;
   }
-  
-  @media (max-width: 767px) { 
+
+  @media (max-width: 767px) {
     .login-form {
       top: 20px;
       transform: translate(-50%, 0);
     }
   }
-  
+
   .login-image {
     width: 100%;
     max-width: 500px;
     margin: 0 auto 50px;
   }
-  
+
   .login-card-img {
-     width: 100px;
-     margin: 30px auto 20px;
+    width: 100px;
+    margin: 30px auto 20px;
   }
 `;
 

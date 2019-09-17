@@ -113,6 +113,12 @@ const routes = [
     access: combineOr(isAdminRole, isCourseManager),
     newTab: false,
   },
+  {
+    name: `👩‍🏫 Course Mentors`,
+    getLink: (course: Course) => `/course/admin/mentors?course=${course.alias}`,
+    access: combineOr(isAdminRole, isCourseManager),
+    newTab: false,
+  },
 
   // {
   //   name: `➡️ Assign Tasks`,
