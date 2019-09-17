@@ -20,6 +20,11 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
     return;
   }
 
+  if (courseTask.task.type !== 'externaltask') {
+    setResponse(ctx, BAD_REQUEST, { message: 'Not supported task type' });
+    return;
+  }
+
   const student = await getRepository(Student).findOne({
     where: { userId: id, courseId },
   });
