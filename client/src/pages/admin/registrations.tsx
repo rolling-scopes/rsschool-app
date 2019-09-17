@@ -73,13 +73,13 @@ class RegistrationsPage extends React.Component<Props, State> {
 
   getRegistrations = async (id?: number) => {
     const courseId = id || this.props.form.getFieldValue('courseId');
-    const Url = `/api/registry?type=mentor&courseId=${courseId}`;
+    const url = `/api/registry?type=mentor&courseId=${courseId}`;
     const {
       data: { data: registrations },
-    } = await axios.get(Url);
+    } = await axios.get(url);
     const statistics = { ...DEFAULT_STATISTICS };
 
-    for (let registration of registrations) {
+    for (const registration of registrations) {
       switch (registration.status) {
         case 'approved':
           statistics.approved += 1;

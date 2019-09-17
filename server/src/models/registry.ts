@@ -17,7 +17,10 @@ export class Registry {
   userId: number;
 
   @ManyToOne(_ => Course, (course: Course) => course.registries, { nullable: true })
-  course: Course | number;
+  course: Course;
+
+  @Column()
+  courseId: number;
 
   @Column({ name: 'type' })
   type: ParticipantType;

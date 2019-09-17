@@ -1,4 +1,4 @@
-import { Button, Col, Form, message, Select, Typography } from 'antd';
+import { Button, Col, Form, message, Input, Select, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -28,7 +28,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
 
     const filteredCourseTasks = courseTasks
       .sort(sortTasksByEndDate)
-      .filter(task => task.studentEndDate && task.verification === 'auto' && task.githubRepoName);
+      .filter(task => task.studentEndDate && task.verification === 'auto');
 
     this.setState({ courseTasks: filteredCourseTasks });
   }
@@ -53,7 +53,15 @@ class TaskCheckerPage extends React.Component<Props, State> {
                 </Select>,
               )}
             </Form.Item>
-            {task && (
+            {task && task.type === 'external' && (
+              <div>
+                <Form.Item label="Codecademy Account">{field('codecademy')(<Input />)}</Form.Item>
+                <Form.Item label="Html Academy Account">{field('htmlacademy')(<Input />)}</Form.Item>
+                <Form.Item label="Udemy: HTML/CSS Certificate Id ">{field('udemyHtml')(<Input />)}</Form.Item>
+                <Form.Item label="Udemy: Web Certificate Id ">{field('udemyWeb')(<Input />)}</Form.Item>
+              </div>
+            )}
+            {task && task.type === 'jstask' && (
               <>
                 <Typography.Paragraph>
                   The system will run tests in the following repository and will update the score based on the result

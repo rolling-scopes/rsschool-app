@@ -115,26 +115,37 @@ export function registryRouter(logger?: ILogger) {
   });
 
   router.put('/', adminGuard, async (ctx: Router.RouterContext) => {
-    const ids = ctx.request.body.ids;
+    const ids = ctx.request.body.ids as number[];
     const status = ctx.request.body.status;
 
     const registries = await Promise.all(
-      ids.map((id: number) => getRepository(Registry).findOne({ where: { id }, relations: ['course'] })),
-    ).then((oldRegistries: any) =>
+      ids.map(id => getRepository(Registry).findOne({ where: { id: Number(id) }, relations: ['course'] })),
+    ).then(oldRegistries =>
       Promise.all(
-        oldRegistries.reduce((requests: any, registry: any) => {
-          const registryPayload = { ...registry, status };
-          const { userId, course, maxStudentsLimit } = registryPayload;
+        oldRegistries.reduce(
+          (requests, registry) => {
+            if (!registry) {
+              return requests;
+            }
+            const registryPayload = { ...registry, status };
+            const { userId, course, attributes } = registryPayload;
 
-          delete registryPayload.course;
-          requests.push(getManager().save(Registry, registryPayload));
+            requests.push(getManager().save(Registry, registryPayload));
 
-          if (status === 'approved') {
-            requests.push(getRepository(Mentor).save({ userId, courseId: course!.id, maxStudentsLimit }));
-          }
+            if (status === 'approved') {
+              requests.push(
+                getRepository(Mentor).save({
+                  userId,
+                  courseId: course.id,
+                  maxStudentsLimit: attributes.maxStudentsLimit,
+                }),
+              );
+            }
 
-          return requests;
-        }, []),
+            return requests;
+          },
+          [] as Promise<any>[],
+        ),
       ),
     );
 
