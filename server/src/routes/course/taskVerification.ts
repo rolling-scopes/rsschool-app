@@ -38,7 +38,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
     },
   };
 
-  await awsTaskService.postTaskVerification(result);
+  await awsTaskService.postTaskVerification([result]);
 
   setResponse(ctx, OK, result);
 };

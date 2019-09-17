@@ -10,8 +10,8 @@ type TaskVerificationEvent = {
   };
 };
 
-export async function postTaskVerification(event: TaskVerificationEvent) {
-  return axios.post(`${config.aws.taskApiUrl}/task`, event, {
+export async function postTaskVerification(data: TaskVerificationEvent[]) {
+  return axios.post(`${config.aws.taskApiUrl}/task`, data, {
     headers: { 'x-api-key': config.aws.taskApiKey },
   });
 }
