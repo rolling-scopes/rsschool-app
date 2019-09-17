@@ -45,7 +45,7 @@ export function createTaskResult(authorId: number, data: TaskResultInput): Parti
   return {
     comment: data.comment,
     courseTaskId: data.courseTaskId,
-    student: data.studentId,
+    studentId: data.studentId,
     score: data.score,
     historicalScores: [
       {
@@ -62,7 +62,7 @@ export function createTaskResult(authorId: number, data: TaskResultInput): Parti
 export function createJuryTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
   return {
     courseTaskId: data.courseTaskId,
-    student: data.studentId,
+    studentId: data.studentId,
     score: data.score,
     juryScores: [
       {

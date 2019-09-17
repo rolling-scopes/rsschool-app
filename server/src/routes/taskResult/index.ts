@@ -5,6 +5,7 @@ import { ILogger } from '../../logger';
 import { TaskResult } from '../../models';
 import { adminGuard } from '../guards';
 import { setResponse } from '../utils';
+import { taskResultsService } from '../../services';
 
 export function taskResultRoute(logger: ILogger) {
   const router = new Router({ prefix: '/taskResult' });
@@ -26,10 +27,20 @@ const createPostTaskResult = (_: ILogger) => async (ctx: Router.RouterContext) =
     setResponse(ctx, BAD_REQUEST, {});
     return;
   }
-  const result = await getRepository(TaskResult).save({
+  const data = taskResultsService.createTaskResult(0, {
     courseTaskId: Number(input.courseTaskId),
     studentId: Number(input.studentId),
     score: Number(input.score),
+    comment: '',
   });
+  const { courseTaskId, studentId } = data;
+  const existing = await getRepository(TaskResult).findOne({ where: { courseTaskId, studentId } });
+  if (existing != null) {
+    const historicalScores = existing.historicalScores.concat(data.historicalScores || []);
+    const result = await getRepository(TaskResult).save({ ...existing, ...data, historicalScores });
+    setResponse(ctx, OK, result);
+    return;
+  }
+  const result = await getRepository(TaskResult).save(data);
   setResponse(ctx, OK, result);
 };

@@ -20,7 +20,10 @@ export class TaskResult {
   updatedDate: string;
 
   @ManyToOne(_ => Student)
-  student: Student | number;
+  student: Student;
+
+  @Column()
+  studentId: number;
 
   @Column()
   courseTaskId: number;
