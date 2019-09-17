@@ -20,6 +20,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { UserService, UserFull, ProfileResponse, ResponseCourse, ResponseMentor, ResponseStudent } from 'services/user';
+import { formatDate } from 'services/formatter';
 
 type Props = {
   router: NextRouter;
@@ -359,12 +360,15 @@ class ProfilePage extends React.Component<Props, State> {
       fromUser: UserFull;
       comment: string;
       badgeId: string;
+      createdDate: string;
+
     }[] = profile.receivedFeedback;
 
     const dataSource = receivedFeedback.map((f, i) => (
-      <span key={i}>
-        {this.renderGithubLink(f.fromUser.githubId)}: {f.comment}
-      </span>
+      <div key={i}>
+        <h4>{formatDate(f.createdDate)} from {this.renderGithubLink(f.fromUser.githubId)}:</h4>
+         {f.comment}
+      </div>
     ));
     if (dataSource.length === 0) {
       dataSource.push(<span>No Data</span>);
