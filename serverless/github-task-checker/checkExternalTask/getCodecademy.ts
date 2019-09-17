@@ -2,12 +2,13 @@ import axios from 'axios';
 import { parse, HTMLElement } from 'node-html-parser';
 
 const URL = 'https://www.codecademy.com/';
-const TASKS = [
-  'Introduction to HTML',
-  'Learn CSS',
-];
+const TASKS = ['Introduction to HTML', 'Learn CSS'];
 
-export default async (username) => {
+export default async (username: string) => {
+  if (!username) {
+    return false;
+  }
+
   const url = `${URL}${username}`;
 
   try {
@@ -16,11 +17,10 @@ export default async (username) => {
 
     const skills = dom
       .querySelectorAll('.contentContainer__3yhRX203mZ5d3LM9QdQ1lj')
-      .map((skill) => {
-        const name = skill.querySelector('.title__3niw5hwoyf-vt1SazvY5Gd')
-          .childNodes[0].rawText;
-        const isPassed = skill.querySelector('.description__5pwX6COkDGktqHdkXYDuu')
-          .childNodes[0].rawText === 'Completed';
+      .map(skill => {
+        const name = skill.querySelector('.title__3niw5hwoyf-vt1SazvY5Gd').childNodes[0].rawText;
+        const isPassed =
+          skill.querySelector('.description__5pwX6COkDGktqHdkXYDuu').childNodes[0].rawText === 'Completed';
 
         return { name, isPassed };
       })

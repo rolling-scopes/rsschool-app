@@ -11,7 +11,7 @@ export interface CourseTask {
   name: string;
   maxScore: number | null;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'external';
+  type: 'jstask' | 'htmltask' | 'externaltask';
   githubRepoName: string;
   scoreWeight: number;
   stageId: number;

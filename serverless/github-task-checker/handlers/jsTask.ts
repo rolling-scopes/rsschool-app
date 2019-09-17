@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as https from 'https';
 import * as unzipper from 'unzipper';
-import { TaskEvent } from './submitTask';
+import { TaskEvent, JsTask } from './submitTask';
 
 interface TestResult {
   passed: number;
@@ -66,7 +66,7 @@ const testRunner = (path: string, result: TestResult) => {
 const worker = (event: TaskEvent): Promise<TestResult> => {
   return new Promise((resolve, reject) => {
     const githubId: string = event.githubId;
-    const githubRepoName: string = event.courseTask.githubRepoName;
+    const githubRepoName: string = (event.courseTask as JsTask).githubRepoName;
     const url: string = `https://codeload.github.com/${githubId}/${githubRepoName}/zip/master`;
     const tempDir: string = `/tmp/${githubId}`;
     const dest: string = `${tempDir}/${githubRepoName}.zip`;

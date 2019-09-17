@@ -9,15 +9,7 @@ import { taskService } from '../../services';
 
 type Input = {
   courseTaskId: number | string;
-};
-type TaskCheckEvent = {
-  courseTask: {
-    id: number;
-    type: 'jstask' | 'htmltask' | 'external';
-    githubRepoName: string;
-  };
-  studentId: number;
-  githubId: string;
+  data: any;
 };
 
 export const postTaskCheck = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -41,14 +33,40 @@ export const postTaskCheck = (_: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const taskCheckEvent: TaskCheckEvent = {
+  const taskCheckEvent: TaskEvent = {
     githubId,
     studentId: student.id,
     courseTask: {
+      ...inputData.data,
       id: courseTask.id,
-      type: courseTask.task.type,
-      githubRepoName: courseTask.task.githubRepoName,
+      type: 'externaltask',
     },
   };
   setResponse(ctx, OK, taskCheckEvent);
+};
+
+export type TaskEvent = {
+  courseTask: JsTask | HtmlTask | ExternalTask;
+  studentId: number;
+  githubId: string;
+};
+
+type JsTask = {
+  id: number;
+  type: 'jstask';
+  githubRepoName: string;
+};
+
+type HtmlTask = {
+  id: number;
+  type: 'htmltask';
+  githubPageUrl: string;
+};
+
+type ExternalTask = {
+  id: number;
+  type: 'externaltask';
+  codecademy: string;
+  htmlacademy: string;
+  udemy: string[];
 };

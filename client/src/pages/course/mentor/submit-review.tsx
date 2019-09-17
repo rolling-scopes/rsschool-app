@@ -57,7 +57,7 @@ class TaskScorePage extends React.Component<Props, State> {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     return (
       <>
-        <Header title="Check Task" courseName={this.props.course.name} username={this.props.session.githubId} />
+        <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
         <Col className="m-2" sm={12}>
           <Form onSubmit={this.handleSubmit} layout="vertical">
             <Form.Item label="Task">
