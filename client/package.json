@@ -25,7 +25,7 @@
     "bootstrap": "~4.3.1",
     "express": "~4.17.1",
     "lodash.get": "~4.4.2",
-    "next": "~9.0.5",
+    "next": "9.0.5",
     "rc-menu": "7.4.23",
     "react-dom": "~16.9.0",
     "react": "~16.9.0",
