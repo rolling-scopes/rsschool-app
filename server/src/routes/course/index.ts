@@ -18,6 +18,8 @@ import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
 import { getStudents, postStudents } from './students';
 import { postTaskArtefact } from './taskArtefact';
+import { postTaskVerification } from './taskVerification';
+
 import { getCourseTasks, getCourseTasksWithTaskCheckers, postShuffleCourseTask } from './tasks';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
@@ -275,6 +277,8 @@ export function courseRoute(logger: ILogger) {
   router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
 
   router.get('/:courseId/tasksCheckers', guard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
+
+  router.post('/:courseId/task/:id/verification', guard, validateCourseId, postTaskVerification(logger));
 
   /**
    * @swagger

@@ -11,6 +11,8 @@ export interface IConfig {
     accessKeyId: string;
     certificateGenerationUrl: string;
     certificateGenerationApiKey: string;
+    taskApiUrl: string;
+    taskApiKey: string;
   };
   dev: {
     username: string;
@@ -80,6 +82,8 @@ export const config: IConfig = {
     accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
     certificateGenerationUrl: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_URL || '',
     certificateGenerationApiKey: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_API_KEY || '',
+    taskApiUrl: process.env.RSSHCOOL_API_AWS_TASK_API_URL || '',
+    taskApiKey: process.env.RSSHCOOL_API_AWS_TASK_API_KEY || '',
   },
   integrations: {
     heroes: {

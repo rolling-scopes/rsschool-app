@@ -5,23 +5,18 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import { setResponse } from '../utils';
 import { Student } from '../../models';
 import { ILogger } from '../../logger';
-import { taskService } from '../../services';
+import { taskService, awsTaskService } from '../../services';
 
-type Input = {
-  courseTaskId: number | string;
-  data: any;
-};
-
-export const postTaskCheck = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
-  const inputData: Input = ctx.request.body;
-  const courseTaskId = Number(inputData.courseTaskId);
+  const courseTaskId: number = Number(ctx.params.id);
 
+  const inputData: any = ctx.request.body;
   const { githubId, id } = ctx.state.user;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
-  if (!courseTask || !courseTask.task || !courseTask.task.githubRepoName) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
+  if (!courseTask || !courseTask.task) {
+    setResponse(ctx, BAD_REQUEST, { message: 'Not valid course task' });
     return;
   }
 
@@ -29,20 +24,23 @@ export const postTaskCheck = (_: ILogger) => async (ctx: Router.RouterContext) =
     where: { userId: id, courseId },
   });
   if (student == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no student' });
+    setResponse(ctx, BAD_REQUEST, { message: 'No student' });
     return;
   }
 
-  const taskCheckEvent: TaskEvent = {
+  const result: TaskEvent = {
     githubId,
     studentId: student.id,
     courseTask: {
-      ...inputData.data,
+      ...inputData,
       id: courseTask.id,
       type: 'externaltask',
     },
   };
-  setResponse(ctx, OK, taskCheckEvent);
+
+  await awsTaskService.postTaskVerification(result);
+
+  setResponse(ctx, OK, result);
 };
 
 export type TaskEvent = {

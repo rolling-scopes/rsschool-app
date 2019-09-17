@@ -65,6 +65,9 @@ functions:
     handler: handlers/externalTask.handler
     memorySize: 256
     timeout: 30
+    package:
+      exclude:
+        - 'node_modules/chrome-aws-lambda/**'
     events:
       - sqs:
           batchSize: 1
@@ -75,6 +78,9 @@ functions:
     handler: handlers/jsTask.handler
     memorySize: 256
     timeout: 30
+    package:
+      exclude:
+        - 'node_modules/chrome-aws-lambda/**'
     events:
       - sqs:
           batchSize: 1

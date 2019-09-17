@@ -155,6 +155,10 @@ export class CourseService {
     });
   }
 
+  async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
+    await axios.post(`/api/course/${courseId}/task/${courseTaskId}/verification`, data);
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }

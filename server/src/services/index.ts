@@ -4,6 +4,7 @@ import * as courseService from './courseService';
 import * as taskResultsService from './taskResultsService';
 import * as shuffleService from './shuffleService';
 import * as taskService from './tasksService';
+import * as awsTaskService from './awsTaskService';
 
 export * from './operationResult';
-export { userService, taskService, shuffleService, studentsService, courseService, taskResultsService };
+export { userService, taskService, shuffleService, studentsService, courseService, taskResultsService, awsTaskService };
