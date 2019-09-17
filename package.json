@@ -2,8 +2,7 @@
   "private": true,
   "workspaces": [
     "client",
-    "server",
-    "serverless/*"
+    "server"
   ],
   "scripts": {
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",

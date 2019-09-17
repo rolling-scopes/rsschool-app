@@ -6,7 +6,7 @@ import { TaskResult } from '../../models';
 import { adminGuard } from '../guards';
 import { setResponse } from '../utils';
 
-export function taskRoute(logger: ILogger) {
+export function taskResultRoute(logger: ILogger) {
   const router = new Router({ prefix: '/taskResult' });
 
   router.post('/', adminGuard, createPostTaskResult(logger));

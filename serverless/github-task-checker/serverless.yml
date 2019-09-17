@@ -73,6 +73,8 @@ functions:
           batchSize: 1
           arn:
             Fn::GetAtt: [ExternalTasksQueue, Arn]
+    environment:
+      RS_APP_AUTHORIZATION: '{{resolve:ssm:rs-app-authorization:1}}'
 
   CheckJsTask:
     handler: handlers/jsTask.handler
