@@ -13,7 +13,7 @@ type Input = {
 type TaskCheckEvent = {
   courseTask: {
     id: number;
-    type: 'jstask' | 'htmltask';
+    type: 'jstask' | 'htmltask' | 'codecademy' | 'htmlacademy' | 'udemy';
     githubRepoName: string;
   };
   studentId: number;
@@ -46,7 +46,7 @@ export const postTaskCheck = (_: ILogger) => async (ctx: Router.RouterContext) =
     studentId: student.id,
     courseTask: {
       id: courseTask.id,
-      type: 'jstask',
+      type: courseTask.task.type,
       githubRepoName: courseTask.task.githubRepoName,
     },
   };

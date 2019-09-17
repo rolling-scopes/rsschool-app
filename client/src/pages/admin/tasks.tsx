@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Checkbox, message, Form, Input, Modal, Radio, Table } from 'antd';
+import { Button, Checkbox, message, Select, Form, Input, Modal, Radio, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { Header, Session, withSession } from 'components';
@@ -64,6 +64,10 @@ class TasksPage extends React.Component<Props, State> {
             {
               title: 'Verification',
               dataIndex: 'verification',
+            },
+            {
+              title: 'Type',
+              dataIndex: 'type',
             },
             {
               title: 'Actions',
@@ -137,6 +141,21 @@ class TasksPage extends React.Component<Props, State> {
               })(<Input />)}
             </Form.Item>
           )}
+          {isAutoTask && (
+            <Form.Item label="Type">
+              {field('type', {
+                initialValue: modalData.type,
+              })(
+                <Select placeholder="Please select a type">
+                  <Select.Option value="jstask">JS Task</Select.Option>
+                  <Select.Option value="htmltask">HTML Task</Select.Option>
+                  <Select.Option value="codecademy">Codecademy</Select.Option>
+                  <Select.Option value="htmlacademy">HTML academy</Select.Option>
+                  <Select.Option value="udemy">Udemy</Select.Option>
+                </Select>,
+              )}
+            </Form.Item>
+          )}
         </Form>
       </Modal>
     );
@@ -154,6 +173,7 @@ class TasksPage extends React.Component<Props, State> {
         githubPrRequired: !!values.githubPrRequired,
         descriptionUrl: values.descriptionUrl,
         githubRepoName: values.githubRepoName,
+        type: values.type,
       };
       try {
         const task =

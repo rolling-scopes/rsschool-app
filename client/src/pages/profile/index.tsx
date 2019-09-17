@@ -267,11 +267,7 @@ class ProfilePage extends React.Component<Props, State> {
           size="small"
           header={'Students'}
           dataSource={mentor.students}
-          renderItem={({ githubId }) => (
-            <List.Item>
-              <a href={this.getLink(githubId)}>{githubId}</a>
-            </List.Item>
-          )}
+          renderItem={({ githubId }) => <List.Item>{this.renderGithubLink(githubId)}</List.Item>}
         />
       </Card>
     );
@@ -360,15 +356,18 @@ class ProfilePage extends React.Component<Props, State> {
 
   private renderPublicFeedback(profile: any) {
     const receivedFeedback: {
-      fromUser: number;
-      toUser: number;
+      fromUser: UserFull;
       comment: string;
       badgeId: string;
     }[] = profile.receivedFeedback;
 
-    const dataSource = receivedFeedback.map(f => `${f.comment}${f.badgeId ? ` (Badge [${f.badgeId}])` : ''}`);
+    const dataSource = receivedFeedback.map((f, i) => (
+      <span key={i}>
+        {this.renderGithubLink(f.fromUser.githubId)}: {f.comment}
+      </span>
+    ));
     if (dataSource.length === 0) {
-      dataSource.push('No Data');
+      dataSource.push(<span>No Data</span>);
     }
     const title = (
       <h2>
@@ -385,6 +384,10 @@ class ProfilePage extends React.Component<Props, State> {
         />
       </Card>
     );
+  }
+
+  private renderGithubLink(githubId: string) {
+    return <a href={this.getLink(githubId)}>{githubId}</a>;
   }
 }
 

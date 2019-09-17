@@ -48,6 +48,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     where: { githubId },
     relations: [
       'receivedFeedback',
+      'receivedFeedback.fromUser',
       'mentors',
       'mentors.user',
       'mentors.students',
