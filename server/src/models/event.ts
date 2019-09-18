@@ -1,5 +1,5 @@
 import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { CourseEvent } from './courseLecture';
+import { CourseEvent } from './courseEvent';
 
 @Entity()
 export class Event {
@@ -24,5 +24,5 @@ export class Event {
   type: string;
 
   @OneToMany(_ => CourseEvent, (courseLecture: CourseEvent) => courseLecture.event, { nullable: true })
-  courseLectures: CourseEvent[] | null;
+  courseEvents: CourseEvent[] | null;
 }

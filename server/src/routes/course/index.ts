@@ -1,7 +1,7 @@
 import { BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
 import { ILogger } from '../../logger';
-import { Course, CourseTask } from '../../models';
+import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
 import { adminGuard, guard, courseManagerGuard } from '../guards';
 import { setResponse } from '../utils';
@@ -19,6 +19,7 @@ import { postStudentsFeedbacks } from './studentFeedback';
 import { getStudents, postStudents } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
+import { getCourseEvents } from './events';
 
 import { getCourseTasks, getCourseTasksWithTaskCheckers, postShuffleCourseTask } from './tasks';
 
@@ -336,6 +337,14 @@ export function courseRoute(logger: ILogger) {
    *          description: Result
    */
   router.delete('/:courseId/task/:id', adminGuard, validateCourseId, createDeleteRoute(CourseTask, logger));
+
+  router.get('/:courseId/events', guard, validateCourseId, getCourseEvents(logger));
+
+  router.post('/:courseId/event', adminGuard, validateCourseId, createPostRoute(CourseEvent, logger));
+
+  router.put('/:courseId/event/:id', adminGuard, validateCourseId, createPutRoute(CourseEvent, logger));
+
+  router.delete('/:courseId/event/:id', adminGuard, validateCourseId, createDeleteRoute(CourseEvent, logger));
 
   /**
    * @swagger

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import getConfig from 'next/config';
 import { Session } from '../components/withSession';
-
+import { Event } from './event';
 const { serverRuntimeConfig } = getConfig();
 
 export interface CourseTask {
@@ -23,6 +23,19 @@ export interface CourseTask {
   taskResultCount: number;
   useJury: boolean;
   checker: 'mentor' | 'assigned';
+}
+
+export interface CourseEvent {
+  id: number;
+  event: Event;
+  date: string;
+  time: string;
+  place: string;
+  comment: string;
+  stageId: number;
+  eventId: number;
+  owner: string;
+  coordinator: string;
 }
 
 export interface CreateCourseTask {
@@ -81,6 +94,29 @@ export class CourseService {
 
   async getCourseTasks(courseId: number) {
     const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasks`);
+    return result.data.data;
+  }
+
+  async getCourseEvents(courseId: number) {
+    const result = await axios.get<{ data: CourseEvent[] }>(`${this.host}/api/course/${courseId}/events`);
+    return result.data.data;
+  }
+
+  async createCourseEvent(courseId: number, data: Partial<CourseEvent>) {
+    const result = await axios.post<{ data: CourseEvent }>(`${this.host}/api/course/${courseId}/event`, data);
+    return result.data.data;
+  }
+
+  async updateCourseEvent(courseId: number, courseTaskId: number, data: any) {
+    const result = await axios.put<{ data: CourseEvent }>(
+      `${this.host}/api/course/${courseId}/event/${courseTaskId}`,
+      data,
+    );
+    return result.data.data;
+  }
+
+  async deleteCourseEvent(courseId: number, courseTaskId: number) {
+    const result = await axios.delete(`/api/course/${courseId}/event/${courseTaskId}`);
     return result.data.data;
   }
 

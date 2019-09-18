@@ -14,8 +14,8 @@ import { CourseManager } from './courseManager';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
 import { PrivateFeedback } from './privateFeedback';
-import { Event } from './lecture';
-import { CourseEvent } from './courseLecture';
+import { Event } from './event';
+import { CourseEvent } from './courseEvent';
 import { Certificate } from './certificate';
 
 export * from './session';
@@ -62,6 +62,7 @@ export {
   PrivateFeedback,
   Certificate,
   Event,
+  CourseEvent,
 };
 
 export interface IApiResponse<T> {

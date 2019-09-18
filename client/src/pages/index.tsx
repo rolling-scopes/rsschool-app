@@ -102,6 +102,12 @@ const routes = [
     newTab: false,
   },
   {
+    name: `🎟 Course Events`,
+    getLink: (course: Course) => `/course/admin/events?course=${course.alias}`,
+    access: isAdminRole,
+    newTab: false,
+  },
+  {
     name: `🗂 Course Tasks`,
     getLink: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
     access: isAdminRole,
