@@ -118,38 +118,33 @@ export function registryRouter(logger?: ILogger) {
     const ids = ctx.request.body.ids as number[];
     const status = ctx.request.body.status;
 
-    const registries = await Promise.all(
-      ids.map(id => getRepository(Registry).findOne({ where: { id: Number(id) }, relations: ['course'] })),
-    ).then(oldRegistries =>
-      Promise.all(
-        oldRegistries.reduce(
-          (requests, registry) => {
-            if (!registry) {
-              return requests;
-            }
-            const registryPayload = { ...registry, status };
-            const { userId, course, attributes } = registryPayload;
+    const result = [];
 
-            requests.push(getManager().save(Registry, registryPayload));
+    for await (const id of ids) {
+      const oldRegistry = await getRepository(Registry).findOne({ where: { id: Number(id) }, relations: ['course'] });
+      if (!oldRegistry) {
+        continue;
+      }
+      const registryPayload = { ...oldRegistry, status };
+      const { userId, course, attributes } = registryPayload;
+      await getRepository(Registry).save(registryPayload);
 
-            if (status === 'approved') {
-              requests.push(
-                getRepository(Mentor).save({
-                  userId,
-                  courseId: course.id,
-                  maxStudentsLimit: attributes.maxStudentsLimit,
-                }),
-              );
-            }
+      if (status === 'approved') {
+        const existingMentor = await getRepository(Mentor).findOne({ where: { userId, courseId: course.id } });
+        if (existingMentor == null) {
+          const newMentor = await getRepository(Mentor).save({
+            userId,
+            courseId: course.id,
+            maxStudentsLimit: attributes.maxStudentsLimit,
+          });
+          result.push(newMentor);
+        } else {
+          result.push(existingMentor);
+        }
+      }
+    }
 
-            return requests;
-          },
-          [] as Promise<any>[],
-        ),
-      ),
-    );
-
-    setResponse(ctx, OK, { registries });
+    setResponse(ctx, OK, { registries: result });
   });
 
   return router;
