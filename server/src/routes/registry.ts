@@ -86,7 +86,7 @@ export function registryRouter(logger?: ILogger) {
       if (type === 'student') {
         registryPayload.status = 'approved';
         if ((user.students || []).every(s => s.courseId !== courseId)) {
-          await getRepository(Student).save({ userId: user!.id, courseId: course!.id });
+          await getRepository(Student).save({ userId: user!.id, courseId: course!.id, startDate: new Date() });
         }
       } else if (type === 'mentor') {
         registryPayload = {
