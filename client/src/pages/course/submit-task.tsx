@@ -58,32 +58,44 @@ class TaskCheckerPage extends React.Component<Props, State> {
             </Col>
           </Row>
           {task && task.type === 'externaltask' && (
-            <Row gutter={24}>
-              <Col xs={12} sm={8}>
-                <Form.Item label="Codecademy Account">
-                  {field('codecademy', {
-                    rules: [{ pattern: notUrlPattern, message: 'Enter valid Codecademy account' }],
-                  })(<Input placeholder="username" />)}
-                </Form.Item>
-                <Form.Item label="Html Academy Account">
-                  {field('htmlacademy', {
-                    rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Acedemy account' }],
-                  })(<Input placeholder="id1234567" />)}
-                </Form.Item>
-              </Col>
-              <Col xs={12} sm={8} key="2">
-                <Form.Item label="Udemy: Certificate Id 1">
-                  {field('udemy1', {
-                    rules: [{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }],
-                  })(<Input placeholder="UC-xxxxxx" />)}
-                </Form.Item>
-                <Form.Item label="Udemy: Certificate Id 2">
-                  {field('udemy2', {
-                    rules: [{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }],
-                  })(<Input placeholder="UC-xxxxxx" />)}
-                </Form.Item>
-              </Col>
-            </Row>
+            <>
+              {task.descriptionUrl && (
+                <Row>
+                  <Typography.Paragraph>
+                    <div>Description:</div>
+                    <a href={task.descriptionUrl!} target="_blank">
+                      {task.descriptionUrl}
+                    </a>
+                  </Typography.Paragraph>
+                </Row>
+              )}
+              <Row gutter={24}>
+                <Col xs={12} sm={8}>
+                  <Form.Item label="Codecademy Account">
+                    {field('codecademy', {
+                      rules: [{ pattern: notUrlPattern, message: 'Enter valid Codecademy account' }],
+                    })(<Input placeholder="username" />)}
+                  </Form.Item>
+                  <Form.Item label="Html Academy Account">
+                    {field('htmlacademy', {
+                      rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Acedemy account' }],
+                    })(<Input placeholder="id1234567" />)}
+                  </Form.Item>
+                </Col>
+                <Col xs={12} sm={8} key="2">
+                  <Form.Item label="Udemy: Certificate Id 1">
+                    {field('udemy1', {
+                      rules: [{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }],
+                    })(<Input placeholder="UC-xxxxxx" />)}
+                  </Form.Item>
+                  <Form.Item label="Udemy: Certificate Id 2">
+                    {field('udemy2', {
+                      rules: [{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }],
+                    })(<Input placeholder="UC-xxxxxx" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+            </>
           )}
           {task && task.type === 'jstask' && (
             <Row>
