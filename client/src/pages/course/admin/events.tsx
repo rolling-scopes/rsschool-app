@@ -27,6 +27,8 @@ class CourseEventsPage extends React.Component<Props, State> {
     modalAction: 'update',
   };
 
+  private timeZoneOffset = moment().format('Z');
+
   private courseService = new CourseService();
 
   async componentDidMount() {
@@ -179,10 +181,11 @@ class CourseEventsPage extends React.Component<Props, State> {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Time (in local timezone)">
+              <Form.Item label="Time">
                 {field('time', {
                   initialValue: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
-                })(<TimePicker />)}
+                })(<TimePicker format="HH:mm" />)}{' '}
+                {this.timeZoneOffset}
               </Form.Item>
             </Col>
           </Row>
