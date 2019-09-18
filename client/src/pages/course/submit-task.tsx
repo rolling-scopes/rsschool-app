@@ -63,12 +63,12 @@ class TaskCheckerPage extends React.Component<Props, State> {
                 <Form.Item label="Codecademy Account">
                   {field('codecademy', {
                     rules: [{ pattern: notUrlPattern, message: 'Enter valid Codecademy account' }],
-                  })(<Input />)}
+                  })(<Input placeholder="username" />)}
                 </Form.Item>
                 <Form.Item label="Html Academy Account">
                   {field('htmlacademy', {
                     rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Acedemy account' }],
-                  })(<Input />)}
+                  })(<Input placeholder="id1234567" />)}
                 </Form.Item>
               </Col>
               <Col xs={12} sm={8} key="2">
