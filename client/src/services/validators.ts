@@ -9,3 +9,4 @@ export const githubPrUrl = /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull
 export const githubRepoUrl = /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+/gi;
 
 export const udemyCertificateId = /^UC-/g;
+export const notUrlPattern = /^((?!\/).)*$/g;

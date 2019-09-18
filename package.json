@@ -12,7 +12,7 @@
     "client:build": "yarn workspace client build",
     "client:start": "yarn workspace client start"
   },
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^4.1.2",
     "prettier": "^1.18.2",
     "serverless": "^1.50.0"

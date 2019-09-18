@@ -6,7 +6,7 @@ import * as React from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { sortTasksByEndDate } from 'services/rules';
-import { udemyCertificateId } from 'services/validators';
+import { udemyCertificateId, notUrlPattern } from 'services/validators';
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -29,7 +29,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
 
     const filteredCourseTasks = courseTasks
       .sort(sortTasksByEndDate)
-      .filter(task => task.studentEndDate && task.verification === 'auto');
+      .filter(task => task.studentEndDate && task.verification === 'auto' && task.type === 'externaltask');
 
     this.setState({ courseTasks: filteredCourseTasks });
   }
@@ -60,8 +60,16 @@ class TaskCheckerPage extends React.Component<Props, State> {
           {task && task.type === 'externaltask' && (
             <Row gutter={24}>
               <Col xs={12} sm={8}>
-                <Form.Item label="Codecademy Account">{field('codecademy')(<Input />)}</Form.Item>
-                <Form.Item label="Html Academy Account">{field('htmlacademy')(<Input />)}</Form.Item>
+                <Form.Item label="Codecademy Account">
+                  {field('codecademy', {
+                    rules: [{ pattern: notUrlPattern, message: 'Enter valid Codecademy account' }],
+                  })(<Input />)}
+                </Form.Item>
+                <Form.Item label="Html Academy Account">
+                  {field('htmlacademy', {
+                    rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Acedemy account' }],
+                  })(<Input />)}
+                </Form.Item>
               </Col>
               <Col xs={12} sm={8} key="2">
                 <Form.Item label="Udemy: Certificate Id 1">

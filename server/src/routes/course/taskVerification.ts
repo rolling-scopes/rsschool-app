@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { OK, BAD_REQUEST, NOT_ACCEPTABLE } from 'http-status-codes';
 
 import { setResponse } from '../utils';
 import { Student } from '../../models';
@@ -21,7 +21,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
   }
 
   if (courseTask.task.type !== 'externaltask') {
-    setResponse(ctx, BAD_REQUEST, { message: 'Not supported task type' });
+    setResponse(ctx, NOT_ACCEPTABLE, { message: 'Not supported task type' });
     return;
   }
 
