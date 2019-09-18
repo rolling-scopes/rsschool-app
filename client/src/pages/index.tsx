@@ -22,7 +22,7 @@ const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
-// const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
+const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
 const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
 // const isActivist = (_1: Course, _2: Role, session: Session) => session.isActivist;
 
@@ -79,7 +79,7 @@ const routes = [
   {
     name: `🚀 Submit Task`,
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isAdminRole),
+    access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
   // {
