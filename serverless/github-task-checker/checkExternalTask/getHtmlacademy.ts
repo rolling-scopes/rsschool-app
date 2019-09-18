@@ -1,18 +1,21 @@
 import axios, { AxiosResponse } from 'axios';
 
 const URL = 'https://htmlacademy.ru/profile/';
+
+const REGEXP_NOT_LETTERS_DIGITS = /[^а-яА-ЯёЁa-zA-Z0-9]/g;
+
 const TASKS = [
   'Знакомство с HTML и CSS',
   'Структура HTML-документа',
   'Разметка текста',
-  'Ссылки и изображения',
-  'Основы СSS',
+  'Ссылки и изображения',
+  'Основы CSS',
   'Оформление текста',
-  'Знакомство с таблицами',
-  'Знакомство с формами',
+  'Знакомство с таблицами',
+  'Знакомство с формами',
   'Селекторы, часть 1',
-  'Наследование и каскадирование',
-];
+  'Наследование и каскадирование',
+].map(task => task.replace(REGEXP_NOT_LETTERS_DIGITS, ''));
 
 export default async (username: string) => {
   try {
@@ -54,8 +57,10 @@ export default async (username: string) => {
             : achievement === 'Знакомство с CSS'
             ? 'Основы СSS'
             : achievement,
-        ),
+        )
+        .map(achievement => achievement.replace(REGEXP_NOT_LETTERS_DIGITS, '')),
     );
+
 
     const skills = [...new Set([...theme1, ...theme2, ...theme3])].filter(skill => TASKS.includes(skill));
 
