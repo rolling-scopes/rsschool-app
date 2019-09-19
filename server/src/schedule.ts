@@ -22,7 +22,7 @@ export function startBackgroundJobs(logger: ILogger) {
           const newTotalScore = round(score, 1);
           return { id, totalScore: newTotalScore, changed: totalScore !== newTotalScore };
         })
-        .filter(it => it.totalScore > 0 && it.changed);
+        .filter(it => it.totalScore > 0 || it.changed);
 
       const result = updateScoreStudents(scores);
       logger.info(result);
