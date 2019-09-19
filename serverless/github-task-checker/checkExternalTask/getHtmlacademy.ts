@@ -3,6 +3,24 @@ import axios, { AxiosResponse } from 'axios';
 const URL = 'https://htmlacademy.ru/profile/';
 
 const REGEXP_NOT_LETTERS_DIGITS = /[^а-яА-ЯёЁa-zA-Z0-9]/g;
+const REGEXP_SIMILAR_LATIN_CYRYLIC = /A|B|C|E|H|K|M|O|P|T|X|a|c|e|o|p|x/g;
+
+const latinToCyrilicMapping = {
+  A: 'А', 'a': 'а',
+  B: 'В',
+  C: 'С', 'c': 'с',
+  E: 'Е', 'e': 'е',
+  H: 'Н',
+  K: 'К',
+  M: 'М',
+  O: 'О', 'o': 'о',
+  P: 'Р', 'p': 'р',
+  T: 'Т',
+  X: 'Х', 'x': 'х',
+};
+
+const latinToCyrilic = (letter) => latinToCyrilicMapping[letter];
+const replaceLatin = (str) => str.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic);
 
 const TASKS = [
   'Знакомство с HTML и CSS',
@@ -15,7 +33,9 @@ const TASKS = [
   'Знакомство с формами',
   'Селекторы, часть 1',
   'Наследование и каскадирование',
-].map(task => task.replace(REGEXP_NOT_LETTERS_DIGITS, ''));
+]
+  .map(task => task.replace(REGEXP_NOT_LETTERS_DIGITS, ''))
+  .map(task => task.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic))
 
 export default async (username: string) => {
   try {
@@ -51,22 +71,26 @@ export default async (username: string) => {
             .replace('[Архив] ', '')
             .replace(/[xA0]/g, ' '),
         )
-        .map(achievement =>
-          achievement === 'Знакомство'
-            ? 'Знакомство с HTML и CSS'
-            : achievement === 'Знакомство с CSS'
-            ? 'Основы СSS'
-            : achievement,
-        )
-        .map(achievement => achievement.replace(REGEXP_NOT_LETTERS_DIGITS, '')),
+        .map(task => task.replace(REGEXP_NOT_LETTERS_DIGITS, ''))
+        .map(task => task.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic)),
     );
 
-
-    const skills = [...new Set([...theme1, ...theme2, ...theme3])].filter(skill => TASKS.includes(skill));
+    const skills = [...new Set([...theme1, ...theme2, ...theme3])]
+      .map(skill =>
+        skill === replaceLatin('Знакомство')
+          ? replaceLatin('ЗнакомствосHTMLиCSS')
+          : skill === replaceLatin('ЗнакомствосСSS')
+          ? replaceLatin('ОсновыCSS')
+          : skill,
+      );
 
     console.log('Htmlacademy skills =>', JSON.stringify(skills));
 
-    return skills.length === TASKS.length;
+    const actualSkills = [...new Set(skills)].filter(skill => TASKS.includes(skill));
+
+    console.log('Htmlacademy actual skills =>', JSON.stringify(actualSkills));
+
+    return actualSkills.length === TASKS.length;
   } catch (error) {
     console.log(`Error fetching ${username} pages!\n${error.message}`);
     return false;
