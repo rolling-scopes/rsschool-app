@@ -12,7 +12,7 @@ import { Header, GithubAvatar, LoadingScreen } from 'components';
 import { stringSorter } from 'components/Table';
 
 const defaultRowGutter = 24;
-const PAGINATION = 100;
+const PAGINATION = 200;
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
 
 type Props = {
@@ -36,14 +36,12 @@ type State = {
 interface Registration {
   id: number;
   status: string;
+  lastName: string;
   user: {
     name: string;
     profileUrl: string;
   };
-  github: {
-    id: string;
-    url: string;
-  };
+  githubId: string;
 }
 
 class RegistrationsPage extends React.Component<Props, State> {
@@ -249,6 +247,7 @@ class RegistrationsPage extends React.Component<Props, State> {
                           dataIndex: 'lastName',
                           key: 'lastName',
                           width: 150,
+                          sorter: stringSorter('lastName'),
                           render: (_: any, record: Registration) => (
                             <a href={record.user.profileUrl}>{record.user.name}</a>
                           ),
@@ -258,6 +257,7 @@ class RegistrationsPage extends React.Component<Props, State> {
                           dataIndex: 'githubId',
                           key: 'githubId',
                           width: 100,
+                          sorter: stringSorter('githubId'),
                           render: (value: string) => (
                             <div className="d-flex flex-row">
                               <GithubAvatar githubId={value} size={24} />
