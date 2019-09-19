@@ -169,7 +169,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of mentors
    */
-  router.get('/:courseId/mentors', adminGuard, validateCourseId, getMentors(logger));
+  router.get('/:courseId/mentors', courseManagerGuard, validateCourseId, getMentors(logger));
 
   /**
    * @swagger
