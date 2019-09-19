@@ -1,7 +1,7 @@
 import { OK, NOT_FOUND, BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
 import { User, Student, Course, Registry, Mentor } from './../models';
-import { getManager, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { ILogger } from './../logger';
 import { adminGuard } from './guards';
 import { createGetRoute } from './common';
