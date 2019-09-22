@@ -21,6 +21,7 @@ export const getTaskVerifications = (_: ILogger) => async (ctx: Router.RouterCon
     .innerJoin('courseTask.task', 'task')
     .addSelect(['task.name', 'task.name', 'courseTask.id'])
     .where('taskVerification.studentId = :id', { id: student.id })
+    .orderBy('taskVerification.updatedDate')
     .getMany();
 
   setResponse(ctx, OK, tasks);

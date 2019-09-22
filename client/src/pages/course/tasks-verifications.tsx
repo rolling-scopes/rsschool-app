@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
+import { dateTimeRenderer } from 'components/Table/renderers';
 import * as React from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
@@ -36,28 +37,26 @@ class TasksVerificationsPage extends React.Component<Props, State> {
           username={this.props.session.githubId}
         />
         <Table
+          size="small"
+          pagination={{ pageSize: 100 }}
           bordered
           columns={[
             {
               title: 'Date/Time',
               dataIndex: 'createdDate',
+              render: dateTimeRenderer,
             },
             {
               title: 'Task Name',
               dataIndex: 'courseTask.task.name',
             },
             {
-              title: 'Status',
-              dataIndex: 'status',
-            },
-
-            {
               title: 'Score',
               dataIndex: 'score',
             },
             {
-              title: 'Comment',
-              dataIndex: 'comment',
+              title: 'Details',
+              dataIndex: 'details',
             },
           ]}
           dataSource={this.state.data}

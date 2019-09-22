@@ -6,7 +6,7 @@ import { Header, Session, withSession } from 'components';
 import { boolRenderer, stringSorter } from 'components/Table';
 import { Task, TaskService } from 'services/task';
 import { PageWithModalState } from 'services/models';
-import { urlPattern } from 'services/validators';
+import { urlPattern, githubRepoUrl } from 'services/validators';
 
 type Props = { session: Session } & FormComponentProps;
 interface State extends PageWithModalState<Task> {}
@@ -88,6 +88,7 @@ class TasksPage extends React.Component<Props, State> {
       return null;
     }
     const isAutoTask = (getFieldValue('verification') || modalData.verification) === 'auto';
+    const type = getFieldValue('type') || modalData.type;
     return (
       <Modal
         visible={!!modalData}
@@ -154,10 +155,11 @@ class TasksPage extends React.Component<Props, State> {
               })(<Input />)}
             </Form.Item>
           )}
-          {isAutoTask && (
+          {isAutoTask && type === 'jstask' && (
             <Form.Item label="Source Github Repo Url">
               {field('sourceGithubRepoUrl', {
                 initialValue: modalData.sourceGithubRepoUrl,
+                rules: [{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }],
               })(<Input />)}
             </Form.Item>
           )}

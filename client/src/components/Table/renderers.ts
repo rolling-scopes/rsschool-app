@@ -8,6 +8,10 @@ export function timeRenderer(value: string) {
   return value ? moment(value, 'HH:mm:ssZ').format('HH:mm') : '';
 }
 
+export function dateTimeRenderer(value: string) {
+  return value ? moment(value).format('YYYY-MM-DD HH:mm') : '';
+}
+
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
 }

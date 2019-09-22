@@ -13,6 +13,7 @@ export interface CourseTask {
   verification: 'auto' | 'manual';
   type: 'jstask' | 'htmltask' | 'externaltask';
   githubRepoName: string;
+  sourceGithubRepoUrl: string;
   scoreWeight: number;
   stageId: number;
   githubPrRequired: boolean;
