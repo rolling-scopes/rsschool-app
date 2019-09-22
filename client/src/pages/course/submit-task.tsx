@@ -78,7 +78,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
                   </Form.Item>
                   <Form.Item label="Html Academy Account">
                     {field('htmlacademy', {
-                      rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Acedemy account' }],
+                      rules: [{ pattern: notUrlPattern, message: 'Enter valid HTML Academy account' }],
                     })(<Input placeholder="id1234567" />)}
                   </Form.Item>
                 </Col>
