@@ -71,6 +71,12 @@ const routes = [
     newTab: false,
   },
   {
+    name: `🗓 Schedule`,
+    getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
+    access: anyAccess,
+    newTab: false,
+  },
+  {
     name: `✅ Submit Review`,
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),

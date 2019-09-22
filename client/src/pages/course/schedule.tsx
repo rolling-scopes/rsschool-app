@@ -61,10 +61,11 @@ class SchedulePage extends React.Component<Props, State> {
           size="small"
           dataSource={this.state.data}
           columns={[
-            { title: 'Date', dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', dataIndex: 'time', render: timeRenderer },
+            { title: 'Date', width: 120, dataIndex: 'date', render: dateRenderer },
+            { title: 'Time', width: 60, dataIndex: 'time', render: timeRenderer },
             {
               title: 'Type',
+              width: 100,
               dataIndex: 'event.type',
               render: value => <Tag color={value === 'task' ? 'red' : 'blue'}>{value}</Tag>,
             },
@@ -92,7 +93,7 @@ class SchedulePage extends React.Component<Props, State> {
               },
             },
 
-            { title: 'Coordinator', dataIndex: 'coordinator' },
+            { title: 'Coordinator', width: 140, dataIndex: 'coordinator' },
             { title: 'Comment', dataIndex: 'comment' },
           ]}
         />
