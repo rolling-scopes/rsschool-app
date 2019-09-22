@@ -192,7 +192,12 @@ export class CourseService {
   }
 
   async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
-    await axios.post(`/api/course/${courseId}/task/${courseTaskId}/verification`, data);
+    await axios.post(`/api/course/${courseId}/student/me/task/${courseTaskId}/verification`, data);
+  }
+
+  async getTaskVerifications(courseId: number) {
+    const result = await axios.get(`/api/course/${courseId}/student/me/tasks/verifications`);
+    return result.data.data;
   }
 
   isPowerUser(courseId: number, session: Session) {

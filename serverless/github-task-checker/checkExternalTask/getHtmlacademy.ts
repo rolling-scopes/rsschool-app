@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { Result } from './types';
 
 const URL = 'https://htmlacademy.ru/profile/';
 
@@ -6,21 +7,27 @@ const REGEXP_NOT_LETTERS_DIGITS = /[^а-яА-ЯёЁa-zA-Z0-9]/g;
 const REGEXP_SIMILAR_LATIN_CYRYLIC = /A|B|C|E|H|K|M|O|P|T|X|a|c|e|o|p|x/g;
 
 const latinToCyrilicMapping = {
-  A: 'А', 'a': 'а',
+  A: 'А',
+  a: 'а',
   B: 'В',
-  C: 'С', 'c': 'с',
-  E: 'Е', 'e': 'е',
+  C: 'С',
+  c: 'с',
+  E: 'Е',
+  e: 'е',
   H: 'Н',
   K: 'К',
   M: 'М',
-  O: 'О', 'o': 'о',
-  P: 'Р', 'p': 'р',
+  O: 'О',
+  o: 'о',
+  P: 'Р',
+  p: 'р',
   T: 'Т',
-  X: 'Х', 'x': 'х',
+  X: 'Х',
+  x: 'х',
 };
 
-const latinToCyrilic = (letter) => latinToCyrilicMapping[letter];
-const replaceLatin = (str) => str.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic);
+const latinToCyrilic = letter => latinToCyrilicMapping[letter];
+const replaceLatin = str => str.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic);
 
 const TASKS = [
   'Знакомство с HTML и CSS',
@@ -35,12 +42,12 @@ const TASKS = [
   'Наследование и каскадирование',
 ]
   .map(task => task.replace(REGEXP_NOT_LETTERS_DIGITS, ''))
-  .map(task => task.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic))
+  .map(task => task.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic));
 
-export default async (username: string) => {
+export default async (username: string): Promise<Result> => {
   try {
     if (!username) {
-      return false;
+      return { result: false, details: 'No HTML Account provided' };
     }
     const urls = [
       `${URL}${username}/category?name=basic-html&t=1551516408650`,
@@ -75,14 +82,13 @@ export default async (username: string) => {
         .map(task => task.replace(REGEXP_SIMILAR_LATIN_CYRYLIC, latinToCyrilic)),
     );
 
-    const skills = [...new Set([...theme1, ...theme2, ...theme3])]
-      .map(skill =>
-        skill === replaceLatin('Знакомство')
-          ? replaceLatin('ЗнакомствосHTMLиCSS')
-          : skill === replaceLatin('ЗнакомствосСSS')
-          ? replaceLatin('ОсновыCSS')
-          : skill,
-      );
+    const skills = [...new Set([...theme1, ...theme2, ...theme3])].map(skill =>
+      skill === replaceLatin('Знакомство')
+        ? replaceLatin('ЗнакомствосHTMLиCSS')
+        : skill === replaceLatin('ЗнакомствосСSS')
+        ? replaceLatin('ОсновыCSS')
+        : skill,
+    );
 
     console.log('Htmlacademy skills =>', JSON.stringify(skills));
 
@@ -90,9 +96,15 @@ export default async (username: string) => {
 
     console.log('Htmlacademy actual skills =>', JSON.stringify(actualSkills));
 
-    return actualSkills.length === TASKS.length;
+    return {
+      result: actualSkills.length === TASKS.length,
+      details: [
+        `Htmlacademy. Required courses: ${JSON.stringify(TASKS)}`,
+        `Passed courses: ${JSON.stringify(actualSkills)}`,
+      ].join(' / '),
+    };
   } catch (error) {
     console.log(`Error fetching ${username} pages!\n${error.message}`);
-    return false;
+    return { result: false, details: error.message };
   }
 };

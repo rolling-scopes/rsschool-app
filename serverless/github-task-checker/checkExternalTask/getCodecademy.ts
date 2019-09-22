@@ -1,12 +1,16 @@
 import axios from 'axios';
 import { parse, HTMLElement } from 'node-html-parser';
+import { Result } from './types';
 
 const URL = 'https://www.codecademy.com/';
 const TASKS = ['Introduction to HTML', 'Learn CSS'];
 
-export default async (username: string) => {
+export default async (username: string): Promise<Result> => {
   if (!username) {
-    return false;
+    return {
+      result: false,
+      details: 'No Codecademy account provided',
+    };
   }
 
   const url = `${URL}${username}`;
@@ -28,9 +32,15 @@ export default async (username: string) => {
 
     console.log('Codecademy skills =>', JSON.stringify(skills));
 
-    return skills.length === TASKS.length;
+    return {
+      result: skills.length === TASKS.length,
+      details: [
+        `Codecademy. Required courses: ${JSON.stringify(TASKS)}`,
+        `Passed courses: ${JSON.stringify(skills)}`,
+      ].join(' / '),
+    };
   } catch (error) {
     console.log(`Error fetching ${url} page!\n${error.message}`);
-    return false;
+    return { result: false, details: error.message };
   }
 };

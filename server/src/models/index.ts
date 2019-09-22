@@ -17,6 +17,7 @@ import { PrivateFeedback } from './privateFeedback';
 import { Event } from './event';
 import { CourseEvent } from './courseEvent';
 import { Certificate } from './certificate';
+import { TaskVerification } from './taskVerification';
 
 export * from './session';
 
@@ -40,6 +41,7 @@ export const models = [
   CourseEvent,
   Event,
   Certificate,
+  TaskVerification,
 ];
 
 export {
@@ -63,6 +65,7 @@ export {
   Certificate,
   Event,
   CourseEvent,
+  TaskVerification,
 };
 
 export interface IApiResponse<T> {

@@ -9,7 +9,7 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
   const [record] = event.Records;
   const data: TaskEvent = JSON.parse(record.body);
 
-  const score = await checkExternalTask(data);
+  const { score, details } = await checkExternalTask(data);
 
   const result = {
     score,
@@ -25,5 +25,19 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
 
   console.log('Score will be saved =>', JSON.stringify(result));
 
-  await axios.post(`https://app.rs.school/api/taskResult`, result, requestConfig);
+  await Promise.all([
+    axios.post(`https://app.rs.school/api/taskResult`, result, requestConfig),
+    axios
+      .post(
+        `https://app.rs.school/api/task-verification`,
+        {
+          courseTaskId: result.courseTaskId,
+          studentId: result.studentId,
+          details,
+          score,
+        },
+        requestConfig,
+      )
+      .catch(() => {}),
+  ]);
 };

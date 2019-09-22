@@ -20,6 +20,7 @@ import { getStudents, postStudents } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
 import { getCourseEvents } from './events';
+import { getTaskVerifications } from './taskVerifications';
 
 import { getCourseTasks, getCourseTasksWithTaskCheckers, postShuffleCourseTask } from './tasks';
 
@@ -279,7 +280,7 @@ export function courseRoute(logger: ILogger) {
 
   router.get('/:courseId/tasksCheckers', guard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
 
-  router.post('/:courseId/task/:id/verification', guard, validateCourseId, postTaskVerification(logger));
+  router.post('/:courseId/student/me/task/:id/verification', guard, validateCourseId, postTaskVerification(logger));
 
   /**
    * @swagger
@@ -495,6 +496,8 @@ export function courseRoute(logger: ILogger) {
   router.post('/:courseId/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
 
   router.post('/:courseId/certificates', adminGuard, validateCourseId, postCertificates(logger));
+
+  router.get('/:courseId/student/me/tasks/verifications', guard, validateCourseId, getTaskVerifications(logger));
 
   /**
    * @swagger
