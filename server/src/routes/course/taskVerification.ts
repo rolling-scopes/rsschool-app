@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
-import { OK, BAD_REQUEST, NOT_ACCEPTABLE } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 
 import { setResponse } from '../utils';
 import { Student } from '../../models';
@@ -20,14 +20,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
     return;
   }
 
-  if (courseTask.task.type !== 'externaltask') {
-    setResponse(ctx, NOT_ACCEPTABLE, { message: 'Not supported task type' });
-    return;
-  }
-
-  const student = await getRepository(Student).findOne({
-    where: { userId: id, courseId },
-  });
+  const student = await getRepository(Student).findOne({ where: { userId: id, courseId } });
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'No student' });
     return;
@@ -39,7 +32,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
     courseTask: {
       ...inputData,
       id: courseTask.id,
-      type: 'externaltask',
+      type: courseTask.task.type,
     },
   };
 

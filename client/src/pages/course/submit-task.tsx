@@ -29,7 +29,12 @@ class TaskCheckerPage extends React.Component<Props, State> {
 
     const filteredCourseTasks = courseTasks
       .sort(sortTasksByEndDate)
-      .filter(task => task.studentEndDate && task.verification === 'auto' && task.type === 'externaltask');
+      .filter(
+        task =>
+          task.studentEndDate &&
+          task.verification === 'auto' &&
+          (task.type === 'externaltask' || task.type === 'jstask'),
+      );
 
     this.setState({ courseTasks: filteredCourseTasks });
   }
@@ -125,20 +130,32 @@ class TaskCheckerPage extends React.Component<Props, State> {
       if (err) {
         return;
       }
-      if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
-        message.error('Enter any Account / Cerficate Id');
+      const { courseTaskId, ...other } = values;
+      const courseId = this.props.course.id;
+      const task = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
+      if (!task) {
         return;
       }
       try {
-        this.setState({ isLoading: true });
+        let data: object = {};
+        if (task.type === 'externaltask') {
+          if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
+            message.error('Enter any Account / Cerficate Id');
+            return;
+          }
 
-        const courseId = this.props.course.id;
-        const { courseTaskId, ...other } = values;
-        const data = {
-          codecademy: other.codecademy,
-          htmlacademy: other.htmlacademy,
-          udemy: [other.udemy1, other.udemy2].filter(it => !!it),
-        };
+          this.setState({ isLoading: true });
+          data = {
+            codecademy: other.codecademy,
+            htmlacademy: other.htmlacademy,
+            udemy: [other.udemy1, other.udemy2].filter(it => !!it),
+          };
+        } else if (task.type === 'jstask') {
+          data = {
+            githubRepoName: task.githubRepoName,
+            sourceGithubRepoUrl: task.sourceGithubRepoUrl,
+          };
+        }
 
         await this.courseService.postTaskVerification(courseId, courseTaskId, data);
         this.setState({ isLoading: false });

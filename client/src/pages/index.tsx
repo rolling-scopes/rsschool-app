@@ -88,6 +88,12 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
+  {
+    name: `🚦 Task Verification Status`,
+    getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
   // {
   //   name: `👨‍🏫 Rate Task By Jury`,
   //   getLink: (course: Course) => `/course/rate-task-jury?course=${course.alias}`,

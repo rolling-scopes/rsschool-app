@@ -70,7 +70,7 @@ class PrivateFeedbackPage extends React.Component<Props, State> {
                       message: 'Please give us more details',
                     },
                   ],
-                })(<Input.TextArea />)}
+                })(<Input.TextArea style={{ height: 200 }} />)}
               </Form.Item>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
