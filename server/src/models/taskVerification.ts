@@ -32,4 +32,7 @@ export class TaskVerification {
 
   @Column()
   score: number;
+
+  @Column({ type: 'json', default: [] })
+  metadata: { path: string; md5: string }[];
 }
