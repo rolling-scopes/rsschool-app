@@ -13,11 +13,13 @@
     "child-proc": "0.0.1",
     "chrome-aws-lambda": "^1.19.0",
     "lodash": "^4.17.15",
+    "fs-extra": "8.1.0",
     "node-html-parser": "^1.1.16",
     "puppeteer-core": "^1.19.0",
     "unzipper": "^0.10.5"
   },
   "devDependencies": {
+    "@types/fs-extra": "8.0.0",
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^24.0.18",
     "@types/node": "^10.12.18",

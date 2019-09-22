@@ -35,9 +35,12 @@ export const handler: SQSHandler = async (event: SQSEvent) => {
           studentId: result.studentId,
           details,
           score,
+          status: 'success',
         },
         requestConfig,
       )
-      .catch(() => {}),
+      .catch(e => {
+        console.error(e);
+      }),
   ]);
 };

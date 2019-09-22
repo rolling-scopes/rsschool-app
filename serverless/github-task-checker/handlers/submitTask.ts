@@ -14,6 +14,7 @@ export type JsTask = {
   id: number;
   type: 'jstask';
   githubRepoName: string;
+  sourceGithubRepoUrl: string;
 };
 
 export type HtmlTask = {
