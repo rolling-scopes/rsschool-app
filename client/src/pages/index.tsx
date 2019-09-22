@@ -90,7 +90,7 @@ const routes = [
   },
   {
     name: `🚦 Task Verification Status`,
-    getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
+    getLink: (course: Course) => `/course/tasks-verifications?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
