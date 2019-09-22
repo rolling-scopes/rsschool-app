@@ -11,6 +11,7 @@ export interface Task {
   verification: 'manual' | 'auto';
   type: 'jstask' | 'htmltask' | 'externaltask';
   githubRepoName: string;
+  sourceGithubRepoUrl: string;
 }
 
 export class TaskService {

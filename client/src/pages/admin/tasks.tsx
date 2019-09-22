@@ -148,9 +148,16 @@ class TasksPage extends React.Component<Props, State> {
             </Form.Item>
           )}
           {isAutoTask && (
-            <Form.Item label="Github Repo Name">
+            <Form.Item label="Expected Github Repo Name">
               {field('githubRepoName', {
                 initialValue: modalData.githubRepoName,
+              })(<Input />)}
+            </Form.Item>
+          )}
+          {isAutoTask && (
+            <Form.Item label="Source Github Repo Url">
+              {field('sourceGithubRepoUrl', {
+                initialValue: modalData.sourceGithubRepoUrl,
               })(<Input />)}
             </Form.Item>
           )}
@@ -171,6 +178,7 @@ class TasksPage extends React.Component<Props, State> {
         githubPrRequired: !!values.githubPrRequired,
         descriptionUrl: values.descriptionUrl,
         githubRepoName: values.githubRepoName,
+        sourceGithubRepoUrl: values.sourceGithubRepoUrl,
         type: values.type,
       };
       try {

@@ -33,6 +33,9 @@ export class Task {
   githubRepoName: string;
 
   @Column({ nullable: true })
+  sourceGithubRepoUrl: string;
+
+  @Column({ nullable: true })
   type: 'jstask' | 'htmltask' | 'externaltask';
 
   @Column({ default: false })
