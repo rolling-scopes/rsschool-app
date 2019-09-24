@@ -33,10 +33,12 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .innerJoinAndSelect('courseTask.task', 'task')
     .innerJoinAndSelect('courseTask.stage', 'stage')
+    .leftJoinAndSelect('courseTask.taskOwner', 'taskOwner')
     .where(`courseTask.id IN (${courseTaskIds.join(',')})`)
     .addGroupBy('courseTask.id')
     .addGroupBy('task.id')
     .addGroupBy('stage.id')
+    .addGroupBy('taskOwner.id')
     .getRawAndEntities();
 
   const data = courseTasks.entities.map(item => {
@@ -60,6 +62,14 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
       useJury: (item.task as Task).useJury,
       checker: item.checker,
+      taskOwner: item.taskOwner
+        ? {
+          id: item.taskOwner.id,
+          githubId: item.taskOwner.githubId,
+          firstName: item.taskOwner.firstName,
+          lastName: item.taskOwner.lastName,
+        }
+        : null,
       taskCheckers: [],
       githubRepoName: (item.task as Task).githubRepoName,
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,

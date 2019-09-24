@@ -10,6 +10,8 @@ import { formatDate } from 'services/formatter';
 import { CoursePageProps, PageWithModalState } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
+import { UserSearch } from 'components/UserSearch';
+import { UserService } from 'services/user';
 
 type Props = CoursePageProps & FormComponentProps;
 interface State extends PageWithModalState<CourseTask> {
@@ -27,6 +29,7 @@ class CourseTasksPage extends React.Component<Props, State> {
   };
 
   private courseService = new CourseService();
+  private userService = new UserService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -51,18 +54,23 @@ class CourseTasksPage extends React.Component<Props, State> {
         studentEndDate: endDate ? formatDate(endDate) : null,
         taskId: values.taskId,
         stageId: values.stageId,
+        taskOwnerId: values.taskOwnerId,
         checker: values.checker,
         scoreWeight: values.scoreWeight,
         maxScore: values.maxScore,
       };
+
       const courseTask =
         this.state.modalAction === 'update'
           ? await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data)
           : await this.courseService.createCourseTask(this.props.course.id, data);
 
+      const task = (await this.courseService.getCourseTasks(this.props.course.id))
+        .find(task => task.taskId === data.taskId);
+
       const updatedData =
         this.state.modalAction === 'update'
-          ? this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...courseTask } : d))
+          ? this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...task } : d))
           : this.state.data.concat([courseTask]);
       this.setState({ modalData: null, data: updatedData });
     });
@@ -102,6 +110,7 @@ class CourseTasksPage extends React.Component<Props, State> {
             },
             { title: 'Score Weight', dataIndex: 'scoreWeight' },
             { title: 'Who Checks', dataIndex: 'checker' },
+            { title: 'Task Owner', dataIndex: 'taskOwner.githubId' },
             {
               title: 'Actions',
               dataIndex: 'actions',
@@ -145,7 +154,7 @@ class CourseTasksPage extends React.Component<Props, State> {
           <Form.Item label="Task">
             {field<CourseTask>('taskId', {
               initialValue: modalData.taskId,
-              rules: [{ required: true, message: 'Please select a taks' }],
+              rules: [{ required: true, message: 'Please select a task' }],
             })(
               <Select placeholder="Please select a task">
                 {tasks.map((task: Task) => (
@@ -168,6 +177,14 @@ class CourseTasksPage extends React.Component<Props, State> {
                   </Select.Option>
                 ))}
               </Select>,
+            )}
+          </Form.Item>
+          <Form.Item label="Task Owner">
+            {field('taskOwnerId', {
+              initialValue: modalData.taskOwner ? modalData.taskOwner.id : undefined,
+              rules: [{ required: false, message: 'Please select a task owner' }],
+            })(
+              <UserSearch person={modalData.taskOwner} searchFn={this.loadUsers} />,
             )}
           </Form.Item>
           <Form.Item label="Start Date - End Date">
@@ -206,6 +223,7 @@ class CourseTasksPage extends React.Component<Props, State> {
               <Radio.Group>
                 <Radio value="mentor">Mentor</Radio>
                 <Radio value="assigned">Assigned</Radio>
+                <Radio value="taskOwner">Task Owner</Radio>
               </Radio.Group>,
             )}
           </Form.Item>
@@ -213,6 +231,10 @@ class CourseTasksPage extends React.Component<Props, State> {
       </Modal>
     );
   }
+
+  private loadUsers = async (searchText: string) => {
+    return this.userService.searchUser(searchText);
+  };
 
   private handleAddItem = () => this.setState({ modalData: {}, modalAction: 'create' });
 
