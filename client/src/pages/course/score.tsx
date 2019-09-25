@@ -87,7 +87,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
+                    &nbsp;
+                    <a href={`https://github.com/${value}`}>{value}</a>
                   </div>
                 ),
                 ...getColumnSearchProps('githubId'),
@@ -98,7 +99,11 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 key: 'lastName',
                 width: 150,
                 sorter: stringSorter('firstName'),
-                render: (_: any, record: StudentScore) => `${record.firstName} ${record.lastName}`,
+                render: (_: any, record: StudentScore) => (
+                  <a href={`/profile?githubId=${record.githubId}`}>
+                    {record.firstName} {record.lastName}
+                  </a>
+                ),
                 ...getColumnSearchProps('lastName'),
               },
               {
