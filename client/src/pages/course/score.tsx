@@ -108,7 +108,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Location',
                 dataIndex: 'locationName',
                 key: 'locationName',
-                width: 100,
+                width: 150,
                 sorter: stringSorter('locationName'),
                 ...getColumnSearchProps('locationName'),
               },
