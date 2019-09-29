@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
 
-export type Role = 'student' | 'mentor' | 'coursemanager';
+export type Role = 'student' | 'mentor' | 'coursemanager' | 'taskowner';
 export interface Session {
   id: number;
   githubId: string;

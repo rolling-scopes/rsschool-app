@@ -169,6 +169,11 @@ export class CourseService {
     });
   }
 
+  async postMultipleScores(courseId: number, data: any) {
+    const result = await axios.post(`/api/course/${courseId}/scores`, data);
+    return result.data.data;
+  }
+
   async getAllMentorStudents(courseId: number) {
     const result = await axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
       `/api/course/${courseId}/mentor/me/students/all`,

@@ -23,11 +23,11 @@ type ScoreInput = {
 
 type ScoresInput = {
   studentGithubId: string;
-  mentorGithubId: string;
   courseTaskId: number;
   score: number;
   comment: string;
-  githubPrUrl: string;
+  githubPrUrl?: string;
+  mentorGithubId?: string;
 };
 
 const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
@@ -153,7 +153,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         courseTaskId: Number(item.courseTaskId),
         score: Math.round(Number(item.score)),
         comment: item.comment || '',
-        githubPrUrl: item.githubPrUrl,
+        githubPrUrl: item.githubPrUrl || '',
       };
 
       const { studentGithubId } = data;
@@ -191,7 +191,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
       }
 
       if (data.githubPrUrl) {
-        existingResult.githubPrUrl = item.githubPrUrl;
+        existingResult.githubPrUrl = item.githubPrUrl || '';
       }
       if (data.comment) {
         existingResult.comment = item.comment;

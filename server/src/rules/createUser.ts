@@ -27,6 +27,7 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
   const id = profile.username!.toLowerCase();
   const result = await userService.getFullUserByGithubId(id);
 
+  // TODO: add taskowner role
   const isAdmin = getAdminStatus(teamsIds);
   const isHirer = hirers.includes(id);
   if (result == null) {
@@ -61,7 +62,7 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
       roles: {},
     };
   }
-  const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' } = {};
+  const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' | 'taskowner' } = {};
   result.students!.forEach(student => {
     roles[(student.course as Course).id] = 'student';
   });

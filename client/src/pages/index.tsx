@@ -1,5 +1,4 @@
 import { Button, List, Select, Result, Divider } from 'antd';
-
 import { Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
@@ -24,6 +23,8 @@ const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
 const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
 const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
+// TODO: add taskowner role
+const isTaskOwner = () => true;
 // const isActivist = (_1: Course, _2: Role, session: Session) => session.isActivist;
 
 const isAdminRole = (_1: Course, _2: Role, session: Session) => session.isAdmin;
@@ -80,6 +81,12 @@ const routes = [
     name: `✅ Submit Review`,
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
+  },
+  {
+    name: `📝 Submit Scores`,
+    getLink: (course: Course) => `/course/task-owner/submit-scores?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isTaskOwner),
     newTab: false,
   },
   {

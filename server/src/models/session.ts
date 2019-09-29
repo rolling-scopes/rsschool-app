@@ -4,5 +4,5 @@ export interface IUserSession {
   isHirer: boolean;
   isActivist: boolean;
   githubId: string;
-  roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' };
+  roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' | 'taskowner' };
 }
