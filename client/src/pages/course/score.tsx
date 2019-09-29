@@ -64,8 +64,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
           <Table<StudentScore>
             className="m-3 table-score"
             bordered
-            scroll={{ x: 1800, y: "calc(100vh - 300px)" }}
-            style={{ overflowY: 'scroll'}}
+            scroll={{ x: 1800, y: 'calc(100vh - 300px)' }}
+            style={{ overflowY: 'scroll' }}
             pagination={{ pageSize: 100 }}
             size="small"
             rowKey="githubId"
@@ -133,7 +133,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 // width: 100,
                 render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
                 ...getColumnSearchProps('mentor.githubId'),
-              }
+              },
             ]}
           />
         </LoadingScreen>

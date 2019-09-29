@@ -20,6 +20,13 @@ export function setCsvResponse(ctx: Router.RouterContext, status: number, data: 
   return ctx;
 }
 
+export function setIcalResponse(ctx: Router.RouterContext, data: string) {
+  ctx.status = 200;
+  ctx.body = data;
+  ctx.res.setHeader('Content-Type', 'text/calendar');
+  return ctx;
+}
+
 export function createComparisonSignature(body: any, secret: string) {
   const hmac = crypto.createHmac('sha1', secret);
   const selfSignature = hmac.update(JSON.stringify(body)).digest('hex');

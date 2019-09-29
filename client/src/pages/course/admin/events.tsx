@@ -68,6 +68,7 @@ class CourseEventsPage extends React.Component<Props, State> {
         courseId: this.props.course.id,
         coordinator: values.coordinator,
         organizerId: values.organizerId,
+        broadcastUrl: values.broadcastUrl,
       };
 
       this.state.modalAction === 'update'
@@ -214,9 +215,10 @@ class CourseEventsPage extends React.Component<Props, State> {
             )}
           </Form.Item>
           <Form.Item label="Broadcast URL">
-            {field<CourseEvent>('comment', { initialValue: modalData.broadcastUrl, rules: [{ pattern: urlPattern }] })(
-              <Input />,
-            )}
+            {field<CourseEvent>('broadcastUrl', {
+              initialValue: modalData.broadcastUrl,
+              rules: [{ pattern: urlPattern }],
+            })(<Input />)}
           </Form.Item>
           <Form.Item label="Comment">
             {field<CourseEvent>('comment', { initialValue: modalData.comment })(<Input.TextArea />)}

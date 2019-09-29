@@ -4,7 +4,7 @@ import css from 'styled-jsx/css';
 export function GithubUserLink(props: { value: string }) {
   return (
     <>
-      <a className="link-user-github" href={`/profile?githubId=${props.value}`}>
+      <a target="_blank" className="link-user-github" href={`https://github.com/${props.value}`}>
         <GithubAvatar size={24} githubId={props.value} /> {props.value}
       </a>
       <style jsx>{styles}</style>

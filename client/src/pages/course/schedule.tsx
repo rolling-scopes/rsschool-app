@@ -1,6 +1,6 @@
-import { Form, Table, Tag, Icon, Tooltip } from 'antd';
+import { Form, Table, Tag, Row, Icon, Tooltip, Button } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, withSession } from 'components';
+import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, timeRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
@@ -48,12 +48,14 @@ class SchedulePage extends React.Component<Props, State> {
   }
 
   render() {
-    if (!this.props.session) {
-      return null;
-    }
     return (
       <div>
         <Header title="Schedule" username={this.props.session.githubId} />
+        <Row type="flex" justify="end" className="m-3">
+          <Button icon="calendar" href={`/api/course/${this.props.course.id}/events/ical`}>
+            Events iCal
+          </Button>
+        </Row>
         <Table
           className="m-3"
           rowKey="id"
@@ -72,7 +74,7 @@ class SchedulePage extends React.Component<Props, State> {
             {
               title: 'Place',
               dataIndex: 'place',
-              render: value => {
+              render: (value: string) => {
                 return value === 'Youtube Live' ? (
                   <div>
                     <Icon type="youtube" /> {value}{' '}
@@ -92,8 +94,38 @@ class SchedulePage extends React.Component<Props, State> {
                 return record.event.descriptionUrl ? <a href={record.event.descriptionUrl}>{value}</a> : value;
               },
             },
-
+            {
+              title: 'Broadcast Url',
+              width: 140,
+              dataIndex: 'broadcastUrl',
+              render: (url: string) =>
+                url ? (
+                  <a target="_blank" href={url}>
+                    Link
+                  </a>
+                ) : (
+                  ''
+                ),
+            },
             { title: 'Coordinator', width: 140, dataIndex: 'coordinator' },
+            {
+              title: 'Organizer',
+              width: 140,
+              dataIndex: 'organizer.githubId',
+              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
+            },
+            {
+              title: 'Details Url',
+              dataIndex: 'detailsUrl',
+              render: (url: string) =>
+                url ? (
+                  <a target="_blank" href={url}>
+                    Details
+                  </a>
+                ) : (
+                  ''
+                ),
+            },
             { title: 'Comment', dataIndex: 'comment' },
           ]}
         />
