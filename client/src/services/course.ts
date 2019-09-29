@@ -2,6 +2,7 @@ import axios from 'axios';
 import getConfig from 'next/config';
 import { Session } from '../components/withSession';
 import { Event } from './event';
+import { UserBasic } from './user';
 const { serverRuntimeConfig } = getConfig();
 
 export interface CourseTask {
@@ -37,6 +38,10 @@ export interface CourseEvent {
   eventId: number;
   owner: string;
   coordinator: string;
+  organizerId: number;
+  organizer: UserBasic;
+  detailsUrl: string;
+  broadcastUrl: string;
 }
 
 export interface CreateCourseTask {

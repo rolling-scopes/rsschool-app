@@ -1,6 +1,6 @@
 import { Button, DatePicker, Input, Form, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, withSession } from 'components';
+import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, timeRenderer, idFromArrayRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import moment from 'moment';
@@ -10,6 +10,9 @@ import { Event, EventService } from 'services/event';
 import { formatDate, formatTime } from 'services/formatter';
 import { CoursePageProps, PageWithModalState } from 'services/models';
 import { Stage, StageService } from 'services/stage';
+import { urlPattern } from 'services/validators';
+import { UserService } from 'services/user';
+import { UserSearch } from 'components/UserSearch';
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -30,6 +33,7 @@ class CourseEventsPage extends React.Component<Props, State> {
   private timeZoneOffset = moment().format('Z');
 
   private courseService = new CourseService();
+  private userService = new UserService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -40,6 +44,12 @@ class CourseEventsPage extends React.Component<Props, State> {
     ]);
     this.setState({ data, stages, events });
   }
+
+  private refreshData = async () => {
+    const courseId = this.props.course.id;
+    const data = await this.courseService.getCourseEvents(courseId);
+    this.setState({ data });
+  };
 
   private handleModalSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -57,24 +67,19 @@ class CourseEventsPage extends React.Component<Props, State> {
         comment: values.comment,
         courseId: this.props.course.id,
         coordinator: values.coordinator,
+        organizerId: values.organizerId,
       };
-      const record =
-        this.state.modalAction === 'update'
-          ? await this.courseService.updateCourseEvent(this.props.course.id, this.state.modalData!.id!, data)
-          : await this.courseService.createCourseEvent(this.props.course.id, data);
 
-      const updatedData =
-        this.state.modalAction === 'update'
-          ? this.state.data.map(d => (d.id === record.id ? { ...d, ...record } : d))
-          : this.state.data.concat([record]);
-      this.setState({ modalData: null, data: updatedData });
+      this.state.modalAction === 'update'
+        ? await this.courseService.updateCourseEvent(this.props.course.id, this.state.modalData!.id!, data)
+        : await this.courseService.createCourseEvent(this.props.course.id, data);
+
+      await this.refreshData();
+      this.setState({ modalData: null });
     });
   };
 
   render() {
-    if (!this.props.session) {
-      return null;
-    }
     return (
       <div>
         <Header username={this.props.session.githubId} />
@@ -99,6 +104,11 @@ class CourseEventsPage extends React.Component<Props, State> {
             { title: 'Time', dataIndex: 'time', render: timeRenderer },
             { title: 'Place', dataIndex: 'place' },
             { title: 'Coordinator', dataIndex: 'coordinator' },
+            {
+              title: 'Organizer',
+              dataIndex: 'organizer.githubId',
+              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
+            },
             { title: 'Comment', dataIndex: 'comment' },
             {
               title: 'Stage',
@@ -192,8 +202,21 @@ class CourseEventsPage extends React.Component<Props, State> {
           <Form.Item label="Place">
             {field<CourseEvent>('place', { initialValue: modalData.place })(<Input />)}
           </Form.Item>
-          <Form.Item label="Coordinator">
-            {field<CourseEvent>('coordinator', { initialValue: modalData.coordinator })(<Input />)}
+          <Form.Item label="Organizer">
+            {field('organizerId', {
+              initialValue: modalData.organizerId,
+            })(
+              <UserSearch
+                defaultValues={modalData.organizer ? [modalData.organizer] : []}
+                user={modalData.organizer}
+                searchFn={this.loadUsers}
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="Broadcast URL">
+            {field<CourseEvent>('comment', { initialValue: modalData.broadcastUrl, rules: [{ pattern: urlPattern }] })(
+              <Input />,
+            )}
           </Form.Item>
           <Form.Item label="Comment">
             {field<CourseEvent>('comment', { initialValue: modalData.comment })(<Input.TextArea />)}
@@ -202,6 +225,10 @@ class CourseEventsPage extends React.Component<Props, State> {
       </Modal>
     );
   }
+
+  private loadUsers = async (searchText: string) => {
+    return this.userService.searchUser(searchText);
+  };
 
   private handleAddItem = () => this.setState({ modalData: {}, modalAction: 'create' });
 

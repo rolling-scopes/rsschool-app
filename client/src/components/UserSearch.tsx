@@ -7,16 +7,24 @@ type Person = { id: number; githubId: string; firstName: string; lastName: strin
 type Props = {
   [key: string]: any;
   searchFn: (value: string) => Promise<Person[]>;
+  defaultValues?: Person[];
 };
 
 type State = {
-  data: { id: number; githubId: string; firstName: string; lastName: string }[];
+  data: Person[];
 };
 
 export class UserSearch extends React.Component<Props, State> {
   state: State = {
     data: [],
   };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      data: props.defaultValues || [],
+    };
+  }
 
   handleSearch = async (value: string) => {
     if (value) {
