@@ -144,7 +144,7 @@ class ProfilePage extends React.Component<Props, State> {
           {entries.map((entry, i) => (
             <div className="mb-3" key={i}>
               {entry.student && this.renderStudentProfile(entry.course, entry.student)}
-              {entry.mentor && entry.mentor.students.length > 0 && this.renderMentorProfile(entry.course, entry.mentor)}
+              {entry.mentor && this.renderMentorProfile(entry.course, entry.mentor)}
             </div>
           ))}
         </div>
@@ -264,12 +264,14 @@ class ProfilePage extends React.Component<Props, State> {
     );
     return (
       <Card bordered={false} size="small" title={title}>
-        <List
-          size="small"
-          header={'Students'}
-          dataSource={mentor.students}
-          renderItem={({ githubId }) => <List.Item>{this.renderGithubLink(githubId)}</List.Item>}
-        />
+        {mentor.students.length > 0 && (
+          <List
+            size="small"
+            header={'Students'}
+            dataSource={mentor.students}
+            renderItem={({ githubId }) => <List.Item>{this.renderGithubLink(githubId)}</List.Item>}
+          />
+        )}
       </Card>
     );
   }

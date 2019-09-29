@@ -6,7 +6,6 @@ import { Course, CourseTask, Student, Task, User } from '../../models';
 import { IUserSession } from '../../models/session';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
-import fs from 'fs';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
@@ -75,7 +74,6 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
   }
 
   const { students, mentors, receivedFeedback, ...user } = profile;
-  fs.writeFileSync('profile.json', JSON.stringify(profile, undefined, 2));
 
   const result = {
     user,
