@@ -5,12 +5,12 @@ EXPOSE 8080
 ENV NODE_ENV production
 ENV NODE_PORT 8080
 
-WORKDIR /server
+WORKDIR /src
 
-COPY package.json /server
+COPY package.json /src
 RUN npm install --production --no-optional
 
-COPY public /server/public
-COPY dist /server
+COPY public /src/public
+COPY dist /src
 
-CMD [ "node", "./index.js" ]
+CMD [ "node", "./server/index.js" ]
