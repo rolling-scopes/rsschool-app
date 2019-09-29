@@ -7,6 +7,8 @@ import * as React from 'react';
 import { CourseEvent, CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatTime } from 'services/formatter';
+import css from 'styled-jsx/css';
+import moment from 'moment';
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -18,6 +20,8 @@ class SchedulePage extends React.Component<Props, State> {
   state: State = {
     data: [],
   };
+
+  startOfToday = moment().startOf('day');
 
   private courseService = new CourseService();
 
@@ -62,6 +66,7 @@ class SchedulePage extends React.Component<Props, State> {
           pagination={{ pageSize: 100 }}
           size="small"
           dataSource={this.state.data}
+          rowClassName={record => (moment(record.date).isBefore(this.startOfToday) ? 'rs-table-row-disabled' : '')}
           columns={[
             { title: 'Date', width: 120, dataIndex: 'date', render: dateRenderer },
             { title: 'Time', width: 60, dataIndex: 'time', render: timeRenderer },
@@ -134,9 +139,16 @@ class SchedulePage extends React.Component<Props, State> {
             { title: 'Comment', dataIndex: 'comment' },
           ]}
         />
+        <style jsx>{styles}</style>
       </div>
     );
   }
 }
+
+const styles = css`
+  :global(.rs-table-row-disabled) {
+    opacity: 0.5;
+  }
+`;
 
 export default withCourseData(withSession(Form.create()(SchedulePage)));
