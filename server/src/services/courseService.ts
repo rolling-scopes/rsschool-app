@@ -378,5 +378,6 @@ export async function getEvents(courseId: number) {
       'organizer.githubId',
     ])
     .where('courseEvent.courseId = :courseId', { courseId })
+    .orderBy('courseEvent.date')
     .getMany();
 }

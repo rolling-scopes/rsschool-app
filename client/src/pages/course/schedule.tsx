@@ -91,7 +91,13 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Name',
               dataIndex: 'event.name',
               render: (value: string, record) => {
-                return record.event.descriptionUrl ? <a href={record.event.descriptionUrl}>{value}</a> : value;
+                return record.event.descriptionUrl ? (
+                  <a target="_blank" href={record.event.descriptionUrl}>
+                    {value}
+                  </a>
+                ) : (
+                  value
+                );
               },
             },
             {
@@ -107,7 +113,6 @@ class SchedulePage extends React.Component<Props, State> {
                   ''
                 ),
             },
-            { title: 'Coordinator', width: 140, dataIndex: 'coordinator' },
             {
               title: 'Organizer',
               width: 140,

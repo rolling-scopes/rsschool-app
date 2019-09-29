@@ -104,7 +104,6 @@ class CourseEventsPage extends React.Component<Props, State> {
             { title: 'Date', dataIndex: 'date', render: dateRenderer },
             { title: 'Time', dataIndex: 'time', render: timeRenderer },
             { title: 'Place', dataIndex: 'place' },
-            { title: 'Coordinator', dataIndex: 'coordinator' },
             {
               title: 'Organizer',
               dataIndex: 'organizer.githubId',
@@ -217,7 +216,7 @@ class CourseEventsPage extends React.Component<Props, State> {
           <Form.Item label="Broadcast URL">
             {field<CourseEvent>('broadcastUrl', {
               initialValue: modalData.broadcastUrl,
-              rules: [{ pattern: urlPattern }],
+              rules: [{ pattern: urlPattern, message: 'Enter valid url' }],
             })(<Input />)}
           </Form.Item>
           <Form.Item label="Comment">

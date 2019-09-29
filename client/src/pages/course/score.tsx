@@ -148,7 +148,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       key: task.id.toString(),
       title: () => {
         return task.descriptionUrl ? (
-          <a className="table-header-link" href={task.descriptionUrl}>
+          <a className="table-header-link" target="_blank" href={task.descriptionUrl}>
             {task.name}
           </a>
         ) : (
