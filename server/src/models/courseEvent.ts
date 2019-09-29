@@ -26,10 +26,10 @@ export class CourseEvent {
   @Column()
   courseId: number;
 
-  @ManyToOne(_ => Stage)
+  @ManyToOne(_ => Stage, { nullable: true })
   stage: Stage;
 
-  @Column()
+  @Column({ nullable: true })
   stageId: number;
 
   @Column({ type: 'date', nullable: true })
