@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
+import { MentorBasic, StudentBasic } from '../../../common/models';
 import { Course, CourseTask, Mentor, Student, User, CourseEvent } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
@@ -18,51 +19,9 @@ export async function getCourseMentorWithUser(courseId: number, userId: number) 
     .getOne();
 }
 
-export interface MentorBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  students: StudentBasic[];
-}
-
 export interface MentorWithContacts extends MentorBasic {
   email?: string;
   phone?: string;
-}
-
-export interface StudentBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-  isActive: boolean;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  totalScore: number;
-
-  mentor: MentorBasic | null;
-}
-
-export interface StudentBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-  isActive: boolean;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  totalScore: number;
-
-  mentor: MentorBasic | null;
 }
 
 export interface AssignedStudent extends StudentBasic {

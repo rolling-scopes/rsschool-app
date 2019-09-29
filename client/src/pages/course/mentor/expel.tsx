@@ -4,7 +4,8 @@ import { Header } from 'components/Header';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService, StudentBasic } from 'services/course';
+import { Course, CourseService } from 'services/course';
+import { StudentBasic } from '../../../../../common/models';
 
 import { PersonSelect } from 'components/PersonSelect';
 
