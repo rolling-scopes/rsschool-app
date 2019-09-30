@@ -44,6 +44,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   render() {
     const { isAdmin, isHirer, roles } = this.props.session;
     const csvEnabled = isAdmin || isHirer || roles[this.props.course.id] === 'coursemanager';
+    const columnWidth = 90;
+    const tableWidth = this.getColumns().length * columnWidth + 800; // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
     return (
       <>
         <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -64,7 +66,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
           <Table<StudentScore>
             className="m-3 table-score"
             bordered
-            scroll={{ x: 1800, y: 'calc(100vh - 300px)' }}
+            scroll={{ x: tableWidth, y: 'calc(100vh - 300px)' }}
             style={{ overflowY: 'scroll' }}
             pagination={{ pageSize: 100 }}
             size="small"
