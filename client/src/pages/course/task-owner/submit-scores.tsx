@@ -1,5 +1,6 @@
 import { Button, Col, Form, Select, Upload, Icon, message, Spin, Table } from 'antd';
 import csv from 'csvtojson';
+import { isUndefined } from 'lodash';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -148,9 +149,13 @@ class TaskScorePage extends React.Component<Props, State> {
   private handleFileChose = (info: any) => {
     let newSelectedFileList: Map<string, UploadFile> = new Map(this.state.selectedFileList);
     switch (info.file.status) {
-      case "uploading":
-      case "done": {
+      case 'uploading':
+      case 'done': {
         newSelectedFileList.set(info.file.uid, info.file);
+        break;
+      }
+      case 'removed': {
+        newSelectedFileList.delete(info.file.uid);
         break;
       }
       default: {
@@ -181,7 +186,7 @@ class TaskScorePage extends React.Component<Props, State> {
         const scores = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
           .reduce((acc, cur) => acc.concat(cur), [])
           .map((item) =>  {
-            if (!item.Github || !item.Score) {
+            if (isUndefined(item.Github) || isUndefined(item.Score)) {
               throw new Error('Incorrect data: CSV file should content the headers named "Github" and "Score"!');
             }
             return {
