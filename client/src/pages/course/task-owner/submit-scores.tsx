@@ -1,4 +1,4 @@
-import { Button, Col, Form, Select, Upload, Icon, message } from 'antd';
+import { Button, Col, Form, Select, Upload, Icon, message, Spin, Table } from 'antd';
 import csv from 'csvtojson';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
@@ -8,20 +8,31 @@ import { CourseService, CourseTask } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 type Props = CoursePageProps & FormComponentProps;
 
+interface SubmitResult {
+  status: string;
+  count: number;
+  messages?: string[];
+}
+
 type State = {
   courseTasks: CourseTask[];
+  submitResults: SubmitResult[];
   isLoading: boolean;
   isPowerMentor: boolean;
+  selectedFileList: Map<string, UploadFile>;
 };
 
 class TaskScorePage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     isPowerMentor: false,
+    submitResults: [],
     courseTasks: [],
+    selectedFileList: new Map(),
   };
 
   courseService = new CourseService();
@@ -40,6 +51,14 @@ class TaskScorePage extends React.Component<Props, State> {
 
   render() {
     const { getFieldDecorator: field } = this.props.form;
+    const { isLoading, submitResults } = this.state;
+    const [skipped] = submitResults.filter(({ status }) => status === 'skipped');
+    const skippedStudents = skipped
+      && skipped.messages
+      && skipped.messages.map(message => ({ message }))
+      || [];
+
+    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     return (
       <>
         <Header title="Submit Scores" courseName={this.props.course.name} username={this.props.session.githubId} />
@@ -57,25 +76,88 @@ class TaskScorePage extends React.Component<Props, State> {
               )}
             </Form.Item>
             <Form.Item label="CSV File">
-              {field('files', { rules: [{ required: true, message: 'Please select csv-file'  }] })(
-                <Upload>
+              {field('files', { rules: [{ required: true, message: 'Please select csv-file' }] })(
+                <Upload
+                  fileList={Array.from(this.state.selectedFileList).map(([, file]) => file)}
+                  onChange={this.handleFileChose}
+                  multiple={true}
+                >
                   <Button>
                     <Icon type="upload" /> Select files
                   </Button>
                 </Upload>,
               )}
             </Form.Item>
-            <Button size="large" type="primary" htmlType="submit">
-              Submit
-            </Button>
+            <Form.Item>
+              <Button size="large" type="primary" htmlType="submit" style={{ marginRight: '1.5em' }}>
+                Submit
+              </Button>
+              {isLoading
+                ? <Spin indicator={antIcon} style={{ fontSize: 20 }} />
+                : ''
+              }
+            </Form.Item>
+            {submitResults.length
+              ? <Form.Item>
+                  <h3>Summary</h3>
+                  <Table
+                    pagination={false}
+                    dataSource={submitResults}
+                    size="small"
+                    rowKey="status"
+                    columns={[
+                      {
+                        title: 'Status',
+                        dataIndex: 'status',
+                      },
+                      {
+                        title: 'Count',
+                        dataIndex: 'count',
+                      },
+                    ]}
+                  />
+              </Form.Item>
+              : ''
+            }
+            {skippedStudents.length
+              ? <Form.Item>
+                  <h3>Skipped students</h3>
+                  <Table
+                    showHeader={false}
+                    pagination={false}
+                    dataSource={skippedStudents}
+                    size="small"
+                    rowKey="message"
+                    columns={[
+                      {
+                        dataIndex: 'message',
+                      },
+                    ]}
+                  />
+              </Form.Item>
+              : ''
+            }
           </Form>
         </Col>
       </>
     );
   }
 
-  private handleTaskChange = async (value: number) => {
-    console.log(value);
+  private handleTaskChange = () => this.setState({ submitResults: [] });
+
+  private handleFileChose = (info: any) => {
+    let newSelectedFileList: Map<string, UploadFile> = new Map(this.state.selectedFileList);
+    switch (info.file.status) {
+      case "uploading":
+      case "done": {
+        newSelectedFileList.set(info.file.uid, info.file);
+        break;
+      }
+      default: {
+        newSelectedFileList = new Map();
+      }
+    }
+    this.setState({ selectedFileList: newSelectedFileList, submitResults: [] });
   };
 
   private handleSubmit = async (e: any) => {
@@ -85,11 +167,9 @@ class TaskScorePage extends React.Component<Props, State> {
         return;
       }
       try {
-        this.setState({ isLoading: true });
+        await this.setState({ isLoading: true });
         const courseId = this.props.course.id;
-
         const files = values.files.fileList;
-        console.log(files);
 
         const filesContent: string[] = await Promise.all(files.map((file: any) => new Promise((res, rej) => {
           const reader = new FileReader();
@@ -100,10 +180,15 @@ class TaskScorePage extends React.Component<Props, State> {
 
         const scores = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
           .reduce((acc, cur) => acc.concat(cur), [])
-          .map(item => ({
-            score: parseInt(item.Score, 10),
-            github: filterLogin(item.Github).toLowerCase(),
-          }));
+          .map((item) =>  {
+            if (!item.Github || !item.Score) {
+              throw new Error('Incorrect data: CSV file should content the headers named "Github" and "Score"!');
+            }
+            return {
+              score: parseInt(item.Score, 10),
+              github: filterLogin(item.Github).toLowerCase(),
+            };
+          });
 
         const uniqueStudents = new Map();
         scores.forEach(({ github, score }) => {
@@ -124,19 +209,43 @@ class TaskScorePage extends React.Component<Props, State> {
             courseTaskId: values.courseTaskId,
           }));
 
-        console.log(data);
+        const results = await this.courseService.postMultipleScores(courseId, data);
+        const groupedByStatus = new Map();
+        results.forEach(({ status, value }: { status: string; value: string | number}) => {
+          if (groupedByStatus.has(status)) {
+            const savedStatus = groupedByStatus.get(status);
+            const newStatus = {
+              status,
+              count: savedStatus.count + 1,
+            } as SubmitResult;
+            if (status === 'skipped' && typeof value === 'string') {
+              newStatus.messages = savedStatus.messages.concat([value]);
+            }
+            groupedByStatus.set(status, newStatus);
+          } else {
+            const newStatus = {
+              status,
+              count: 1,
+            } as SubmitResult;
+            if (status === 'skipped' && typeof value === 'string') {
+              newStatus.messages = [value];
+            }
+            groupedByStatus.set(status, newStatus);
+          }
+        });
+        const submitResults = Array.from(groupedByStatus).map(([, submitResult]) => submitResult);
 
-        const result = await this.courseService.postMultipleScores(courseId, data);
-
-        console.log(result);
-        // TODO: make loader and show list of student's names that hasn't been scored
-
-        this.setState({ isLoading: false });
+        await this.setState({ submitResults, isLoading: false });
         message.success('Score has been submitted.');
         this.props.form.resetFields();
+        this.setState({ selectedFileList: new Map() });
       } catch (e) {
         this.setState({ isLoading: false });
-        message.error('An error occured. Please try later.');
+        if (e.message.match(/^Incorrect data/)) {
+          message.error(e.message);
+        } else {
+          message.error('An error occured. Please try later.');
+        }
       }
     });
   };
