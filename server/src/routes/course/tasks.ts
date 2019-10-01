@@ -80,6 +80,22 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
   setResponse(ctx, OK, data);
 };
 
+export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const taskOwnerId: number = ctx.state.user.id;
+
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .select(`"courseTask"."id" AS "id", "task"."name" AS "name"`)
+    .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
+    .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
+    .leftJoin(Task, 'task', '"task"."id" = "courseTask"."taskId"')
+    .where(`"course"."id" = '${courseId}' AND "courseTask"."taskOwnerId" = '${taskOwnerId}'`)
+    .getRawMany();
+
+  setResponse(ctx, OK, courseTasks);
+};
+
 export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
 

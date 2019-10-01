@@ -9,7 +9,6 @@ export function getUserByGithubId(id: string) {
 export function getFullUserByGithubId(id: string) {
   const githubId = id.toLowerCase();
 
-  // TODO: add taskowner role
   return getRepository(User).findOne({
     where: { githubId },
     relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseManagers', 'courseManagers.course'],

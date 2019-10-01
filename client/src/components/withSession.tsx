@@ -2,8 +2,9 @@ import * as React from 'react';
 import axios from 'axios';
 import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
+import { TaskOwnerRole } from '../../../server/src/rules/types';
 
-export type Role = 'student' | 'mentor' | 'coursemanager' | 'taskowner';
+export type Role = 'student' | 'mentor' | 'coursemanager';
 export interface Session {
   id: number;
   githubId: string;
@@ -11,6 +12,7 @@ export interface Session {
   isHirer: boolean;
   isActivist: boolean;
   roles: { [key: number]: Role };
+  courseRoles: { [key: string]: TaskOwnerRole };
 }
 
 type State = {

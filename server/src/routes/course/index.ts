@@ -3,7 +3,7 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard, courseManagerGuard } from '../guards';
+import { adminGuard, guard, courseManagerGuard, taskOwnerGuard } from '../guards';
 import { setResponse } from '../utils';
 import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
@@ -12,7 +12,7 @@ import { getMe, getMyMentors } from './me';
 import { getAllMentorStudents, getMentorStudents } from './mentor';
 import { getMentors, postMentors } from './mentors';
 import { postPairs } from './pairs';
-import { getScore, getScoreAsCsv, postScore, postScores } from './score';
+import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores } from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
@@ -22,7 +22,12 @@ import { postTaskVerification } from './taskVerification';
 import { getCourseEvents } from './events';
 import { getTaskVerifications } from './taskVerifications';
 
-import { getCourseTasks, getCourseTasksWithTaskCheckers, postShuffleCourseTask } from './tasks';
+import {
+  getCourseTasks,
+  getCourseTasksWithTaskCheckers,
+  getCourseTasksForTaskOwner,
+  postShuffleCourseTask,
+} from './tasks';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -278,6 +283,8 @@ export function courseRoute(logger: ILogger) {
    */
   router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
 
+  router.get('/:courseId/tasksTaskOwner', taskOwnerGuard, validateCourseId, getCourseTasksForTaskOwner(logger));
+
   router.get('/:courseId/tasksCheckers', guard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
 
   router.post('/:courseId/student/me/task/:id/verification', guard, validateCourseId, postTaskVerification(logger));
@@ -409,6 +416,8 @@ export function courseRoute(logger: ILogger) {
    *          description: ''
    */
   router.post('/:courseId/scores', adminGuard, validateCourseId, postScores(logger));
+
+  router.post('/:courseId/scores/:courseTaskId', taskOwnerGuard, validateCourseId, postMultipleScores(logger));
 
   /**
    * @swagger

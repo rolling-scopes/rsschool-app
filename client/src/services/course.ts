@@ -99,6 +99,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getCourseTasksForTaskOwner(courseId: number) {
+    const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasksTaskOwner`);
+    return result.data.data;
+  }
+
   async getCourseEvents(courseId: number) {
     const result = await axios.get<{ data: CourseEvent[] }>(`${this.host}/api/course/${courseId}/events`);
     return result.data.data;
@@ -169,8 +174,8 @@ export class CourseService {
     });
   }
 
-  async postMultipleScores(courseId: number, data: any) {
-    const result = await axios.post(`/api/course/${courseId}/scores`, data);
+  async postMultipleScores(courseId: number, courseTaskId: number, data: any) {
+    const result = await axios.post(`/api/course/${courseId}/scores/${courseTaskId}`, data);
     return result.data.data;
   }
 

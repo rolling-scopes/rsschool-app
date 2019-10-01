@@ -1,4 +1,4 @@
-import { Button, Col, Form, Select, Upload, Icon, message, Spin, Table } from 'antd';
+import { Button, Col, Form, Select, Upload, Icon, message, Spin, Table, List, Typography } from 'antd';
 import csv from 'csvtojson';
 import { isUndefined } from 'lodash';
 import { FormComponentProps } from 'antd/lib/form';
@@ -6,7 +6,6 @@ import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CourseService, CourseTask } from 'services/course';
-import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
 import { UploadFile } from 'antd/lib/upload/interface';
@@ -41,23 +40,16 @@ class TaskScorePage extends React.Component<Props, State> {
   async componentDidMount() {
     const courseId = this.props.course.id;
 
-    const courseTasks = await this.courseService.getCourseTasks(courseId);
+    const courseTasks = await this.courseService.getCourseTasksForTaskOwner(courseId);
 
-    const filteredCourseTasks = courseTasks
-      .sort(sortTasksByEndDate)
-      .filter(task => task.checker === 'taskOwner');
-
-    this.setState({ courseTasks: filteredCourseTasks });
+    this.setState({ courseTasks });
   }
 
   render() {
     const { getFieldDecorator: field } = this.props.form;
     const { isLoading, submitResults } = this.state;
     const [skipped] = submitResults.filter(({ status }) => status === 'skipped');
-    const skippedStudents = skipped
-      && skipped.messages
-      && skipped.messages.map(message => ({ message }))
-      || [];
+    const skippedStudents = skipped && skipped.messages ? skipped.messages : [];
 
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
     return (
@@ -77,6 +69,24 @@ class TaskScorePage extends React.Component<Props, State> {
               )}
             </Form.Item>
             <Form.Item label="CSV File">
+              <h3>Uploading rules</h3>
+              <List
+                size="small"
+                bordered
+                dataSource={[
+                  'CSV-file should contain columns "Score" and "Github".',
+                  '"Github" fields could be links or plain names.',
+                  'For duplicated "Github" fields the best score would be counted.',
+                  'You should upload several files, if you need scoring the best result from two or more tests.',
+                  'Only students in the file would be scored. By the way, you can update just several scores.',
+                ]}
+                renderItem={(item, idx) => (
+                  <List.Item>
+                    <Typography.Text strong>{idx + 1}</Typography.Text> {item}
+                  </List.Item>
+                )}
+                style={{ marginBottom: '1em' }}
+              />
               {field('files', { rules: [{ required: true, message: 'Please select csv-file' }] })(
                 <Upload
                   fileList={Array.from(this.state.selectedFileList).map(([, file]) => file)}
@@ -123,17 +133,12 @@ class TaskScorePage extends React.Component<Props, State> {
             {skippedStudents.length
               ? <Form.Item>
                   <h3>Skipped students</h3>
-                  <Table
-                    showHeader={false}
-                    pagination={false}
-                    dataSource={skippedStudents}
+                  <List
                     size="small"
-                    rowKey="message"
-                    columns={[
-                      {
-                        dataIndex: 'message',
-                      },
-                    ]}
+                    bordered
+                    dataSource={skippedStudents}
+                    renderItem={item => (<List.Item>{item}</List.Item>)}
+                    style={{ marginBottom: '1em' }}
                   />
               </Form.Item>
               : ''
@@ -211,10 +216,9 @@ class TaskScorePage extends React.Component<Props, State> {
           .map(([github, score]) => ({
             score,
             studentGithubId: github,
-            courseTaskId: values.courseTaskId,
           }));
 
-        const results = await this.courseService.postMultipleScores(courseId, data);
+        const results = await this.courseService.postMultipleScores(courseId, values.courseTaskId, data);
         const groupedByStatus = new Map();
         results.forEach(({ status, value }: { status: string; value: string | number}) => {
           if (groupedByStatus.has(status)) {
