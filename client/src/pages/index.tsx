@@ -23,8 +23,8 @@ const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
 const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
 const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
-const isTaskOwner = (course: Course, _: Role, session: Session) => session.courseRoles.taskOwnerRole.courses
-  .some(({ id }) => id === course.id);
+const isTaskOwner = (course: Course, _: Role, session: Session) =>
+  session.courseRoles.taskOwnerRole.courses.some(({ id }) => id === course.id);
 
 // const isActivist = (_1: Course, _2: Role, session: Session) => session.isActivist;
 

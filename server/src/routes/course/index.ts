@@ -19,7 +19,7 @@ import { postStudentsFeedbacks } from './studentFeedback';
 import { getStudents, postStudents } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
-import { getCourseEvents } from './events';
+import { getCourseEvents, getCourseEventsCalendar } from './events';
 import { getTaskVerifications } from './taskVerifications';
 
 import {
@@ -353,6 +353,8 @@ export function courseRoute(logger: ILogger) {
   router.put('/:courseId/event/:id', adminGuard, validateCourseId, createPutRoute(CourseEvent, logger));
 
   router.delete('/:courseId/event/:id', adminGuard, validateCourseId, createDeleteRoute(CourseEvent, logger));
+
+  router.get('/:courseId/events/ical', validateCourseId, getCourseEventsCalendar(logger));
 
   /**
    * @swagger

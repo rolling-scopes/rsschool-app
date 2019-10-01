@@ -2,6 +2,8 @@ import axios from 'axios';
 import getConfig from 'next/config';
 import { Session } from '../components/withSession';
 import { Event } from './event';
+import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
+
 const { serverRuntimeConfig } = getConfig();
 
 export interface CourseTask {
@@ -38,6 +40,10 @@ export interface CourseEvent {
   eventId: number;
   owner: string;
   coordinator: string;
+  organizerId: number;
+  organizer: UserBasic;
+  detailsUrl: string;
+  broadcastUrl: string;
 }
 
 export interface CreateCourseTask {
@@ -223,34 +229,10 @@ export interface StudentProfile {
   mentor: MentorWithContacts | null;
 }
 
-export interface StudentBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-  isActive: boolean;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  mentor: MentorBasic | null;
-}
-
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number;
 }
 
-export interface MentorBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  students: StudentBasic[];
-}
 export interface StudentScore extends StudentBasic {
   taskResults: {
     courseTaskId: number;

@@ -84,13 +84,10 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
     .getRawMany();
 
   const taskOwnerRole: TaskOwnerRole = {
-    courses: [...new Set(taskOwner.map(item => item.courseId))]
-      .map(id => ({
-        id,
-        tasksIds: taskOwner
-          .filter(item => item.courseId === id)
-          .map(item => item.courseTaskId),
-      })),
+    courses: [...new Set(taskOwner.map(item => item.courseId))].map(id => ({
+      id,
+      tasksIds: taskOwner.filter(item => item.courseId === id).map(item => item.courseTaskId),
+    })),
   };
 
   return {

@@ -2,6 +2,7 @@ import { Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, Column, PrimaryG
 import { Event } from './event';
 import { Course } from './course';
 import { Stage } from './stage';
+import { User } from './user';
 
 @Entity()
 export class CourseEvent {
@@ -25,10 +26,10 @@ export class CourseEvent {
   @Column()
   courseId: number;
 
-  @ManyToOne(_ => Stage)
+  @ManyToOne(_ => Stage, { nullable: true })
   stage: Stage;
 
-  @Column()
+  @Column({ nullable: true })
   stageId: number;
 
   @Column({ type: 'date', nullable: true })
@@ -45,4 +46,16 @@ export class CourseEvent {
 
   @Column({ nullable: true })
   comment: string;
+
+  @ManyToOne(_ => User, { nullable: true })
+  organizer: User;
+
+  @Column({ nullable: true })
+  organizerId: number;
+
+  @Column({ nullable: true })
+  detailsUrl: string;
+
+  @Column({ nullable: true })
+  broadcastUrl: string;
 }

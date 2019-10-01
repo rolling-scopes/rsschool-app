@@ -3,9 +3,10 @@ import { FormComponentProps } from 'antd/lib/form';
 import { Header, PersonSelect, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
-import { AssignedStudent, CourseService, CourseTask, StudentBasic } from 'services/course';
+import { AssignedStudent, CourseService, CourseTask } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
+import { StudentBasic } from '../../../../../common/models';
 
 type Props = CoursePageProps & FormComponentProps;
 

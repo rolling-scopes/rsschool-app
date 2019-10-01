@@ -65,8 +65,9 @@ class CourseTasksPage extends React.Component<Props, State> {
           ? await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data)
           : await this.courseService.createCourseTask(this.props.course.id, data);
 
-      const task = (await this.courseService.getCourseTasks(this.props.course.id))
-        .find(task => task.taskId === data.taskId);
+      const task = (await this.courseService.getCourseTasks(this.props.course.id)).find(
+        task => task.taskId === data.taskId,
+      );
 
       const updatedData =
         this.state.modalAction === 'update'
@@ -184,7 +185,7 @@ class CourseTasksPage extends React.Component<Props, State> {
               initialValue: modalData.taskOwner ? modalData.taskOwner.id : undefined,
               rules: [{ required: false, message: 'Please select a task owner' }],
             })(
-              <UserSearch person={modalData.taskOwner} searchFn={this.loadUsers} />,
+              <UserSearch defaultValues={modalData.taskOwner ? [modalData.taskOwner] : []} searchFn={this.loadUsers} />,
             )}
           </Form.Item>
           <Form.Item label="Start Date - End Date">

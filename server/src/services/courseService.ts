@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { Course, CourseTask, Mentor, Student, User } from '../models';
+import { MentorBasic, StudentBasic } from '../../../common/models';
+import { Course, CourseTask, Mentor, Student, User, CourseEvent } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
@@ -18,51 +19,9 @@ export async function getCourseMentorWithUser(courseId: number, userId: number) 
     .getOne();
 }
 
-export interface MentorBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  students: StudentBasic[];
-}
-
 export interface MentorWithContacts extends MentorBasic {
   email?: string;
   phone?: string;
-}
-
-export interface StudentBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-  isActive: boolean;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  totalScore: number;
-
-  mentor: MentorBasic | null;
-}
-
-export interface StudentBasic {
-  lastName: string;
-  firstName: string;
-  githubId: string;
-  isActive: boolean;
-
-  id: number;
-  userId: number;
-  courseId: number;
-
-  totalScore: number;
-
-  mentor: MentorBasic | null;
 }
 
 export interface AssignedStudent extends StudentBasic {
@@ -361,4 +320,23 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 
 export function isPowerUser(courseId: number, session: IUserSession) {
   return session.isAdmin || session.roles[courseId] === 'coursemanager';
+}
+
+export async function getEvents(courseId: number) {
+  return getRepository(CourseEvent)
+    .createQueryBuilder('courseEvent')
+    .innerJoinAndSelect('courseEvent.event', 'event')
+    .innerJoin('courseEvent.stage', 'stage')
+    .leftJoin('courseEvent.organizer', 'organizer')
+    .addSelect([
+      'stage.id',
+      'stage.name',
+      'organizer.id',
+      'organizer.firstName',
+      'organizer.lastName',
+      'organizer.githubId',
+    ])
+    .where('courseEvent.courseId = :courseId', { courseId })
+    .orderBy('courseEvent.date')
+    .getMany();
 }

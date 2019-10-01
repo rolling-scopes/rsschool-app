@@ -64,11 +64,11 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       checker: item.checker,
       taskOwner: item.taskOwner
         ? {
-          id: item.taskOwner.id,
-          githubId: item.taskOwner.githubId,
-          firstName: item.taskOwner.firstName,
-          lastName: item.taskOwner.lastName,
-        }
+            id: item.taskOwner.id,
+            githubId: item.taskOwner.githubId,
+            firstName: item.taskOwner.firstName,
+            lastName: item.taskOwner.lastName,
+          }
         : null,
       taskCheckers: [],
       githubRepoName: (item.task as Task).githubRepoName,
@@ -90,7 +90,9 @@ export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.Rou
     .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
     .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
     .leftJoin(Task, 'task', '"task"."id" = "courseTask"."taskId"')
-    .where(`"course"."id" = '${courseId}' AND "courseTask"."taskOwnerId" = '${taskOwnerId}'`)
+    .where(`"course"."id" = '${courseId}'`)
+    .andWhere(`"courseTask"."taskOwnerId" = '${taskOwnerId}'`)
+    .andWhere(`"courseTask"."checker" = 'taskOwner'`)
     .getRawMany();
 
   setResponse(ctx, OK, courseTasks);

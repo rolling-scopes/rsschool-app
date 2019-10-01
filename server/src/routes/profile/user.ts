@@ -1,8 +1,8 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Course, CourseTask, Student, Task, User } from '../../models';
+import { Course, CourseTask, Student, Mentor, Task, User } from '../../models';
 import { IUserSession } from '../../models/session';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
@@ -46,26 +46,7 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: string, excludeFeedback: boolean) => {
   const profile = await getRepository(User).findOne({
     where: { githubId },
-    relations: [
-      'receivedFeedback',
-      'receivedFeedback.fromUser',
-      'mentors',
-      'mentors.user',
-      'mentors.students',
-      'mentors.students.user',
-      'students',
-      'mentors.course',
-      'students.course',
-      'students.course.stages',
-      'students.course.stages.courseTasks',
-      'students.course.stages.courseTasks.task',
-      'students.mentor',
-      'students.mentor.user',
-      'students.taskResults',
-      'students.feedback',
-      'students.taskInterviewResults',
-      'students.certificate',
-    ],
+    relations: ['receivedFeedback', 'receivedFeedback.fromUser', 'mentors', 'students'],
   });
 
   if (profile === undefined) {
@@ -73,7 +54,33 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     return;
   }
 
-  const { students, mentors, receivedFeedback, ...user } = profile;
+  const { students: studentRecords, mentors: mentorRecords, receivedFeedback, ...user } = profile;
+
+  const [students, mentors] = await Promise.all([
+    studentRecords && studentRecords.length > 0
+      ? getRepository(Student).find({
+          where: { id: In(studentRecords.map(s => s.id)) },
+          relations: [
+            'course',
+            'course.stages',
+            'course.stages.courseTasks',
+            'course.stages.courseTasks.task',
+            'mentor',
+            'mentor.user',
+            'taskResults',
+            'taskInterviewResults',
+            'certificate',
+          ],
+        })
+      : Promise.resolve([]),
+    mentorRecords && mentorRecords.length > 0
+      ? getRepository(Mentor).find({
+          where: { id: In(mentorRecords.map(s => s.id)) },
+          relations: ['user', 'course', 'students', 'students.user'],
+        })
+      : Promise.resolve([]),
+  ]);
+
   const result = {
     user,
     students: [] as any[],
@@ -81,59 +88,49 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     receivedFeedback: [] as any[],
   };
 
-  if (students) {
-    result.receivedFeedback = receivedFeedback || [];
-    result.students = students.map(st => {
-      const course = st.course as Course;
-      const courseTasks = course.stages
-        .reduce((acc, stage) => acc.concat(stage.courseTasks || []), [] as CourseTask[])
-        .map(t => ({
-          id: t.id,
-          name: (t.task as Task).name,
-          descriptionUrl: (t.task as Task).descriptionUrl,
-        }));
-      return {
-        id: st.id,
-        course: {
-          id: course.id,
-          name: course.name,
-        },
-        totalScore: st.totalScore,
-        certificatePublicId: st.certificate ? st.certificate.publicId : null,
-        completed: !st.isExpelled && !st.isFailed,
-        expellingReason: st.expellingReason,
-        taskResults: (st.taskResults || []).map(t => ({
-          score: t.score,
-          githubPrUrl: t.githubPrUrl,
-          comment: t.comment,
-          courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
-        })),
-        interviews: excludeFeedback
-          ? []
-          : (st.taskInterviewResults || []).map(t => ({
-              formAnswers: t.formAnswers,
-              score: t.score,
-              comment: t.comment,
-              courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
-            })),
-        mentor: st.mentor ? courseService.convertToMentorBasic(st.mentor) : null,
-      };
-    });
-  }
+  result.receivedFeedback = receivedFeedback || [];
+  result.students = students.map(st => {
+    const { course, id } = st;
+    const courseTasks = course.stages
+      .reduce((acc, stage) => acc.concat(stage.courseTasks || []), [] as CourseTask[])
+      .map(t => ({
+        id: t.id,
+        name: (t.task as Task).name,
+        descriptionUrl: (t.task as Task).descriptionUrl,
+      }));
 
-  if (mentors) {
-    result.mentors = mentors.map(m => {
-      const course = m.course as Course;
-      return {
-        id: m.id,
-        course: {
-          id: course.id,
-          name: course.name,
-        },
-        students: (m.students || []).map(s => courseService.convertToStudentBasic(s)),
-      };
-    });
-  }
+    return {
+      id,
+      course: {
+        id: course.id,
+        name: course.name,
+      },
+      totalScore: st.totalScore,
+      certificatePublicId: st.certificate ? st.certificate.publicId : null,
+      completed: !st.isExpelled && !st.isFailed,
+      expellingReason: st.expellingReason,
+      taskResults: (st.taskResults || []).map(t => ({
+        score: t.score,
+        githubPrUrl: t.githubPrUrl,
+        comment: t.comment,
+        courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
+      })),
+      interviews: excludeFeedback
+        ? []
+        : (st.taskInterviewResults || []).map(t => ({
+            formAnswers: t.formAnswers,
+            score: t.score,
+            comment: t.comment,
+            courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
+          })),
+      mentor: st.mentor ? courseService.convertToMentorBasic(st.mentor) : null,
+    };
+  });
+  result.mentors = mentors.map(({ id, course, students }) => ({
+    id,
+    course: { id: course.id, name: course.name },
+    students: (students || []).map(courseService.convertToStudentBasic),
+  }));
 
   setResponse(ctx, OK, result);
 };

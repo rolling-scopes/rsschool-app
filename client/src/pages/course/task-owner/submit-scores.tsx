@@ -103,46 +103,45 @@ class TaskScorePage extends React.Component<Props, State> {
               <Button size="large" type="primary" htmlType="submit" style={{ marginRight: '1.5em' }}>
                 Submit
               </Button>
-              {isLoading
-                ? <Spin indicator={antIcon} style={{ fontSize: 20 }} />
-                : ''
-              }
+              {isLoading ? <Spin indicator={antIcon} style={{ fontSize: 20 }} /> : ''}
             </Form.Item>
-            {submitResults.length
-              ? <Form.Item>
-                  <h3>Summary</h3>
-                  <Table
-                    pagination={false}
-                    dataSource={submitResults}
-                    size="small"
-                    rowKey="status"
-                    columns={[
-                      {
-                        title: 'Status',
-                        dataIndex: 'status',
-                      },
-                      {
-                        title: 'Count',
-                        dataIndex: 'count',
-                      },
-                    ]}
-                  />
+            {submitResults.length ? (
+              <Form.Item>
+                <h3>Summary</h3>
+                <Table
+                  pagination={false}
+                  dataSource={submitResults}
+                  size="small"
+                  rowKey="status"
+                  columns={[
+                    {
+                      title: 'Status',
+                      dataIndex: 'status',
+                    },
+                    {
+                      title: 'Count',
+                      dataIndex: 'count',
+                    },
+                  ]}
+                />
               </Form.Item>
-              : ''
-            }
-            {skippedStudents.length
-              ? <Form.Item>
-                  <h3>Skipped students</h3>
-                  <List
-                    size="small"
-                    bordered
-                    dataSource={skippedStudents}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
-                    style={{ marginBottom: '1em' }}
-                  />
+            ) : (
+              ''
+            )}
+            {skippedStudents.length ? (
+              <Form.Item>
+                <h3>Skipped students</h3>
+                <List
+                  size="small"
+                  bordered
+                  dataSource={skippedStudents}
+                  renderItem={item => <List.Item>{item}</List.Item>}
+                  style={{ marginBottom: '1em' }}
+                />
               </Form.Item>
-              : ''
-            }
+            ) : (
+              ''
+            )}
           </Form>
         </Col>
       </>
@@ -181,16 +180,21 @@ class TaskScorePage extends React.Component<Props, State> {
         const courseId = this.props.course.id;
         const files = values.files.fileList;
 
-        const filesContent: string[] = await Promise.all(files.map((file: any) => new Promise((res, rej) => {
-          const reader = new FileReader();
-          reader.readAsText(file.originFileObj, 'utf-8');
-          reader.onload = ({ target }) => res(target ? target.result : '');
-          reader.onerror = e => rej(e);
-        })));
+        const filesContent: string[] = await Promise.all(
+          files.map(
+            (file: any) =>
+              new Promise((res, rej) => {
+                const reader = new FileReader();
+                reader.readAsText(file.originFileObj, 'utf-8');
+                reader.onload = ({ target }) => res(target ? target.result : '');
+                reader.onerror = e => rej(e);
+              }),
+          ),
+        );
 
         const scores = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
           .reduce((acc, cur) => acc.concat(cur), [])
-          .map((item) =>  {
+          .map(item => {
             if (isUndefined(item.Github) || isUndefined(item.Score)) {
               throw new Error('Incorrect data: CSV file should content the headers named "Github" and "Score"!');
             }
@@ -212,15 +216,14 @@ class TaskScorePage extends React.Component<Props, State> {
           }
         });
 
-        const data = Array.from(uniqueStudents)
-          .map(([github, score]) => ({
-            score,
-            studentGithubId: github,
-          }));
+        const data = Array.from(uniqueStudents).map(([github, score]) => ({
+          score,
+          studentGithubId: github,
+        }));
 
         const results = await this.courseService.postMultipleScores(courseId, values.courseTaskId, data);
         const groupedByStatus = new Map();
-        results.forEach(({ status, value }: { status: string; value: string | number}) => {
+        results.forEach(({ status, value }: { status: string; value: string | number }) => {
           if (groupedByStatus.has(status)) {
             const savedStatus = groupedByStatus.get(status);
             const newStatus = {

@@ -30,8 +30,9 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
 
 export const taskOwnerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
   const courseId: number = Number(ctx.params.courseId);
-  const isTaskOwner = ctx.state.user.courseRoles.taskOwnerRole.courses
-    .some(({ id }: { id: number } ) => id === courseId);
+  const isTaskOwner = ctx.state.user.courseRoles.taskOwnerRole.courses.some(
+    ({ id }: { id: number }) => id === courseId,
+  );
   if (ctx.state.user != null && isTaskOwner) {
     await next();
     return;

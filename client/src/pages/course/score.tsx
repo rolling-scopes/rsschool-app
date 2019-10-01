@@ -44,6 +44,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   render() {
     const { isAdmin, isHirer, roles } = this.props.session;
     const csvEnabled = isAdmin || isHirer || roles[this.props.course.id] === 'coursemanager';
+    const columnWidth = 90;
+    const tableWidth = this.getColumns().length * columnWidth + 800; // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
     return (
       <>
         <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -60,10 +62,11 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               </Button>
             )}
           </div>
+
           <Table<StudentScore>
-            className="m-3"
+            className="m-3 table-score"
             bordered
-            scroll={{ x: 2000 }}
+            scroll={{ x: tableWidth, y: 'calc(100vh - 300px)' }}
             style={{ overflowY: 'scroll' }}
             pagination={{ pageSize: 100 }}
             size="small"
@@ -73,21 +76,24 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             columns={[
               {
                 title: '#',
+                fixed: 'left',
                 dataIndex: 'rank',
                 key: 'rank',
-                width: 60,
+                width: 50,
                 sorter: numberSorter('rank'),
               },
               {
                 title: 'Github',
+                fixed: 'left',
                 dataIndex: 'githubId',
                 sorter: stringSorter('githubId'),
-                width: 120,
+                width: 150,
                 key: 'githubId',
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
+                    &nbsp;
+                    <a href={`https://github.com/${value}`}>{value}</a>
                   </div>
                 ),
                 ...getColumnSearchProps('githubId'),
@@ -98,22 +104,18 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 key: 'lastName',
                 width: 150,
                 sorter: stringSorter('firstName'),
-                render: (_: any, record: StudentScore) => `${record.firstName} ${record.lastName}`,
+                render: (_: any, record: StudentScore) => (
+                  <a href={`/profile?githubId=${record.githubId}`}>
+                    {record.firstName} {record.lastName}
+                  </a>
+                ),
                 ...getColumnSearchProps('lastName'),
-              },
-              {
-                title: 'Mentor',
-                dataIndex: 'mentor.githubId',
-                key: 'mentor.githubId',
-                width: 100,
-                render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
-                ...getColumnSearchProps('mentor.githubId'),
               },
               {
                 title: 'Location',
                 dataIndex: 'locationName',
                 key: 'locationName',
-                width: 100,
+                width: 150,
                 sorter: stringSorter('locationName'),
                 ...getColumnSearchProps('locationName'),
               },
@@ -126,6 +128,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 render: value => <Text strong>{value}</Text>,
               },
               ...this.getColumns(),
+              {
+                title: 'Mentor',
+                dataIndex: 'mentor.githubId',
+                key: 'mentor.githubId',
+                // width: 100,
+                render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
+                ...getColumnSearchProps('mentor.githubId'),
+              },
             ]}
           />
         </LoadingScreen>
@@ -140,14 +150,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       key: task.id.toString(),
       title: () => {
         return task.descriptionUrl ? (
-          <a className="table-header-link" href={task.descriptionUrl}>
+          <a className="table-header-link" target="_blank" href={task.descriptionUrl}>
             {task.name}
           </a>
         ) : (
           <div>{task.name}</div>
         );
       },
-      width: 75,
+      width: 90,
       className: 'align-right',
       render: (_: any, d: StudentScore) => {
         const currentTask = d.taskResults.find((taskResult: any) => taskResult.courseTaskId === task.courseTaskId);
@@ -161,6 +171,13 @@ class ScorePage extends React.Component<CoursePageProps, State> {
 const styles = css`
   :global(.rs-table-row-disabled) {
     opacity: 0.25;
+  }
+  :global(.table-score td, .table-score th) {
+    padding: 0 5px !important;
+    font-size: 11px;
+  }
+  :global(.table-score td a) {
+    line-height: 24px;
   }
 `;
 
