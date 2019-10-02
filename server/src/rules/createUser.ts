@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm';
 import { config } from '../config';
-import { Course, IUserSession, User } from '../models';
+import { Course, IUserSession, User, CourseTask, Stage } from '../models';
 import { userService } from '../services';
+import { TaskOwnerRole } from './types';
 
 const adminTeams: string[] = config.roles.adminTeams;
 const hirers: string[] = config.roles.hirers;
@@ -59,6 +60,7 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
       isHirer,
       isActivist: false,
       roles: {},
+      courseRoles: {},
     };
   }
   const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' } = {};
@@ -71,12 +73,30 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
   result.courseManagers!.forEach(courseManager => {
     roles[(courseManager.course as Course).id] = 'coursemanager';
   });
+
+  const taskOwner = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .select('"courseTask"."id" AS "courseTaskId", "course"."id" AS "courseId"')
+    .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
+    .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
+    .leftJoin(User, 'user', '"user"."id" = "courseTask"."taskOwnerId"')
+    .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${id}'`)
+    .getRawMany();
+
+  const taskOwnerRole: TaskOwnerRole = {
+    courses: [...new Set(taskOwner.map(item => item.courseId))].map(id => ({
+      id,
+      tasksIds: taskOwner.filter(item => item.courseId === id).map(item => item.courseTaskId),
+    })),
+  };
+
   return {
     roles,
+    isAdmin,
+    isHirer,
     id: result.id!,
     isActivist: result.activist,
     githubId: result.githubId.toLowerCase(),
-    isAdmin,
-    isHirer,
+    courseRoles: { taskOwnerRole },
   };
 }

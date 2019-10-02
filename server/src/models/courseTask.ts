@@ -11,6 +11,7 @@ import { Task } from './task';
 import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskResult } from './taskResult';
+import { User } from './user';
 
 @Entity()
 export class CourseTask {
@@ -59,5 +60,11 @@ export class CourseTask {
   scoreWeight: number;
 
   @Column({ default: 'mentor' })
-  checker: 'assigned' | 'mentor';
+  checker: 'assigned' | 'mentor' | 'taskOwner';
+
+  @ManyToOne(_ => User, { nullable: true })
+  taskOwner: User | null;
+
+  @Column({ nullable: true })
+  taskOwnerId: number | null;
 }

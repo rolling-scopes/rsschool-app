@@ -28,6 +28,18 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
   await basicAuthAdmin(ctx, next);
 };
 
+export const taskOwnerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+  const courseId: number = Number(ctx.params.courseId);
+  const isTaskOwner = ctx.state.user.courseRoles.taskOwnerRole.courses.some(
+    ({ id }: { id: number }) => id === courseId,
+  );
+  if (ctx.state.user != null && isTaskOwner) {
+    await next();
+    return;
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
 export const courseManagerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
   if (ctx.state.user != null && ctx.state.user.isAdmin) {
     await next();
