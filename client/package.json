@@ -14,10 +14,13 @@
     "build": "next build src",
     "prod": "next start -p 8080",
     "lint": "tslint -c tslint.json --project tsconfig.json",
-    "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\" \"./src/**/*.tsx\""
+    "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\" \"./src/**/*.tsx\"",
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "dependencies": {
     "@types/csvtojson": "^1.1.5",
+    "@types/jest": "^24.0.18",
     "@types/styled-jsx": "~2.2.8",
     "@zeit/next-css": "~1.0.1",
     "@zeit/next-sass": "~1.0.1",
@@ -26,12 +29,14 @@
     "bootstrap": "~4.3.1",
     "csvtojson": "^2.0.10",
     "express": "~4.17.1",
+    "jest": "^24.9.0",
     "lodash.get": "~4.4.2",
     "next": "9.0.5",
     "rc-menu": "7.4.23",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
-    "styled-jsx": "~3.2.1"
+    "styled-jsx": "~3.2.1",
+    "ts-jest": "^24.1.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.4.0",

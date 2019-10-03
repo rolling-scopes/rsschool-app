@@ -10,7 +10,11 @@
     "server:build": "yarn workspace server build",
     "server:start": "yarn workspace server start",
     "client:build": "yarn workspace client build",
-    "client:start": "yarn workspace client start"
+    "client:start": "yarn workspace client start",
+    "client:test": "yarn workspace client test",
+    "client:test-watch": "yarn workspace client test-watch",
+    "test": "npm run client:test",
+    "test-watch": "npm run client:test-watch"
   },
   "devDependencies": {
     "concurrently": "^4.1.2",
