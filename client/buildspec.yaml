@@ -7,6 +7,7 @@ phases:
   build:
     commands:
       - yarn
+      - npm test
       - yarn client:build
       - cd ./client
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -17,7 +18,7 @@ phases:
       - >
         ssh -tt -i "key.pem" $RSSCHOOL_API_EC2_USER@$RSSCHOOL_API_HOST "
           sleep 10
-          docker pull rsschool/ui:latest 
+          docker pull rsschool/ui:latest
           docker-compose up -d ui
           docker system prune -f "
 
