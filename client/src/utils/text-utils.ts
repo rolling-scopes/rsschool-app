@@ -1,32 +1,11 @@
-import { chain } from 'lodash';
+const githubIdMatch = '[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}';
+const stringStartMatch = '(https?:\\/*\\/)?github.com(\\/)?|https?:\\/*\\/|^';
+
+const LOGIN_FIND_REGEXP = new RegExp(`(${stringStartMatch})(${githubIdMatch})?`, 'i');
 
 export const filterLogin = (login: string) => {
-  if (!login) {
-    return login;
-  }
+  const matches = login.trim().match(LOGIN_FIND_REGEXP) || [];
+  const [foundLogin = ''] = matches.reverse();
 
-  return chain(login)
-    .trim(' ')
-    .thru((str: string) => {
-      const questionMarkPosition = login.lastIndexOf('?');
-      if (questionMarkPosition === -1) {
-        return str;
-      }
-      return str.slice(0, questionMarkPosition);
-    })
-    .trimEnd('/')
-    .thru((str: string) => {
-      const slashPosition = str.lastIndexOf('/');
-      if (slashPosition === -1) {
-        return str;
-      }
-      return str.slice(slashPosition + 1);
-    })
-    .thru((str: string) => {
-      if (str === 'github.com') {
-        return '';
-      }
-      return str;
-    })
-    .value();
+  return foundLogin;
 };
