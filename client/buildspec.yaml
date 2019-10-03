@@ -7,7 +7,7 @@ phases:
   build:
     commands:
       - yarn
-      - npm test
+      - yarn client:test
       - yarn client:build
       - cd ./client
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
