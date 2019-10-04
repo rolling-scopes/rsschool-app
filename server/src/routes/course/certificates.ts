@@ -9,7 +9,7 @@ import { config } from '../../config';
 
 export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const inputIds = ctx.request.body as { studentId: number }[];
+  const inputIds = ctx.request.body as number[];
   let students: Student[] = [];
   const initialQuery = getRepository(Student)
     .createQueryBuilder('student')

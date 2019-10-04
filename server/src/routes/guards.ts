@@ -13,6 +13,30 @@ export const guard = async (ctx: Router.RouterContext, next: () => Promise<void>
   await basicAuthAdmin(ctx, next);
 };
 
+export const courseGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
+    const user = ctx.state.user as IUserSession;
+    const courseId = Number(ctx.params.courseId);
+    if ((courseId && user.roles[courseId]) || user.isAdmin || user.isHirer) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const courseMentorGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
+    const user = ctx.state.user as IUserSession;
+    const courseId = Number(ctx.params.courseId);
+    if ((courseId && user.roles[courseId] === 'mentor') || user.isAdmin || user.isHirer) {
+      await next();
+      return;
+    }
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
 export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
   if (ctx.state.user != null && ctx.state.user.isAdmin) {
     await next();

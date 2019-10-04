@@ -3,7 +3,7 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard, courseManagerGuard, taskOwnerGuard } from '../guards';
+import { adminGuard, guard, courseGuard, courseMentorGuard, courseManagerGuard, taskOwnerGuard } from '../guards';
 import { setResponse } from '../utils';
 import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
@@ -281,13 +281,18 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
+  router.get('/:courseId/tasks', courseGuard, validateCourseId, getCourseTasks(logger));
 
   router.get('/:courseId/tasksTaskOwner', taskOwnerGuard, validateCourseId, getCourseTasksForTaskOwner(logger));
 
-  router.get('/:courseId/tasksCheckers', guard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
+  router.get('/:courseId/tasksCheckers', courseGuard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
 
-  router.post('/:courseId/student/me/task/:id/verification', guard, validateCourseId, postTaskVerification(logger));
+  router.post(
+    '/:courseId/student/me/task/:id/verification',
+    courseGuard,
+    validateCourseId,
+    postTaskVerification(logger),
+  );
 
   /**
    * @swagger
@@ -346,7 +351,7 @@ export function courseRoute(logger: ILogger) {
    */
   router.delete('/:courseId/task/:id', adminGuard, validateCourseId, createDeleteRoute(CourseTask, logger));
 
-  router.get('/:courseId/events', guard, validateCourseId, getCourseEvents(logger));
+  router.get('/:courseId/events', courseGuard, validateCourseId, getCourseEvents(logger));
 
   router.post('/:courseId/event', adminGuard, validateCourseId, createPostRoute(CourseEvent, logger));
 
@@ -438,7 +443,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.post('/:courseId/score', guard, validateCourseId, postScore(logger));
+  router.post('/:courseId/score', courseGuard, validateCourseId, postScore(logger));
 
   /**
    * @swagger
@@ -457,7 +462,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: ''
    */
-  router.get('/:courseId/score', guard, validateCourseId, getScore(logger));
+  router.get('/:courseId/score', courseGuard, validateCourseId, getScore(logger));
 
   router.get('/:courseId/score/csv', courseManagerGuard, validateCourseId, getScoreAsCsv(logger));
 
@@ -490,17 +495,17 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: result
    */
-  router.post('/:courseId/expulsion', guard, validateCourseId, postExpulsion(logger));
+  router.post('/:courseId/expulsion', courseMentorGuard, validateCourseId, postExpulsion(logger));
 
-  router.get('/:courseId/me', guard, validateCourseId, getMe(logger));
+  router.get('/:courseId/me', courseGuard, validateCourseId, getMe(logger));
 
-  router.get('/:courseId/me/mentors', guard, validateCourseId, getMyMentors(logger));
+  router.get('/:courseId/me/mentors', courseGuard, validateCourseId, getMyMentors(logger));
 
-  router.post('/:courseId/taskArtefact', guard, validateCourseId, postTaskArtefact(logger));
+  router.post('/:courseId/taskArtefact', courseGuard, validateCourseId, postTaskArtefact(logger));
 
   // router.get('/:courseId/mentorContacts', guard, validateCourseId, getMentorContacts(logger));
 
-  router.post('/:courseId/interviewFeedback', guard, validateCourseId, postInterviewFeedback(logger));
+  router.post('/:courseId/interviewFeedback', courseGuard, validateCourseId, postInterviewFeedback(logger));
 
   router.post('/:courseId/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
 
@@ -508,7 +513,7 @@ export function courseRoute(logger: ILogger) {
 
   router.post('/:courseId/certificates', adminGuard, validateCourseId, postCertificates(logger));
 
-  router.get('/:courseId/student/me/tasks/verifications', guard, validateCourseId, getTaskVerifications(logger));
+  router.get('/:courseId/student/me/tasks/verifications', courseGuard, validateCourseId, getTaskVerifications(logger));
 
   /**
    * @swagger
