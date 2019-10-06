@@ -45,14 +45,17 @@ class TasksVerificationsPage extends React.Component<Props, State> {
               title: 'Date/Time',
               dataIndex: 'createdDate',
               render: dateTimeRenderer,
+              width: 200,
             },
             {
               title: 'Task Name',
               dataIndex: 'courseTask.task.name',
+              width: 300,
             },
             {
               title: 'Score',
               dataIndex: 'score',
+              width: 100,
             },
             {
               title: 'Details',
