@@ -6,3 +6,5 @@ export * from './GithubUserLink';
 export * from './withSession';
 export * from './LoadingScreen';
 export * from './PersonSelect';
+export * from './Feedback';
+export * from './Help';

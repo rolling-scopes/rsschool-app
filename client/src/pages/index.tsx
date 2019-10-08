@@ -1,5 +1,5 @@
-import { Button, List, Select, Result, Divider } from 'antd';
-import { Header, RegistryBanner } from 'components';
+import { Button, List, Select, Result, Row, Col } from 'antd';
+import { Header, RegistryBanner, Feedback, Help } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
@@ -17,7 +17,6 @@ type State = {
   hasRegistryBanner: boolean;
 };
 
-const githubIssuesUrl = 'https://github.com/rolling-scopes/rsschool-app/issues';
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
@@ -38,34 +37,6 @@ const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: S
 
 const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
   checks.some(check => check(course, role, session));
-
-const publicRoutes = [
-  {
-    name: `👏 Say Thank you (Discord >> #gratitude)`,
-    link: `/gratitude`,
-    newTab: false,
-  },
-  {
-    name: `💌 Feedback on Student/Mentor`,
-    link: `/private-feedback`,
-    newTab: false,
-  },
-  {
-    name: `📝 Feedback on RS School`,
-    link: `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
-    newTab: true,
-  },
-  {
-    name: `🐞 Submit "Bug"`,
-    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
-    newTab: false,
-  },
-  {
-    name: `🔢 Submit "Data Issue"`,
-    link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=data-issue-report.md&title=`,
-    newTab: false,
-  },
-];
 
 const routes = [
   {
@@ -323,19 +294,16 @@ class IndexPage extends React.PureComponent<Props, State> {
               )}
             />
           )}
-          <Divider dashed />
-          <h4>Feedback</h4>
-          <List
-            bordered
-            dataSource={publicRoutes}
-            renderItem={(linkInfo: LinkInfo) => (
-              <List.Item key={linkInfo.link}>
-                <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
-                  {linkInfo.name}
-                </a>
-              </List.Item>
-            )}
-          />
+          <Row gutter={16}>
+            <Col span={4}> 
+              <Feedback /> 
+            </Col>  
+          </Row>
+          <Row gutter={16}>
+            <Col span={4}> 
+              <Help /> 
+            </Col>    
+          </Row>
         </div>
       </div>
     );
