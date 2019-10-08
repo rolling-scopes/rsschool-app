@@ -13,7 +13,7 @@ export interface CourseTask {
   name: string;
   maxScore: number | null;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'externaltask';
+  type: 'jstask' | 'htmltask' | 'externaltask' | 'test';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   scoreWeight: number;

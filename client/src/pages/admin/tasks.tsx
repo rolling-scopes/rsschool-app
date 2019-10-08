@@ -164,6 +164,7 @@ class TasksPage extends React.Component<Props, State> {
                   <Select.Option value="jstask">JS Task</Select.Option>
                   <Select.Option value="htmltask">HTML Task</Select.Option>
                   <Select.Option value="external">External</Select.Option>
+                  <Select.Option value="test">Test</Select.Option>
                 </Select>,
               )}
             </Form.Item>

@@ -36,7 +36,7 @@ export class Task {
   sourceGithubRepoUrl: string;
 
   @Column({ nullable: true })
-  type: 'jstask' | 'htmltask' | 'externaltask';
+  type: 'jstask' | 'htmltask' | 'externaltask' | 'test';
 
   @Column({ default: false })
   useJury: boolean;
