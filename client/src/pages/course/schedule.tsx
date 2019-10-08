@@ -16,6 +16,12 @@ interface State {
   data: CourseEvent[];
 }
 
+enum EventTypeColor {
+  task = 'red',
+  test = 'green',
+  lecture = 'blue',
+}
+
 class SchedulePage extends React.Component<Props, State> {
   state: State = {
     data: [],
@@ -40,7 +46,7 @@ class SchedulePage extends React.Component<Props, State> {
               date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
               time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
               event: {
-                type: 'task',
+                type: task.type === 'test' ? 'test' : 'task',
                 name: task.name,
                 descriptionUrl: task.descriptionUrl,
               },
@@ -74,7 +80,7 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Type',
               width: 100,
               dataIndex: 'event.type',
-              render: value => <Tag color={value === 'task' ? 'red' : 'blue'}>{value}</Tag>,
+              render: (value: keyof typeof EventTypeColor) => <Tag color={EventTypeColor[value]}>{value}</Tag>,
             },
             {
               title: 'Place',
