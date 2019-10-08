@@ -44,6 +44,6 @@ export class Task {
   @Column({ default: false })
   allowStudentArtefacts: boolean;
 
-  @Column({ type: 'simple-array' })
+  @Column({ type: 'simple-array', default: '' })
   tags: string[];
 }
