@@ -107,6 +107,9 @@ class TaskCheckerPage extends React.Component<Props, State> {
               <Typography.Paragraph>
                 The system will run tests in the following repository and will update the score based on the result
               </Typography.Paragraph>
+              <Typography.Paragraph type="danger">
+                IMPORTANT: Tests are run using NodeJS 10. Please make sure your solution works in NodeJS 10.
+              </Typography.Paragraph>
               <Typography.Paragraph>
                 <Typography.Text mark>
                   https://github.com/{this.props.session.githubId}/{task.githubRepoName}
