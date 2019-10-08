@@ -359,7 +359,7 @@ export function courseRoute(logger: ILogger) {
 
   router.delete('/:courseId/event/:id', adminGuard, validateCourseId, createDeleteRoute(CourseEvent, logger));
 
-  router.get('/:courseId/events/ical', validateCourseId, getCourseEventsCalendar(logger));
+  router.get('/:courseId/events/ical', courseGuard, validateCourseId, getCourseEventsCalendar(logger));
 
   /**
    * @swagger

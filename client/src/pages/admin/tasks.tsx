@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Button, Checkbox, message, Select, Form, Input, Modal, Radio, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
+import { union } from 'lodash';
 import { Header, Session, withSession } from 'components';
-import { boolRenderer, stringSorter } from 'components/Table';
+import { boolRenderer, tagsRenderer, stringSorter } from 'components/Table';
 import { Task, TaskService } from 'services/task';
 import { PageWithModalState } from 'services/models';
 import { urlPattern, githubRepoUrl } from 'services/validators';
@@ -49,6 +50,11 @@ class TasksPage extends React.Component<Props, State> {
               sorter: stringSorter<Task>('name'),
             },
             {
+              title: 'Tags',
+              dataIndex: 'tags',
+              render: tagsRenderer,
+            },
+            {
               title: 'Description URL',
               dataIndex: 'descriptionUrl',
             },
@@ -89,6 +95,7 @@ class TasksPage extends React.Component<Props, State> {
     }
     const isAutoTask = (getFieldValue('verification') || modalData.verification) === 'auto';
     const type = getFieldValue('type') || modalData.type;
+    const allTags = union(...this.state.data.map(d => d.tags || []));
     return (
       <Modal
         visible={!!modalData}
@@ -103,6 +110,19 @@ class TasksPage extends React.Component<Props, State> {
               initialValue: modalData.name,
               rules: [{ required: true, message: 'Please enter stage name' }],
             })(<Input />)}
+          </Form.Item>
+          <Form.Item label="Tags">
+            {field('tags', {
+              initialValue: modalData.tags || [],
+            })(
+              <Select mode="tags">
+                {allTags.map(tag => (
+                  <Select.Option key={tag} value={tag}>
+                    {tag}
+                  </Select.Option>
+                ))}
+              </Select>,
+            )}
           </Form.Item>
           <Form.Item label="Description URL">
             {field('descriptionUrl', {
@@ -182,6 +202,7 @@ class TasksPage extends React.Component<Props, State> {
         githubRepoName: values.githubRepoName,
         sourceGithubRepoUrl: values.sourceGithubRepoUrl,
         type: values.type,
+        tags: values.tags,
       };
       try {
         const task =

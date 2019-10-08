@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Table, Typography, Button } from 'antd';
+import { Table, Typography, Button, Icon, Popover } from 'antd';
 import { Header, withSession, LoadingScreen, GithubAvatar } from 'components';
 import withCourseData from 'components/withCourseData';
-import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
+import { getColumnSearchProps, stringSorter, dateRenderer, numberSorter } from 'components/Table';
 import { CourseTask, CourseService, StudentScore } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
@@ -45,7 +45,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     const { isAdmin, isHirer, roles } = this.props.session;
     const csvEnabled = isAdmin || isHirer || roles[this.props.course.id] === 'coursemanager';
     const columnWidth = 90;
-    const tableWidth = this.getColumns().length * columnWidth + 800; // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
+    // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
+    const tableWidth = this.getColumns().length * columnWidth + 800;
     return (
       <>
         <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -149,12 +150,30 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       dataIndex: task.id.toString(),
       key: task.id.toString(),
       title: () => {
+        const icon = (
+          <Popover
+            content={
+              <ul>
+                <li>Coefficient: {task.scoreWeight}</li>
+                <li>Deadline: {dateRenderer(task.studentEndDate)}</li>
+              </ul>
+            }
+            trigger="click"
+          >
+            <Icon type="question-circle" title="Click for detatils" />
+          </Popover>
+        );
         return task.descriptionUrl ? (
-          <a className="table-header-link" target="_blank" href={task.descriptionUrl}>
-            {task.name}
-          </a>
+          <>
+            <a className="table-header-link" target="_blank" href={task.descriptionUrl}>
+              {task.name}
+            </a>{' '}
+            {icon}
+          </>
         ) : (
-          <div>{task.name}</div>
+          <div>
+            {task.name} {icon}
+          </div>
         );
       },
       width: 90,

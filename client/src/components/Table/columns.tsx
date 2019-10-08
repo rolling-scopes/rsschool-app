@@ -1,5 +1,5 @@
 import { Button, Icon, Input } from 'antd';
-import get from 'lodash.get';
+import { get } from 'lodash';
 
 let searchInput: any;
 export function getColumnSearchProps(dataIndex: string, label?: string) {

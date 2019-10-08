@@ -1,4 +1,4 @@
-import get from 'lodash.get';
+import { get } from 'lodash';
 
 export function stringSorter<T>(field: keyof T) {
   return (a: T, b: T) => {

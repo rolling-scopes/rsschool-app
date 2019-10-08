@@ -12,6 +12,7 @@ export interface Task {
   type: 'jstask' | 'htmltask' | 'externaltask';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
+  tags: string[];
 }
 
 export class TaskService {

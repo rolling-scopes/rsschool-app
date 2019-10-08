@@ -1,6 +1,7 @@
 import moment from 'moment';
+import { Tag } from 'antd';
 
-export function dateRenderer(value: string) {
+export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
 }
 
@@ -14,6 +15,17 @@ export function dateTimeRenderer(value: string) {
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
+}
+
+export function tagsRenderer(values: string[]) {
+  if (!Array.isArray(values)) {
+    return '';
+  }
+  return <span>{values.map(renderTag)}</span>;
+}
+
+function renderTag(value: string) {
+  return <Tag key={value}>{value}</Tag>;
 }
 
 export function stringTrimRenderer(value: string) {

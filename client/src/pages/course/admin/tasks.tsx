@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Button, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Select, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
-import { dateRenderer, idFromArrayRenderer } from 'components/Table';
+import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { CourseService, CourseTask } from 'services/course';
 import { formatDate } from 'services/formatter';
@@ -160,7 +160,7 @@ class CourseTasksPage extends React.Component<Props, State> {
               <Select placeholder="Please select a task">
                 {tasks.map((task: Task) => (
                   <Select.Option key={task.id} value={task.id}>
-                    {task.name}
+                    {task.name} {tagsRenderer(task.tags)}
                   </Select.Option>
                 ))}
               </Select>,
