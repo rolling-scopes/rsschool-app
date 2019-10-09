@@ -1,10 +1,13 @@
-import { Button, List, Select, Result, Row, Col } from 'antd';
-import { Header, RegistryBanner, Feedback, Help } from 'components';
+import { Button, List, Select, Result, Row, Col, Layout } from 'antd';
+import { Header, RegistryBanner, Feedback, Help, AdminSider } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
 import { Course } from 'services/course';
 import '../styles/main.scss';
+
+
+const { Content } = Layout;
 
 type Props = {
   courses?: Course[];
@@ -15,8 +18,8 @@ type State = {
   dropdownOpen: boolean;
   activeCourseId: number | null;
   hasRegistryBanner: boolean;
+  collapsed: boolean;
 };
-
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
@@ -132,6 +135,13 @@ class IndexPage extends React.PureComponent<Props, State> {
     dropdownOpen: false,
     activeCourseId: null,
     hasRegistryBanner: false,
+    collapsed: false,
+  };
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
   };
 
   private hasAccessToCourse = (session: Session, course: Course) => {
@@ -239,72 +249,61 @@ class IndexPage extends React.PureComponent<Props, State> {
     const courses = this.getCourses();
     return (
       <div>
-        {/* <ActivityBanner /> */}
+        <Layout style={{ minHeight: '100vh' }}>
+          {isAdmin && <AdminSider />}
 
-        <Header username={this.props.session.githubId} />
-
-        <div className="m-3">
-          {isAdmin && (
-            <div className="mb-3">
-              <Button type="link">
-                <a href="/admin/courses">Courses</a>
-              </Button>
-              <Button type="link">
-                <a href="/admin/stages">Stages</a>
-              </Button>
-              <Button type="link">
-                <a href="/admin/tasks">Tasks</a>
-              </Button>
-              <Button type="link">
-                <a href="/admin/events">Events</a>
-              </Button>
-              <Button type="link">
-                <a href="/admin/users">Users</a>
-              </Button>
-              <Button type="link">
-                <a href="/admin/registrations">Registrations</a>
-              </Button>
-            </div>
-          )}
-          {!activeCourse && this.renderNoCourse()}
-          {this.state.hasRegistryBanner && activeCourse && (
-            <div className="mb-3">
-              <RegistryBanner />
-            </div>
-          )}
-          {activeCourse && (
-            <Select style={{ width: 250 }} className="mb-2" defaultValue={activeCourse.id} onChange={this.handleChange}>
-              {courses.map(course => (
-                <Select.Option key={course.id} value={course.id}>
-                  {course.name} ({this.getStatus(course)})
-                </Select.Option>
-              ))}
-            </Select>
-          )}
-          {activeCourse && (
-            <List
-              bordered
-              dataSource={this.getLinks(activeCourse)}
-              renderItem={(linkInfo: LinkInfo) => (
-                <List.Item key={linkInfo.link}>
-                  <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
-                    {linkInfo.name}
-                  </a>
-                </List.Item>
-              )}
-            />
-          )}
-          <Row gutter={16}>
-            <Col span={4}> 
-              <Feedback /> 
-            </Col>  
-          </Row>
-          <Row gutter={16}>
-            <Col span={4}> 
-              <Help /> 
-            </Col>    
-          </Row>
-        </div>
+          <Layout style={{ background: '#fff' }}>
+            <Header username={this.props.session.githubId} />
+            <Content>
+              {/* <ActivityBanner /> */}
+              <div className="m-3">
+                {!activeCourse && this.renderNoCourse()}
+                {this.state.hasRegistryBanner && activeCourse && (
+                  <div className="mb-3">
+                    <RegistryBanner />
+                  </div>
+                )}
+                {activeCourse && (
+                  <Select
+                    style={{ width: 250 }}
+                    className="mb-2"
+                    defaultValue={activeCourse.id}
+                    onChange={this.handleChange}
+                  >
+                    {courses.map(course => (
+                      <Select.Option key={course.id} value={course.id}>
+                        {course.name} ({this.getStatus(course)})
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
+                {activeCourse && (
+                  <List
+                    bordered
+                    dataSource={this.getLinks(activeCourse)}
+                    renderItem={(linkInfo: LinkInfo) => (
+                      <List.Item key={linkInfo.link}>
+                        <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+                          {linkInfo.name}
+                        </a>
+                      </List.Item>
+                    )}
+                  />
+                )}
+                <Row gutter={16}>
+                  <Col>
+                    <Feedback />
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col>
+                    <Help />
+                  </Col>
+                </Row>
+              </div>
+            </Content>
+          </Layout>
+        </Layout>
       </div>
     );
   }
