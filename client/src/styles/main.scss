@@ -9,3 +9,20 @@ body,
 #root {
   height: 100%;
 }
+
+.ant-layout-sider-dark h4 {
+  color: rgba(255, 255, 255, 0.6);
+  background: #07223b;
+  white-space: nowrap;
+
+  span {
+    text-transform: uppercase;
+    font-size: 16px;
+    line-height: 30px;
+    padding: 0 0 0 24px;
+  }
+}
+
+.ant-layout-sider-collapsed h4 span {
+  display: none;
+}

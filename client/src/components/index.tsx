@@ -8,3 +8,4 @@ export * from './LoadingScreen';
 export * from './PersonSelect';
 export * from './Feedback';
 export * from './Help';
+export * from './AdminSider';
