@@ -47,7 +47,9 @@ class GratitudePage extends React.Component<Props, State> {
       <>
         <Header title="#gratitude" username={this.props.session.githubId} />
         <Col className="m-2" sm={12}>
-          <Typography.Text type="secondary">Your feedback will be posted to #gratitude channel</Typography.Text>
+          <Typography.Text type="secondary">
+            Your feedback will be posted to #gratitude channel and to the Profile page of selected person
+          </Typography.Text>
           <LoadingScreen show={this.state.isLoading}>
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="Person">
@@ -73,7 +75,7 @@ class GratitudePage extends React.Component<Props, State> {
                       required: true,
                       min: 20,
                       whitespace: true,
-                      message: 'Please write more nice words about the person',
+                      message: 'The comment must contain at least 20 characters',
                     },
                   ],
                 })(<Input.TextArea style={{ height: 200 }} />)}
@@ -110,7 +112,7 @@ class GratitudePage extends React.Component<Props, State> {
         message.success('Your feedback has been submitted.');
         this.setState({ isLoading: false });
       } catch (e) {
-        message.error('An error occured. Please try later.');
+        message.error('An error occurred. Please try later.');
         this.setState({ isLoading: false });
       }
     });
