@@ -1,8 +1,9 @@
 (ns obfuscator
   (:require
    [clojure.string :as s]
-   [fake :as faker]
+   [clojure.test :refer [function?]]
 
+   [fake :as faker]
    [line-parser :as line-parser]
    [table-parser :as table-parser]
    [hashing :as hashing]))
@@ -22,10 +23,15 @@
    :empty-vec (fn [& args] [])
    :default identity})
 
+(def tagged-obfuscators
+  {'number-between faker/number-between})
+
 (defn make-row-obfuscator
   [config obfuscators-cfg]
   (map (fn [[column obfuscation-type]]
-         (get obfuscators-cfg obfuscation-type (:default obfuscators-cfg)))
+         (if (function? obfuscation-type)
+          obfuscation-type
+          (get obfuscators-cfg obfuscation-type (:default obfuscators-cfg))))
        config))
 
 (defn schemas-obfuscators
@@ -36,7 +42,7 @@
 
 (defn generate-obfuscators-for-tables
   "generates vector of obfuscators(each column) for each schema"
-  [obfuscation-cfg obfuscators]
+  [obfuscators obfuscation-cfg]
   (into {} (schemas-obfuscators obfuscation-cfg obfuscators)))
 
 (defn obfuscate-row

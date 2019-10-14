@@ -21,8 +21,8 @@
     (case (:action args-map)
           "generate-config" (print-dup (obfuscator-cfg/dump->obfuscation-cfg file) *out*)
           (print (let [obfuscators (obfuscator/create-obfuscators (:sault args-map))
-                       tables-obfuscators (-> (slurp (:config args-map))
-                                           (clojure.edn/read-string)
+                       tables-obfuscators (->> (slurp (:config args-map))
+                                           (clojure.edn/read-string {:readers obfuscator/tagged-obfuscators})
                                            (obfuscator/generate-obfuscators-for-tables obfuscators))]
                   (as-> file f
                     (obfuscator/obfuscate-dump f tables-obfuscators)
