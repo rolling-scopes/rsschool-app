@@ -44,7 +44,7 @@ class ExpelPage extends React.Component<Props, State> {
       }
       try {
         this.setState({ isLoading: true });
-        this.courseService.expelStudent(this.props.course.id, Number(values.studentId), values.comment);
+        await this.courseService.expelStudent(this.props.course.id, Number(values.studentId), values.comment);
         message.success('The student has been expelled');
         this.setState({ isLoading: false });
         this.props.form.resetFields();

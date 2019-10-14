@@ -151,8 +151,8 @@ export async function getMentorByGithubId(courseId: number, githubId: string): P
 export async function getStudent(studentId: number): Promise<StudentBasic> {
   const record = (await studentQuery()
     .innerJoinAndSelect('student.user', 'user')
-    .innerJoinAndSelect('student.mentor', 'mentor')
-    .innerJoinAndSelect('mentor.user', 'mentorUser')
+    .leftJoinAndSelect('student.mentor', 'mentor')
+    .leftJoinAndSelect('mentor.user', 'mentorUser')
     .where('"student".id = :studentId', { studentId })
     .getOne())!;
   const student = convertToStudentBasic(record);

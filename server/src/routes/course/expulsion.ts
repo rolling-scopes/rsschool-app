@@ -19,7 +19,6 @@ export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterConte
   const data: ExpulsionInput = ctx.request.body;
 
   const { user } = ctx.state;
-  const mentor = await courseService.getCourseMentorWithUser(courseId, user.id);
 
   const student = await courseService.getStudent(data.studentId);
   if (student == null) {
@@ -27,6 +26,7 @@ export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterConte
     return;
   }
 
+  const mentor = await courseService.getCourseMentorWithUser(courseId, user.id);
   if (!courseService.isPowerUser(courseId, ctx.state!.user as IUserSession)) {
     if (mentor == null) {
       setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
