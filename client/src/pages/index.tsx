@@ -205,8 +205,12 @@ class IndexPage extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
+
     const plannedCourses = (this.props.courses || []).filter(course => course.planned);
-    const hasRegistryBanner = wasMentor && plannedCourses.every(course => this.props.session.roles[course.id] == null);
+    const hasRegistryBanner =
+      wasMentor &&
+      plannedCourses.length > 0 &&
+      plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
   }
 
