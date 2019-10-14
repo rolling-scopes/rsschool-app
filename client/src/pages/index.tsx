@@ -6,7 +6,6 @@ import * as React from 'react';
 import { Course } from 'services/course';
 import '../styles/main.scss';
 
-
 const { Content } = Layout;
 
 type Props = {
@@ -206,7 +205,7 @@ class IndexPage extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
-    const plannedCourses = (this.props.courses || []).filter(course => course.planned && !course.completed);
+    const plannedCourses = (this.props.courses || []).filter(course => course.planned);
     const hasRegistryBanner = wasMentor && plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
   }
