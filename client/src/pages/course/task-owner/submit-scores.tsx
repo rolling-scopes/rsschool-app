@@ -263,4 +263,4 @@ class TaskScorePage extends React.Component<Props, State> {
   };
 }
 
-export default withCourseData(withSession(Form.create()(TaskScorePage), 'mentor'));
+export default withCourseData(withSession(Form.create()(TaskScorePage)));
