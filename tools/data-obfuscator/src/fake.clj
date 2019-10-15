@@ -13,7 +13,7 @@
 (defn fake-full-name
   [& x]
   (.. (Faker.) name fullName))
-  
+
 (defn fake-email
   [& x]
   (.. (Faker.) internet emailAddress))
@@ -43,3 +43,11 @@
 (defn fake-url
   [& x]
   (.. (Faker.) internet url))
+
+(defn number-between
+  [{:keys [from-inclusive to-inclusive
+           from-exclusive to-exclusive]}]
+  (let [from (if (nil? from-exclusive) from-inclusive (+ from-exclusive 1))
+        to (if (nil? to-inclusive) to-exclusive (+ to-inclusive 1))]
+    (fn [& args]
+        (+ from (rand-int (- to from))))))

@@ -31,7 +31,10 @@ Lets consider an example. Suppose that the config was created with the following
   ["lastName" :obfuscate-last-name]
   ["email" :obfuscate-email]
   ["phone" :obfuscate-phone]
-  ["field which we don' want to obfuscate"]
+
+  ["score" #number-between {:from-inclusive 10 :to-inclusive 20}]
+
+  ["field which we don't want to obfuscate"]
 
   ;;; other schemes ;;;
 }
