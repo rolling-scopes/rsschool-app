@@ -11,11 +11,11 @@ export function stringSorter<T>(field: keyof T) {
     if (b == null) {
       return 1;
     }
-    return get(a, field)
+    return get(a, field, '')
       .toString()
       .toLowerCase()
       .localeCompare(
-        get(b, field)
+        get(b, field, '')
           .toString()
           .toLowerCase(),
       );

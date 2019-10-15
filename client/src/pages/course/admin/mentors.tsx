@@ -118,6 +118,11 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 sorter: stringSorter('countryName'),
                 ...getColumnSearchProps('countryName'),
               },
+              {
+                title: 'Max Student',
+                dataIndex: 'maxStudentsLimit',
+                width: 100,
+              },
             ]}
           />
         </LoadingScreen>

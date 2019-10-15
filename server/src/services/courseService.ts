@@ -45,6 +45,7 @@ export interface StudentWithResults extends StudentBasic {
 export interface MentorDetails extends MentorBasic {
   locationName: string | null;
   countryName: string;
+  maxStudentsLimit: number;
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
@@ -92,6 +93,7 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     ...mentorBasic,
     locationName: user.locationName || null,
     countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
+    maxStudentsLimit: mentor.maxStudentsLimit,
   };
 }
 
@@ -253,6 +255,7 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
     .addSelect(primaryUserFields)
     .innerJoin('student.course', 'course')
     .where(`course.id = :courseId ${activeOnly ? 'AND student."isExpelled" = false' : ''}`, { courseId })
+    .orderBy('student.totalScore', 'DESC')
     .getMany();
 
   const students = records.map(convertToStudentDetails);
