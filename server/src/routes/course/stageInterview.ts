@@ -5,11 +5,17 @@ import { ILogger } from '../../logger';
 import { StageInterview, Mentor, Student, IUserSession } from '../../models';
 import { setResponse } from '../utils';
 import { getMentorsWithStudents, getStudents } from '../../services/courseService';
-import { getStageInterviewsPairs, getInterviewsByGithubId } from '../../services/stageInterviews';
 import { createInterviewPairs } from '../../rules/interviewPairs';
+import {
+  getStageInterviewsPairs,
+  getInterviewsByGithubId,
+  getStageInterviewsByMentorId,
+  getStageInterviewStudentFeedback,
+} from '../../services/stageInterviews';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
 import _ from 'lodash';
+import { StageInterviewFeedback } from './../../models/stageInterviewFeedback';
 
 const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
 const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
@@ -19,6 +25,13 @@ export const getStageInterviews = (_: ILogger) => async (ctx: Router.RouterConte
   // const courseId: number = Number(ctx.params.courseId);
   const stageId: number = Number(ctx.params.id);
   const result = await getStageInterviewsPairs(stageId);
+  setResponse(ctx, OK, result);
+};
+
+export const getStageInterviewStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const githubId = ctx.state!.user.githubId;
+  const stageId: number = Number(ctx.params.id);
+  const result = await getStageInterviewsByMentorId(stageId, githubId);
   setResponse(ctx, OK, result);
 };
 
@@ -191,3 +204,89 @@ function getReservedMentors(mentors: any[], locationName: string) {
   }
   return reservedMentors;
 }
+
+type InterviewFeedbackPostInput = {
+  studentId: number;
+  json: string;
+  isCompleted: boolean;
+  decision: string | null;
+  isGoodCandidate: boolean | null;
+};
+
+export const postStageInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const data: InterviewFeedbackPostInput = ctx.request.body;
+
+  const stageId: number = Number(ctx.params.id);
+  const userId: number = (ctx.state!.user as IUserSession).id;
+  const studentId = data.studentId;
+
+  try {
+    const stageInterview: any = await getRepository(StageInterview)
+      .createQueryBuilder('stageInterview')
+      .innerJoin('stageInterview.mentor', 'mentor')
+      .innerJoin('mentor.user', 'user')
+      .where('stageInterview.stageId = :stageId', { stageId })
+      .andWhere('stageInterview.studentId = :studentId', { studentId })
+      .andWhere('user.id = :userId', { userId })
+      .getOne();
+
+    if (!stageInterview) {
+      throw new Error(
+        `Stage interview for userId='${userId}' and studentId='${studentId}' is not found at stage='${stageId}'`);
+    }
+
+    const stageInterviewId = stageInterview.id;
+
+    const feedback = await getRepository(StageInterviewFeedback)
+      .createQueryBuilder('stageInterviewFeedback')
+      .where('stageInterviewFeedback.stageInterviewId = :stageInterviewId', { stageInterviewId })
+      .getOne();
+
+    const feedbackRequest = {
+      stageInterviewId,
+      json: data.json,
+    };
+
+    if (feedback) {
+      await getRepository(StageInterviewFeedback).save({ id: feedback.id, ...feedbackRequest });
+    } else {
+      await getRepository(StageInterviewFeedback).save(feedbackRequest);
+    }
+
+    const stageInterviewRequest: any = {
+      isCompleted: data.isCompleted,
+    };
+
+    if (data.decision) {
+      stageInterviewRequest.decision = data.decision;
+    }
+
+    if (data.isGoodCandidate) {
+      stageInterviewRequest.isGoodCandidate = data.isGoodCandidate;
+    }
+
+    await getRepository(StageInterview).update(stageInterviewId, stageInterviewRequest);
+
+    if (data.isCompleted) {
+      await getRepository(Student).update(studentId, { mentorId: stageInterview.mentorId });
+    }
+
+    setResponse(ctx, OK, feedbackRequest);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const getStageInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const stageId: number = Number(ctx.params.id);
+  const userId: number = (ctx.state!.user as IUserSession).id;
+  const studentId: number = Number(ctx.params.studentId);
+
+  try {
+    const stageInterviewFeedback: any = await getStageInterviewStudentFeedback(stageId, userId, studentId);
+
+    setResponse(ctx, OK, stageInterviewFeedback ? stageInterviewFeedback.json : '{}');
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};

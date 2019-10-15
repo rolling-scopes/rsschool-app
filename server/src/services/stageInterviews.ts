@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { StageInterview } from '../models';
+import { StageInterview, StageInterviewFeedback } from '../models';
 
 export async function getStageInterviewsPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
@@ -40,6 +40,50 @@ export async function getStageInterviewsPairs(stageId: number) {
         locationName: it.mentor.user.locationName,
         studentsPreference: it.mentor.studentsPreference || '',
       },
+    };
+  });
+  return result;
+}
+
+export async function getStageInterviewStudentFeedback(stageId: number, userId: number, studentId: number) {
+  return getRepository(StageInterviewFeedback)
+    .createQueryBuilder('stageInterviewFeedback')
+    .innerJoin('stageInterviewFeedback.stageInterview', 'stageInterview')
+    .innerJoin('stageInterview.mentor', 'mentor')
+    .innerJoin('mentor.user', 'user')
+    .where('stageInterview.stageId = :stageId', { stageId })
+    .andWhere('stageInterview.studentId = :studentId', { studentId })
+    .andWhere('user.id = :userId', { userId })
+    .getOne();
+}
+
+export async function getStageInterviewsByMentorId(stageId: number, githubId: string) {
+  const stageInterviews = await getRepository(StageInterview)
+    .createQueryBuilder('stageInterview')
+    .innerJoin('stageInterview.stage', 'stage')
+    .innerJoin('stage.course', 'course')
+    .innerJoin('stageInterview.mentor', 'mentor')
+    .innerJoin('stageInterview.student', 'student')
+    .innerJoin('mentor.user', 'mentorUser')
+    .innerJoin('student.user', 'studentUser')
+    .addSelect([
+      'student.id',
+      'studentUser.firstName',
+      'studentUser.lastName',
+      'studentUser.githubId',
+    ])
+    .where(`stage.id = :stageId
+      AND mentorUser.githubId = :githubId
+      AND "stageInterview"."isCompleted" = FALSE
+    `, { stageId, githubId })
+    .getMany();
+
+  const result = stageInterviews.map(it => {
+    return {
+      id: it.student.id,
+      githubId: it.student.user.githubId,
+      firstName: it.student.user.firstName,
+      lastName: it.student.user.lastName,
     };
   });
   return result;

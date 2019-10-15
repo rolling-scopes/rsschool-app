@@ -78,6 +78,12 @@ const routes = [
     newTab: false,
   },
   {
+    name: `🎤 Stage Interview Feedback`,
+    getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
+  },
+  {
     name: `🚀 Submit Task`,
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
