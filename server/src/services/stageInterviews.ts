@@ -103,6 +103,7 @@ export async function getStageInterviewsPairs(stageId: number) {
     .addSelect([
       'mentor.id',
       'student.id',
+      'student.totalScore',
       'mentorUser.id',
       'mentorUser.githubId',
       'mentorUser.locationName',
@@ -118,10 +119,13 @@ export async function getStageInterviewsPairs(stageId: number) {
       student: {
         id: it.student.id,
         githubId: it.student.user.githubId,
+        locationName: it.student.user.locationName,
+        totalScore: it.student.totalScore,
       },
       mentor: {
         id: it.mentor.id,
         githubId: it.mentor.user.githubId,
+        locationName: it.mentor.user.locationName,
       },
     };
   });

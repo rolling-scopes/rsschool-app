@@ -72,6 +72,17 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 ),
                 ...getColumnSearchProps('student.githubId'),
               },
+              {
+                title: 'Student Location',
+                dataIndex: 'student.locationName',
+                sorter: stringSorter('student.locationName'),
+                width: 120,
+                ...getColumnSearchProps('student.locationName'),
+              },
+              {
+                title: 'Student Score',
+                dataIndex: 'student.totalScore',
+              },
             ]}
           />
         </LoadingScreen>
