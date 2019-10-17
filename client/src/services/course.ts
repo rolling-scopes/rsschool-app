@@ -218,6 +218,16 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getStageInterviews(courseId: number, stageId: number) {
+    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews`);
+    return result.data.data;
+  }
+
+  async postStageInterviews(courseId: number, stageId: number) {
+    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interviews`);
+    return result.data.data;
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }

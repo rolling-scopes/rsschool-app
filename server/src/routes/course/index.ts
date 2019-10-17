@@ -21,6 +21,7 @@ import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
 import { getCourseEvents, getCourseEventsCalendar } from './events';
 import { getTaskVerifications } from './taskVerifications';
+import { getStageInterviews, postStageInterview, postStageInterviews } from './stageInterview';
 
 import {
   getCourseTasks,
@@ -551,6 +552,10 @@ export function courseRoute(logger: ILogger) {
   router.post('/', adminGuard, createPostRoute(Course, logger));
 
   router.put('/:id', adminGuard, validateId, createPutRoute(Course, logger));
+
+  router.post('/:courseId/stage/:id/interview', adminGuard, postStageInterview(logger));
+  router.get('/:courseId/stage/:id/interviews', adminGuard, getStageInterviews(logger));
+  router.post('/:courseId/stage/:id/interviews', adminGuard, postStageInterviews(logger));
 
   return router;
 }

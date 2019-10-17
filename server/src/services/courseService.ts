@@ -229,6 +229,7 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
     .addSelect(primaryUserFields)
     .innerJoin('mentor.course', 'course')
     .where(`course.id = :courseId`, { courseId })
+    .orderBy('mentor.createdDate')
     .getMany();
 
   const mentors = records.map(convertToMentorDetails);
