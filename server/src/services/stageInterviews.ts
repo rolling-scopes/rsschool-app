@@ -80,12 +80,7 @@ export function createStageInterviewPairs(allMentors: Mentor[], allStudents: Stu
       });
     }
 
-    result = result.concat(
-      mentorsStudents.map(student => ({
-        mentor,
-        student,
-      })),
-    );
+    result = result.concat(mentorsStudents.map(student => ({ mentor, student })));
     mentor.capacity = 0;
     return mentorsStudents.map(m => m.githubId);
   }

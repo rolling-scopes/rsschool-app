@@ -21,5 +21,5 @@ export interface StudentBasic extends UserBasic {
   totalScore: number;
   isActive: boolean;
 
-  mentor: MentorBasic | null;
+  mentor: MentorBasic | { id: number } | null;
 }

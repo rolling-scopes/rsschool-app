@@ -130,6 +130,8 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
       .filter(m => m.capacity > 0);
 
     const reservedMentors = getReservedMentors(mentorsWithCapacity, 'Minsk');
+    console.warn({ reservedMentors });
+
     mentorsWithCapacity = mentorsWithCapacity.filter(m => !reservedMentors.includes(m.githubId));
 
     const alreadyHasInterview = interviewPairs.map(pair => pair.student.githubId);

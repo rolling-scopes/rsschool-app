@@ -71,7 +71,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     githubId: user.githubId,
     userId: user.id!,
     courseId: student.courseId,
-    mentor: null,
+    mentor: student.mentor ? { id: student.mentor.id } : null,
     totalScore: student.totalScore,
   };
 }
@@ -269,6 +269,7 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
     .innerJoin('student.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('student.course', 'course')
+    .leftJoinAndSelect('student.mentor', 'mentor')
     .where(`course.id = :courseId ${activeOnly ? 'AND student."isExpelled" = false' : ''}`, { courseId })
     .orderBy('student.totalScore', 'DESC')
     .getMany();
