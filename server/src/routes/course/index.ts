@@ -554,7 +554,7 @@ export function courseRoute(logger: ILogger) {
   router.put('/:id', adminGuard, validateId, createPutRoute(Course, logger));
 
   router.post('/:courseId/stage/:id/interview', adminGuard, postStageInterview(logger));
-  router.get('/:courseId/stage/:id/interviews', adminGuard, getStageInterviews(logger));
+  router.get('/:courseId/stage/:id/interviews', courseMentorGuard, getStageInterviews(logger));
   router.post('/:courseId/stage/:id/interviews', adminGuard, postStageInterviews(logger));
 
   return router;

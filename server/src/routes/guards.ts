@@ -29,7 +29,8 @@ export const courseMentorGuard = async (ctx: Router.RouterContext, next: () => P
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId = Number(ctx.params.courseId);
-    if ((courseId && user.roles[courseId] === 'mentor') || user.isAdmin || user.isHirer) {
+    const isCourseManager = user.roles[courseId] === 'coursemanager';
+    if ((courseId && user.roles[courseId] === 'mentor') || isCourseManager || user.isAdmin || user.isHirer) {
       await next();
       return;
     }
