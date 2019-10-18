@@ -41,6 +41,15 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               Generate Pairs
             </Button>
           )}
+          <ul className="m-3">
+            Reserved mentors:
+            {['qwelias', 'agavrilin', 'tuwhoo', 'vinfinit', 'prodislav'].map(githubId => (
+              <div key={githubId} className="d-flex flex-row">
+                <GithubAvatar githubId={githubId} size={24} />
+                &nbsp;<a href={`/profile?githubId=${githubId}`}>{githubId}</a>
+              </div>
+            ))}
+          </ul>
           <Table
             bordered
             className="m-3"
