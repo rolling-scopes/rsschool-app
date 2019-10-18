@@ -10,7 +10,7 @@ export interface MentorBasic extends UserBasic {
   courseId: number;
   userId: number;
 
-  students: StudentBasic[];
+  students: StudentBasic[] | ({ id: number })[];
 }
 
 export interface StudentBasic extends UserBasic {

@@ -228,6 +228,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getStageInterviewsByStudent(courseId: number, githubId: string) {
+    const result = await axios.get(`/api/course/${courseId}/user/${githubId}/interviews`);
+    return result.data.data;
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }

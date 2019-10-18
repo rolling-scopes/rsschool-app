@@ -57,7 +57,7 @@ export function convertToMentorBasic(mentor: Mentor): MentorBasic {
     githubId: user.githubId,
     userId: user.id!,
     courseId: mentor.courseId,
-    students: [],
+    students: mentor.students ? mentor.students.map(s => ({ id: s.id })) : [],
   };
 }
 
@@ -228,6 +228,20 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
     .innerJoin('mentor.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('mentor.course', 'course')
+    .where(`course.id = :courseId`, { courseId })
+    .orderBy('mentor.createdDate')
+    .getMany();
+
+  const mentors = records.map(convertToMentorDetails);
+  return mentors;
+}
+
+export async function getMentorsWithStudents(courseId: number): Promise<MentorDetails[]> {
+  const records = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(primaryUserFields)
+    .innerJoin('mentor.course', 'course')
+    .leftJoinAndSelect('mentor.students', 'students')
     .where(`course.id = :courseId`, { courseId })
     .orderBy('mentor.createdDate')
     .getMany();

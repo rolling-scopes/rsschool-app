@@ -2,10 +2,14 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { StageInterview, Mentor, Student } from '../../models';
+import { StageInterview, Mentor, Student, IUserSession } from '../../models';
 import { setResponse } from '../utils';
-import { getMentors, getStudents } from '../../services/courseService';
-import { createStageInterviewPairs, getStageInterviewsPairs } from '../../services/stageInterviews';
+import { getMentorsWithStudents, getStudents } from '../../services/courseService';
+import {
+  createStageInterviewPairs,
+  getStageInterviewsPairs,
+  getInterviewsByGithubId,
+} from '../../services/stageInterviews';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
 import _ from 'lodash';
@@ -108,7 +112,7 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
 
   try {
     const [mentors, students, interviewPairs] = await Promise.all([
-      getMentors(courseId),
+      getMentorsWithStudents(courseId),
       getStudents(courseId, true),
       getStageInterviewsPairs(stageId),
     ]);
@@ -140,16 +144,32 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
 
     const result = createStageInterviewPairs(mentorsWithCapacity, freeStudents, 10);
 
-    const items = result.map(pair => ({
-      mentorId: pair.mentor.id,
-      studentId: pair.student.id,
-      courseId,
-      stageId,
-    }));
+    const items = result
+      .map(pair => ({ mentorId: pair.mentor.id, studentId: pair.student.id, courseId, stageId }))
+      .concat(
+        mentors
+          .filter(m => m.students.length > 0)
+          .reduce(
+            (acc, m) =>
+              acc.concat(
+                (m.students as any[]).map((s: any) => ({ mentorId: m.id, studentId: s.id, courseId, stageId })),
+              ),
+            [] as any[],
+          ),
+      );
+
     await getRepository(StageInterview).save(items), setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
+};
+
+export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
+  const githubId = (ctx.state!.user as IUserSession).githubId;
+
+  const records = await getInterviewsByGithubId(courseId, githubId);
+  setResponse(ctx, OK, records);
 };
 
 function getReservedMentors(mentors: any[], locationName: string) {
