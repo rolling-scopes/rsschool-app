@@ -557,7 +557,7 @@ export function courseRoute(logger: ILogger) {
   router.get('/:courseId/stage/:id/interviews', courseMentorGuard, getStageInterviews(logger));
   router.post('/:courseId/stage/:id/interviews', adminGuard, postStageInterviews(logger));
 
-  router.get('/:courseId/user/:githubId/interviews', adminGuard, getStudentInterviews(logger));
+  router.get('/:courseId/user/:githubId/interviews', guard, getStudentInterviews(logger));
 
   return router;
 }

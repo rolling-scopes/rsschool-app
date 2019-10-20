@@ -65,12 +65,12 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, isTaskOwner),
     newTab: false,
   },
-  // {
-  //   name: `🎤 Stage Interview`,
-  //   getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isStudent),
-  //   newTab: false,
-  // },
+  {
+    name: `🎤 Stage Interview`,
+    getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
   {
     name: `🎤 Stage Interviews`,
     getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
