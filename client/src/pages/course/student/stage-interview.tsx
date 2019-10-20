@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
@@ -23,10 +23,16 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   }
 
   render() {
+    const hasRecords = this.state.records.length;
     return (
       <>
         <Header title="Stage Interviews" username={this.props.session.githubId} courseName={this.props.course.name} />
         <LoadingScreen show={this.state.isLoading}>
+          {hasRecords && (
+            <Typography.Text type="danger" className="m-3">
+              You need to contact your interviewer and agree about interview until 27th October (Sunday)
+            </Typography.Text>
+          )}
           <Table
             bordered
             className="m-3"
