@@ -71,12 +71,12 @@ const routes = [
   //   access: combineAnd(isCourseNotCompleted, isStudent),
   //   newTab: false,
   // },
-  // {
-  //   name: `🎤 Stage Interviews`,
-  //   getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  //   newTab: false,
-  // },
+  {
+    name: `🎤 Stage Interviews`,
+    getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
+  },
   {
     name: `🚀 Submit Task`,
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,

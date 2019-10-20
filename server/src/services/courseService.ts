@@ -46,6 +46,7 @@ export interface MentorDetails extends MentorBasic {
   locationName: string | null;
   countryName: string;
   maxStudentsLimit: number;
+  studentsPreference: 'sameCity' | 'sameCountry' | null;
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
@@ -57,7 +58,7 @@ export function convertToMentorBasic(mentor: Mentor): MentorBasic {
     githubId: user.githubId,
     userId: user.id!,
     courseId: mentor.courseId,
-    students: mentor.students ? mentor.students.map(s => ({ id: s.id })) : [],
+    students: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
   };
 }
 
@@ -94,6 +95,7 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     locationName: user.locationName || null,
     countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
     maxStudentsLimit: mentor.maxStudentsLimit,
+    studentsPreference: mentor.studentsPreference,
   };
 }
 

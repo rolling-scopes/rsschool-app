@@ -61,7 +61,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Mentor Github Id',
                 dataIndex: 'mentor.githubId',
                 sorter: stringSorter('mentor.githubId'),
-                width: 120,
+                width: 180,
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
@@ -74,7 +74,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Student Github Id',
                 dataIndex: 'student.githubId',
                 sorter: stringSorter('student.githubId'),
-                width: 120,
+                width: 180,
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
@@ -87,7 +87,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Student Location',
                 dataIndex: 'student.locationName',
                 sorter: stringSorter('student.locationName'),
-                width: 120,
+                width: 180,
                 ...getColumnSearchProps('student.locationName'),
               },
               {

@@ -11,6 +11,7 @@ import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
 import { TaskChecker } from './taskChecker';
+
 @Entity()
 export class Mentor {
   @PrimaryGeneratedColumn() id: number;
@@ -41,4 +42,7 @@ export class Mentor {
 
   @Column({ nullable: true })
   maxStudentsLimit: number;
+
+  @Column({ nullable: true, type: 'varchar' })
+  studentsPreference: 'sameCity' | 'sameCountry' | null;
 }

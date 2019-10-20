@@ -5,11 +5,8 @@ import { ILogger } from '../../logger';
 import { StageInterview, Mentor, Student, IUserSession } from '../../models';
 import { setResponse } from '../utils';
 import { getMentorsWithStudents, getStudents } from '../../services/courseService';
-import {
-  createStageInterviewPairs,
-  getStageInterviewsPairs,
-  getInterviewsByGithubId,
-} from '../../services/stageInterviews';
+import { getStageInterviewsPairs, getInterviewsByGithubId } from '../../services/stageInterviews';
+import { createInterviewPairs } from '../../rules/interviewPairs';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
 import _ from 'lodash';
@@ -123,8 +120,10 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
         const capacity = m.maxStudentsLimit - m.students.length - scheduledInterviewsCount;
         return {
           ...m,
+          studentsPreference: m.studentsPreference,
           countryName: countriesMap[citiesMap[m.locationName || 'Other']] || 'Other',
           capacity: capacity > 1 ? capacity + 2 : capacity === 1 ? capacity + 1 : 0,
+          students: [],
         };
       })
       .filter(m => m.capacity > 0);
@@ -144,10 +143,9 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
         countryName: countriesMap[citiesMap[s.locationName || 'Other']] || 'Other',
       }));
 
-    const result = createStageInterviewPairs(mentorsWithCapacity, freeStudents, 10);
-
+    const result = createInterviewPairs(mentorsWithCapacity, freeStudents, 10);
     const items = result
-      .map(pair => ({ mentorId: pair.mentor.id, studentId: pair.student.id, courseId, stageId }))
+      .map(pair => ({ mentorId: pair.mentorId, studentId: pair.studentId, courseId, stageId }))
       .concat(
         mentors
           .filter(m => m.students.length > 0)
@@ -159,8 +157,8 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
             [] as any[],
           ),
       );
-
-    await getRepository(StageInterview).save(items), setResponse(ctx, OK, result);
+    await getRepository(StageInterview).save(items);
+    setResponse(ctx, OK, items);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
