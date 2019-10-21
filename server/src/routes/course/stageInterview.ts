@@ -39,12 +39,18 @@ export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterConte
         getRepository(Mentor)
           .createQueryBuilder('mentor')
           .innerJoin('mentor.user', 'user')
-          .where('user.githubId = :githubId', { githubId: item.mentorGithubId })
+          .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
+            githubId: item.mentorGithubId,
+            courseId,
+          })
           .getOne(),
         getRepository(Student)
           .createQueryBuilder('student')
           .innerJoin('student.user', 'user')
-          .where('user.githubId = :githubId', { githubId: item.studentGithubId })
+          .where('user.githubId = :githubId AND student.courseId = :courseId', {
+            githubId: item.studentGithubId,
+            courseId,
+          })
           .getOne(),
       ]);
       result.push(
