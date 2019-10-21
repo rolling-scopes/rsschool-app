@@ -2,7 +2,7 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository, In } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Course, CourseTask, Student, Mentor, Task, User } from '../../models';
+import { Course, CourseTask, Student, Mentor, Task, User, StageInterview } from '../../models';
 import { IUserSession } from '../../models/session';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
@@ -26,16 +26,30 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
       .createQueryBuilder('student')
       .innerJoinAndSelect('student.user', 'user')
       .innerJoinAndSelect('student.course', 'course')
-      .innerJoinAndSelect('student.mentor', 'mentor')
-      .innerJoinAndSelect('mentor.user', 'mentorUser')
-      .where('user.githubId = :githubId AND course.completed=false ', { githubId })
+      .leftJoinAndSelect('student.mentor', 'mentor')
+      .leftJoinAndSelect('mentor.user', 'mentorUser')
+      .where('user.githubId = :githubId AND course.completed = false ', { githubId })
       .getMany();
+
+    const stageInterviews =
+      students.length > 0
+        ? await getRepository(StageInterview)
+            .createQueryBuilder('stageInterview')
+            .innerJoin('stageInterview.mentor', 'mentor')
+            .innerJoin('mentor.user', 'mentorUser')
+            .addSelect(['mentor.id', 'mentorUser.githubId'])
+            .where(`stageInterview.studentId IN (${students.map(s => s.id).join(',')})`)
+            .getMany()
+        : [];
 
     const isMentor = students.some(
       student => student.mentor && student.mentor.user && (student.mentor.user as User).githubId === userGithubId,
     );
     const isCourseManager = students.some(student => roles[(student.course as Course)!.id] === 'coursemanager');
-    if (!isMentor && !isCourseManager) {
+    const isInterviewer = stageInterviews.some(
+      interview => interview.mentor && interview.mentor.user && interview.mentor.user.githubId === userGithubId,
+    );
+    if (!isMentor && !isCourseManager && !isInterviewer) {
       return;
     }
   }
