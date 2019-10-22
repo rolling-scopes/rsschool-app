@@ -197,6 +197,13 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getInterviewStudents(courseId: number) {
+    const result = await axios.get<{ data: StudentBasic[] }>(
+      `/api/course/${courseId}/mentor/me/interviews`,
+    );
+    return result.data.data;
+  }
+
   async postPublicFeedback(courseId: number, data: { toUserId: number; badgeId?: string; comment: string }) {
     const result = await axios.post<{ data: { heroesUrl: string } }>(`/api/course/${courseId}/feedback`, data);
     return result.data.data;

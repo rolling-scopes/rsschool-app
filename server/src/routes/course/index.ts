@@ -9,7 +9,7 @@ import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
 import { getMe, getMyMentors } from './me';
-import { getAllMentorStudents, getMentorStudents } from './mentor';
+import { getAllMentorStudents, getMentorStudents, getMentorInterviews } from './mentor';
 import { getMentors, postMentors } from './mentors';
 import { postPairs } from './pairs';
 import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores } from './score';
@@ -72,6 +72,8 @@ export function courseRoute(logger: ILogger) {
    *          description: User object
    */
   router.get('/:courseId/mentor/me/students', guard, validateCourseId, getMentorStudents(logger));
+
+  router.get('/:courseId/mentor/me/interviews', guard, validateCourseId, getMentorInterviews(logger));
 
   router.get('/:courseId/mentor/me/students/all', guard, validateCourseId, getAllMentorStudents(logger));
 

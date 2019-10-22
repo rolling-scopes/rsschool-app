@@ -28,9 +28,17 @@ class ExpelPage extends React.Component<Props, State> {
 
   async componentDidMount() {
     const courseId = this.props.course.id;
-    const students = this.courseService.isPowerUser(courseId, this.props.session)
-      ? await this.courseService.getCourseStudents(courseId, true)
-      : await this.courseService.getMentorStudents(courseId);
+    let students = [];
+    const isPowerUser = this.courseService.isPowerUser(courseId, this.props.session);
+    if (isPowerUser) {
+      students = await this.courseService.getCourseStudents(courseId, true);
+    } else {
+      const [mentorStudents, interviewStudents] = await Promise.all([
+        this.courseService.getMentorStudents(courseId),
+        this.courseService.getInterviewStudents(courseId),
+      ]);
+      students = mentorStudents.concat(interviewStudents);
+    }
     const activeStudents = students.filter(student => student.isActive);
     this.setState({ students: activeStudents });
   }

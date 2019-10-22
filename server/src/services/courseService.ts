@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
-import { Course, CourseTask, Mentor, Student, User, CourseEvent } from '../models';
+import { Course, CourseTask, Mentor, StageInterview, Student, User, CourseEvent } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
@@ -198,6 +198,19 @@ export async function getStudentsByMentorId(mentorId: number) {
     return student;
   });
 
+  return students;
+}
+
+export async function getInterviewStudentsByMentorId(mentorId: number) {
+  const records = await getRepository(StageInterview)
+    .createQueryBuilder('stageInterview')
+    .innerJoinAndSelect('stageInterview.mentor', 'mentor')
+    .innerJoinAndSelect('stageInterview.student', 'student')
+    .innerJoinAndSelect('student.user', 'studentUser')
+    .where('stageInterview.mentorId = :mentorId', { mentorId })
+    .getMany();
+
+  const students = records.map(record => convertToStudentBasic(record.student));
   return students;
 }
 

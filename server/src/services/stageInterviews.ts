@@ -89,3 +89,39 @@ export async function getInterviewsByGithubId(courseId: number, githubId: string
   });
   return result;
 }
+
+export async function getInterviewsByStudent(courseId: number, studentId: number) {
+  const stageInterviews = await getRepository(StageInterview)
+    .createQueryBuilder('stageInterview')
+    .innerJoin('stageInterview.stage', 'stage')
+    .innerJoin('stage.course', 'course')
+    .innerJoin('stageInterview.mentor', 'mentor')
+    .innerJoin('stageInterview.student', 'student')
+    .innerJoin('mentor.user', 'mentorUser')
+    .innerJoin('student.user', 'studentUser')
+    .addSelect([
+      'mentor.id',
+      'student.id',
+      'student.totalScore',
+      'mentorUser.id',
+      'mentorUser.githubId',
+      'studentUser.id',
+      'studentUser.githubId',
+    ])
+    .where('course.id = :courseId AND student.id = :studentId', { courseId, studentId })
+    .getMany();
+
+  const result = stageInterviews.map(it => {
+    return {
+      mentor: {
+        id: it.mentor.id,
+        githubId: it.mentor.user.githubId,
+      },
+      student: {
+        id: it.student.id,
+        githubId: it.student.user.githubId,
+      },
+    };
+  });
+  return result;
+}

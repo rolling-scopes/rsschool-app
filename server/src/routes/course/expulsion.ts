@@ -5,6 +5,7 @@ import { setResponse } from '../utils';
 import { Student, IUserSession } from '../../models';
 import { ILogger } from '../../logger';
 import { courseService } from '../../services';
+import * as stageInterviews from '../../services/stageInterviews';
 
 type ExpulsionInput = {
   studentId: number;
@@ -19,8 +20,10 @@ export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterConte
   const data: ExpulsionInput = ctx.request.body;
 
   const { user } = ctx.state;
+  const studentId = Number(data.studentId);
 
-  const student = await courseService.getStudent(data.studentId);
+  const student = await courseService.getStudent(studentId);
+  const interviews = await stageInterviews.getInterviewsByStudent(courseId, studentId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
@@ -33,7 +36,7 @@ export const postExpulsion = (logger: ILogger) => async (ctx: Router.RouterConte
       return;
     }
 
-    if (student.mentor!.id !== mentor.id) {
+    if (!interviews.some(it => it.mentor.id === mentor.id) && (!student.mentor || student.mentor!.id !== mentor.id)) {
       setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
       return;
     }
