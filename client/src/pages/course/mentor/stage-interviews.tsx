@@ -1,4 +1,4 @@
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
 import { getColumnSearchProps, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
