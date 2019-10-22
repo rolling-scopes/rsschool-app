@@ -67,6 +67,10 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Phone',
                 dataIndex: 'mentor.contactsPhone',
               },
+              {
+                title: 'Email',
+                dataIndex: 'mentor.contactsEmail',
+              },
             ]}
           />
         </LoadingScreen>

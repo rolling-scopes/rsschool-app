@@ -65,6 +65,7 @@ export async function getInterviewsByGithubId(courseId: number, githubId: string
       'mentorUser.contactsSkype',
       'mentorUser.contactsTelegram',
       'mentorUser.contactsPhone',
+      'mentorUser.primaryEmail',
       'studentUser.id',
       'studentUser.githubId',
       'studentUser.locationName',
@@ -82,6 +83,7 @@ export async function getInterviewsByGithubId(courseId: number, githubId: string
         contactsTelegram: it.mentor.user.contactsTelegram,
         contactsSkype: it.mentor.user.contactsSkype,
         contactsNotes: it.mentor.user.contactsNotes,
+        contactsEmail: it.mentor.user.primaryEmail,
       },
     };
   });
