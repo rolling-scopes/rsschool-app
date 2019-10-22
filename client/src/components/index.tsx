@@ -9,3 +9,5 @@ export * from './PersonSelect';
 export * from './Feedback';
 export * from './Help';
 export * from './AdminSider';
+export * from './FooterLayout';
+export * from './SocialNetworks';

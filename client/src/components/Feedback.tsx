@@ -17,6 +17,11 @@ const publicRoutes = [
     link: `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
     newTab: true,
   },
+  {
+    name: `💰 Make a donation`,
+    link: `https://www.patreon.com/therollingscopes`,
+    newTab: true,
+  },
 ];
 
 type LinkInfo = { name: string; link: string; newTab: boolean };
@@ -24,10 +29,9 @@ type LinkInfo = { name: string; link: string; newTab: boolean };
 class Feedback extends React.Component<any, any> {
   render() {
     return (
-      <div className="mt-5">
-        <h4>Feedback</h4>
+      <div>
+        <h5>Feedback</h5>
       <List
-        bordered
         size="small"
         dataSource={publicRoutes}
         renderItem={(linkInfo: LinkInfo) => (

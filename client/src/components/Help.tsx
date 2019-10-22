@@ -26,10 +26,9 @@ type LinkInfo = { name: string; link: string; newTab: boolean };
 class Help extends React.Component<any, any> {
   render() {
     return (
-      <div className="mt-5">
-        <h4>Help</h4>
+      <div>
+        <h5>Help</h5>
       <List
-        bordered
         size="small"
         dataSource={publicRoutes}
         renderItem={(linkInfo: LinkInfo) => (
