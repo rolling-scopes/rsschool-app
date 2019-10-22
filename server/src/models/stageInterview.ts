@@ -1,4 +1,11 @@
-import { Entity, Column, CreateDateColumn, ManyToOne, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Mentor } from './mentor';
 import { Student } from './student';
 import { Stage } from './stage';
@@ -30,4 +37,13 @@ export class StageInterview {
 
   @Column()
   stageId: number;
+
+  @Column({ default: false })
+  isCompleted: boolean;
+
+  @Column({ nullable: true })
+  decision: string;
+
+  @Column({ nullable: true })
+  isGoodCandidate: boolean;
 }

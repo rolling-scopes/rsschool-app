@@ -32,6 +32,7 @@
     "next": "9.1.1",
     "rc-menu": "7.4.23",
     "react": "~16.10.2",
+    "react-component-debounce": "^0.0.4",
     "react-dom": "~16.10.2",
     "styled-jsx": "~3.2.1"
   },

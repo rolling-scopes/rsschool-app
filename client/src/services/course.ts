@@ -230,8 +230,23 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getStageInterviewStudents(courseId: number, stageId: number) {
+    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/students`);
+    return result.data.data;
+  }
+
   async postStageInterviews(courseId: number, stageId: number) {
     const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interviews`);
+    return result.data.data;
+  }
+
+  async postStageInterviewFeedback(courseId: number, stageId: number, data: any) {
+    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interviews/feedback`, data);
+    return result.data.data;
+  }
+
+  async getStageInterviewFeedback(courseId: number, stageId: number, studentId: number) {
+    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/student/${studentId}`);
     return result.data.data;
   }
 

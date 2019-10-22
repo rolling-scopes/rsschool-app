@@ -21,7 +21,15 @@ import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
 import { getCourseEvents, getCourseEventsCalendar } from './events';
 import { getTaskVerifications } from './taskVerifications';
-import { getStageInterviews, postStageInterview, postStageInterviews, getStudentInterviews } from './stageInterview';
+import {
+  getStageInterviews,
+  postStageInterview,
+  postStageInterviews,
+  getStudentInterviews,
+  getStageInterviewStudents,
+  postStageInterviewFeedback,
+  getStageInterviewFeedback,
+} from './stageInterview';
 
 import {
   getCourseTasks,
@@ -559,6 +567,13 @@ export function courseRoute(logger: ILogger) {
   router.get('/:courseId/stage/:id/interviews', courseMentorGuard, getStageInterviews(logger));
   router.post('/:courseId/stage/:id/interviews', adminGuard, postStageInterviews(logger));
 
+  router.get(
+    '/:courseId/stage/:id/interviews/student/:studentId',
+    courseMentorGuard,
+    getStageInterviewFeedback(logger),
+  );
+  router.post('/:courseId/stage/:id/interviews/feedback', courseMentorGuard, postStageInterviewFeedback(logger));
+  router.get('/:courseId/stage/:id/interviews/students', courseMentorGuard, getStageInterviewStudents(logger));
   router.get('/:courseId/user/:githubId/interviews', guard, getStudentInterviews(logger));
 
   return router;
