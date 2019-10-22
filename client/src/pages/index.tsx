@@ -1,5 +1,5 @@
-import { Button, List, Select, Result, Row, Col, Layout } from 'antd';
-import { Header, RegistryBanner, Feedback, Help, AdminSider } from 'components';
+import { Button, List, Select, Result, Layout } from 'antd';
+import { Header, RegistryBanner, AdminSider, FooterLayout } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
@@ -265,17 +265,17 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {isAdmin && <AdminSider />}
+          {isAdmin && <AdminSider/>}
 
           <Layout style={{ background: '#fff' }}>
-            <Header username={this.props.session.githubId} />
+            <Header username={this.props.session.githubId}/>
             <Content>
               {/* <ActivityBanner /> */}
               <div className="m-3">
                 {!activeCourse && this.renderNoCourse()}
                 {this.state.hasRegistryBanner && activeCourse && (
                   <div className="mb-3">
-                    <RegistryBanner />
+                    <RegistryBanner/>
                   </div>
                 )}
                 {activeCourse && (
@@ -305,18 +305,9 @@ class IndexPage extends React.PureComponent<Props, State> {
                     )}
                   />
                 )}
-                <Row gutter={16}>
-                  <Col>
-                    <Feedback />
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col>
-                    <Help />
-                  </Col>
-                </Row>
               </div>
             </Content>
+            <FooterLayout/>
           </Layout>
         </Layout>
       </div>

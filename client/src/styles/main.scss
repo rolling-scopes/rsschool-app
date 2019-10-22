@@ -26,3 +26,24 @@ body,
 .ant-layout-sider-collapsed h4 span {
   display: none;
 }
+
+.footer-dark.ant-layout-footer {
+  background: #000;
+  color: #fff;
+  a, h4, h5 {
+    color: #fff;
+  }
+
+  a:hover {
+    color: #ccc;
+  }
+
+  .ant-list-bordered, li {
+    border: 0;
+  }
+
+  .ant-list-item {
+    padding-right: 0;
+    font-size: .7rem;
+  }
+}
