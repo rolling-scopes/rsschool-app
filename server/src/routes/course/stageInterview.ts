@@ -267,8 +267,14 @@ export const postStageInterviewFeedback = (_: ILogger) => async (ctx: Router.Rou
 
     await getRepository(StageInterview).update(stageInterviewId, stageInterviewRequest);
 
-    if (data.isCompleted) {
+    if (data.decision === 'yes') {
       await getRepository(Student).update(studentId, { mentorId: stageInterview.mentorId });
+    } else if (data.decision === 'no' && !data.isGoodCandidate && data.isGoodCandidate !== null) {
+      await getRepository(Student).update(studentId, {
+        isExpelled: true,
+        expellingReason: '',
+        endDate: new Date(),
+      });
     }
 
     setResponse(ctx, OK, feedbackRequest);

@@ -304,8 +304,8 @@ class StageInterviewFeedback extends React.Component<Props, State> {
 
       const json = JSON.parse(feedback);
 
-      const englishLevelMentorOpinion = json.english && json.english.levelMentorOpinion.toUpperCase();
-      const englishLevelStudentOpinion = json.english && json.english.levelStudentOpinion.toUpperCase();
+      const englishLevelMentorOpinion = json.english && json.english.levelMentorOpinion;
+      const englishLevelStudentOpinion = json.english && json.english.levelStudentOpinion;
 
       await this.setState({
         isLoading: false,
@@ -314,10 +314,10 @@ class StageInterviewFeedback extends React.Component<Props, State> {
         english: {
           ...english,
           levelMentorOpinion: englishLevelMentorOpinion
-            ? EnglishLevelsMapping[englishLevelMentorOpinion]
+            ? EnglishLevelsMapping[englishLevelMentorOpinion.toUpperCase()]
             : english.levelMentorOpinion,
           levelStudentOpinion: englishLevelStudentOpinion
-            ? EnglishLevelsMapping[englishLevelStudentOpinion]
+            ? EnglishLevelsMapping[englishLevelStudentOpinion.toUpperCase()]
             : english.levelStudentOpinion,
         },
       });
