@@ -29,18 +29,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       <>
         <Header title="Stage Interviews" username={this.props.session.githubId} courseName={this.props.course.name} />
         <LoadingScreen show={this.state.isLoading}>
-          {this.props.session.isAdmin && (
-            <Button
-              className="m-3"
-              onClick={async () => {
-                const courseId = this.props.course.id;
-                await this.courseService.postStageInterviews(courseId, 17);
-                await this.loadInterviews();
-              }}
-            >
-              Generate Pairs
-            </Button>
-          )}
           <ul className="m-3">
             Reserved mentors:
             {['qwelias', 'agavrilin', 'tuwhoo', 'vinfinit', 'prodislav'].map(githubId => (
