@@ -46,7 +46,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             dataSource={this.state.records}
             columns={[
               {
-                title: 'Mentor Github Id',
+                title: 'Mentor Profile',
                 dataIndex: 'mentor.githubId',
                 sorter: stringSorter('mentor.githubId'),
                 width: 180,
@@ -59,7 +59,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 ...getColumnSearchProps('mentor.githubId'),
               },
               {
-                title: 'Student Github Id',
+                title: 'Student Profile',
                 dataIndex: 'student.githubId',
                 sorter: stringSorter('student.githubId'),
                 width: 180,
