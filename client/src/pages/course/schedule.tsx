@@ -1,4 +1,4 @@
-import { Form, Table, Tag, Row, Icon, Tooltip, Button } from 'antd';
+import { Form, Table, Tag, Row, Icon, Tooltip, Button, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, timeRenderer } from 'components/Table';
@@ -9,6 +9,8 @@ import { CoursePageProps } from 'services/models';
 import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
 import moment from 'moment';
+
+const { Text } = Typography;
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -60,7 +62,22 @@ class SchedulePage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Schedule" username={this.props.session.githubId} />
+        <Header title="Schedule" username={this.props.session.githubId}/>
+        <Row className="text-center">
+          <p>
+            <Text type="danger">This is a draft version!</Text>
+          </p>
+          <p>
+            Please see the actual schedule here:
+          </p>
+          <p>
+            <Button
+              type="primary" icon="calendar" target="_blank"
+              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302">
+              See Schedule
+            </Button>
+          </p>
+        </Row>
         <Row type="flex" justify="end" className="m-3">
           <Button icon="calendar" href={`/api/course/${this.props.course.id}/events/ical`}>
             Events iCal
@@ -88,9 +105,9 @@ class SchedulePage extends React.Component<Props, State> {
               render: (value: string) => {
                 return value === 'Youtube Live' ? (
                   <div>
-                    <Icon type="youtube" /> {value}{' '}
+                    <Icon type="youtube"/> {value}{' '}
                     <Tooltip title="Ссылка будет в Discord">
-                      <Icon type="question-circle" />
+                      <Icon type="question-circle"/>
                     </Tooltip>
                   </div>
                 ) : (
@@ -128,7 +145,7 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Organizer',
               width: 140,
               dataIndex: 'organizer.githubId',
-              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
+              render: (value: string) => (value ? <GithubUserLink value={value}/> : ''),
             },
             {
               title: 'Details Url',

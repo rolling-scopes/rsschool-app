@@ -48,7 +48,7 @@ const routes = [
     newTab: false,
   },
   {
-    name: `🗓 Schedule`,
+    name: `🗓 Schedule (draft)`,
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
     access: anyAccess,
     newTab: false,
