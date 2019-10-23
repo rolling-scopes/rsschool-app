@@ -11,6 +11,7 @@ import {
   getInterviewsByGithubId,
   getStageInterviewsByMentorId,
   getStageInterviewStudentFeedback,
+  getAvailableStudentsForStageInterview,
 } from '../../services/stageInterviews';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
@@ -36,50 +37,98 @@ export const getStageInterviewStudents = (_: ILogger) => async (ctx: Router.Rout
 };
 
 type PostInput = {
-  mentorGithubId: string;
-  studentGithubId: string;
+  mentorGithubId?: string;
+  studentGithubId?: string;
+  githubId?: string;
 };
 
 export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const data: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
+  const inputData: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
   const courseId: number = Number(ctx.params.courseId);
   const stageId: number = Number(ctx.params.id);
 
   try {
     const result = [];
+    const data = prepareInputData(inputData, ctx.state!.user);
+
     for await (const item of data) {
-      const [mentor, student] = await Promise.all([
-        getRepository(Mentor)
-          .createQueryBuilder('mentor')
-          .innerJoin('mentor.user', 'user')
-          .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
-            githubId: item.mentorGithubId,
-            courseId,
-          })
-          .getOne(),
-        getRepository(Student)
-          .createQueryBuilder('student')
-          .innerJoin('student.user', 'user')
-          .where('user.githubId = :githubId AND student.courseId = :courseId', {
-            githubId: item.studentGithubId,
-            courseId,
-          })
-          .getOne(),
-      ]);
-      result.push(
-        await getRepository(StageInterview).save({
-          mentorId: mentor!.id,
-          studentId: student!.id,
-          courseId,
-          stageId,
-        }),
-      );
+      const [mentor, student] = await getStundentAndMentor(courseId, item.mentorGithubId, item.studentGithubId);
+      if (mentor == null || student == null) {
+        continue;
+      }
+
+      const repository = getRepository(StageInterview);
+      const existingInterview = await repository.findOne({
+        where: { studentId: student.id, stageId },
+      });
+
+      if (existingInterview) {
+        existingInterview.mentorId = mentor.id;
+        const interview = await repository.save(existingInterview);
+        result.push(interview);
+      } else {
+        const interview = await repository.save({ mentorId: mentor.id, studentId: student.id, courseId, stageId });
+        result.push(interview);
+      }
     }
     setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
 };
+
+export const deleteStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const interviewId: number = Number(ctx.params.interviewId);
+  try {
+    const interview = await getRepository(StageInterview).delete(interviewId);
+    setResponse(ctx, OK, interview);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+function prepareInputData(
+  input: {
+    githubId?: string;
+    mentorGithubId?: string;
+    studentGithubId?: string;
+  }[],
+  user?: IUserSession,
+) {
+  const hasUser = user && !!user.githubId;
+  return input.map(d =>
+    hasUser
+      ? {
+          studentGithubId: d.githubId!,
+          mentorGithubId: user!.githubId,
+        }
+      : {
+          studentGithubId: d.studentGithubId!,
+          mentorGithubId: d.mentorGithubId!,
+        },
+  );
+}
+
+async function getStundentAndMentor(courseId: number, mentorGithubId: string, studentGithubId: string) {
+  return Promise.all([
+    getRepository(Mentor)
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
+        githubId: mentorGithubId,
+        courseId,
+      })
+      .getOne(),
+    getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .where('user.githubId = :githubId AND student.courseId = :courseId', {
+        githubId: studentGithubId,
+        courseId,
+      })
+      .getOne(),
+  ]);
+}
 
 const shortTrackStudents = [
   'katyyats',
@@ -191,6 +240,13 @@ export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterCon
   setResponse(ctx, OK, records);
 };
 
+export const getAvailableStudentsForInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
+  const stageId: number = Number(ctx.params.id);
+  const result = await getAvailableStudentsForStageInterview(courseId, stageId);
+  setResponse(ctx, OK, result);
+};
+
 function getReservedMentors(mentors: any[], locationName: string) {
   const minskMentors = mentors.filter(m => m.locationName === locationName).reverse();
   let reservedCapacity = 0;
@@ -232,7 +288,8 @@ export const postStageInterviewFeedback = (_: ILogger) => async (ctx: Router.Rou
 
     if (!stageInterview) {
       throw new Error(
-        `Stage interview for userId='${userId}' and studentId='${studentId}' is not found at stage='${stageId}'`);
+        `Stage interview for userId='${userId}' and studentId='${studentId}' is not found at stage='${stageId}'`,
+      );
     }
 
     const stageInterviewId = stageInterview.id;

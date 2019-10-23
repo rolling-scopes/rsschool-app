@@ -198,9 +198,7 @@ export class CourseService {
   }
 
   async getInterviewStudents(courseId: number) {
-    const result = await axios.get<{ data: StudentBasic[] }>(
-      `/api/course/${courseId}/mentor/me/interviews`,
-    );
+    const result = await axios.get<{ data: StudentBasic[] }>(`/api/course/${courseId}/mentor/me/interviews`);
     return result.data.data;
   }
 
@@ -227,6 +225,21 @@ export class CourseService {
 
   async getStageInterviews(courseId: number, stageId: number) {
     const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews`);
+    return result.data.data;
+  }
+
+  async getAvailableStudentsForStageInterviews(courseId: number, stageId: number) {
+    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/available-students`);
+    return result.data.data;
+  }
+
+  async createInterview(courseId: number, stageId: number, students: { githubId: string }[]) {
+    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interview`, students);
+    return result.data.data;
+  }
+
+  async deleteInterview(courseId: number, stageId: number, interviewId: number) {
+    const result = await axios.delete(`/api/course/${courseId}/stage/${stageId}/interview/${interviewId}`);
     return result.data.data;
   }
 

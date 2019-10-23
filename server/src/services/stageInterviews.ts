@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { StageInterview, StageInterviewFeedback } from '../models';
+import { StageInterview, StageInterviewFeedback, Student } from '../models';
 
 export async function getStageInterviewsPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
@@ -28,6 +28,7 @@ export async function getStageInterviewsPairs(stageId: number) {
 
   const result = stageInterviews.map(it => {
     return {
+      id: it.id,
       student: {
         id: it.student.id,
         githubId: it.student.user.githubId,
@@ -66,16 +67,14 @@ export async function getStageInterviewsByMentorId(stageId: number, githubId: st
     .innerJoin('stageInterview.student', 'student')
     .innerJoin('mentor.user', 'mentorUser')
     .innerJoin('student.user', 'studentUser')
-    .addSelect([
-      'student.id',
-      'studentUser.firstName',
-      'studentUser.lastName',
-      'studentUser.githubId',
-    ])
-    .where(`stage.id = :stageId
+    .addSelect(['student.id', 'studentUser.firstName', 'studentUser.lastName', 'studentUser.githubId'])
+    .where(
+      `stage.id = :stageId
       AND mentorUser.githubId = :githubId
       AND "stageInterview"."isCompleted" = FALSE
-    `, { stageId, githubId })
+    `,
+      { stageId, githubId },
+    )
     .getMany();
 
   const result = stageInterviews.map(it => {
@@ -165,6 +164,34 @@ export async function getInterviewsByStudent(courseId: number, studentId: number
         id: it.student.id,
         githubId: it.student.user.githubId,
       },
+    };
+  });
+  return result;
+}
+
+export async function getAvailableStudentsForStageInterview(courseId: number, stageId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.id', 'user.githubId', 'user.firstName', 'user.lastName', 'user.locationName'])
+    .leftJoin(
+      StageInterview,
+      'stageInterview',
+      '"stageInterview"."studentId" = student.id AND "stageInterview"."stageId" = :stageId',
+      { stageId },
+    )
+    .where(`student.courseId = :courseId AND student."totalScore" > 0 AND "stageInterview".id IS NULL`, { courseId })
+    .orderBy('student.totalScore', 'DESC')
+    .getMany();
+
+  const result = students.map(student => {
+    return {
+      id: student.id,
+      githubId: student.user.githubId,
+      firstName: student.user.firstName,
+      lastName: student.user.lastName,
+      locationName: student.user.locationName,
+      totalScore: student.totalScore,
     };
   });
   return result;

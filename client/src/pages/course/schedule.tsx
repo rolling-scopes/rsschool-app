@@ -62,18 +62,19 @@ class SchedulePage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Schedule" username={this.props.session.githubId}/>
+        <Header title="Schedule" username={this.props.session.githubId} />
         <Row className="text-center">
           <p>
             <Text type="danger">This is a draft version!</Text>
           </p>
-          <p>
-            Please see the actual schedule here:
-          </p>
+          <p>Please see the actual schedule here:</p>
           <p>
             <Button
-              type="primary" icon="calendar" target="_blank"
-              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302">
+              type="primary"
+              icon="calendar"
+              target="_blank"
+              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
+            >
               See Schedule
             </Button>
           </p>
@@ -105,9 +106,9 @@ class SchedulePage extends React.Component<Props, State> {
               render: (value: string) => {
                 return value === 'Youtube Live' ? (
                   <div>
-                    <Icon type="youtube"/> {value}{' '}
+                    <Icon type="youtube" /> {value}{' '}
                     <Tooltip title="Ссылка будет в Discord">
-                      <Icon type="question-circle"/>
+                      <Icon type="question-circle" />
                     </Tooltip>
                   </div>
                 ) : (
@@ -145,7 +146,7 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Organizer',
               width: 140,
               dataIndex: 'organizer.githubId',
-              render: (value: string) => (value ? <GithubUserLink value={value}/> : ''),
+              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
             },
             {
               title: 'Details Url',

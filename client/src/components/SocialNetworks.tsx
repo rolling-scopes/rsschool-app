@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {List} from 'antd';
+import { List } from 'antd';
 
 const socialLinks = [
   {
@@ -26,17 +26,17 @@ class SocialNetworks extends React.Component<any, any> {
     return (
       <div>
         <h5>Join us</h5>
-      <List
-        size="small"
-        dataSource={socialLinks}
-        renderItem={(linkInfo: LinkInfo) => (
-          <List.Item key={linkInfo.link}>
-            <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
-              {linkInfo.name}
-            </a>
-          </List.Item>
-        )}
-      />
+        <List
+          size="small"
+          dataSource={socialLinks}
+          renderItem={(linkInfo: LinkInfo) => (
+            <List.Item key={linkInfo.link}>
+              <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+                {linkInfo.name}
+              </a>
+            </List.Item>
+          )}
+        />
       </div>
     );
   }
