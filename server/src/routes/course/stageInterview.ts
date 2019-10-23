@@ -243,7 +243,8 @@ export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterCon
 export const getAvailableStudentsForInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   const stageId: number = Number(ctx.params.id);
-  const result = await getAvailableStudentsForStageInterview(courseId, stageId);
+  let result = await getAvailableStudentsForStageInterview(courseId, stageId);
+  result = result.filter(r => !shortTrackStudents.includes(r.githubId));
   setResponse(ctx, OK, result);
 };
 

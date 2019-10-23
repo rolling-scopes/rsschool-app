@@ -47,7 +47,6 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     );
 
     const isCourseMentor = students.some(student => {
-      console.log(stageInterviews);
       return !student.course.completed && roles[student.course.id] === 'mentor' && stageInterviews.length === 0;
     });
 
