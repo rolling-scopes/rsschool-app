@@ -855,7 +855,6 @@ class StageInterviewFeedback extends React.Component<Props, State> {
                   </Typography.Paragraph>
                   {field('english.levelMentorOpinion', {
                     initialValue: this.state.english.levelMentorOpinion,
-                    rules: [{ required: true, message: 'Please specify estimated level of English!' }],
                   })(
                     <Rate
                       tooltips={ENGLISH_LEVELS.filter((_, idx) => idx % 2 !== 0)}
