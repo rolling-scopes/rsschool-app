@@ -421,7 +421,8 @@ class StageInterviewFeedback extends React.Component<Props, State> {
 
         await this.courseService.postStageInterviewFeedback(courseId, STAGE_ID, data);
 
-        await this.setState({ isLoading: false, ...values });
+        await this.setState({ ...defaultState, students: this.state.students });
+        this.props.form.resetFields();
         message.success('Draft has been saved.');
       } catch (e) {
         this.setState({ isLoading: false });
