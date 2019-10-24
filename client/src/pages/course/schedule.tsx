@@ -47,7 +47,6 @@ class SchedulePage extends React.Component<Props, State> {
       this.courseService.getCourseEvents(courseId),
       this.courseService.getCourseTasks(courseId),
     ]);
-    debugger
     const data = events
       .concat(
         tasks
