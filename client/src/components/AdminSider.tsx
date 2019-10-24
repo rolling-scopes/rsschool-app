@@ -9,7 +9,7 @@ type State = {
 
 class AdminSider extends React.Component<any, any> {
   state: State = {
-    collapsed: false,
+    collapsed: true,
   };
 
   toggle = () => {

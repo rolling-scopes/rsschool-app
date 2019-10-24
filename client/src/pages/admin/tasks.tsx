@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Button, Checkbox, message, Select, Form, Input, Modal, Radio, Table } from 'antd';
+import { Button, Checkbox, message, Select, Form, Input, Modal, Radio, Table, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { union } from 'lodash';
-import { Header, Session, withSession } from 'components';
+import { Header, Session, withSession, AdminSider } from 'components';
 import { boolRenderer, tagsRenderer, stringSorter } from 'components/Table';
 import { Task, TaskService } from 'services/task';
 import { PageWithModalState } from 'services/models';
 import { urlPattern, githubRepoUrl } from 'services/validators';
+
+const { Content } = Layout;
 
 type Props = { session: Session } & FormComponentProps;
 interface State extends PageWithModalState<Task> {}
@@ -29,60 +31,67 @@ class TasksPage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Manage Tasks" username={this.props.session.githubId} />
-        <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
-          Add Task
-        </Button>
-        <Table
-          size="small"
-          className="m-3"
-          dataSource={this.state.data}
-          pagination={{ pageSize: 100 }}
-          rowKey="id"
-          columns={[
-            {
-              title: 'Id',
-              dataIndex: 'id',
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              sorter: stringSorter<Task>('name'),
-            },
-            {
-              title: 'Tags',
-              dataIndex: 'tags',
-              render: tagsRenderer,
-            },
-            {
-              title: 'Description URL',
-              dataIndex: 'descriptionUrl',
-            },
-            {
-              title: 'Github PR Required',
-              dataIndex: 'githubPrRequired',
-              render: boolRenderer,
-            },
-            {
-              title: 'Github Repo Name',
-              dataIndex: 'githubRepoName',
-            },
-            {
-              title: 'Verification',
-              dataIndex: 'verification',
-            },
-            {
-              title: 'Type',
-              dataIndex: 'type',
-            },
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
-            },
-          ]}
-        />
-        {this.renderModal()}
+        <Layout style={{ minHeight: '100vh' }}>
+          <AdminSider />
+          <Layout style={{ background: '#fff' }}>
+            <Header title="Manage Tasks" username={this.props.session.githubId} />
+            <Content>
+              <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
+                Add Task
+              </Button>
+              <Table
+                size="small"
+                className="m-3"
+                dataSource={this.state.data}
+                pagination={{ pageSize: 100 }}
+                rowKey="id"
+                columns={[
+                  {
+                    title: 'Id',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    sorter: stringSorter<Task>('name'),
+                  },
+                  {
+                    title: 'Tags',
+                    dataIndex: 'tags',
+                    render: tagsRenderer,
+                  },
+                  {
+                    title: 'Description URL',
+                    dataIndex: 'descriptionUrl',
+                  },
+                  {
+                    title: 'Github PR Required',
+                    dataIndex: 'githubPrRequired',
+                    render: boolRenderer,
+                  },
+                  {
+                    title: 'Github Repo Name',
+                    dataIndex: 'githubRepoName',
+                  },
+                  {
+                    title: 'Verification',
+                    dataIndex: 'verification',
+                  },
+                  {
+                    title: 'Type',
+                    dataIndex: 'type',
+                  },
+                  {
+                    title: 'Actions',
+                    dataIndex: 'actions',
+                    render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
+                  },
+                ]}
+              />
+              {this.renderModal()}
+            </Content>
+          </Layout>
+        </Layout>
       </div>
     );
   }
