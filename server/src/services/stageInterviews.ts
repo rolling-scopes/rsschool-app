@@ -180,7 +180,16 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
       '"stageInterview"."studentId" = student.id AND "stageInterview"."stageId" = :stageId',
       { stageId },
     )
-    .where(`student.courseId = :courseId AND student."totalScore" > 0 AND "stageInterview".id IS NULL`, { courseId })
+    .where(
+      [
+        `student.courseId = :courseId`,
+        `student."isFailed" = false`,
+        `student."isExpelled" = false`,
+        `student."totalScore" > 0`,
+        `"stageInterview".id IS NULL`,
+      ].join(' AND '),
+      { courseId },
+    )
     .orderBy('student.totalScore', 'DESC')
     .getMany();
 
