@@ -55,15 +55,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
         <LoadingScreen show={this.state.isLoading}>
           <Tabs activeKey={this.state.activeKey} onChange={this.onChange} type="card">
             <Tabs.TabPane tab="Interviews" key="1">
-              <ul className="m-3">
-                Reserved mentors:
-                {['qwelias', 'agavrilin', 'tuwhoo', 'vinfinit', 'prodislav'].map(githubId => (
-                  <div key={githubId} className="d-flex flex-row">
-                    <GithubAvatar githubId={githubId} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${githubId}`}>{githubId}</a>
-                  </div>
-                ))}
-              </ul>
               <Table
                 bordered
                 className="m-3"

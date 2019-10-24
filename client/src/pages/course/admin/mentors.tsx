@@ -41,8 +41,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
         countries[countryName] = { totalCount: 0 };
       }
       countries[countryName].totalCount++;
-      const { interviewsCount, maxStudentsLimit } = record as MentorDetails;
-      record.capacity = maxStudentsLimit + 2 - interviewsCount;
     }
 
     this.setState({
@@ -123,13 +121,20 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Max Student',
                 dataIndex: 'maxStudentsLimit',
-                width: 100,
+                sorter: numberSorter('maxStudentsLimit'),
+                width: 80,
               },
               {
-                title: 'Interview Capacity',
-                dataIndex: 'capacity',
-                sorter: numberSorter('capacity' as any),
-                width: 100,
+                title: 'Interviews Count',
+                dataIndex: 'interviewsCount',
+                sorter: numberSorter('interviewsCount'),
+                width: 80,
+              },
+              {
+                title: 'Students Count',
+                dataIndex: 'studentsCount',
+                sorter: numberSorter('studentsCount' as any),
+                width: 80,
               },
             ]}
           />

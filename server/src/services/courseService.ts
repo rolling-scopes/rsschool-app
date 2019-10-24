@@ -48,6 +48,7 @@ export interface MentorDetails extends MentorBasic {
   maxStudentsLimit: number;
   studentsPreference: 'sameCity' | 'sameCountry' | null;
   interviewsCount?: number;
+  studentsCount?: number;
 }
 
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
@@ -97,6 +98,7 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference,
+    studentsCount: mentor.students ? mentor.students.length : 0,
     interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
   };
 }
@@ -245,6 +247,8 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
     .innerJoin('mentor.user', 'user')
     .addSelect(primaryUserFields)
     .innerJoin('mentor.course', 'course')
+    .leftJoin('mentor.students', 'students')
+    .addSelect(['students.id'])
     .leftJoinAndSelect('mentor.stageInterviews', 'stageInterviews')
     .where(`course.id = :courseId`, { courseId })
     .orderBy('mentor.createdDate')
