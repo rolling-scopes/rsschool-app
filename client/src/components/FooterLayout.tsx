@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Col, Layout, Row, Divider } from 'antd';
+import { Col, Layout, Row, Divider, Button } from 'antd';
 import { Feedback } from './Feedback';
 import { Help } from './Help';
 import { SocialNetworks } from './SocialNetworks';
@@ -23,9 +23,17 @@ class FooterLayout extends React.Component<any, any> {
             </Col>
           </Row>
           <Divider />
-          <div className="text-center">
-            <small>&copy; The Rolling Scopes 2019</small>
-          </div>
+          <h5> Thank you for your support! 🎉</h5>
+          <p>
+            <object type="image/svg+xml"
+                      data="https://opencollective.com/rsschool/backers.svg?avatarHeight=28&button=false"></object>
+          </p>
+          <p>
+          <Button size="small" href="https://opencollective.com/rsschool#section-contribute" target="_blank" ghost>
+          ❤️ Make a donation
+          </Button>
+          </p>
+          <p className="text-center"><small>&copy; The Rolling Scopes 2019</small></p>
         </Footer>
       </div>
     );
