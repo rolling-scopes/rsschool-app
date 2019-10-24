@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Button, Select, message, Form, Input, Modal, Table } from 'antd';
+import { Button, Select, message, Form, Input, Modal, Table, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
-import { Header, Session, withSession } from 'components';
+import { Header, Session, withSession, AdminSider } from 'components';
 import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { PageWithModalState } from 'services/models';
 import { urlPattern } from 'services/validators';
+
+const { Content } = Layout;
 
 type Props = { session: Session } & FormComponentProps;
 interface State extends PageWithModalState<Event> {}
@@ -28,55 +30,62 @@ class EventsPage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Manage Events" username={this.props.session.githubId} />
-        <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
-          Add Event
-        </Button>
-        <Table
-          size="small"
-          className="m-3"
-          dataSource={this.state.data}
-          pagination={{ pageSize: 100 }}
-          rowKey="id"
-          columns={[
-            {
-              title: 'Id',
-              dataIndex: 'id',
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              sorter: stringSorter<Event>('name'),
-            },
-            {
-              title: 'Description URL',
-              dataIndex: 'descriptionUrl',
-            },
-            {
-              title: 'Description',
-              dataIndex: 'description',
-              render: stringTrimRenderer,
-            },
-            {
-              title: 'Type',
-              dataIndex: 'type',
-            },
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              render: (_, record) => (
-                <>
-                  <span>
-                    <a onClick={() => this.handleEditItem(record)}>Edit</a>{' '}
-                  </span>
-                  <span className="ml-1 mr-1">
-                    <a onClick={() => this.handleDeleteItem(record.id)}>Delete</a>
-                  </span>
-                </>
-              ),
-            },
-          ]}
-        />
+        <Layout style={{ minHeight: '100vh' }}>
+          <AdminSider />
+          <Layout style={{ background: '#fff' }}>
+            <Header title="Manage Events" username={this.props.session.githubId} />
+            <Content>
+              <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
+                Add Event
+              </Button>
+              <Table
+                size="small"
+                className="m-3"
+                dataSource={this.state.data}
+                pagination={{ pageSize: 100 }}
+                rowKey="id"
+                columns={[
+                  {
+                    title: 'Id',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    sorter: stringSorter<Event>('name'),
+                  },
+                  {
+                    title: 'Description URL',
+                    dataIndex: 'descriptionUrl',
+                  },
+                  {
+                    title: 'Description',
+                    dataIndex: 'description',
+                    render: stringTrimRenderer,
+                  },
+                  {
+                    title: 'Type',
+                    dataIndex: 'type',
+                  },
+                  {
+                    title: 'Actions',
+                    dataIndex: 'actions',
+                    render: (_, record) => (
+                      <>
+                        <span>
+                          <a onClick={() => this.handleEditItem(record)}>Edit</a>{' '}
+                        </span>
+                        <span className="ml-1 mr-1">
+                          <a onClick={() => this.handleDeleteItem(record.id)}>Delete</a>
+                        </span>
+                      </>
+                    ),
+                  },
+                ]}
+              />
+            </Content>
+          </Layout>
+        </Layout>
         {this.renderModal()}
       </div>
     );

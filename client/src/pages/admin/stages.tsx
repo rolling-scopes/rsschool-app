@@ -1,6 +1,6 @@
-import { Button, DatePicker, message, Form, Input, Modal, Table, Select } from 'antd';
+import { Button, DatePicker, message, Form, Input, Modal, Table, Select, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header } from 'components/Header';
+import { Header, AdminSider } from 'components';
 import withSession, { Session } from 'components/withSession';
 import moment from 'moment';
 import * as React from 'react';
@@ -9,6 +9,8 @@ import { Stage, StageService } from 'services/stage';
 import { dateRenderer, idFromArrayRenderer, stringSorter } from 'components/Table';
 import { formatDate } from 'services/formatter';
 import { PageWithModalState } from 'services/models';
+
+const { Content } = Layout;
 
 type Props = { session: Session } & FormComponentProps;
 
@@ -35,53 +37,59 @@ class StagesPage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Manage Stages" username={this.props.session.githubId} />
+        <Layout style={{ minHeight: '100vh' }}>
+          <AdminSider />
+          <Layout style={{ background: '#fff' }}>
+            <Header title="Manage Stages" username={this.props.session.githubId} />
+            <Content>
+              <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
+                Add Stage
+              </Button>
 
-        <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
-          Add Stage
-        </Button>
+              <Table
+                size="small"
+                className="m-3"
+                dataSource={this.state.data}
+                pagination={{ pageSize: 100 }}
+                rowKey="id"
+                columns={[
+                  {
+                    title: 'Id',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    sorter: stringSorter<Stage>('name'),
+                  },
+                  {
+                    title: 'Course',
+                    dataIndex: 'courseId',
+                    render: idFromArrayRenderer(this.state.courses),
+                    sorter: stringSorter<Stage>('courseId'),
+                  },
+                  {
+                    title: 'Start Date',
+                    dataIndex: 'startDate',
+                    render: dateRenderer,
+                  },
+                  {
+                    title: 'End Date',
+                    dataIndex: 'endDate',
+                    render: dateRenderer,
+                  },
+                  {
+                    title: 'Actions',
+                    dataIndex: 'actions',
+                    render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
+                  },
+                ]}
+              />
 
-        <Table
-          size="small"
-          className="m-3"
-          dataSource={this.state.data}
-          pagination={{ pageSize: 100 }}
-          rowKey="id"
-          columns={[
-            {
-              title: 'Id',
-              dataIndex: 'id',
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              sorter: stringSorter<Stage>('name'),
-            },
-            {
-              title: 'Course',
-              dataIndex: 'courseId',
-              render: idFromArrayRenderer(this.state.courses),
-              sorter: stringSorter<Stage>('courseId'),
-            },
-            {
-              title: 'Start Date',
-              dataIndex: 'startDate',
-              render: dateRenderer,
-            },
-            {
-              title: 'End Date',
-              dataIndex: 'endDate',
-              render: dateRenderer,
-            },
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
-            },
-          ]}
-        />
-
-        {this.renderModal()}
+              {this.renderModal()}
+            </Content>
+          </Layout>
+        </Layout>
       </div>
     );
   }

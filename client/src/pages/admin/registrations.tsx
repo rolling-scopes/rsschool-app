@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Button, Col, Form, Icon, Result, Row, Select, Statistic, Table, Typography } from 'antd';
+import { Button, Col, Form, Icon, Result, Row, Select, Statistic, Table, Typography, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { Course } from 'services/course';
@@ -8,9 +8,10 @@ import { formatMonthFriendly } from 'services/formatter';
 
 import withSession, { Session } from 'components/withSession';
 import withCourses from 'components/withCourses';
-import { Header, GithubAvatar, LoadingScreen } from 'components';
+import { Header, GithubAvatar, LoadingScreen, AdminSider } from 'components';
 import { stringSorter } from 'components/Table';
 
+const { Content } = Layout;
 const defaultRowGutter = 24;
 const PAGINATION = 200;
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
@@ -164,142 +165,149 @@ class RegistrationsPage extends React.Component<Props, State> {
 
     return (
       <div>
-        <Header username={session.githubId} />
-        {!courses.length && (
-          <Result
-            status="info"
-            icon={<Icon type="meh" theme="twoTone" />}
-            title="There are no planned courses."
-            subTitle="Please come back later."
-            extra={
-              <Button type="primary" href="/">
-                Back to Home
-              </Button>
-            }
-          />
-        )}
-        {courses.length && (
-          <LoadingScreen show={isLoading}>
-            <div className="m-3">
-              <Col>
-                <Row>
-                  <Typography.Title level={4}>Registrations</Typography.Title>
-                </Row>
-                <Row gutter={defaultRowGutter}>
-                  <Col span={10}>
-                    <Form.Item>
-                      {field('courseId', { initialValue: courses[0].id })(
-                        <Select placeholder="Select course..." onChange={this.getRegistrations}>
-                          {courses.map(course => (
-                            <Select.Option key={course.id} value={course.id}>
-                              {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
-                            </Select.Option>
-                          ))}
-                        </Select>,
-                      )}
-                    </Form.Item>
-                    <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
-                  </Col>
-                </Row>
-                <Row gutter={defaultRowGutter}>
-                  <Col span={12}>
-                    <Button size="large" type="primary" onClick={this.approve}>
-                      Approve
+        <Layout style={{ minHeight: '100vh' }}>
+          <AdminSider />
+          <Layout style={{ background: '#fff' }}>
+            <Header username={session.githubId} />
+            <Content>
+              {!courses.length && (
+                <Result
+                  status="info"
+                  icon={<Icon type="meh" theme="twoTone" />}
+                  title="There are no planned courses."
+                  subTitle="Please come back later."
+                  extra={
+                    <Button type="primary" href="/">
+                      Back to Home
                     </Button>
-                    <span>&nbsp;</span>
-                    <Button size="large" type="danger" onClick={this.reject}>
-                      Reject
-                    </Button>
-                  </Col>
-                  <Col span={4}>
-                    <Statistic
-                      title="Approved"
-                      value={statistics.approved}
-                      valueStyle={{ color: '#3f8600' }}
-                      prefix={<Icon type="like" />}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Statistic
-                      title="Rejected"
-                      value={statistics.rejected}
-                      valueStyle={{ color: '#cf1322' }}
-                      prefix={<Icon type="dislike" />}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Statistic title="Pending" value={statistics.pending} prefix={<Icon type="hourglass" />} />
-                  </Col>
-                </Row>
-                <Row gutter={defaultRowGutter}>
-                  <Col>
-                    <Table<Registration>
-                      className="m-3"
-                      bordered
-                      pagination={{ pageSize: PAGINATION }}
-                      size="small"
-                      rowKey="id"
-                      dataSource={data}
-                      rowSelection={rowSelection}
-                      columns={[
-                        {
-                          title: 'Name',
-                          dataIndex: 'lastName',
-                          key: 'lastName',
-                          width: 150,
-                          sorter: stringSorter('lastName'),
-                          render: (_: any, record: Registration) => (
-                            <a href={record.user.profileUrl}>{record.user.name}</a>
-                          ),
-                        },
-                        {
-                          title: 'Github',
-                          dataIndex: 'githubId',
-                          key: 'githubId',
-                          width: 100,
-                          sorter: stringSorter('githubId'),
-                          render: (value: string) => (
-                            <div className="d-flex flex-row">
-                              <GithubAvatar githubId={value} size={24} />
-                              &nbsp;<a href={`https://github.com/${value}`}>{value}</a>
-                            </div>
-                          ),
-                        },
-                        {
-                          title: 'Status',
-                          dataIndex: 'status',
-                          key: 'status',
-                          sorter: stringSorter('status'),
-                          width: 50,
-                        },
-                        {
-                          title: 'City',
-                          dataIndex: 'city',
-                          key: 'city',
-                          width: 50,
-                        },
-                        {
-                          title: 'Max students amount',
-                          dataIndex: 'maxStudentsLimit',
-                          key: 'maxStudentsLimit',
-                          width: 100,
-                        },
-                        {
-                          title: 'From EPAM',
-                          dataIndex: 'isFromEpam',
-                          key: 'isFromEpam',
-                          width: 30,
-                          render: (value: boolean) => (value ? 'Y' : 'N'),
-                        },
-                        { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
-                      ]}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </div>
-          </LoadingScreen>
-        )}
+                  }
+                />
+              )}
+              {courses.length && (
+                <LoadingScreen show={isLoading}>
+                  <div className="m-3">
+                    <Col>
+                      <Row>
+                        <Typography.Title level={4}>Registrations</Typography.Title>
+                      </Row>
+                      <Row gutter={defaultRowGutter}>
+                        <Col span={10}>
+                          <Form.Item>
+                            {field('courseId', { initialValue: courses[0].id })(
+                              <Select placeholder="Select course..." onChange={this.getRegistrations}>
+                                {courses.map(course => (
+                                  <Select.Option key={course.id} value={course.id}>
+                                    {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                                  </Select.Option>
+                                ))}
+                              </Select>,
+                            )}
+                          </Form.Item>
+                          <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+                        </Col>
+                      </Row>
+                      <Row gutter={defaultRowGutter}>
+                        <Col span={12}>
+                          <Button size="large" type="primary" onClick={this.approve}>
+                            Approve
+                          </Button>
+                          <span>&nbsp;</span>
+                          <Button size="large" type="danger" onClick={this.reject}>
+                            Reject
+                          </Button>
+                        </Col>
+                        <Col span={4}>
+                          <Statistic
+                            title="Approved"
+                            value={statistics.approved}
+                            valueStyle={{ color: '#3f8600' }}
+                            prefix={<Icon type="like" />}
+                          />
+                        </Col>
+                        <Col span={4}>
+                          <Statistic
+                            title="Rejected"
+                            value={statistics.rejected}
+                            valueStyle={{ color: '#cf1322' }}
+                            prefix={<Icon type="dislike" />}
+                          />
+                        </Col>
+                        <Col span={4}>
+                          <Statistic title="Pending" value={statistics.pending} prefix={<Icon type="hourglass" />} />
+                        </Col>
+                      </Row>
+                      <Row gutter={defaultRowGutter}>
+                        <Col>
+                          <Table<Registration>
+                            className="m-3"
+                            bordered
+                            pagination={{ pageSize: PAGINATION }}
+                            size="small"
+                            rowKey="id"
+                            dataSource={data}
+                            rowSelection={rowSelection}
+                            columns={[
+                              {
+                                title: 'Name',
+                                dataIndex: 'lastName',
+                                key: 'lastName',
+                                width: 150,
+                                sorter: stringSorter('lastName'),
+                                render: (_: any, record: Registration) => (
+                                  <a href={record.user.profileUrl}>{record.user.name}</a>
+                                ),
+                              },
+                              {
+                                title: 'Github',
+                                dataIndex: 'githubId',
+                                key: 'githubId',
+                                width: 100,
+                                sorter: stringSorter('githubId'),
+                                render: (value: string) => (
+                                  <div className="d-flex flex-row">
+                                    <GithubAvatar githubId={value} size={24} />
+                                    &nbsp;<a href={`https://github.com/${value}`}>{value}</a>
+                                  </div>
+                                ),
+                              },
+                              {
+                                title: 'Status',
+                                dataIndex: 'status',
+                                key: 'status',
+                                sorter: stringSorter('status'),
+                                width: 50,
+                              },
+                              {
+                                title: 'City',
+                                dataIndex: 'city',
+                                key: 'city',
+                                width: 50,
+                              },
+                              {
+                                title: 'Max students amount',
+                                dataIndex: 'maxStudentsLimit',
+                                key: 'maxStudentsLimit',
+                                width: 100,
+                              },
+                              {
+                                title: 'From EPAM',
+                                dataIndex: 'isFromEpam',
+                                key: 'isFromEpam',
+                                width: 30,
+                                render: (value: boolean) => (value ? 'Y' : 'N'),
+                              },
+                              { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
+                            ]}
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+                  </div>
+                </LoadingScreen>
+              )}
+            </Content>
+          </Layout>
+        </Layout>
       </div>
     );
   }
