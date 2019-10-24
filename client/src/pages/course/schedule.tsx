@@ -4,7 +4,7 @@ import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, timeRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseEvent, CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
@@ -19,9 +19,17 @@ interface State {
 }
 
 enum EventTypeColor {
-  task = 'red',
+  deadline = 'red',
   test = 'green',
+  newtask = 'green',
   lecture = 'blue',
+}
+
+const TaskTypes = {
+  deadline: 'deadline',
+  test: 'test',
+  newtask: 'newtask',
+  lecture: 'lecture',
 }
 
 class SchedulePage extends React.Component<Props, State> {
@@ -39,21 +47,35 @@ class SchedulePage extends React.Component<Props, State> {
       this.courseService.getCourseEvents(courseId),
       this.courseService.getCourseTasks(courseId),
     ]);
+    debugger
     const data = events
       .concat(
-        tasks.map(
-          task =>
-            ({
-              id: task.id,
-              date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
-              time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
-              event: {
-                type: task.type === 'test' ? 'test' : 'task',
-                name: task.name,
-                descriptionUrl: task.descriptionUrl,
-              },
-            } as CourseEvent),
-        ),
+        tasks
+        .reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+          if(task.type !== TaskTypes.test) {
+              acc.push({
+                id: task.id,
+                date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
+                time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
+                event: {
+                  type: TaskTypes.newtask,
+                  name: task.name,
+                  descriptionUrl: task.descriptionUrl,
+                },
+              } as CourseEvent)
+          }
+            acc.push({
+                      id: task.id,
+                      date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
+                      time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
+                      event: {
+                        type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
+                        name: task.name,
+                        descriptionUrl: task.descriptionUrl,
+                      },
+                    } as CourseEvent);
+          return acc;
+        }, [])
       )
       .sort((a, b) => a.date.localeCompare(b.date));
     this.setState({ data });
