@@ -11,6 +11,7 @@ import { User } from './user';
 import { Student } from './student';
 import { Course } from './course';
 import { TaskChecker } from './taskChecker';
+import { StageInterview } from './stageInterview';
 
 @Entity()
 export class Mentor {
@@ -45,4 +46,7 @@ export class Mentor {
 
   @Column({ nullable: true, type: 'varchar' })
   studentsPreference: 'sameCity' | 'sameCountry' | null;
+
+  @OneToMany(_ => StageInterview, stageInterview => stageInterview.mentor, { nullable: true })
+  stageInterviews: StageInterview[] | null;
 }

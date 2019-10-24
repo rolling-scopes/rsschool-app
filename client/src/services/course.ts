@@ -302,6 +302,8 @@ export interface StudentDetails extends StudentBasic {
 export interface MentorDetails extends MentorBasic {
   countryName: string;
   locationName: string;
+  maxStudentsLimit: number;
+  interviewsCount: number;
 }
 
 export interface PostScore {

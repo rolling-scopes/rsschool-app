@@ -1,6 +1,6 @@
 import { Divider, Statistic, Table } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
-import { getColumnSearchProps, stringSorter } from 'components/Table';
+import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
 import * as React from 'react';
@@ -32,7 +32,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     this.setState({ isLoading: true });
 
     const courseId = this.props.course.id;
-    const records = await this.courseService.getCourseMentors(courseId);
+    const records: any[] = await this.courseService.getCourseMentors(courseId);
     const countries: Record<string, { totalCount: number }> = {};
 
     for (const record of records) {
@@ -41,6 +41,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
         countries[countryName] = { totalCount: 0 };
       }
       countries[countryName].totalCount++;
+      const { interviewsCount, maxStudentsLimit } = record as MentorDetails;
+      record.capacity = maxStudentsLimit + 2 - interviewsCount;
     }
 
     this.setState({
@@ -121,6 +123,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Max Student',
                 dataIndex: 'maxStudentsLimit',
+                width: 100,
+              },
+              {
+                title: 'Interview Capacity',
+                dataIndex: 'capacity',
+                sorter: numberSorter('capacity' as any),
                 width: 100,
               },
             ]}
