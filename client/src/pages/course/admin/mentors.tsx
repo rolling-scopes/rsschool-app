@@ -1,7 +1,7 @@
 import { Divider, Statistic, Table } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
 import StudentsAddModal from 'components/StudentsAddModal';
-import { getColumnSearchProps, stringSorter } from 'components/Table';
+import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
 import * as React from 'react';
@@ -33,7 +33,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     this.setState({ isLoading: true });
 
     const courseId = this.props.course.id;
-    const records = await this.courseService.getCourseMentors(courseId);
+    const records: any[] = await this.courseService.getCourseMentors(courseId);
     const countries: Record<string, { totalCount: number }> = {};
 
     for (const record of records) {
@@ -124,7 +124,20 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Max Student',
                 dataIndex: 'maxStudentsLimit',
-                width: 100,
+                sorter: numberSorter('maxStudentsLimit'),
+                width: 80,
+              },
+              {
+                title: 'Interviews Count',
+                dataIndex: 'interviewsCount',
+                sorter: numberSorter('interviewsCount'),
+                width: 80,
+              },
+              {
+                title: 'Students Count',
+                dataIndex: 'studentsCount',
+                sorter: numberSorter('studentsCount' as any),
+                width: 80,
               },
               {
                 title: 'Add Student',

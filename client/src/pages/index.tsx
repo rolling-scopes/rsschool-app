@@ -48,7 +48,7 @@ const routes = [
     newTab: false,
   },
   {
-    name: `🗓 Schedule`,
+    name: `🗓 Schedule (draft)`,
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
     access: anyAccess,
     newTab: false,
@@ -74,6 +74,12 @@ const routes = [
   {
     name: `🎤 Stage Interviews`,
     getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
+  },
+  {
+    name: `📝 Stage Interview Feedback`,
+    getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },

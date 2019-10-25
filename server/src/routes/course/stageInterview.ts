@@ -5,11 +5,18 @@ import { ILogger } from '../../logger';
 import { StageInterview, Mentor, Student, IUserSession } from '../../models';
 import { setResponse } from '../utils';
 import { getMentorsWithStudents, getStudents } from '../../services/courseService';
-import { getStageInterviewsPairs, getInterviewsByGithubId } from '../../services/stageInterviews';
 import { createInterviewPairs } from '../../rules/interviewPairs';
+import {
+  getStageInterviewsPairs,
+  getInterviewsByGithubId,
+  getStageInterviewsByMentorId,
+  getStageInterviewStudentFeedback,
+  getAvailableStudentsForStageInterview,
+} from '../../services/stageInterviews';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
 import _ from 'lodash';
+import { StageInterviewFeedback } from './../../models/stageInterviewFeedback';
 
 const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
 const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
@@ -22,45 +29,47 @@ export const getStageInterviews = (_: ILogger) => async (ctx: Router.RouterConte
   setResponse(ctx, OK, result);
 };
 
+export const getStageInterviewStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const githubId = ctx.state!.user.githubId;
+  const stageId: number = Number(ctx.params.id);
+  const result = await getStageInterviewsByMentorId(stageId, githubId);
+  setResponse(ctx, OK, result);
+};
+
 type PostInput = {
-  mentorGithubId: string;
-  studentGithubId: string;
+  mentorGithubId?: string;
+  studentGithubId?: string;
+  githubId?: string;
 };
 
 export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const data: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
+  const inputData: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
   const courseId: number = Number(ctx.params.courseId);
   const stageId: number = Number(ctx.params.id);
 
   try {
     const result = [];
+    const data = prepareInputData(inputData, ctx.state!.user);
+
     for await (const item of data) {
-      const [mentor, student] = await Promise.all([
-        getRepository(Mentor)
-          .createQueryBuilder('mentor')
-          .innerJoin('mentor.user', 'user')
-          .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
-            githubId: item.mentorGithubId,
-            courseId,
-          })
-          .getOne(),
-        getRepository(Student)
-          .createQueryBuilder('student')
-          .innerJoin('student.user', 'user')
-          .where('user.githubId = :githubId AND student.courseId = :courseId', {
-            githubId: item.studentGithubId,
-            courseId,
-          })
-          .getOne(),
-      ]);
-      result.push(
-        await getRepository(StageInterview).save({
-          mentorId: mentor!.id,
-          studentId: student!.id,
-          courseId,
-          stageId,
-        }),
-      );
+      const [mentor, student] = await getStundentAndMentor(courseId, item.mentorGithubId, item.studentGithubId);
+      if (mentor == null || student == null) {
+        continue;
+      }
+
+      const repository = getRepository(StageInterview);
+      const existingInterview = await repository.findOne({
+        where: { studentId: student.id, stageId },
+      });
+
+      if (existingInterview) {
+        existingInterview.mentorId = mentor.id;
+        const interview = await repository.save(existingInterview);
+        result.push(interview);
+      } else {
+        const interview = await repository.save({ mentorId: mentor.id, studentId: student.id, courseId, stageId });
+        result.push(interview);
+      }
     }
     setResponse(ctx, OK, result);
   } catch (e) {
@@ -68,45 +77,84 @@ export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterConte
   }
 };
 
+export const deleteStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const interviewId: number = Number(ctx.params.interviewId);
+  try {
+    const interview = await getRepository(StageInterview).delete(interviewId);
+    setResponse(ctx, OK, interview);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+function prepareInputData(
+  input: {
+    githubId?: string;
+    mentorGithubId?: string;
+    studentGithubId?: string;
+  }[],
+  user?: IUserSession,
+) {
+  const hasUser = user && !!user.githubId;
+  return input.map(d =>
+    hasUser
+      ? {
+          studentGithubId: d.githubId!,
+          mentorGithubId: user!.githubId,
+        }
+      : {
+          studentGithubId: d.studentGithubId!,
+          mentorGithubId: d.mentorGithubId!,
+        },
+  );
+}
+
+async function getStundentAndMentor(courseId: number, mentorGithubId: string, studentGithubId: string) {
+  return Promise.all([
+    getRepository(Mentor)
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
+        githubId: mentorGithubId,
+        courseId,
+      })
+      .getOne(),
+    getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .where('user.githubId = :githubId AND student.courseId = :courseId', {
+        githubId: studentGithubId,
+        courseId,
+      })
+      .getOne(),
+  ]);
+}
+
 const shortTrackStudents = [
-  'katyyats',
-  'spaceearth',
+  'albertkengerli',
   'alphajax',
-  'iliyapunko',
-  'lighthousekeeperyn',
-  'caninax',
-  'elaray1',
-  'vitbazylchik',
+  'antonionick',
+  'dsv-sergey',
   'ieopvl',
-  'kseniakuntsevich',
-  'msv1990',
-  'trigsen',
-  'yalatan',
   'kalinatimka',
-  'viktarrudzenia',
-  'moiseenokv',
+  'katyyats',
+  'magerrrr',
   'maliaxandr',
-  'alekseyvanyukevich',
-  'achuyanov',
-  'msv1990',
-  'mitskevichvs',
-  'gurbanovali',
-  'caninax',
-  'vitbazylchik',
-  'achuyanov',
-  'viktorguschin',
-  'serezhishe',
-  'trigsen',
+  'nastyamedv',
+  'nikola2390',
+  'pyatromarchanka',
   'romanrg',
+  'serezhishe',
+  'sk1ngr0s',
+  'skodasha',
+  'spaceearth',
   'spinagrblzzz',
+  'timary13',
+  'viktarrudzenia',
+  'viktorguschin',
   'vitbazylchik',
   'vladislavbizin',
-  'eugenesheuchuk',
   'wonderxuy',
-  'pyatromarchanka',
-  'timary13',
-  'pyatromarchanka',
-  'fursaleksey',
 ];
 
 export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -178,6 +226,14 @@ export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterCon
   setResponse(ctx, OK, records);
 };
 
+export const getAvailableStudentsForInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
+  const stageId: number = Number(ctx.params.id);
+  let result = await getAvailableStudentsForStageInterview(courseId, stageId);
+  result = result.filter(r => !shortTrackStudents.includes(r.githubId));
+  setResponse(ctx, OK, result);
+};
+
 function getReservedMentors(mentors: any[], locationName: string) {
   const minskMentors = mentors.filter(m => m.locationName === locationName).reverse();
   let reservedCapacity = 0;
@@ -191,3 +247,96 @@ function getReservedMentors(mentors: any[], locationName: string) {
   }
   return reservedMentors;
 }
+
+type InterviewFeedbackPostInput = {
+  studentId: number;
+  json: string;
+  isCompleted: boolean;
+  decision: string | null;
+  isGoodCandidate: boolean | null;
+};
+
+export const postStageInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const data: InterviewFeedbackPostInput = ctx.request.body;
+
+  const stageId: number = Number(ctx.params.id);
+  const userId: number = (ctx.state!.user as IUserSession).id;
+  const studentId = data.studentId;
+
+  try {
+    const stageInterview: any = await getRepository(StageInterview)
+      .createQueryBuilder('stageInterview')
+      .innerJoin('stageInterview.mentor', 'mentor')
+      .innerJoin('mentor.user', 'user')
+      .where('stageInterview.stageId = :stageId', { stageId })
+      .andWhere('stageInterview.studentId = :studentId', { studentId })
+      .andWhere('user.id = :userId', { userId })
+      .getOne();
+
+    if (!stageInterview) {
+      throw new Error(
+        `Stage interview for userId='${userId}' and studentId='${studentId}' is not found at stage='${stageId}'`,
+      );
+    }
+
+    const stageInterviewId = stageInterview.id;
+
+    const feedback = await getRepository(StageInterviewFeedback)
+      .createQueryBuilder('stageInterviewFeedback')
+      .where('stageInterviewFeedback.stageInterviewId = :stageInterviewId', { stageInterviewId })
+      .getOne();
+
+    const feedbackRequest = {
+      stageInterviewId,
+      json: data.json,
+    };
+
+    if (feedback) {
+      await getRepository(StageInterviewFeedback).save({ id: feedback.id, ...feedbackRequest });
+    } else {
+      await getRepository(StageInterviewFeedback).save(feedbackRequest);
+    }
+
+    const stageInterviewRequest: any = {
+      isCompleted: data.isCompleted,
+    };
+
+    if (data.decision) {
+      stageInterviewRequest.decision = data.decision;
+    }
+
+    if (data.isGoodCandidate) {
+      stageInterviewRequest.isGoodCandidate = data.isGoodCandidate;
+    }
+
+    await getRepository(StageInterview).update(stageInterviewId, stageInterviewRequest);
+
+    if (data.decision === 'yes') {
+      await getRepository(Student).update(studentId, { mentorId: stageInterview.mentorId });
+    } else if (data.decision === 'no' && !data.isGoodCandidate && data.isGoodCandidate !== null) {
+      await getRepository(Student).update(studentId, {
+        isExpelled: true,
+        expellingReason: '',
+        endDate: new Date(),
+      });
+    }
+
+    setResponse(ctx, OK, feedbackRequest);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const getStageInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const stageId: number = Number(ctx.params.id);
+  const userId: number = (ctx.state!.user as IUserSession).id;
+  const studentId: number = Number(ctx.params.studentId);
+
+  try {
+    const stageInterviewFeedback: any = await getStageInterviewStudentFeedback(stageId, userId, studentId);
+
+    setResponse(ctx, OK, stageInterviewFeedback ? stageInterviewFeedback.json : '{}');
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};

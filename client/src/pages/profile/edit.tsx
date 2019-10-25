@@ -18,6 +18,11 @@ type State = {
   initialData: Partial<UserFull> | null;
 };
 
+type ExternalAccount = {
+  service: string;
+  username: string;
+};
+
 const defaultColumnSizes = {
   xs: 18,
   sm: 11,
@@ -58,7 +63,7 @@ class EditProfilePage extends React.Component<Props, State> {
       }
       try {
         this.setState({ isLoading: true });
-        const externalAccounts = [];
+        const externalAccounts: ExternalAccount[] = [];
         if (values.codewars) {
           externalAccounts.push({
             service: 'codewars',

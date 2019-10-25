@@ -30,4 +30,13 @@ export class StageInterview {
 
   @Column()
   stageId: number;
+
+  @Column({ default: false })
+  isCompleted: boolean;
+
+  @Column({ nullable: true })
+  decision: string;
+
+  @Column({ nullable: true })
+  isGoodCandidate: boolean;
 }

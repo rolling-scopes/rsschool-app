@@ -1,12 +1,14 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Table, Button, Modal, message, Col, Form, Row, Input, DatePicker, Radio, Select } from 'antd';
+import { Table, Button, Modal, message, Col, Form, Row, Input, DatePicker, Radio, Select, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, withSession, Session } from 'components';
+import { Header, withSession, Session, AdminSider } from 'components';
 import { dateRenderer, boolRenderer, stringTrimRenderer, stringSorter } from 'components/Table';
 import { PageWithModalState } from 'services/models';
 import { PRIMARY_SKILLS } from 'services/reference-data';
 import { CourseService, Course } from 'services/course';
+
+const { Content } = Layout;
 
 type Props = { session: Session } & FormComponentProps;
 interface State extends PageWithModalState<Course> {}
@@ -28,75 +30,80 @@ class CoursesPage extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Header title="Manage Courses" username={this.props.session.githubId} />
+        <Layout style={{ minHeight: '100vh' }}>
+          <AdminSider />
+          <Layout style={{ background: '#fff' }}>
+            <Header title="Manage Courses" username={this.props.session.githubId} />
+            <Content>
+              <Button className="ml-3 mr-3 mt-3" type="primary" onClick={this.handleAddItem}>
+                Add Course
+              </Button>
 
-        <Button className="ml-3 mr-3 mt-3" type="primary" onClick={this.handleAddItem}>
-          Add Course
-        </Button>
-
-        <Table
-          className="m-3"
-          size="small"
-          dataSource={this.state.data}
-          pagination={{ pageSize: 100 }}
-          rowKey="id"
-          columns={[
-            {
-              title: 'Id',
-              dataIndex: 'id',
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              sorter: stringSorter<Course>('name'),
-            },
-            {
-              title: 'Full Name',
-              dataIndex: 'fullName',
-              sorter: stringSorter<Course>('fullName'),
-            },
-            {
-              title: 'Alias',
-              dataIndex: 'alias',
-              sorter: stringSorter<Course>('alias'),
-            },
-            {
-              title: 'Description',
-              dataIndex: 'description',
-              render: stringTrimRenderer,
-            },
-            {
-              title: 'Start Date',
-              dataIndex: 'startDate',
-              render: dateRenderer,
-            },
-            {
-              title: 'End Date',
-              dataIndex: 'endDate',
-              render: dateRenderer,
-            },
-            {
-              title: 'Primary Skill',
-              dataIndex: 'primarySkillName',
-            },
-            {
-              title: 'Completed',
-              dataIndex: 'completed',
-              render: boolRenderer,
-            },
-            {
-              title: 'Planned',
-              dataIndex: 'planned',
-              render: boolRenderer,
-            },
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
-            },
-          ]}
-        />
-
+              <Table
+                className="m-3"
+                size="small"
+                dataSource={this.state.data}
+                pagination={{ pageSize: 100 }}
+                rowKey="id"
+                columns={[
+                  {
+                    title: 'Id',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    sorter: stringSorter<Course>('name'),
+                  },
+                  {
+                    title: 'Full Name',
+                    dataIndex: 'fullName',
+                    sorter: stringSorter<Course>('fullName'),
+                  },
+                  {
+                    title: 'Alias',
+                    dataIndex: 'alias',
+                    sorter: stringSorter<Course>('alias'),
+                  },
+                  {
+                    title: 'Description',
+                    dataIndex: 'description',
+                    render: stringTrimRenderer,
+                  },
+                  {
+                    title: 'Start Date',
+                    dataIndex: 'startDate',
+                    render: dateRenderer,
+                  },
+                  {
+                    title: 'End Date',
+                    dataIndex: 'endDate',
+                    render: dateRenderer,
+                  },
+                  {
+                    title: 'Primary Skill',
+                    dataIndex: 'primarySkillName',
+                  },
+                  {
+                    title: 'Completed',
+                    dataIndex: 'completed',
+                    render: boolRenderer,
+                  },
+                  {
+                    title: 'Planned',
+                    dataIndex: 'planned',
+                    render: boolRenderer,
+                  },
+                  {
+                    title: 'Actions',
+                    dataIndex: 'actions',
+                    render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
+                  },
+                ]}
+              />
+            </Content>
+          </Layout>
+        </Layout>
         {this.renderModal()}
       </div>
     );

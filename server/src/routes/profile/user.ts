@@ -45,11 +45,16 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
     const isMentor = students.some(
       student => student.mentor && student.mentor.user && (student.mentor.user as User).githubId === userGithubId,
     );
+
+    const isCourseMentor = students.some(student => {
+      return !student.course.completed && roles[student.course.id] === 'mentor' && stageInterviews.length === 0;
+    });
+
     const isCourseManager = students.some(student => roles[(student.course as Course)!.id] === 'coursemanager');
     const isInterviewer = stageInterviews.some(
       interview => interview.mentor && interview.mentor.user && interview.mentor.user.githubId === userGithubId,
     );
-    if (!isMentor && !isCourseManager && !isInterviewer) {
+    if (!isMentor && !isCourseManager && !isInterviewer && !isCourseMentor) {
       return;
     }
   }

@@ -1,14 +1,16 @@
-import { Form, Table, Tag, Row, Icon, Tooltip, Button } from 'antd';
+import { Form, Table, Tag, Row, Icon, Tooltip, Button, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, timeRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseEvent, CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
 import moment from 'moment';
+
+const { Text } = Typography;
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -17,9 +19,17 @@ interface State {
 }
 
 enum EventTypeColor {
-  task = 'red',
+  deadline = 'red',
   test = 'green',
+  newtask = 'green',
   lecture = 'blue',
+}
+
+const TaskTypes = {
+  deadline: 'deadline',
+  test: 'test',
+  newtask: 'newtask',
+  lecture: 'lecture',
 }
 
 class SchedulePage extends React.Component<Props, State> {
@@ -39,19 +49,32 @@ class SchedulePage extends React.Component<Props, State> {
     ]);
     const data = events
       .concat(
-        tasks.map(
-          task =>
-            ({
-              id: task.id,
-              date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
-              time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
-              event: {
-                type: task.type === 'test' ? 'test' : 'task',
-                name: task.name,
-                descriptionUrl: task.descriptionUrl,
-              },
-            } as CourseEvent),
-        ),
+        tasks
+        .reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+          if(task.type !== TaskTypes.test) {
+              acc.push({
+                id: task.id,
+                date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
+                time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
+                event: {
+                  type: TaskTypes.newtask,
+                  name: task.name,
+                  descriptionUrl: task.descriptionUrl,
+                },
+              } as CourseEvent)
+          }
+            acc.push({
+                      id: task.id,
+                      date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
+                      time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
+                      event: {
+                        type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
+                        name: task.name,
+                        descriptionUrl: task.descriptionUrl,
+                      },
+                    } as CourseEvent);
+          return acc;
+        }, [])
       )
       .sort((a, b) => a.date.localeCompare(b.date));
     this.setState({ data });
@@ -61,6 +84,22 @@ class SchedulePage extends React.Component<Props, State> {
     return (
       <div>
         <Header title="Schedule" username={this.props.session.githubId} />
+        <Row className="text-center">
+          <p>
+            <Text type="danger">This is a draft version!</Text>
+          </p>
+          <p>Please see the actual schedule here:</p>
+          <p>
+            <Button
+              type="primary"
+              icon="calendar"
+              target="_blank"
+              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
+            >
+              See Schedule
+            </Button>
+          </p>
+        </Row>
         <Row type="flex" justify="end" className="m-3">
           <Button icon="calendar" href={`/api/course/${this.props.course.id}/events/ical`}>
             Events iCal

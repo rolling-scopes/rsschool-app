@@ -19,6 +19,7 @@ import { CourseEvent } from './courseEvent';
 import { Certificate } from './certificate';
 import { TaskVerification } from './taskVerification';
 import { StageInterview } from './stageInterview';
+import { StageInterviewFeedback } from './stageInterviewFeedback';
 
 export * from './session';
 
@@ -44,6 +45,7 @@ export const models = [
   Certificate,
   TaskVerification,
   StageInterview,
+  StageInterviewFeedback,
 ];
 
 export {
@@ -69,6 +71,7 @@ export {
   CourseEvent,
   TaskVerification,
   StageInterview,
+  StageInterviewFeedback,
 };
 
 export interface IApiResponse<T> {

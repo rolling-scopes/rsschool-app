@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { StageInterview } from '../models';
+import { StageInterview, StageInterviewFeedback, Student } from '../models';
 
 export async function getStageInterviewsPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
@@ -28,6 +28,7 @@ export async function getStageInterviewsPairs(stageId: number) {
 
   const result = stageInterviews.map(it => {
     return {
+      id: it.id,
       student: {
         id: it.student.id,
         githubId: it.student.user.githubId,
@@ -40,6 +41,48 @@ export async function getStageInterviewsPairs(stageId: number) {
         locationName: it.mentor.user.locationName,
         studentsPreference: it.mentor.studentsPreference || '',
       },
+    };
+  });
+  return result;
+}
+
+export async function getStageInterviewStudentFeedback(stageId: number, userId: number, studentId: number) {
+  return getRepository(StageInterviewFeedback)
+    .createQueryBuilder('stageInterviewFeedback')
+    .innerJoin('stageInterviewFeedback.stageInterview', 'stageInterview')
+    .innerJoin('stageInterview.mentor', 'mentor')
+    .innerJoin('mentor.user', 'user')
+    .where('stageInterview.stageId = :stageId', { stageId })
+    .andWhere('stageInterview.studentId = :studentId', { studentId })
+    .andWhere('user.id = :userId', { userId })
+    .getOne();
+}
+
+export async function getStageInterviewsByMentorId(stageId: number, githubId: string) {
+  const stageInterviews = await getRepository(StageInterview)
+    .createQueryBuilder('stageInterview')
+    .innerJoin('stageInterview.stage', 'stage')
+    .innerJoin('stage.course', 'course')
+    .innerJoin('stageInterview.mentor', 'mentor')
+    .innerJoin('stageInterview.student', 'student')
+    .innerJoin('mentor.user', 'mentorUser')
+    .innerJoin('student.user', 'studentUser')
+    .addSelect(['student.id', 'studentUser.firstName', 'studentUser.lastName', 'studentUser.githubId'])
+    .where(
+      `stage.id = :stageId
+      AND mentorUser.githubId = :githubId
+      AND "stageInterview"."isCompleted" = FALSE
+    `,
+      { stageId, githubId },
+    )
+    .getMany();
+
+  const result = stageInterviews.map(it => {
+    return {
+      id: it.student.id,
+      githubId: it.student.user.githubId,
+      firstName: it.student.user.firstName,
+      lastName: it.student.user.lastName,
     };
   });
   return result;
@@ -121,6 +164,43 @@ export async function getInterviewsByStudent(courseId: number, studentId: number
         id: it.student.id,
         githubId: it.student.user.githubId,
       },
+    };
+  });
+  return result;
+}
+
+export async function getAvailableStudentsForStageInterview(courseId: number, stageId: number) {
+  const students = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.id', 'user.githubId', 'user.firstName', 'user.lastName', 'user.locationName'])
+    .leftJoin(
+      StageInterview,
+      'stageInterview',
+      '"stageInterview"."studentId" = student.id AND "stageInterview"."stageId" = :stageId',
+      { stageId },
+    )
+    .where(
+      [
+        `student.courseId = :courseId`,
+        `student."isFailed" = false`,
+        `student."isExpelled" = false`,
+        `student."totalScore" > 0`,
+        `"stageInterview".id IS NULL`,
+      ].join(' AND '),
+      { courseId },
+    )
+    .orderBy('student.totalScore', 'DESC')
+    .getMany();
+
+  const result = students.map(student => {
+    return {
+      id: student.id,
+      githubId: student.user.githubId,
+      firstName: student.user.firstName,
+      lastName: student.user.lastName,
+      locationName: student.user.locationName,
+      totalScore: student.totalScore,
     };
   });
   return result;
