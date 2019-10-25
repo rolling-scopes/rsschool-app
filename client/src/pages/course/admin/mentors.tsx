@@ -1,5 +1,6 @@
 import { Divider, Statistic, Table } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
+import StudentsAddModal from 'components/StudentsAddModal';
 import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
@@ -57,6 +58,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   }
 
   render() {
+    const courseId = this.props.course.id;
+
     return (
       <>
         <Header title="Course Mentors" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -135,6 +138,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'studentsCount',
                 sorter: numberSorter('studentsCount' as any),
                 width: 80,
+              },
+              {
+                title: 'Add Student',
+                dataIndex: 'githubId',
+                width: 50,
+                render: (value: string, mentor: MentorDetails) => (
+                  <StudentsAddModal courseId={courseId} mentorsGithub={value} mentorId={mentor.id} />
+                ),
               },
             ]}
           />
