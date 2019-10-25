@@ -1,6 +1,20 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Table, Button, Modal, message, Col, Form, Row, Input, DatePicker, Radio, Select, Layout } from 'antd';
+import {
+  Table,
+  Button,
+  Modal,
+  Checkbox,
+  message,
+  Col,
+  Form,
+  Row,
+  Input,
+  DatePicker,
+  Radio,
+  Select,
+  Layout,
+} from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, Session, AdminSider } from 'components';
 import { dateRenderer, boolRenderer, stringTrimRenderer, stringSorter } from 'components/Table';
@@ -92,6 +106,11 @@ class CoursesPage extends React.Component<Props, State> {
                   {
                     title: 'Planned',
                     dataIndex: 'planned',
+                    render: boolRenderer,
+                  },
+                  {
+                    title: 'Invite Only',
+                    dataIndex: 'inviteOnly',
                     render: boolRenderer,
                   },
                   {
@@ -203,6 +222,10 @@ class CoursesPage extends React.Component<Props, State> {
               </Radio.Group>,
             )}
           </Form.Item>
+
+          <Form.Item label="Invite Only">
+            {field('inviteOnly', { initialValue: !!modalData.inviteOnly })(<Checkbox>Invite Only Course</Checkbox>)}
+          </Form.Item>
         </Form>
       </Modal>
     );
@@ -229,6 +252,7 @@ class CoursesPage extends React.Component<Props, State> {
         registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
         completed: values.state === 'completed',
         planned: values.state === 'planned',
+        inviteOnly: values.inviteOnly,
         description: values.description,
         primarySkillId: values.primarySkillId,
         primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,

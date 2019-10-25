@@ -28,7 +28,7 @@ const defaultRowGutter = 24;
 class CourseRegistryPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const courses = (this.props.courses || []).filter((course: Course) => course.planned);
+    const courses = (this.props.courses || []).filter((course: Course) => !course.completed && !course.inviteOnly);
 
     this.state = {
       courses,
@@ -144,7 +144,6 @@ class CourseRegistryPage extends React.Component<Props, State> {
                     <li>Проводить учебные интервью (по 2 для каждого студента)</li>
                     <li>Проводить дополнительные лекции (по желанию)</li>
                   </ul>
-                  <p></p>
                 </Typography.Paragraph>
               </Col>
             </Row>

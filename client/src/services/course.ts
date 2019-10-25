@@ -59,6 +59,7 @@ export interface Course {
   fullName: string;
   alias: string;
   completed: boolean;
+  inviteOnly: boolean;
   description: string;
   endDate: string;
   planned: boolean;

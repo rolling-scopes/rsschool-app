@@ -48,7 +48,9 @@ interface Registration {
 class RegistrationsPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const courses: Course[] = (this.props.courses || []).filter((course: Course) => course.planned);
+    const courses: Course[] = (this.props.courses || []).filter(
+      (course: Course) => !course.completed && !course.inviteOnly,
+    );
 
     this.state = {
       courses,

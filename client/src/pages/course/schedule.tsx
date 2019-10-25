@@ -30,7 +30,7 @@ const TaskTypes = {
   test: 'test',
   newtask: 'newtask',
   lecture: 'lecture',
-}
+};
 
 class SchedulePage extends React.Component<Props, State> {
   state: State = {
@@ -49,32 +49,31 @@ class SchedulePage extends React.Component<Props, State> {
     ]);
     const data = events
       .concat(
-        tasks
-        .reduce((acc: Array<CourseEvent>, task: CourseTask) => {
-          if(task.type !== TaskTypes.test) {
-              acc.push({
-                id: task.id,
-                date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
-                time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
-                event: {
-                  type: TaskTypes.newtask,
-                  name: task.name,
-                  descriptionUrl: task.descriptionUrl,
-                },
-              } as CourseEvent)
-          }
+        tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+          if (task.type !== TaskTypes.test) {
             acc.push({
-                      id: task.id,
-                      date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
-                      time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
-                      event: {
-                        type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
-                        name: task.name,
-                        descriptionUrl: task.descriptionUrl,
-                      },
-                    } as CourseEvent);
+              id: task.id,
+              date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
+              time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
+              event: {
+                type: TaskTypes.newtask,
+                name: task.name,
+                descriptionUrl: task.descriptionUrl,
+              },
+            } as CourseEvent);
+          }
+          acc.push({
+            id: task.id,
+            date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
+            time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
+            event: {
+              type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
+              name: task.name,
+              descriptionUrl: task.descriptionUrl,
+            },
+          } as CourseEvent);
           return acc;
-        }, [])
+        }, []),
       )
       .sort((a, b) => a.date.localeCompare(b.date));
     this.setState({ data });

@@ -16,7 +16,7 @@ const publicRoutes = [
     name: `📝 Feedback on RS School`,
     link: `https://docs.google.com/forms/d/1F4NeS0oBq-CY805aqiPVp6CIrl4_nIYJ7Z_vUcMOFrQ/viewform`,
     newTab: true,
-  }
+  },
 ];
 
 type LinkInfo = { name: string; link: string; newTab: boolean };

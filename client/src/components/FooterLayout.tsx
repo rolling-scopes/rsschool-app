@@ -25,15 +25,19 @@ class FooterLayout extends React.Component<any, any> {
           <Divider />
           <h5> Thank you for your support! 🎉</h5>
           <p>
-            <object type="image/svg+xml"
-                      data="https://opencollective.com/rsschool/backers.svg?avatarHeight=28&button=false"></object>
+            <object
+              type="image/svg+xml"
+              data="https://opencollective.com/rsschool/backers.svg?avatarHeight=28&button=false"
+            ></object>
           </p>
           <p>
-          <Button size="small" href="https://opencollective.com/rsschool#section-contribute" target="_blank" ghost>
-          ❤️ Make a donation
-          </Button>
+            <Button size="small" href="https://opencollective.com/rsschool#section-contribute" target="_blank" ghost>
+              ❤️ Make a donation
+            </Button>
           </p>
-          <p className="text-center"><small>&copy; The Rolling Scopes 2019</small></p>
+          <p className="text-center">
+            <small>&copy; The Rolling Scopes 2019</small>
+          </p>
         </Footer>
       </div>
     );

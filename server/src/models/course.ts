@@ -67,4 +67,7 @@ export class Course {
 
   @Column({ default: false })
   planned: boolean;
+
+  @Column({ default: false })
+  inviteOnly: boolean;
 }
