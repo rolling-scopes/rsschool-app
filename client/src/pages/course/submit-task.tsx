@@ -32,6 +32,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
       .filter(
         task =>
           task.studentEndDate &&
+          new Date(task.studentEndDate).getTime() > Date.now() &&
           task.verification === 'auto' &&
           (task.type === 'externaltask' || task.type === 'jstask'),
       );
