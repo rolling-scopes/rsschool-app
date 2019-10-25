@@ -31,7 +31,7 @@ const noticeStyle = {
 class CourseRegistryPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const courses = (props.courses || []).filter((course: Course) => !course.completed && !course.inviteOnly);
+    const courses = (props.courses || []).filter((course: Course) => course.planned && !course.inviteOnly);
 
     this.state = {
       courses,
