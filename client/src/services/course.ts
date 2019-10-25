@@ -198,9 +198,7 @@ export class CourseService {
   }
 
   async getInterviewStudents(courseId: number) {
-    const result = await axios.get<{ data: StudentBasic[] }>(
-      `/api/course/${courseId}/mentor/me/interviews`,
-    );
+    const result = await axios.get<{ data: StudentBasic[] }>(`/api/course/${courseId}/mentor/me/interviews`);
     return result.data.data;
   }
 

@@ -11,19 +11,21 @@ class FooterLayout extends React.Component<any, any> {
     return (
       <div>
         <Footer className="footer-dark">
-          <Row gutter={40}>
+          <Row gutter={40}>
             <Col xs={24} sm={8} md={8} lg={8}>
-              <Feedback />
+              <Feedback />
             </Col>
             <Col xs={24} sm={8} md={8} lg={8}>
-              <Help />
+              <Help />
             </Col>
             <Col xs={24} sm={8} md={8} lg={8}>
               <SocialNetworks />
             </Col>
           </Row>
           <Divider />
-          <div className='text-center'><small>&copy; The Rolling Scopes 2019</small></div>
+          <div className="text-center">
+            <small>&copy; The Rolling Scopes 2019</small>
+          </div>
         </Footer>
       </div>
     );

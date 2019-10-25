@@ -265,17 +265,17 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {isAdmin && <AdminSider/>}
+          {isAdmin && <AdminSider />}
 
           <Layout style={{ background: '#fff' }}>
-            <Header username={this.props.session.githubId}/>
+            <Header username={this.props.session.githubId} />
             <Content>
               {/* <ActivityBanner /> */}
               <div className="m-3">
                 {!activeCourse && this.renderNoCourse()}
                 {this.state.hasRegistryBanner && activeCourse && (
                   <div className="mb-3">
-                    <RegistryBanner/>
+                    <RegistryBanner />
                   </div>
                 )}
                 {activeCourse && (
@@ -307,7 +307,7 @@ class IndexPage extends React.PureComponent<Props, State> {
                 )}
               </div>
             </Content>
-            <FooterLayout/>
+            <FooterLayout />
           </Layout>
         </Layout>
       </div>
