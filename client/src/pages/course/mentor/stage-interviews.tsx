@@ -1,6 +1,6 @@
 import { Table, Tabs, message } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
-import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
+import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
 import * as React from 'react';
@@ -97,6 +97,18 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                     dataIndex: 'student.totalScore',
                     width: 100,
                     sorter: numberSorter('student.totalScore'),
+                  },
+                  {
+                    title: 'Is Student Active',
+                    dataIndex: 'student.isActive',
+                    render: boolIconRenderer,
+                    width: 100,
+                  },
+                  {
+                    title: 'Interview Completed',
+                    dataIndex: 'isCompleted',
+                    render: boolIconRenderer,
+                    width: 100,
                   },
                   {
                     title: 'Actions',

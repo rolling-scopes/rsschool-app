@@ -22,8 +22,6 @@ const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
 const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 
 export const getStageInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  // const userId = ctx.state!.user.id;
-  // const courseId: number = Number(ctx.params.courseId);
   const stageId: number = Number(ctx.params.id);
   const result = await getStageInterviewsPairs(stageId);
   setResponse(ctx, OK, result);

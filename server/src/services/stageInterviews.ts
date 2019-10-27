@@ -14,6 +14,8 @@ export async function getStageInterviewsPairs(stageId: number) {
     .addSelect([
       'mentor.id',
       'student.id',
+      'student.isExpelled',
+      'student.isFailed',
       'student.totalScore',
       'mentorUser.id',
       'mentorUser.githubId',
@@ -29,11 +31,13 @@ export async function getStageInterviewsPairs(stageId: number) {
   const result = stageInterviews.map(it => {
     return {
       id: it.id,
+      isCompleted: it.isCompleted,
       student: {
         id: it.student.id,
         githubId: it.student.user.githubId,
         locationName: it.student.user.locationName,
         totalScore: it.student.totalScore,
+        isActive: !it.student.isExpelled && !it.student.isFailed,
       },
       mentor: {
         id: it.mentor.id,

@@ -6,6 +6,7 @@ import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
 import { StudentBasic } from '../../../../../common/models';
+import _ from 'lodash';
 
 import { PersonSelect } from 'components/PersonSelect';
 
@@ -37,7 +38,7 @@ class ExpelPage extends React.Component<Props, State> {
         this.courseService.getMentorStudents(courseId),
         this.courseService.getInterviewStudents(courseId),
       ]);
-      students = mentorStudents.concat(interviewStudents);
+      students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
     }
     const activeStudents = students.filter(student => student.isActive);
     this.setState({ students: activeStudents });

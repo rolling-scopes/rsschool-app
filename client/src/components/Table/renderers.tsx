@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Tag } from 'antd';
+import { Tag, Icon } from 'antd';
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -15,6 +15,14 @@ export function dateTimeRenderer(value: string) {
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
+}
+
+export function boolIconRenderer(value: string) {
+  return value ? (
+    <Icon title={(!!value).toString()} type="check-circle" theme="filled" />
+  ) : (
+    <Icon title={(!!value).toString()} type="minus-circle" />
+  );
 }
 
 export function tagsRenderer(values: string[]) {
