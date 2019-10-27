@@ -23,10 +23,8 @@ export function setupPassport(logger: ILogger) {
       (accessToken: string, _, profile, cb) => {
         logger.info('token', { accessToken });
         const github = new octokit();
-        github.authenticate({
-          token: accessToken,
-          type: 'oauth',
-        });
+        github.authenticate({ token: accessToken, type: 'oauth' });
+
         logger.info('request users');
         github.users
           .getTeams({})

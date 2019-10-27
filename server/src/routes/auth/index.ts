@@ -1,4 +1,4 @@
-import { FORBIDDEN, OK } from 'http-status-codes';
+import { FORBIDDEN } from 'http-status-codes';
 import passport from 'koa-passport';
 import Router from 'koa-router';
 
@@ -17,11 +17,6 @@ export function authRoute() {
     } else {
       ctx.status = FORBIDDEN;
     }
-  });
-
-  router.get('/success', ctx => {
-    ctx.status = OK;
-    ctx.body = ctx.state.user;
   });
 
   return router;

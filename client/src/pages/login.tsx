@@ -23,6 +23,7 @@ class LoginPage extends React.PureComponent {
             }
             actions={[
               <Button
+                key={'github'}
                 onClick={() => (window.location.href = '/api/auth/github')}
                 size="large"
                 icon="github"

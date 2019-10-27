@@ -4,6 +4,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
 import serve from 'koa-static';
+import koaJwt from 'koa-jwt';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';
@@ -36,12 +37,13 @@ export class App {
 
     this.koa.keys = [config.sessionKey];
 
-    const maxAge = 1000 * 60 * 60 * 24 * 2; // 2 days
-    this.koa.use(session({ maxAge }, this.koa));
+    this.koa.use(session({ maxAge: config.sessionAge }, this.koa));
 
     const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
     this.koa.use(passport.initialize());
     this.koa.use(passport.session());
+
+    this.koa.use(koaJwt({ key: 'user', secret: config.sessionKey, passthrough: true }));
 
     const routes = routesMiddleware(this.appLogger);
 
