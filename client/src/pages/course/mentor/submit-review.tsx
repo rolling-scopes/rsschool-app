@@ -58,7 +58,7 @@ class TaskScorePage extends React.Component<Props, State> {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const courseTaskId = getFieldValue('courseTaskId');
     const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
-    const maxScore = (courseTask && courseTask.maxScore) || 100;
+    const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
     return (
       <>
         <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
@@ -90,7 +90,7 @@ class TaskScorePage extends React.Component<Props, State> {
                 ],
               })(<Input size="large" />)}
             </Form.Item>
-            <Form.Item label={`Score (Max ${maxScore} points)`}>
+            <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
               {field('score', {
                 rules: [
                   {
