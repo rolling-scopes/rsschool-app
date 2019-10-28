@@ -56,6 +56,9 @@ class TaskScorePage extends React.Component<Props, State> {
 
   render() {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
+    const courseTaskId = getFieldValue('courseTaskId');
+    const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
+    const maxScore = (courseTask && courseTask.maxScore) || 100;
     return (
       <>
         <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
@@ -74,7 +77,7 @@ class TaskScorePage extends React.Component<Props, State> {
             </Form.Item>
             <Form.Item label="Student">
               {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <PersonSelect data={this.state.students} disabled={!getFieldValue('courseTaskId')} />,
+                <PersonSelect data={this.state.students} disabled={!courseTaskId} />,
               )}
             </Form.Item>
             <Form.Item label="Github Pull Request URL">
@@ -87,7 +90,7 @@ class TaskScorePage extends React.Component<Props, State> {
                 ],
               })(<Input size="large" />)}
             </Form.Item>
-            <Form.Item label="Score">
+            <Form.Item label={`Score (Max ${maxScore} points)`}>
               {field('score', {
                 rules: [
                   {
@@ -95,7 +98,7 @@ class TaskScorePage extends React.Component<Props, State> {
                     message: 'Please enter task score',
                   },
                 ],
-              })(<InputNumber size="large" step={1} />)}
+              })(<InputNumber size="large" step={1} min={0} max={maxScore} />)}
             </Form.Item>
             <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
             <Button size="large" type="primary" htmlType="submit">

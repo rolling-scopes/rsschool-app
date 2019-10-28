@@ -37,7 +37,7 @@ export class App {
 
     this.koa.keys = [config.sessionKey];
 
-    this.koa.use(session({ maxAge: config.sessionAge }, this.koa));
+    this.koa.use(session({ maxAge: config.sessionAge, renew: true }, this.koa));
 
     const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
     this.koa.use(passport.initialize());
