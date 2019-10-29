@@ -190,6 +190,8 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
       'user.lastName',
       'user.locationName',
       'stageInterview.id',
+      'stageInterview.isGoodCandidate',
+      'stageInterview.isCompleted',
     ])
     .where(
       [
