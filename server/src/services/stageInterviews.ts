@@ -207,16 +207,20 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
     .orderBy('student.totalScore', 'DESC')
     .getMany();
 
-  const result = students.map(student => {
-    return {
-      id: student.id,
-      githubId: student.user.githubId,
-      firstName: student.user.firstName,
-      lastName: student.user.lastName,
-      locationName: student.user.locationName,
-      totalScore: student.totalScore,
-      isGoodCandidate: Array.isArray(student.stageInterviews) && student.stageInterviews.length > 0,
-    };
-  });
+  const result = students
+    .filter(s => {
+      return !s.stageInterviews || s.stageInterviews.every(i => i.isCompleted);
+    })
+    .map(student => {
+      return {
+        id: student.id,
+        githubId: student.user.githubId,
+        firstName: student.user.firstName,
+        lastName: student.user.lastName,
+        locationName: student.user.locationName,
+        totalScore: student.totalScore,
+        isGoodCandidate: Array.isArray(student.stageInterviews) && student.stageInterviews.some(i => i.isCompleted),
+      };
+    });
   return result;
 }
