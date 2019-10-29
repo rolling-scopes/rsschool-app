@@ -17,6 +17,7 @@ import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { StudentFeedback } from './studentFeedback';
+import { StageInterview } from './stageInterview';
 
 @Entity()
 export class Student {
@@ -51,6 +52,9 @@ export class Student {
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.student, { nullable: true })
   taskResults: TaskResult[] | null;
+
+  @OneToMany(_ => StageInterview, (stageInterview: StageInterview) => stageInterview.student, { nullable: true })
+  stageInterviews: StageInterview[] | null;
 
   @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.student, { nullable: true })
   taskChecker: TaskChecker[] | null;

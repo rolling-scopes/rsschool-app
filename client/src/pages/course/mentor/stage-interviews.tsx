@@ -1,4 +1,4 @@
-import { Table, Tabs, message } from 'antd';
+import { Table, Tabs, message, Tag } from 'antd';
 import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -145,6 +145,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                       </div>
                     ),
                     ...getColumnSearchProps('githubId'),
+                  },
+                  {
+                    title: 'Feedback',
+                    dataIndex: 'isGoodCandidate',
+                    width: 180,
+                    render: (isGoodCandidate: boolean) => isGoodCandidate && <Tag color="blue">Good Student</Tag>,
                   },
                   {
                     title: 'Name',

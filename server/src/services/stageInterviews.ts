@@ -177,20 +177,30 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
-    .addSelect(['user.id', 'user.githubId', 'user.firstName', 'user.lastName', 'user.locationName'])
     .leftJoin(
-      StageInterview,
+      'student.stageInterviews',
       'stageInterview',
       '"stageInterview"."studentId" = student.id AND "stageInterview"."stageId" = :stageId',
       { stageId },
     )
+    .addSelect([
+      'user.id',
+      'user.githubId',
+      'user.firstName',
+      'user.lastName',
+      'user.locationName',
+      'stageInterview.id',
+    ])
     .where(
       [
         `student.courseId = :courseId`,
         `student."isFailed" = false`,
         `student."isExpelled" = false`,
         `student."totalScore" > 0`,
-        `"stageInterview".id IS NULL`,
+        `(${[
+          `"stageInterview".id IS NULL`,
+          `("stageInterview".decision = \'no\' AND "stageInterview"."isGoodCandidate" = true)`,
+        ].join(' OR ')})`,
       ].join(' AND '),
       { courseId },
     )
@@ -205,6 +215,7 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
       lastName: student.user.lastName,
       locationName: student.user.locationName,
       totalScore: student.totalScore,
+      isGoodCandidate: Array.isArray(student.stageInterviews) && student.stageInterviews.length > 0,
     };
   });
   return result;
