@@ -101,12 +101,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                   {
                     title: 'Is Student Active',
                     dataIndex: 'student.isActive',
+                    sorter: stringSorter('student.isActive'),
                     render: boolIconRenderer,
                     width: 100,
                   },
                   {
                     title: 'Interview Completed',
                     dataIndex: 'isCompleted',
+                    sorter: stringSorter('isCompleted'),
                     render: boolIconRenderer,
                     width: 100,
                   },
