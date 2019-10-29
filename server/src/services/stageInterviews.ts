@@ -173,16 +173,11 @@ export async function getInterviewsByStudent(courseId: number, studentId: number
   return result;
 }
 
-export async function getAvailableStudentsForStageInterview(courseId: number, stageId: number) {
+export async function getAvailableStudentsForStageInterview(courseId: number, _: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
-    .leftJoin(
-      'student.stageInterviews',
-      'stageInterview',
-      '"stageInterview"."studentId" = student.id AND "stageInterview"."stageId" = :stageId',
-      { stageId },
-    )
+    .leftJoin('student.stageInterviews', 'stageInterview')
     .addSelect([
       'user.id',
       'user.githubId',
@@ -196,13 +191,10 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
     .where(
       [
         `student.courseId = :courseId`,
-        `student."isFailed" = false`,
-        `student."isExpelled" = false`,
-        `student."totalScore" > 0`,
-        `(${[
-          `"stageInterview".id IS NULL`,
-          `("stageInterview".decision = \'no\' AND "stageInterview"."isGoodCandidate" = true)`,
-        ].join(' OR ')})`,
+        `student.isFailed = false`,
+        `student.isExpelled = false`,
+        `student.totalScore > 0`,
+        `student.mentorId IS NULL`,
       ].join(' AND '),
       { courseId },
     )
