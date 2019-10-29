@@ -57,7 +57,7 @@ export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterConte
 
       const repository = getRepository(StageInterview);
       const existingInterview = await repository.findOne({
-        where: { studentId: student.id, stageId },
+        where: { studentId: student.id, stageId, isCompleted: false },
       });
 
       if (existingInterview) {
