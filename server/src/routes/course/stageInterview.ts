@@ -60,7 +60,7 @@ export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterConte
         where: { studentId: student.id, stageId, isCompleted: false },
       });
 
-      if (existingInterview) {
+      if (existingInterview && !existingInterview.isCompleted) {
         existingInterview.mentorId = mentor.id;
         const interview = await repository.save(existingInterview);
         result.push(interview);
