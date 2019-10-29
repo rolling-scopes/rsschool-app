@@ -209,7 +209,7 @@ export async function getAvailableStudentsForStageInterview(courseId: number, st
 
   const result = students
     .filter(s => {
-      return !s.stageInterviews || s.stageInterviews.every(i => i.isCompleted);
+      return !s.stageInterviews || s.stageInterviews.length === 0 || s.stageInterviews.every(i => i.isCompleted);
     })
     .map(student => {
       return {
