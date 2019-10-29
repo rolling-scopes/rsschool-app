@@ -114,7 +114,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                     title: 'Actions',
                     dataIndex: 'actions',
                     render: (_, record) => {
-                      if (record.mentor.githubId === this.props.session.githubId) {
+                      if (record.mentor.githubId === this.props.session.githubId || this.props.session.isAdmin) {
                         return <a onClick={() => this.deleteInterview(record)}>Cancel</a>;
                       }
                       return null;
