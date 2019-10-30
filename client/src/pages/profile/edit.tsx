@@ -88,6 +88,7 @@ class EditProfilePage extends React.Component<Props, State> {
           locationName: !location.key ? values.otherLocationName : location.label,
           firstName: values.firstName,
           lastName: values.lastName,
+          englishLevel: values.englishLevel,
           contactsTelegram: values.contactsTelegram,
           contactsSkype: values.contactsSkype,
           contactsPhone: values.contactsPhone,
@@ -129,6 +130,7 @@ class EditProfilePage extends React.Component<Props, State> {
       lastName: values.lastName,
       locationId: values.locationId,
       locationName: values.locationName,
+      englishLevel: values.englishLevel,
       primaryEmail: values.primaryEmail,
       tshirtSize: values.tshirtSize,
     };
@@ -187,6 +189,15 @@ class EditProfilePage extends React.Component<Props, State> {
                       { pattern: englishNamePattern, message: 'Last name should be in English' },
                     ],
                   })(<Input placeholder="Varabei" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
+              <Form.Item label="Estimated English Level">
+                  {field('englishLevel', {
+                    initialValue: initialData.englishLevel,
+                  })(<Input />)}
                 </Form.Item>
               </Col>
             </Row>
