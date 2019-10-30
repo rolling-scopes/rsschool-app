@@ -24,6 +24,18 @@ export class UserService {
     }
   }
 
+  async extendedUserSearch(query: string | null) {
+    try {
+      if (!query) {
+        return [];
+      }
+      const response = await axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
+      return response.data.data;
+    } catch (e) {
+      return [];
+    }
+  }
+
   async submitPrivateFeedback(data: { toUserId: number; comment: string }) {
     await axios.post(`/api/feedback/private`, {
       toUserId: Number(data.toUserId),

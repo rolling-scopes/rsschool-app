@@ -35,7 +35,23 @@ const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, result);
 };
 
-const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) => {
+type SearchConfigItem = {
+  field: string;
+  isCaseSensitive: boolean;
+};
+
+const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: string): string =>
+  searchConfig
+    .map(
+      ({ field, isCaseSensitive }: SearchConfigItem) =>
+        `user.${field} ${isCaseSensitive ? 'like' : 'ilike'} ${parameterName}`,
+    )
+    .join(' OR ');
+
+const generateResponse = (user: any, searchConfig: SearchConfigItem[]) =>
+  searchConfig.reduce((response: any, { field }: SearchConfigItem) => ({ ...response, [field]: user[field] }), {});
+
+const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (ctx: Router.RouterContext) => {
   const searchText = ctx.params.searchText;
   if (!searchText) {
     setResponse(ctx, OK, []);
@@ -44,23 +60,21 @@ const getSearchByGithubId = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const entities = await getRepository(User)
     .createQueryBuilder('user')
-    .where('user.githubId like :text OR user.firstName ilike :text OR user.lastName ilike :text', {
+    .where(generateSearchString(searchConfig, ':text'), {
       text: searchText.toLowerCase() + '%',
     })
     .limit(20)
     .getMany();
 
-  setResponse(
-    ctx,
-    OK,
-    entities.map(user => ({
-      id: user.id,
-      githubId: user.githubId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    })),
-  );
+  setResponse(ctx, OK, entities.map(user => generateResponse(user, searchConfig)));
 };
+
+const getSearchByGithubId = (logger: ILogger) =>
+  getSearch(logger)([
+    { field: 'githubId', isCaseSensitive: true },
+    { field: 'firstName', isCaseSensitive: false },
+    { field: 'lastName', isCaseSensitive: false },
+  ]);
 
 const postUserActivist = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body as { activist: boolean };
@@ -125,6 +139,18 @@ export function usersRoute(logger: ILogger) {
    *          description: operation status
    */
   router.get('/search/:searchText', guard, getSearchByGithubId(logger));
+
+  const searchConfig = [
+    { field: 'githubId', isCaseSensitive: true },
+    { field: 'contactsTelegram', isCaseSensitive: true },
+    { field: 'contactsSkype', isCaseSensitive: true },
+    { field: 'contactsEpamEmail', isCaseSensitive: true },
+    { field: 'primaryEmail', isCaseSensitive: true },
+    { field: 'firstName', isCaseSensitive: false },
+    { field: 'lastName', isCaseSensitive: false },
+  ];
+
+  router.get('/search/extended/:searchText', guard, getSearch(logger)(searchConfig));
 
   return router;
 }

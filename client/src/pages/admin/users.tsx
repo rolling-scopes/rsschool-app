@@ -27,7 +27,7 @@ class Users extends React.Component<Props, State> {
     if (!values.searchText) {
       return;
     }
-    const users = await this.userService.searchUser(values.searchText);
+    const users = await this.userService.extendedUserSearch(values.searchText);
     this.setState({ users });
   };
 
@@ -50,7 +50,9 @@ class Users extends React.Component<Props, State> {
                     </Col>
                     <Col span={6}>
                       <Form.Item>
-                        <Button type="primary">Search</Button>
+                        <Button type="primary" htmlType="submit">
+                          Search
+                        </Button>
                       </Form.Item>
                     </Col>
                   </Row>
@@ -67,7 +69,15 @@ class Users extends React.Component<Props, State> {
                             <List.Item.Meta
                               avatar={<GithubAvatar size={48} githubId={user.githubId} />}
                               title={<a href={`/profile?githubId=${user.githubId}`}>{user.githubId}</a>}
-                              description={`${user.firstName} ${user.lastName}`}
+                              description={
+                                <div>
+                                  <div>{`${user.firstName} ${user.lastName}`}</div>
+                                  <div>{`Primary email: ${user.primaryEmail || ''}`}</div>
+                                  <div>{`EPAM email: ${user.contactsEpamEmail || ''}`}</div>
+                                  <div>{`Skype: ${user.contactsSkype || ''}`}</div>
+                                  <div>{`Telegram: ${user.contactsTelegram || ''}`}</div>
+                                </div>
+                              }
                             />
                           </List.Item>
                         )}
