@@ -1,4 +1,5 @@
 .vscode
+yarn-error.log
 client/dist
 client/node_modules
 client/src/.next
