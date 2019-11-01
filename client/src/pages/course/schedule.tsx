@@ -23,6 +23,14 @@ enum EventTypeColor {
   test = 'green',
   newtask = 'green',
   lecture = 'blue',
+  lecture_online = 'blue',
+  lecture_offline = 'blue',
+  lecture_mixed = 'blue',
+  lecture_self_study = 'blue',
+  info = '#ff7b00',
+  warmup = 'green',
+  meetup = '#bde04a',
+  workshop = '#bde04a',
 }
 
 const TaskTypes = {
@@ -32,12 +40,22 @@ const TaskTypes = {
   lecture: 'lecture',
 };
 
+const EventTypeToName = {
+  lecture_online: 'online lecture',
+  lecture_offline: 'offline lecture',
+  lecture_mixed: 'mixed lecture',
+  lecture_self_study: 'self study',
+  warmup: 'warm-up',
+}
+
 class SchedulePage extends React.Component<Props, State> {
   state: State = {
     data: [],
   };
 
   startOfToday = moment().startOf('day');
+
+ readonly eventTypeToName = EventTypeToName;
 
   private courseService = new CourseService();
 
@@ -118,7 +136,8 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Type',
               width: 100,
               dataIndex: 'event.type',
-              render: (value: keyof typeof EventTypeColor) => <Tag color={EventTypeColor[value]}>{value}</Tag>,
+              render: (value: keyof typeof EventTypeColor) =>
+                <Tag color={EventTypeColor[value]}>{this.eventTypeToName[value] || value}</Tag>,
             },
             {
               title: 'Place',

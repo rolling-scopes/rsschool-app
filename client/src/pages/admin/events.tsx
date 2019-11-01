@@ -134,8 +134,14 @@ class EventsPage extends React.Component<Props, State> {
               rules: [{ required: true, message: 'Please select a type' }],
             })(
               <Select>
-                <Select.Option value="lecture">Lecture</Select.Option>
+                <Select.Option value="lecture_online">Online Lecture</Select.Option>
+                <Select.Option value="lecture_offline">Offline Lecture</Select.Option>
+                <Select.Option value="lecture_mixed">Online/Offline Lecture</Select.Option>
+                <Select.Option value="lecture_self_study">Self-studying</Select.Option>
+                <Select.Option value="warmup">Warm-up</Select.Option>
+                <Select.Option value="info">Info (additional announcements)</Select.Option>
                 <Select.Option value="workshop">Workshop</Select.Option>
+                <Select.Option value="meetup">Meetup</Select.Option>
               </Select>,
             )}
           </Form.Item>
