@@ -1,9 +1,9 @@
 import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, PersonSelect, withSession } from 'components';
+import { Header, UserSearch, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
-import { AssignedStudent, CourseService, CourseTask } from 'services/course';
+import { CourseService, CourseTask } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
 import { StudentBasic } from '../../../../../common/models';
@@ -25,11 +25,7 @@ class TaskScorePage extends React.Component<Props, State> {
     courseTasks: [],
   };
 
-  allStudents: {
-    students: StudentBasic[];
-    assignedStudents: AssignedStudent[];
-  } | null = null;
-  courseService = new CourseService();
+  private courseService = new CourseService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -37,21 +33,12 @@ class TaskScorePage extends React.Component<Props, State> {
     const isCourseManager = roles[courseId] === 'coursemanager';
     const isPowerMentor = isAdmin || isCourseManager;
 
-    const students = isPowerMentor
-      ? this.courseService.getCourseStudents(courseId, true).then(students => ({
-          students,
-          assignedStudents: [],
-        }))
-      : this.courseService.getAllMentorStudents(courseId);
-
-    const [allStudents, courseTasks] = await Promise.all([students, this.courseService.getCourseTasks(courseId)]);
-    this.allStudents = allStudents;
-
-    const filteredCourseTasks = courseTasks
+    const { students } = await this.courseService.getAllMentorStudents(courseId);
+    const courseTasks = (await this.courseService.getCourseTasks(courseId))
       .sort(sortTasksByEndDate)
       .filter(task => task.studentEndDate && task.verification !== 'auto' && !task.useJury);
 
-    this.setState({ isPowerMentor, courseTasks: filteredCourseTasks });
+    this.setState({ isPowerMentor, students, courseTasks });
   }
 
   render() {
@@ -77,7 +64,11 @@ class TaskScorePage extends React.Component<Props, State> {
             </Form.Item>
             <Form.Item label="Student">
               {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <PersonSelect data={this.state.students} disabled={!courseTaskId} />,
+                <UserSearch
+                  defaultValues={this.state.students}
+                  disabled={!courseTaskId}
+                  searchFn={this.loadStudents}
+                />,
               )}
             </Form.Item>
             <Form.Item label="Github Pull Request URL">
@@ -110,25 +101,18 @@ class TaskScorePage extends React.Component<Props, State> {
     );
   }
 
+  private loadStudents = async (searchText: string) => this.state.isPowerMentor
+    ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
+    : this.state.students
+      .filter(({ githubId, firstName, lastName }) => `${githubId} ${firstName} ${lastName}`
+      .match(searchText));
+
   private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
     const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
-    if (courseTask == null || this.allStudents == null) {
+    if (courseTask === null) {
       return;
     }
-    if (this.state.isPowerMentor) {
-      this.setState({ students: this.allStudents.students });
-      return;
-    }
-    if (courseTask.checker !== 'mentor') {
-      this.setState({
-        students: this.allStudents.assignedStudents
-          .filter(s => s.courseTaskId === courseTaskId)
-          .filter(student => student.isActive),
-      });
-      return;
-    }
-    this.setState({ students: this.allStudents.students.filter(student => student.isActive) });
   };
 
   private handleSubmit = async (e: any) => {

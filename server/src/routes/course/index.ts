@@ -16,7 +16,7 @@ import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores } fr
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
-import { getStudents, postStudents } from './students';
+import { getStudents, postStudents, searchCourseStudent } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
 import { getCourseEvents, getCourseEventsCalendar } from './events';
@@ -108,6 +108,9 @@ export function courseRoute(logger: ILogger) {
    *          description: List of students
    */
   router.get('/:courseId/students', courseManagerGuard, validateCourseId, getStudents(logger));
+
+  router.get('/:courseId/students/search/:searchText',
+    courseManagerGuard, validateCourseId, searchCourseStudent(logger));
 
   /**
    * @swagger
