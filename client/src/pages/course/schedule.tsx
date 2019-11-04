@@ -20,7 +20,11 @@ interface State {
 
 enum EventTypeColor {
   deadline = 'red',
-  test = 'green',
+  test = '#63ab91',
+  jstask = 'green',
+  htmltask = 'green',
+  externaltask = 'green',
+  codejam = 'green',
   newtask = 'green',
   lecture = 'blue',
   lecture_online = 'blue',
@@ -28,9 +32,10 @@ enum EventTypeColor {
   lecture_mixed = 'blue',
   lecture_self_study = 'blue',
   info = '#ff7b00',
-  warmup = 'green',
+  warmup = '#63ab91',
   meetup = '#bde04a',
   workshop = '#bde04a',
+  interview = '#63ab91',
 }
 
 const TaskTypes = {
@@ -46,6 +51,10 @@ const EventTypeToName = {
   lecture_mixed: 'mixed lecture',
   lecture_self_study: 'self study',
   warmup: 'warm-up',
+  jstask: 'js task',
+  htmltask: 'html task',
+  codejam: 'code jam',
+  externaltask: 'external task',
 }
 
 class SchedulePage extends React.Component<Props, State> {
@@ -74,7 +83,7 @@ class SchedulePage extends React.Component<Props, State> {
               date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
               time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
               event: {
-                type: TaskTypes.newtask,
+                type: task.type,
                 name: task.name,
                 descriptionUrl: task.descriptionUrl,
               },
