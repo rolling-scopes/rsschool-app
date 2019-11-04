@@ -31,11 +31,16 @@ class ExpelPage extends React.Component<Props, State> {
     const courseId = this.props.course.id;
     const isPowerUser = this.courseService.isPowerUser(courseId, this.props.session);
 
-    const [mentorStudents, interviewStudents] = await Promise.all([
-      this.courseService.getMentorStudents(courseId),
-      this.courseService.getInterviewStudents(courseId),
-    ]);
-    const students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
+    let students: StudentBasic[] = [];
+    try {
+      const [mentorStudents, interviewStudents] = await Promise.all([
+        this.courseService.getMentorStudents(courseId),
+        this.courseService.getInterviewStudents(courseId),
+      ]);
+      students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
+    } catch (error) {
+      console.error(error);
+    }
 
     const activeStudents = students.filter(student => student.isActive);
     this.setState({ students: activeStudents, isPowerUser });
