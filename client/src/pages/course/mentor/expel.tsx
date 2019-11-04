@@ -1,14 +1,12 @@
 import { Button, Form, Input, message, Col, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header } from 'components/Header';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
 import { StudentBasic } from '../../../../../common/models';
+import { Header, UserSearch } from 'components';
 import _ from 'lodash';
-
-import { PersonSelect } from 'components/PersonSelect';
 
 type Props = {
   session: Session;
@@ -16,33 +14,38 @@ type Props = {
 } & FormComponentProps;
 
 type State = {
-  students: StudentBasic[];
   isLoading: boolean;
+  isPowerUser: boolean;
+  students: StudentBasic[];
 };
 
 class ExpelPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
+    isPowerUser: false,
     students: [],
   };
   private courseService = new CourseService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
-    let students: any = [];
     const isPowerUser = this.courseService.isPowerUser(courseId, this.props.session);
-    if (isPowerUser) {
-      students = await this.courseService.getCourseStudents(courseId, true);
-    } else {
-      const [mentorStudents, interviewStudents] = await Promise.all([
-        this.courseService.getMentorStudents(courseId),
-        this.courseService.getInterviewStudents(courseId),
-      ]);
-      students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
-    }
+
+    const [mentorStudents, interviewStudents] = await Promise.all([
+      this.courseService.getMentorStudents(courseId),
+      this.courseService.getInterviewStudents(courseId),
+    ]);
+    const students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
+
     const activeStudents = students.filter(student => student.isActive);
-    this.setState({ students: activeStudents });
+    this.setState({ students: activeStudents, isPowerUser });
   }
+
+  private loadStudents = async (searchText: string) => this.state.isPowerUser
+    ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
+    : this.state.students
+      .filter(({ githubId, firstName, lastName }) => `${githubId} ${firstName} ${lastName}`
+      .match(searchText))
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -76,7 +79,7 @@ class ExpelPage extends React.Component<Props, State> {
           <Form onSubmit={this.handleSubmit} layout="vertical">
             <Form.Item label="Student">
               {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <PersonSelect data={this.state.students} />,
+                <UserSearch defaultValues={this.state.students} searchFn={this.loadStudents} />,
               )}
             </Form.Item>
             <Form.Item label="Reason for expelling">

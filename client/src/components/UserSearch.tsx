@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Select } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from 'components';
 
 type Person = { id: number; githubId: string; firstName: string; lastName: string };
 
@@ -19,19 +19,18 @@ export class UserSearch extends React.Component<Props, State> {
     data: [],
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      data: props.defaultValues || [],
-    };
-  }
-
   handleSearch = async (value: string) => {
     if (value) {
       const data = await this.props.searchFn(value);
       this.setState({ data });
     } else {
-      this.setState({ data: [] });
+      this.setState({ data: this.props.defaultValues || [] });
+    }
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.defaultValues !== this.props.defaultValues) {
+      this.setState({ data: this.props.defaultValues || [] });
     }
   };
 
@@ -42,11 +41,11 @@ export class UserSearch extends React.Component<Props, State> {
         showSearch
         defaultValue={undefined}
         defaultActiveFirstOption={false}
-        showArrow={false}
+        showArrow={this.props.defaultValues ? Boolean(this.props.defaultValues.length) : false}
         filterOption={false}
         onSearch={this.handleSearch}
         size="large"
-        placeholder="Search..."
+        placeholder={this.props.defaultValues ? "Select..." : "Search..."}
         notFoundContent={null}
       >
         {this.state.data.map(person => (

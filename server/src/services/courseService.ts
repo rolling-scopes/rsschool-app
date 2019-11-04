@@ -194,6 +194,7 @@ export async function getStudentsByMentorId(mentorId: number) {
     .innerJoinAndSelect('student.mentor', 'mentor')
     .innerJoinAndSelect('mentor.user', 'mentorUser')
     .where('"student"."mentorId" = :mentorId', { mentorId })
+    .andWhere('"student"."isExpelled" = false')
     .getMany();
 
   const students = records.map(record => {
@@ -226,6 +227,7 @@ export async function getAssignedStudentsByMentorId(mentorId: number) {
     .innerJoinAndSelect('student.mentor', 'mentor')
     .innerJoinAndSelect('mentor.user', 'mentorUser')
     .where('"taskChecker"."mentorId" = :mentorId', { mentorId })
+    .andWhere('"student"."isExpelled" = false')
     .getMany();
 
   const students = records.map<AssignedStudent>(record => {

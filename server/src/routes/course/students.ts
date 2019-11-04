@@ -2,7 +2,7 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Student } from '../../models';
+import { User, Student } from '../../models';
 import { courseService, OperationResult, studentsService, userService } from '../../services';
 import { setResponse } from '../utils';
 
@@ -11,6 +11,29 @@ export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => 
   const status: string = ctx.query.status;
   const students = await courseService.getStudents(courseId, status === 'active');
   setResponse(ctx, OK, students);
+};
+
+export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const searchText = `${String(ctx.params.searchText)}%`;
+
+  const entities = (await getRepository(Student)
+    .createQueryBuilder('student')
+    .select(`"student"."id" AS "id",
+      "user"."githubId" AS "githubId",
+      "user"."firstName" AS "firstName",
+      "user"."lastName" AS "lastName"`)
+    .leftJoin(User, 'user', '"student"."userId" = "user"."id"')
+    .where(`"student"."courseId" = :courseId
+      AND "student"."isExpelled" = false
+      AND ("user"."githubId" ILIKE :searchText
+        OR "user"."firstName" ILIKE :searchText
+        OR "user"."lastName" ILIKE :searchText)
+    `, { courseId, searchText })
+    .limit(20)
+    .getRawMany());
+
+  setResponse(ctx, OK, entities);
 };
 
 type StudentInput = {

@@ -141,6 +141,20 @@ export class CourseService {
     return result.data.data;
   }
 
+  async searchCourseStudent(courseId: number, query: string | null) {
+    try {
+      if (!query) {
+        return [];
+      }
+      const response = await axios.get<{ data: StudentDetails[] }>(
+        `${this.host}/api/course/${courseId}/students/search/${query}`,
+      );
+      return response.data.data;
+    } catch (e) {
+      return [];
+    }
+  }
+
   async getCourseMentors(courseId: number) {
     const result = await axios.get<{ data: MentorDetails[] }>(`${this.host}/api/course/${courseId}/mentors`);
     return result.data.data;
