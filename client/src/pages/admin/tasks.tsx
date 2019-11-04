@@ -154,6 +154,21 @@ class TasksPage extends React.Component<Props, State> {
               <Checkbox>Github Pull Request required</Checkbox>,
             )}
           </Form.Item>
+          <Form.Item label="Task Type">
+            {field<Event>('type', {
+              initialValue: modalData.type,
+              rules: [{ required: true, message: 'Please select a type' }],
+            })(
+              <Select>
+                <Select.Option value="jstask">JS task</Select.Option>
+                <Select.Option value="htmltask">HTML task</Select.Option>
+                <Select.Option value="externaltask">External task</Select.Option>
+                <Select.Option value="test">Test</Select.Option>
+                <Select.Option value="codejam">Code Jam</Select.Option>
+                <Select.Option value="interview">Interview</Select.Option>
+              </Select>,
+            )}
+          </Form.Item>
           <Form.Item label="Verification">
             {field('verification', {
               initialValue: modalData.verification || 'manual',
@@ -164,20 +179,6 @@ class TasksPage extends React.Component<Props, State> {
               </Radio.Group>,
             )}
           </Form.Item>
-          {isAutoTask && (
-            <Form.Item label="Type">
-              {field('type', {
-                initialValue: modalData.type,
-              })(
-                <Select placeholder="Please select a type">
-                  <Select.Option value="jstask">JS Task</Select.Option>
-                  <Select.Option value="htmltask">HTML Task</Select.Option>
-                  <Select.Option value="external">External</Select.Option>
-                  <Select.Option value="test">Test</Select.Option>
-                </Select>,
-              )}
-            </Form.Item>
-          )}
           {isAutoTask && (
             <Form.Item label="Expected Github Repo Name">
               {field('githubRepoName', {
