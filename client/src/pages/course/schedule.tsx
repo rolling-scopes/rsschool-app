@@ -133,7 +133,7 @@ class SchedulePage extends React.Component<Props, State> {
         </Row>
         <Table
           className="m-3"
-          rowKey={record => (record.event.type === 'deadline' ? `${record.id}d` : record.id).toString()}
+          rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
           pagination={{ pageSize: 100 }}
           size="small"
           dataSource={this.state.data}
