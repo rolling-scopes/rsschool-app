@@ -43,7 +43,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     setResponse(ctx, BAD_REQUEST, 'invalid [studentId] or [courseTaskId]');
     return;
   }
-  if (!inputData.score) {
+  if (Number.isNaN(Number(inputData.score))) {
     setResponse(ctx, BAD_REQUEST, 'no score');
     return;
   }
