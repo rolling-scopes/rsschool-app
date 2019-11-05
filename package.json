@@ -19,7 +19,7 @@
   "devDependencies": {
     "concurrently": "^4.1.2",
     "prettier": "^1.18.2",
-    "serverless": "^1.50.0"
+    "typescript": "^3.6.0"
   },
   "prettier": {
     "trailingComma": "all",

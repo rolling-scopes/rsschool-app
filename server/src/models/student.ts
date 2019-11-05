@@ -89,6 +89,9 @@ export class Student {
   cvUrl: string;
 
   @Column({ nullable: true })
+  repository: string;
+
+  @Column({ nullable: true })
   hiredById: string;
 
   @Column({ nullable: true })

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Table, Typography, Statistic, Divider } from 'antd';
-import { Header, withSession, LoadingScreen, GithubAvatar } from 'components';
+import { Table, Typography, Statistic, Divider, Button } from 'antd';
+import { Header, withSession, LoadingScreen, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
-import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
+import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
@@ -37,7 +37,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     this.setState({ isLoading: true });
 
     const courseId = this.props.course.id;
-    const courseStudents = await this.courseService.getCourseStudents(courseId);
+    const courseStudents = await this.courseService.getCourseStudentsWithDetails(courseId);
     let activeStudentCount = 0;
     const countries: Record<string, { count: number; totalCount: number }> = {};
 
@@ -107,19 +107,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 sorter: stringSorter('githubId'),
                 width: 120,
                 key: 'githubId',
-                render: (value: string) => (
-                  <div className="d-flex flex-row">
-                    <GithubAvatar githubId={value} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                  </div>
-                ),
+                render: (value: string) => <GithubUserLink value={value} />,
                 ...getColumnSearchProps('githubId'),
               },
               {
                 title: 'Name',
                 dataIndex: 'lastName',
                 key: 'lastName',
-                width: 150,
+                width: 200,
                 sorter: stringSorter('firstName'),
                 render: (_: any, record: StudentDetails) => `${record.firstName} ${record.lastName}`,
                 ...getColumnSearchProps('lastName'),
@@ -129,14 +124,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'mentor.githubId',
                 key: 'mentor.githubId',
                 width: 100,
-                render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
+                render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
                 ...getColumnSearchProps('mentor.githubId'),
               },
               {
                 title: 'Location',
                 dataIndex: 'locationName',
                 key: 'locationName',
-                width: 100,
+                width: 120,
                 sorter: stringSorter('locationName'),
                 ...getColumnSearchProps('locationName'),
               },
@@ -144,17 +139,39 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Country',
                 dataIndex: 'countryName',
                 key: 'countryName',
-                width: 100,
+                width: 80,
                 sorter: stringSorter('countryName'),
                 ...getColumnSearchProps('countryName'),
+              },
+              {
+                title: 'Screening Interview',
+                dataIndex: 'interviews',
+                width: 50,
+                render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
+              },
+              {
+                title: 'Repository',
+                dataIndex: 'repository',
+                key: 'repository',
+                sorter: stringSorter('repository'),
+                render: value => <Text strong>{value}</Text>,
               },
               {
                 title: 'Total',
                 dataIndex: 'totalScore',
                 key: 'totalScore',
-                width: 100,
+                width: 50,
                 sorter: numberSorter('totalScore'),
                 render: value => <Text strong>{value}</Text>,
+              },
+              {
+                title: 'Actions',
+                dataIndex: 'actions',
+                render: () => (
+                  <>
+                    <Button type="link">Create Repo</Button>
+                  </>
+                ),
               },
             ]}
           />

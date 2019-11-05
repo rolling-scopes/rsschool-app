@@ -33,7 +33,7 @@
     "tslint": "^5.15.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-loader": "^3.5.4",
-    "typescript": "^3.4.2",
+    "typescript": "^3.7.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",

@@ -13,6 +13,12 @@ export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => 
   setResponse(ctx, OK, students);
 };
 
+export const getStudentsWithDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const students = await courseService.getStudentsWithDetails(courseId);
+  setResponse(ctx, OK, students);
+};
+
 export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
   const searchText = `${String(ctx.params.searchText)}%`;

@@ -17,7 +17,7 @@ export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
 }
 
-export function boolIconRenderer(value: string) {
+export function boolIconRenderer(value: any) {
   return value ? (
     <Icon title={(!!value).toString()} type="check-circle" theme="filled" />
   ) : (

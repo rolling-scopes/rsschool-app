@@ -141,6 +141,13 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getCourseStudentsWithDetails(courseId: number) {
+    const result = await axios.get<{ data: StudentDetails[] }>(
+      `${this.host}/api/course/${courseId}/students/details`,
+    );
+    return result.data.data;
+  }
+
   async searchCourseStudent(courseId: number, query: string | null) {
     try {
       if (!query) {
@@ -312,6 +319,8 @@ export interface StudentDetails extends StudentBasic {
   countryName: string;
   locationName: string;
   totalScore: number;
+  repository: string;
+  interviews: { id: number; isCompleted: boolean }[];
 }
 
 export interface MentorDetails extends MentorBasic {

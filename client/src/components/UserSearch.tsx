@@ -45,7 +45,7 @@ export class UserSearch extends React.Component<Props, State> {
         filterOption={false}
         onSearch={this.handleSearch}
         size="large"
-        placeholder={this.props.defaultValues ? "Select..." : "Search..."}
+        placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? "Select..." : "Search..."}
         notFoundContent={null}
       >
         {this.state.data.map(person => (

@@ -35,6 +35,9 @@ export class Mentor {
   @Column()
   userId: number;
 
+  @Column({ default: false })
+  isExpelled: boolean;
+
   @OneToMany(_ => Student, student => student.mentor, { nullable: true })
   students: Student[] | null;
 

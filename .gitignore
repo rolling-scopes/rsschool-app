@@ -13,3 +13,4 @@ serverless/**/node_modules
 serverless/**/.serverless
 serverless/**/.build
 .idea
+.DS_Store

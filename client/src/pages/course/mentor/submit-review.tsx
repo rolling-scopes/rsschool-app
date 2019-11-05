@@ -33,7 +33,8 @@ class TaskScorePage extends React.Component<Props, State> {
     const isCourseManager = roles[courseId] === 'coursemanager';
     const isPowerMentor = isAdmin || isCourseManager;
 
-    const { students } = await this.courseService.getAllMentorStudents(courseId);
+    const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
+
     const courseTasks = (await this.courseService.getCourseTasks(courseId))
       .sort(sortTasksByEndDate)
       .filter(task => task.studentEndDate && task.verification !== 'auto' && !task.useJury);
@@ -101,11 +102,12 @@ class TaskScorePage extends React.Component<Props, State> {
     );
   }
 
-  private loadStudents = async (searchText: string) => this.state.isPowerMentor
-    ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-    : this.state.students
-      .filter(({ githubId, firstName, lastName }) => `${githubId} ${firstName} ${lastName}`
-      .match(searchText));
+  private loadStudents = async (searchText: string) =>
+    this.state.isPowerMentor
+      ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
+      : this.state.students.filter(({ githubId, firstName, lastName }) =>
+          `${githubId} ${firstName} ${lastName}`.match(searchText),
+        );
 
   private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);

@@ -1,5 +1,5 @@
 import { Table, Tabs, message, Tag } from 'antd';
-import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
+import { Header, LoadingScreen, withSession, GithubUserLink } from 'components';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
@@ -66,24 +66,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                     title: 'Mentor Profile',
                     dataIndex: 'mentor.githubId',
                     sorter: stringSorter('mentor.githubId'),
-                    render: (value: string) => (
-                      <div className="d-flex flex-row">
-                        <GithubAvatar githubId={value} size={24} />
-                        &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                      </div>
-                    ),
+                    render: (value: string) => <GithubUserLink value={value} />,
                     ...getColumnSearchProps('mentor.githubId'),
                   },
                   {
                     title: 'Student Profile',
                     dataIndex: 'student.githubId',
                     sorter: stringSorter('student.githubId'),
-                    render: (value: string) => (
-                      <div className="d-flex flex-row">
-                        <GithubAvatar githubId={value} size={24} />
-                        &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                      </div>
-                    ),
+                    render: (value: string) => <GithubUserLink value={value} />,
                     ...getColumnSearchProps('student.githubId'),
                   },
                   {
@@ -138,12 +128,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                     dataIndex: 'githubId',
                     sorter: stringSorter('githubId'),
                     width: 180,
-                    render: (value: string) => (
-                      <div className="d-flex flex-row">
-                        <GithubAvatar githubId={value} size={24} />
-                        &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                      </div>
-                    ),
+                    render: (value: string) => <GithubUserLink value={value} />,
                     ...getColumnSearchProps('githubId'),
                   },
                   {
