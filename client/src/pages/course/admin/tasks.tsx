@@ -6,7 +6,7 @@ import { Header, withSession } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { CourseService, CourseTask } from 'services/course';
-import { formatDate } from 'services/formatter';
+import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, PageWithModalState } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
@@ -50,8 +50,8 @@ class CourseTasksPage extends React.Component<Props, State> {
       }
       const [startDate, endDate] = values.range || [null, null];
       const data = {
-        studentStartDate: startDate ? formatDate(startDate) : null,
-        studentEndDate: endDate ? formatDate(endDate) : null,
+        studentStartDate: startDate ? formatDateTime(startDate) : null,
+        studentEndDate: endDate ? formatDateTime(endDate) : null,
         taskId: values.taskId,
         stageId: values.stageId,
         taskOwnerId: values.taskOwnerId,
@@ -198,7 +198,7 @@ class CourseTasksPage extends React.Component<Props, State> {
                     ]
                   : null,
               rules: [{ required: true, type: 'array', message: 'Please enter start and end date' }],
-            })(<DatePicker.RangePicker />)}
+            })(<DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />)}
           </Form.Item>
           <Row gutter={24}>
             <Col span={12}>

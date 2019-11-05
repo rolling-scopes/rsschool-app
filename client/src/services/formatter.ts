@@ -4,6 +4,10 @@ export function formatDate(value: string) {
   return moment(value).format('YYYY-MM-DD');
 }
 
+export function formatDateTime(value: string) {
+  return moment(value).format('YYYY-MM-DD HH:mm');
+}
+
 export function formatTime(value: string) {
   return moment(value).format('HH:mm:ssZ');
 }
