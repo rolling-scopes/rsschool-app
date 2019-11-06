@@ -72,13 +72,10 @@ export async function getStageInterviewsByMentorId(stageId: number, githubId: st
     .innerJoin('mentor.user', 'mentorUser')
     .innerJoin('student.user', 'studentUser')
     .addSelect(['student.id', 'studentUser.firstName', 'studentUser.lastName', 'studentUser.githubId'])
-    .where(
-      `stage.id = :stageId
-      AND mentorUser.githubId = :githubId
-      AND "stageInterview"."isCompleted" = FALSE
-    `,
-      { stageId, githubId },
-    )
+    .where('stage.id = :stageId', { stageId })
+    .andWhere('"mentorUser"."githubId" = :githubId', { githubId })
+    .andWhere('"stageInterview"."isCompleted" = FALSE')
+    .andWhere('"student"."isExpelled" = FALSE')
     .getMany();
 
   const result = stageInterviews.map(it => {
