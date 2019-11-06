@@ -112,12 +112,7 @@ export function courseRoute(logger: ILogger) {
 
   router.get('/:courseId/students/details', courseManagerGuard, validateCourseId, getStudentsWithDetails(logger));
 
-  router.get(
-    '/:courseId/students/search/:searchText',
-    courseManagerGuard,
-    validateCourseId,
-    searchCourseStudent(logger),
-  );
+  router.get('/:courseId/students/search/:searchText', taskOwnerGuard, validateCourseId, searchCourseStudent(logger));
 
   /**
    * @swagger
@@ -304,7 +299,7 @@ export function courseRoute(logger: ILogger) {
    *        200:
    *          description: List of tasks object
    */
-  router.get('/:courseId/tasks', courseGuard, validateCourseId, getCourseTasks(logger));
+  router.get('/:courseId/tasks', guard, validateCourseId, getCourseTasks(logger));
 
   router.get('/:courseId/tasksTaskOwner', taskOwnerGuard, validateCourseId, getCourseTasksForTaskOwner(logger));
 

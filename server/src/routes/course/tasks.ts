@@ -4,6 +4,7 @@ import { Course, CourseTask, TaskChecker, TaskResult, Task, Stage } from '../../
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
+import { IUserSession } from '../../models/session';
 import { shuffleService } from '../../services';
 
 export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -80,6 +81,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
 };
 
 export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { isAdmin } = ctx.state!.user as IUserSession;
   const courseId: number = ctx.params.courseId;
   const taskOwnerId: number = ctx.state.user.id;
 
@@ -89,9 +91,9 @@ export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.Rou
     .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
     .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
     .leftJoin(Task, 'task', '"task"."id" = "courseTask"."taskId"')
-    .where(`"course"."id" = '${courseId}'`)
-    .andWhere(`"courseTask"."taskOwnerId" = '${taskOwnerId}'`)
+    .where(`"course"."id" = :courseId`, { courseId })
     .andWhere(`"courseTask"."checker" = 'taskOwner'`)
+    .andWhere(`("courseTask"."taskOwnerId" = :taskOwnerId OR :isAdmin = TRUE)`, { taskOwnerId, isAdmin })
     .getRawMany();
 
   setResponse(ctx, OK, courseTasks);

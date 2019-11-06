@@ -15,6 +15,7 @@ type State = {
   courseTasks: CourseTask[];
   isLoading: boolean;
   isPowerMentor: boolean;
+  courseTaskId: number | null;
 };
 
 class TaskScorePage extends React.Component<Props, State> {
@@ -23,6 +24,7 @@ class TaskScorePage extends React.Component<Props, State> {
     isPowerMentor: false,
     students: [],
     courseTasks: [],
+    courseTaskId: null,
   };
 
   private courseService = new CourseService();
@@ -31,18 +33,37 @@ class TaskScorePage extends React.Component<Props, State> {
     const courseId = this.props.course.id;
     const { isAdmin, roles } = this.props.session;
     const isCourseManager = roles[courseId] === 'coursemanager';
+    const isMentor = roles[courseId] === 'mentor';
     const isPowerMentor = isAdmin || isCourseManager;
+
+    const isCheckedByMentor = task => task.checker === 'mentor';
+    const isNotAutoChecked = task => task.verification !== 'auto';
+    const isCheckedByTaskOwner = task => task.checker === 'taskOwner';
+    const hasStudentEndDate = task => Boolean(task.studentEndDate);
+    const isNotUseJury = task => !task.useJury;
+
+    const isSumbitedByTaskOwner = task => this.isTaskOwner(task)
+      && isCheckedByTaskOwner(task);
+
+    const isSumbitedByMentor = task => hasStudentEndDate(task)
+      && isNotAutoChecked(task)
+      && isNotUseJury(task)
+      && isCheckedByMentor(task)
+      && (isMentor || isPowerMentor);
+
+    const isSumbitedByPowerAdmin = task => isPowerMentor
+      && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
 
     const courseTasks = (await this.courseService.getCourseTasks(courseId))
       .sort(sortTasksByEndDate)
-      .filter(task => task.studentEndDate && task.verification !== 'auto' && !task.useJury);
+      .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
 
     const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
 
     this.setState({ isPowerMentor, students, courseTasks });
   }
 
-  render() {
+render() {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const courseTaskId = getFieldValue('courseTaskId');
     const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
@@ -100,12 +121,29 @@ class TaskScorePage extends React.Component<Props, State> {
         </Col>
       </>
     );
-  }
+  };
 
-  private loadStudents = async (searchText: string) =>
-    this.state.isPowerMentor
+  private isTaskOwner = (task) => {
+    const courseId = this.props.course.id;
+    const { courseRoles } = this.props.session;
+
+    const { tasksIds = [] }: any = courseRoles
+      && courseRoles.taskOwnerRole
+      && courseRoles.taskOwnerRole.courses.find(course => course.id === courseId)
+      || {};
+
+    return tasksIds.includes(task.id);
+  };
+
+  private loadStudents = async (searchText: string) => {
+    const { isPowerMentor, courseTaskId, students } = this.state;
+
+    return isPowerMentor || this.isTaskOwner({ id: courseTaskId })
       ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-      : this.state.students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
+      : students
+        .filter(({ githubId, firstName, lastName }: any) => `${githubId} ${firstName} ${lastName}`
+        .match(searchText));
+  };
 
   private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
@@ -113,6 +151,7 @@ class TaskScorePage extends React.Component<Props, State> {
     if (courseTask === null) {
       return;
     }
+    this.setState({ courseTaskId });
   };
 
   private handleSubmit = async (e: any) => {
@@ -138,4 +177,4 @@ class TaskScorePage extends React.Component<Props, State> {
   };
 }
 
-export default withCourseData(withSession(Form.create()(TaskScorePage), 'mentor'));
+export default withCourseData(withSession(Form.create()(TaskScorePage)));
