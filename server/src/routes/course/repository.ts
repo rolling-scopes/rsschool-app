@@ -14,20 +14,36 @@ const teamsCache: Record<string, number | undefined> = {};
 const { appId, privateKey } = config.github;
 const app = new App({ id: Number(appId), privateKey });
 
+export const postRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId } = ctx.params as { courseId: number };
+  const result: { repository: string }[] = [];
+  const course = (await getRepository(Course).findOne(courseId))!;
+  const githubIds = await queryStudentGithubIds(courseId);
+  for await (const githubId of githubIds) {
+    const { repository } = await createRepository(course, githubId, logger);
+    result.push({ repository });
+  }
+  setResponse(ctx, OK, result);
+};
+
 export const postRepository = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as { courseId: number; githubId: string };
 
   const course = (await getRepository(Course).findOne(courseId))!;
+  const student = await createRepository(course, githubId, logger);
+  setResponse(ctx, OK, { repository: student.repository });
+};
+
+async function createRepository(course: Course, githubId: string, logger: ILogger) {
   const teamName = getTeamName(course);
   let teamId = teamsCache[teamName];
-
   const { org, installationId } = config.github;
   const installationAccessToken = await app.getInstallationAccessToken({
     installationId: Number(installationId),
   });
   const github = new octokit({ auth: `token ${installationAccessToken}` });
   if (!teamId) {
-    teamId = await createTeam(github, teamName, courseId, logger);
+    teamId = await createTeam(github, teamName, course.id, logger);
   }
   const repoName = getRepoName(githubId, course);
   logger.info(`creating ${repoName}`);
@@ -39,16 +55,17 @@ export const postRepository = (logger: ILogger) => async (ctx: Router.RouterCont
     gitignore_template: 'Node',
     description: `Private repository for @${githubId}`,
   });
-  logger.info(`adding team ${teamId}`);
-  await github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName });
-  logger.info(`adding user ${githubId}`);
-  await github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName });
-  const student = await queryStudentByGithubId(courseId, githubId);
+  logger.info(`adding team ${teamId} and user ${githubId}`);
+  await Promise.all([
+    github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
+    github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
+  ]);
+  const student = await queryStudentByGithubId(course.id, githubId);
   student.repository = response.data.html_url;
   logger.info({ repository: student.repository });
   await getRepository(Student).save(student);
-  setResponse(ctx, OK, { repository: student.repository });
-};
+  return student;
+}
 
 function getTeamName(course: Course) {
   return `mentors-${course.alias}`;
@@ -87,6 +104,21 @@ async function queryMentorsGithubIds(courseId: number) {
     .addSelect(['mentor.id', 'mentorUser.githubId'])
     .where('mentor.courseId = :courseId', { courseId })
     .andWhere('mentor.isExpelled = false')
+    .getMany();
+  return mentors.map(m => m.user.githubId);
+}
+
+async function queryStudentGithubIds(courseId: number) {
+  const mentors = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoin('student.user', 'studentUser')
+    .innerJoin('student.stageInterviews', 'stageInterview')
+    .addSelect(['student.id', 'studentUser.githubId'])
+    .where('student.courseId = :courseId', { courseId })
+    .andWhere('student.isExpelled = false AND student.isFailed = false')
+    .andWhere('student.mentorId IS NOT NULL')
+    .andWhere('student.repository IS NULL')
+    .andWhere('stageInterview.isCompleted = true')
     .getMany();
   return mentors.map(m => m.user.githubId);
 }

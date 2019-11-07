@@ -39,7 +39,7 @@ import {
   getCourseTasksForTaskOwner,
   postShuffleCourseTask,
 } from './tasks';
-import { postRepository } from './repository';
+import { postRepository, postRepositories } from './repository';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -598,6 +598,7 @@ export function courseRoute(logger: ILogger) {
   router.get('/:courseId/user/:githubId/interviews', guard, getStudentInterviews(logger));
 
   router.post('/:courseId/user/:githubId/repository', adminGuard, postRepository(logger));
+  router.post('/:courseId/repositories', adminGuard, postRepositories(logger));
 
   return router;
 }
