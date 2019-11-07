@@ -169,7 +169,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'actions',
                 render: (_, record: StudentDetails) => (
                   <>
-                    {!record.repository && (
+                    {!record.repository && record.isActive && (
                       <Button type="link" onClick={() => this.handleCreateRepo(record)}>
                         Create Repo
                       </Button>

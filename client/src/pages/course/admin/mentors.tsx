@@ -1,5 +1,5 @@
 import { Divider, Statistic, Table } from 'antd';
-import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
+import { GithubUserLink, Header, LoadingScreen, withSession } from 'components';
 import StudentsAddModal from 'components/StudentsAddModal';
 import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -77,9 +77,9 @@ class ScorePage extends React.Component<CoursePageProps, State> {
           <Table<MentorDetails>
             bordered
             className="m-3"
+            rowKey="githubId"
             pagination={{ pageSize: 100 }}
             size="small"
-            rowKey="githubId"
             dataSource={this.state.records}
             columns={[
               {
@@ -87,19 +87,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'githubId',
                 sorter: stringSorter('githubId'),
                 width: 120,
-                key: 'githubId',
-                render: (value: string) => (
-                  <div className="d-flex flex-row">
-                    <GithubAvatar githubId={value} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                  </div>
-                ),
+                render: (value: string) => <GithubUserLink value={value} />,
                 ...getColumnSearchProps('githubId'),
               },
               {
                 title: 'Name',
                 dataIndex: 'lastName',
-                key: 'lastName',
                 width: 150,
                 sorter: stringSorter('firstName'),
                 render: (_: any, record: MentorDetails) => `${record.firstName} ${record.lastName}`,
@@ -140,8 +133,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 width: 80,
               },
               {
-                title: 'Add Student',
-                dataIndex: 'githubId',
+                title: 'Students',
+                dataIndex: 'actions',
                 width: 50,
                 render: (value: string, mentor: MentorDetails) => (
                   <StudentsAddModal courseId={courseId} mentorsGithub={value} mentorId={mentor.id} />

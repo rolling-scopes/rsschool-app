@@ -64,7 +64,7 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
 
     return (
       <>
-        <Button type="danger" shape="circle" icon="plus" onClick={this.openModal} />
+        <Button type="link" shape="circle" icon="plus" onClick={this.openModal} />
         <Modal
           title={
             <>
