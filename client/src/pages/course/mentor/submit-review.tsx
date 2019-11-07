@@ -33,11 +33,11 @@ class TaskScorePage extends React.Component<Props, State> {
     const isCourseManager = roles[courseId] === 'coursemanager';
     const isPowerMentor = isAdmin || isCourseManager;
 
-    const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
-
     const courseTasks = (await this.courseService.getCourseTasks(courseId))
       .sort(sortTasksByEndDate)
       .filter(task => task.studentEndDate && task.verification !== 'auto' && !task.useJury);
+
+    const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
 
     this.setState({ isPowerMentor, students, courseTasks });
   }
