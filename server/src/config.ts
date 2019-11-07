@@ -36,6 +36,12 @@ export interface IConfig {
     password: string;
     database: string;
   };
+  github: {
+    org: string;
+    privateKey: string;
+    appId: string;
+    installationId: string;
+  };
   port: number;
   name: string;
   sessionAge: number;
@@ -66,6 +72,12 @@ export const config: IConfig = {
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',
     password: process.env.RSSHCOOL_API_ADMIN_PASSWORD || '',
+  },
+  github: {
+    org: 'rolling-scopes-school',
+    privateKey: process.env.RSSHCOOL_API_GITHUB_PRIVATE_KEY || '',
+    appId: process.env.RSSHCOOL_API_GITHUB_APP_ID || '',
+    installationId: process.env.RSSHCOOL_API_GITHUB_APP_INSTALL_ID || '',
   },
   roles: {
     adminTeams: ['rsschool-dev-team@rolling-scopes'],

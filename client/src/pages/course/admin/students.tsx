@@ -1,6 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Table, Typography, Statistic, Divider, Button } from 'antd';
+import { Table, Typography, Statistic, Divider, Button, message } from 'antd';
 import { Header, withSession, LoadingScreen, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
@@ -153,8 +153,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Repository',
                 dataIndex: 'repository',
                 key: 'repository',
-                sorter: stringSorter('repository'),
-                render: value => <Text strong>{value}</Text>,
+                width: 80,
+                render: value => (value ? <a href={value}>Link</a> : null),
               },
               {
                 title: 'Total',
@@ -167,9 +167,13 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Actions',
                 dataIndex: 'actions',
-                render: () => (
+                render: (_, record: StudentDetails) => (
                   <>
-                    <Button type="link">Create Repo</Button>
+                    {!record.repository && (
+                      <Button type="link" onClick={() => this.handleCreateRepo(record)}>
+                        Create Repo
+                      </Button>
+                    )}
                   </>
                 ),
               },
@@ -179,6 +183,18 @@ class ScorePage extends React.Component<CoursePageProps, State> {
         <style jsx>{styles}</style>
       </>
     );
+  }
+
+  private async handleCreateRepo({ githubId }: StudentDetails) {
+    try {
+      this.setState({ isLoading: true });
+      const { repository } = await this.courseService.createRepository(this.props.course.id, githubId);
+      const students = this.state.students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+      this.setState({ students, isLoading: false });
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+      this.setState({ isLoading: false });
+    }
   }
 }
 

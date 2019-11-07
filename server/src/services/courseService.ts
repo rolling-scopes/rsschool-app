@@ -38,6 +38,7 @@ export interface StudentDetails extends StudentBasic {
   locationName: string | null;
   countryName: string;
   interviews: { id: number; isCompleted: boolean }[];
+  repository: string;
 }
 
 export interface StudentWithResults extends StudentBasic {
@@ -94,6 +95,7 @@ export function convertToStudentDetails(student: Student): StudentDetails {
     locationName: user.locationName || null,
     countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
     interviews: _.isEmpty(student.stageInterviews) ? [] : student.stageInterviews!,
+    repository: student.repository,
   };
 }
 
@@ -162,6 +164,15 @@ export async function getMentorByGithubId(courseId: number, githubId: string): P
     })
     .getOne())!;
   return convertToMentorBasic(record);
+}
+
+export async function queryStudentByGithubId(courseId: number, githubId: string): Promise<Student> {
+  const record = (await studentQuery()
+    .innerJoin('student.user', 'user')
+    .where('user.githubId = :githubId', { githubId })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne())!;
+  return record;
 }
 
 export async function getStudent(studentId: number): Promise<StudentBasic> {

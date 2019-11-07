@@ -26,8 +26,8 @@ export function setupPassport(logger: ILogger) {
         github.authenticate({ token: accessToken, type: 'oauth' });
 
         logger.info('request users');
-        github.users
-          .getTeams({})
+        github.teams
+          .listForAuthenticatedUser()
           .then(teams =>
             createUser(profile as any, getTeamIds(teams.data)).then(result => {
               logger.info({ userId: result.id }, 'Created user');

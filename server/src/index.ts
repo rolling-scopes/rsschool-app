@@ -87,7 +87,7 @@ export class App {
   }
 
   public async startBackgroundJobs() {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'production') {
       return Promise.resolve();
     }
     return startBackgroundJobs(this.appLogger.child({ module: 'schedule' }));

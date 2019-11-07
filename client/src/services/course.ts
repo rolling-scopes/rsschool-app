@@ -290,6 +290,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async createRepository(courseId: number, githubId: string) {
+    const result = await axios.post(`/api/course/${courseId}/user/${githubId}/repository`);
+    return result.data.data as { repository: string };
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }
