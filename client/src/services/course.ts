@@ -142,9 +142,7 @@ export class CourseService {
   }
 
   async getCourseStudentsWithDetails(courseId: number) {
-    const result = await axios.get<{ data: StudentDetails[] }>(
-      `${this.host}/api/course/${courseId}/students/details`,
-    );
+    const result = await axios.get<{ data: StudentDetails[] }>(`${this.host}/api/course/${courseId}/students/details`);
     return result.data.data;
   }
 

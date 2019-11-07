@@ -28,7 +28,7 @@ export class UserSearch extends React.Component<Props, State> {
     }
   };
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (prevProps.defaultValues !== this.props.defaultValues) {
       this.setState({ data: this.props.defaultValues || [] });
     }
@@ -45,7 +45,7 @@ export class UserSearch extends React.Component<Props, State> {
         filterOption={false}
         onSearch={this.handleSearch}
         size="large"
-        placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? "Select..." : "Search..."}
+        placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? 'Select...' : 'Search...'}
         notFoundContent={null}
       >
         {this.state.data.map(person => (

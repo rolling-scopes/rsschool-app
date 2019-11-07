@@ -55,7 +55,7 @@ const EventTypeToName = {
   htmltask: 'html task',
   codejam: 'code jam',
   externaltask: 'external task',
-}
+};
 
 class SchedulePage extends React.Component<Props, State> {
   state: State = {
@@ -64,7 +64,7 @@ class SchedulePage extends React.Component<Props, State> {
 
   startOfToday = moment().startOf('day');
 
- readonly eventTypeToName = EventTypeToName;
+  readonly eventTypeToName = EventTypeToName;
 
   private courseService = new CourseService();
 
@@ -145,8 +145,9 @@ class SchedulePage extends React.Component<Props, State> {
               title: 'Type',
               width: 100,
               dataIndex: 'event.type',
-              render: (value: keyof typeof EventTypeColor) =>
-                <Tag color={EventTypeColor[value]}>{this.eventTypeToName[value] || value}</Tag>,
+              render: (value: keyof typeof EventTypeColor) => (
+                <Tag color={EventTypeColor[value]}>{this.eventTypeToName[value] || value}</Tag>
+              ),
             },
             {
               title: 'Place',

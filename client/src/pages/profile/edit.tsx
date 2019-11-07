@@ -194,7 +194,7 @@ class EditProfilePage extends React.Component<Props, State> {
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
-              <Form.Item label="Estimated English Level">
+                <Form.Item label="Estimated English Level">
                   {field('englishLevel', {
                     initialValue: initialData.englishLevel,
                   })(<Input />)}

@@ -14,8 +14,6 @@ const teamsCache: Record<string, number | undefined> = {};
 const { appId, privateKey } = config.github;
 const app = new App({ id: Number(appId), privateKey });
 
-
-
 export const postRepository = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as { courseId: number; githubId: string };
 
