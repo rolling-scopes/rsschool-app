@@ -13,8 +13,7 @@
     "start": "node server.js",
     "build": "next build src",
     "prod": "next start -p 8080",
-    "lint": "tslint -c tslint.json --project tsconfig.json",
-    "format": "prettier --config .prettierrc.json --write \"./src/**/*.ts\" \"./src/**/*.tsx\"",
+    "lint": "tslint -c tslint.json -p ./src/tsconfig.json",
     "test": "jest",
     "test-watch": "jest --watch"
   },

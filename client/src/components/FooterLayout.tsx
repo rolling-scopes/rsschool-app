@@ -28,7 +28,7 @@ class FooterLayout extends React.Component<any, any> {
             <object
               type="image/svg+xml"
               data="https://opencollective.com/rsschool/backers.svg?avatarHeight=28&button=false"
-            ></object>
+            />
           </p>
           <p>
             <Button size="small" href="https://opencollective.com/rsschool#section-contribute" target="_blank" ghost>

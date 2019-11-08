@@ -13,8 +13,10 @@
     "client:start": "yarn workspace client start",
     "client:test": "yarn workspace client test",
     "client:test-watch": "yarn workspace client test-watch",
-    "test": "npm run client:test",
-    "test-watch": "npm run client:test-watch"
+    "test": "yarn workspace client test",
+    "test-watch": "yarn workspace client test-watch",
+    "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
+    "ci:lint": "yarn workspace server lint && yarn workspace client lint"
   },
   "devDependencies": {
     "concurrently": "^4.1.2",

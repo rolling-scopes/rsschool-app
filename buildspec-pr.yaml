@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  build:
+    commands:
+      - yarn
+      - yarn test
+      - yarn ci:format
+      - yarn ci:lint
+      - yarn server:build
+      - yarn client:build
+
+cache:
+  paths:
+    - /root/.npm/**/*
+    - /usr/local/share/.cache/**/*
