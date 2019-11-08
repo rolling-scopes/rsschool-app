@@ -10,8 +10,7 @@ phases:
       - yarn test
       - yarn ci:format
       - yarn ci:lint
-      - yarn server:build
-      - yarn client:build
+      - yarn ci:build
 
 cache:
   paths:

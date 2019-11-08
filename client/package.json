@@ -12,6 +12,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "next build src",
+    "build:tsc": "tsc -p ./src/tsconfig.json",
     "prod": "next start -p 8080",
     "lint": "tslint -c tslint.json -p ./src/tsconfig.json",
     "test": "jest",
