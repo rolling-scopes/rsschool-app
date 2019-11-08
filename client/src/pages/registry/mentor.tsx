@@ -1,17 +1,14 @@
-import { Button, Checkbox, message, Col, Radio, Form, Icon, Input, Result, Row, Select, Typography } from 'antd';
-
+import { Button, Checkbox, Col, Spin, Form, Icon, Input, message, Radio, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
 import { Header } from 'components/Header';
-import withCourses from 'components/withCourses';
+import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';
 import * as React from 'react';
-import { UserService, UserFull } from 'services/user';
-
-import { Course } from 'services/course';
+import { Course, CourseService } from 'services/course';
 import { formatMonthFriendly } from 'services/formatter';
-import { Props, TYPES } from './../../configs/registry';
+import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
-import { LocationSelect } from 'components/LocationSelect';
+import { Props, TYPES } from './../../configs/registry';
 
 type State = {
   courses: Course[];
@@ -26,31 +23,36 @@ const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
 class CourseRegistryPage extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const courses = (this.props.courses || []).filter((course: Course) => !course.completed && !course.inviteOnly);
-
-    this.state = {
-      courses,
-      submitted: false,
-      initialData: {} as any,
-      isLoading: true,
-      isApproved: false,
-    };
-  }
+  state: State = {
+    courses: [],
+    submitted: false,
+    initialData: {} as any,
+    isLoading: true,
+    isApproved: false,
+  };
 
   async componentDidMount() {
     const userService = new UserService();
-    const profile = await userService.getProfile();
-    this.setState({ initialData: profile.user, isLoading: false });
+    const courseService = new CourseService();
+    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+
+    this.setState({
+      courses: courses
+        .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
+        .sort((a, b) => a.startDate.localeCompare(b.startDate)),
+      initialData: profile.user,
+      isLoading: false,
+    });
   }
 
   render() {
-    const { courses, initialData } = this.state;
+    const { courses, initialData, isLoading } = this.state;
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
 
     let content: React.ReactNode;
-    if (!courses.length) {
+    if (isLoading) {
+      content = null;
+    } else if (!courses.length) {
       content = (
         <Result
           status="info"
@@ -344,7 +346,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
     return (
       <div>
         <Header username={this.props.session.githubId} />
-        {content}
+        <Spin spinning={this.state.isLoading}>{content}</Spin>
       </div>
     );
   }
@@ -397,4 +399,4 @@ class CourseRegistryPage extends React.Component<Props, State> {
   };
 }
 
-export default withCourses(withSession(Form.create()(CourseRegistryPage)));
+export default withSession(Form.create()(CourseRegistryPage));

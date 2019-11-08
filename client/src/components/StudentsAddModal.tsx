@@ -1,9 +1,7 @@
-import { Button, Modal, Typography, message } from 'antd';
+import { Button, Modal, Row, Typography, message } from 'antd';
 import * as React from 'react';
 import axios from 'axios';
-
-import { StudentsAutocomplete } from 'components';
-import { StudentBasic } from '../../../common/models';
+import { StudentSearch } from 'components';
 
 const { Text } = Typography;
 
@@ -54,8 +52,8 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
     this.setState({ isModalOpened: false, selectedStudent: 0 });
   };
 
-  handleStudentSelect = (student?: StudentBasic) => {
-    this.setState({ selectedStudent: student ? student.id : 0 });
+  handleStudentSelect = (id: number) => {
+    this.setState({ selectedStudent: id ? id : 0 });
   };
 
   render() {
@@ -64,7 +62,9 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
 
     return (
       <>
-        <Button type="link" shape="circle" icon="plus" onClick={this.openModal} />
+        <Button type="link" shape="circle" onClick={this.openModal}>
+          Add
+        </Button>
         <Modal
           title={
             <>
@@ -75,7 +75,9 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
           onOk={this.addStudent}
           onCancel={this.reset}
         >
-          <StudentsAutocomplete onStudentSelect={this.handleStudentSelect} courseId={courseId} />
+          <Row type="flex">
+            <StudentSearch onChange={this.handleStudentSelect} courseId={courseId} />
+          </Row>
         </Modal>
       </>
     );

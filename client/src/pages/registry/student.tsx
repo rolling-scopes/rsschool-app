@@ -1,10 +1,9 @@
 import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
 import { Header } from 'components/Header';
-import withCourses from 'components/withCourses';
 import withSession from 'components/withSession';
 import * as React from 'react';
-import { Course } from 'services/course';
+import { Course, CourseService } from 'services/course';
 import { UserService, UserFull } from 'services/user';
 import { formatMonthFriendly } from 'services/formatter';
 import { Props, TYPES } from './../../configs/registry';
@@ -29,21 +28,22 @@ const noticeStyle = {
 };
 
 class CourseRegistryPage extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const courses = (props.courses || []).filter((course: Course) => course.planned && !course.inviteOnly);
-
-    this.state = {
-      courses,
-      submitted: false,
-      initialData: {},
-    };
-  }
+  state: State = {
+    courses: [],
+    submitted: false,
+    initialData: {},
+  };
 
   async componentDidMount() {
     const userService = new UserService();
-    const profile = await userService.getProfile();
-    this.setState({ initialData: profile.user });
+    const courseService = new CourseService();
+    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+    this.setState({
+      initialData: profile.user,
+      courses: courses
+        .filter((course: Course) => course.planned && !course.inviteOnly)
+        .sort((a, b) => a.startDate.localeCompare(b.startDate)),
+    });
   }
 
   private handleSubmit = async (event: React.FormEvent) => {
@@ -276,4 +276,4 @@ class CourseRegistryPage extends React.Component<Props, State> {
   }
 }
 
-export default withCourses(withSession(Form.create()(CourseRegistryPage)));
+export default withSession(Form.create()(CourseRegistryPage));

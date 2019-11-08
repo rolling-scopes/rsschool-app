@@ -1,4 +1,8 @@
 import axios from 'axios';
+import getConfig from 'next/config';
+import { Course } from './course';
+
+const { serverRuntimeConfig } = getConfig();
 
 export interface UserBasic {
   name: string;
@@ -11,6 +15,21 @@ type SearchResponse = {
 };
 
 export class UserService {
+  private host = serverRuntimeConfig.rsHost || '';
+
+  static cookie?: any;
+
+  async getCourses() {
+    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/user/me/courses`, {
+      headers: UserService.cookie
+        ? {
+            cookie: UserService.cookie,
+          }
+        : undefined,
+    });
+    return result.data.data.sort((a, b) => b.id - a.id);
+  }
+
   async searchUser(query: string | null) {
     try {
       if (!query) {

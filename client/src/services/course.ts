@@ -78,8 +78,6 @@ export interface MentorWithContacts {
 export class CourseService {
   private host = serverRuntimeConfig.rsHost || '';
 
-  static cookie?: any;
-
   async updateCourse(id: number, data: Partial<Course>) {
     const result = await axios.put<{ data: Course }>(`${this.host}/api/course/${id}`, data);
     return result.data.data;
@@ -91,14 +89,8 @@ export class CourseService {
   }
 
   async getCourses() {
-    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`, {
-      headers: CourseService.cookie
-        ? {
-            cookie: CourseService.cookie,
-          }
-        : undefined,
-    });
-    return result.data.data.sort((a, b) => b.id - a.id);
+    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`);
+    return result.data.data;
   }
 
   async getCourseTasks(courseId: number) {

@@ -24,6 +24,7 @@ import { certificateRoute } from './certificate';
 import { lectureRoute } from './event';
 import { lecturesRoute } from './events';
 import { jwtRoute } from './jwt';
+import { userRoute } from './user';
 
 import { ILogger } from '../logger';
 
@@ -60,6 +61,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
   applyRouter(router, jwtRoute(logger));
+  applyRouter(router, userRoute(logger));
 
   return { publicRouter: router };
 };

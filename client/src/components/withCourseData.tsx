@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { NextPageContext } from 'next';
-import { Course, CourseService } from 'services/course';
+import { Course } from 'services/course';
+import { UserService } from 'services/user';
+
 import { Alert, Row, Col } from 'antd';
 import { Session } from './withSession';
 
@@ -8,8 +10,8 @@ function withCourseData(WrappedComponent: React.ComponentType<any>) {
   return class extends React.PureComponent<{ course?: Course | null; session: Session }> {
     static async getInitialProps(context: NextPageContext) {
       try {
-        CourseService.cookie = context && context.req ? context.req.headers.cookie : undefined;
-        const service = new CourseService();
+        UserService.cookie = context && context.req ? context.req.headers.cookie : undefined;
+        const service = new UserService();
         const alias = context.query.course;
         const courses = await service.getCourses();
         const course = courses.find(c => c.alias === alias) || null;

@@ -13,3 +13,5 @@ export * from './Help';
 export * from './AdminSider';
 export * from './FooterLayout';
 export * from './SocialNetworks';
+export * from './StudentSearch';
+export * from './StudentExpelModal';

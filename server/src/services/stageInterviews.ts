@@ -205,8 +205,7 @@ export async function getAvailableStudentsForStageInterview(courseId: number, _:
       return {
         id: student.id,
         githubId: student.user.githubId,
-        firstName: student.user.firstName,
-        lastName: student.user.lastName,
+        name: `${student.user.firstName} ${student.user.lastName}`.trim(),
         locationName: student.user.locationName,
         totalScore: student.totalScore,
         isGoodCandidate: Array.isArray(student.stageInterviews) && student.stageInterviews.some(i => i.isCompleted),

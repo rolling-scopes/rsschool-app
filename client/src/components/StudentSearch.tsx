@@ -1,32 +1,24 @@
 import * as React from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components';
+import { CourseService } from 'services/course';
 
 type Person = { id: number; githubId: string; name: string };
 
 type Props = {
   [key: string]: any;
-  searchFn: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
+  courseId: number;
 };
 
 type State = {
   data: Person[];
 };
 
-export class UserSearch extends React.Component<Props, State> {
-  state: State = {
-    data: [],
-  };
+export class StudentSearch extends React.Component<Props, State> {
+  state: State = { data: [] };
 
-  handleSearch = async (value: string) => {
-    if (value) {
-      const data = await this.props.searchFn(value);
-      this.setState({ data });
-    } else {
-      this.setState({ data: this.props.defaultValues || [] });
-    }
-  };
+  courseService = new CourseService();
 
   componentDidUpdate = prevProps => {
     if (prevProps.defaultValues !== this.props.defaultValues) {
@@ -47,6 +39,7 @@ export class UserSearch extends React.Component<Props, State> {
         size="large"
         placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? 'Select...' : 'Search...'}
         notFoundContent={null}
+        style={{ width: '100%' }}
       >
         {this.state.data.map(person => (
           <Select.Option key={person.id} value={person.id}>
@@ -56,4 +49,17 @@ export class UserSearch extends React.Component<Props, State> {
       </Select>
     );
   }
+
+  private searchStudents = async (searchText: string) => {
+    return this.courseService.searchCourseStudent(this.props.courseId, searchText);
+  };
+
+  private handleSearch = async (value: string) => {
+    if (value) {
+      const data = await this.searchStudents(value);
+      this.setState({ data });
+    } else {
+      this.setState({ data: this.props.defaultValues || [] });
+    }
+  };
 }

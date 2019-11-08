@@ -15,22 +15,18 @@ type Props = {
 
 type State = {
   isLoading: boolean;
-  isPowerUser: boolean;
   students: StudentBasic[];
 };
 
 class ExpelPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
-    isPowerUser: false,
     students: [],
   };
   private courseService = new CourseService();
 
   async componentDidMount() {
     const courseId = this.props.course.id;
-    const isPowerUser = this.courseService.isPowerUser(courseId, this.props.session);
-
     let students: StudentBasic[] = [];
     try {
       const [mentorStudents, interviewStudents] = await Promise.all([
@@ -43,15 +39,11 @@ class ExpelPage extends React.Component<Props, State> {
     }
 
     const activeStudents = students.filter(student => student.isActive);
-    this.setState({ students: activeStudents, isPowerUser });
+    this.setState({ students: activeStudents });
   }
 
   private loadStudents = async (searchText: string) =>
-    this.state.isPowerUser
-      ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-      : this.state.students.filter(({ githubId, name }) =>
-          `${githubId} ${name}`.match(searchText),
-        );
+    this.state.students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
 
   handleSubmit = async (e: any) => {
     e.preventDefault();

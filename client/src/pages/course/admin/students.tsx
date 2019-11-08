@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { Table, Typography, Statistic, Divider, Button, message } from 'antd';
-import { Header, withSession, LoadingScreen, GithubUserLink } from 'components';
+import { Header, withSession, LoadingScreen, GithubUserLink, StudentExpelModal } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import { CourseService, StudentDetails } from 'services/course';
@@ -13,6 +13,7 @@ const { Text } = Typography;
 type State = {
   students: StudentDetails[];
   isLoading: boolean;
+  expelledStudent: StudentDetails | null;
   stats: {
     studentCount: number;
     activeStudentCount: number;
@@ -24,6 +25,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   state: State = {
     isLoading: false,
     students: [],
+    expelledStudent: null,
     stats: {
       studentCount: 0,
       activeStudentCount: 0,
@@ -69,6 +71,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   }
 
   render() {
+    const { expelledStudent } = this.state;
     return (
       <>
         <Header title="Course Students" username={this.props.session.githubId} courseName={this.props.course.name} />
@@ -92,6 +95,19 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             ]}
           />
           <Divider dashed />
+          <StudentExpelModal
+            onCancel={() => this.setState({ expelledStudent: null })}
+            onOk={() => {
+              const { expelledStudent } = this.state;
+              const students = this.state.students.map(s =>
+                expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
+              );
+              this.setState({ students, expelledStudent: null });
+            }}
+            studentId={expelledStudent ? expelledStudent.id : 0}
+            visible={!!expelledStudent}
+            courseId={this.props.course.id}
+          />
           <Table<StudentDetails>
             bordered
             className="m-3"
@@ -168,8 +184,17 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 render: (_, record: StudentDetails) => (
                   <>
                     {!record.repository && record.isActive && (
-                      <Button type="link" onClick={() => this.handleCreateRepo(record)}>
+                      <Button
+                        style={{ marginRight: '8px' }}
+                        type="dashed"
+                        onClick={() => this.handleCreateRepo(record)}
+                      >
                         Create Repo
+                      </Button>
+                    )}
+                    {record.isActive && (
+                      <Button type="dashed" onClick={() => this.setState({ expelledStudent: record })}>
+                        Expel
                       </Button>
                     )}
                   </>

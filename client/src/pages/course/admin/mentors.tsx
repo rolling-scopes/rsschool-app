@@ -136,9 +136,9 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Students',
                 dataIndex: 'students',
                 width: 80,
-                render: (value: string, mentor: MentorDetails) => (
+                render: (_: string, mentor: MentorDetails) => (
                   <>
-                    <StudentsAddModal courseId={courseId} mentorsGithub={value} mentorId={mentor.id} />
+                    <StudentsAddModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
                   </>
                 ),
               },
