@@ -16,10 +16,11 @@
     "test": "yarn workspace client test",
     "test-watch": "yarn workspace client test-watch",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "ci:lint": "yarn workspace server lint && yarn workspace client lint"
+    "ci:lint": "yarn workspace server lint && yarn workspace client lint",
+    "ci:build": "yarn workspace server build && yarn workspace client build:tsc"
   },
   "devDependencies": {
-    "concurrently": "^4.1.2",
+    "concurrently": "^5.0.0",
     "prettier": "^1.18.2",
     "typescript": "^3.6.0"
   },
