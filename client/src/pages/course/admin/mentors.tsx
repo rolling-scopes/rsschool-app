@@ -1,5 +1,5 @@
-import { Divider, Statistic, Table } from 'antd';
-import { GithubUserLink, Header, LoadingScreen, withSession } from 'components';
+import { Divider, Statistic, Table, Button, Spin, message } from 'antd';
+import { GithubUserLink, Header, withSession } from 'components';
 import StudentsAddModal from 'components/StudentsAddModal';
 import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -63,7 +63,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     return (
       <>
         <Header title="Course Mentors" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <LoadingScreen show={this.state.isLoading}>
+        <Spin spinning={this.state.isLoading}>
           <Statistic className="m-3" title="Total Count" value={this.state.stats.recordCount} />
           <Table
             className="m-3"
@@ -78,6 +78,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             bordered
             className="m-3"
             rowKey="githubId"
+            rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
             pagination={{ pageSize: 100 }}
             size="small"
             dataSource={this.state.records}
@@ -92,11 +93,10 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               },
               {
                 title: 'Name',
-                dataIndex: 'lastName',
+                dataIndex: 'name',
                 width: 150,
-                sorter: stringSorter('firstName'),
-                render: (_: any, record: MentorDetails) => `${record.firstName} ${record.lastName}`,
-                ...getColumnSearchProps('lastName'),
+                sorter: stringSorter('name'),
+                ...getColumnSearchProps('name'),
               },
               {
                 title: 'Location',
@@ -134,17 +134,42 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               },
               {
                 title: 'Students',
-                dataIndex: 'actions',
-                width: 50,
+                dataIndex: 'students',
+                width: 80,
                 render: (value: string, mentor: MentorDetails) => (
-                  <StudentsAddModal courseId={courseId} mentorsGithub={value} mentorId={mentor.id} />
+                  <>
+                    <StudentsAddModal courseId={courseId} mentorsGithub={value} mentorId={mentor.id} />
+                  </>
+                ),
+              },
+              {
+                title: 'Actions',
+                dataIndex: 'actions',
+                render: (_: string, mentor: MentorDetails) => (
+                  <>
+                    <Button type="link" onClick={() => this.handleExpell(mentor)}>
+                      Expel
+                    </Button>
+                  </>
                 ),
               },
             ]}
           />
-        </LoadingScreen>
+        </Spin>
       </>
     );
+  }
+
+  private async handleExpell({ githubId }: MentorDetails) {
+    try {
+      this.setState({ isLoading: true });
+      await this.courseService.expelMentor(this.props.course.id, githubId);
+      const records = this.state.records.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
+      this.setState({ isLoading: false, records });
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+      this.setState({ isLoading: false });
+    }
   }
 }
 

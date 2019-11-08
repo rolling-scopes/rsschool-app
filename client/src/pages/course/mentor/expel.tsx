@@ -49,8 +49,8 @@ class ExpelPage extends React.Component<Props, State> {
   private loadStudents = async (searchText: string) =>
     this.state.isPowerUser
       ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-      : this.state.students.filter(({ githubId, firstName, lastName }) =>
-          `${githubId} ${firstName} ${lastName}`.match(searchText),
+      : this.state.students.filter(({ githubId, name }) =>
+          `${githubId} ${name}`.match(searchText),
         );
 
   handleSubmit = async (e: any) => {

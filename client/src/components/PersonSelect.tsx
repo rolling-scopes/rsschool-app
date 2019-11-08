@@ -4,7 +4,7 @@ import { GithubAvatar } from 'components/GithubAvatar';
 
 type Props = {
   [key: string]: any;
-  data: { id: number; githubId: string; firstName?: string; lastName?: string }[];
+  data: { id: number; githubId: string; name?: string }[];
 };
 
 export class PersonSelect extends React.PureComponent<Props> {
@@ -21,8 +21,7 @@ export class PersonSelect extends React.PureComponent<Props> {
       >
         {data.map(person => (
           <Select.Option key={person.id} value={person.id}>
-            <GithubAvatar size={24} githubId={person.githubId} /> {person.firstName} {person.lastName} (
-            {person.githubId})
+            <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
           </Select.Option>
         ))}
       </Select>

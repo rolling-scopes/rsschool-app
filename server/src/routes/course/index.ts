@@ -9,7 +9,7 @@ import { postExpulsion } from './expulsion';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
 import { getMe, getMyMentors } from './me';
-import { getAllMentorStudents, getMentorStudents, getMentorInterviews } from './mentor';
+import { getAllMentorStudents, getMentorStudents, getMentorInterviews, deleteMentor } from './mentor';
 import { getMentors, postMentors } from './mentors';
 import { postPairs } from './pairs';
 import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores } from './score';
@@ -599,6 +599,8 @@ export function courseRoute(logger: ILogger) {
 
   router.post('/:courseId/user/:githubId/repository', adminGuard, postRepository(logger));
   router.post('/:courseId/repositories', adminGuard, postRepositories(logger));
+
+  router.delete('/:courseId/mentor/:githubId', adminGuard, deleteMentor(logger));
 
   return router;
 }

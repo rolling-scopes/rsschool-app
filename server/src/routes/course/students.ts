@@ -44,7 +44,13 @@ export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterCont
     .limit(20)
     .getRawMany();
 
-  setResponse(ctx, OK, entities);
+  const result = entities.map(entity => ({
+    id: entity.id,
+    githubId: entity.githubId,
+    name: `${entity.firstName} ${entity.lastName}`,
+  }));
+
+  setResponse(ctx, OK, result);
 };
 
 type StudentInput = {

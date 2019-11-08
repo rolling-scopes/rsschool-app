@@ -82,8 +82,7 @@ export async function getStageInterviewsByMentorId(stageId: number, githubId: st
     return {
       id: it.student.id,
       githubId: it.student.user.githubId,
-      firstName: it.student.user.firstName,
-      lastName: it.student.user.lastName,
+      name: `${it.student.user.firstName} ${it.student.user.lastName}`.trim(),
     };
   });
   return result;

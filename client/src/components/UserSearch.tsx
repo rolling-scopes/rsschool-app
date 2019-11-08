@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components';
 
-type Person = { id: number; githubId: string; firstName: string; lastName: string };
+type Person = { id: number; githubId: string; name: string; };
 
 type Props = {
   [key: string]: any;
@@ -50,7 +50,7 @@ export class UserSearch extends React.Component<Props, State> {
       >
         {this.state.data.map(person => (
           <Select.Option key={person.id} value={person.id}>
-            <GithubAvatar size={24} githubId={person.githubId} /> {person.firstName} {person.lastName} (
+            <GithubAvatar size={24} githubId={person.githubId} /> {person.name} (
             {person.githubId})
           </Select.Option>
         ))}

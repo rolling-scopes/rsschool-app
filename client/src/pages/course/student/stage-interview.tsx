@@ -28,11 +28,11 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       <>
         <Header title="Stage Interviews" username={this.props.session.githubId} courseName={this.props.course.name} />
         <LoadingScreen show={this.state.isLoading}>
-          {hasRecords && (
+          {hasRecords ? (
             <Typography.Text type="danger" className="m-3">
               You need to contact your interviewer and agree about interview until 27th October (Sunday)
             </Typography.Text>
-          )}
+          ) : null}
           <Table
             bordered
             className="m-3"

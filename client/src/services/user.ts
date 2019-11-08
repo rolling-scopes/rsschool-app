@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 export interface UserBasic {
-  firstName: string;
-  lastName: string;
+  name: string;
   githubId: string;
   id: number;
 }
@@ -109,6 +108,8 @@ export type ResponseCourse = {
 };
 
 export interface UserFull extends UserBasic {
+  firstName: string;
+  lastName: string;
   externalAccounts: any[];
   englishLevel: string;
   readyFullTime: string;

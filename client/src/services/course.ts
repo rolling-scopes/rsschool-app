@@ -26,7 +26,7 @@ export interface CourseTask {
   taskResultCount: number;
   useJury: boolean;
   checker: 'mentor' | 'assigned' | 'taskOwner';
-  taskOwner: { id: number; githubId: string; firstName: string; lastName: string } | null;
+  taskOwner: { id: number; githubId: string; name: string } | null;
 }
 
 export interface CourseEvent {
@@ -265,7 +265,7 @@ export class CourseService {
 
   async getStageInterviewStudents(courseId: number, stageId: number) {
     const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/students`);
-    return result.data.data;
+    return result.data.data as StudentBasic[];
   }
 
   async postStageInterviews(courseId: number, stageId: number) {
@@ -291,6 +291,10 @@ export class CourseService {
   async createRepository(courseId: number, githubId: string) {
     const result = await axios.post(`/api/course/${courseId}/user/${githubId}/repository`);
     return result.data.data as { repository: string };
+  }
+
+  async expelMentor(courseId: number, githubId: string) {
+    await axios.delete(`/api/course/${courseId}/mentor/${githubId}`);
   }
 
   isPowerUser(courseId: number, session: Session) {

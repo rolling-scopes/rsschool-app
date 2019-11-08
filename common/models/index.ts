@@ -1,25 +1,16 @@
 export interface UserBasic {
   id: number;
   githubId: string;
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
 export interface MentorBasic extends UserBasic {
-  id: number;
-  courseId: number;
-  userId: number;
-
+  isActive: boolean;
   students: StudentBasic[] | ({ id: number })[];
 }
 
 export interface StudentBasic extends UserBasic {
-  id: number;
-  courseId: number;
-  userId: number;
-
-  totalScore: number;
   isActive: boolean;
-
+  totalScore: number;
   mentor: MentorBasic | { id: number } | null;
 }

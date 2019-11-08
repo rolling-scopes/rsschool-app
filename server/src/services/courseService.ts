@@ -62,12 +62,10 @@ export interface MentorDetails extends MentorBasic {
 export function convertToMentorBasic(mentor: Mentor): MentorBasic {
   const user = (mentor.user as User)!;
   return {
-    lastName: user.lastName,
-    firstName: user.firstName,
+    isActive: !mentor.isExpelled,
+    name: `${user.firstName} ${user.lastName}`.trim(),
     id: mentor.id,
     githubId: user.githubId,
-    userId: user.id!,
-    courseId: mentor.courseId,
     students: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
   };
 }
@@ -75,13 +73,10 @@ export function convertToMentorBasic(mentor: Mentor): MentorBasic {
 export function convertToStudentBasic(student: Student): StudentBasic {
   const user = (student.user as User)!;
   return {
-    lastName: user.lastName,
-    firstName: user.firstName,
+    name: `${user.firstName} ${user.lastName}`.trim(),
     isActive: !student.isExpelled && !student.isFailed,
     id: student.id,
     githubId: user.githubId,
-    userId: user.id!,
-    courseId: student.courseId,
     mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
     totalScore: student.totalScore,
   };
@@ -115,6 +110,10 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
 
 function mentorQuery() {
   return getRepository(Mentor).createQueryBuilder('mentor');
+}
+
+function userQuery() {
+  return getRepository(User).createQueryBuilder('user');
 }
 
 function studentQuery() {
@@ -151,6 +150,19 @@ export async function getMentorByUserId(courseId: number, userId: number): Promi
     return null;
   }
   return convertToMentorBasic(record);
+}
+
+export async function expelMentor(courseId: number, githubId: string) {
+  const githubIdQuery = userQuery()
+    .select('id')
+    .where('user.githubId = :githubId', { githubId })
+    .getQuery();
+  return mentorQuery()
+    .update(Mentor)
+    .set({ isExpelled: true })
+    .where(`userId IN (${githubIdQuery})`, { githubId })
+    .andWhere('mentor."courseId" = :courseId', { courseId })
+    .execute();
 }
 
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic> {
@@ -367,8 +379,7 @@ export async function getScoreStudents(courseId: number) {
         id: student.id,
         mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
         userId: user.id!,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        name: `${user.firstName} ${user.lastName}`.trim(),
         githubId: user.githubId,
         totalScore: student.totalScore,
         locationName: user.locationName || '',

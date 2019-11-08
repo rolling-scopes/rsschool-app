@@ -318,8 +318,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
   const result = students.map(student => {
     return {
       githubId: student.githubId,
-      firstName: student.firstName,
-      lastName: student.lastName,
+      name: student.name,
       locationName: student.locationName,
       countryName: countriesMap[citiesMap[student.locationName]] || 'Other',
       mentorGithubId: student.mentor ? (student.mentor as any).githubId : '',

@@ -66,8 +66,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
         ? {
             id: item.taskOwner.id,
             githubId: item.taskOwner.githubId,
-            firstName: item.taskOwner.firstName,
-            lastName: item.taskOwner.lastName,
+            name: `${item.taskOwner.firstName} ${item.taskOwner.lastName}`,
           }
         : null,
       taskCheckers: [],

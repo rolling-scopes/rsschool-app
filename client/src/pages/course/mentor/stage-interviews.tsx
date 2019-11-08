@@ -139,10 +139,9 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                   },
                   {
                     title: 'Name',
-                    dataIndex: 'firstName',
+                    dataIndex: 'name',
                     width: 180,
-                    render: (_: string, record: any) => `${record.firstName} ${record.lastName}`,
-                    ...getColumnSearchProps('firstName'),
+                    ...getColumnSearchProps('name'),
                   },
                   {
                     title: 'Location',

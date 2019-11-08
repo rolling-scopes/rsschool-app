@@ -46,3 +46,10 @@ export const getAllMentorStudents = (_: ILogger) => async (ctx: Router.RouterCon
   const assignedStudents = await courseService.getAssignedStudentsByMentorId(mentor.id);
   setResponse(ctx, OK, { students, assignedStudents });
 };
+
+export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const githubId: string = ctx.params.githubId;
+  await courseService.expelMentor(courseId, githubId);
+  setResponse(ctx, OK);
+};
