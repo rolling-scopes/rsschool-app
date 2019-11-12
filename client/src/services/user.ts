@@ -105,8 +105,7 @@ export type ResponseStudent = {
   mentor: {
     id: number;
     githubId: string;
-    lastName: string;
-    firstName: string;
+    name: string;
   } | null;
 };
 

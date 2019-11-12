@@ -247,7 +247,7 @@ class ProfilePage extends React.Component<Props, State> {
         Mentor:{' '}
         {student.mentor ? (
           <a href={this.getLink(student.mentor.githubId)}>
-            {student.mentor.firstName} {student.mentor.lastName}
+            {student.mentor.name}
           </a>
         ) : (
           'No Mentor'
