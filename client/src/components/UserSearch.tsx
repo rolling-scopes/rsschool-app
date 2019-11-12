@@ -16,7 +16,7 @@ type State = {
 
 export class UserSearch extends React.Component<Props, State> {
   state: State = {
-    data: [],
+    data: this.props.defaultValues || [],
   };
 
   handleSearch = async (value: string) => {

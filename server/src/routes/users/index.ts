@@ -66,7 +66,15 @@ const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (c
     .limit(20)
     .getMany();
 
-  setResponse(ctx, OK, entities.map(user => generateResponse(user, searchConfig)));
+  setResponse(
+    ctx,
+    OK,
+    entities.map(user => {
+      const response = generateResponse(user, searchConfig);
+      const { lastName, firstName, ...other } = response;
+      return { ...other, id: user.id, name: `${user.firstName} ${user.lastName}` };
+    }),
+  );
 };
 
 const getSearchByGithubId = (logger: ILogger) =>
