@@ -285,6 +285,11 @@ export class CourseService {
     return result.data.data as { repository: string };
   }
 
+  async createRepositories(courseId: number) {
+    const result = await axios.post(`/api/course/${courseId}/repositories`);
+    return result.data.data as { repository: string }[];
+  }
+
   async expelMentor(courseId: number, githubId: string) {
     await axios.delete(`/api/course/${courseId}/mentor/${githubId}`);
   }

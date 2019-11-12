@@ -1,6 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Table, Typography, Statistic, Divider, Button, message } from 'antd';
+import { Table, Typography, Statistic, Divider, Button, message, Row } from 'antd';
 import { Header, withSession, LoadingScreen, GithubUserLink, StudentExpelModal } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
@@ -36,38 +36,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private courseService = new CourseService();
 
   async componentDidMount() {
-    this.setState({ isLoading: true });
-
-    const courseId = this.props.course.id;
-    const courseStudents = await this.courseService.getCourseStudentsWithDetails(courseId);
-    let activeStudentCount = 0;
-    const countries: Record<string, { count: number; totalCount: number }> = {};
-
-    for (const courseStudent of courseStudents) {
-      const { countryName } = courseStudent;
-      if (!countries[countryName]) {
-        countries[countryName] = { count: 0, totalCount: 0 };
-      }
-      countries[countryName].totalCount++;
-      if (courseStudent.isActive) {
-        activeStudentCount++;
-        countries[countryName].count++;
-      }
-    }
-
-    this.setState({
-      students: courseStudents,
-      isLoading: false,
-      stats: {
-        activeStudentCount,
-        studentCount: courseStudents.length,
-        countries: _.keys(countries).map(k => ({
-          name: k,
-          count: countries[k].count,
-          totalCount: countries[k].totalCount,
-        })),
-      },
-    });
+    await this.loadStudents();
   }
 
   render() {
@@ -108,6 +77,9 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             visible={!!expelledStudent}
             courseId={this.props.course.id}
           />
+          <Row type="flex" justify="end" className="m-3">
+            {this.props.session.isAdmin && <Button onClick={this.handleCreateRepos}>Create Repos</Button>}
+          </Row>
           <Table<StudentDetails>
             bordered
             className="m-3"
@@ -217,6 +189,50 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     } catch (e) {
       message.error('An error occured. Please try later.');
       this.setState({ isLoading: false });
+    }
+  }
+
+  private async loadStudents() {
+    this.setState({ isLoading: true });
+
+    const courseId = this.props.course.id;
+    const courseStudents = await this.courseService.getCourseStudentsWithDetails(courseId);
+    let activeStudentCount = 0;
+    const countries: Record<string, { count: number; totalCount: number }> = {};
+
+    for (const courseStudent of courseStudents) {
+      const { countryName } = courseStudent;
+      if (!countries[countryName]) {
+        countries[countryName] = { count: 0, totalCount: 0 };
+      }
+      countries[countryName].totalCount++;
+      if (courseStudent.isActive) {
+        activeStudentCount++;
+        countries[countryName].count++;
+      }
+    }
+
+    this.setState({
+      students: courseStudents,
+      isLoading: false,
+      stats: {
+        activeStudentCount,
+        studentCount: courseStudents.length,
+        countries: _.keys(countries).map(k => ({
+          name: k,
+          count: countries[k].count,
+          totalCount: countries[k].totalCount,
+        })),
+      },
+    });
+  }
+
+  private handleCreateRepos = () => {
+    try {
+      this.courseService.createRepositories(this.props.course.id);
+      message.info('The job for creating repositories has been submitted');
+    } catch (e) {
+      message.error('An error occured. Please try later.');
     }
   }
 }
