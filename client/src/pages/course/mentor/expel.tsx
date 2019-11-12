@@ -1,12 +1,12 @@
-import { Button, Form, Input, message, Col, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
+import { Header, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
+import _ from 'lodash';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
 import { StudentBasic } from '../../../../../common/models';
-import { Header, UserSearch } from 'components';
-import _ from 'lodash';
 
 type Props = {
   session: Session;
@@ -23,7 +23,13 @@ class ExpelPage extends React.Component<Props, State> {
     isLoading: false,
     students: [],
   };
-  private courseService = new CourseService();
+
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -42,19 +48,20 @@ class ExpelPage extends React.Component<Props, State> {
     this.setState({ students: activeStudents });
   }
 
-  private loadStudents = async (searchText: string) =>
-    this.state.students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
+  private loadStudents = async (searchText: string) => {
+    return this.state.students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
 
     this.props.form.validateFields(async (err: any, values: any) => {
-      if (err || !values.studentId) {
+      if (err || !values.githubId || this.state.isLoading) {
         return;
       }
       try {
         this.setState({ isLoading: true });
-        await this.courseService.expelStudent(this.props.course.id, Number(values.studentId), values.comment);
+        await this.courseService.expelStudent(values.githubId, values.comment);
         message.success('The student has been expelled');
         this.setState({ isLoading: false });
         this.props.form.resetFields();
@@ -70,20 +77,20 @@ class ExpelPage extends React.Component<Props, State> {
     return (
       <>
         <Header username={this.props.session.githubId} courseName={this.props.course.name} />
-        <Col className="m-2" sm={12}>
+        <Col className="m-2" sm={16} md={12} lg={8}>
           <div className="mb-3">
             <Typography.Text type="warning">This page allows to expel a student from the course</Typography.Text>
           </div>
           <Form onSubmit={this.handleSubmit} layout="vertical">
             <Form.Item label="Student">
-              {field('studentId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <UserSearch defaultValues={this.state.students} searchFn={this.loadStudents} />,
+              {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
+                <UserSearch keyField="githubId" defaultValues={this.state.students} searchFn={this.loadStudents} />,
               )}
             </Form.Item>
             <Form.Item label="Reason for expelling">
               {field('comment', {
                 rules: [{ required: true, message: 'Please give us a couple words why you are expelling the student' }],
-              })(<Input.TextArea />)}
+              })(<Input.TextArea style={{ height: 150 }} />)}
             </Form.Item>
             <Button size="large" type="primary" htmlType="submit">
               Submit

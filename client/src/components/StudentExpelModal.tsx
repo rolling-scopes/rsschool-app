@@ -5,25 +5,28 @@ import { FormComponentProps } from 'antd/lib/form';
 
 type Props = {
   visible: boolean;
-  studentId: number;
+  githubId?: string;
   courseId: number;
   onCancel: () => void;
   onOk: () => void;
 } & FormComponentProps;
 
 class ExpelModal extends React.PureComponent<Props, { isLoading: boolean }> {
-  private courseService: CourseService = new CourseService();
+  state = { isLoading: false };
 
-  state = {
-    isLoading: false,
-  };
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.courseId);
+  }
 
   render() {
     const { getFieldDecorator: field } = this.props.form;
     return (
       <Modal
         title="Expel Student"
-        visible={this.props.visible}
+        visible={this.props.visible && !!this.props.githubId}
         okText="Expel"
         okButtonProps={{ type: 'danger' }}
         onOk={this.handleExpelStudent}
@@ -50,12 +53,12 @@ class ExpelModal extends React.PureComponent<Props, { isLoading: boolean }> {
   private handleExpelStudent = (event: React.FormEvent) => {
     event.preventDefault();
     this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
+      if (err || !this.props.githubId) {
         return;
       }
       try {
         this.setState({ isLoading: true });
-        await this.courseService.expelStudent(this.props.courseId, this.props.studentId, values.comment);
+        await this.courseService.expelStudent(this.props.githubId, values.comment);
         this.setState({ isLoading: false });
         this.props.onOk();
       } catch (e) {

@@ -8,9 +8,13 @@ import { OperationResult, userService, courseService } from '../../services';
 
 export const getMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
-
   const result = await courseService.getMentors(courseId);
+  setResponse(ctx, OK, result);
+};
 
+export const getMentorsDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const result = await courseService.getMentorsDetails(courseId);
   setResponse(ctx, OK, result);
 };
 

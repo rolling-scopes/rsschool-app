@@ -27,7 +27,12 @@ class TaskScorePage extends React.Component<Props, State> {
     courseTaskId: null,
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     const courseId = this.props.course.id;
@@ -53,7 +58,7 @@ class TaskScorePage extends React.Component<Props, State> {
 
     const isSumbitedByPowerAdmin = task => isPowerMentor && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
 
-    const courseTasks = (await this.courseService.getCourseTasks(courseId))
+    const courseTasks = (await this.courseService.getCourseTasks())
       .sort(sortTasksByEndDate)
       .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
 
@@ -157,7 +162,7 @@ class TaskScorePage extends React.Component<Props, State> {
   private handleSubmit = async (e: any) => {
     e.preventDefault();
     this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
+      if (err || this.state.isLoading) {
         return;
       }
       try {

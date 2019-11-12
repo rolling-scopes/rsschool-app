@@ -217,9 +217,7 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
 };
 
 export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = Number(ctx.params.courseId);
-  const githubId = (ctx.state!.user as IUserSession).githubId;
-
+  const { courseId, githubId } = ctx.params;
   const records = await getInterviewsByGithubId(courseId, githubId);
   setResponse(ctx, OK, records);
 };

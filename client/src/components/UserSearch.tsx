@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components';
+import { get } from 'lodash';
 
 type Person = { id: number; githubId: string; name: string };
 
@@ -8,6 +9,7 @@ type Props = {
   [key: string]: any;
   searchFn: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
+  keyField?: 'id' | 'githubId';
 };
 
 type State = {
@@ -49,7 +51,7 @@ export class UserSearch extends React.Component<Props, State> {
         notFoundContent={null}
       >
         {this.state.data.map(person => (
-          <Select.Option key={person.id} value={person.id}>
+          <Select.Option key={person.id} value={this.props.keyField ? get(person, this.props.keyField) : person.id}>
             <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
           </Select.Option>
         ))}

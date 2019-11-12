@@ -23,6 +23,10 @@ export class Event {
   @Column({ default: 'regular' })
   type: string;
 
-  @OneToMany(_ => CourseEvent, (courseLecture: CourseEvent) => courseLecture.event, { nullable: true })
+  @OneToMany(
+    _ => CourseEvent,
+    (courseLecture: CourseEvent) => courseLecture.event,
+    { nullable: true },
+  )
   courseEvents: CourseEvent[] | null;
 }

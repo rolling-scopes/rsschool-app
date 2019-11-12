@@ -27,13 +27,17 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     },
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: CoursePageProps) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     this.setState({ isLoading: true });
 
-    const courseId = this.props.course.id;
-    const records: any[] = await this.courseService.getCourseMentors(courseId);
+    const records: any[] = await this.courseService.getMentorsWithDetails();
     const countries: Record<string, { totalCount: number }> = {};
 
     for (const record of records) {
@@ -71,7 +75,10 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             size="small"
             rowKey="name"
             dataSource={this.state.stats.countries}
-            columns={[{ title: 'Country', dataIndex: 'name' }, { title: 'Count', dataIndex: 'totalCount' }]}
+            columns={[
+              { title: 'Country', dataIndex: 'name' },
+              { title: 'Count', dataIndex: 'totalCount' },
+            ]}
           />
           <Divider dashed />
           <Table<MentorDetails>
@@ -133,6 +140,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 width: 80,
               },
               {
+                title: 'Checked Tasks',
+                dataIndex: 'taskResultsStats',
+                sorter: numberSorter('taskResultsStats.checked' as any),
+                render: (value: any) => `${value.checked} / ${value.total}`,
+              },
+              {
                 title: 'Students',
                 dataIndex: 'students',
                 width: 80,
@@ -163,7 +176,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private async handleExpell({ githubId }: MentorDetails) {
     try {
       this.setState({ isLoading: true });
-      await this.courseService.expelMentor(this.props.course.id, githubId);
+      await this.courseService.expelMentor(githubId);
       const records = this.state.records.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
       this.setState({ isLoading: false, records });
     } catch (e) {

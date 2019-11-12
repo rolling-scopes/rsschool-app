@@ -23,7 +23,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     courseTasks: [],
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: CoursePageProps) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     this.setState({ isLoading: true });
@@ -31,7 +36,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     const courseId = this.props.course.id;
     const [courseScore, courseTasks] = await Promise.all([
       this.courseService.getCourseScore(courseId),
-      this.courseService.getCourseTasks(courseId),
+      this.courseService.getCourseTasks(),
     ]);
 
     const sortedTasks = courseTasks
@@ -57,7 +62,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             {csvEnabled && (
               <Button
                 icon="file-excel"
-                onClick={() => (window.location.href = `/api/course/${this.props.course.id}/score/csv`)}
+                onClick={() => (window.location.href = `/api/course/${this.props.course.id}/students/score/csv`)}
               >
                 Export CSV
               </Button>

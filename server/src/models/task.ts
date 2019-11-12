@@ -23,7 +23,11 @@ export class Task {
   @Column({ nullable: true })
   githubPrRequired: boolean;
 
-  @OneToMany(_ => CourseTask, (courseTask: CourseTask) => courseTask.task, { nullable: true })
+  @OneToMany(
+    _ => CourseTask,
+    (courseTask: CourseTask) => courseTask.task,
+    { nullable: true },
+  )
   courseTasks: CourseTask[] | null;
 
   @Column()

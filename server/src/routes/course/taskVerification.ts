@@ -1,31 +1,25 @@
+import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from 'koa-router';
-import { getRepository } from 'typeorm';
-import { OK, BAD_REQUEST } from 'http-status-codes';
-
-import { setResponse } from '../utils';
-import { Student } from '../../models';
 import { ILogger } from '../../logger';
-import { taskService, awsTaskService } from '../../services';
+import { awsTaskService, courseService, taskService } from '../../services';
+import { setResponse } from '../utils';
 
 export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
-  const courseTaskId: number = Number(ctx.params.id);
+  const { courseId, githubId, id } = ctx.params;
 
   const inputData: any = ctx.request.body;
-  const { githubId, id } = ctx.state.user;
 
-  const courseTask = await taskService.getCourseTask(courseTaskId);
+  const courseTask = await taskService.getCourseTask(id);
   if (!courseTask || !courseTask.task) {
     setResponse(ctx, BAD_REQUEST, { message: 'Not valid course task' });
     return;
   }
 
-  const student = await getRepository(Student).findOne({ where: { userId: id, courseId } });
+  const student = await courseService.getStudentByGithubId(courseId, githubId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'No student' });
     return;
   }
-
   const result: TaskEvent = {
     githubId,
     studentId: student.id,
@@ -35,9 +29,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
       type: courseTask.task.type,
     },
   };
-
   await awsTaskService.postTaskVerification([result]);
-
   setResponse(ctx, OK, result);
 };
 

@@ -1,5 +1,5 @@
 import { Table, Typography } from 'antd';
-import { GithubAvatar, Header, LoadingScreen, withSession } from 'components';
+import { GithubUserLink, Header, LoadingScreen, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CourseService } from 'services/course';
@@ -44,12 +44,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Interviewer',
                 dataIndex: 'mentor.githubId',
                 width: 120,
-                render: (value: string) => (
-                  <div className="d-flex flex-row">
-                    <GithubAvatar githubId={value} size={24} />
-                    &nbsp;<a href={`/profile?githubId=${value}`}>{value}</a>
-                  </div>
-                ),
+                render: (value: string) => <GithubUserLink value={value} />,
               },
               {
                 title: 'Contacts Notes',
