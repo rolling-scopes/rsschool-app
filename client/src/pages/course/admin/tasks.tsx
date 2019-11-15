@@ -69,7 +69,7 @@ class CourseTasksPage extends React.Component<Props, State> {
         task => task.taskId === data.taskId,
       );
 
-      //TODO: remove it! it is temporary solution for just added task edit case.
+      // TODO: remove it! it is temporary solution for just added task edit case.
       courseTask.studentStartDate = startDate;
       courseTask.studentEndDate = endDate;
 
