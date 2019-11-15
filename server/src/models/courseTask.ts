@@ -41,10 +41,10 @@ export class CourseTask {
   @Column()
   stageId: number;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   studentStartDate: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   studentEndDate: string;
 
   @Column({ type: 'timestamp', nullable: true })

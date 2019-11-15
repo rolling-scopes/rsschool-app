@@ -69,6 +69,10 @@ class CourseTasksPage extends React.Component<Props, State> {
         task => task.taskId === data.taskId,
       );
 
+      // TODO: remove it! it is temporary solution for just added task edit case.
+      courseTask.studentStartDate = startDate;
+      courseTask.studentEndDate = endDate;
+
       const updatedData =
         this.state.modalAction === 'update'
           ? this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...task } : d))

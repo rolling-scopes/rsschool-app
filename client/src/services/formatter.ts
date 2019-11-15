@@ -1,11 +1,13 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 export function formatDate(value: string) {
   return moment(value).format('YYYY-MM-DD');
 }
 
 export function formatDateTime(value: string) {
-  return moment(value).format('YYYY-MM-DD HH:mm');
+  return moment(value)
+    .utc()
+    .format('YYYY-MM-DD HH:mm');
 }
 
 export function formatTime(value: string) {
