@@ -22,14 +22,12 @@ type State = {
   courseTasks: CourseTask[];
   submitResults: SubmitResult[];
   isLoading: boolean;
-  isPowerMentor: boolean;
   selectedFileList: Map<string, UploadFile>;
 };
 
 class TaskScorePage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
-    isPowerMentor: false,
     submitResults: [],
     courseTasks: [],
     selectedFileList: new Map(),

@@ -80,7 +80,7 @@ export const config: IConfig = {
     installationId: process.env.RSSHCOOL_API_GITHUB_APP_INSTALL_ID || '',
   },
   roles: {
-    adminTeams: ['rsschool-dev-team@rolling-scopes'],
+    adminTeams: process.env.RSSCHOOL_ADMIN_TEAMS ? process.env.RSSCHOOL_ADMIN_TEAMS.split(',') : [],
     hirers: process.env.RSSHCOOL_API_HIRERS ? process.env.RSSHCOOL_API_HIRERS.split(',') : [],
   },
   isDevMode: process.env.NODE_ENV !== 'production',

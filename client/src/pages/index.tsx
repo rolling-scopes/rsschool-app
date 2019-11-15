@@ -56,13 +56,13 @@ const routes = [
   {
     name: `✅ Submit Review`,
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
+    access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole)),
     newTab: false,
   },
   {
     name: `📝 Submit Scores`,
     getLink: (course: Course) => `/course/task-owner/submit-scores?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isTaskOwner),
+    access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
     newTab: false,
   },
   {
@@ -164,7 +164,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   private hasAccessToCourse = (session: Session, course: Course) => {
     const { isAdmin, isHirer, isActivist } = session;
     const role = session.roles[course.id];
-    return !!role || isAdmin || isHirer || isActivist;
+    return !!role || isAdmin || isHirer || isActivist || isTaskOwner(course, role, session);
   };
 
   private getLinks = (course: Course) => {
@@ -193,7 +193,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     }
     const { isAdmin } = session;
     return courses
-      .filter(course => session.roles[course.id] || isAdmin)
+      .filter(course => session.roles[course.id] || isAdmin || isTaskOwner(course, session.roles[course.id], session))
       .sort((a, b) => (a.startDate && b.startDate ? b.startDate.localeCompare(a.startDate) : 0));
   }
 

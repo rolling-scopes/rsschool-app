@@ -17,7 +17,8 @@ export const courseGuard = async (ctx: Router.RouterContext, next: () => Promise
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId = Number(ctx.params.courseId);
-    if ((courseId && user.roles[courseId]) || user.isAdmin || user.isHirer) {
+    const isTaskOwner = user.courseRoles.taskOwnerRole.courses.some(({ id }: { id: number }) => id === courseId);
+    if ((courseId && user.roles[courseId]) || user.isAdmin || user.isHirer || isTaskOwner) {
       await next();
       return;
     }
@@ -54,13 +55,16 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
 };
 
 export const taskOwnerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
-  const courseId: number = Number(ctx.params.courseId);
-  const isTaskOwner = ctx.state.user.courseRoles.taskOwnerRole.courses.some(
-    ({ id }: { id: number }) => id === courseId,
-  );
-  if (ctx.state.user != null && isTaskOwner) {
-    await next();
-    return;
+  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
+    const user = ctx.state.user as IUserSession;
+    const courseId: number = Number(ctx.params.courseId);
+    const isCourseManager = user.roles[courseId] === 'coursemanager';
+    const isMentor = courseId && user.roles[courseId] === 'mentor';
+    const isTaskOwner = user.courseRoles.taskOwnerRole.courses.some(({ id }: { id: number }) => id === courseId);
+    if (isTaskOwner || isMentor || isCourseManager || user.isAdmin || user.isHirer) {
+      await next();
+      return;
+    }
   }
   await basicAuthAdmin(ctx, next);
 };
