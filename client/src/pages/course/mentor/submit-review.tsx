@@ -42,17 +42,16 @@ class TaskScorePage extends React.Component<Props, State> {
     const hasStudentEndDate = task => Boolean(task.studentEndDate);
     const isNotUseJury = task => !task.useJury;
 
-    const isSumbitedByTaskOwner = task => this.isTaskOwner(task)
-      && isCheckedByTaskOwner(task);
+    const isSumbitedByTaskOwner = task => this.isTaskOwner(task) && isCheckedByTaskOwner(task);
 
-    const isSumbitedByMentor = task => hasStudentEndDate(task)
-      && isNotAutoChecked(task)
-      && isNotUseJury(task)
-      && isCheckedByMentor(task)
-      && (isMentor || isPowerMentor);
+    const isSumbitedByMentor = task =>
+      hasStudentEndDate(task) &&
+      isNotAutoChecked(task) &&
+      isNotUseJury(task) &&
+      isCheckedByMentor(task) &&
+      (isMentor || isPowerMentor);
 
-    const isSumbitedByPowerAdmin = task => isPowerMentor
-      && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
+    const isSumbitedByPowerAdmin = task => isPowerMentor && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
 
     const courseTasks = (await this.courseService.getCourseTasks(courseId))
       .sort(sortTasksByEndDate)
@@ -63,7 +62,7 @@ class TaskScorePage extends React.Component<Props, State> {
     this.setState({ isPowerMentor, students, courseTasks });
   }
 
-render() {
+  render() {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const courseTaskId = getFieldValue('courseTaskId');
     const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
@@ -121,16 +120,17 @@ render() {
         </Col>
       </>
     );
-  };
+  }
 
-  private isTaskOwner = (task) => {
+  private isTaskOwner = task => {
     const courseId = this.props.course.id;
     const { courseRoles } = this.props.session;
 
-    const { tasksIds = [] }: any = courseRoles
-      && courseRoles.taskOwnerRole
-      && courseRoles.taskOwnerRole.courses.find(course => course.id === courseId)
-      || {};
+    const { tasksIds = [] }: any =
+      (courseRoles &&
+        courseRoles.taskOwnerRole &&
+        courseRoles.taskOwnerRole.courses.find(course => course.id === courseId)) ||
+      {};
 
     return tasksIds.includes(task.id);
   };
@@ -140,9 +140,9 @@ render() {
 
     return isPowerMentor || this.isTaskOwner({ id: courseTaskId })
       ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-      : students
-        .filter(({ githubId, firstName, lastName }: any) => `${githubId} ${firstName} ${lastName}`
-        .match(searchText));
+      : students.filter(({ githubId, firstName, lastName }: any) =>
+          `${githubId} ${firstName} ${lastName}`.match(searchText),
+        );
   };
 
   private handleTaskChange = async (value: number) => {

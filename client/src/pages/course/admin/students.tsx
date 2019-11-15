@@ -234,7 +234,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     } catch (e) {
       message.error('An error occured. Please try later.');
     }
-  }
+  };
 }
 
 const styles = css`

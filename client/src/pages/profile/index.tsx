@@ -245,13 +245,7 @@ class ProfilePage extends React.Component<Props, State> {
     return (
       <div>
         Mentor:{' '}
-        {student.mentor ? (
-          <a href={this.getLink(student.mentor.githubId)}>
-            {student.mentor.name}
-          </a>
-        ) : (
-          'No Mentor'
-        )}
+        {student.mentor ? <a href={this.getLink(student.mentor.githubId)}>{student.mentor.name}</a> : 'No Mentor'}
       </div>
     );
   }
