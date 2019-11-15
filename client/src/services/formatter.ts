@@ -5,7 +5,9 @@ export function formatDate(value: string) {
 }
 
 export function formatDateTime(value: string) {
-  return moment(value).utc().format('YYYY-MM-DD HH:mm');
+  return moment(value)
+    .utc()
+    .format('YYYY-MM-DD HH:mm');
 }
 
 export function formatTime(value: string) {
