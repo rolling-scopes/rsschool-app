@@ -60,23 +60,22 @@ class CourseTasksPage extends React.Component<Props, State> {
         maxScore: values.maxScore,
       };
 
-      const courseTask =
-        this.state.modalAction === 'update'
-          ? await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data)
-          : await this.courseService.createCourseTask(this.props.course.id, data);
+      let courseTask;
+      let updatedData;
 
-      const task = (await this.courseService.getCourseTasks(this.props.course.id)).find(
-        task => task.taskId === data.taskId,
-      );
+      if (this.state.modalAction === 'update') {
+        courseTask = await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data)
+        courseTask.taskOwnerId = values.taskOwnerId;
+        courseTask.studentStartDate = startDate;
+        courseTask.studentEndDate = endDate;
+        updatedData = this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...courseTask } : d));
+      } else {
+        courseTask = await this.courseService.createCourseTask(this.props.course.id, data);
+        courseTask.studentStartDate = startDate;
+        courseTask.studentEndDate = endDate;
+        updatedData = this.state.data.concat([courseTask]);
+      }
 
-      // TODO: remove it! it is temporary solution for just added task edit case.
-      courseTask.studentStartDate = startDate;
-      courseTask.studentEndDate = endDate;
-
-      const updatedData =
-        this.state.modalAction === 'update'
-          ? this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...task } : d))
-          : this.state.data.concat([courseTask]);
       this.setState({ modalData: null, data: updatedData });
     });
   };
