@@ -64,7 +64,7 @@ class CourseTasksPage extends React.Component<Props, State> {
       let updatedData;
 
       if (this.state.modalAction === 'update') {
-        courseTask = await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data)
+        courseTask = await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data);
         courseTask.taskOwnerId = values.taskOwnerId;
         courseTask.studentStartDate = startDate;
         courseTask.studentEndDate = endDate;
