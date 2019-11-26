@@ -2,14 +2,16 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { TaskVerification, Student } from '../../models';
+import { TaskVerification } from '../../models';
 import { setResponse } from '../utils';
+import { getStudentByGithubId } from '../../services/courseService';
+
+type Params = { courseId: number; githubId: string };
 
 export const getTaskVerifications = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state!.user.id;
-  const courseId: number = ctx.params.courseId;
+  const { courseId, githubId } = ctx.params as Params;
 
-  const student = await getRepository(Student).findOne({ where: { userId, courseId } });
+  const student = await getStudentByGithubId(courseId, githubId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, {});
     return;

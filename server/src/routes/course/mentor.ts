@@ -4,44 +4,37 @@ import { ILogger } from '../../logger';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
 
-export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state!.user.id;
-  const courseId: number = ctx.params.courseId;
+type Params = { courseId: number; githubId: string };
 
-  const mentor = await courseService.getMentorByUserId(courseId, userId);
+export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params as Params;
+  const mentor = await courseService.getMentorByGithubId(courseId, githubId);
   if (mentor == null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
-
   const students = await courseService.getStudentsByMentorId(mentor.id);
   setResponse(ctx, OK, students);
 };
 
 export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state!.user.id;
-  const courseId: number = ctx.params.courseId;
-
-  const mentor = await courseService.getMentorByUserId(courseId, userId);
+  const { courseId, githubId } = ctx.params as Params;
+  const mentor = await courseService.getMentorByGithubId(courseId, githubId);
   if (mentor == null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
-
   const students = await courseService.getInterviewStudentsByMentorId(mentor.id);
   setResponse(ctx, OK, students);
 };
 
 export const getAllMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const userId = ctx.state!.user.id;
-  const courseId: number = ctx.params.courseId;
-
-  const mentor = await courseService.getMentorByUserId(courseId, userId);
+  const { courseId, githubId } = ctx.params as Params;
+  const mentor = await courseService.getMentorByGithubId(courseId, githubId);
   if (mentor == null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
-
   const students = await courseService.getStudentsByMentorId(mentor.id);
   const assignedStudents = await courseService.getAssignedStudentsByMentorId(mentor.id);
   setResponse(ctx, OK, { students, assignedStudents });

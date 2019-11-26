@@ -77,9 +77,19 @@ export interface MentorWithContacts {
 
 export class CourseService {
   private host = serverRuntimeConfig.rsHost || '';
+  private urlPrefix: string;
+
+  constructor(private courseId?: number) {
+    this.urlPrefix = `/api/course/${this.courseId}`;
+  }
+
+  private wrapUrl = (url: string) => {
+    return `${this.urlPrefix}${url}`;
+  };
 
   async updateCourse(id: number, data: Partial<Course>) {
-    const result = await axios.put<{ data: Course }>(`${this.host}/api/course/${id}`, data);
+    type Response = { data: Course };
+    const result = await axios.put<Response>(`/api/course/${id}`, data);
     return result.data.data;
   }
 
@@ -93,8 +103,9 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseTasks(courseId: number) {
-    const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasks`);
+  async getCourseTasks() {
+    type Response = { data: CourseTask[] };
+    const result = await axios.get<Response>(this.wrapUrl('/tasks'));
     return result.data.data;
   }
 
@@ -109,7 +120,7 @@ export class CourseService {
   }
 
   async createCourseEvent(courseId: number, data: Partial<CourseEvent>) {
-    const result = await axios.post<{ data: CourseEvent }>(`${this.host}/api/course/${courseId}/event`, data);
+    const result = await axios.post<{ data: CourseEvent }>(`/api/course/${courseId}/event`, data);
     return result.data.data;
   }
 
@@ -152,13 +163,15 @@ export class CourseService {
     }
   }
 
-  async getCourseMentors(courseId: number) {
-    const result = await axios.get<{ data: MentorDetails[] }>(`${this.host}/api/course/${courseId}/mentors`);
+  async getMentorsWithDetails() {
+    type Response = { data: MentorDetails[] };
+    const result = await axios.get<Response>(this.wrapUrl('/mentors/details'));
     return result.data.data;
   }
 
   async getCourseTasksWithTaskCheckers(courseId: number) {
-    const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasksCheckers`);
+    type Response = { data: CourseTask[] };
+    const result = await axios.get<Response>(`${this.host}/api/course/${courseId}/tasksCheckers`);
     return result.data.data;
   }
 
@@ -181,7 +194,7 @@ export class CourseService {
   }
 
   async getCourseScore(courseId: number) {
-    const result = await axios.get<{ data: StudentScore[] }>(`/api/course/${courseId}/score`);
+    const result = await axios.get<{ data: StudentScore[] }>(`/api/course/${courseId}/students/score`);
     return result.data.data;
   }
 
@@ -215,15 +228,13 @@ export class CourseService {
   }
 
   async postPublicFeedback(courseId: number, data: { toUserId: number; badgeId?: string; comment: string }) {
-    const result = await axios.post<{ data: { heroesUrl: string } }>(`/api/course/${courseId}/feedback`, data);
+    type Response = { data: { heroesUrl: string } };
+    const result = await axios.post<Response>(`/api/course/${courseId}/feedback`, data);
     return result.data.data;
   }
 
-  async expelStudent(courseId: number, studentId: number, comment: string = '') {
-    await axios.post(`/api/course/${courseId}/expulsion`, {
-      studentId,
-      comment,
-    });
+  async expelStudent(githubId: string, comment: string = '') {
+    await axios.post(this.wrapUrl(`/student/${githubId}/status`), { comment, status: 'expelled' });
   }
 
   async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
@@ -276,13 +287,14 @@ export class CourseService {
   }
 
   async getStageInterviewsByStudent(courseId: number, githubId: string) {
-    const result = await axios.get(`/api/course/${courseId}/user/${githubId}/interviews`);
+    const result = await axios.get(`/api/course/${courseId}/student/${githubId}/interviews`);
     return result.data.data;
   }
 
-  async createRepository(courseId: number, githubId: string) {
-    const result = await axios.post(`/api/course/${courseId}/user/${githubId}/repository`);
-    return result.data.data as { repository: string };
+  async createRepository(githubId: string) {
+    type Response = { data: { repository: string } };
+    const result = await axios.post<Response>(this.wrapUrl(`/mentor/${githubId}/repository`));
+    return result.data.data;
   }
 
   async createRepositories(courseId: number) {
@@ -290,8 +302,8 @@ export class CourseService {
     return result.data.data as { repository: string }[];
   }
 
-  async expelMentor(courseId: number, githubId: string) {
-    await axios.delete(`/api/course/${courseId}/mentor/${githubId}`);
+  async expelMentor(githubId: string) {
+    await axios.post(this.wrapUrl(`/mentor/${githubId}/status/expelled`));
   }
 
   isPowerUser(courseId: number, session: Session) {

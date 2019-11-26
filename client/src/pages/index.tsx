@@ -1,4 +1,4 @@
-import { Button, List, Select, Result, Layout } from 'antd';
+import { Button, List, Select, Result, Layout, Icon } from 'antd';
 import { Header, RegistryBanner, AdminSider, FooterLayout } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
@@ -42,55 +42,91 @@ const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Se
 
 const routes = [
   {
-    name: `🔥 Score`,
+    name: () => (
+      <>
+        <Icon type="fire" theme="twoTone" twoToneColor="orange" /> Score
+      </>
+    ),
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,
     newTab: false,
   },
   {
-    name: `🗓 Schedule (draft)`,
+    name: () => (
+      <>
+        <Icon type="calendar" theme="twoTone" twoToneColor="#eb2f96" /> Schedule (draft)
+      </>
+    ),
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
     access: anyAccess,
     newTab: false,
   },
   {
-    name: `✅ Submit Review`,
+    name: () => (
+      <>
+        <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> Submit Review
+      </>
+    ),
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole)),
     newTab: false,
   },
   {
-    name: `📝 Submit Scores`,
+    name: () => (
+      <>
+        <Icon type="check-square" theme="twoTone" twoToneColor="#52c41a" /> Submit Scores
+      </>
+    ),
     getLink: (course: Course) => `/course/task-owner/submit-scores?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
     newTab: false,
   },
   {
-    name: `🎤 Stage Interview`,
+    name: () => (
+      <>
+        <Icon type="interaction" theme="twoTone" /> Stage Interview
+      </>
+    ),
     getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
   {
-    name: `🎤 Stage Interviews`,
+    name: () => (
+      <>
+        <Icon type="interaction" theme="twoTone" /> Stage Interviews
+      </>
+    ),
     getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },
   {
-    name: `📝 Stage Interview Feedback`,
+    name: () => (
+      <>
+        <Icon type="highlight" theme="twoTone" twoToneColor="#7f00ff" /> Stage Interview Feedback
+      </>
+    ),
     getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },
   {
-    name: `🚀 Submit Task`,
+    name: () => (
+      <>
+        <Icon type="play-circle" theme="twoTone" twoToneColor="#7f00ff" /> Submit Task
+      </>
+    ),
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
   {
-    name: `🚦 Task Verification Status`,
+    name: () => (
+      <>
+        <Icon type="dashboard" theme="twoTone" twoToneColor="#52c41a" /> Task Verification Status
+      </>
+    ),
     getLink: (course: Course) => `/course/tasks-verifications?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
@@ -109,31 +145,35 @@ const routes = [
   //   newTab: false,
   // },
   {
-    name: `😞 Expel Student`,
+    name: () => (
+      <>
+        <Icon type="stop" theme="twoTone" twoToneColor="red" /> Expel Student
+      </>
+    ),
     getLink: (course: Course) => `/course/mentor/expel?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },
   {
-    name: `🎟 Course Events`,
+    name: () => `Course Events`,
     getLink: (course: Course) => `/course/admin/events?course=${course.alias}`,
     access: isAdminRole,
     newTab: false,
   },
   {
-    name: `🗂 Course Tasks`,
+    name: () => `Course Tasks`,
     getLink: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
     access: isAdminRole,
     newTab: false,
   },
   {
-    name: `👩‍🎓 Course Students`,
+    name: () => `Course Students`,
     getLink: (course: Course) => `/course/admin/students?course=${course.alias}`,
     access: combineOr(isAdminRole, isCourseManager),
     newTab: false,
   },
   {
-    name: `👩‍🏫 Course Mentors`,
+    name: () => `Course Mentors`,
     getLink: (course: Course) => `/course/admin/mentors?course=${course.alias}`,
     access: combineOr(isAdminRole, isCourseManager),
     newTab: false,
@@ -180,7 +220,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     return routes
       .filter(route => route.access(course, role, this.props.session))
       .map(route => ({
-        name: route.name,
+        name: route.name(),
         link: route.getLink(course),
         newTab: route.newTab,
       }));
@@ -321,6 +361,6 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 }
 
-type LinkInfo = { name: string; link: string; newTab: boolean };
+type LinkInfo = { name: React.ReactNode; link: string; newTab: boolean };
 
 export default withCourses(withSession(IndexPage));

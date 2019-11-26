@@ -29,7 +29,11 @@ export class Student {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Course, (course: Course) => course.students, { nullable: true })
+  @ManyToOne(
+    _ => Course,
+    (course: Course) => course.students,
+    { nullable: true },
+  )
   course: Course;
 
   @Column({ nullable: true })
@@ -41,27 +45,51 @@ export class Student {
   @Column()
   userId: number;
 
-  @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
+  @ManyToOne(
+    _ => Mentor,
+    (mentor: Mentor) => mentor.students,
+    { nullable: true },
+  )
   mentor: Mentor;
 
   @Column({ nullable: true })
   mentorId: number;
 
-  @ManyToOne(_ => Stage, (stage: Stage) => stage.students, { nullable: true })
+  @ManyToOne(
+    _ => Stage,
+    (stage: Stage) => stage.students,
+    { nullable: true },
+  )
   stage: Stage;
 
-  @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.student, { nullable: true })
+  @OneToMany(
+    _ => TaskResult,
+    (taskResult: TaskResult) => taskResult.student,
+    { nullable: true },
+  )
   taskResults: TaskResult[] | null;
 
-  @OneToMany(_ => StageInterview, (stageInterview: StageInterview) => stageInterview.student, { nullable: true })
+  @OneToMany(
+    _ => StageInterview,
+    (stageInterview: StageInterview) => stageInterview.student,
+    { nullable: true },
+  )
   stageInterviews: StageInterview[] | null;
 
-  @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.student, { nullable: true })
+  @OneToMany(
+    _ => TaskChecker,
+    (taskChecker: TaskChecker) => taskChecker.student,
+    { nullable: true },
+  )
   taskChecker: TaskChecker[] | null;
 
-  @OneToMany(_ => TaskInterviewResult, (taskInterviewResult: TaskInterviewResult) => taskInterviewResult.student, {
-    nullable: true,
-  })
+  @OneToMany(
+    _ => TaskInterviewResult,
+    (taskInterviewResult: TaskInterviewResult) => taskInterviewResult.student,
+    {
+      nullable: true,
+    },
+  )
   taskInterviewResults: TaskInterviewResult[] | null;
 
   @Column({ default: false })
@@ -100,7 +128,11 @@ export class Student {
   @Column({ default: 0, type: 'float' })
   totalScore: number;
 
-  @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
+  @OneToMany(
+    _ => StudentFeedback,
+    (studentFeedback: StudentFeedback) => studentFeedback.student,
+    { nullable: true },
+  )
   feedback: StudentFeedback[] | null;
 
   @Column({ default: new Date(0), type: 'timestamptz' })
@@ -109,6 +141,9 @@ export class Student {
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date;
 
-  @OneToOne(() => Certificate, certificate => certificate.student)
+  @OneToOne(
+    () => Certificate,
+    certificate => certificate.student,
+  )
   certificate: Certificate;
 }

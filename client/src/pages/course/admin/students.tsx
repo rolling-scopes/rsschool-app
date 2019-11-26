@@ -33,7 +33,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     },
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: CoursePageProps) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     await this.loadStudents();
@@ -51,6 +56,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             value={this.state.stats.activeStudentCount}
             suffix={`/ ${this.state.stats.studentCount}`}
           />
+
           <Table
             className="m-3"
             pagination={false}
@@ -73,7 +79,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               );
               this.setState({ students, expelledStudent: null });
             }}
-            studentId={expelledStudent ? expelledStudent.id : 0}
+            githubId={expelledStudent?.githubId}
             visible={!!expelledStudent}
             courseId={this.props.course.id}
           />
@@ -183,7 +189,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private async handleCreateRepo({ githubId }: StudentDetails) {
     try {
       this.setState({ isLoading: true });
-      const { repository } = await this.courseService.createRepository(this.props.course.id, githubId);
+      const { repository } = await this.courseService.createRepository(githubId);
       const students = this.state.students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
       this.setState({ students, isLoading: false });
     } catch (e) {

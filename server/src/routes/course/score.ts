@@ -62,7 +62,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
     return;
   }
-  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor', 'user'] });
+  const student = await getRepository(Student).findOne(data.studentId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
@@ -76,7 +76,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
       setResponse(ctx, BAD_REQUEST, { message: 'no score' });
       return;
     }
-    const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
+    const existingResult = await taskResultsService.getTaskResult(studentId, courseTaskId);
     if (existingResult == null) {
       const taskResult = taskResultsService.createJuryTaskResult(authorId, data);
       const addResult = await getRepository(TaskResult).save(taskResult);
@@ -111,7 +111,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const existingResult = await taskResultsService.getStudentTaskResult(studentId, courseTaskId);
+  const existingResult = await taskResultsService.getTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
     const taskResult = taskResultsService.createTaskResult(authorId, data);
     const addResult = await getRepository(TaskResult).save(taskResult);
@@ -173,7 +173,7 @@ export const postScores = (logger: ILogger) => async (ctx: Router.RouterContext)
         continue;
       }
 
-      const existingResult = await taskResultsService.getStudentTaskResult(student.id, data.courseTaskId);
+      const existingResult = await taskResultsService.getTaskResult(student.id, data.courseTaskId);
 
       if (existingResult == null) {
         const taskResult = taskResultsService.createTaskResult(0, {
@@ -252,7 +252,7 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         continue;
       }
 
-      const existingResult = await taskResultsService.getStudentTaskResult(student.id, data.courseTaskId);
+      const existingResult = await taskResultsService.getTaskResult(student.id, data.courseTaskId);
 
       if (existingResult == null) {
         const taskResult = taskResultsService.createTaskResult(0, {
@@ -332,13 +332,10 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
 };
 
 function getTasksResults(taskResults: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
-  return courseTasks.reduce(
-    (acc, courseTask) => {
-      const r = taskResults.find(r => r.courseTaskId === courseTask.id);
-      acc[(courseTask.task as Task).name] = r ? r.score : 0;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  return courseTasks.reduce((acc, courseTask) => {
+    const r = taskResults.find(r => r.courseTaskId === courseTask.id);
+    acc[(courseTask.task as Task).name] = r ? r.score : 0;
+    return acc;
+  }, {} as Record<string, number>);
   return {};
 }

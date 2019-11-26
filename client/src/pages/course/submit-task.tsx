@@ -21,11 +21,15 @@ class TaskCheckerPage extends React.Component<Props, State> {
     courseTasks: [],
   };
 
-  courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
-    const courseTasks = await this.courseService.getCourseTasks(courseId);
+    const courseTasks = await this.courseService.getCourseTasks();
 
     const filteredCourseTasks = courseTasks
       .sort(sortTasksByEndDate)

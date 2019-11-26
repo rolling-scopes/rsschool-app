@@ -5,7 +5,7 @@ const auth = require('koa-basic-auth'); //tslint:disable-line
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
 
-export const guard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+export const guard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     await next();
     return;
@@ -13,7 +13,7 @@ export const guard = async (ctx: Router.RouterContext, next: () => Promise<void>
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+export const courseGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId = Number(ctx.params.courseId);
@@ -26,7 +26,7 @@ export const courseGuard = async (ctx: Router.RouterContext, next: () => Promise
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseMentorGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+export const courseMentorGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId = Number(ctx.params.courseId);
@@ -54,7 +54,7 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
   await basicAuthAdmin(ctx, next);
 };
 
-export const taskOwnerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+export const taskOwnerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId: number = Number(ctx.params.courseId);

@@ -50,16 +50,29 @@ export class Course {
   @Column({ nullable: true })
   locationName: string;
 
-  @OneToMany(_ => Stage, (stage: Stage) => stage.course)
+  @OneToMany(
+    _ => Stage,
+    (stage: Stage) => stage.course,
+  )
   stages: Stage[];
 
-  @OneToMany(_ => Student, (student: Student) => student.course)
+  @OneToMany(
+    _ => Student,
+    (student: Student) => student.course,
+  )
   students: Student[];
 
-  @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.course)
+  @OneToMany(
+    _ => Mentor,
+    (mentor: Mentor) => mentor.course,
+  )
   mentors: Mentor[];
 
-  @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
+  @OneToMany(
+    _ => Registry,
+    (registry: Registry) => registry.course,
+    { nullable: true },
+  )
   registries: Registry[] | null;
 
   @Column({ default: false })

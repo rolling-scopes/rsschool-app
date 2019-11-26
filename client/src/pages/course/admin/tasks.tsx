@@ -28,13 +28,18 @@ class CourseTasksPage extends React.Component<Props, State> {
     modalAction: 'update',
   };
 
-  private courseService = new CourseService();
   private userService = new UserService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     const courseId = this.props.course.id;
     const [data, stages, tasks] = await Promise.all([
-      this.courseService.getCourseTasks(courseId),
+      this.courseService.getCourseTasks(),
       new StageService().getCourseStages(courseId),
       new TaskService().getTasks(),
     ]);
@@ -246,7 +251,7 @@ class CourseTasksPage extends React.Component<Props, State> {
 
   private handleDeleteItem = async (id: number) => {
     await this.courseService.deleteCourseTask(this.props.course.id, id);
-    const courseTasks = await this.courseService.getCourseTasks(this.props.course.id);
+    const courseTasks = await this.courseService.getCourseTasks();
     this.setState({ data: courseTasks });
   };
 }

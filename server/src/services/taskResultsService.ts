@@ -1,27 +1,19 @@
 import { TaskResult, TaskArtefact } from '../models';
 import { getRepository } from 'typeorm';
 
-export async function getStudentTaskResult(studentId: number, courseTaskId: number) {
+export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
     .createQueryBuilder('taskResult')
-    .innerJoinAndSelect('taskResult.student', 'student')
-    .innerJoinAndSelect('taskResult.courseTask', 'courseTask')
-    .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
-      studentId,
-      courseTaskId,
-    })
+    .where('"taskResult"."studentId" = :studentId', { studentId })
+    .andWhere('"taskResult"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
 }
 
 export async function getStudentTaskArtefact(studentId: number, courseTaskId: number) {
   return getRepository(TaskArtefact)
     .createQueryBuilder('taskArtefact')
-    .innerJoinAndSelect('taskArtefact.student', 'student')
-    .innerJoinAndSelect('taskArtefact.courseTask', 'courseTask')
-    .where('student.id = :studentId AND courseTask.id = :courseTaskId', {
-      studentId,
-      courseTaskId,
-    })
+    .where('"taskResult"."studentId" = :studentId', { studentId })
+    .andWhere('"taskResult"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
 }
 

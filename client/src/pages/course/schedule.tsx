@@ -65,14 +65,18 @@ class SchedulePage extends React.Component<Props, State> {
   startOfToday = moment().startOf('day');
 
   readonly eventTypeToName = EventTypeToName;
+  private courseService: CourseService;
 
-  private courseService = new CourseService();
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     const courseId = this.props.course.id;
     const [events, tasks] = await Promise.all([
       this.courseService.getCourseEvents(courseId),
-      this.courseService.getCourseTasks(courseId),
+      this.courseService.getCourseTasks(),
     ]);
     const data = events
       .concat(

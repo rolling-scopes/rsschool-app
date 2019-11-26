@@ -8,7 +8,7 @@ import { formatMonthFriendly } from 'services/formatter';
 
 import withSession, { Session } from 'components/withSession';
 import withCourses from 'components/withCourses';
-import { Header, GithubAvatar, LoadingScreen, AdminSider } from 'components';
+import { Header, GithubUserLink, LoadingScreen, AdminSider } from 'components';
 import { stringSorter } from 'components/Table';
 
 const { Content } = Layout;
@@ -265,12 +265,7 @@ class RegistrationsPage extends React.Component<Props, State> {
                                 key: 'githubId',
                                 width: 100,
                                 sorter: stringSorter('githubId'),
-                                render: (value: string) => (
-                                  <div className="d-flex flex-row">
-                                    <GithubAvatar githubId={value} size={24} />
-                                    &nbsp;<a href={`https://github.com/${value}`}>{value}</a>
-                                  </div>
-                                ),
+                                render: (value: string) => <GithubUserLink value={value} />,
                               },
                               {
                                 title: 'Status',

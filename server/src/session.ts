@@ -2,7 +2,7 @@ import * as passport from 'koa-passport';
 import Router from 'koa-router';
 import { IUserSession } from './models';
 
-export function replaceSession(ctx: Router.RouterContext, session: Partial<IUserSession>) {
+export function replaceSession(ctx: Router.RouterContext<any, any>, session: Partial<IUserSession>) {
   // inject dev user into passport's session
   const key = (passport as any)._key;
   if (!ctx.session) {
@@ -13,7 +13,7 @@ export function replaceSession(ctx: Router.RouterContext, session: Partial<IUser
   };
 }
 
-export function updateSession(ctx: Router.RouterContext, session: Partial<IUserSession>) {
+export function updateSession(ctx: Router.RouterContext<any, any>, session: Partial<IUserSession>) {
   // inject dev user into passport's session
   const key = (passport as any)._key;
   if (!ctx.session || !ctx.session[key] || !ctx.session[key].user) {

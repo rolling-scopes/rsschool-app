@@ -13,7 +13,10 @@ export class StageInterview {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Student, (student: Student) => student.stageInterviews)
+  @ManyToOne(
+    _ => Student,
+    (student: Student) => student.stageInterviews,
+  )
   student: Student;
 
   @Column()

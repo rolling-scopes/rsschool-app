@@ -69,7 +69,7 @@ export const postInterviewFeedback = (_: ILogger) => async (ctx: Router.RouterCo
   }
 
   const { courseTaskId, studentId } = data;
-  const mentor = await courseService.getCourseMentorWithUser(courseId, userId);
+  const mentor = await courseService.getCourseMentor(courseId, userId);
   if (mentor == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
     return;
