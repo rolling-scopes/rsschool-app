@@ -4,7 +4,7 @@ import Router from 'koa-router';
 
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseRoute } from './course';
+import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
 import { stageRoute } from './stage';
 import { stagesRoute } from './stages';
@@ -45,6 +45,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, publicMeRouter(logger));
   applyRouter(router, registryRouter(logger));
   applyRouter(router, courseRoute(logger));
+  applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
