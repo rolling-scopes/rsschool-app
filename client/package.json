@@ -44,6 +44,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.142",
+    "@types/moment-timezone": "^0.5.12",
     "@types/node": "^10.0",
     "@types/react": "~16.9.13",
     "@types/react-dom": "~16.9.4",

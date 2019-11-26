@@ -33,8 +33,8 @@ export function numberSorter<T>(field: keyof T) {
     if (b == null) {
       return -1;
     }
-    const aValue = get(a, field);
-    const bValue = get(b, field);
+    const aValue = get(a, field, 0);
+    const bValue = get(b, field, 0);
     return bValue - aValue;
   };
 }
