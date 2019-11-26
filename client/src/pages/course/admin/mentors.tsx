@@ -7,6 +7,7 @@ import _ from 'lodash';
 import * as React from 'react';
 import { CourseService, MentorDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { relativeDays } from 'services/formatter';
 
 type State = {
   records: MentorDetails[];
@@ -94,14 +95,14 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: 'Github',
                 dataIndex: 'githubId',
                 sorter: stringSorter('githubId'),
-                width: 120,
+                width: 100,
                 render: (value: string) => <GithubUserLink value={value} />,
                 ...getColumnSearchProps('githubId'),
               },
               {
                 title: 'Name',
                 dataIndex: 'name',
-                width: 150,
+                width: 120,
                 sorter: stringSorter('name'),
                 ...getColumnSearchProps('name'),
               },
@@ -144,6 +145,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'taskResultsStats',
                 sorter: numberSorter('taskResultsStats.checked' as any),
                 render: (value: any) => `${value.checked} / ${value.total}`,
+              },
+              {
+                title: 'Last Checked Task',
+                dataIndex: 'taskResultsStats.lastUpdatedDate',
+                sorter: numberSorter('taskResultsStats.lastUpdatedDate' as any),
+                render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
               },
               {
                 title: 'Students',

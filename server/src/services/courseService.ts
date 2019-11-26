@@ -145,6 +145,7 @@ export async function expelMentor(courseId: number, githubId: string) {
     .select('id')
     .where('user.githubId = :githubId', { githubId })
     .getQuery();
+
   return mentorQuery()
     .update(Mentor)
     .set({ isExpelled: true })
@@ -284,36 +285,40 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
 }
 
 export async function getMentorsDetails(courseId: number): Promise<MentorDetails[]> {
-  const courseTasks = await getRepository(CourseTask)
+  const courseTaskQuery = getRepository(CourseTask)
     .createQueryBuilder('courseTask')
+    .select(['courseTask.id'])
     .leftJoin('courseTask.task', 'task')
     .leftJoin('courseTask.stage', 'stage')
     .where('task.verification = :manual', { manual: 'manual' })
     .andWhere('"courseTask".checker = :mentor', { mentor: 'mentor' })
     .andWhere('stage."courseId" = :courseId', { courseId })
-    .andWhere('"courseTask"."studentEndDate" < NOW()')
-    .getMany();
+    .andWhere('"courseTask"."studentEndDate" < NOW()');
+
+  const courseTasks = await courseTaskQuery.getMany();
   const count = courseTasks.length;
 
-  const records = await mentorQuery()
+  const query = mentorQuery()
     .innerJoin('mentor.user', 'user')
     .addSelect(getPrimaryUserFields())
     .leftJoin('mentor.students', 'students')
     .addSelect(['students.id'])
-    .leftJoin('students.taskResults', 'taskResults')
-    .leftJoin('taskResults.courseTask', 'courseTask')
-    .leftJoin('courseTask.task', 'task')
-    .addSelect(['taskResults.id', 'taskResults.score', 'taskResults.courseTaskId'])
+    .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
+      taskIds: courseTasks.map(t => t.id),
+    })
+    .addSelect(['taskResults.id', 'taskResults.score', 'taskResults.courseTaskId', 'taskResults.updatedDate'])
     .where(`"mentor"."courseId" = :courseId`, { courseId })
-    .andWhere('task.verification = :manual', { manual: 'manual' })
-    .andWhere('"courseTask".checker = :mentor', { mentor: 'mentor' })
-    .orderBy('mentor.createdDate')
-    .getMany();
+    .orderBy('mentor.createdDate');
+
+  const records = await query.getMany();
 
   const mentors = records.map(mentor => {
     const mentorBasic = convertToMentorBasic(mentor);
     const user = (mentor.user as User)!;
     const totalToCheck = (mentor.students?.length ?? 0) * count;
+    const lastUpdatedDate = _.max(
+      _.flatMap(mentor.students ?? [], s => s.taskResults?.map(r => new Date(r.updatedDate).getTime()) ?? []),
+    );
     return {
       ...mentorBasic,
       locationName: user.locationName || null,
@@ -323,6 +328,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
       studentsCount: mentor.students ? mentor.students.length : 0,
       interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
       taskResultsStats: {
+        lastUpdatedDate,
         total: totalToCheck,
         checked: mentor.students?.reduce((acc, student) => acc + (student.taskResults?.length ?? 0), 0) ?? 0,
       },
