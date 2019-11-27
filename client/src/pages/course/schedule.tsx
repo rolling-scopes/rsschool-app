@@ -1,7 +1,7 @@
-import { Form, Table, Tag, Row, Icon, Tooltip, Button, Typography } from 'antd';
+import { Form, Table, Tag, Row, Icon, Tooltip, Button, Typography, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
-import { dateRenderer, timeRenderer } from 'components/Table';
+import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CourseEvent, CourseService, CourseTask } from 'services/course';
@@ -9,6 +9,7 @@ import { CoursePageProps } from 'services/models';
 import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
 import moment from 'moment';
+import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
 
 const { Text } = Typography;
 
@@ -16,6 +17,7 @@ type Props = CoursePageProps & FormComponentProps;
 
 interface State {
   data: CourseEvent[];
+  timeZone: string;
 }
 
 enum EventTypeColor {
@@ -60,6 +62,7 @@ const EventTypeToName = {
 class SchedulePage extends React.Component<Props, State> {
   state: State = {
     data: [],
+    timeZone: DEFAULT_TIMEZONE,
   };
 
   startOfToday = moment().startOf('day');
@@ -70,6 +73,14 @@ class SchedulePage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.courseService = new CourseService(props.course.id);
+  }
+
+  handleTimeZoneChange = (timeZone) => {
+    this.setState({timeZone});
+  }
+
+  timeZoneRenderer = (value) => {
+    return value ? moment(value, 'HH:mm:ssZ').tz(this.state.timeZone).format('HH:mm') : '';
   }
 
   async componentDidMount() {
@@ -106,7 +117,7 @@ class SchedulePage extends React.Component<Props, State> {
           return acc;
         }, []),
       )
-      .sort((a, b) => a.date.localeCompare(b.date));
+      .sort((a, b) => a.date ? a.date.localeCompare(b.date) : -1);
     this.setState({ data });
   }
 
@@ -121,6 +132,7 @@ class SchedulePage extends React.Component<Props, State> {
           <p>Please see the actual schedule here:</p>
           <p>
             <Button
+              className='mt-3 ml-3'
               type="primary"
               icon="calendar"
               target="_blank"
@@ -128,6 +140,18 @@ class SchedulePage extends React.Component<Props, State> {
             >
               See Schedule
             </Button>
+            <Select
+              className='mt-3 ml-3'
+              placeholder="Please select a timezone"
+              defaultValue={this.state.timeZone}
+              onChange={this.handleTimeZoneChange}
+            >
+              {Object.entries(TIMEZONES).map((tz) => (
+                <Select.Option key={tz[0]} value={tz[0]}>
+                  {tz[0]}
+                </Select.Option>
+              ))}
+            </Select>
           </p>
         </Row>
         <Row type="flex" justify="end" className="m-3">
@@ -144,7 +168,7 @@ class SchedulePage extends React.Component<Props, State> {
           rowClassName={record => (moment(record.date).isBefore(this.startOfToday) ? 'rs-table-row-disabled' : '')}
           columns={[
             { title: 'Date', width: 120, dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', width: 60, dataIndex: 'time', render: timeRenderer },
+            { title: 'Time', width: 60, dataIndex: 'time', render: this.timeZoneRenderer },
             {
               title: 'Type',
               width: 100,
