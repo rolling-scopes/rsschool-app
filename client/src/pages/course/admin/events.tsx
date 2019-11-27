@@ -1,7 +1,7 @@
 import { Button, DatePicker, Input, Form, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
-import { dateRenderer, timeRenderer, idFromArrayRenderer } from 'components/Table';
+import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import moment from 'moment';
 import * as React from 'react';
@@ -13,12 +13,14 @@ import { Stage, StageService } from 'services/stage';
 import { urlPattern } from 'services/validators';
 import { UserService } from 'services/user';
 import { UserSearch } from 'components/UserSearch';
+import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
 
 type Props = CoursePageProps & FormComponentProps;
 
 interface State extends PageWithModalState<CourseEvent> {
   events: Event[];
   stages: Stage[];
+  timeZone: string;
 }
 
 class CourseEventsPage extends React.Component<Props, State> {
@@ -28,6 +30,7 @@ class CourseEventsPage extends React.Component<Props, State> {
     stages: [],
     modalData: null,
     modalAction: 'update',
+    timeZone: DEFAULT_TIMEZONE,
   };
 
   private timeZoneOffset = moment().format('Z');
@@ -44,6 +47,18 @@ class CourseEventsPage extends React.Component<Props, State> {
     ]);
     this.setState({ data, stages, events });
   }
+
+  private handleTimeZoneChange = (timeZone: string) => {
+    this.setState({ timeZone });
+  };
+
+  timeZoneRenderer = value => {
+    return value
+      ? moment(value, 'HH:mm:ssZ')
+          .tz(this.state.timeZone)
+          .format('HH:mm')
+      : '';
+  };
 
   private refreshData = async () => {
     const courseId = this.props.course.id;
@@ -87,6 +102,18 @@ class CourseEventsPage extends React.Component<Props, State> {
         <Button type="primary" className="mt-3 ml-3" onClick={this.handleAddItem}>
           Add Event
         </Button>
+        <Select
+          className="mt-3 ml-3"
+          placeholder="Please select a timezone"
+          defaultValue={this.state.timeZone}
+          onChange={this.handleTimeZoneChange}
+        >
+          {Object.entries(TIMEZONES).map(tz => (
+            <Select.Option key={tz[0]} value={tz[0]}>
+              {tz[0]}
+            </Select.Option>
+          ))}
+        </Select>
         <Table
           className="m-3"
           rowKey="id"
@@ -102,7 +129,7 @@ class CourseEventsPage extends React.Component<Props, State> {
             },
             { title: 'Type', dataIndex: 'event.type' },
             { title: 'Date', dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', dataIndex: 'time', render: timeRenderer },
+            { title: 'Time', dataIndex: 'time', render: this.timeZoneRenderer },
             { title: 'Place', dataIndex: 'place' },
             {
               title: 'Organizer',

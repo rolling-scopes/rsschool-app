@@ -44,6 +44,9 @@ export class CourseEvent {
   @Column({ type: 'time with time zone', nullable: true })
   time: string;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  datetime: string;
+
   @Column({ nullable: true })
   place: string;
 
