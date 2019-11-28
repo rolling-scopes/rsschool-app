@@ -99,6 +99,7 @@ class TasksPage extends React.Component<Props, State> {
   private renderModal() {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const modalData = this.state.modalData as Task;
+
     if (modalData == null) {
       return null;
     }
@@ -162,7 +163,8 @@ class TasksPage extends React.Component<Props, State> {
               <Select>
                 <Select.Option value="jstask">JS task</Select.Option>
                 <Select.Option value="htmltask">HTML task</Select.Option>
-                <Select.Option value="externaltask">External task</Select.Option>
+                <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
+                <Select.Option value="codewars">Codewars</Select.Option>
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
@@ -206,13 +208,13 @@ class TasksPage extends React.Component<Props, State> {
         return;
       }
       const data: Partial<Task> = {
+        type: values.type,
         name: values.name,
         verification: values.verification,
         githubPrRequired: !!values.githubPrRequired,
         descriptionUrl: values.descriptionUrl,
         githubRepoName: values.githubRepoName,
         sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-        type: values.type,
         tags: values.tags,
       };
       try {

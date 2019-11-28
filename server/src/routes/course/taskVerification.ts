@@ -34,7 +34,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
 };
 
 export type TaskEvent = {
-  courseTask: JsTask | HtmlTask | ExternalTask;
+  courseTask: JsTask | HtmlTask | HtmlCssAcademy | Codewars;
   studentId: number;
   githubId: string;
 };
@@ -51,10 +51,17 @@ type HtmlTask = {
   githubPageUrl: string;
 };
 
-type ExternalTask = {
+type HtmlCssAcademy = {
   id: number;
-  type: 'externaltask';
+  type: 'htmlcssacademy';
   codecademy: string;
   htmlacademy: string;
   udemy: string[];
+};
+
+export type Codewars = {
+  id: number;
+  type: 'codewars';
+  codewars: string;
+  deadline: string;
 };

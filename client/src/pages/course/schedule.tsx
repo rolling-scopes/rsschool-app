@@ -25,7 +25,9 @@ enum EventTypeColor {
   test = '#63ab91',
   jstask = 'green',
   htmltask = 'green',
+  htmlcssacademy = 'green',
   externaltask = 'green',
+  codewars = 'green',
   codejam = 'green',
   newtask = 'green',
   lecture = 'blue',
@@ -57,6 +59,8 @@ const EventTypeToName = {
   htmltask: 'html task',
   codejam: 'code jam',
   externaltask: 'external task',
+  htmlcssacademy: 'html/css academy',
+  codewars: 'codewars',
 };
 
 class SchedulePage extends React.Component<Props, State> {
