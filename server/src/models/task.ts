@@ -42,6 +42,9 @@ export class Task {
   @Column({ nullable: true })
   type: 'jstask' | 'htmltask' | 'externaltask' | 'test' | 'codejam' | 'interview';
 
+  @Column({ nullable: true })
+  externalType: 'codewars' | 'htmlcss';
+
   @Column({ default: false })
   useJury: boolean;
 

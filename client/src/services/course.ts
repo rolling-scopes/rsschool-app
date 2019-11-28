@@ -14,6 +14,7 @@ export interface CourseTask {
   maxScore: number | null;
   verification: 'auto' | 'manual';
   type: 'jstask' | 'htmltask' | 'externaltask' | 'test';
+  externalType: 'htmlcss' | 'codewars';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   scoreWeight: number;

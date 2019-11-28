@@ -26,7 +26,9 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
     courseTask: {
       ...inputData,
       id: courseTask.id,
-      type: courseTask.task.type,
+      type: courseTask.task.externalType
+        ? `${courseTask.task.type}:${courseTask.task.externalType}`
+        : courseTask.task.type,
     },
   };
   await awsTaskService.postTaskVerification([result]);
@@ -34,7 +36,7 @@ export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterCon
 };
 
 export type TaskEvent = {
-  courseTask: JsTask | HtmlTask | ExternalTask;
+  courseTask: JsTask | HtmlTask | ExternalTaskHtmlCss | ExternalTaskCodewars;
   studentId: number;
   githubId: string;
 };
@@ -51,10 +53,17 @@ type HtmlTask = {
   githubPageUrl: string;
 };
 
-type ExternalTask = {
+type ExternalTaskHtmlCss = {
   id: number;
-  type: 'externaltask';
+  type: 'externaltask:htmlcss';
   codecademy: string;
   htmlacademy: string;
   udemy: string[];
+};
+
+export type ExternalTaskCodewars = {
+  id: number;
+  type: 'externaltask:codewars';
+  codewars: string;
+  deadline: string;
 };

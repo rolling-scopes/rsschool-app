@@ -36,7 +36,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
       .filter(
         task =>
           task.studentEndDate &&
-          new Date(task.studentEndDate).getTime() > Date.now() &&
+          (new Date(task.studentEndDate).getTime() > Date.now() || task.externalType === 'codewars') &&
           task.verification === 'auto' &&
           (task.type === 'externaltask' || task.type === 'jstask'),
       );
@@ -67,7 +67,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
               </Form.Item>
             </Col>
           </Row>
-          {task && task.type === 'externaltask' && (
+          {task && task.type === 'externaltask' && task.externalType === 'htmlcss' && (
             <>
               {task.descriptionUrl && (
                 <Row>
@@ -102,6 +102,29 @@ class TaskCheckerPage extends React.Component<Props, State> {
                     {field('udemy2', {
                       rules: [{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }],
                     })(<Input placeholder="UC-xxxxxx" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+            </>
+          )}
+          {task && task.type === 'externaltask' && task.externalType === 'codewars' && (
+            <>
+              {task.descriptionUrl && (
+                <Row>
+                  <Typography.Paragraph>
+                    <div>Description:</div>
+                    <a href={task.descriptionUrl!} target="_blank">
+                      {task.descriptionUrl}
+                    </a>
+                  </Typography.Paragraph>
+                </Row>
+              )}
+              <Row gutter={24}>
+                <Col xs={12} sm={8}>
+                  <Form.Item label="Codewars Account">
+                    {field('codewars', {
+                      rules: [{ pattern: notUrlPattern, message: 'Enter valid Codewars account' }],
+                    })(<Input placeholder="username" />)}
                   </Form.Item>
                 </Col>
               </Row>
@@ -146,7 +169,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
       }
       try {
         let data: object = {};
-        if (task.type === 'externaltask') {
+        if (task.type === 'externaltask' && task.externalType === 'htmlcss') {
           if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
             message.error('Enter any Account / Cerficate Id');
             return;
@@ -157,6 +180,17 @@ class TaskCheckerPage extends React.Component<Props, State> {
             codecademy: other.codecademy,
             htmlacademy: other.htmlacademy,
             udemy: [other.udemy1, other.udemy2].filter(it => !!it),
+          };
+        } else if (task.type === 'externaltask' && task.externalType === 'codewars') {
+          if (!values.codewars) {
+            message.error('Enter Account');
+            return;
+          }
+
+          this.setState({ isLoading: true });
+          data = {
+            codewars: other.codewars,
+            deadline: task.studentEndDate,
           };
         } else if (task.type === 'jstask') {
           data = {

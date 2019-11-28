@@ -10,6 +10,7 @@ export interface Task {
   githubPrRequired: boolean | null;
   verification: 'manual' | 'auto';
   type: 'jstask' | 'htmltask' | 'externaltask' | 'test' | 'interview' | 'codejam';
+  externalType: 'htmlcss' | 'codewars' | null;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   tags: string[];

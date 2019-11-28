@@ -99,6 +99,7 @@ class TasksPage extends React.Component<Props, State> {
   private renderModal() {
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     const modalData = this.state.modalData as Task;
+
     if (modalData == null) {
       return null;
     }
@@ -156,13 +157,14 @@ class TasksPage extends React.Component<Props, State> {
           </Form.Item>
           <Form.Item label="Task Type">
             {field<Event>('type', {
-              initialValue: modalData.type,
+              initialValue: modalData.externalType ? `${modalData.type}:${modalData.externalType}` : modalData.type,
               rules: [{ required: true, message: 'Please select a type' }],
             })(
               <Select>
                 <Select.Option value="jstask">JS task</Select.Option>
                 <Select.Option value="htmltask">HTML task</Select.Option>
-                <Select.Option value="externaltask">External task</Select.Option>
+                <Select.Option value="externaltask:htmlcss">External task - HTML/CSS</Select.Option>
+                <Select.Option value="externaltask:codewars">External task - Codewars</Select.Option>
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
@@ -205,14 +207,16 @@ class TasksPage extends React.Component<Props, State> {
       if (err) {
         return;
       }
+      const [type, externalType = null] = values.type.split(':');
       const data: Partial<Task> = {
+        type,
+        externalType,
         name: values.name,
         verification: values.verification,
         githubPrRequired: !!values.githubPrRequired,
         descriptionUrl: values.descriptionUrl,
         githubRepoName: values.githubRepoName,
         sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-        type: values.type,
         tags: values.tags,
       };
       try {
