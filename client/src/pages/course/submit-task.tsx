@@ -36,9 +36,9 @@ class TaskCheckerPage extends React.Component<Props, State> {
       .filter(
         task =>
           task.studentEndDate &&
-          (new Date(task.studentEndDate).getTime() > Date.now() || task.externalType === 'codewars') &&
+          (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
           task.verification === 'auto' &&
-          (task.type === 'externaltask' || task.type === 'jstask'),
+          (task.type === 'htmlcssacademy' || task.type === 'codewars' || task.type === 'jstask'),
       );
 
     this.setState({ courseTasks: filteredCourseTasks });
@@ -67,7 +67,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
               </Form.Item>
             </Col>
           </Row>
-          {task && task.type === 'externaltask' && task.externalType === 'htmlcss' && (
+          {task && task.type === 'htmlcssacademy' && (
             <>
               {task.descriptionUrl && (
                 <Row>
@@ -107,7 +107,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
               </Row>
             </>
           )}
-          {task && task.type === 'externaltask' && task.externalType === 'codewars' && (
+          {task && task.type === 'codewars' && (
             <>
               {task.descriptionUrl && (
                 <Row>
@@ -169,7 +169,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
       }
       try {
         let data: object = {};
-        if (task.type === 'externaltask' && task.externalType === 'htmlcss') {
+        if (task.type === 'htmlcssacademy') {
           if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
             message.error('Enter any Account / Cerficate Id');
             return;
@@ -181,7 +181,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
             htmlacademy: other.htmlacademy,
             udemy: [other.udemy1, other.udemy2].filter(it => !!it),
           };
-        } else if (task.type === 'externaltask' && task.externalType === 'codewars') {
+        } else if (task.type === 'codewars') {
           if (!values.codewars) {
             message.error('Enter Account');
             return;

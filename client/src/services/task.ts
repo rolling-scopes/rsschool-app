@@ -9,8 +9,7 @@ export interface Task {
   description: string | null;
   githubPrRequired: boolean | null;
   verification: 'manual' | 'auto';
-  type: 'jstask' | 'htmltask' | 'externaltask' | 'test' | 'interview' | 'codejam';
-  externalType: 'htmlcss' | 'codewars' | null;
+  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test' | 'interview' | 'codejam';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   tags: string[];

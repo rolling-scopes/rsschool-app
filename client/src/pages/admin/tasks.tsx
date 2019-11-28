@@ -157,14 +157,14 @@ class TasksPage extends React.Component<Props, State> {
           </Form.Item>
           <Form.Item label="Task Type">
             {field<Event>('type', {
-              initialValue: modalData.externalType ? `${modalData.type}:${modalData.externalType}` : modalData.type,
+              initialValue: modalData.type,
               rules: [{ required: true, message: 'Please select a type' }],
             })(
               <Select>
                 <Select.Option value="jstask">JS task</Select.Option>
                 <Select.Option value="htmltask">HTML task</Select.Option>
-                <Select.Option value="externaltask:htmlcss">External task - HTML/CSS</Select.Option>
-                <Select.Option value="externaltask:codewars">External task - Codewars</Select.Option>
+                <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
+                <Select.Option value="codewars">Codewars</Select.Option>
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
@@ -206,11 +206,9 @@ class TasksPage extends React.Component<Props, State> {
     this.props.form.validateFields(async (err: any, values: any) => {
       if (err) {
         return;
-      }
-      const [type, externalType = null] = values.type.split(':');
+      };
       const data: Partial<Task> = {
-        type,
-        externalType,
+        type: values.type,
         name: values.name,
         verification: values.verification,
         githubPrRequired: !!values.githubPrRequired,
