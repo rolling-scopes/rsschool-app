@@ -206,7 +206,7 @@ class TasksPage extends React.Component<Props, State> {
     this.props.form.validateFields(async (err: any, values: any) => {
       if (err) {
         return;
-      };
+      }
       const data: Partial<Task> = {
         type: values.type,
         name: values.name,
