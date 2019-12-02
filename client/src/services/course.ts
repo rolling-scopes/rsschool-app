@@ -293,7 +293,7 @@ export class CourseService {
 
   async createRepository(githubId: string) {
     type Response = { data: { repository: string } };
-    const result = await axios.post<Response>(this.wrapUrl(`/mentor/${githubId}/repository`));
+    const result = await axios.post<Response>(this.wrapUrl(`/student/${githubId}/repository`));
     return result.data.data;
   }
 
