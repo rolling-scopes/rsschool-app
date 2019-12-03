@@ -26,7 +26,7 @@ export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext
     url: inputData.url || undefined,
   };
 
-  if (!courseTask.crossCheck) {
+  if (courseTask.checker !== 'crossCheck') {
     setResponse(ctx, BAD_REQUEST, { message: 'task solution is supported for this task' });
     return;
   }

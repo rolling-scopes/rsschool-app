@@ -25,9 +25,8 @@ export interface CourseTask {
   studentEndDate: string | null;
   taskResultCount: number;
   useJury: boolean;
-  checker: 'mentor' | 'assigned' | 'taskOwner';
+  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
   taskOwner: { id: number; githubId: string; name: string } | null;
-  crossCheck: boolean;
 }
 
 export interface CourseEvent {

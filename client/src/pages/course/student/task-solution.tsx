@@ -31,7 +31,7 @@ class TaskSolutionPage extends React.Component<Props, State> {
   async componentDidMount() {
     try {
       const tasks = await this.courseService.getCourseTasks();
-      const courseTasks = tasks.filter(t => t.crossCheck).map(t => ({ id: t.id, name: t.name }));
+      const courseTasks = tasks.filter(t => t.checker === 'crossCheck').map(t => ({ id: t.id, name: t.name }));
       this.setState({ courseTasks });
     } catch (error) {
       console.error(error);

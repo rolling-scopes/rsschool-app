@@ -63,7 +63,6 @@ class CourseTasksPage extends React.Component<Props, State> {
         checker: values.checker,
         scoreWeight: values.scoreWeight,
         maxScore: values.maxScore,
-        crossCheck: !!values.crossCheck,
       };
 
       let courseTask;
@@ -209,9 +208,6 @@ class CourseTasksPage extends React.Component<Props, State> {
               rules: [{ required: true, type: 'array', message: 'Please enter start and end date' }],
             })(<DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />)}
           </Form.Item>
-          <Form.Item label="Student cross-check">
-            {field('crossCheck', { initialValue: modalData.crossCheck })(<Checkbox>Student Cross-Check</Checkbox>)}
-          </Form.Item>
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item label="Max Score">
@@ -237,6 +233,7 @@ class CourseTasksPage extends React.Component<Props, State> {
                 <Radio value="mentor">Mentor</Radio>
                 <Radio value="assigned">Assigned</Radio>
                 <Radio value="taskOwner">Task Owner</Radio>
+                <Radio value="crossCheck">Cross Check</Radio>
               </Radio.Group>,
             )}
           </Form.Item>
