@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as React from 'react';
-import { Button, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Select, Table } from 'antd';
+import { Button, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Select, Table, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
@@ -63,6 +63,7 @@ class CourseTasksPage extends React.Component<Props, State> {
         checker: values.checker,
         scoreWeight: values.scoreWeight,
         maxScore: values.maxScore,
+        crossCheck: !!values.crossCheck,
       };
 
       let courseTask;
@@ -207,6 +208,9 @@ class CourseTasksPage extends React.Component<Props, State> {
                   : null,
               rules: [{ required: true, type: 'array', message: 'Please enter start and end date' }],
             })(<DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />)}
+          </Form.Item>
+          <Form.Item label="Student cross-check">
+            {field('crossCheck', { initialValue: modalData.crossCheck })(<Checkbox>Student Cross-Check</Checkbox>)}
           </Form.Item>
           <Row gutter={24}>
             <Col span={12}>

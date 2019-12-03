@@ -46,6 +46,7 @@ import {
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import { postStudentStatus } from './student';
+import { postTaskSolution } from './taskSolution';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -53,7 +54,10 @@ const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
     return;
   }
-  ctx.params.courseId = courseId;
+  const courseTaskId = Number(ctx.params.courseTaskId);
+  if (!isNaN(courseTaskId)) {
+    ctx.params.courseTaskId = courseTaskId;
+  }
   await next();
 };
 
@@ -155,7 +159,13 @@ function addStudentApi(router: Router, logger: ILogger) {
 
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, getStudentInterviews(logger));
-  router.post('/student/:githubId/task/:id/verification', courseGuard, ...validators, postTaskVerification(logger));
+  router.post(
+    '/student/:githubId/task/:courseTaskId/verification',
+    courseGuard,
+    ...validators,
+    postTaskVerification(logger),
+  );
+  router.post('/student/:githubId/task/:courseTaskId/solution', courseGuard, ...validators, postTaskSolution(logger));
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
 

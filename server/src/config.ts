@@ -16,6 +16,7 @@ export interface IConfig {
   };
   dev: {
     username: string;
+    adminEnabled: boolean;
   };
   admin: {
     username: string;
@@ -68,6 +69,7 @@ export const config: IConfig = {
   },
   dev: {
     username: process.env.RSSHCOOL_DEV_USERNAME || '',
+    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN || ''),
   },
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',

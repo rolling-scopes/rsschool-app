@@ -11,7 +11,7 @@ export const devAuthMiddleware = async (ctx: Router.RouterContext) => {
       {
         username: config.dev.username || `${userInfo().username}@${hostname()}`,
       },
-      config.roles.adminTeams,
+      config.dev.adminEnabled ? config.roles.adminTeams : [],
     );
     replaceSession(ctx, userSession);
     ctx.redirect(config.auth.successRedirect);
