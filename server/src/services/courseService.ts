@@ -325,12 +325,12 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
       countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
       maxStudentsLimit: mentor.maxStudentsLimit,
       studentsPreference: mentor.studentsPreference,
-      studentsCount: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).length : 0,
+      studentsCount: activeStudents.length,
       interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
       taskResultsStats: {
         lastUpdatedDate,
         total: totalToCheck,
-        checked: mentor.students?.reduce((acc, student) => acc + (student.taskResults?.length ?? 0), 0) ?? 0,
+        checked: activeStudents.reduce((acc, student) => acc + (student.taskResults?.length ?? 0), 0) ?? 0,
       },
     };
   });
