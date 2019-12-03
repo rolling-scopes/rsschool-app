@@ -325,7 +325,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
       countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
       maxStudentsLimit: mentor.maxStudentsLimit,
       studentsPreference: mentor.studentsPreference,
-      studentsCount: mentor.students ? mentor.students.length : 0,
+      studentsCount: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).length : 0,
       interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
       taskResultsStats: {
         lastUpdatedDate,
