@@ -74,7 +74,6 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       githubRepoName: (item.task as Task).githubRepoName,
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
       type: (item.task as Task).type,
-      crossCheck: !!item.crossCheck,
     };
   });
 
