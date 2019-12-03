@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Select } from 'antd';
+import { Button, Col, Form, Input, message, Select, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -74,6 +74,9 @@ class TaskSolutionPage extends React.Component<Props, State> {
               )}
             </Form.Item>
             <Form.Item label="Solution URL">
+              <Typography.Text mark type="warning">
+                NOT link to Github repository or pull request
+              </Typography.Text>
               {field('url', {
                 rules: [{ required: true, pattern: urlPattern, message: 'Please enter a valid url' }],
               })(<Input />)}
