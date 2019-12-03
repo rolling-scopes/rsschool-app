@@ -315,7 +315,8 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
   const mentors = records.map(mentor => {
     const mentorBasic = convertToMentorBasic(mentor);
     const user = (mentor.user as User)!;
-    const totalToCheck = (mentor.students?.length ?? 0) * count;
+    const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
+    const totalToCheck = activeStudents.length * count;
     const lastUpdatedDate = _.max(
       _.flatMap(mentor.students ?? [], s => s.taskResults?.map(r => new Date(r.updatedDate).getTime()) ?? []),
     );
