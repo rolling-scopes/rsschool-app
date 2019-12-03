@@ -1,4 +1,4 @@
-import { TaskResult, TaskArtefact } from '../models';
+import { TaskResult, TaskArtefact, TaskSolution } from '../models';
 import { getRepository } from 'typeorm';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
@@ -14,6 +14,14 @@ export async function getStudentTaskArtefact(studentId: number, courseTaskId: nu
     .createQueryBuilder('taskArtefact')
     .where('"taskResult"."studentId" = :studentId', { studentId })
     .andWhere('"taskResult"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+}
+
+export async function getStudentTaskSolution(studentId: number, courseTaskId: number) {
+  return getRepository(TaskSolution)
+    .createQueryBuilder('taskSolution')
+    .where('"taskSolution"."studentId" = :studentId', { studentId })
+    .andWhere('"taskSolution"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
 }
 

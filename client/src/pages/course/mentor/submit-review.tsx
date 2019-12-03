@@ -60,6 +60,7 @@ class TaskScorePage extends React.Component<Props, State> {
 
     const courseTasks = (await this.courseService.getCourseTasks())
       .sort(sortTasksByEndDate)
+      .filter(task => !task.crossCheck)
       .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
 
     const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));

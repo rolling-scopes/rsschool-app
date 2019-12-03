@@ -82,4 +82,7 @@ export class CourseTask {
 
   @Column({ nullable: true })
   taskOwnerId: number | null;
+
+  @Column({ nullable: true })
+  crossCheck: boolean;
 }

@@ -27,6 +27,7 @@ export interface CourseTask {
   useJury: boolean;
   checker: 'mentor' | 'assigned' | 'taskOwner';
   taskOwner: { id: number; githubId: string; name: string } | null;
+  crossCheck: boolean;
 }
 
 export interface CourseEvent {
@@ -235,6 +236,12 @@ export class CourseService {
 
   async expelStudent(githubId: string, comment: string = '') {
     await axios.post(this.wrapUrl(`/student/${githubId}/status`), { comment, status: 'expelled' });
+  }
+
+  async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
+    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/solution`), {
+      url,
+    });
   }
 
   async postTaskVerification(courseId: number, courseTaskId: number, data: any) {

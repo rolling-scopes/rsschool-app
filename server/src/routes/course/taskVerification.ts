@@ -5,11 +5,11 @@ import { awsTaskService, courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
 
 export const postTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId, id } = ctx.params;
+  const { courseId, githubId, courseTaskId } = ctx.params;
 
   const inputData: any = ctx.request.body;
 
-  const courseTask = await taskService.getCourseTask(id);
+  const courseTask = await taskService.getCourseTask(courseTaskId);
   if (!courseTask || !courseTask.task) {
     setResponse(ctx, BAD_REQUEST, { message: 'Not valid course task' });
     return;

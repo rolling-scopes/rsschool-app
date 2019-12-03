@@ -94,6 +94,16 @@ const routes = [
   {
     name: () => (
       <>
+        <Icon type="code" twoToneColor="#f56161" theme="twoTone" /> Submit Task Solution
+      </>
+    ),
+    getLink: (course: Course) => `/course/student/task-solution?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
+  {
+    name: () => (
+      <>
         <Icon type="interaction" theme="twoTone" /> Stage Interviews
       </>
     ),
