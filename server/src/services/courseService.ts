@@ -302,7 +302,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     .innerJoin('mentor.user', 'user')
     .addSelect(getPrimaryUserFields())
     .leftJoin('mentor.students', 'students')
-    .addSelect(['students.id'])
+    .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
     .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
       taskIds: courseTasks.map(t => t.id),
     })
