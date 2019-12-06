@@ -153,7 +153,7 @@ class TaskScorePage extends React.Component<Props, State> {
   private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
     const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
-    if (courseTask === null) {
+    if (courseTask == null) {
       return;
     }
     this.setState({ courseTaskId });

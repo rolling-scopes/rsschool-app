@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
-import { Course, CourseTask, Mentor, StageInterview, Student, User, CourseEvent } from '../models';
+import { Course, CourseTask, Mentor, StageInterview, Student, User, CourseEvent, TaskSolution } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
@@ -480,4 +480,18 @@ export async function getEvents(courseId: number) {
     .where('courseEvent.courseId = :courseId', { courseId })
     .orderBy('courseEvent.date')
     .getMany();
+}
+
+export async function getTaskSolutionsWithoutChecker(courseTaskId: number) {
+  const records = await getRepository(TaskSolution)
+    .createQueryBuilder('taskSolution')
+    .leftJoin(
+      'task_solution_checker',
+      'taskSolutionChecker',
+      '"taskSolutionChecker"."taskSolutionId" = "taskSolution".id',
+    )
+    .where(`"taskSolution"."courseTaskId" = :courseTaskId`, { courseTaskId })
+    .andWhere('"taskSolutionChecker".id IS NULL')
+    .getMany();
+  return records;
 }

@@ -104,6 +104,16 @@ const routes = [
   {
     name: () => (
       <>
+        <Icon type="check-circle" twoToneColor="#f56161" theme="twoTone" /> Cross-Check
+      </>
+    ),
+    getLink: (course: Course) => `/course/student/cross-check?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
+  {
+    name: () => (
+      <>
         <Icon type="interaction" theme="twoTone" /> Stage Interviews
       </>
     ),
