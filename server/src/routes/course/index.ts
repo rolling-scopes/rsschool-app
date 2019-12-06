@@ -185,7 +185,8 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post(
     '/student/:githubId/task/:courseTaskId/cross-check/result',
     courseGuard,
-    ...validators,
+    validateCourseId,
+    validateGithubId,
     postTaskSolutionResult(logger),
   );
   router.get(
