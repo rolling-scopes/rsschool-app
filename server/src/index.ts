@@ -1,5 +1,4 @@
 import cors from '@koa/cors';
-import pinoLogger from 'pino';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
@@ -9,7 +8,7 @@ import { Server } from 'net';
 
 import { setupPassport } from './auth';
 import { config } from './config';
-import { ILogger, loggerMiddleware } from './logger';
+import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
 import { createConnection } from 'typeorm';
 import { models } from './models';
@@ -17,10 +16,6 @@ import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { startBackgroundJobs } from './schedule';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
-
-function createDefaultLogger() {
-  return pinoLogger({ name: config.name }) as ILogger;
-}
 
 export class App {
   private koa = new Koa();
