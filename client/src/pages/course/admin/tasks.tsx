@@ -1,4 +1,3 @@
-import moment from 'moment';
 import * as React from 'react';
 import { Button, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Select, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
@@ -6,12 +5,14 @@ import { Header, withSession } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { CourseService, CourseTask } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps, PageWithModalState } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
+import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
+import moment from 'moment-timezone';
 
 type Props = CoursePageProps & FormComponentProps;
 interface State extends PageWithModalState<CourseTask> {
@@ -55,8 +56,8 @@ class CourseTasksPage extends React.Component<Props, State> {
       }
       const [startDate, endDate] = values.range || [null, null];
       const data = {
-        studentStartDate: startDate ? formatDateTime(startDate) : null,
-        studentEndDate: endDate ? formatDateTime(endDate) : null,
+        studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
+        studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
         taskId: values.taskId,
         stageId: values.stageId,
         taskOwnerId: values.taskOwnerId,
@@ -71,13 +72,9 @@ class CourseTasksPage extends React.Component<Props, State> {
       if (this.state.modalAction === 'update') {
         courseTask = await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data);
         courseTask.taskOwnerId = values.taskOwnerId;
-        courseTask.studentStartDate = startDate;
-        courseTask.studentEndDate = endDate;
         updatedData = this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...courseTask } : d));
       } else {
         courseTask = await this.courseService.createCourseTask(this.props.course.id, data);
-        courseTask.studentStartDate = startDate;
-        courseTask.studentEndDate = endDate;
         updatedData = this.state.data.concat([courseTask]);
       }
 
@@ -196,13 +193,26 @@ class CourseTasksPage extends React.Component<Props, State> {
               <UserSearch defaultValues={modalData.taskOwner ? [modalData.taskOwner] : []} searchFn={this.loadUsers} />,
             )}
           </Form.Item>
+          <Form.Item label="TimeZone">
+            {field('timeZone', {
+              initialValue: DEFAULT_TIMEZONE,
+            })(
+              <Select placeholder="Please select a timezone">
+                {Object.entries(TIMEZONES).map(tz => (
+                  <Select.Option key={tz[0]} value={tz[0]}>
+                    {tz[0]}
+                  </Select.Option>
+                ))}
+              </Select>,
+            )}
+          </Form.Item>
           <Form.Item label="Start Date - End Date">
             {field('range', {
               initialValue:
                 modalData.studentStartDate && modalData.studentEndDate
                   ? [
-                      modalData.studentStartDate ? moment(modalData.studentStartDate) : null,
-                      modalData.studentEndDate ? moment(modalData.studentEndDate) : null,
+                      modalData.studentStartDate ? moment.tz(modalData.studentStartDate, DEFAULT_TIMEZONE) : null,
+                      modalData.studentEndDate ? moment.tz(modalData.studentEndDate, DEFAULT_TIMEZONE) : null,
                     ]
                   : null,
               rules: [{ required: true, type: 'array', message: 'Please enter start and end date' }],

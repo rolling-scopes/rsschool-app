@@ -14,6 +14,13 @@ export function formatDateTime(value: string) {
     .format('YYYY-MM-DD HH:mm');
 }
 
+export function formatTimezoneToUTC(value: string, zone: string) {
+  return moment(value)
+    .tz(zone, true)
+    .utc()
+    .format('YYYY-MM-DD HH:mmZ');
+}
+
 export function formatTime(value: string) {
   return moment(value).format('HH:mm:ssZ');
 }
