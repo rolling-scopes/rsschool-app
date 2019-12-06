@@ -1,5 +1,5 @@
 import cors from '@koa/cors';
-import pinoLogger from 'pino';
+import pinoLogger from 'pino-multi-stream';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
@@ -17,9 +17,15 @@ import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { startBackgroundJobs } from './schedule';
 
 const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
+const datadog = require('pino-datadog'); //tslint:disable-line
 
-function createDefaultLogger() {
-  return pinoLogger({ name: config.name }) as ILogger;
+export async function createDefaultLogger() {
+  const streams = [{ stream: process.stdout }];
+  if (process.env.NODE_ENV === 'production') {
+    const writeStream = await datadog.createWriteStream({ eu: true, apiKey: config.logging.datadogApiKey, size: 20 });
+    streams.push(writeStream);
+  }
+  return pinoLogger({ streams }) as ILogger;
 }
 
 export class App {
@@ -27,7 +33,7 @@ export class App {
   private appLogger: ILogger;
   private server: Server | undefined = undefined;
 
-  constructor(logger: ILogger = createDefaultLogger()) {
+  constructor(logger: ILogger) {
     this.appLogger = logger.child({ module: 'app' });
 
     this.koa.use(loggerMiddleware(this.appLogger));

@@ -1,9 +1,11 @@
 import 'reflect-metadata'; // for typeorm
-import { App } from './src';
+import { App, createDefaultLogger } from './src';
 
-const app = new App();
-app.start();
-app
-  .pgConnect()
-  .then(() => app.startBackgroundJobs())
-  .catch(e => console.error(e));
+createDefaultLogger().then(logger => {
+  const app = new App(logger);
+  app.start();
+  app
+    .pgConnect()
+    .then(() => app.startBackgroundJobs())
+    .catch(e => console.error(e));
+});

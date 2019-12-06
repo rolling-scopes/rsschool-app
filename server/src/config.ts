@@ -57,6 +57,9 @@ export interface IConfig {
       gratitudeUrl?: string;
     };
   };
+  logging: {
+    datadogApiKey: string;
+  };
 }
 
 export const config: IConfig = {
@@ -120,4 +123,7 @@ export const config: IConfig = {
   },
   sessionAge: 1000 * 60 * 60 * 24 * 2,
   sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret-session-key',
+  logging: {
+    datadogApiKey: process.env.RSSHCOOL_API_DATADOG_API_KEY || '',
+  },
 };
