@@ -42,7 +42,7 @@ function shuffle(arr: any[]): any[] {
   return copy;
 }
 
-export function shuffleRec(arr: any[]): any[] {
+export function shuffleRec<T = any>(arr: T[]): T[] {
   const res = shuffle(arr);
   return isShuffledArrays(arr, res) ? res : shuffleRec(arr);
 }

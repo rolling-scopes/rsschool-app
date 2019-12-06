@@ -238,9 +238,13 @@ export class CourseService {
   }
 
   async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
-    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/solution`), {
+    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`), {
       url,
     });
+  }
+
+  async postTaskSolutionResult(githubId: string, courseTaskId: number, data: { score: number; comment: string }) {
+    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/result`), data);
   }
 
   async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
@@ -310,6 +314,21 @@ export class CourseService {
 
   async expelMentor(githubId: string) {
     await axios.post(this.wrapUrl(`/mentor/${githubId}/status/expelled`));
+  }
+
+  async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
+    const result = await axios.get<{
+      data: {
+        student: StudentBasic;
+        url: string;
+      }[];
+    }>(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`));
+    return result.data.data;
+  }
+
+  async createCrossCheckDistribution(courseTaskId: number) {
+    const result = await axios.post(this.wrapUrl(`/task/${courseTaskId}/cross-check/distribution`));
+    return result.data;
   }
 
   isPowerUser(courseId: number, session: Session) {

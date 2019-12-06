@@ -46,7 +46,12 @@ import {
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import { postStudentStatus } from './student';
-import { postTaskSolution } from './taskSolution';
+import {
+  postTaskSolution,
+  postTaskSolutionDistribution,
+  getTaskSolutionAssignments,
+  postTaskSolutionResult,
+} from './taskSolution';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -128,6 +133,12 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.get('/tasksCheckers', courseGuard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
   router.post('/task/:courseTaskId/shuffle', adminGuard, validateCourseId, postShuffleCourseTask(logger));
   router.post('/taskArtefact', courseGuard, validateCourseId, postTaskArtefact(logger));
+  router.post(
+    '/task/:courseTaskId/cross-check/distribution',
+    adminGuard,
+    validateCourseId,
+    postTaskSolutionDistribution(logger),
+  );
 }
 
 function addStageInterviewApi(router: Router, logger: ILogger) {
@@ -165,7 +176,24 @@ function addStudentApi(router: Router, logger: ILogger) {
     ...validators,
     postTaskVerification(logger),
   );
-  router.post('/student/:githubId/task/:courseTaskId/solution', courseGuard, ...validators, postTaskSolution(logger));
+  router.post(
+    '/student/:githubId/task/:courseTaskId/cross-check/solution',
+    courseGuard,
+    ...validators,
+    postTaskSolution(logger),
+  );
+  router.post(
+    '/student/:githubId/task/:courseTaskId/cross-check/result',
+    courseGuard,
+    ...validators,
+    postTaskSolutionResult(logger),
+  );
+  router.get(
+    '/student/:githubId/task/:courseTaskId/cross-check/assignments',
+    courseGuard,
+    ...validators,
+    getTaskSolutionAssignments(logger),
+  );
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
 

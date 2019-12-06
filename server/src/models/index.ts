@@ -19,6 +19,8 @@ import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
 import { TaskResult } from './taskResult';
 import { TaskSolution } from './taskSolution';
+import { TaskSolutionChecker } from './taskSolutionChecker';
+import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { ExternalAccount, User } from './user';
 
@@ -46,6 +48,8 @@ export {
   TaskInterviewResult,
   TaskResult,
   TaskSolution,
+  TaskSolutionChecker,
+  TaskSolutionResult,
   TaskVerification,
   User,
 };
@@ -72,6 +76,8 @@ export const models = [
   TaskInterviewResult,
   TaskResult,
   TaskSolution,
+  TaskSolutionChecker,
+  TaskSolutionResult,
   TaskVerification,
   User,
 ];

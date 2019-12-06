@@ -1,14 +1,18 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Table, Typography, Statistic, Divider, Button, message, Row } from 'antd';
-import { Header, withSession, LoadingScreen, GithubUserLink, StudentExpelModal } from 'components';
+import { Table, Typography, Statistic, Divider, Button, Select, message, Row, Modal, Form, Spin, Col } from 'antd';
+import { Header, withSession, GithubUserLink, StudentExpelModal } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { FormComponentProps } from 'antd/lib/form';
+
 import css from 'styled-jsx/css';
 
 const { Text } = Typography;
+
+type Props = CoursePageProps & FormComponentProps;
 
 type State = {
   students: StudentDetails[];
@@ -19,13 +23,17 @@ type State = {
     activeStudentCount: number;
     countries: { name: string; count: number; totalCount: number }[];
   };
+  crossCheckTasks: { id: number; name: string }[];
+  crossCheckModal: boolean;
 };
 
-class ScorePage extends React.Component<CoursePageProps, State> {
+class ScorePage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     students: [],
     expelledStudent: null,
+    crossCheckModal: false,
+    crossCheckTasks: [],
     stats: {
       studentCount: 0,
       activeStudentCount: 0,
@@ -35,21 +43,27 @@ class ScorePage extends React.Component<CoursePageProps, State> {
 
   private courseService: CourseService;
 
-  constructor(props: CoursePageProps) {
+  constructor(props: Props) {
     super(props);
     this.courseService = new CourseService(props.course.id);
   }
 
   async componentDidMount() {
+    this.setState({ isLoading: true });
     await this.loadStudents();
+    const tasks = await this.courseService.getCourseTasks();
+    const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
+    this.setState({ crossCheckTasks, isLoading: false });
   }
 
   render() {
     const { expelledStudent } = this.state;
+    const { getFieldDecorator: field } = this.props.form;
+
     return (
       <>
         <Header title="Course Students" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <LoadingScreen show={this.state.isLoading}>
+        <Spin spinning={this.state.isLoading}>
           <Statistic
             className="m-3"
             title="Active Students"
@@ -83,8 +97,43 @@ class ScorePage extends React.Component<CoursePageProps, State> {
             visible={!!expelledStudent}
             courseId={this.props.course.id}
           />
+          <Modal
+            title="Choose Task"
+            visible={this.state.crossCheckModal}
+            okText="Submit"
+            okButtonProps={{ type: 'danger' }}
+            onOk={this.handleCrossCheckSubmit}
+            onCancel={this.handleCrossCheckCancel}
+          >
+            <Form layout="vertical">
+              <Spin spinning={this.state.isLoading}>
+                <Row gutter={24}>
+                  <Col span={24}>
+                    <Form.Item label="Task">
+                      {field('courseTaskId', {
+                        rules: [{ required: true, message: 'Please select a task' }],
+                      })(
+                        <Select>
+                          {this.state.crossCheckTasks.map(task => (
+                            <Select.Option key={task.id} value={task.id}>
+                              {task.name}
+                            </Select.Option>
+                          ))}
+                        </Select>,
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Spin>
+            </Form>
+          </Modal>
           <Row type="flex" justify="end" className="m-3">
             {this.props.session.isAdmin && <Button onClick={this.handleCreateRepos}>Create Repos</Button>}
+            {this.props.session.isAdmin && (
+              <Button style={{ margin: '0 8px' }} onClick={this.handleCrossCheckClick}>
+                Cross-Check Distribution
+              </Button>
+            )}
           </Row>
           <Table<StudentDetails>
             bordered
@@ -180,7 +229,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               },
             ]}
           />
-        </LoadingScreen>
+        </Spin>
         <style jsx>{styles}</style>
       </>
     );
@@ -198,9 +247,32 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     }
   }
 
-  private async loadStudents() {
-    this.setState({ isLoading: true });
+  private handleCrossCheckClick = () => {
+    this.setState({ crossCheckModal: true });
+  };
 
+  private handleCrossCheckCancel = () => {
+    this.setState({ crossCheckModal: false });
+  };
+
+  private handleCrossCheckSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    this.props.form.validateFields(async (err: any, values: any) => {
+      if (err) {
+        return;
+      }
+      try {
+        await this.courseService.createCrossCheckDistribution(values.courseTaskId);
+        this.props.form.resetFields();
+        message.success('Cross-check distrubtion has been created');
+        this.setState({ crossCheckModal: false });
+      } catch (e) {
+        message.error('An error occurred.');
+      }
+    });
+  };
+
+  private async loadStudents() {
     const courseId = this.props.course.id;
     const courseStudents = await this.courseService.getCourseStudentsWithDetails(courseId);
     let activeStudentCount = 0;
@@ -220,7 +292,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
 
     this.setState({
       students: courseStudents,
-      isLoading: false,
       stats: {
         activeStudentCount,
         studentCount: courseStudents.length,
@@ -249,4 +320,4 @@ const styles = css`
   }
 `;
 
-export default withCourseData(withSession(ScorePage));
+export default withCourseData(withSession(Form.create()(ScorePage)));

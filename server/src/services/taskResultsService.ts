@@ -1,5 +1,13 @@
-import { TaskResult, TaskArtefact, TaskSolution } from '../models';
+import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
 import { getRepository } from 'typeorm';
+
+const getPrimaryUserFields = (modelName: string = 'user') => [
+  `${modelName}.id`,
+  `${modelName}.firstName`,
+  `${modelName}.lastName`,
+  `${modelName}.githubId`,
+  `${modelName}.locationName`,
+];
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -17,11 +25,41 @@ export async function getStudentTaskArtefact(studentId: number, courseTaskId: nu
     .getOne();
 }
 
-export async function getStudentTaskSolution(studentId: number, courseTaskId: number) {
+export async function getTaskSolution(studentId: number, courseTaskId: number) {
   return getRepository(TaskSolution)
     .createQueryBuilder('taskSolution')
     .where('"taskSolution"."studentId" = :studentId', { studentId })
     .andWhere('"taskSolution"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+}
+
+export async function getTaskSolutionChecker(studentId: number, checkerId: number, courseTaskId: number) {
+  return getRepository(TaskSolutionChecker)
+    .createQueryBuilder('taskSolutionChecker')
+    .where('"taskSolutionChecker"."studentId" = :studentId', { studentId })
+    .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+    .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+}
+
+export async function getTaskSolutionAssignments(checkerId: number, courseTaskId: number) {
+  return getRepository(TaskSolutionChecker)
+    .createQueryBuilder('taskSolutionChecker')
+    .innerJoinAndSelect('taskSolutionChecker.taskSolution', 'taskSolution')
+    .innerJoinAndSelect('taskSolutionChecker.student', 'student')
+    .innerJoin('student.user', 'user')
+    .addSelect(getPrimaryUserFields())
+    .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+    .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getMany();
+}
+
+export async function getTaskSolutionResult(studentId: number, checkerId: number, courseTaskId: number) {
+  return getRepository(TaskSolutionResult)
+    .createQueryBuilder('taskSolutionResult')
+    .where('"taskSolutionResult"."studentId" = :studentId', { studentId })
+    .where('"taskSolutionResult"."checkerId" = :checkerId', { checkerId })
+    .andWhere('"taskSolutionResult"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
 }
 
