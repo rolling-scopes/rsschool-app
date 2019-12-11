@@ -1,7 +1,7 @@
 import axios from 'axios';
 import getConfig from 'next/config';
 import { Course } from './course';
-import { StageInterview } from '../../../server/src/models/stageInterview';
+import { EnglishLevel } from '../../../common/models';
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -76,7 +76,28 @@ export type ResponseStudent = {
   totalScore: number;
   certificatePublicId: string;
   completed: boolean;
-  stageInterviews: StageInterview[];
+  stageInterviews: {
+    date: string;
+    isGoodCandidate: boolean;
+    english: EnglishLevel;
+    comment: string;
+    rating: number;
+    programmingTask: {
+      task: string;
+      resolved: number;
+      codeWritingLevel: number;
+      comment: string;
+    };
+    interviewer: {
+      githubId: string;
+      name: string;
+    };
+    skills: {
+      htmlCss: number;
+      common: number;
+      dataStructures: number;
+    };
+  }[];
   interviews: {
     score: number;
     comment: string;
