@@ -31,7 +31,7 @@
     "lodash": "~4.17.15",
     "moment": "~2.24.0",
     "moment-timezone": "~0.5.27",
-    "next": "9.1.4",
+    "next": "9.1.5",
     "rc-menu": "7.4.23",
     "react": "~16.11.0",
     "react-component-debounce": "^0.0.4",

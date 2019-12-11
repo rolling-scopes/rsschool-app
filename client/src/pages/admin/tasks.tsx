@@ -151,7 +151,7 @@ class TasksPage extends React.Component<Props, State> {
           </Form.Item>
 
           <Form.Item label="Github">
-            {field('githubPrRequired', { initialValue: modalData.githubPrRequired })(
+            {field('githubPrRequired', { valuePropName: 'checked', initialValue: modalData.githubPrRequired })(
               <Checkbox>Github Pull Request required</Checkbox>,
             )}
           </Form.Item>

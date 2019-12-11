@@ -224,7 +224,9 @@ class CoursesPage extends React.Component<Props, State> {
           </Form.Item>
 
           <Form.Item label="Invite Only">
-            {field('inviteOnly', { initialValue: !!modalData.inviteOnly })(<Checkbox>Invite Only Course</Checkbox>)}
+            {field('inviteOnly', { initialValue: !!modalData.inviteOnly, valuePropName: 'checked' })(
+              <Checkbox>Invite Only Course</Checkbox>,
+            )}
           </Form.Item>
         </Form>
       </Modal>

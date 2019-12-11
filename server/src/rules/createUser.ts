@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
+import { flatMap, union } from 'lodash';
 import { config } from '../config';
-import { Course, IUserSession, User, CourseTask, Stage } from '../models';
+import { Course, IUserSession, CourseRole, User, CourseTask, Stage, CourseUser } from '../models';
 import { userService } from '../services';
-import { TaskOwnerRole } from './types';
 
 const adminTeams: string[] = config.roles.adminTeams;
 const hirers: string[] = config.roles.hirers;
@@ -58,9 +58,8 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
       githubId: createdUser.githubId.toLowerCase(),
       isAdmin,
       isHirer,
-      isActivist: false,
       roles: {},
-      courseRoles: {},
+      coursesRoles: {},
     };
   }
   const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' } = {};
@@ -74,29 +73,47 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
     roles[(courseManager.course as Course).id] = 'coursemanager';
   });
 
-  const taskOwner = await getRepository(CourseTask)
-    .createQueryBuilder('courseTask')
-    .select('"courseTask"."id" AS "courseTaskId", "course"."id" AS "courseId"')
-    .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
-    .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
-    .leftJoin(User, 'user', '"user"."id" = "courseTask"."taskOwnerId"')
-    .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${id}'`)
-    .getRawMany();
+  const userId = result.id!;
+  const [taskOwner, courseUsers] = await Promise.all([
+    getRepository(CourseTask)
+      .createQueryBuilder('courseTask')
+      .select('"courseTask"."id" AS "courseTaskId", "course"."id" AS "courseId"')
+      .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
+      .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
+      .leftJoin(User, 'user', '"user"."id" = "courseTask"."taskOwnerId"')
+      .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${id}'`)
+      .getRawMany(),
+    getRepository(CourseUser)
+      .createQueryBuilder('courseUser')
+      .where('"courseUser"."userId" = :userId', { userId })
+      .getMany(),
+  ] as const);
 
-  const taskOwnerRole: TaskOwnerRole = {
-    courses: [...new Set(taskOwner.map(item => item.courseId))].map(id => ({
-      id,
-      tasksIds: taskOwner.filter(item => item.courseId === id).map(item => item.courseTaskId),
-    })),
-  };
+  const coursesRoles = flatMap(courseUsers, u => {
+    const result = [];
+    if (u.isJuryActivist) {
+      result.push({ courseId: u.courseId, role: 'juryActivist' });
+    }
+    if (u.isManager) {
+      result.push({ courseId: u.courseId, role: 'courseManager' });
+    }
+    return result;
+  })
+    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: 'taskOwner' })))
+    .reduce((acc, item) => {
+      if (!acc[item.courseId]) {
+        acc[item.courseId] = [];
+      }
+      acc[item.courseId] = union(acc[item.courseId], [item.role]) as any[];
+      return acc;
+    }, {} as CourseRole);
 
   return {
     roles,
     isAdmin,
     isHirer,
-    id: result.id!,
-    isActivist: result.activist,
+    id: userId,
+    coursesRoles,
     githubId: result.githubId.toLowerCase(),
-    courseRoles: { taskOwnerRole },
   };
 }

@@ -75,7 +75,7 @@ export class CourseTask {
   scoreWeight: number;
 
   @Column({ default: 'mentor' })
-  checker: 'assigned' | 'mentor' | 'taskOwner' | 'crossCheck';
+  checker: 'assigned' | 'mentor' | 'taskOwner' | 'crossCheck' | 'jury';
 
   @ManyToOne(_ => User, { nullable: true })
   taskOwner: User | null;
