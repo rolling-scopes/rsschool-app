@@ -52,6 +52,7 @@ import {
   getTaskSolutionAssignments,
   postTaskSolutionResult,
 } from './taskSolution';
+import { getUsers, postUser, putUser } from './user';
 
 const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
   const courseId = Number(ctx.params.courseId);
@@ -95,6 +96,7 @@ export function courseRoute(logger: ILogger) {
   addStageInterviewApi(router, logger);
   addMentorApi(router, logger);
   addStudentApi(router, logger);
+  addCourseUserApi(router, logger);
 
   return router;
 }
@@ -107,7 +109,6 @@ function addProfileApi(router: Router, logger: ILogger) {
 function addScoreApi(router: Router, logger: ILogger) {
   router.post('/scores', adminGuard, validateCourseId, postScores(logger));
   router.post('/scores/:courseTaskId', taskOwnerGuard, validateCourseId, postMultipleScores(logger));
-  router.post('/score', courseGuard, validateCourseId, postScore(logger));
 }
 
 function addStageApi(router: Router, logger: ILogger) {
@@ -152,6 +153,12 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
   router.post('/stage/:id/interviews/feedback', courseMentorGuard, postStageInterviewFeedback(logger));
 }
 
+function addCourseUserApi(router: Router, logger: ILogger) {
+  router.get('/users', adminGuard, validateCourseId, getUsers(logger));
+  router.post('/user/:githubId', adminGuard, validateCourseId, validateGithubId, postUser(logger));
+  router.put('/user/:githubId', adminGuard, validateCourseId, validateGithubId, putUser(logger));
+}
+
 function addMentorApi(router: Router, logger: ILogger) {
   const validators = [validateCourseId, validateGithubIdAndAccess];
   router.get('/mentors', courseManagerGuard, validateCourseId, getMentors(logger));
@@ -170,6 +177,7 @@ function addStudentApi(router: Router, logger: ILogger) {
 
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, getStudentInterviews(logger));
+  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, validateCourseId, postScore(logger));
   router.post(
     '/student/:githubId/task/:courseTaskId/verification',
     courseGuard,
@@ -204,7 +212,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.get('/students/score', courseGuard, validateCourseId, getScore(logger));
   router.get('/students/score/csv', courseManagerGuard, validateCourseId, getScoreAsCsv(logger));
 
-  router.get('/students/search/:searchText', courseManagerGuard, validateCourseId, searchCourseStudent(logger));
+  router.get('/students/search/:searchText', courseGuard, validateCourseId, searchCourseStudent(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {

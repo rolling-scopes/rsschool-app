@@ -17,7 +17,7 @@ export const courseGuard = async (ctx: Router.RouterContext<any, any>, next: () 
   if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
     const user = ctx.state.user as IUserSession;
     const courseId = Number(ctx.params.courseId);
-    const isTaskOwner = user.courseRoles.taskOwnerRole.courses.some(({ id }: { id: number }) => id === courseId);
+    const isTaskOwner = user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false;
     if ((courseId && user.roles[courseId]) || user.isAdmin || user.isHirer || isTaskOwner) {
       await next();
       return;
@@ -60,7 +60,7 @@ export const taskOwnerGuard = async (ctx: Router.RouterContext<any, any>, next: 
     const courseId: number = Number(ctx.params.courseId);
     const isCourseManager = user.roles[courseId] === 'coursemanager';
     const isMentor = courseId && user.roles[courseId] === 'mentor';
-    const isTaskOwner = user.courseRoles.taskOwnerRole.courses.some(({ id }: { id: number }) => id === courseId);
+    const isTaskOwner = user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false;
     if (isTaskOwner || isMentor || isCourseManager || user.isAdmin || user.isHirer) {
       await next();
       return;

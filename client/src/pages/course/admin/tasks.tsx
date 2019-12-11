@@ -244,6 +244,7 @@ class CourseTasksPage extends React.Component<Props, State> {
                 <Radio value="assigned">Assigned</Radio>
                 <Radio value="taskOwner">Task Owner</Radio>
                 <Radio value="crossCheck">Cross-Check</Radio>
+                <Radio value="jury">Jury</Radio>
               </Radio.Group>,
             )}
           </Form.Item>

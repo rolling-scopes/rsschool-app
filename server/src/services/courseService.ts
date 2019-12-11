@@ -1,7 +1,17 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
-import { Course, CourseTask, Mentor, StageInterview, Student, User, CourseEvent, TaskSolution } from '../models';
+import {
+  Course,
+  CourseTask,
+  Mentor,
+  StageInterview,
+  Student,
+  User,
+  CourseEvent,
+  TaskSolution,
+  CourseUser,
+} from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
@@ -494,4 +504,22 @@ export async function getTaskSolutionsWithoutChecker(courseTaskId: number) {
     .andWhere('"taskSolutionChecker".id IS NULL')
     .getMany();
   return records;
+}
+
+export async function getUsers(courseId: number) {
+  const records = await getRepository(CourseUser)
+    .createQueryBuilder('courseUser')
+    .innerJoin('courseUser.user', 'user')
+    .addSelect(getPrimaryUserFields())
+    .where(`"courseUser"."courseId" = :courseId`, { courseId })
+    .getMany();
+
+  return records.map(r => ({
+    courseId: r.courseId,
+    id: r.userId,
+    name: `${r.user.firstName} ${r.user.lastName}`.trim(),
+    githubId: r.user.githubId,
+    isJuryActivist: r.isJuryActivist,
+    isManager: r.isManager,
+  }));
 }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Select } from 'antd';
+import { get } from 'lodash';
 import { GithubAvatar } from 'components';
 import { CourseService } from 'services/course';
 
@@ -9,6 +10,7 @@ type Props = {
   [key: string]: any;
   defaultValues?: Person[];
   courseId: number;
+  keyField?: 'id' | 'githubId';
 };
 
 type State = {
@@ -42,7 +44,7 @@ export class StudentSearch extends React.Component<Props, State> {
         style={{ width: '100%' }}
       >
         {this.state.data.map(person => (
-          <Select.Option key={person.id} value={person.id}>
+          <Select.Option key={person.id} value={this.props.keyField ? get(person, this.props.keyField) : person.id}>
             <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
           </Select.Option>
         ))}

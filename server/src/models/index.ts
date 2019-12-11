@@ -3,6 +3,7 @@ import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
+import { CourseUser } from './courseUser';
 import { Event } from './event';
 import { Feedback } from './feedback';
 import { Mentor } from './mentor';
@@ -22,15 +23,17 @@ import { TaskSolution } from './taskSolution';
 import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
-import { ExternalAccount, User } from './user';
+import { User, ExternalAccount } from './user';
 
 export * from './session';
+
 export {
   Certificate,
   Course,
   CourseEvent,
   CourseManager,
   CourseTask,
+  CourseUser,
   Event,
   ExternalAccount,
   Feedback,
@@ -60,6 +63,7 @@ export const models = [
   CourseEvent,
   CourseManager,
   CourseTask,
+  CourseUser,
   Event,
   Feedback,
   Mentor,

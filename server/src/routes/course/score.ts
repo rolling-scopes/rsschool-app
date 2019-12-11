@@ -5,7 +5,7 @@ import _ from 'lodash';
 import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { CourseTask, Student, Task, TaskResult } from '../../models';
+import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
 import { getCourseTasks, getScoreStudents } from '../../services/courseService';
 import countries from '../../services/reference-data/countries.json';
@@ -14,8 +14,6 @@ import cities from '../../services/reference-data/cities.json';
 import { setCsvResponse, setResponse } from '../utils';
 
 type ScoreInput = {
-  studentId: number | string;
-  courseTaskId: number | string;
   score: number | string;
   comment?: string;
   githubPrUrl?: string;
@@ -35,21 +33,22 @@ const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
 export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
+  const { courseId, courseTaskId, githubId } = ctx.params;
+  const { coursesRoles } = ctx.state!.user as IUserSession;
 
   const inputData: ScoreInput = ctx.request.body;
 
-  if (!inputData.studentId || !inputData.courseTaskId) {
-    setResponse(ctx, BAD_REQUEST, 'invalid [studentId] or [courseTaskId]');
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
+
   if (Number.isNaN(Number(inputData.score))) {
     setResponse(ctx, BAD_REQUEST, 'no score');
     return;
   }
   const data = {
-    studentId: Number(inputData.studentId),
-    courseTaskId: Number(inputData.courseTaskId),
     score: Math.round(Number(inputData.score)),
     comment: inputData.comment || '',
     githubPrUrl: inputData.githubPrUrl,
@@ -57,28 +56,28 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   logger.info(data);
 
   const authorId = ctx.state.user.id;
-  const courseTask = await taskService.getCourseTask(data.courseTaskId);
+  const courseTask = await taskService.getCourseTask(courseTaskId);
   if (courseTask == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
     return;
   }
-  const student = await getRepository(Student).findOne(data.studentId);
-  if (student == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
-    return;
-  }
 
-  const { courseTaskId, studentId } = data;
-  const task = courseTask.task as Task;
-
-  if (task.useJury) {
+  if (courseTask.checker === 'jury') {
+    if (!coursesRoles?.[courseId]?.includes('juryActivist')) {
+      setResponse(ctx, BAD_REQUEST, { message: 'not jury activist' });
+      return;
+    }
     if (!data.score) {
       setResponse(ctx, BAD_REQUEST, { message: 'no score' });
       return;
     }
-    const existingResult = await taskResultsService.getTaskResult(studentId, courseTaskId);
+    const existingResult = await taskResultsService.getTaskResult(student.id, courseTask.id);
     if (existingResult == null) {
-      const taskResult = taskResultsService.createJuryTaskResult(authorId, data);
+      const taskResult = taskResultsService.createJuryTaskResult(authorId, {
+        ...data,
+        studentId: student.id,
+        courseTaskId: courseTask.id,
+      });
       const addResult = await getRepository(TaskResult).save(taskResult);
       setResponse(ctx, OK, addResult);
       return;
@@ -104,16 +103,21 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   }
 
   const mentor = await courseService.getMentorByUserId(courseId, authorId);
-  const session = ctx.state.user;
-  const isNotTaskOwner = !session.courseRoles.taskOwnerRole.courses.some(({ id }: { id: number }) => id === courseId);
+  const session = ctx.state.user as IUserSession;
+
+  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes('taskOwner');
   if (mentor == null && !session.isAdmin && session.roles[courseId] !== 'coursemanager' && isNotTaskOwner) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
 
-  const existingResult = await taskResultsService.getTaskResult(studentId, courseTaskId);
+  const existingResult = await taskResultsService.getTaskResult(student.id, courseTask.id);
   if (existingResult == null) {
-    const taskResult = taskResultsService.createTaskResult(authorId, data);
+    const taskResult = taskResultsService.createTaskResult(authorId, {
+      ...data,
+      studentId: student.id,
+      courseTaskId: courseTask.id,
+    });
     const addResult = await getRepository(TaskResult).save(taskResult);
     setResponse(ctx, OK, addResult);
     return;

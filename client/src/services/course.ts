@@ -25,7 +25,7 @@ export interface CourseTask {
   studentEndDate: string | null;
   taskResultCount: number;
   useJury: boolean;
-  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
+  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwner: { id: number; githubId: string; name: string } | null;
 }
 
@@ -44,6 +44,15 @@ export interface CourseEvent {
   organizer: UserBasic;
   detailsUrl: string;
   broadcastUrl: string;
+}
+
+export interface CourseUser {
+  id: number;
+  name: string;
+  githubId: string;
+  courseId: number;
+  isManager: boolean;
+  isJuryActivist: boolean;
 }
 
 export interface CreateCourseTask {
@@ -198,11 +207,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postStudentScore(courseId: number, studentId: number, data: PostScore) {
-    await axios.post(`/api/course/${courseId}/score`, {
-      studentId,
-      ...data,
-    });
+  async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
+    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/result`), data);
   }
 
   async postMultipleScores(courseId: number, courseTaskId: number, data: any) {
@@ -331,6 +337,21 @@ export class CourseService {
     return result.data;
   }
 
+  async getUsers() {
+    const result = await axios.get(this.wrapUrl(`/users`));
+    return result.data.data;
+  }
+
+  async createUser(githubId: string, data: any) {
+    const result = await axios.post(this.wrapUrl(`/user/${githubId}`), data);
+    return result.data;
+  }
+
+  async updateUser(githubId: string, data: any) {
+    const result = await axios.put(this.wrapUrl(`/user/${githubId}`), data);
+    return result.data;
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return session.isAdmin || session.roles[courseId] === 'coursemanager';
   }
@@ -372,7 +393,6 @@ export interface MentorDetails extends MentorBasic {
 }
 
 export interface PostScore {
-  courseTaskId: number;
   score: number;
   comment?: string;
   githubPrUrl?: string;

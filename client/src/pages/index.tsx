@@ -25,11 +25,10 @@ const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' 
 const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
 const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
 const isTaskOwner = (course: Course, _: Role, session: Session) =>
-  session.courseRoles &&
-  session.courseRoles.taskOwnerRole &&
-  session.courseRoles.taskOwnerRole.courses.some(({ id }) => id === course.id);
+  session.coursesRoles?.[course.id]?.includes('taskOwner') ?? false;
 
-// const isActivist = (_1: Course, _2: Role, session: Session) => session.isActivist;
+const isJuryActivist = (course: Course, _: Role, session: Session) =>
+  session.coursesRoles?.[course.id]?.includes('juryActivist') ?? false;
 
 const isAdminRole = (_1: Course, _2: Role, session: Session) => session.isAdmin;
 const isCourseNotCompleted = (course: Course) => !course.completed;
@@ -69,6 +68,16 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole)),
+    newTab: false,
+  },
+  {
+    name: () => (
+      <>
+        <Icon type="check-circle" theme="twoTone" /> Submit Review By Jury
+      </>
+    ),
+    getLink: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, combineOr(isAdminRole, isJuryActivist)),
     newTab: false,
   },
   {
@@ -151,12 +160,6 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
-  // {
-  //   name: `👨‍🏫 Rate Task By Jury`,
-  //   getLink: (course: Course) => `/course/rate-task-jury?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, combineOr(isAdminRole, isActivist, isCourseManager)),
-  //   newTab: false,
-  // },
 
   // {
   //   name: `🎤 Interview Feedback`,
@@ -198,13 +201,12 @@ const routes = [
     access: combineOr(isAdminRole, isCourseManager),
     newTab: false,
   },
-
-  // {
-  //   name: `➡️ Assign Tasks`,
-  //   getLink: (course: Course) => `/course/admin/task-assign?course=${course.alias}`,
-  //   access: combine(isCourseNotCompleted, isAdmin),
-  //   newTab: false,
-  // },
+  {
+    name: () => `Course Users`,
+    getLink: (course: Course) => `/course/admin/users?course=${course.alias}`,
+    access: isAdminRole,
+    newTab: false,
+  },
 ];
 
 class IndexPage extends React.PureComponent<Props, State> {

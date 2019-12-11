@@ -1,28 +1,23 @@
 import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, UserSearch, withSession } from 'components';
+import { Header, withSession, StudentSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
-import { StudentBasic } from '../../../../../common/models';
 
 type Props = CoursePageProps & FormComponentProps;
 
 type State = {
-  students: StudentBasic[];
   courseTasks: CourseTask[];
   isLoading: boolean;
-  isPowerMentor: boolean;
   courseTaskId: number | null;
 };
 
 class TaskScorePage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
-    isPowerMentor: false,
-    students: [],
     courseTasks: [],
     courseTaskId: null,
   };
@@ -35,36 +30,11 @@ class TaskScorePage extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
-    const { isAdmin, roles } = this.props.session;
-    const isCourseManager = roles[courseId] === 'coursemanager';
-    const isMentor = roles[courseId] === 'mentor';
-    const isPowerMentor = isAdmin || isCourseManager;
-
-    const isCheckedByMentor = task => task.checker === 'mentor';
-    const isNotAutoChecked = task => task.verification !== 'auto';
-    const isCheckedByTaskOwner = task => task.checker === 'taskOwner';
-    const hasStudentEndDate = task => Boolean(task.studentEndDate);
-    const isNotUseJury = task => !task.useJury;
-
-    const isSumbitedByTaskOwner = task => this.isTaskOwner(task) && isCheckedByTaskOwner(task);
-
-    const isSumbitedByMentor = task =>
-      hasStudentEndDate(task) &&
-      isNotAutoChecked(task) &&
-      isNotUseJury(task) &&
-      isCheckedByMentor(task) &&
-      (isMentor || isPowerMentor);
-
-    const isSumbitedByPowerAdmin = task => isPowerMentor && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
-
     const courseTasks = (await this.courseService.getCourseTasks())
       .sort(sortTasksByEndDate)
-      .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
+      .filter(task => task.checker === 'jury');
 
-    const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
-
-    this.setState({ isPowerMentor, students, courseTasks });
+    this.setState({ courseTasks });
   }
 
   render() {
@@ -74,7 +44,11 @@ class TaskScorePage extends React.Component<Props, State> {
     const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
     return (
       <>
-        <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
+        <Header
+          title="Submit Review By Jury"
+          courseName={this.props.course.name}
+          username={this.props.session.githubId}
+        />
         <Col className="m-2" sm={12}>
           <Form onSubmit={this.handleSubmit} layout="vertical">
             <Form.Item label="Task">
@@ -90,23 +64,8 @@ class TaskScorePage extends React.Component<Props, State> {
             </Form.Item>
             <Form.Item label="Student">
               {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <UserSearch
-                  defaultValues={this.state.students}
-                  disabled={!courseTaskId}
-                  searchFn={this.loadStudents}
-                  keyField="githubId"
-                />,
+                <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={this.props.course.id} />,
               )}
-            </Form.Item>
-            <Form.Item label="Github Pull Request URL">
-              {field('githubPrUrl', {
-                rules: [
-                  {
-                    message: 'Please enter a valid Github Pull Request URL',
-                    pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
-                  },
-                ],
-              })(<Input size="large" />)}
             </Form.Item>
             <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
               {field('score', {
@@ -128,21 +87,6 @@ class TaskScorePage extends React.Component<Props, State> {
     );
   }
 
-  private isTaskOwner = (task?: CourseTask) => {
-    return task?.taskOwner?.githubId === this.props.session.githubId;
-  };
-
-  private loadStudents = async (searchText: string) => {
-    const { isPowerMentor, courseTaskId, students } = this.state;
-
-    const task = this.state.courseTasks.find(t => t.id === courseTaskId);
-    return isPowerMentor || this.isTaskOwner(task)
-      ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
-      : students.filter(({ githubId, firstName, lastName }: any) =>
-          `${githubId} ${firstName} ${lastName}`.match(searchText),
-        );
-  };
-
   private handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
     const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
@@ -160,6 +104,7 @@ class TaskScorePage extends React.Component<Props, State> {
       }
       try {
         this.setState({ isLoading: true });
+
         const { githubId, courseTaskId, ...data } = values;
         await this.courseService.postStudentScore(githubId, courseTaskId, data);
 
