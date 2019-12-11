@@ -6,6 +6,7 @@ import { Course, CourseTask, Student, Mentor, Task, User, StageInterview } from 
 import { IUserSession } from '../../models/session';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
+import { getStudentInterviewRatings } from '../../services/stageInterviews';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
@@ -67,7 +68,6 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
     where: { githubId },
     relations: ['receivedFeedback', 'receivedFeedback.fromUser', 'mentors', 'students'],
   });
-
   if (profile === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
@@ -89,6 +89,11 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
             'taskResults',
             'taskInterviewResults',
             'certificate',
+            'stageInterviews',
+            'stageInterviews.stageInterviewFeedbacks',
+            'stageInterviews.stage',
+            'stageInterviews.mentor',
+            'stageInterviews.mentor.user',
           ],
         })
       : Promise.resolve([]),
@@ -109,7 +114,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
 
   result.receivedFeedback = receivedFeedback || [];
   result.students = students.map(st => {
-    const { course, id } = st;
+    const { course, id, stageInterviews } = st;
     const courseTasks = course.stages
       .reduce((acc, stage) => acc.concat(stage.courseTasks || []), [] as CourseTask[])
       .map(t => ({
@@ -117,6 +122,35 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
         name: (t.task as Task).name,
         descriptionUrl: (t.task as Task).descriptionUrl,
       }));
+    const stageInterviewsResult = stageInterviews
+      ? stageInterviews
+          .filter(stageInterview => stageInterview.isCompleted && stageInterview.stage.courseId === course.id)
+          .map(stageInterview => {
+            const [feedback] = stageInterview.stageInterviewFeedbacks;
+            const stageInterviewFeedbackJson = JSON.parse(feedback.json);
+            const { english, programmingTask, resume } = stageInterviewFeedbackJson;
+            const { rating, htmlCss, common, dataStructures } = getStudentInterviewRatings(stageInterviewFeedbackJson);
+
+            return {
+              programmingTask,
+              date: feedback.updatedDate,
+              decision: stageInterview.decision,
+              isGoodCandidate: stageInterview.isGoodCandidate,
+              english: english.levelMentorOpinion ? english.levelMentorOpinion : english.levelStudentOpinion,
+              comment: resume.comment,
+              rating,
+              interviewer: {
+                githubId: stageInterview.mentor.user.githubId,
+                name: `${stageInterview.mentor.user.firstName} ${stageInterview.mentor.user.lastName}`,
+              },
+              skills: {
+                htmlCss,
+                common,
+                dataStructures,
+              },
+            };
+          })
+      : [];
 
     return {
       id,
@@ -142,6 +176,7 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
             comment: t.comment,
             courseTask: courseTasks.find(ct => ct.id === t.courseTaskId),
           })),
+      stageInterviews: stageInterviewsResult,
       mentor: st.mentor ? courseService.convertToMentorBasic(st.mentor) : null,
     };
   });

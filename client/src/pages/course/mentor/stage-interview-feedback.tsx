@@ -6,7 +6,7 @@ import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseService } from 'services/course';
-import { StudentBasic } from '../../../../../common/models';
+import { StudentBasic, StageInterviewFeedbackState } from '../../../../../common/models';
 
 // Debounce is needed because of with using GetFieldDecorator the component is rerendered
 // every time for changing the state.
@@ -23,61 +23,13 @@ const DebounceTextArea = reactComponentDebounce({ triggerMs: DEBOUCE_INPUT_TIMEO
 
 type Props = CoursePageProps & FormComponentProps;
 
-type State = {
+type State = StageInterviewFeedbackState & {
   isLoading: boolean;
   currentStep: number;
   studentId: number | null;
   students: StudentBasic[];
   stepsStatuses: {
     [index: string]: 'wait' | 'process' | 'finish' | 'error' | undefined;
-  };
-  common: {
-    reason: 'haveITEducation' | 'doNotWorkInIT' | 'whatThisCourseAbout' | 'other' | null;
-    reasonOther: string | null;
-    whenStartCoding: number | null;
-    schoolChallengesParticipaton: string | null;
-    whereStudied: string | null;
-    workExperience: string | null;
-    otherAchievements: string | null;
-    militaryService: 'served' | 'liable' | 'notLiable' | null;
-  };
-  skills: {
-    [index: string]: any;
-    htmlCss: {
-      level: number | null;
-    };
-    dataStructures: {
-      array: number | null;
-      list: number | null;
-      stack: number | null;
-      queue: number | null;
-      tree: number | null;
-      hashTable: number | null;
-      heap: number | null;
-    };
-    common: {
-      binaryNumber: number | null;
-      oop: number | null;
-      bigONotation: number | null;
-      sortingAndSearchAlgorithms: number | null;
-    };
-    comment: string | null;
-  };
-  programmingTask: {
-    task: string | null;
-    codeWritingLevel: number | null;
-    resolved: number | null;
-    comment: string | null;
-  };
-  english: {
-    levelStudentOpinion: number | null;
-    levelMentorOpinion: number | null;
-    whereAndWhenLearned: string | null;
-    comment: string | null;
-  };
-  resume: {
-    verdict: 'yes' | 'no' | 'noButGoodCandidate' | 'didNotDecideYet' | null;
-    comment: string | null;
   };
 };
 
@@ -100,7 +52,7 @@ enum FormStepStatuses {
 
 const DEFAULT_STEP_STATUS = undefined;
 
-const SKILLS_LEVELS = [
+export const SKILLS_LEVELS = [
   `Doesn't know`,
   `Poor knowledge (almost doesn't know)`,
   'Knows something (with tips)',
@@ -108,7 +60,7 @@ const SKILLS_LEVELS = [
   'Great knowledge',
 ];
 
-const CODING_LEVELS = [
+export const CODING_LEVELS = [
   `Isn't able to coding`,
   `Poor coding ability (almost isn't able to)`,
   'Can code with tips',
@@ -688,7 +640,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
                     ],
                   })(<DebounceTextArea placeholder="aaabbcc = 3a2b2c" autosize={{ minRows: 3, maxRows: 5 }} />)}
                 </Form.Item>
-                <Form.Item label="Has the student solved the tasks?">
+                <Form.Item label="Has the student solved the task(s(?">
                   {field('programmingTask.resolved', {
                     initialValue: this.state.programmingTask.resolved,
                     rules: [{ required: true, message: 'Please select a verdict!' }],

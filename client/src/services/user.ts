@@ -1,6 +1,7 @@
 import axios from 'axios';
 import getConfig from 'next/config';
 import { Course } from './course';
+import { StageInterview } from '../../../server/src/models/stageInterview';
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -75,6 +76,7 @@ export type ResponseStudent = {
   totalScore: number;
   certificatePublicId: string;
   completed: boolean;
+  stageInterviews: StageInterview[];
   interviews: {
     score: number;
     comment: string;

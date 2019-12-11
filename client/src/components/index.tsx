@@ -15,3 +15,4 @@ export * from './FooterLayout';
 export * from './SocialNetworks';
 export * from './StudentSearch';
 export * from './StudentExpelModal';
+export * from './Rating';

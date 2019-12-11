@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { StageInterview, StageInterviewFeedback, Student } from '../models';
+import { StageInterviewFeedbackJson } from '../../../common/models';
 
 export async function getStageInterviewsPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
@@ -169,11 +170,45 @@ export async function getInterviewsByStudent(courseId: number, studentId: number
   return result;
 }
 
+export function getStudentInterviewRatings({ skills, programmingTask }: StageInterviewFeedbackJson) {
+  const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
+  const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
+
+  const htmlCss = skills.htmlCss.level;
+  const common = commonSkills.reduce((acc, cur) => acc + cur, 0) / commonSkills.length;
+  const dataStructures = dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length;
+
+  const ratingsCount = 4;
+  const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
+
+  const rating = ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0;
+
+  return { rating, htmlCss, common, dataStructures };
+}
+
+const isGoodCandidate = (stageInterviews: StageInterview[]) => stageInterviews.some(i => i.isCompleted);
+
+const getLastRating = (stageInterviews: StageInterview[]) => {
+  const [lastInterview] = stageInterviews
+    .filter((interview: StageInterview) => interview.isCompleted)
+    .map(({ stageInterviewFeedbacks }: StageInterview) =>
+      stageInterviewFeedbacks.map((feedback: StageInterviewFeedback) => ({
+        date: feedback.updatedDate,
+        rating: getStudentInterviewRatings(JSON.parse(feedback.json)).rating,
+      })),
+    )
+    .reduce((acc, cur) => acc.concat(cur), [])
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  return lastInterview && lastInterview.rating !== undefined ? lastInterview.rating : null;
+};
+
 export async function getAvailableStudentsForStageInterview(courseId: number, _: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
     .leftJoin('student.stageInterviews', 'stageInterview')
+    .leftJoin('stageInterview.stageInterviewFeedbacks', 'stageInterviewFeedbacks')
     .addSelect([
       'user.id',
       'user.githubId',
@@ -183,6 +218,8 @@ export async function getAvailableStudentsForStageInterview(courseId: number, _:
       'stageInterview.id',
       'stageInterview.isGoodCandidate',
       'stageInterview.isCompleted',
+      'stageInterviewFeedbacks.json',
+      'stageInterviewFeedbacks.updatedDate',
     ])
     .where(
       [
@@ -202,13 +239,17 @@ export async function getAvailableStudentsForStageInterview(courseId: number, _:
       return !s.stageInterviews || s.stageInterviews.length === 0 || s.stageInterviews.every(i => i.isCompleted);
     })
     .map(student => {
+      const { id, user, totalScore } = student;
+      const stageInterviews: StageInterview[] = student.stageInterviews || [];
+
       return {
-        id: student.id,
-        githubId: student.user.githubId,
-        name: `${student.user.firstName} ${student.user.lastName}`.trim(),
-        locationName: student.user.locationName,
-        totalScore: student.totalScore,
-        isGoodCandidate: Array.isArray(student.stageInterviews) && student.stageInterviews.some(i => i.isCompleted),
+        id,
+        totalScore,
+        githubId: user.githubId,
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        locationName: user.locationName,
+        isGoodCandidate: isGoodCandidate(stageInterviews),
+        rating: getLastRating(stageInterviews),
       };
     });
   return result;
