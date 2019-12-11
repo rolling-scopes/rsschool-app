@@ -640,7 +640,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
                     ],
                   })(<DebounceTextArea placeholder="aaabbcc = 3a2b2c" autosize={{ minRows: 3, maxRows: 5 }} />)}
                 </Form.Item>
-                <Form.Item label="Has the student solved the task(s(?">
+                <Form.Item label="Has the student solved the task(s)?">
                   {field('programmingTask.resolved', {
                     initialValue: this.state.programmingTask.resolved,
                     rules: [{ required: true, message: 'Please select a verdict!' }],
