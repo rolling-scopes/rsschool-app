@@ -57,6 +57,7 @@ class CrossCheckPage extends React.Component<Props, State> {
         });
         message.success('The review has been submitted. Thanks!');
         this.props.form.resetFields();
+        await this.loadStudentScoreHistory(values.githubId);
       } catch (e) {
         message.error('An error occured. Please try later.');
       }
@@ -73,8 +74,8 @@ class CrossCheckPage extends React.Component<Props, State> {
     this.setState({ assignments, courseTaskId: courseTask.id });
   };
 
-  private handleStudentChange = async (githubId: string) => {
-    this.setState({ historyLoading: true });
+  private loadStudentScoreHistory = async (githubId: string) => {
+    this.setState({ historyLoading: true, history: [] });
     const result = await this.courseService.getTaskSolutionResult(githubId, this.state.courseTaskId!);
     this.setState({
       historyLoading: false,
@@ -109,7 +110,7 @@ class CrossCheckPage extends React.Component<Props, State> {
                 <Select
                   onChange={(githubId: string) => {
                     setFieldsValue({ githubId });
-                    this.handleStudentChange(githubId);
+                    this.loadStudentScoreHistory(githubId);
                   }}
                   disabled={!this.state.courseTaskId}
                 >
