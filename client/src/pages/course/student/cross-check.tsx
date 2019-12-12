@@ -152,12 +152,13 @@ class CrossCheckPage extends React.Component<Props, State> {
                   {this.state.history.map((historyItem, i) => (
                     <Timeline.Item
                       key={i}
-                      color="green"
+                      color={i === 0 ? 'green' : 'gray'}
                       dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
                     >
                       <div>{formatDateTime(historyItem.dateTime)}</div>
                       <div>
-                        <Icon type="star" theme="twoTone" /> {historyItem.score}
+                        <Icon type="star" twoToneColor={i === 0 ? '#52c41a' : 'gray'} theme="twoTone" />{' '}
+                        <Typography.Text>{historyItem.score}</Typography.Text>
                       </div>
                       <div>
                         <Typography.Text>
