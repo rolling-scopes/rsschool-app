@@ -4,9 +4,13 @@ import * as crypto from 'crypto';
 
 export function setResponse<T>(ctx: Router.RouterContext, status: number, data?: T) {
   ctx.status = status;
-  ctx.body = {
-    data,
-  } as IApiResponse<T>;
+  ctx.body = { data } as IApiResponse<T>;
+  return ctx;
+}
+
+export function setErrorResponse<T>(ctx: Router.RouterContext, status: number, message: string) {
+  ctx.status = status;
+  ctx.body = { error: { message } } as IApiResponse<T>;
   return ctx;
 }
 

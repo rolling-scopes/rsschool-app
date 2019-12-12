@@ -51,6 +51,7 @@ import {
   postTaskSolutionDistribution,
   getTaskSolutionAssignments,
   postTaskSolutionResult,
+  getTaskSolutionResult,
 } from './taskSolution';
 import { getUsers, postUser, putUser } from './user';
 
@@ -196,6 +197,13 @@ function addStudentApi(router: Router, logger: ILogger) {
     validateCourseId,
     validateGithubId,
     postTaskSolutionResult(logger),
+  );
+  router.get(
+    '/student/:githubId/task/:courseTaskId/cross-check/result',
+    courseGuard,
+    validateCourseId,
+    validateGithubId,
+    getTaskSolutionResult(logger),
   );
   router.get(
     '/student/:githubId/task/:courseTaskId/cross-check/assignments',
