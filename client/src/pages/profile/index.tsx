@@ -13,6 +13,7 @@ import {
   Icon,
   Result,
 } from 'antd';
+import { Rating } from 'components';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
 import * as React from 'react';
@@ -21,6 +22,7 @@ import withSession, { Session } from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { UserService, UserFull, ProfileResponse, ResponseCourse, ResponseMentor, ResponseStudent } from 'services/user';
 import { formatDate } from 'services/formatter';
+import { SKILLS_LEVELS, CODING_LEVELS } from '../course/mentor/stage-interview-feedback';
 
 type Props = {
   router: NextRouter;
@@ -41,6 +43,12 @@ type HistoryEntry = {
   mentor: any;
   student: any;
 };
+
+enum Skill {
+  htmlCss = 'HTML/CSS',
+  dataStructures = 'Data structures',
+  common = 'Common of CS / Programming',
+}
 
 class ProfilePage extends React.Component<Props, State> {
   state: State = {
@@ -270,15 +278,74 @@ class ProfilePage extends React.Component<Props, State> {
     );
   }
 
+  private renderStageInterviews(stageInterviews) {
+    return (
+      <>
+        <h4>Pre-screening Interviews</h4>
+        {stageInterviews.map(interview => (
+          <div key={`stageInterview${interview.date}`}>
+            <div>Date: {formatDate(interview.date)}</div>
+            <div>
+              Rating: <Rating rating={interview.rating} />
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              Interviewer: <a href={this.getLink(interview.interviewer.githubId)}>{interview.interviewer.name}</a>
+            </div>
+            <Descriptions size="small" column={1} bordered style={{ marginBottom: '50px' }}>
+              <Descriptions.Item label="Good candidate">
+                <Typography.Text>
+                  {interview.isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
+                </Typography.Text>
+              </Descriptions.Item>
+              <Descriptions.Item label="Interviewer's comments">
+                <Typography.Text>{interview.comment}</Typography.Text>
+              </Descriptions.Item>
+              {Object.keys(interview.skills).map(key => (
+                <Descriptions.Item key={`stageInterview-${interview.date}-skills-${key}`} label={Skill[key]}>
+                  <Rating rating={interview.skills[key]} tooltips={SKILLS_LEVELS} />
+                </Descriptions.Item>
+              ))}
+              <Descriptions.Item label="Programming task(s)">
+                <Typography.Text>{interview.programmingTask.task}</Typography.Text>
+              </Descriptions.Item>
+              <Descriptions.Item label="Has the student solved the task(s)?">
+                <Typography.Text>
+                  {interview.programmingTask.resolved === 1 ? (
+                    <Tag color="green">Yes</Tag>
+                  ) : interview.programmingTask.resolved === 2 ? (
+                    <Tag color="orange">Yes (with tips)</Tag>
+                  ) : (
+                    <Tag color="red">No</Tag>
+                  )}
+                </Typography.Text>
+              </Descriptions.Item>
+              <Descriptions.Item label="Interviewer's comments about coding level">
+                <Typography.Text>{interview.programmingTask.comment}</Typography.Text>
+              </Descriptions.Item>
+              <Descriptions.Item label="Coding level">
+                <Rating rating={interview.programmingTask.codeWritingLevel} tooltips={CODING_LEVELS} />
+              </Descriptions.Item>
+              <Descriptions.Item label="Estimated English level">
+                <Typography.Text>{interview.english.toUpperCase()}</Typography.Text>
+              </Descriptions.Item>
+            </Descriptions>
+          </div>
+        ))}
+      </>
+    );
+  }
+
   private renderStudentProfile(course: ResponseCourse, student: ResponseStudent) {
     const tasks = student.taskResults.map(t => ({ ...t, id: t.courseTask.id }));
     const hasTasks = tasks.length > 0;
     const hasInterviews = student.interviews.length > 0;
+    const hasStageInterviews = student.stageInterviews.length > 0;
     const title = (
       <h2>
         <Icon type="user" /> {course.name} (Student)
       </h2>
     );
+
     return (
       <Card bordered={false} size="small" title={title}>
         {student.certificatePublicId && (
@@ -321,6 +388,7 @@ class ProfilePage extends React.Component<Props, State> {
             />
           </div>
         )}
+        {hasStageInterviews && this.renderStageInterviews(student.stageInterviews)}
         {hasInterviews && (
           <div>
             <h4>{student.interviews[0].courseTask.name}</h4>

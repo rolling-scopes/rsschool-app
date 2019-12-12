@@ -1,4 +1,13 @@
-import { Entity, Column, CreateDateColumn, ManyToOne, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  OneToMany,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { Mentor } from './mentor';
 import { Student } from './student';
 import { Stage } from './stage';
@@ -18,6 +27,12 @@ export class StageInterview {
     (student: Student) => student.stageInterviews,
   )
   student: Student;
+
+  @OneToMany(
+    _ => StageInterviewFeedback,
+    (StageInterviewFeedback: StageInterviewFeedback) => StageInterviewFeedback.stageInterview,
+  )
+  stageInterviewFeedbacks: StageInterviewFeedback[];
 
   @Column()
   studentId: number;

@@ -1,5 +1,5 @@
-import { Table, Tabs, message, Tag } from 'antd';
-import { Header, LoadingScreen, withSession, GithubUserLink } from 'components';
+import { Table, Tabs, message } from 'antd';
+import { Header, LoadingScreen, withSession, GithubUserLink, Rating } from 'components';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
@@ -133,9 +133,10 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                   },
                   {
                     title: 'Feedback',
-                    dataIndex: 'isGoodCandidate',
-                    width: 180,
-                    render: (isGoodCandidate: boolean) => isGoodCandidate && <Tag color="blue">Good Student</Tag>,
+                    dataIndex: 'rating',
+                    sorter: numberSorter('rating'),
+                    width: 210,
+                    render: (rating: number) => rating !== null && <Rating rating={rating} />,
                   },
                   {
                     title: 'Name',
