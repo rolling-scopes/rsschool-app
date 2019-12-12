@@ -33,6 +33,7 @@ type State = {
   profile: ProfileResponse | null;
   isLoading: boolean;
   user: { id: number; githubId: string } | null;
+  roles: { [key: number]: 'student' | 'mentor' | 'coursemanager' } | null;
 };
 
 type HistoryEntry = {
@@ -55,6 +56,7 @@ class ProfilePage extends React.Component<Props, State> {
     isLoading: true,
     profile: null,
     user: null,
+    roles: null,
   };
 
   private userService = new UserService();
@@ -76,6 +78,9 @@ class ProfilePage extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
+    const { roles } = this.props.session;
+
+    await this.setState({ roles });
     await this.fetchData();
   }
 
@@ -340,6 +345,7 @@ class ProfilePage extends React.Component<Props, State> {
     const hasTasks = tasks.length > 0;
     const hasInterviews = student.interviews.length > 0;
     const hasStageInterviews = student.stageInterviews.length > 0;
+    const isNotStudent = this.state.roles && this.state.roles[course.id] !== 'student';
     const title = (
       <h2>
         <Icon type="user" /> {course.name} (Student)
@@ -388,8 +394,8 @@ class ProfilePage extends React.Component<Props, State> {
             />
           </div>
         )}
-        {hasStageInterviews && this.renderStageInterviews(student.stageInterviews)}
-        {hasInterviews && (
+        {isNotStudent && hasStageInterviews && this.renderStageInterviews(student.stageInterviews)}
+        {isNotStudent && hasInterviews && (
           <div>
             <h4>{student.interviews[0].courseTask.name}</h4>
             <Descriptions size="small" column={1} bordered>
