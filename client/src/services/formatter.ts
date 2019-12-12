@@ -9,9 +9,7 @@ export function relativeDays(value: string) {
 }
 
 export function formatDateTime(value: string) {
-  return moment(value)
-    .utc()
-    .format('YYYY-MM-DD HH:mm');
+  return moment(value).format('YYYY-MM-DD HH:mm');
 }
 
 export function formatTimezoneToUTC(value: string, zone: string) {
