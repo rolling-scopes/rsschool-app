@@ -253,6 +253,11 @@ export class CourseService {
     await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/result`), data);
   }
 
+  async getTaskSolutionResult(githubId: string, courseTaskId: number) {
+    const result = await axios.get(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/result`));
+    return result.data.data as { historicalScores: { score: number; comment: string; dateTime: number }[] } | null;
+  }
+
   async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
     await axios.post(`/api/course/${courseId}/student/me/task/${courseTaskId}/verification`, data);
   }

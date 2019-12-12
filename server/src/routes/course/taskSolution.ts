@@ -6,7 +6,7 @@ import { shuffleRec } from '../../lib/distribution';
 import { ILogger } from '../../logger';
 import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
 import { courseService, taskResultsService, taskService } from '../../services';
-import { setResponse } from '../utils';
+import { setResponse, setErrorResponse } from '../utils';
 
 const MIN_CHECKERS = 3;
 
@@ -103,16 +103,16 @@ export const postTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterC
   ]);
 
   if (student == null || courseTask == null || checker == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid student or course task' });
+    setErrorResponse(ctx, BAD_REQUEST, 'not valid student or course task');
     return;
   }
   if (courseTask.checker !== 'crossCheck') {
-    setResponse(ctx, BAD_REQUEST, { message: 'task solution is supported for this task' });
+    setErrorResponse(ctx, BAD_REQUEST, 'task solution is supported for this task');
     return;
   }
-  const taskChecker = taskResultsService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
+  const taskChecker = await taskResultsService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
   if (taskChecker == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no assigned cross-check' });
+    setErrorResponse(ctx, BAD_REQUEST, 'no assigned cross-check');
     return;
   }
 
@@ -120,7 +120,7 @@ export const postTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterC
   const data = { score: inputData.score, comment: inputData.comment || '' };
 
   if (!data.score) {
-    setResponse(ctx, BAD_REQUEST, { message: 'no score provided' });
+    setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
     return;
   }
 
@@ -134,13 +134,43 @@ export const postTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   await getRepository(TaskSolutionResult).save({
-    studentId: student.id,
-    checkerId: checker.id,
-    courseTaskId: courseTask.id,
+    studentId: taskChecker.studentId,
+    checkerId: taskChecker.checkerId,
+    courseTaskId: taskChecker.courseTaskId,
     historicalScores: [historicalResult],
     ...data,
   });
   setResponse(ctx, OK);
+};
+
+export const getTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId, courseTaskId } = ctx.params;
+  const { user } = ctx.state as { user: IUserSession };
+  const [student, checker, courseTask] = await Promise.all([
+    courseService.queryStudentByGithubId(courseId, githubId),
+    courseService.queryStudentByGithubId(courseId, user.githubId),
+    taskService.getCourseTask(courseTaskId),
+  ]);
+
+  if (student == null || courseTask == null || checker == null) {
+    setErrorResponse(ctx, BAD_REQUEST, 'not valid student or course task');
+    return;
+  }
+  if (courseTask.checker !== 'crossCheck') {
+    setErrorResponse(ctx, BAD_REQUEST, 'task solution is supported for this task');
+    return;
+  }
+  const taskChecker = await taskResultsService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
+  if (taskChecker == null) {
+    setErrorResponse(ctx, BAD_REQUEST, 'no assigned cross-check');
+    return;
+  }
+  const existingResult = await taskResultsService.getTaskSolutionResult(
+    taskChecker.studentId,
+    taskChecker.checkerId,
+    taskChecker.courseTaskId,
+  );
+  setResponse(ctx, OK, existingResult);
 };
 
 export const getTaskSolutionAssignments = (_: ILogger) => async (ctx: Router.RouterContext) => {

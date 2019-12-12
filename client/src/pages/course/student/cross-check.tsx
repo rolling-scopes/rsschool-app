@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Select, InputNumber, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Select, Icon, Spin, InputNumber, Typography, Timeline } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, GithubAvatar } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -6,22 +6,24 @@ import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
 import { StudentBasic } from '../../../../../common/models';
+import { formatDateTime } from 'services/formatter';
 
-type Props = {
-  session: Session;
-  course: Course;
-} & FormComponentProps;
+type Props = { session: Session; course: Course } & FormComponentProps;
 
 type State = {
   courseTaskId?: number;
   courseTasks: { id: number; name: string; maxScore: number | null }[];
   assignments: { student: StudentBasic; url: string }[];
+  history: any[];
+  historyLoading: boolean;
 };
 
 class CrossCheckPage extends React.Component<Props, State> {
   state: State = {
     courseTasks: [],
     assignments: [],
+    history: [],
+    historyLoading: false,
   };
 
   private courseService: CourseService;
@@ -71,8 +73,17 @@ class CrossCheckPage extends React.Component<Props, State> {
     this.setState({ assignments, courseTaskId: courseTask.id });
   };
 
+  private handleStudentChange = async (githubId: string) => {
+    this.setState({ historyLoading: true });
+    const result = await this.courseService.getTaskSolutionResult(githubId, this.state.courseTaskId!);
+    this.setState({
+      historyLoading: false,
+      history: result?.historicalScores.sort((a, b) => b.dateTime - a.dateTime) ?? [],
+    });
+  };
+
   render() {
-    const { getFieldDecorator: field, getFieldValue } = this.props.form;
+    const { getFieldDecorator: field, setFieldsValue, getFieldValue } = this.props.form;
     const courseTaskId = getFieldValue('courseTaskId');
     const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
     const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
@@ -80,7 +91,7 @@ class CrossCheckPage extends React.Component<Props, State> {
     return (
       <>
         <Header title="Cross-Check" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <Col className="m-2" sm={16} md={12} lg={8}>
+        <Col style={{ margin: 16 }} sm={18} md={14} lg={10}>
           <Form onSubmit={this.handleSubmit} layout="vertical">
             <Form.Item label="Task">
               {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
@@ -95,7 +106,13 @@ class CrossCheckPage extends React.Component<Props, State> {
             </Form.Item>
             <Form.Item label="Student">
               {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <Select disabled={!this.state.courseTaskId}>
+                <Select
+                  onChange={(githubId: string) => {
+                    setFieldsValue({ githubId });
+                    this.handleStudentChange(githubId);
+                  }}
+                  disabled={!this.state.courseTaskId}
+                >
                   {this.state.assignments.map(({ student }) => (
                     <Select.Option key={student.githubId}>
                       <GithubAvatar size={24} githubId={student.githubId} /> {student.name} ({student.githubId})
@@ -125,6 +142,35 @@ class CrossCheckPage extends React.Component<Props, State> {
             <Button size="large" type="primary" htmlType="submit">
               Submit
             </Button>
+
+            {this.state.history.length ? (
+              <Spin spinning={this.state.historyLoading}>
+                <Typography.Title style={{ marginTop: 24 }} level={4}>
+                  History
+                </Typography.Title>
+                <Timeline>
+                  {this.state.history.map((historyItem, i) => (
+                    <Timeline.Item
+                      key={i}
+                      color="green"
+                      dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
+                    >
+                      <div>{formatDateTime(historyItem.dateTime)}</div>
+                      <div>
+                        <Icon type="star" theme="twoTone" /> {historyItem.score}
+                      </div>
+                      <div>
+                        <Typography.Text>
+                          {historyItem.comment.split('\n').map((item, i) => (
+                            <div key={i}>{item}</div>
+                          ))}
+                        </Typography.Text>
+                      </div>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+              </Spin>
+            ) : null}
           </Form>
         </Col>
       </>

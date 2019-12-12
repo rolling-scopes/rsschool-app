@@ -37,7 +37,7 @@ export async function getTaskSolutionChecker(studentId: number, checkerId: numbe
   return getRepository(TaskSolutionChecker)
     .createQueryBuilder('taskSolutionChecker')
     .where('"taskSolutionChecker"."studentId" = :studentId', { studentId })
-    .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+    .andWhere('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
     .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
 }

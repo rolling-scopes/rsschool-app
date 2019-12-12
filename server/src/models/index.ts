@@ -88,4 +88,7 @@ export const models = [
 
 export interface IApiResponse<T> {
   data: T | T[] | null;
+  error?: {
+    message: string;
+  };
 }
