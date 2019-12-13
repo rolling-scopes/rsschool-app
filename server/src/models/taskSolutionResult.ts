@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  Index,
+  Unique,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
@@ -10,6 +19,8 @@ type ScoreRecord = {
 };
 
 @Entity()
+@Index(['courseTaskId', 'studentId', 'checkerId'])
+@Unique(['courseTaskId', 'studentId', 'checkerId'])
 export class TaskSolutionResult {
   @PrimaryGeneratedColumn() id: number;
 
