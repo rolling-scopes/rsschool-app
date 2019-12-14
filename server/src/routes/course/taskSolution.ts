@@ -128,12 +128,15 @@ export const postTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterC
   const existingResult = await taskResultsService.getTaskSolutionResult(student.id, checker.id, courseTask.id);
   if (existingResult != null) {
     existingResult.historicalScores.push(historicalResult);
-    await getRepository(TaskSolutionResult).save({ ...existingResult, ...data });
-    setResponse(ctx, OK, {});
+    await getRepository(TaskSolutionResult).update(existingResult.id, {
+      ...data,
+      historicalScores: existingResult.historicalScores,
+    });
+    setResponse(ctx, OK);
     return;
   }
 
-  await getRepository(TaskSolutionResult).save({
+  await getRepository(TaskSolutionResult).insert({
     studentId: taskChecker.studentId,
     checkerId: taskChecker.checkerId,
     courseTaskId: taskChecker.courseTaskId,
