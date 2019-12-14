@@ -363,6 +363,11 @@ export class CourseService {
     return result.data.data as StudentSummary;
   }
 
+  async getStudentScore(githubId: string) {
+    const result = await axios.get(this.wrapUrl(`/student/${githubId}/score`));
+    return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return (
       session.isAdmin ||

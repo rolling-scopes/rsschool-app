@@ -16,7 +16,7 @@ import {
 } from './mentor';
 import { getMentors, postMentors, getMentorsDetails } from './mentors';
 import { postPairs } from './pairs';
-import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores } from './score';
+import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores, getScoreByStudent } from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
@@ -199,7 +199,8 @@ function addStudentApi(router: Router, logger: ILogger) {
   );
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
-
+  router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
+  
   router.get('/students', courseManagerGuard, getStudents(logger));
   router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/details', courseManagerGuard, getStudentsWithDetails(logger));
