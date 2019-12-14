@@ -14,7 +14,9 @@ export const devAuthMiddleware = async (ctx: Router.RouterContext) => {
       config.dev.adminEnabled ? config.roles.adminTeams : [],
     );
     replaceSession(ctx, userSession);
-    ctx.redirect(config.auth.successRedirect);
+    const url = ctx.query.url;
+    const query = url ? decodeURIComponent(url) : '';
+    ctx.redirect(config.auth.successRedirect + query);
   } catch (err) {
     ctx.status = INTERNAL_SERVER_ERROR;
   }
