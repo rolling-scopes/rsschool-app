@@ -18,8 +18,10 @@ export function authRoute() {
 
   router.get('/github/callback', passport.authenticate('github', { failureFlash: true }), ctx => {
     if (ctx.isAuthenticated() || config.isDevMode) {
-      (ctx.logger as ILogger).info('Successfully authenticated', { query: JSON.stringify(ctx.query) });
-      ctx.redirect(config.auth.successRedirect);
+      (ctx.logger as ILogger).info('Successfully authenticated');
+      const state = ctx.query?.state;
+      const url = state ? decodeURIComponent(state) : '';
+      ctx.redirect(`${config.auth.successRedirect}${url}`);
     } else {
       ctx.status = FORBIDDEN;
     }
