@@ -9,6 +9,7 @@ export interface IConfig {
   aws: {
     secretAccessKey: string;
     accessKeyId: string;
+    region: string;
     certificateGenerationUrl: string;
     certificateGenerationApiKey: string;
     taskApiUrl: string;
@@ -97,6 +98,7 @@ export const config: IConfig = {
   aws: {
     secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',
     accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
+    region: process.env.RSSHCOOL_API_AWS_REGION || '',
     certificateGenerationUrl: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_URL || '',
     certificateGenerationApiKey: process.env.RSSHCOOL_API_AWS_CERTIFICATE_GENERATION_API_KEY || '',
     taskApiUrl: process.env.RSSHCOOL_API_AWS_TASK_API_URL || '',

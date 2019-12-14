@@ -1,4 +1,7 @@
 import Router from 'koa-router';
+import pinoLogger from 'pino-multi-stream';
+const cloudwatch = require('pino-cloudwatch'); //tslint:disable-line
+import { config } from './config';
 
 export interface ILog {
   data?: any;
@@ -6,7 +9,7 @@ export interface ILog {
   method: string;
   query: string;
   remoteAddress: string;
-  statusCode: number;
+  status: number;
   url: string;
   userAgent: string;
   userId?: string;
@@ -30,26 +33,38 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
   const logger = externalLogger;
 
   const data: Partial<ILog> = {
-    host: ctx.headers.host,
+    status: ctx.status,
     method: ctx.method,
-    query: ctx.query,
-    remoteAddress: ctx.request.ip,
-    statusCode: ctx.status,
     url: ctx.url,
+    query: ctx.query,
   };
   try {
     ctx.logger = logger;
     await next();
-    data.statusCode = ctx.status;
+    data.status = ctx.status;
   } catch (e) {
     logger.error(e);
-    data.statusCode = e.status;
+    data.status = e.status;
   }
-  logger.info(
-    {
-      ...data,
-      userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
-    },
-    'Processed request',
-  );
+  logger.info({
+    msg: 'Processed request',
+    ...data,
+    userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
+  });
 };
+
+export function createDefaultLogger() {
+  const streams = [{ stream: process.stdout }];
+  const { accessKeyId, secretAccessKey, region } = config.aws;
+  if (process.env.NODE_ENV === 'production' && accessKeyId && secretAccessKey) {
+    const writeStream = cloudwatch({
+      interval: 2000,
+      aws_access_key_id: accessKeyId,
+      aws_secret_access_key: secretAccessKey,
+      aws_region: region,
+      group: '/app/rsschool-api',
+    });
+    streams.push(writeStream);
+  }
+  return pinoLogger({ streams, base: null }) as ILogger;
+}
