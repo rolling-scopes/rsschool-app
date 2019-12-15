@@ -7,7 +7,6 @@ import { adminGuard, guard, courseGuard, courseMentorGuard, courseManagerGuard, 
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
-import { getMyMentors } from './me';
 import {
   getAllMentorStudents,
   getMentorStudents,
@@ -15,8 +14,7 @@ import {
   deleteMentor as postMentorStatusExpelled,
 } from './mentor';
 import { getMentors, postMentors, getMentorsDetails } from './mentors';
-import { postPairs } from './pairs';
-import { getScore, getScoreAsCsv, postScore, postScores, postMultipleScores, getScoreByStudent } from './score';
+import { getScore, getScoreAsCsv, postScore, postMultipleScores, getScoreByStudent } from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
@@ -69,14 +67,12 @@ export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course/:courseId' });
 
   router.get('/externalAccounts', adminGuard, getExternalAccounts(logger));
-  router.post('/pairs', adminGuard, postPairs(logger));
   router.post('/interviewFeedback', courseGuard, postInterviewFeedback(logger));
   router.post('/interviewFeedbacks', adminGuard, postInterviewFeedbacks(logger));
   router.post('/studentsFeedbacks', adminGuard, postStudentsFeedbacks(logger));
   router.post('/certificates', adminGuard, postCertificates(logger));
   router.post('/repositories', adminGuard, postRepositories(logger));
 
-  addProfileApi(router, logger);
   addScoreApi(router, logger);
   addStageApi(router, logger);
   addEventApi(router, logger);
@@ -89,12 +85,7 @@ export function courseRoute(logger: ILogger) {
   return router;
 }
 
-function addProfileApi(router: Router, logger: ILogger) {
-  router.get('/me/mentors', courseGuard, getMyMentors(logger));
-}
-
 function addScoreApi(router: Router, logger: ILogger) {
-  router.post('/scores', adminGuard, postScores(logger));
   router.post('/scores/:courseTaskId', taskOwnerGuard, postMultipleScores(logger));
 }
 
@@ -116,6 +107,7 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.post('/task', adminGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', adminGuard, createPutRoute(CourseTask, logger));
   router.delete('/task/:id', adminGuard, createDeleteRoute(CourseTask, logger));
+
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasksTaskOwner', taskOwnerGuard, getCourseTasksForTaskOwner(logger));
   router.get('/tasksCheckers', courseGuard, getCourseTasksWithTaskCheckers(logger));

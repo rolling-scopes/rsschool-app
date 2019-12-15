@@ -77,7 +77,7 @@ class PreCheckPage extends React.Component<Props, State> {
                     </Typography.Text>
                   </Typography.Paragraph>
                   <Typography.Paragraph type="danger">
-                    IMPORTANT: Tests are run using NodeJS 10. Please make sure your solution works in NodeJS 10.
+                    IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
                   </Typography.Paragraph>
                 </>
               )}
