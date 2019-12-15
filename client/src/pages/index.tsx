@@ -1,9 +1,10 @@
-import { Button, List, Select, Result, Layout, Icon } from 'antd';
-import { Header, RegistryBanner, AdminSider, FooterLayout } from 'components';
+import { Button, List, Select, Result, Layout, Icon, Row, Col, Statistic, Card, Typography, Tag } from 'antd';
+import { Header, RegistryBanner, AdminSider, FooterLayout, GithubUserLink } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
-import { Course } from 'services/course';
+import { Course, CourseService, StudentSummary } from 'services/course';
+import { isEmpty } from 'lodash';
 import '../styles/main.scss';
 
 const { Content } = Layout;
@@ -18,12 +19,15 @@ type State = {
   activeCourseId: number | null;
   hasRegistryBanner: boolean;
   collapsed: boolean;
+  studentSummary: StudentSummary | null;
+  courseTasks: { id: number }[];
 };
 
 const anyAccess = () => true;
 const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' || session.isAdmin;
 const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
-const isCourseManager = (_1: Course, role: Role, _2: Session) => role === 'coursemanager';
+const isCourseManager = (course: Course, role: Role, session: Session) =>
+  role === 'coursemanager' || session.coursesRoles?.[course.id]?.includes('manager');
 const isTaskOwner = (course: Course, _: Role, session: Session) =>
   session.coursesRoles?.[course.id]?.includes('taskOwner') ?? false;
 
@@ -53,7 +57,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="calendar" theme="twoTone" twoToneColor="#eb2f96" /> Schedule (draft)
+        <Icon type="calendar" theme="twoTone" twoToneColor="#eb2f96" /> Schedule <Tag color="volcano">alpha</Tag>
       </>
     ),
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
@@ -215,6 +219,8 @@ class IndexPage extends React.PureComponent<Props, State> {
     activeCourseId: null,
     hasRegistryBanner: false,
     collapsed: false,
+    studentSummary: null,
+    courseTasks: [],
   };
 
   toggle = () => {
@@ -223,18 +229,8 @@ class IndexPage extends React.PureComponent<Props, State> {
     });
   };
 
-  private hasAccessToCourse = (session: Session, course: Course) => {
-    const { isAdmin, isHirer, isActivist } = session;
-    const role = session.roles[course.id];
-    return !!role || isAdmin || isHirer || isActivist || isTaskOwner(course, role, session);
-  };
-
   private getLinks = (course: Course) => {
     if (!this.props.session) {
-      return [];
-    }
-
-    if (!this.hasAccessToCourse(this.props.session, course)) {
       return [];
     }
 
@@ -254,8 +250,9 @@ class IndexPage extends React.PureComponent<Props, State> {
       return [];
     }
     const { isAdmin } = session;
+    // TODO: it seems no need to filter. It is done on the server already.
     return courses
-      .filter(course => session.roles[course.id] || isAdmin || isTaskOwner(course, session.roles[course.id], session))
+      .filter(course => isAdmin || session.roles[course.id] || !isEmpty(session.coursesRoles?.[course.id]))
       .sort((a, b) => (a.startDate && b.startDate ? b.startDate.localeCompare(a.startDate) : 0));
   }
 
@@ -283,7 +280,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     return 'Active';
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
 
     const plannedCourses = (this.props.courses || []).filter(course => course.planned);
@@ -292,6 +289,8 @@ class IndexPage extends React.PureComponent<Props, State> {
       plannedCourses.length > 0 &&
       plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
+    const activeCourse = this.getActiveCourse();
+    await this.loadCourseData(activeCourse?.id);
   }
 
   renderNoCourse() {
@@ -321,10 +320,23 @@ class IndexPage extends React.PureComponent<Props, State> {
     );
   }
 
-  private handleChange = (courseId: number) => {
+  private handleChange = async (courseId: number) => {
     localStorage.setItem('activeCourseId', courseId as any);
     this.setState({ activeCourseId: courseId });
+    await this.loadCourseData(courseId);
   };
+
+  private async loadCourseData(courseId?: number) {
+    this.setState({ studentSummary: null });
+    if (courseId && this.props.session.roles[courseId] === 'student') {
+      const courseService = new CourseService(courseId);
+      const [studentSummary, courseTasks] = await Promise.all([
+        courseService.getStudentSummary('me'),
+        courseService.getCourseTasks(),
+      ]);
+      this.setState({ studentSummary, courseTasks: courseTasks.map(t => ({ id: t.id })) });
+    }
+  }
 
   render() {
     const { isAdmin } = this.props.session;
@@ -337,48 +349,132 @@ class IndexPage extends React.PureComponent<Props, State> {
 
           <Layout style={{ background: '#fff' }}>
             <Header username={this.props.session.githubId} />
-            <Content>
-              {/* <ActivityBanner /> */}
-              <div className="m-3">
-                {!activeCourse && this.renderNoCourse()}
-                {this.state.hasRegistryBanner && activeCourse && (
-                  <div className="mb-3">
-                    <RegistryBanner />
-                  </div>
-                )}
-                {activeCourse && (
-                  <Select
-                    style={{ width: 250 }}
-                    className="mb-2"
-                    defaultValue={activeCourse.id}
-                    onChange={this.handleChange}
-                  >
-                    {courses.map(course => (
-                      <Select.Option key={course.id} value={course.id}>
-                        {course.name} ({this.getStatus(course)})
-                      </Select.Option>
-                    ))}
-                  </Select>
-                )}
-                {activeCourse && (
-                  <List
-                    bordered
-                    dataSource={this.getLinks(activeCourse)}
-                    renderItem={(linkInfo: LinkInfo) => (
-                      <List.Item key={linkInfo.link}>
-                        <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
-                          {linkInfo.name}
-                        </a>
-                      </List.Item>
-                    )}
-                  />
-                )}
-              </div>
+            <Content style={{ margin: 16, marginBottom: 32 }}>
+              {!activeCourse && this.renderNoCourse()}
+              {this.renderRegistryBanner(activeCourse)}
+              {this.renderCourseSelect(activeCourse, courses)}
+              <Row gutter={24}>
+                <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
+                  {this.renderCourseLinks(activeCourse)}
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={16}>
+                  {this.renderSummmary(this.state.studentSummary)}
+                </Col>
+              </Row>
             </Content>
             <FooterLayout />
           </Layout>
         </Layout>
       </div>
+    );
+  }
+
+  private renderRegistryBanner(course: Course | null) {
+    if (!course || !this.state.hasRegistryBanner) {
+      return null;
+    }
+    return (
+      <div className="mb-3">
+        <RegistryBanner />
+      </div>
+    );
+  }
+
+  private renderCourseSelect(course: Course | null, courses: Course[]) {
+    if (!course) {
+      return null;
+    }
+    return (
+      <Select style={{ width: 250 }} className="mb-2" defaultValue={course.id} onChange={this.handleChange}>
+        {courses.map(course => (
+          <Select.Option key={course.id} value={course.id}>
+            {course.name} ({this.getStatus(course)})
+          </Select.Option>
+        ))}
+      </Select>
+    );
+  }
+
+  private renderCourseLinks(course: Course | null) {
+    if (!course) {
+      return null;
+    }
+    return (
+      <List
+        bordered
+        dataSource={this.getLinks(course)}
+        renderItem={(linkInfo: LinkInfo) => (
+          <List.Item key={linkInfo.link}>
+            <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+              {linkInfo.name}
+            </a>
+          </List.Item>
+        )}
+      />
+    );
+  }
+
+  private renderSummmary(summary: StudentSummary | null) {
+    if (!summary) {
+      return null;
+    }
+    const { name, githubId, contactsEmail, contactsPhone, contactsSkype, contactsTelegram, contactsNotes } =
+      summary.mentor ?? {};
+    const tasksCount = summary.results.filter(r => r.score > 0).length;
+    const courseTasks = this.state.courseTasks;
+    const totalTaskCount = courseTasks.length;
+    return (
+      <>
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={24} lg={12}>
+            <Card style={{ marginBottom: 16 }} size="small" title="Your stats">
+              <Row>
+                <Col span={12}>
+                  <Statistic title="Score Points" value={summary.totalScore} />
+                </Col>
+                <Col span={12}>
+                  <Statistic title="Completed Tasks" value={`${tasksCount}/${totalTaskCount}`} />
+                </Col>
+                <Col span={24} style={{ marginTop: 16 }}>
+                  <Statistic
+                    title="Status"
+                    valueStyle={{ color: summary.isActive ? '#87d068' : '#ff5500' }}
+                    value={summary.isActive ? 'Active' : 'Inactive'}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          {summary.mentor && (
+            <Col xs={24} sm={24} md={24} lg={12}>
+              <Card size="small" title="Your mentor">
+                <p>
+                  <div>{name}</div>
+                  <div>
+                    <GithubUserLink value={githubId!} />
+                  </div>
+                </p>
+                {this.renderContact('Email', contactsEmail)}
+                {this.renderContact('Phone', contactsPhone)}
+                {this.renderContact('Skype', contactsSkype)}
+                {this.renderContact('Telegram', contactsTelegram)}
+                {this.renderContact('Notes', contactsNotes)}
+              </Card>
+            </Col>
+          )}
+        </Row>
+      </>
+    );
+  }
+
+  private renderContact(label: string, value?: string) {
+    if (!value) {
+      return null;
+    }
+    return (
+      <p>
+        <Typography.Text type="secondary">{label}:</Typography.Text> {value}
+      </p>
     );
   }
 }

@@ -2,14 +2,14 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository, In } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Course, CourseTask, Student, Mentor, Task, User, StageInterview } from '../../models';
+import { CourseTask, Student, Mentor, Task, User, StageInterview } from '../../models';
 import { IUserSession } from '../../models/session';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
 import { getStudentInterviewRatings } from '../../services/stageInterviews';
 
 export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { isAdmin, githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
+  const { isAdmin, githubId: userGithubId, roles, coursesRoles } = ctx.state!.user as IUserSession;
   const query = ctx.query as { githubId: string | undefined };
   if (query === undefined) {
     setResponse(ctx, NOT_FOUND);
@@ -51,7 +51,9 @@ export const getProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
       return !student.course.completed && roles[student.course.id] === 'mentor' && stageInterviews.length === 0;
     });
 
-    const isCourseManager = students.some(student => roles[(student.course as Course)!.id] === 'coursemanager');
+    const isCourseManager = students.some(
+      student => roles[student.course.id] === 'coursemanager' || coursesRoles?.[student.course.id]?.includes('manager'),
+    );
     const isInterviewer = stageInterviews.some(
       interview => interview.mentor && interview.mentor.user && interview.mentor.user.githubId === userGithubId,
     );

@@ -2,7 +2,7 @@ import { OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Course, CourseManager, Mentor, Student, User, CourseTask } from '../../models';
+import { Course, CourseManager, CourseUser, Mentor, Student, User, CourseTask } from '../../models';
 import { setResponse } from '../utils';
 
 export const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -33,10 +33,14 @@ export const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
       '"courseManager"."courseId" = course.id AND "courseManager"."userId" = :userId',
       { userId },
     )
+    .leftJoin(CourseUser, 'courseUser', '"courseUser"."courseId" = course.id AND "courseUser"."userId" = :userId', {
+      userId,
+    })
     .leftJoin(CourseTask, 'courseTask', '"courseTask"."taskOwnerId" = :userId', { userId })
     .where('mentor.id IS NOT NULL')
     .orWhere('student.id IS NOT NULL')
     .orWhere('"courseManager".id IS NOT NULL')
+    .orWhere('"courseUser".id IS NOT NULL')
     .orWhere('"courseTask"."taskOwnerId" = :userId', { userId })
     .orderBy('course."startDate"')
     .getMany();

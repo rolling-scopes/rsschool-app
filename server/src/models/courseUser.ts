@@ -29,5 +29,8 @@ export class CourseUser {
   isManager: boolean;
 
   @Column({ default: false })
+  isSupervisor: boolean;
+
+  @Column({ default: false })
   isJuryActivist: boolean;
 }

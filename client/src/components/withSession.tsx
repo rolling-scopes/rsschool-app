@@ -12,7 +12,7 @@ export interface Session {
   isHirer: boolean;
   isActivist: boolean;
   roles: { [key: number]: Role };
-  coursesRoles?: { [key: string]: ('taskOwner' | 'juryActivist')[] | undefined };
+  coursesRoles?: { [key: string]: ('taskOwner' | 'juryActivist' | 'manager' | 'supervisor')[] | undefined };
 }
 
 type State = {

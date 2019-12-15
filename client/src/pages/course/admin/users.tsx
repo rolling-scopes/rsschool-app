@@ -52,6 +52,7 @@ class CourseUsersPage extends React.Component<Props, State> {
         githubId: values.githubId,
         isManager: values.isManager,
         isJuryActivist: values.isJuryActivist,
+        isSupervisor: values.isSupervisor,
       };
 
       this.state.modalAction === 'update'
@@ -88,6 +89,11 @@ class CourseUsersPage extends React.Component<Props, State> {
             {
               title: 'Manager',
               dataIndex: 'isManager',
+              render: boolIconRenderer,
+            },
+            {
+              title: 'Supervisor',
+              dataIndex: 'isSupervisor',
               render: boolIconRenderer,
             },
             {
@@ -135,14 +141,21 @@ class CourseUsersPage extends React.Component<Props, State> {
           </Form.Item>
 
           <Row gutter={24}>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item>
                 {field('isManager', { valuePropName: 'checked', initialValue: modalData.isManager })(
                   <Checkbox>Manager</Checkbox>,
                 )}
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
+              <Form.Item>
+                {field('isSupervisor', { valuePropName: 'checked', initialValue: modalData.isSupervisor })(
+                  <Checkbox>Supervisor</Checkbox>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
               <Form.Item>
                 {field('isJuryActivist', { valuePropName: 'checked', initialValue: modalData.isJuryActivist })(
                   <Checkbox>Jury Activist</Checkbox>,

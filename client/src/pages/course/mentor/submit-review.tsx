@@ -36,8 +36,9 @@ class TaskScorePage extends React.Component<Props, State> {
 
   async componentDidMount() {
     const courseId = this.props.course.id;
-    const { isAdmin, roles } = this.props.session;
-    const isCourseManager = roles[courseId] === 'coursemanager';
+    const { isAdmin, roles, coursesRoles } = this.props.session;
+    const isCourseManager =
+      roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
     const isMentor = roles[courseId] === 'mentor';
     const isPowerMentor = isAdmin || isCourseManager;
 

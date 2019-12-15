@@ -9,38 +9,37 @@ import { taskService, taskResultsService } from '../../services';
 
 type Input = {
   studentId: number | string;
-  courseTaskId: number | string;
   comment?: string;
   videoUrl?: string;
   presentationUrl?: string;
 };
 
-export const postTaskArtefact = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  // const courseId: number = ctx.params.courseId;
-
-  const inputData: Input = ctx.request.body;
-  const data = {
-    studentId: Number(inputData.studentId),
-    courseTaskId: Number(inputData.courseTaskId),
-    comment: inputData.comment || '',
-    videoUrl: inputData.videoUrl,
-    presentationUrl: inputData.presentationUrl,
-  };
-  logger.info(data);
+export const postTaskArtefact = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseTaskId: number = ctx.params.courseTaskId;
 
   const authorId = ctx.state.user.id;
-  const courseTask = await taskService.getCourseTask(data.courseTaskId);
+  const courseTask = await taskService.getCourseTask(courseTaskId);
   if (courseTask == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid course task' });
     return;
   }
-  const student = await getRepository(Student).findOne(data.studentId, { relations: ['mentor', 'user'] });
+
+  const inputData: Input = ctx.request.body;
+  const data = {
+    courseTaskId: courseTask.id,
+    studentId: Number(inputData.studentId),
+    comment: inputData.comment || '',
+    videoUrl: inputData.videoUrl,
+    presentationUrl: inputData.presentationUrl,
+  };
+
+  const student = await getRepository(Student).findOne(data.studentId, { relations: ['user'] });
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
 
-  const { courseTaskId, studentId } = data;
+  const { studentId } = data;
   const task = courseTask.task as Task;
 
   if (!task.allowStudentArtefacts) {
@@ -51,7 +50,7 @@ export const postTaskArtefact = (logger: ILogger) => async (ctx: Router.RouterCo
     const existingResult = await taskResultsService.getStudentTaskArtefact(studentId, courseTaskId);
     if (existingResult == null) {
       const taskArtefact = taskResultsService.createStudentArtefactTaskResult(data);
-      const addResult = await getRepository(TaskArtefact).save(taskArtefact);
+      const addResult = await getRepository(TaskArtefact).insert(taskArtefact);
       setResponse(ctx, OK, addResult);
       return;
     }
@@ -61,7 +60,11 @@ export const postTaskArtefact = (logger: ILogger) => async (ctx: Router.RouterCo
     if (data.presentationUrl) {
       existingResult.presentationUrl = data.presentationUrl;
     }
-    const updateResult = await getRepository(TaskArtefact).save(existingResult);
+    const updateResult = await getRepository(TaskArtefact).update(existingResult.id, {
+      videoUrl: data.videoUrl,
+      presentationUrl: data.presentationUrl,
+      comment: data.comment || existingResult.comment,
+    });
     setResponse(ctx, OK, updateResult);
     return;
   }

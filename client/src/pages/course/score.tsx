@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Table, Typography, Button, Icon, Popover } from 'antd';
-import { Header, withSession, LoadingScreen, GithubAvatar } from 'components';
+import { Table, Typography, Button, Icon, Popover, Spin, Switch } from 'antd';
+import { Header, withSession, GithubAvatar } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, dateRenderer, numberSorter } from 'components/Table';
 import { CourseTask, CourseService, StudentScore } from 'services/course';
@@ -14,6 +14,7 @@ type State = {
   students: StudentScore[];
   isLoading: boolean;
   courseTasks: CourseTask[];
+  activeOnly: boolean;
 };
 
 class ScorePage extends React.Component<CoursePageProps, State> {
@@ -21,6 +22,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     isLoading: false,
     students: [],
     courseTasks: [],
+    activeOnly: true,
   };
 
   private courseService: CourseService;
@@ -33,9 +35,8 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   async componentDidMount() {
     this.setState({ isLoading: true });
 
-    const courseId = this.props.course.id;
     const [courseScore, courseTasks] = await Promise.all([
-      this.courseService.getCourseScore(courseId),
+      this.courseService.getCourseScore(this.state.activeOnly),
       this.courseService.getCourseTasks(),
     ]);
 
@@ -47,18 +48,23 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   }
 
   render() {
-    const { isAdmin, isHirer, roles } = this.props.session;
-    const csvEnabled = isAdmin || isHirer || roles[this.props.course.id] === 'coursemanager';
+    const { isAdmin, isHirer, roles, coursesRoles } = this.props.session;
+    const courseId = this.props.course.id;
+    const csvEnabled =
+      isAdmin || isHirer || roles[courseId] === 'coursemanager' || coursesRoles?.[courseId]?.includes('manager');
     const columnWidth = 90;
     // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
     const tableWidth = this.getColumns().length * columnWidth + 800;
     return (
       <>
         <Header title="Score" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <LoadingScreen show={this.state.isLoading}>
+        <Spin spinning={this.state.isLoading}>
           <div className="d-flex justify-content-between align-items-center m-2">
+            <div>
+              <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+              <Switch checked={this.state.activeOnly} onChange={this.handleActiveOnlyChange} />
+            </div>
             <Text mark>Score is refreshed every 5 minutes</Text>
-
             {csvEnabled && (
               <Button
                 icon="file-excel"
@@ -84,7 +90,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 title: '#',
                 fixed: 'left',
                 dataIndex: 'rank',
-                key: 'rank',
                 width: 50,
                 sorter: numberSorter('rank'),
               },
@@ -94,12 +99,13 @@ class ScorePage extends React.Component<CoursePageProps, State> {
                 dataIndex: 'githubId',
                 sorter: stringSorter('githubId'),
                 width: 150,
-                key: 'githubId',
                 render: (value: string) => (
                   <div className="d-flex flex-row">
                     <GithubAvatar githubId={value} size={24} />
                     &nbsp;
-                    <a href={`https://github.com/${value}`}>{value}</a>
+                    <a target="_blank" href={`https://github.com/${value}`}>
+                      {value}
+                    </a>
                   </div>
                 ),
                 ...getColumnSearchProps('githubId'),
@@ -117,7 +123,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Location',
                 dataIndex: 'locationName',
-                key: 'locationName',
                 width: 150,
                 sorter: stringSorter('locationName'),
                 ...getColumnSearchProps('locationName'),
@@ -125,8 +130,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Total',
                 dataIndex: 'totalScore',
-                key: 'totalScore',
-                width: 100,
+                width: 80,
                 sorter: numberSorter('totalScore'),
                 render: value => <Text strong>{value}</Text>,
               },
@@ -134,14 +138,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
               {
                 title: 'Mentor',
                 dataIndex: 'mentor.githubId',
-                key: 'mentor.githubId',
-                // width: 100,
                 render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
                 ...getColumnSearchProps('mentor.githubId'),
               },
             ]}
           />
-        </LoadingScreen>
+        </Spin>
         <style jsx>{styles}</style>
       </>
     );
@@ -150,7 +152,6 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private getColumns() {
     const columns = this.state.courseTasks.map(task => ({
       dataIndex: task.id.toString(),
-      key: task.id.toString(),
       title: () => {
         const icon = (
           <Popover
@@ -187,6 +188,17 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     }));
     return columns;
   }
+
+  private handleActiveOnlyChange = async () => {
+    const activeOnly = !this.state.activeOnly;
+    this.setState({ activeOnly, isLoading: true });
+    try {
+      const courseScore = await this.courseService.getCourseScore(activeOnly);
+      this.setState({ students: courseScore, isLoading: false });
+    } catch (err) {
+      this.setState({ isLoading: false });
+    }
+  };
 }
 
 const styles = css`

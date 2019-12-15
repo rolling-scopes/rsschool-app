@@ -61,7 +61,7 @@ class TaskScorePage extends React.Component<Props, State> {
     this.setState({ isLoading: true });
 
     try {
-      await axios.post(`/api/course/${this.props.course.id}/taskArtefact`, {
+      await axios.post(`/api/course/${this.props.course.id}/task/${values.courseTaskId}/artefact`, {
         ...values,
         studentId: this.state.studentId,
       });

@@ -7,7 +7,7 @@ import { adminGuard, guard, courseGuard, courseMentorGuard, courseManagerGuard, 
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
-import { getMe, getMyMentors } from './me';
+import { getMyMentors } from './me';
 import {
   getAllMentorStudents,
   getMentorStudents,
@@ -45,7 +45,7 @@ import {
 } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
-import { postStudentStatus } from './student';
+import { postStudentStatus, getStudentSummary } from './student';
 import {
   postTaskSolution,
   postTaskSolutionDistribution,
@@ -54,19 +54,6 @@ import {
   getTaskSolutionResult,
 } from './taskSolution';
 import { getUsers, postUser, putUser } from './user';
-
-const validateCourseId = async (ctx: Router.RouterContext, next: any) => {
-  const courseId = Number(ctx.params.courseId);
-  if (isNaN(courseId)) {
-    setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
-    return;
-  }
-  const courseTaskId = Number(ctx.params.courseTaskId);
-  if (!isNaN(courseTaskId)) {
-    ctx.params.courseTaskId = courseTaskId;
-  }
-  await next();
-};
 
 const validateId = async (ctx: Router.RouterContext, next: any) => {
   const id = Number(ctx.params.id);
@@ -81,12 +68,12 @@ const validateId = async (ctx: Router.RouterContext, next: any) => {
 export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course/:courseId' });
 
-  router.get('/externalAccounts', adminGuard, validateCourseId, getExternalAccounts(logger));
-  router.post('/pairs', adminGuard, validateCourseId, postPairs(logger));
-  router.post('/interviewFeedback', courseGuard, validateCourseId, postInterviewFeedback(logger));
-  router.post('/interviewFeedbacks', adminGuard, validateCourseId, postInterviewFeedbacks(logger));
-  router.post('/studentsFeedbacks', adminGuard, validateCourseId, postStudentsFeedbacks(logger));
-  router.post('/certificates', adminGuard, validateCourseId, postCertificates(logger));
+  router.get('/externalAccounts', adminGuard, getExternalAccounts(logger));
+  router.post('/pairs', adminGuard, postPairs(logger));
+  router.post('/interviewFeedback', courseGuard, postInterviewFeedback(logger));
+  router.post('/interviewFeedbacks', adminGuard, postInterviewFeedbacks(logger));
+  router.post('/studentsFeedbacks', adminGuard, postStudentsFeedbacks(logger));
+  router.post('/certificates', adminGuard, postCertificates(logger));
   router.post('/repositories', adminGuard, postRepositories(logger));
 
   addProfileApi(router, logger);
@@ -103,42 +90,41 @@ export function courseRoute(logger: ILogger) {
 }
 
 function addProfileApi(router: Router, logger: ILogger) {
-  router.get('/me', courseGuard, validateCourseId, getMe(logger));
-  router.get('/me/mentors', courseGuard, validateCourseId, getMyMentors(logger));
+  router.get('/me/mentors', courseGuard, getMyMentors(logger));
 }
 
 function addScoreApi(router: Router, logger: ILogger) {
-  router.post('/scores', adminGuard, validateCourseId, postScores(logger));
-  router.post('/scores/:courseTaskId', taskOwnerGuard, validateCourseId, postMultipleScores(logger));
+  router.post('/scores', adminGuard, postScores(logger));
+  router.post('/scores/:courseTaskId', taskOwnerGuard, postMultipleScores(logger));
 }
 
 function addStageApi(router: Router, logger: ILogger) {
-  router.get('/stages', guard, validateCourseId, getCourseStages(logger));
-  router.post('/stages', adminGuard, validateCourseId, postCourseStages(logger));
+  router.get('/stages', guard, getCourseStages(logger));
+  router.post('/stages', adminGuard, postCourseStages(logger));
 }
 
 function addEventApi(router: Router, logger: ILogger) {
-  router.put('/event/:id', adminGuard, validateCourseId, createPutRoute(CourseEvent, logger));
-  router.post('/event', adminGuard, validateCourseId, createPostRoute(CourseEvent, logger));
-  router.delete('/event/:id', adminGuard, validateCourseId, createDeleteRoute(CourseEvent, logger));
+  router.put('/event/:id', adminGuard, createPutRoute(CourseEvent, logger));
+  router.post('/event', adminGuard, createPostRoute(CourseEvent, logger));
+  router.delete('/event/:id', adminGuard, createDeleteRoute(CourseEvent, logger));
 
-  router.get('/events', courseGuard, validateCourseId, getCourseEvents(logger));
-  router.get('/events/ical', courseGuard, validateCourseId, getCourseEventsCalendar(logger));
+  router.get('/events', courseGuard, getCourseEvents(logger));
+  router.get('/events/ical', courseGuard, getCourseEventsCalendar(logger));
 }
 
 function addTaskApi(router: Router, logger: ILogger) {
-  router.post('/task', adminGuard, validateCourseId, createPostRoute(CourseTask, logger));
-  router.put('/task/:id', adminGuard, validateCourseId, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', adminGuard, validateCourseId, createDeleteRoute(CourseTask, logger));
-  router.get('/tasks', courseGuard, validateCourseId, getCourseTasks(logger));
-  router.get('/tasksTaskOwner', taskOwnerGuard, validateCourseId, getCourseTasksForTaskOwner(logger));
-  router.get('/tasksCheckers', courseGuard, validateCourseId, getCourseTasksWithTaskCheckers(logger));
-  router.post('/task/:courseTaskId/shuffle', adminGuard, validateCourseId, postShuffleCourseTask(logger));
-  router.post('/taskArtefact', courseGuard, validateCourseId, postTaskArtefact(logger));
+  router.post('/task', adminGuard, createPostRoute(CourseTask, logger));
+  router.put('/task/:id', adminGuard, createPutRoute(CourseTask, logger));
+  router.delete('/task/:id', adminGuard, createDeleteRoute(CourseTask, logger));
+  router.get('/tasks', courseGuard, getCourseTasks(logger));
+  router.get('/tasksTaskOwner', taskOwnerGuard, getCourseTasksForTaskOwner(logger));
+  router.get('/tasksCheckers', courseGuard, getCourseTasksWithTaskCheckers(logger));
+  router.post('/task/:courseTaskId/shuffle', adminGuard, postShuffleCourseTask(logger));
+  router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post(
     '/task/:courseTaskId/cross-check/distribution',
     adminGuard,
-    validateCourseId,
+
     postTaskSolutionDistribution(logger),
   );
 }
@@ -155,17 +141,16 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
 }
 
 function addCourseUserApi(router: Router, logger: ILogger) {
-  router.get('/users', adminGuard, validateCourseId, getUsers(logger));
-  router.post('/user/:githubId', adminGuard, validateCourseId, validateGithubId, postUser(logger));
-  router.put('/user/:githubId', adminGuard, validateCourseId, validateGithubId, putUser(logger));
+  router.get('/users', adminGuard, getUsers(logger));
+  router.post('/user/:githubId', adminGuard, validateGithubId, postUser(logger));
+  router.put('/user/:githubId', adminGuard, validateGithubId, putUser(logger));
 }
 
 function addMentorApi(router: Router, logger: ILogger) {
-  const validators = [validateCourseId, validateGithubIdAndAccess];
-  router.get('/mentors', courseManagerGuard, validateCourseId, getMentors(logger));
-  router.get('/mentors/details', courseManagerGuard, validateCourseId, getMentorsDetails(logger));
-
-  router.post('/mentors', adminGuard, validateCourseId, postMentors(logger));
+  const validators = [validateGithubIdAndAccess];
+  router.get('/mentors', courseManagerGuard, getMentors(logger));
+  router.post('/mentors', adminGuard, postMentors(logger));
+  router.get('/mentors/details', courseManagerGuard, getMentorsDetails(logger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, getMentorInterviews(logger));
   router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
@@ -173,12 +158,13 @@ function addMentorApi(router: Router, logger: ILogger) {
 }
 
 function addStudentApi(router: Router, logger: ILogger) {
-  const validators = [validateCourseId, validateGithubIdAndAccess];
-  const mentorValidators = [courseMentorGuard, validateCourseId, validateGithubId];
+  const validators = [validateGithubIdAndAccess];
+  const mentorValidators = [courseMentorGuard, validateGithubId];
 
+  router.get('/student/:githubId/summary', courseGuard, ...validators, getStudentSummary(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, getStudentInterviews(logger));
-  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, validateCourseId, postScore(logger));
+  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, postScore(logger));
   router.post(
     '/student/:githubId/task/:courseTaskId/verification',
     courseGuard,
@@ -194,14 +180,14 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post(
     '/student/:githubId/task/:courseTaskId/cross-check/result',
     courseGuard,
-    validateCourseId,
+
     validateGithubId,
     postTaskSolutionResult(logger),
   );
   router.get(
     '/student/:githubId/task/:courseTaskId/cross-check/result',
     courseGuard,
-    validateCourseId,
+
     validateGithubId,
     getTaskSolutionResult(logger),
   );
@@ -214,20 +200,20 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
 
-  router.get('/students', courseManagerGuard, validateCourseId, getStudents(logger));
-  router.post('/students', adminGuard, validateCourseId, postStudents(logger));
-  router.get('/students/details', courseManagerGuard, validateCourseId, getStudentsWithDetails(logger));
-  router.get('/students/score', courseGuard, validateCourseId, getScore(logger));
-  router.get('/students/score/csv', courseManagerGuard, validateCourseId, getScoreAsCsv(logger));
+  router.get('/students', courseManagerGuard, getStudents(logger));
+  router.post('/students', adminGuard, postStudents(logger));
+  router.get('/students/details', courseManagerGuard, getStudentsWithDetails(logger));
+  router.get('/students/score', courseGuard, getScore(logger));
+  router.get('/students/score/csv', courseManagerGuard, getScoreAsCsv(logger));
 
-  router.get('/students/search/:searchText', courseGuard, validateCourseId, searchCourseStudent(logger));
+  router.get('/students/search/:searchText', courseGuard, searchCourseStudent(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course' });
 
-  router.get('/:id', guard, validateId, createGetRoute(Course, logger));
   router.post('/', adminGuard, createPostRoute(Course, logger));
+  router.get('/:id', guard, validateId, createGetRoute(Course, logger));
   router.put('/:id', adminGuard, validateId, createPutRoute(Course, logger));
 
   return router;
