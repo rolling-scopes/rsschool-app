@@ -1,36 +1,27 @@
-import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
+import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
-import { UserService, UserFull } from 'services/user';
-import { formatMonthFriendly } from 'services/formatter';
-import { Props, TYPES } from '../../configs/registry';
+import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { LocationSelect } from 'components/LocationSelect';
-import { NoCourses } from 'components/Registry/NoCourses';
+import { Props, TYPES } from '../../configs/registry';
 
 type State = {
-  courses: Course[] | null;
+  course: Course | null;
   submitted: boolean;
   initialData: Partial<UserFull>;
 };
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
-const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
-
-const noticeStyle = {
-  lineHeight: '20px',
-  display: 'block',
-  fontStyle: 'italic',
-};
 
 const courseAlias = 'epamlearningjs';
 
 class CourseRegistryPage extends React.Component<Props, State> {
   state: State = {
-    courses: null,
+    course: null,
     submitted: false,
     initialData: {},
   };
@@ -39,25 +30,21 @@ class CourseRegistryPage extends React.Component<Props, State> {
     const userService = new UserService();
     const courseService = new CourseService();
     const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
-    const activeCourses = courses.filter((course: Course) => course.alias === courseAlias);
+    const activeCourse = courses.find(course => course.alias === courseAlias) ?? null;
 
-    this.setState({
-      initialData: profile.user,
-      courses: activeCourses,
-    });
+    this.setState({ initialData: profile.user, course: activeCourse });
   }
 
   private handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     this.props.form.validateFields(async (err: any, model: any) => {
-      if (err) {
+      if (err || !this.state.course) {
         return;
       }
-      const { comment, location, courseId } = model;
+      const { location } = model;
       const registryModel = {
         type: TYPES.STUDENT,
-        courseId,
-        comment,
+        courseId: this.state.course.id,
       };
       const userModel = {
         locationId: location.key ? location.key : undefined,
@@ -84,16 +71,14 @@ class CourseRegistryPage extends React.Component<Props, State> {
   };
 
   render() {
-    const { courses, initialData } = this.state;
+    const { course, initialData } = this.state;
     const { getFieldDecorator: field, getFieldValue } = this.props.form;
     let content: React.ReactNode;
     const location = getFieldValue('location');
-    if (courses == null) {
+    if (course == null) {
       return null;
     }
-    if (!courses.length) {
-      content = <NoCourses />;
-    } else if (this.state.submitted) {
+    if (this.state.submitted) {
       content = (
         <Result
           status="success"
@@ -106,32 +91,11 @@ class CourseRegistryPage extends React.Component<Props, State> {
         />
       );
     } else {
-      const courseId = getFieldValue('courseId');
-      const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
       content = (
-        <Form style={{ margin: 16 }} onSubmit={this.handleSubmit}>
-          <Col style={{ margin: '0 20px' }}>
+        <Row style={{ margin: 16 }}>
+          <Form style={{ margin: 16 }} onSubmit={this.handleSubmit}>
             <Row>
-              <Typography.Title level={4}>Course</Typography.Title>
-            </Row>
-            <Row gutter={defaultRowGutter}>
-              <Col span={10}>
-                <Form.Item>
-                  {field('courseId', { initialValue: courses[0].id })(
-                    <Select placeholder="Select course...">
-                      {courses.map(course => (
-                        <Select.Option key={course.id} value={course.id}>
-                          {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
-                        </Select.Option>
-                      ))}
-                    </Select>,
-                  )}
-                </Form.Item>
-                <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
-              </Col>
-            </Row>
-            <Row>
-              <Typography.Title level={4}>General</Typography.Title>
+              <Typography.Title level={4}>My Profile</Typography.Title>
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
@@ -154,10 +118,6 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Location">
-                  <span style={noticeStyle}>
-                    We need your location for understanding audience and use it for mentor distribution. If you live
-                    close to any city from the list, please choose it.
-                  </span>
                   {field('location', {
                     initialValue: initialData.locationId ? { key: initialData.locationId } : undefined,
                     rules: [{ required: true, message: 'Please select city or "Other"' }],
@@ -175,18 +135,10 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item label="Primary Email">
-                  <span style={noticeStyle}>We will use your email only for course purposes. No spam emails.</span>
                   {field('primaryEmail', {
                     initialValue: initialData.primaryEmail,
                     rules: [{ required: true, pattern: emailPattern, message: 'Email is required' }],
                   })(<Input placeholder="user@example.com" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={defaultRowGutter}>
-              <Col {...textColumnSizes}>
-                <Form.Item label="Comments / Feedback / Questions">
-                  {field('comment', {})(<Input.TextArea placeholder="" />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -206,8 +158,8 @@ class CourseRegistryPage extends React.Component<Props, State> {
             <Button size="large" type="primary" disabled={!getFieldValue('gdpr')} htmlType="submit">
               Submit
             </Button>
-          </Col>
-        </Form>
+          </Form>
+        </Row>
       );
     }
 
