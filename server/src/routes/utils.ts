@@ -2,15 +2,17 @@ import { IApiResponse } from '../models';
 import Router from 'koa-router';
 import * as crypto from 'crypto';
 
-export function setResponse<T>(ctx: Router.RouterContext, status: number, data?: T) {
+export function setResponse<T>(ctx: Router.RouterContext, status: number, data?: T, cacheTimeSeconds: number = 0) {
   ctx.status = status;
   ctx.body = { data } as IApiResponse<T>;
+  ctx.res.setHeader('Cache-Control', cacheTimeSeconds > 0 ? `public, max-age=${cacheTimeSeconds}` : 'no-cache');
   return ctx;
 }
 
 export function setErrorResponse<T>(ctx: Router.RouterContext, status: number, message: string) {
   ctx.status = status;
   ctx.body = { error: { message } } as IApiResponse<T>;
+  ctx.res.setHeader('Cache-Control', 'no-cache');
   return ctx;
 }
 

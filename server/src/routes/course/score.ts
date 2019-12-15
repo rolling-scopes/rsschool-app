@@ -313,13 +313,13 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
   const cachedData = memoryCache.get(cacheKey);
   if (cachedData) {
     logger.info(`[Cache]: Score for ${courseId}`);
-    setResponse(ctx, OK, cachedData);
+    setResponse(ctx, OK, cachedData, 120);
     return;
   }
 
   const students = await getStudentsScore(courseId, activeOnly);
   memoryCache.set(cacheKey, students);
-  setResponse(ctx, OK, students);
+  setResponse(ctx, OK, students, 120);
 };
 
 export const getScoreByStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {

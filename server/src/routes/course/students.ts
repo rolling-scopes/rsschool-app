@@ -50,7 +50,7 @@ export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterCont
     name: `${entity.firstName} ${entity.lastName}`,
   }));
 
-  setResponse(ctx, OK, result);
+  setResponse(ctx, OK, result, 60);
 };
 
 type StudentInput = {

@@ -109,7 +109,7 @@ class CourseRegistryPage extends React.Component<Props & { courseAlias?: string 
           status="success"
           title="You have successfully registered."
           extra={
-            <Button type="primary" href="/">
+            <Button type="primary" href="/pre-check">
               Go to Home
             </Button>
           }
