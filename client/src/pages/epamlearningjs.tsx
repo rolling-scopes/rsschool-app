@@ -35,7 +35,7 @@ class EpamLearningJs extends React.Component<Props, State> {
       return { course };
     } catch (e) {
       console.error(e.message);
-      return EpamLearningJs.redirectToRegistry(ctx);
+      return { course: null };
     }
   }
 
@@ -133,7 +133,7 @@ class EpamLearningJs extends React.Component<Props, State> {
   private handleSubmit = async (e: any) => {
     e.preventDefault();
     this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
+      if (err || !this.props.course) {
         return;
       }
       const { courseTaskId } = values;
