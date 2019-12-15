@@ -50,7 +50,7 @@ export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterCont
     name: `${entity.firstName} ${entity.lastName}`,
   }));
 
-  setResponse(ctx, OK, result);
+  setResponse(ctx, OK, result, 60);
 };
 
 type StudentInput = {
@@ -72,9 +72,7 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
   }
 
   const result: OperationResult[] = [];
-  for await (const item of data) {
-    console.time(item.githubId);
-
+  for (const item of data) {
     const user = await userService.getUserByGithubId(item.githubId);
     if (user == null || user.id == null) {
       result.push({ status: 'skipped', value: `no user: ${item.githubId}` });
