@@ -9,6 +9,7 @@ import { CourseUser } from '../../models';
 type PostInput = {
   isManager: boolean;
   isJuryActivist: boolean;
+  isSupervisor: boolean;
 };
 
 export const postUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
@@ -18,8 +19,8 @@ export const postUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
     setResponse(ctx, NOT_FOUND);
     return;
   }
-  const { isJuryActivist, isManager }: PostInput = ctx.request.body;
-  await getRepository(CourseUser).save({ courseId, userId: user.id, isJuryActivist, isManager });
+  const { isJuryActivist, isManager, isSupervisor }: PostInput = ctx.request.body;
+  await getRepository(CourseUser).insert({ courseId, userId: user.id, isJuryActivist, isManager, isSupervisor });
   setResponse(ctx, OK);
 };
 
@@ -45,7 +46,7 @@ export const putUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
     setResponse(ctx, BAD_REQUEST);
     return;
   }
-  const { isJuryActivist, isManager }: PostInput = ctx.request.body;
-  await getRepository(CourseUser).save({ ...existing, isJuryActivist, isManager });
+  const { isJuryActivist, isManager, isSupervisor }: PostInput = ctx.request.body;
+  await getRepository(CourseUser).update(existing.id, { isJuryActivist, isManager, isSupervisor });
   setResponse(ctx, OK);
 };

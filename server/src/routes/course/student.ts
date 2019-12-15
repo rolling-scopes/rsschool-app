@@ -45,3 +45,24 @@ export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContex
   setResponse(ctx, OK);
   return;
 };
+
+export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, OK, null);
+    return;
+  }
+
+  const [score, mentor] = await Promise.all([
+    courseService.getStudentScore(student.id),
+    student.mentorId ? await courseService.getMentorWithContacts(student.mentorId) : null,
+  ]);
+
+  setResponse(ctx, OK, {
+    ...score,
+    isActive: !student.isExpelled && !student.isFailed,
+    mentor,
+  });
+};

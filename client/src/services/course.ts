@@ -53,6 +53,7 @@ export interface CourseUser {
   courseId: number;
   isManager: boolean;
   isJuryActivist: boolean;
+  isSupervisor: boolean;
 }
 
 export interface CreateCourseTask {
@@ -202,8 +203,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseScore(courseId: number) {
-    const result = await axios.get<{ data: StudentScore[] }>(`/api/course/${courseId}/students/score`);
+  async getCourseScore(activeOnly: boolean = false) {
+    const result = await axios.get<{ data: StudentScore[] }>(this.wrapUrl(`/students/score?activeOnly=${activeOnly}`));
     return result.data.data;
   }
 
@@ -357,8 +358,17 @@ export class CourseService {
     return result.data;
   }
 
+  async getStudentSummary(githubId: string) {
+    const result = await axios.get(this.wrapUrl(`/student/${githubId}/summary`));
+    return result.data.data as StudentSummary;
+  }
+
   isPowerUser(courseId: number, session: Session) {
-    return session.isAdmin || session.roles[courseId] === 'coursemanager';
+    return (
+      session.isAdmin ||
+      session.roles[courseId] === 'coursemanager' ||
+      session.coursesRoles?.[courseId]?.includes('manager')
+    );
   }
 }
 
@@ -401,4 +411,19 @@ export interface PostScore {
   score: number;
   comment?: string;
   githubPrUrl?: string;
+}
+
+export interface StudentSummary {
+  totalScore: number;
+  results: any[];
+  isActive: boolean;
+  mentor:
+    | (MentorBasic & {
+        contactsEmail?: string;
+        contactsPhone?: string;
+        contactsSkype?: string;
+        contactsTelegram?: string;
+        contactsNotes?: string;
+      })
+    | null;
 }

@@ -15,7 +15,7 @@ class Header extends React.PureComponent<Props> {
         <div>
           <a href="/">
             <img
-              style={{ height: 60 }}
+              style={{ height: 30 }}
               className="header-logo"
               src="/static/images/logo-rsschool3.png"
               alt="Rolling Scopes School Logo"

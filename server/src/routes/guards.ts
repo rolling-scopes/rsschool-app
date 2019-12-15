@@ -5,8 +5,28 @@ const auth = require('koa-basic-auth'); //tslint:disable-line
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
 
+const userGuards = (user: IUserSession) => {
+  const guards = {
+    isAdmin: () => user.isAdmin,
+    isHirer: () => user.isHirer,
+    hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
+    isManager: (courseId: number) =>
+      user.roles[courseId] === 'coursemanager' || (user.coursesRoles?.[courseId]?.includes('manager') ?? false),
+    isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
+    isStudent: (courseId: number) => user.roles[courseId] === 'student',
+    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false,
+    isLoggedIn: (ctx: Router.RouterContext<any, any>) => user != null && (ctx.isAuthenticated() || config.isDevMode),
+  };
+  return {
+    ...guards,
+    isPowerUser: (courseId: number) => guards.isAdmin() || guards.isHirer() || guards.isManager(courseId),
+  };
+};
+
 export const guard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
-  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  if (guards.isLoggedIn(ctx)) {
     await next();
     return;
   }
@@ -14,80 +34,61 @@ export const guard = async (ctx: Router.RouterContext<any, any>, next: () => Pro
 };
 
 export const courseGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
-  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
-    const user = ctx.state.user as IUserSession;
-    const courseId = Number(ctx.params.courseId);
-    const isTaskOwner = user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false;
-    if ((courseId && user.roles[courseId]) || user.isAdmin || user.isHirer || isTaskOwner) {
-      await next();
-      return;
-    }
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  const { courseId } = ctx.params;
+
+  if (guards.isLoggedIn(ctx) && (guards.hasRole(courseId) || guards.isPowerUser(courseId))) {
+    await next();
+    return;
   }
   await basicAuthAdmin(ctx, next);
 };
 
 export const courseMentorGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
-  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
-    const user = ctx.state.user as IUserSession;
-    const courseId = Number(ctx.params.courseId);
-    const isCourseManager = user.roles[courseId] === 'coursemanager';
-    if ((courseId && user.roles[courseId] === 'mentor') || isCourseManager || user.isAdmin || user.isHirer) {
-      await next();
-      return;
-    }
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  const { courseId } = ctx.params;
+
+  if (guards.isLoggedIn(ctx) && (guards.isMentor(courseId) || guards.isPowerUser(courseId))) {
+    await next();
+    return;
   }
   await basicAuthAdmin(ctx, next);
 };
 
 export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
-  if (ctx.state.user != null && ctx.state.user.isAdmin) {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+
+  if (guards.isLoggedIn(ctx) && guards.isAdmin()) {
     await next();
     return;
-  }
-  if (ctx.state.user != null && ctx.state.user.isHirer) {
-    // Allow only readonly mode
-    if (ctx.req.method === 'GET') {
-      await next();
-      return;
-    }
   }
   await basicAuthAdmin(ctx, next);
 };
 
 export const taskOwnerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
-  if (ctx.state.user != null && (ctx.isAuthenticated() || config.isDevMode)) {
-    const user = ctx.state.user as IUserSession;
-    const courseId: number = Number(ctx.params.courseId);
-    const isCourseManager = user.roles[courseId] === 'coursemanager';
-    const isMentor = courseId && user.roles[courseId] === 'mentor';
-    const isTaskOwner = user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false;
-    if (isTaskOwner || isMentor || isCourseManager || user.isAdmin || user.isHirer) {
-      await next();
-      return;
-    }
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  const { courseId } = ctx.params;
+  if (
+    guards.isLoggedIn(ctx) &&
+    (guards.isTaskOwner(courseId) || guards.isMentor(courseId) || guards.isPowerUser(courseId))
+  ) {
+    await next();
+    return;
   }
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseManagerGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
-  if (ctx.state.user != null && ctx.state.user.isAdmin) {
+export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  const { courseId } = ctx.params;
+  if (guards.isLoggedIn(ctx) && guards.isPowerUser(courseId)) {
     await next();
     return;
-  }
-  if (ctx.state.user != null && ctx.state.user.isHirer) {
-    // Allow only readonly mode
-    if (ctx.req.method === 'GET') {
-      await next();
-      return;
-    }
-  }
-  if (ctx.state.user != null) {
-    const courseId = Number(ctx.params.courseId);
-    const user = ctx.state.user as IUserSession;
-    if (user.roles[courseId] === 'coursemanager') {
-      await next();
-      return;
-    }
   }
   await basicAuthAdmin(ctx, next);
 };

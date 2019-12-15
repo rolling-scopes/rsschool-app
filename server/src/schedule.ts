@@ -1,6 +1,6 @@
 import { scheduleJob } from 'node-schedule';
 import { ILogger } from './logger';
-import { getScoreStudents, getCourseTasks, updateScoreStudents, getCourses } from './services/courseService';
+import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } from './services/courseService';
 import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {
@@ -13,7 +13,7 @@ export function startBackgroundJobs(logger: ILogger) {
       logger.info(`update course = [${course.id}]`);
 
       const courseId = course.id;
-      const [students, courseTasks] = await Promise.all([getScoreStudents(courseId), getCourseTasks(courseId)]);
+      const [students, courseTasks] = await Promise.all([getStudentsScore(courseId), getCourseTasks(courseId)]);
       const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
       const scores = students

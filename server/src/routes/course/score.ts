@@ -7,7 +7,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
-import { getCourseTasks, getScoreStudents } from '../../services/courseService';
+import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/courseService';
 import countries from '../../services/reference-data/countries.json';
 import cities from '../../services/reference-data/cities.json';
 
@@ -106,7 +106,13 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const session = ctx.state.user as IUserSession;
 
   const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes('taskOwner');
-  if (mentor == null && !session.isAdmin && session.roles[courseId] !== 'coursemanager' && isNotTaskOwner) {
+  if (
+    mentor == null &&
+    !session.isAdmin &&
+    session.coursesRoles?.[courseId]?.includes('manager') &&
+    session.roles[courseId] !== 'coursemanager' &&
+    isNotTaskOwner
+  ) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
@@ -302,7 +308,8 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
 
 export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const cacheKey = `${courseId}_score`;
+  const activeOnly = ctx.query.activeOnly === 'true';
+  const cacheKey = `${courseId}_score_${activeOnly}`;
   const cachedData = memoryCache.get(cacheKey);
   if (cachedData) {
     logger.info(`[Cache]: Score for ${courseId}`);
@@ -310,14 +317,26 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const students = await getScoreStudents(courseId);
+  const students = await getStudentsScore(courseId, activeOnly);
   memoryCache.set(cacheKey, students);
+  setResponse(ctx, OK, students);
+};
+
+export const getScoreByStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+  const students = await getStudentScore(student.id);
   setResponse(ctx, OK, students);
 };
 
 export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const students = await getScoreStudents(courseId);
+  const students = await getStudentsScore(courseId);
   const courseTasks = await getCourseTasks(courseId);
 
   const result = students.map(student => {

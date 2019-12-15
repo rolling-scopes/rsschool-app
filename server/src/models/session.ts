@@ -4,9 +4,11 @@ export interface IUserSession {
   isHirer: boolean;
   githubId: string;
   roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' };
-  coursesRoles?: CourseRole;
+  coursesRoles?: CourseRoles;
 }
 
-export interface CourseRole {
-  [key: string]: ('taskOwner' | 'juryActivist')[] | undefined;
+export interface CourseRoles {
+  [key: string]: CourseRole[] | undefined;
 }
+
+export type CourseRole = 'taskOwner' | 'juryActivist' | 'manager' | 'supervisor';

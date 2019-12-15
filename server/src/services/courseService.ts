@@ -34,10 +34,9 @@ export async function getCourseMentor(courseId: number, userId: number): Promise
     .getOne();
 }
 
-export interface MentorWithContacts extends MentorBasic {
-  email?: string;
-  phone?: string;
-}
+export interface MentorWithContacts
+  extends MentorBasic,
+    Pick<User, 'contactsEmail' | 'contactsPhone' | 'contactsSkype' | 'contactsTelegram' | 'contactsNotes'> {}
 
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number | null;
@@ -50,7 +49,15 @@ export interface StudentDetails extends StudentBasic {
   repository: string;
 }
 
-export interface StudentWithResults extends StudentBasic {
+export interface StudentWithResults {
+  id: number;
+  name: string;
+  githubId: string;
+  mentor?: {
+    name: string;
+    githubId: string;
+  };
+  totalScore: number;
   rank: number;
   locationName: string;
   taskResults: {
@@ -368,10 +375,13 @@ export async function getMentorWithContacts(mentorId: number): Promise<MentorWit
     .where('mentor.id = :mentorId', { mentorId })
     .getOne())!;
   const mentor = convertToMentorBasic(record);
+  const user = record.user as User;
   const mentorWithContacts: MentorWithContacts = {
     ...mentor,
-    email: (record.user as User).contactsEmail,
-    phone: (record.user as User).contactsPhone,
+    contactsEmail: user.contactsEmail,
+    contactsSkype: user.contactsSkype,
+    contactsTelegram: user.contactsTelegram,
+    contactsNotes: user.contactsNotes,
   };
   return mentorWithContacts;
 }
@@ -410,8 +420,8 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
   return students;
 }
 
-export async function getScoreStudents(courseId: number) {
-  const students = await getRepository(Student)
+export async function getStudentsScore(courseId: number, activeOnly: boolean = false) {
+  let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
     .addSelect(getPrimaryUserFields().concat(['user.locationName']))
@@ -420,9 +430,12 @@ export async function getScoreStudents(courseId: number) {
     .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .leftJoin('mentor.user', 'mentorUser')
     .addSelect(getPrimaryUserFields('mentorUser'))
-    .innerJoin('student.course', 'course')
-    .where('course.id = :courseId', { courseId })
-    .getMany();
+    .where('student."courseId" = :courseId', { courseId });
+
+  if (activeOnly) {
+    query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
+  }
+  const students = await query.getMany();
 
   return students
     .sort((a, b) => b.totalScore - a.totalScore)
@@ -438,12 +451,16 @@ export async function getScoreStudents(courseId: number) {
             })) ?? [],
           ) ?? [];
 
+      const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
       return {
-        rank: i + 1,
-        courseId,
         id: student.id,
-        mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
-        userId: user.id!,
+        rank: i + 1,
+        mentor: mentor
+          ? {
+              githubId: mentor.githubId,
+              name: mentor.name,
+            }
+          : undefined,
         name: `${user.firstName} ${user.lastName}`.trim(),
         githubId: user.githubId,
         totalScore: student.totalScore,
@@ -452,6 +469,29 @@ export async function getScoreStudents(courseId: number) {
         isActive: !student.isExpelled && !student.isFailed,
       };
     });
+}
+
+export async function getStudentScore(studentId: number) {
+  const student = await getRepository(Student)
+    .createQueryBuilder('student')
+    .leftJoinAndSelect('student.taskResults', 'taskResults')
+    .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
+    .where('student.id = :studentId', { studentId })
+    .getOne();
+
+  const taskResults = student?.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+  const interviewResults =
+    student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
+      courseTaskId,
+      score,
+    })) ?? [];
+
+  const results = taskResults.concat(interviewResults);
+
+  return {
+    totalScore: student?.totalScore ?? 0,
+    results,
+  };
 }
 
 export async function getCourseTasks(courseId: number) {
@@ -470,7 +510,11 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
-  return session.isAdmin || session.roles[courseId] === 'coursemanager';
+  return (
+    session.isAdmin ||
+    session.roles[courseId] === 'coursemanager' ||
+    session.coursesRoles?.[courseId]?.includes('manager')
+  );
 }
 
 export async function getEvents(courseId: number) {
@@ -521,5 +565,6 @@ export async function getUsers(courseId: number) {
     githubId: r.user.githubId,
     isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
+    isSupervisor: r.isSupervisor,
   }));
 }

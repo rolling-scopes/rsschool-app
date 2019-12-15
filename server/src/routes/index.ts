@@ -27,6 +27,7 @@ import { jwtRoute } from './jwt';
 import { userRoute } from './user';
 
 import { ILogger } from '../logger';
+import { userRolesMiddleware, courseMiddleware } from './middlewares';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -39,6 +40,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   const router = new Router();
 
   router.use(errorHandlerMiddleware(logger));
+  router.use(userRolesMiddleware, courseMiddleware);
 
   applyRouter(router, authRoute());
   applyRouter(router, sessionRoute(logger));

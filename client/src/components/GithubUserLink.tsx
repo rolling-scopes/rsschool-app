@@ -22,6 +22,9 @@ export function GithubUserLink(props: { value: string }) {
 }
 
 const styles = css`
+  .link-user {
+    display: inline-block;
+  }
   .link-user,
   .link-user-profile {
     white-space: nowrap;
