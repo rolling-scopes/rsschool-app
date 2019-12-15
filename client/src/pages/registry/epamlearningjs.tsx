@@ -1,7 +1,5 @@
 import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
-import { NextPageContext } from 'next';
-import { Header } from 'components/Header';
 import withSession from 'components/withSession';
 import * as React from 'react';
 import { Course, CourseService } from 'services/course';
@@ -28,28 +26,20 @@ const noticeStyle = {
   fontStyle: 'italic',
 };
 
-class CourseRegistryPage extends React.Component<Props & { courseAlias?: string }, State> {
+const courseAlias = 'epamlearningjs';
+
+class CourseRegistryPage extends React.Component<Props, State> {
   state: State = {
     courses: null,
     submitted: false,
     initialData: {},
   };
 
-  static async getInitialProps(context: NextPageContext) {
-    try {
-      const courseAlias = context.query.course;
-      return { courseAlias };
-    } catch (e) {
-      console.error(e.message);
-      return { course: undefined };
-    }
-  }
-
   async componentDidMount() {
     const userService = new UserService();
     const courseService = new CourseService();
     const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
-    const activeCourses = courses.filter((course: Course) => course.alias === this.props.courseAlias);
+    const activeCourses = courses.filter((course: Course) => course.alias === courseAlias);
 
     this.setState({
       initialData: profile.user,
@@ -109,8 +99,8 @@ class CourseRegistryPage extends React.Component<Props & { courseAlias?: string 
           status="success"
           title="You have successfully registered."
           extra={
-            <Button type="primary" href="/pre-check">
-              Go to Home
+            <Button type="primary" href="/epamlearningjs">
+              Continue
             </Button>
           }
         />
@@ -221,15 +211,8 @@ class CourseRegistryPage extends React.Component<Props & { courseAlias?: string 
       );
     }
 
-    return (
-      <>
-        <Header courseName="Registration" username={this.props.session.githubId} />
-        {content}
-      </>
-    );
+    return content;
   }
 }
 
-const Page = withSession(Form.create()(CourseRegistryPage)) as any;
-Page.getInitialProps = CourseRegistryPage.getInitialProps;
-export default Page;
+export default withSession(Form.create()(CourseRegistryPage));
