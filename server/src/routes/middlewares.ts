@@ -15,6 +15,7 @@ export const courseMiddleware = async (ctx: Router.RouterContext, next: any) => 
     setResponse(ctx, BAD_REQUEST, 'Incorrect [Course Id]');
     return;
   }
+  ctx.params.courseId = courseId;
   const courseTaskId = Number(ctx.params.courseTaskId);
   if (!isNaN(courseTaskId)) {
     ctx.params.courseTaskId = courseTaskId;
