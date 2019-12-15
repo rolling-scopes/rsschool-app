@@ -70,9 +70,6 @@ class EpamLearningJs extends React.Component<Props, State> {
     const courseTaskId = getFieldValue('courseTaskId');
     const { courseTasks, loading } = this.state;
     const task = courseTasks.find(t => t.id === courseTaskId);
-    if (courseTasks.length === 0) {
-      return null;
-    }
     return (
       <Spin spinning={loading}>
         <Form style={{ margin: 32 }} onSubmit={this.handleSubmit} layout="vertical">
