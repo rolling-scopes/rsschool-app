@@ -147,7 +147,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="play-circle" theme="twoTone" twoToneColor="#7f00ff" /> Submit Task
+        <Icon type="play-circle" theme="twoTone" twoToneColor="#7f00ff" /> Auto-Test: Submit
       </>
     ),
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
@@ -157,7 +157,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="dashboard" theme="twoTone" twoToneColor="#52c41a" /> Task Verification Status
+        <Icon type="dashboard" theme="twoTone" twoToneColor="#7f00ff" /> Auto-Test: Verification Status
       </>
     ),
     getLink: (course: Course) => `/course/tasks-verifications?course=${course.alias}`,
