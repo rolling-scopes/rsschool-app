@@ -432,7 +432,7 @@ class IndexPage extends React.PureComponent<Props, State> {
             </List.Item>
           )}
         />
-        {courseManagementLinks.length && (
+        {courseManagementLinks.length ? (
           <List
             size="small"
             style={{ marginTop: 16 }}
@@ -452,7 +452,7 @@ class IndexPage extends React.PureComponent<Props, State> {
               </List.Item>
             )}
           />
-        )}
+        ) : null}
       </>
     );
   }
