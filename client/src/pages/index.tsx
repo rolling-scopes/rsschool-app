@@ -107,7 +107,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="code" twoToneColor="#f56161" theme="twoTone" /> Submit Task Solution
+        <Icon type="code" twoToneColor="#f56161" theme="twoTone" /> Cross-Check: Submit
       </>
     ),
     getLink: (course: Course) => `/course/student/task-solution?course=${course.alias}`,
@@ -117,7 +117,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="check-circle" twoToneColor="#f56161" theme="twoTone" /> Cross-Check
+        <Icon type="check-circle" twoToneColor="#f56161" theme="twoTone" /> Cross-Check: Review
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check?course=${course.alias}`,
