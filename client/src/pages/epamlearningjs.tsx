@@ -58,10 +58,12 @@ class EpamLearningJs extends React.Component<Props, State> {
 
     this.setState({
       loading: false,
-      courseTasks: courseTasks.map(courseTask => {
-        const result = studentScore?.results.find(({ courseTaskId }) => courseTaskId === courseTask.id);
-        return { ...courseTask, score: result?.score ?? 0 };
-      }),
+      courseTasks: courseTasks
+        .map(courseTask => {
+          const result = studentScore?.results.find(({ courseTaskId }) => courseTaskId === courseTask.id);
+          return { ...courseTask, score: result?.score ?? 0 };
+        })
+        .sort((a, b) => a.id - b.id),
     });
   }
 
