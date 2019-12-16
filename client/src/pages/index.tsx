@@ -271,6 +271,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     // TODO: it seems no need to filter. It is done on the server already.
     return courses
       .filter(course => isAdmin || session.roles[course.id] || !isEmpty(session.coursesRoles?.[course.id]))
+      .filter(course => !(course.alias === 'epamlearningjs' && session.roles[course.id] === 'student'))
       .sort((a, b) => (a.startDate && b.startDate ? b.startDate.localeCompare(a.startDate) : 0));
   }
 

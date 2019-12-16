@@ -91,6 +91,12 @@ class EpamLearningJs extends React.Component<Props, State> {
               {task && (
                 <>
                   <Typography.Paragraph>
+                    Task Description:
+                    <Button type="link" target="_blank" href={task.descriptionUrl!}>
+                      {task.descriptionUrl}
+                    </Button>
+                  </Typography.Paragraph>
+                  <Typography.Paragraph>
                     The system will run tests in the following repository and will update the score based on the result
                   </Typography.Paragraph>
                   <Typography.Paragraph>
@@ -98,7 +104,7 @@ class EpamLearningJs extends React.Component<Props, State> {
                       https://github.com/{this.props.session.githubId}/{task.githubRepoName}
                     </Typography.Text>
                   </Typography.Paragraph>
-                  <Typography.Paragraph type="danger">
+                  <Typography.Paragraph type="warning">
                     IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
                   </Typography.Paragraph>
                 </>
