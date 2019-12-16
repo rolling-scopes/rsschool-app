@@ -77,7 +77,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     };
   });
 
-  setResponse(ctx, OK, data, 180);
+  setResponse(ctx, OK, data);
 };
 
 export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.RouterContext) => {
