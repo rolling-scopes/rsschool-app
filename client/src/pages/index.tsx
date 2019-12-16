@@ -183,7 +183,7 @@ const routes = [
   },
 ];
 
-const courseManagmentRoutes = [
+const courseManagementRoutes = [
   {
     name: () => `Course Events`,
     getLink: (course: Course) => `/course/admin/events?course=${course.alias}`,
@@ -247,13 +247,13 @@ class IndexPage extends React.PureComponent<Props, State> {
       }));
   };
 
-  private getCourseManagmentLinks = (course: Course) => {
+  private getCourseManagementLinks = (course: Course) => {
     if (!this.props.session) {
       return [];
     }
 
     const role = this.props.session.roles[course.id];
-    return courseManagmentRoutes
+    return courseManagementRoutes
       .filter(route => route.access(course, role, this.props.session))
       .map(route => ({
         name: route.name(),
@@ -417,6 +417,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     if (!course) {
       return null;
     }
+    const courseManagementLinks = this.getCourseManagementLinks(course);
     return (
       <>
         <List
@@ -431,25 +432,27 @@ class IndexPage extends React.PureComponent<Props, State> {
             </List.Item>
           )}
         />
-        <List
-          size="small"
-          style={{ marginTop: 16 }}
-          header={
-            <>
-              <Icon type="tool" theme="twoTone" twoToneColor="#000000" />
-              <Typography.Text strong> Course Management</Typography.Text>
-            </>
-          }
-          bordered
-          dataSource={this.getCourseManagmentLinks(course)}
-          renderItem={(linkInfo: LinkInfo) => (
-            <List.Item key={linkInfo.link}>
-              <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
-                {linkInfo.name}
-              </a>
-            </List.Item>
-          )}
-        />
+        {courseManagementLinks.length && (
+          <List
+            size="small"
+            style={{ marginTop: 16 }}
+            header={
+              <>
+                <Icon type="tool" theme="twoTone" twoToneColor="#000000" />
+                <Typography.Text strong> Course Management</Typography.Text>
+              </>
+            }
+            bordered
+            dataSource={courseManagementLinks}
+            renderItem={(linkInfo: LinkInfo) => (
+              <List.Item key={linkInfo.link}>
+                <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link}>
+                  {linkInfo.name}
+                </a>
+              </List.Item>
+            )}
+          />
+        )}
       </>
     );
   }
