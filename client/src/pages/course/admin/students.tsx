@@ -208,7 +208,7 @@ class ScorePage extends React.Component<Props, State> {
                 title: 'Total',
                 dataIndex: 'totalScore',
                 key: 'totalScore',
-                width: 50,
+                width: 80,
                 sorter: numberSorter('totalScore'),
                 render: value => <Text strong>{value}</Text>,
               },
