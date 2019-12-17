@@ -47,6 +47,7 @@ import { postStudentStatus, getStudentSummary } from './student';
 import {
   postTaskSolution,
   postTaskSolutionDistribution,
+  postTaskSolutionCompletion,
   getTaskSolutionAssignments,
   postTaskSolutionResult,
   getTaskSolutionResult,
@@ -113,12 +114,8 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.get('/tasksCheckers', courseGuard, getCourseTasksWithTaskCheckers(logger));
   router.post('/task/:courseTaskId/shuffle', adminGuard, postShuffleCourseTask(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
-  router.post(
-    '/task/:courseTaskId/cross-check/distribution',
-    adminGuard,
-
-    postTaskSolutionDistribution(logger),
-  );
+  router.post('/task/:courseTaskId/cross-check/distribution', adminGuard, postTaskSolutionDistribution(logger));
+  router.post('/task/:courseTaskId/cross-check/completion', adminGuard, postTaskSolutionCompletion(logger));
 }
 
 function addStageInterviewApi(router: Router, logger: ILogger) {

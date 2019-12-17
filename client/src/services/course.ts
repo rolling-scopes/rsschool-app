@@ -343,6 +343,11 @@ export class CourseService {
     return result.data;
   }
 
+  async createCrossCheckCompletion(courseTaskId: number) {
+    const result = await axios.post(this.wrapUrl(`/task/${courseTaskId}/cross-check/completion`));
+    return result.data;
+  }
+
   async getUsers() {
     const result = await axios.get(this.wrapUrl(`/users`));
     return result.data.data;

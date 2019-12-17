@@ -117,36 +117,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
 
-  const existingResult = await taskResultsService.getTaskResult(student.id, courseTask.id);
-  if (existingResult == null) {
-    const taskResult = taskResultsService.createTaskResult(authorId, {
-      ...data,
-      studentId: student.id,
-      courseTaskId: courseTask.id,
-    });
-    const addResult = await getRepository(TaskResult).save(taskResult);
-    setResponse(ctx, OK, addResult);
-    return;
-  }
-
-  if (data.githubPrUrl) {
-    existingResult.githubPrUrl = data.githubPrUrl;
-  }
-  if (data.comment) {
-    existingResult.comment = data.comment;
-  }
-  if (data.score !== existingResult.score) {
-    existingResult.historicalScores.push({
-      authorId,
-      score: data.score,
-      dateTime: Date.now(),
-      comment: data.comment || '',
-    });
-    existingResult.score = data.score;
-  }
-
-  const updateResult = await getRepository(TaskResult).save(existingResult);
-  setResponse(ctx, OK, updateResult);
+  const result = taskResultsService.saveScore(student.id, courseTask.id, { ...data, authorId });
+  setResponse(ctx, OK, result);
 };
 
 export const postMultipleScores = (logger: ILogger) => async (ctx: Router.RouterContext) => {

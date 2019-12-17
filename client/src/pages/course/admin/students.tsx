@@ -24,7 +24,7 @@ type State = {
     countries: { name: string; count: number; totalCount: number }[];
   };
   crossCheckTasks: { id: number; name: string }[];
-  crossCheckModal: boolean;
+  crossCheckModal: 'distribution' | 'completion' | null;
 };
 
 class ScorePage extends React.Component<Props, State> {
@@ -32,7 +32,7 @@ class ScorePage extends React.Component<Props, State> {
     isLoading: false,
     students: [],
     expelledStudent: null,
-    crossCheckModal: false,
+    crossCheckModal: null,
     crossCheckTasks: [],
     stats: {
       studentCount: 0,
@@ -99,7 +99,7 @@ class ScorePage extends React.Component<Props, State> {
           />
           <Modal
             title="Choose Task"
-            visible={this.state.crossCheckModal}
+            visible={!!this.state.crossCheckModal}
             okText="Submit"
             okButtonProps={{ type: 'danger' }}
             onOk={this.handleCrossCheckSubmit}
@@ -128,11 +128,18 @@ class ScorePage extends React.Component<Props, State> {
             </Form>
           </Modal>
           <Row type="flex" justify="end" className="m-3">
-            {this.props.session.isAdmin && <Button onClick={this.handleCreateRepos}>Create Repos</Button>}
             {this.props.session.isAdmin && (
-              <Button style={{ margin: '0 8px' }} onClick={this.handleCrossCheckClick}>
-                Cross-Check Distribution
-              </Button>
+              <>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleCreateRepos}>
+                  Create Repos
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleCrossCheckDistribution}>
+                  Cross-Check Distribution
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleCrossCheckCompletion}>
+                  Cross-Check Completion
+                </Button>
+              </>
             )}
           </Row>
           <Table<StudentDetails>
@@ -247,12 +254,16 @@ class ScorePage extends React.Component<Props, State> {
     }
   }
 
-  private handleCrossCheckClick = () => {
-    this.setState({ crossCheckModal: true });
+  private handleCrossCheckDistribution = () => {
+    this.setState({ crossCheckModal: 'distribution' });
+  };
+
+  private handleCrossCheckCompletion = () => {
+    this.setState({ crossCheckModal: 'completion' });
   };
 
   private handleCrossCheckCancel = () => {
-    this.setState({ crossCheckModal: false });
+    this.setState({ crossCheckModal: null });
   };
 
   private handleCrossCheckSubmit = (event: React.FormEvent) => {
@@ -262,10 +273,14 @@ class ScorePage extends React.Component<Props, State> {
         return;
       }
       try {
-        await this.courseService.createCrossCheckDistribution(values.courseTaskId);
+        if (this.state.crossCheckModal === 'distribution') {
+          await this.courseService.createCrossCheckDistribution(values.courseTaskId);
+        } else {
+          await this.courseService.createCrossCheckCompletion(values.courseTaskId);
+        }
         this.props.form.resetFields();
         message.success('Cross-check distrubtion has been created');
-        this.setState({ crossCheckModal: false });
+        this.setState({ crossCheckModal: null });
       } catch (e) {
         message.error('An error occurred.');
       }

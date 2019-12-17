@@ -121,3 +121,56 @@ export function createStudentArtefactTaskResult(data: TaskArtefactInput): Partia
     presentationUrl: data.presentationUrl,
   };
 }
+
+export async function saveScore(
+  studentId: number,
+  courseTaskId: number,
+  data: {
+    authorId: number;
+    score: number;
+    comment: string;
+    githubPrUrl?: string;
+  },
+) {
+  const { authorId, githubPrUrl = null, comment = '', score } = data;
+  const existingResult = await getTaskResult(studentId, courseTaskId);
+  if (existingResult == null) {
+    const taskResult = createTaskResult(authorId, {
+      ...data,
+      studentId,
+      courseTaskId,
+    });
+    return getRepository(TaskResult).insert(taskResult);
+  }
+
+  if (
+    existingResult.githubRepoUrl === githubPrUrl &&
+    existingResult.comment === comment &&
+    existingResult.score === score
+  ) {
+    return null;
+  }
+
+  if (githubPrUrl) {
+    existingResult.githubPrUrl = githubPrUrl;
+  }
+  if (comment) {
+    existingResult.comment = comment;
+  }
+  if (score !== existingResult.score) {
+    existingResult.historicalScores.push({
+      authorId,
+      score,
+      dateTime: Date.now(),
+      comment: data.comment || '',
+    });
+    existingResult.score = score;
+  }
+
+  return getRepository(TaskResult).update(existingResult.id, {
+    score: existingResult.score,
+    comment: existingResult.comment,
+    githubPrUrl: existingResult.githubPrUrl,
+    historicalScores: existingResult.historicalScores,
+  });
+}

@@ -11,6 +11,8 @@ import {
   CourseEvent,
   TaskSolution,
   CourseUser,
+  TaskSolutionChecker,
+  TaskSolutionResult,
 } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
@@ -566,5 +568,38 @@ export async function getUsers(courseId: number) {
     isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
+  }));
+}
+
+export async function getTaskSolutionCheckers(courseTaskId: number) {
+  const records = await getRepository(TaskSolutionResult)
+    .createQueryBuilder('tsr')
+    .select('"tsr"."studentId", ROUND(AVG("tsr".score)) as "score"')
+    .where(qb => {
+      const query = qb
+        .subQuery()
+        .select('"taskSolutionResult"."checkerId"')
+        .from(TaskSolutionChecker, 'taskSolutionChecker')
+        .leftJoin(
+          'task_solution_result',
+          'taskSolutionResult',
+          [
+            '"taskSolutionResult"."checkerId" = "taskSolutionChecker"."checkerId"',
+            '"taskSolutionResult"."studentId" = "taskSolutionChecker"."studentId"',
+          ].join(' AND '),
+        )
+        .where(`"taskSolutionChecker"."courseTaskId" = :courseTaskId`, { courseTaskId })
+        .andWhere('"taskSolutionResult".id IS NOT NULL')
+        .groupBy('"taskSolutionResult"."checkerId"')
+        .having(`COUNT("taskSolutionChecker".id) >= 3`)
+        .getQuery();
+      return `"studentId" IN ${query}`;
+    })
+    .groupBy('"tsr"."studentId"')
+    .having(`COUNT("tsr".id) > 2`)
+    .getRawMany();
+  return records.map<{ studentId: number; score: number }>(record => ({
+    studentId: record.studentId,
+    score: Number(record.score),
   }));
 }
