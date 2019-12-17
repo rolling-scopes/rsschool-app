@@ -22,7 +22,7 @@
   "devDependencies": {
     "concurrently": "^5.0.1",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.3"
   },
   "prettier": {
     "trailingComma": "all",

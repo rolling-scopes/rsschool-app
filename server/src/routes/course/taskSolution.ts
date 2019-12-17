@@ -198,3 +198,14 @@ export const getTaskSolutionAssignments = (_: ILogger) => async (ctx: Router.Rou
   }));
   setResponse(ctx, OK, result);
 };
+
+export const postTaskSolutionCompletion = (__: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseTaskId } = ctx.params;
+
+  const studentScores = await courseService.getTaskSolutionCheckers(courseTaskId);
+  for (const studentScore of studentScores) {
+    const data = { authorId: -1, comment: 'Cross-Check score', score: studentScore.score };
+    await taskResultsService.saveScore(studentScore.studentId, courseTaskId, data);
+  }
+  setResponse(ctx, OK);
+};

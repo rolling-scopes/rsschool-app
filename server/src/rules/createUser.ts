@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { flatMap, union } from 'lodash';
 import { config } from '../config';
-import { Course, IUserSession, CourseRoles, User, CourseTask, Stage, CourseUser } from '../models';
+import { Course, CourseManager, IUserSession, CourseRoles, User, CourseTask, Stage, CourseUser } from '../models';
 import { userService } from '../services';
 
 const adminTeams: string[] = config.roles.adminTeams;
@@ -63,13 +63,15 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
     };
   }
   const roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' } = {};
-  result.students!.forEach(student => {
+  result.students?.forEach(student => {
     roles[(student.course as Course).id] = 'student';
   });
-  result.mentors!.forEach(mentor => {
+  result.mentors?.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
   });
-  result.courseManagers!.forEach(courseManager => {
+
+  const courseManagers = result.courseManagers as CourseManager[];
+  courseManagers.forEach((courseManager: any) => {
     roles[(courseManager.course as Course).id] = 'coursemanager';
   });
 
