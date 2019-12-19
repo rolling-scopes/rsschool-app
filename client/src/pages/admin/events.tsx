@@ -11,13 +11,16 @@ import { urlPattern } from 'services/validators';
 const { Content } = Layout;
 
 type Props = { session: Session } & FormComponentProps;
-interface State extends PageWithModalState<Event> {}
+interface State extends PageWithModalState<Event> {
+  confirmationModalData: { id: number } | null;
+}
 
 class EventsPage extends React.Component<Props, State> {
   state: State = {
     data: [],
     modalData: null,
     modalAction: 'update',
+    confirmationModalData: null,
   };
 
   private service = new EventService();
@@ -87,6 +90,7 @@ class EventsPage extends React.Component<Props, State> {
           </Layout>
         </Layout>
         {this.renderModal()}
+        {this.renderConfirmationModal()}
       </div>
     );
   }
@@ -150,6 +154,23 @@ class EventsPage extends React.Component<Props, State> {
     );
   }
 
+  private renderConfirmationModal = () => {
+    const confirmationModalData = this.state.confirmationModalData;
+    if (!confirmationModalData) {
+      return null;
+    }
+    return (
+      <Modal
+        visible={!!confirmationModalData}
+        title="Confirm your action"
+        okText="Save"
+        onOk={() => this.submitDeleteItem(confirmationModalData.id)}
+      >
+        <div>Are you sure you want to delete this item?</div>
+      </Modal>
+    );
+  };
+
   private handleModalSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     this.props.form.validateFields(async (err: any, values: any) => {
@@ -182,10 +203,12 @@ class EventsPage extends React.Component<Props, State> {
 
   private handleEditItem = (record: Event) => this.setState({ modalData: record, modalAction: 'update' });
 
-  private handleDeleteItem = async (id: number) => {
+  private handleDeleteItem = (id: number) => this.setState({ confirmationModalData: { id } });
+
+  private submitDeleteItem = async (id: number) => {
     await this.service.deleteEvent(id);
     const data = await this.service.getEvents();
-    this.setState({ data });
+    this.setState({ data, confirmationModalData: null });
   };
 }
 
