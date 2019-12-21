@@ -63,6 +63,21 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
     .getOne();
 }
 
+export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
+  const comments = (await getRepository(TaskSolutionResult)
+    .createQueryBuilder('tsr')
+    .select(['tsr.comment'])
+    .where('"tsr"."studentId" = :studentId', { studentId })
+    .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getMany()) as { comment: string }[];
+  const taskSolution = await getRepository(TaskSolution)
+    .createQueryBuilder('ts')
+    .where('"ts"."studentId" = :studentId', { studentId })
+    .andWhere('"ts"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .getOne();
+  return { url: taskSolution?.url, comments };
+}
+
 type TaskResultInput = {
   studentId: number;
   courseTaskId: number;
