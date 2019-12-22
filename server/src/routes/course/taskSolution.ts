@@ -188,7 +188,7 @@ export const getTaskSolutionAssignments = (_: ILogger) => async (ctx: Router.Rou
     return;
   }
   if (courseTask.checker !== 'crossCheck') {
-    setResponse(ctx, BAD_REQUEST, { message: 'task solution is supported for this task' });
+    setResponse(ctx, BAD_REQUEST, { message: 'not supported task' });
     return;
   }
   const records = await taskResultsService.getTaskSolutionAssignments(student.id, courseTaskId);
@@ -208,4 +208,25 @@ export const postTaskSolutionCompletion = (__: ILogger) => async (ctx: Router.Ro
     await taskResultsService.saveScore(studentScore.studentId, courseTaskId, data);
   }
   setResponse(ctx, OK);
+};
+
+export const getTaskSolutionFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId, courseTaskId } = ctx.params;
+  const [student, courseTask] = await Promise.all([
+    courseService.queryStudentByGithubId(courseId, githubId),
+    taskService.getCourseTask(courseTaskId),
+  ]);
+
+  if (student == null || courseTask == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student or course task' });
+    return;
+  }
+  if (courseTask.checker !== 'crossCheck') {
+    setResponse(ctx, BAD_REQUEST, { message: 'not supported task' });
+    return;
+  }
+
+  const feedback = await taskResultsService.getTaskSolutionFeedback(student.id, courseTaskId);
+  const response = { url: feedback.url, comments: feedback.comments.map(({ comment }) => ({ comment })) };
+  setResponse(ctx, OK, response);
 };

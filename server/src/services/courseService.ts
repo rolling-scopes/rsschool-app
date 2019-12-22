@@ -576,6 +576,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number) {
     .createQueryBuilder('tsr')
     .select('"tsr"."studentId", ROUND(AVG("tsr".score)) as "score"')
     .where(qb => {
+      // query students with 3 checked tasks
       const query = qb
         .subQuery()
         .select('"taskSolutionResult"."checkerId"')
@@ -596,7 +597,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number) {
       return `"studentId" IN ${query}`;
     })
     .groupBy('"tsr"."studentId"')
-    .having(`COUNT("tsr".id) > 2`)
+    .having(`COUNT("tsr".id) >= 2`)
     .getRawMany();
   return records.map<{ studentId: number; score: number }>(record => ({
     studentId: record.studentId,

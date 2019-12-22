@@ -9,17 +9,18 @@ export const validateGithubIdAndAccess = async (ctx: Router.RouterContext, next:
     setResponse(ctx, BAD_REQUEST, 'Incorrect [githubId]');
     return;
   }
-  if (githubId === 'me' && ctx.state.user) {
-    githubId = ctx.state.user.githubId;
+  const user = ctx.state.user;
+  if (githubId === 'me' && user) {
+    githubId = user.githubId;
   } else {
     githubId = githubId.toLowerCase();
   }
   ctx.params.githubId = githubId;
-  if ((ctx.state.user != null && ctx.state.user.isAdmin) || auth(ctx)) {
+  if ((user != null && user.isAdmin) || auth(ctx)) {
     await next();
     return;
   }
-  if (ctx.state.user.githubId !== githubId) {
+  if (user.githubId !== githubId) {
     setResponse(ctx, FORBIDDEN);
     return;
   }
@@ -32,8 +33,9 @@ export const validateGithubId = async (ctx: Router.RouterContext, next: any) => 
     setResponse(ctx, BAD_REQUEST, 'Incorrect [githubId]');
     return;
   }
-  if (githubId === 'me' && ctx.state.user) {
-    githubId = ctx.state.user.githubId;
+  const user = ctx.state.user;
+  if (githubId === 'me' && user) {
+    githubId = user.githubId;
   } else {
     githubId = githubId.toLowerCase();
   }

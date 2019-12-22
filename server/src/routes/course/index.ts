@@ -51,6 +51,7 @@ import {
   getTaskSolutionAssignments,
   postTaskSolutionResult,
   getTaskSolutionResult,
+  getTaskSolutionFeedback,
 } from './taskSolution';
 import { getUsers, postUser, putUser } from './user';
 
@@ -81,6 +82,7 @@ export function courseRoute(logger: ILogger) {
   addStageInterviewApi(router, logger);
   addMentorApi(router, logger);
   addStudentApi(router, logger);
+  addStudentCrossCheckApi(router, logger);
   addCourseUserApi(router, logger);
 
   return router;
@@ -160,32 +162,7 @@ function addStudentApi(router: Router, logger: ILogger) {
     ...validators,
     postTaskVerification(logger),
   );
-  router.post(
-    '/student/:githubId/task/:courseTaskId/cross-check/solution',
-    courseGuard,
-    ...validators,
-    postTaskSolution(logger),
-  );
-  router.post(
-    '/student/:githubId/task/:courseTaskId/cross-check/result',
-    courseGuard,
 
-    validateGithubId,
-    postTaskSolutionResult(logger),
-  );
-  router.get(
-    '/student/:githubId/task/:courseTaskId/cross-check/result',
-    courseGuard,
-
-    validateGithubId,
-    getTaskSolutionResult(logger),
-  );
-  router.get(
-    '/student/:githubId/task/:courseTaskId/cross-check/assignments',
-    courseGuard,
-    ...validators,
-    getTaskSolutionAssignments(logger),
-  );
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
@@ -197,6 +174,17 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.get('/students/score/csv', courseManagerGuard, getScoreAsCsv(logger));
 
   router.get('/students/search/:searchText', courseGuard, searchCourseStudent(logger));
+}
+
+function addStudentCrossCheckApi(router: Router, logger: ILogger) {
+  const validators = [validateGithubIdAndAccess];
+  const baseUrl = `/student/:githubId/task/:courseTaskId`;
+
+  router.post(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, postTaskSolution(logger));
+  router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, postTaskSolutionResult(logger));
+  router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, getTaskSolutionResult(logger));
+  router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, getTaskSolutionFeedback(logger));
+  router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, getTaskSolutionAssignments(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {
