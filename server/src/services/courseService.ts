@@ -596,7 +596,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number) {
         .getQuery();
       return `"studentId" IN ${query}`;
     })
-    .andWhere('"tsr".courseTaskId = :courseTaskId', { courseTaskId })
+    .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
     .groupBy('"tsr"."studentId"')
     .having(`COUNT("tsr".id) >= 2`)
     .getRawMany();
