@@ -33,13 +33,15 @@ class TaskScorePage extends React.Component<Props, State> {
     selectedFileList: new Map(),
   };
 
-  courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
-
-    const courseTasks = await this.courseService.getCourseTasksForTaskOwner(courseId);
-
+    const courseTasks = await this.courseService.getCourseTasksForTaskOwner();
     this.setState({ courseTasks });
   }
 
@@ -175,7 +177,6 @@ class TaskScorePage extends React.Component<Props, State> {
       }
       try {
         await this.setState({ isLoading: true });
-        const courseId = this.props.course.id;
         const files = values.files.fileList;
 
         const filesContent: string[] = await Promise.all(
@@ -219,7 +220,7 @@ class TaskScorePage extends React.Component<Props, State> {
           studentGithubId: github,
         }));
 
-        const results = await this.courseService.postMultipleScores(courseId, values.courseTaskId, data);
+        const results = await this.courseService.postMultipleScores(values.courseTaskId, data);
         const groupedByStatus = new Map();
         results.forEach(({ status, value }: { status: string; value: string | number }) => {
           if (groupedByStatus.has(status)) {

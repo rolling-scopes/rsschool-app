@@ -92,9 +92,8 @@ class SchedulePage extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
     const [events, tasks] = await Promise.all([
-      this.courseService.getCourseEvents(courseId),
+      this.courseService.getCourseEvents(),
       this.courseService.getCourseTasks(),
     ]);
     const data = events

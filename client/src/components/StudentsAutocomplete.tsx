@@ -39,11 +39,15 @@ class StudentsAutocomplete extends React.PureComponent<Props, State> {
     studentQuery: '',
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.courseId);
+  }
 
   async componentDidMount() {
-    const { courseId } = this.props;
-    const students = await this.courseService.getCourseStudents(courseId, true);
+    const students = await this.courseService.getCourseStudents(true);
 
     this.setState({ students: students.filter((student: StudentBasic) => student.isActive) });
   }

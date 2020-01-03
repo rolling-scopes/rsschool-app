@@ -1,5 +1,7 @@
 import { Session } from 'components/withSession';
-import { Course } from 'services/course';
+import { Course as CommonCourse } from '../../../common/models';
+
+export interface Course extends CommonCourse {}
 
 export interface Mentor {
   lastName: string;

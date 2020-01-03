@@ -25,9 +25,7 @@ class EpamLearningJs extends React.Component<Props, State> {
 
   static async getInitialProps(ctx: NextPageContext) {
     try {
-      UserService.cookie = ctx && ctx.req ? ctx.req.headers.cookie : undefined;
-      const service = new UserService();
-      const courses = await service.getCourses();
+      const courses = await new UserService(ctx).getCourses();
       const course = courses.find(c => c.alias === courseName) || null;
       if (course == null) {
         return EpamLearningJs.redirectToRegistry(ctx);
@@ -145,7 +143,6 @@ class EpamLearningJs extends React.Component<Props, State> {
         return;
       }
       const { courseTaskId } = values;
-      const courseId = this.props.course.id;
       const task = this.state.courseTasks.find(t => t.id === courseTaskId);
       if (!task) {
         return;
@@ -155,7 +152,7 @@ class EpamLearningJs extends React.Component<Props, State> {
           githubRepoName: task.githubRepoName,
           sourceGithubRepoUrl: task.sourceGithubRepoUrl,
         };
-        await this.courseService.postTaskVerification(courseId, courseTaskId, data);
+        await this.courseService.postTaskVerification(courseTaskId, data);
         this.setState({ loading: false });
         message.success('The task has been submitted for verification and it will be checked soon.');
         this.props.form.resetFields();

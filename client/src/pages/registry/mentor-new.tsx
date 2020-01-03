@@ -1,13 +1,15 @@
-import { Button, Checkbox, Col, Spin, Form, Tag, Input, message, Result, Row, Select, Typography } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Spin, Tag, Typography } from 'antd';
 import axios from 'axios';
+import { GdprCheckbox } from 'components/Forms';
 import { Header } from 'components/Header';
 import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';
-import * as React from 'react';
-import { Course, CourseService } from 'services/course';
+import { PureComponent } from 'react';
+import { CoursesService } from 'services/courses';
 import { formatMonthFriendly } from 'services/formatter';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
+import { Course } from '../../../../common/models';
 import { Props } from '../../configs/registry';
 
 type State = {
@@ -21,26 +23,25 @@ const defaultColumnSizes = { xs: 18, sm: 12, md: 10, lg: 8 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
-class MentorRegistryPage extends React.Component<Props, State> {
-  state: State = {
+class MentorRegistryPage extends PureComponent<Props, State> {
+  readonly state: State = {
     courses: [],
-    submitted: true,
+    submitted: false,
     initialData: {} as any,
     isLoading: true,
   };
 
   async componentDidMount() {
-    const userService = new UserService();
-    const courseService = new CourseService();
-    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+    const [profile, allCourses] = await Promise.all([
+      new UserService().getProfile(),
+      new CoursesService().getCourses(),
+    ]);
 
-    this.setState({
-      courses: courses
-        .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
-        .sort((a, b) => a.startDate.localeCompare(b.startDate)),
-      initialData: profile.user,
-      isLoading: false,
-    });
+    const courses = allCourses
+      .filter(course => !course.inviteOnly)
+      .filter(course => course.planned || !course.completed);
+
+    this.setState({ courses, initialData: profile.user, isLoading: false });
   }
 
   render() {
@@ -109,7 +110,7 @@ class MentorRegistryPage extends React.Component<Props, State> {
               <Row gutter={defaultRowGutter}>
                 <Col {...defaultColumnSizes}>
                   <Form.Item label="Prefered Courses">
-                    {field('preferedCourses')(
+                    {field('preferedCourses', { initialValue: [] })(
                       <Checkbox.Group
                         options={courses.map(c => ({
                           label: (
@@ -279,17 +280,7 @@ class MentorRegistryPage extends React.Component<Props, State> {
               </Row>
 
               <Row>
-                <Typography.Paragraph>
-                  I hereby agree to the processing of my personal data contained in the application and sharing it with
-                  companies only for students employment purposes.
-                </Typography.Paragraph>
-                <Typography.Paragraph>
-                  Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-                  только в целях трудоустройства студентов.
-                </Typography.Paragraph>
-                <Form.Item>
-                  {field('gdpr', { valuePropName: 'checked' })(<Checkbox>I agree / Я согласен</Checkbox>)}
-                </Form.Item>
+                <GdprCheckbox field={field} />
               </Row>
               <Button
                 size="large"

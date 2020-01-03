@@ -63,7 +63,7 @@ class TaskScorePage extends React.Component<Props, State> {
       .sort(sortTasksByEndDate)
       .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
 
-    const { students } = await this.courseService.getAllMentorStudents(courseId).catch(() => ({ students: [] }));
+    const { students } = await this.courseService.getAllMentorStudents().catch(() => ({ students: [] }));
 
     this.setState({ isPowerMentor, students, courseTasks });
   }
@@ -138,7 +138,7 @@ class TaskScorePage extends React.Component<Props, State> {
 
     const task = this.state.courseTasks.find(t => t.id === courseTaskId);
     return isPowerMentor || this.isTaskOwner(task)
-      ? this.courseService.searchCourseStudent(this.props.course.id, searchText)
+      ? this.courseService.searchCourseStudent(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
           `${githubId} ${firstName} ${lastName}`.match(searchText),
         );

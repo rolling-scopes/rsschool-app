@@ -1,14 +1,14 @@
-import { Button, DatePicker, message, Form, Input, Modal, Table, Select, Layout } from 'antd';
+import { Button, DatePicker, Form, Input, Layout, message, Modal, Select, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, AdminSider } from 'components';
+import { AdminSider, Header } from 'components';
+import { dateRenderer, idFromArrayRenderer, stringSorter } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
 import moment from 'moment';
 import * as React from 'react';
-import { CourseService, Course } from 'services/course';
-import { Stage, StageService } from 'services/stage';
-import { dateRenderer, idFromArrayRenderer, stringSorter } from 'components/Table';
+import { CoursesService } from 'services/courses';
 import { formatDate } from 'services/formatter';
-import { PageWithModalState } from 'services/models';
+import { Course, PageWithModalState } from 'services/models';
+import { Stage, StageService } from 'services/stage';
 
 const { Content } = Layout;
 
@@ -19,7 +19,7 @@ interface State extends PageWithModalState<Stage> {
 }
 
 class StagesPage extends React.Component<Props, State> {
-  state: State = {
+  readonly state: State = {
     data: [],
     courses: [],
     modalData: null,
@@ -27,10 +27,9 @@ class StagesPage extends React.Component<Props, State> {
   };
 
   private stageService = new StageService();
-  private courseService = new CourseService();
 
   async componentDidMount() {
-    const [data, courses] = await Promise.all([this.stageService.getStages(), this.courseService.getCourses()]);
+    const [data, courses] = await Promise.all([this.stageService.getStages(), new CoursesService().getCourses()]);
     this.setState({ data: data.sort((a, b) => a.id - b.id), courses });
   }
 

@@ -1,12 +1,13 @@
-import { Button, Col, Row, Form, Input, message, Select, Icon, Spin, InputNumber, Typography, Timeline } from 'antd';
+import { Button, Col, Form, Icon, Input, InputNumber, message, Row, Select, Spin, Timeline, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Header, GithubAvatar } from 'components';
+import { GithubAvatar, Header } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService } from 'services/course';
-import { StudentBasic } from '../../../../../common/models';
+import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
+import { Course } from 'services/models';
+import { StudentBasic } from '../../../../../common/models';
 
 type Props = { session: Session; course: Course } & FormComponentProps;
 

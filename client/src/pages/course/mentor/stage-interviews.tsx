@@ -2,7 +2,6 @@ import { Table, Tabs, message } from 'antd';
 import { Header, LoadingScreen, withSession, GithubUserLink, Rating } from 'components';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import _ from 'lodash';
 import * as React from 'react';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
@@ -22,7 +21,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     activeKey: '1',
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: CoursePageProps) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     await this.loadInterviews();
@@ -30,7 +34,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
 
   inviteStudent = async (student: { githubId: string }) => {
     try {
-      await this.courseService.createInterview(this.props.course.id, 17, [student]);
+      await this.courseService.createInterview(17, [student]);
       await this.loadInterviews();
     } catch (e) {
       message.error('An error occurred.');
@@ -39,7 +43,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
 
   deleteInterview = async (record: any) => {
     try {
-      await this.courseService.deleteInterview(this.props.course.id, 17, record.id);
+      await this.courseService.deleteInterview(17, record.id);
       await this.loadInterviews();
     } catch (e) {
       message.error('An error occurred.');
@@ -173,10 +177,9 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private async loadInterviews() {
     this.setState({ isLoading: true });
 
-    const courseId = this.props.course.id;
     const [records, availableStudents] = await Promise.all([
-      this.courseService.getStageInterviews(courseId, 17),
-      this.courseService.getAvailableStudentsForStageInterviews(courseId, 17),
+      this.courseService.getStageInterviews(17),
+      this.courseService.getAvailableStudentsForStageInterviews(17),
     ]);
 
     this.setState({ records, availableStudents, isLoading: false });

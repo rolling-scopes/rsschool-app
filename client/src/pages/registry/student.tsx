@@ -1,15 +1,16 @@
 import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
 import { Header } from 'components/Header';
-import withSession from 'components/withSession';
-import * as React from 'react';
-import { Course, CourseService } from 'services/course';
-import { UserService, UserFull } from 'services/user';
-import { formatMonthFriendly } from 'services/formatter';
-import { Props, TYPES } from './../../configs/registry';
-import { emailPattern, englishNamePattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
 import { NoCourses } from 'components/Registry/NoCourses';
+import withSession from 'components/withSession';
+import * as React from 'react';
+import { CoursesService } from 'services/courses';
+import { formatMonthFriendly } from 'services/formatter';
+import { Course } from 'services/models';
+import { UserFull, UserService } from 'services/user';
+import { emailPattern, englishNamePattern } from 'services/validators';
+import { Props, TYPES } from './../../configs/registry';
 
 type State = {
   courses: Course[];
@@ -36,7 +37,7 @@ class CourseRegistryPage extends React.Component<Props & { courseAlias?: string 
 
   async componentDidMount() {
     const userService = new UserService();
-    const courseService = new CourseService();
+    const courseService = new CoursesService();
     const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
     const activeCourses = this.props.courseAlias
       ? courses.filter((course: Course) => course.alias === this.props.courseAlias)

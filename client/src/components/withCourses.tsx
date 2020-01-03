@@ -1,14 +1,12 @@
-import * as React from 'react';
 import { NextPageContext } from 'next';
+import * as React from 'react';
 import { UserService } from 'services/user';
 
 function withCourses(WrappedComponent: React.ComponentType<any>) {
   return class extends React.PureComponent {
-    static async getInitialProps(context: NextPageContext) {
+    static async getInitialProps(ctx: NextPageContext) {
       try {
-        UserService.cookie = context && context.req ? context.req.headers.cookie : undefined;
-        const service = new UserService();
-        const courses = await service.getCourses();
+        const courses = await new UserService(ctx).getCourses();
         return { courses };
       } catch (e) {
         console.error(e.message);

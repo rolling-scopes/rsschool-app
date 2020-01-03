@@ -1,5 +1,5 @@
 import { Session } from 'components/withSession';
-import { Course } from 'services/course';
+import { Course } from 'services/models';
 import { FormComponentProps } from 'antd/lib/form';
 
 export const TYPES = {

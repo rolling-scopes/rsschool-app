@@ -1,15 +1,13 @@
-import * as React from 'react';
-import axios from 'axios';
-import { Button, Col, Form, Icon, Result, Row, Select, Statistic, Table, Typography, Layout } from 'antd';
+import { Button, Col, Form, Icon, Layout, Result, Row, Select, Statistic, Table, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-
-import { Course } from 'services/course';
-import { formatMonthFriendly } from 'services/formatter';
-
-import withSession, { Session } from 'components/withSession';
-import withCourses from 'components/withCourses';
-import { Header, GithubUserLink, LoadingScreen, AdminSider } from 'components';
+import axios from 'axios';
+import { AdminSider, GithubUserLink, Header, LoadingScreen } from 'components';
 import { stringSorter } from 'components/Table';
+import withCourses from 'components/withCourses';
+import withSession, { Session } from 'components/withSession';
+import * as React from 'react';
+import { formatMonthFriendly } from 'services/formatter';
+import { Course } from 'services/models';
 
 const { Content } = Layout;
 const defaultRowGutter = 24;

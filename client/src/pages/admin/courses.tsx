@@ -18,9 +18,9 @@ import {
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, Session, AdminSider } from 'components';
 import { dateRenderer, boolRenderer, stringTrimRenderer, stringSorter } from 'components/Table';
-import { PageWithModalState } from 'services/models';
+import { PageWithModalState, Course } from 'services/models';
 import { PRIMARY_SKILLS } from 'services/reference-data';
-import { CourseService, Course } from 'services/course';
+import { CoursesService } from 'services/courses';
 
 const { Content } = Layout;
 
@@ -34,7 +34,7 @@ class CoursesPage extends React.Component<Props, State> {
     modalAction: 'update',
   };
 
-  private courseService = new CourseService();
+  private courseService = new CoursesService();
 
   async componentDidMount() {
     const data = await this.courseService.getCourses();

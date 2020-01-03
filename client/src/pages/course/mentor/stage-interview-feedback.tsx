@@ -221,7 +221,12 @@ const defaultState: State = {
 class StageInterviewFeedback extends React.Component<Props, State> {
   state: State = defaultState;
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     await this.loadStudents();
@@ -232,8 +237,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
       const { common, skills, programmingTask, english, resume } = values;
       await this.setState({ isLoading: true, common, skills, programmingTask, english, resume });
 
-      const courseId = this.props.course.id;
-      const feedback = await this.courseService.getStageInterviewFeedback(courseId, STAGE_ID, studentId);
+      const feedback = await this.courseService.getStageInterviewFeedback(STAGE_ID, studentId);
 
       const json = JSON.parse(feedback);
 
@@ -261,8 +265,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
   private async loadStudents() {
     await this.setState({ isLoading: true });
 
-    const courseId = this.props.course.id;
-    const students = await this.courseService.getStageInterviewStudents(courseId, STAGE_ID);
+    const students = await this.courseService.getStageInterviewStudents(STAGE_ID);
 
     await this.setState({ students, isLoading: false });
   }
@@ -347,7 +350,6 @@ class StageInterviewFeedback extends React.Component<Props, State> {
     this.props.form.validateFields(async (_, values: any) => {
       try {
         await this.setState({ isLoading: true });
-        const courseId = this.props.course.id;
         const { common, skills, programmingTask, english, resume } = values;
         const data = {
           studentId: values.studentId,
@@ -371,7 +373,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
           isGoodCandidate: null,
         };
 
-        await this.courseService.postStageInterviewFeedback(courseId, STAGE_ID, data);
+        await this.courseService.postStageInterviewFeedback(STAGE_ID, data);
 
         await this.setState({ ...defaultState, students: this.state.students });
         this.props.form.resetFields();
@@ -409,7 +411,6 @@ class StageInterviewFeedback extends React.Component<Props, State> {
       }
       try {
         await this.setState({ isLoading: true });
-        const courseId = this.props.course.id;
         const { common, skills, programmingTask, english, resume }: State = values;
 
         const data = {
@@ -444,7 +445,7 @@ class StageInterviewFeedback extends React.Component<Props, State> {
               : null,
         };
 
-        await this.courseService.postStageInterviewFeedback(courseId, STAGE_ID, data);
+        await this.courseService.postStageInterviewFeedback(STAGE_ID, data);
 
         await this.setState({ ...defaultState });
         await this.loadStudents();

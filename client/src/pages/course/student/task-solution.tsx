@@ -4,7 +4,9 @@ import { Header } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService } from 'services/course';
+import { CourseService } from 'services/course';
+import { Course } from 'services/models';
+
 import { urlPattern } from 'services/validators';
 
 type Props = { session: Session; course: Course } & FormComponentProps;

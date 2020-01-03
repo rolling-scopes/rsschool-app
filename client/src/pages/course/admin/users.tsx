@@ -23,7 +23,7 @@ class CourseUsersPage extends React.Component<Props, State> {
     modalAction: 'update',
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
   private userService = new UserService();
 
   constructor(props: Props) {

@@ -20,7 +20,12 @@ type State = {
 export class StudentSearch extends React.Component<Props, State> {
   state: State = { data: [] };
 
-  courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.courseId);
+  }
 
   componentDidUpdate = prevProps => {
     if (prevProps.defaultValues !== this.props.defaultValues) {
@@ -53,7 +58,7 @@ export class StudentSearch extends React.Component<Props, State> {
   }
 
   private searchStudents = async (searchText: string) => {
-    return this.courseService.searchCourseStudent(this.props.courseId, searchText);
+    return this.courseService.searchCourseStudent(searchText);
   };
 
   private handleSearch = async (value: string) => {

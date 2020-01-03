@@ -70,11 +70,11 @@ class CourseTasksPage extends React.Component<Props, State> {
       let updatedData;
 
       if (this.state.modalAction === 'update') {
-        courseTask = await this.courseService.updateCourseTask(this.props.course.id, this.state.modalData!.id!, data);
+        courseTask = await this.courseService.updateCourseTask(this.state.modalData!.id!, data);
         courseTask.taskOwnerId = values.taskOwnerId;
         updatedData = this.state.data.map(d => (d.id === courseTask.id ? { ...d, ...courseTask } : d));
       } else {
-        courseTask = await this.courseService.createCourseTask(this.props.course.id, data);
+        courseTask = await this.courseService.createCourseTask(data);
         updatedData = this.state.data.concat([courseTask]);
       }
 
@@ -262,7 +262,7 @@ class CourseTasksPage extends React.Component<Props, State> {
   private handleEditItem = (record: CourseTask) => this.setState({ modalData: record, modalAction: 'update' });
 
   private handleDeleteItem = async (id: number) => {
-    await this.courseService.deleteCourseTask(this.props.course.id, id);
+    await this.courseService.deleteCourseTask(id);
     const courseTasks = await this.courseService.getCourseTasks();
     this.setState({ data: courseTasks });
   };
