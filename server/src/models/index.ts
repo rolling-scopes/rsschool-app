@@ -7,6 +7,7 @@ import { CourseUser } from './courseUser';
 import { Event } from './event';
 import { Feedback } from './feedback';
 import { Mentor } from './mentor';
+import { MentorRegistry } from './mentorRegistry';
 import { PrivateFeedback } from './privateFeedback';
 import { Registry } from './registry';
 import { Stage } from './stage';
@@ -38,6 +39,7 @@ export {
   ExternalAccount,
   Feedback,
   Mentor,
+  MentorRegistry,
   PrivateFeedback,
   Registry,
   Stage,
@@ -67,6 +69,7 @@ export const models = [
   Event,
   Feedback,
   Mentor,
+  MentorRegistry,
   PrivateFeedback,
   Registry,
   Stage,
