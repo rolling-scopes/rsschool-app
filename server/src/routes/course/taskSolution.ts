@@ -117,9 +117,9 @@ export const postTaskSolutionResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   const inputData: InputResult = ctx.request.body;
-  const data = { score: inputData.score, comment: inputData.comment || '' };
+  const data = { score: Number(inputData.score), comment: inputData.comment || '' };
 
-  if (!data.score) {
+  if (isNaN(data.score) || data.score < 0) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
     return;
   }
