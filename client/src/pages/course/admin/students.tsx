@@ -288,8 +288,7 @@ class ScorePage extends React.Component<Props, State> {
   };
 
   private async loadStudents() {
-    const courseId = this.props.course.id;
-    const courseStudents = await this.courseService.getCourseStudentsWithDetails(courseId);
+    const courseStudents = await this.courseService.getCourseStudentsWithDetails();
     let activeStudentCount = 0;
     const countries: Record<string, { count: number; totalCount: number }> = {};
 
@@ -321,7 +320,7 @@ class ScorePage extends React.Component<Props, State> {
 
   private handleCreateRepos = () => {
     try {
-      this.courseService.createRepositories(this.props.course.id);
+      this.courseService.createRepositories();
       message.info('The job for creating repositories has been submitted');
     } catch (e) {
       message.error('An error occured. Please try later.');

@@ -20,11 +20,15 @@ class TasksVerificationsPage extends React.Component<Props, State> {
     data: [],
   };
 
-  courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
-    const data = await this.courseService.getTaskVerifications(courseId);
+    const data = await this.courseService.getTaskVerifications();
     this.setState({ data });
   }
 

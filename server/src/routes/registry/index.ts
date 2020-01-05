@@ -1,13 +1,13 @@
 import { OK, NOT_FOUND, BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
-import { User, Student, Course, Registry, Mentor } from './../models';
+import { User, Student, Course, Registry, Mentor, MentorRegistry } from '../../models';
 import { getRepository } from 'typeorm';
-import { ILogger } from './../logger';
-import { adminGuard } from './guards';
-import { createGetRoute } from './common';
-import { setResponse } from './utils';
-import { IUserSession } from './../models/session';
-import { updateSession } from '../session';
+import { ILogger } from '../../logger';
+import { adminGuard } from '../guards';
+import { createGetRoute } from '../common';
+import { setResponse } from '../utils';
+import { IUserSession } from '../../models/session';
+import { updateSession } from '../../session';
 
 interface LoggingError {
   logger?: ILogger;
@@ -42,6 +42,43 @@ export function registryRouter(logger?: ILogger) {
     }
 
     setResponse(ctx, OK, registries);
+  });
+
+  router.post('/mentor', async (ctx: Router.RouterContext) => {
+    const { id: userId } = ctx.state!.user as IUserSession;
+
+    const { comment, maxStudentsLimit, preferedStudentsLocation, preferedCourses, englishMentoring } = ctx.request.body;
+    const mentorData = {
+      comment,
+      maxStudentsLimit,
+      preferedStudentsLocation,
+      englishMentoring,
+      preferedCourses,
+    };
+
+    const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
+    if (mentorRegistry == null) {
+      await getRepository(MentorRegistry).insert({
+        userId,
+        ...mentorData,
+      });
+    } else {
+      await getRepository(MentorRegistry).update(mentorRegistry.id, mentorData);
+    }
+
+    setResponse(ctx, OK);
+  });
+
+  router.get('/mentor', async (ctx: Router.RouterContext) => {
+    const { id: userId } = ctx.state!.user as IUserSession;
+
+    const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
+    if (mentorRegistry == null) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+
+    setResponse(ctx, OK);
   });
 
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));

@@ -1,9 +1,8 @@
-import axios from 'axios';
-import getConfig from 'next/config';
-import { Course } from './course';
+import axios, { AxiosInstance } from 'axios';
+import { NextPageContext } from 'next';
+import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
-
-const { serverRuntimeConfig } = getConfig();
+import { Course } from './models';
 
 export interface UserBasic {
   name: string;
@@ -11,19 +10,17 @@ export interface UserBasic {
   id: number;
 }
 
-type SearchResponse = {
-  data: UserBasic[];
-};
+type SearchResponse = { data: UserBasic[] };
 
 export class UserService {
-  private host = serverRuntimeConfig.rsHost || '';
+  private axios: AxiosInstance;
 
-  static cookie?: any;
+  constructor(ctx?: NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
+  }
 
   async getCourses() {
-    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/user/me/courses`, {
-      headers: UserService.cookie ? { cookie: UserService.cookie } : undefined,
-    });
+    const result = await this.axios.get<{ data: Course[] }>(`/api/user/me/courses`);
     return result.data.data.sort((a, b) => b.id - a.id);
   }
 
@@ -32,7 +29,7 @@ export class UserService {
       if (!query) {
         return [];
       }
-      const response = await axios.get<SearchResponse>(`/api/users/search/${query}`);
+      const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
       return response.data.data;
     } catch (e) {
       return [];
@@ -44,7 +41,7 @@ export class UserService {
       if (!query) {
         return [];
       }
-      const response = await axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
+      const response = await this.axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
       return response.data.data;
     } catch (e) {
       return [];
@@ -52,21 +49,21 @@ export class UserService {
   }
 
   async submitPrivateFeedback(data: { toUserId: number; comment: string }) {
-    await axios.post(`/api/feedback/private`, {
+    await this.axios.post(`/api/feedback/private`, {
       toUserId: Number(data.toUserId),
       comment: data.comment,
     });
   }
 
   async getProfile(githubId?: string) {
-    const response = await axios.get<{ data: ProfileResponse }>(`/api/profile${githubId ? '' : '/me'}`, {
+    const response = await this.axios.get<{ data: ProfileResponse }>(`/api/profile${githubId ? '' : '/me'}`, {
       params: { githubId },
     });
     return response.data.data;
   }
 
   async updateUser(data: Partial<UserFull>) {
-    const response = await axios.post<{ data: UserFull }>(`/api/profile/me`, data);
+    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
     return response.data.data;
   }
 }

@@ -3,9 +3,10 @@ import { FormComponentProps } from 'antd/lib/form';
 import { Header, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
-import _ from 'lodash';
+import { uniqBy } from 'lodash';
 import * as React from 'react';
-import { Course, CourseService } from 'services/course';
+import { CourseService } from 'services/course';
+import { Course } from 'services/models';
 import { StudentBasic } from '../../../../../common/models';
 
 type Props = {
@@ -32,14 +33,13 @@ class ExpelPage extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const courseId = this.props.course.id;
     let students: StudentBasic[] = [];
     try {
       const [mentorStudents, interviewStudents] = await Promise.all([
-        this.courseService.getMentorStudents(courseId),
-        this.courseService.getInterviewStudents(courseId),
+        this.courseService.getMentorStudents(),
+        this.courseService.getInterviewStudents(),
       ]);
-      students = _.uniqBy(mentorStudents.concat(interviewStudents), 'id');
+      students = uniqBy(mentorStudents.concat(interviewStudents), 'id');
     } catch (error) {
       console.error(error);
     }

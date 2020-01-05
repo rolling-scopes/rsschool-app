@@ -16,7 +16,12 @@ class ScorePage extends React.Component<CoursePageProps, State> {
     records: [],
   };
 
-  private courseService = new CourseService();
+  private courseService: CourseService;
+
+  constructor(props: CoursePageProps) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     await this.loadInterviews();
@@ -76,8 +81,7 @@ class ScorePage extends React.Component<CoursePageProps, State> {
   private async loadInterviews() {
     this.setState({ isLoading: true });
 
-    const courseId = this.props.course.id;
-    const records = await this.courseService.getStageInterviewsByStudent(courseId, this.props.session.githubId);
+    const records = await this.courseService.getStageInterviewsByStudent(this.props.session.githubId);
 
     this.setState({ records, isLoading: false });
   }

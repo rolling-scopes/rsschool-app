@@ -1,4 +1,4 @@
-import { Button, Col, Form, message, Input, Row, Select, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Row, Select, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -6,7 +6,7 @@ import * as React from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { sortTasksByEndDate } from 'services/rules';
-import { udemyCertificateId, notUrlPattern } from 'services/validators';
+import { notUrlPattern, udemyCertificateId } from 'services/validators';
 
 type Props = CoursePageProps & FormComponentProps;
 
@@ -162,7 +162,6 @@ class TaskCheckerPage extends React.Component<Props, State> {
         return;
       }
       const { courseTaskId, ...other } = values;
-      const courseId = this.props.course.id;
       const task = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
       if (!task) {
         return;
@@ -199,7 +198,7 @@ class TaskCheckerPage extends React.Component<Props, State> {
           };
         }
 
-        await this.courseService.postTaskVerification(courseId, courseTaskId, data);
+        await this.courseService.postTaskVerification(courseTaskId, data);
         this.setState({ isLoading: false });
         message.success('The task has been submitted for verification and it will be checked soon.');
         this.props.form.resetFields();

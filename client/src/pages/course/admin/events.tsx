@@ -35,13 +35,19 @@ class CourseEventsPage extends React.Component<Props, State> {
 
   private timeZoneOffset = moment().format('Z');
 
-  private courseService = new CourseService();
   private userService = new UserService();
+
+  private courseService: CourseService;
+
+  constructor(props: Props) {
+    super(props);
+    this.courseService = new CourseService(props.course.id);
+  }
 
   async componentDidMount() {
     const courseId = this.props.course.id;
     const [data, stages, events] = await Promise.all([
-      this.courseService.getCourseEvents(courseId),
+      this.courseService.getCourseEvents(),
       new StageService().getCourseStages(courseId),
       new EventService().getEvents(),
     ]);
@@ -61,8 +67,7 @@ class CourseEventsPage extends React.Component<Props, State> {
   };
 
   private refreshData = async () => {
-    const courseId = this.props.course.id;
-    const data = await this.courseService.getCourseEvents(courseId);
+    const data = await this.courseService.getCourseEvents();
     this.setState({ data });
   };
 
@@ -87,8 +92,8 @@ class CourseEventsPage extends React.Component<Props, State> {
       };
 
       this.state.modalAction === 'update'
-        ? await this.courseService.updateCourseEvent(this.props.course.id, this.state.modalData!.id!, data)
-        : await this.courseService.createCourseEvent(this.props.course.id, data);
+        ? await this.courseService.updateCourseEvent(this.state.modalData!.id!, data)
+        : await this.courseService.createCourseEvent(data);
 
       await this.refreshData();
       this.setState({ modalData: null });
@@ -263,8 +268,8 @@ class CourseEventsPage extends React.Component<Props, State> {
   private handleEditItem = (record: CourseEvent) => this.setState({ modalData: record, modalAction: 'update' });
 
   private handleDeleteItem = async (id: number) => {
-    await this.courseService.deleteCourseEvent(this.props.course.id, id);
-    const records = await this.courseService.getCourseEvents(this.props.course.id);
+    await this.courseService.deleteCourseEvent(id);
+    const records = await this.courseService.getCourseEvents();
     this.setState({ data: records });
   };
 }

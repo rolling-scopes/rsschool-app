@@ -4,7 +4,9 @@ import { Header } from 'components/Header';
 import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService } from 'services/course';
+import { CoursesService } from 'services/courses';
+import { Course } from 'services/models';
+
 import { formatMonthFriendly } from 'services/formatter';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
@@ -33,8 +35,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
 
   async componentDidMount() {
     const userService = new UserService();
-    const courseService = new CourseService();
-    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+    const [profile, courses] = await Promise.all([userService.getProfile(), new CoursesService().getCourses()]);
 
     this.setState({
       courses: courses

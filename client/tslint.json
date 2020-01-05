@@ -6,6 +6,7 @@
   ],
   "jsRules": {},
   "rules": {
+    "no-empty-interface": false,
     "object-literal-key-quotes": false,
     "array-type": false,
     "arrow-parens": false,

@@ -3,7 +3,8 @@ import { Header, RegistryBanner, AdminSider, FooterLayout, GithubUserLink } from
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
 import * as React from 'react';
-import { Course, CourseService, StudentSummary } from 'services/course';
+import { CourseService, StudentSummary } from 'services/course';
+import { Course } from 'services/models';
 import { isEmpty } from 'lodash';
 import '../styles/main.scss';
 

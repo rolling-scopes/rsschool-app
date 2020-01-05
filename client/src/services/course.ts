@@ -1,10 +1,7 @@
-import axios from 'axios';
-import getConfig from 'next/config';
+import axios, { AxiosInstance } from 'axios';
 import { Session } from '../components/withSession';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
-
-const { serverRuntimeConfig } = getConfig();
 
 export interface CourseTask {
   id: number;
@@ -63,22 +60,6 @@ export interface CreateCourseTask {
   stageId: number;
 }
 
-export interface Course {
-  id: number;
-  name: string;
-  fullName: string;
-  alias: string;
-  completed: boolean;
-  inviteOnly: boolean;
-  description: string;
-  endDate: string;
-  planned: boolean;
-  primarySkillId: string;
-  primarySkillName: string;
-  startDate: string;
-  registrationEndDate: string;
-}
-
 export interface MentorWithContacts {
   githubId: string;
   email: string;
@@ -86,87 +67,61 @@ export interface MentorWithContacts {
 }
 
 export class CourseService {
-  private host = serverRuntimeConfig.rsHost || '';
-  private urlPrefix: string;
+  private axios: AxiosInstance;
 
-  constructor(private courseId?: number) {
-    this.urlPrefix = `/api/course/${this.courseId}`;
-  }
-
-  private wrapUrl = (url: string) => {
-    return `${this.urlPrefix}${url}`;
-  };
-
-  async updateCourse(id: number, data: Partial<Course>) {
-    type Response = { data: Course };
-    const result = await axios.put<Response>(`/api/course/${id}`, data);
-    return result.data.data;
-  }
-
-  async createCourse(data: Partial<Course>) {
-    const result = await axios.post<{ data: Course }>(`${this.host}/api/course/`, data);
-    return result.data.data;
-  }
-
-  async getCourses() {
-    const result = await axios.get<{ data: Course[] }>(`${this.host}/api/courses`);
-    return result.data.data;
+  constructor(private courseId: number) {
+    this.axios = axios.create({ baseURL: `/api/course/${this.courseId}` });
   }
 
   async getCourseTasks() {
     type Response = { data: CourseTask[] };
-    const result = await axios.get<Response>(this.wrapUrl('/tasks'));
+    const result = await this.axios.get<Response>('/tasks');
     return result.data.data;
   }
 
-  async getCourseTasksForTaskOwner(courseId: number) {
-    const result = await axios.get<{ data: CourseTask[] }>(`${this.host}/api/course/${courseId}/tasksTaskOwner`);
+  async getCourseTasksForTaskOwner() {
+    const result = await this.axios.get<{ data: CourseTask[] }>(`/tasksTaskOwner`);
     return result.data.data;
   }
 
-  async getCourseEvents(courseId: number) {
-    const result = await axios.get<{ data: CourseEvent[] }>(`${this.host}/api/course/${courseId}/events`);
+  async getCourseEvents() {
+    const result = await this.axios.get<{ data: CourseEvent[] }>(`/events`);
     return result.data.data;
   }
 
-  async createCourseEvent(courseId: number, data: Partial<CourseEvent>) {
-    const result = await axios.post<{ data: CourseEvent }>(`/api/course/${courseId}/event`, data);
+  async createCourseEvent(data: Partial<CourseEvent>) {
+    const result = await this.axios.post<{ data: CourseEvent }>(`/event`, data);
     return result.data.data;
   }
 
-  async updateCourseEvent(courseId: number, courseTaskId: number, data: any) {
-    const result = await axios.put<{ data: CourseEvent }>(
-      `${this.host}/api/course/${courseId}/event/${courseTaskId}`,
-      data,
+  async updateCourseEvent(courseTaskId: number, data: any) {
+    const result = await this.axios.put<{ data: CourseEvent }>(`/event/${courseTaskId}`, data);
+    return result.data.data;
+  }
+
+  async deleteCourseEvent(courseTaskId: number) {
+    const result = await this.axios.delete(`/event/${courseTaskId}`);
+    return result.data.data;
+  }
+
+  async getCourseStudents(activeOnly?: boolean) {
+    const result = await this.axios.get<{ data: StudentDetails[] }>(
+      `/students?status=${activeOnly ? 'active' : 'all'}`,
     );
     return result.data.data;
   }
 
-  async deleteCourseEvent(courseId: number, courseTaskId: number) {
-    const result = await axios.delete(`/api/course/${courseId}/event/${courseTaskId}`);
+  async getCourseStudentsWithDetails() {
+    const result = await this.axios.get<{ data: StudentDetails[] }>(`/students/details`);
     return result.data.data;
   }
 
-  async getCourseStudents(courseId: number, activeOnly?: boolean) {
-    const result = await axios.get<{ data: StudentDetails[] }>(
-      `${this.host}/api/course/${courseId}/students?status=${activeOnly ? 'active' : 'all'}`,
-    );
-    return result.data.data;
-  }
-
-  async getCourseStudentsWithDetails(courseId: number) {
-    const result = await axios.get<{ data: StudentDetails[] }>(`${this.host}/api/course/${courseId}/students/details`);
-    return result.data.data;
-  }
-
-  async searchCourseStudent(courseId: number, query: string | null) {
+  async searchCourseStudent(query: string | null) {
     try {
       if (!query) {
         return [];
       }
-      const response = await axios.get<{ data: StudentDetails[] }>(
-        `${this.host}/api/course/${courseId}/students/search/${query}`,
-      );
+      const response = await this.axios.get<{ data: StudentDetails[] }>(`/students/search/${query}`);
       return response.data.data;
     } catch (e) {
       return [];
@@ -175,206 +130,197 @@ export class CourseService {
 
   async getMentorsWithDetails() {
     type Response = { data: MentorDetails[] };
-    const result = await axios.get<Response>(this.wrapUrl('/mentors/details'));
+    const result = await this.axios.get<Response>('/mentors/details');
     return result.data.data;
   }
 
-  async getCourseTasksWithTaskCheckers(courseId: number) {
-    type Response = { data: CourseTask[] };
-    const result = await axios.get<Response>(`${this.host}/api/course/${courseId}/tasksCheckers`);
+  async createCourseTask(data: CreateCourseTask) {
+    const result = await this.axios.post<{ data: CourseTask }>(`/task`, data);
     return result.data.data;
   }
 
-  async createCourseTask(courseId: number, data: CreateCourseTask) {
-    const result = await axios.post<{ data: CourseTask }>(`${this.host}/api/course/${courseId}/task`, data);
+  async updateCourseTask(courseTaskId: number, data: any) {
+    const result = await this.axios.put<{ data: CourseTask }>(`/task/${courseTaskId}`, data);
     return result.data.data;
   }
 
-  async updateCourseTask(courseId: number, courseTaskId: number, data: any) {
-    const result = await axios.put<{ data: CourseTask }>(
-      `${this.host}/api/course/${courseId}/task/${courseTaskId}`,
-      data,
-    );
-    return result.data.data;
-  }
-
-  async deleteCourseTask(courseId: number, courseTaskId: number) {
-    const result = await axios.delete(`/api/course/${courseId}/task/${courseTaskId}`);
+  async deleteCourseTask(courseTaskId: number) {
+    const result = await this.axios.delete(`/task/${courseTaskId}`);
     return result.data.data;
   }
 
   async getCourseScore(activeOnly: boolean = false) {
-    const result = await axios.get<{ data: StudentScore[] }>(this.wrapUrl(`/students/score?activeOnly=${activeOnly}`));
+    const result = await this.axios.get<{ data: StudentScore[] }>(`/students/score?activeOnly=${activeOnly}`);
     return result.data.data;
   }
 
   async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
-    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/result`), data);
+    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/result`, data);
   }
 
-  async postMultipleScores(courseId: number, courseTaskId: number, data: any) {
-    const result = await axios.post(`/api/course/${courseId}/scores/${courseTaskId}`, data);
+  async postMultipleScores(courseTaskId: number, data: any) {
+    const result = await this.axios.post(`/scores/${courseTaskId}`, data);
     return result.data.data;
   }
 
-  async getAllMentorStudents(courseId: number) {
-    const result = await axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
-      `/api/course/${courseId}/mentor/me/students/all`,
+  async getAllMentorStudents() {
+    const result = await this.axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
+      `/mentor/me/students/all`,
     );
     return result.data.data;
   }
 
-  async getMentorStudents(courseId: number) {
-    const result = await axios.get<{ data: StudentBasic[] }>(`/api/course/${courseId}/mentor/me/students`);
+  async getMentorStudents() {
+    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/students`);
     return result.data.data;
   }
 
-  async getInterviewStudents(courseId: number) {
-    const result = await axios.get<{ data: StudentBasic[] }>(`/api/course/${courseId}/mentor/me/interviews`);
+  async getInterviewStudents() {
+    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interviews`);
     return result.data.data;
   }
 
-  async postPublicFeedback(courseId: number, data: { toUserId: number; badgeId?: string; comment: string }) {
+  async postPublicFeedback(data: { toUserId: number; badgeId?: string; comment: string }) {
     type Response = { data: { heroesUrl: string } };
-    const result = await axios.post<Response>(`/api/course/${courseId}/feedback`, data);
+    const result = await this.axios.post<Response>(`/feedback`, data);
     return result.data.data;
   }
 
   async expelStudent(githubId: string, comment: string = '') {
-    await axios.post(this.wrapUrl(`/student/${githubId}/status`), { comment, status: 'expelled' });
+    await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
   }
 
   async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
-    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`), {
+    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
       url,
     });
   }
 
   async postTaskSolutionResult(githubId: string, courseTaskId: number, data: { score: number; comment: string }) {
-    await axios.post(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/result`), data);
+    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
 
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
-    const result = await axios.get(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/result`));
+    const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/result`);
     return result.data.data as { historicalScores: { score: number; comment: string; dateTime: number }[] } | null;
   }
 
-  async postTaskVerification(courseId: number, courseTaskId: number, data: any) {
-    await axios.post(`/api/course/${courseId}/student/me/task/${courseTaskId}/verification`, data);
+  async postTaskVerification(courseTaskId: number, data: any) {
+    await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
   }
 
-  async getTaskVerifications(courseId: number) {
-    const result = await axios.get(`/api/course/${courseId}/student/me/tasks/verifications`);
+  async getTaskVerifications() {
+    const result = await this.axios.get(`/student/me/tasks/verifications`);
     return result.data.data;
   }
 
-  async getStageInterviews(courseId: number, stageId: number) {
-    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews`);
+  async getStageInterviews(stageId: number) {
+    const result = await this.axios.get(`/stage/${stageId}/interviews`);
     return result.data.data;
   }
 
-  async getAvailableStudentsForStageInterviews(courseId: number, stageId: number) {
-    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/available-students`);
+  async getAvailableStudentsForStageInterviews(stageId: number) {
+    const result = await this.axios.get(`/stage/${stageId}/interviews/available-students`);
     return result.data.data;
   }
 
-  async createInterview(courseId: number, stageId: number, students: { githubId: string }[]) {
-    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interview`, students);
+  async createInterview(stageId: number, students: { githubId: string }[]) {
+    const result = await this.axios.post(`/stage/${stageId}/interview`, students);
     return result.data.data;
   }
 
-  async deleteInterview(courseId: number, stageId: number, interviewId: number) {
-    const result = await axios.delete(`/api/course/${courseId}/stage/${stageId}/interview/${interviewId}`);
+  async deleteInterview(stageId: number, interviewId: number) {
+    const result = await this.axios.delete(`/stage/${stageId}/interview/${interviewId}`);
     return result.data.data;
   }
 
-  async getStageInterviewStudents(courseId: number, stageId: number) {
-    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/students`);
+  async getStageInterviewStudents(stageId: number) {
+    const result = await this.axios.get(`/stage/${stageId}/interviews/students`);
     return result.data.data as StudentBasic[];
   }
 
-  async postStageInterviews(courseId: number, stageId: number) {
-    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interviews`);
+  async postStageInterviews(stageId: number) {
+    const result = await this.axios.post(`/stage/${stageId}/interviews`);
     return result.data.data;
   }
 
-  async postStageInterviewFeedback(courseId: number, stageId: number, data: any) {
-    const result = await axios.post(`/api/course/${courseId}/stage/${stageId}/interviews/feedback`, data);
+  async postStageInterviewFeedback(stageId: number, data: any) {
+    const result = await this.axios.post(`/stage/${stageId}/interviews/feedback`, data);
     return result.data.data;
   }
 
-  async getStageInterviewFeedback(courseId: number, stageId: number, studentId: number) {
-    const result = await axios.get(`/api/course/${courseId}/stage/${stageId}/interviews/student/${studentId}`);
+  async getStageInterviewFeedback(stageId: number, studentId: number) {
+    const result = await this.axios.get(`/stage/${stageId}/interviews/student/${studentId}`);
     return result.data.data;
   }
 
-  async getStageInterviewsByStudent(courseId: number, githubId: string) {
-    const result = await axios.get(`/api/course/${courseId}/student/${githubId}/interviews`);
+  async getStageInterviewsByStudent(githubId: string) {
+    const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data;
   }
 
   async createRepository(githubId: string) {
     type Response = { data: { repository: string } };
-    const result = await axios.post<Response>(this.wrapUrl(`/student/${githubId}/repository`));
+    const result = await this.axios.post<Response>(`/student/${githubId}/repository`);
     return result.data.data;
   }
 
-  async createRepositories(courseId: number) {
-    const result = await axios.post(`/api/course/${courseId}/repositories`);
+  async createRepositories() {
+    const result = await this.axios.post(`/repositories`);
     return result.data.data as { repository: string }[];
   }
 
   async expelMentor(githubId: string) {
-    await axios.post(this.wrapUrl(`/mentor/${githubId}/status/expelled`));
+    await this.axios.post(`/mentor/${githubId}/status/expelled`);
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
-    const result = await axios.get<{
+    const result = await this.axios.get<{
       data: {
         student: StudentBasic;
         url: string;
       }[];
-    }>(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`));
+    }>(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`);
     return result.data.data;
   }
 
   async getCrossCheckFeedback(githubId: string, courseTaskId: number) {
-    const result = await axios.get(this.wrapUrl(`/student/${githubId}/task/${courseTaskId}/cross-check/feedback`));
+    const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/feedback`);
     return result.data.data as { url?: string; comments?: { comment: string }[] };
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {
-    const result = await axios.post(this.wrapUrl(`/task/${courseTaskId}/cross-check/distribution`));
+    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/distribution`);
     return result.data;
   }
 
   async createCrossCheckCompletion(courseTaskId: number) {
-    const result = await axios.post(this.wrapUrl(`/task/${courseTaskId}/cross-check/completion`));
+    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
     return result.data;
   }
 
   async getUsers() {
-    const result = await axios.get(this.wrapUrl(`/users`));
+    const result = await this.axios.get('/users');
     return result.data.data;
   }
 
   async createUser(githubId: string, data: any) {
-    const result = await axios.post(this.wrapUrl(`/user/${githubId}`), data);
+    const result = await this.axios.post(`/user/${githubId}`, data);
     return result.data;
   }
 
   async updateUser(githubId: string, data: any) {
-    const result = await axios.put(this.wrapUrl(`/user/${githubId}`), data);
+    const result = await this.axios.put(`/user/${githubId}`, data);
     return result.data;
   }
 
   async getStudentSummary(githubId: string) {
-    const result = await axios.get(this.wrapUrl(`/student/${githubId}/summary`));
+    const result = await this.axios.get(`/student/${githubId}/summary`);
     return result.data.data as StudentSummary;
   }
 
   async getStudentScore(githubId: string) {
-    const result = await axios.get(this.wrapUrl(`/student/${githubId}/score`));
+    const result = await this.axios.get(`/student/${githubId}/score`);
     return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
   }
 
