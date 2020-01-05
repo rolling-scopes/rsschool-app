@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, Checkbox, message, Select, Form, Input, Modal, Radio, Table, Layout } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, message, Select, Input, Modal, Radio, Table, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { union } from 'lodash';

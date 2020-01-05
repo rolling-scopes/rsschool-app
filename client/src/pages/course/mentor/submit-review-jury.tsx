@@ -1,4 +1,6 @@
-import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, InputNumber, message, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, StudentSearch } from 'components';
 import withCourseData from 'components/withCourseData';

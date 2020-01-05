@@ -1,4 +1,18 @@
-import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Spin, Tag, Typography } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Input,
+  message,
+  Result,
+  Row,
+  Select,
+  Spin,
+  Tag,
+  Typography,
+} from 'antd';
 import axios from 'axios';
 import { GdprCheckbox } from 'components/Forms';
 import { Header } from 'components/Header';

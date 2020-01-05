@@ -1,4 +1,6 @@
-import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, InputNumber, message, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, UserSearch, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -73,60 +75,58 @@ class TaskScorePage extends React.Component<Props, State> {
     const courseTaskId = getFieldValue('courseTaskId');
     const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
     const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
-    return (
-      <>
-        <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
-        <Col className="m-2" sm={12}>
-          <Form onSubmit={this.handleSubmit} layout="vertical">
-            <Form.Item label="Task">
-              {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
-                <Select size="large" placeholder="Select task" onChange={this.handleTaskChange}>
-                  {this.state.courseTasks.map(task => (
-                    <Select.Option key={task.id} value={task.id}>
-                      {task.name}
-                    </Select.Option>
-                  ))}
-                </Select>,
-              )}
-            </Form.Item>
-            <Form.Item label="Student">
-              {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <UserSearch
-                  defaultValues={this.state.students}
-                  disabled={!courseTaskId}
-                  searchFn={this.loadStudents}
-                  keyField="githubId"
-                />,
-              )}
-            </Form.Item>
-            <Form.Item label="Github Pull Request URL">
-              {field('githubPrUrl', {
-                rules: [
-                  {
-                    message: 'Please enter a valid Github Pull Request URL',
-                    pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
-                  },
-                ],
-              })(<Input size="large" />)}
-            </Form.Item>
-            <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
-              {field('score', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please enter task score',
-                  },
-                ],
-              })(<InputNumber size="large" step={1} min={0} max={maxScore} />)}
-            </Form.Item>
-            <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
-            <Button size="large" type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </>
-    );
+    return <>
+      <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
+      <Col className="m-2" sm={12}>
+        <Form onSubmit={this.handleSubmit} layout="vertical">
+          <Form.Item label="Task">
+            {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
+              <Select size="large" placeholder="Select task" onChange={this.handleTaskChange}>
+                {this.state.courseTasks.map(task => (
+                  <Select.Option key={task.id} value={task.id}>
+                    {task.name}
+                  </Select.Option>
+                ))}
+              </Select>,
+            )}
+          </Form.Item>
+          <Form.Item label="Student">
+            {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
+              <UserSearch
+                defaultValues={this.state.students}
+                disabled={!courseTaskId}
+                searchFn={this.loadStudents}
+                keyField="githubId"
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="Github Pull Request URL">
+            {field('githubPrUrl', {
+              rules: [
+                {
+                  message: 'Please enter a valid Github Pull Request URL',
+                  pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
+                },
+              ],
+            })(<Input size="large" />)}
+          </Form.Item>
+          <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
+            {field('score', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please enter task score',
+                },
+              ],
+            })(<InputNumber size="large" step={1} min={0} max={maxScore} />)}
+          </Form.Item>
+          <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
+          <Button size="large" type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form>
+      </Col>
+    </>;
   }
 
   private isTaskOwner = (task?: CourseTask) => {

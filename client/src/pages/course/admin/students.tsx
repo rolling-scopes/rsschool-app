@@ -1,6 +1,20 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Table, Typography, Statistic, Divider, Button, Select, message, Row, Modal, Form, Spin, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+  Table,
+  Typography,
+  Statistic,
+  Divider,
+  Button,
+  Select,
+  message,
+  Row,
+  Modal,
+  Spin,
+  Col,
+} from 'antd';
 import { Header, withSession, GithubUserLink, StudentExpelModal } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';

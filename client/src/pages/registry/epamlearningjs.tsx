@@ -1,4 +1,6 @@
-import { Button, Checkbox, Col, Form, Input, message, Result, Row, Typography } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
 import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';

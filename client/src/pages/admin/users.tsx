@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, Col, Form, Input, List, Row, Layout } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, List, Row, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { GithubAvatar, Header, Session, withSession, AdminSider } from 'components';
 import { UserService } from 'services/user';

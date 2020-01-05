@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Row, Col, Result, Form, Input, Typography, Button, message, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Result, Input, Typography, Button, message, Select } from 'antd';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';

@@ -123,7 +123,7 @@ const routes = [
         <CodeTwoTone /> Cross-Check: Submit
       </>
     ),
-    getLink: (course: Course) => `/course/student/task-solution?course=${course.alias}`,
+    getLink: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
@@ -133,7 +133,7 @@ const routes = [
         <CheckCircleTwoTone twoToneColor="#f56161" /> Cross-Check: Review
       </>
     ),
-    getLink: (course: Course) => `/course/student/cross-check?course=${course.alias}`,
+    getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
@@ -190,7 +190,7 @@ const routes = [
         <StopTwoTone twoToneColor="red" /> Expel Student
       </>
     ),
-    getLink: (course: Course) => `/course/mentor/expel?course=${course.alias}`,
+    getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },
@@ -406,7 +406,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       return null;
     }
     return (
-      <div className="mb-3">
+      <div>
         <RegistryBanner />
       </div>
     );
@@ -417,7 +417,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       return null;
     }
     return (
-      <Select style={{ width: 250 }} className="mb-2" defaultValue={course.id} onChange={this.handleChange}>
+      <Select style={{ width: 250, marginBottom: 16 }} defaultValue={course.id} onChange={this.handleChange}>
         {courses.map(course => (
           <Select.Option key={course.id} value={course.id}>
             {course.name} ({this.getStatus(course)})

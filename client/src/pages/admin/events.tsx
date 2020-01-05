@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, Select, message, Form, Input, Modal, Table, Layout } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Select, message, Input, Modal, Table, Layout } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 import { Header, Session, withSession, AdminSider } from 'components';

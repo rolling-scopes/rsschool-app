@@ -1,4 +1,6 @@
-import { Button, Checkbox, Col, Form, Modal, Row, Table, Spin } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Modal, Row, Table, Spin } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { GithubUserLink, Header, withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';

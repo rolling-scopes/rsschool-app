@@ -1,4 +1,6 @@
-import { Button, DatePicker, Input, Form, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, DatePicker, Input, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';

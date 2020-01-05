@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Select, Table } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, DatePicker, InputNumber, Modal, Radio, Row, Select, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';

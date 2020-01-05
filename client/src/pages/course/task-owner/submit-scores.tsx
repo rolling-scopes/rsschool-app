@@ -1,4 +1,6 @@
-import { Button, Col, Form, Select, Upload, message, Spin, Table, List, Typography } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Select, Upload, message, Spin, Table, List, Typography } from 'antd';
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import csv from 'csvtojson';
 import { isUndefined } from 'lodash';

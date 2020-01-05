@@ -1,4 +1,6 @@
-import { Form, Col, Steps, Radio, Input, Button, Rate, Typography, Switch, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Col, Steps, Radio, Input, Button, Rate, Typography, Switch, message } from 'antd';
 import { Header, withSession, PersonSelect, LoadingScreen } from 'components';
 import { FormComponentProps } from 'antd/lib/form';
 import { isNumber } from 'lodash';

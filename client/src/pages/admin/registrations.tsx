@@ -1,4 +1,7 @@
-import { Button, Col, Form, Icon, Layout, Result, Row, Select, Statistic, Table, Typography } from 'antd';
+import { DislikeOutlined, HourglassOutlined, LikeOutlined, MehTwoTone } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Layout, Result, Row, Select, Statistic, Table, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import axios from 'axios';
 import { AdminSider, GithubUserLink, Header, LoadingScreen } from 'components';
@@ -173,7 +176,7 @@ class RegistrationsPage extends React.Component<Props, State> {
               {!courses.length && (
                 <Result
                   status="info"
-                  icon={<Icon type="meh" theme="twoTone" />}
+                  icon={<MehTwoTone />}
                   title="There are no planned courses."
                   subTitle="Please come back later."
                   extra={
@@ -221,7 +224,7 @@ class RegistrationsPage extends React.Component<Props, State> {
                             title="Approved"
                             value={statistics.approved}
                             valueStyle={{ color: '#3f8600' }}
-                            prefix={<Icon type="like" />}
+                            prefix={<LikeOutlined />}
                           />
                         </Col>
                         <Col span={4}>
@@ -229,11 +232,11 @@ class RegistrationsPage extends React.Component<Props, State> {
                             title="Rejected"
                             value={statistics.rejected}
                             valueStyle={{ color: '#cf1322' }}
-                            prefix={<Icon type="dislike" />}
+                            prefix={<DislikeOutlined />}
                           />
                         </Col>
                         <Col span={4}>
-                          <Statistic title="Pending" value={statistics.pending} prefix={<Icon type="hourglass" />} />
+                          <Statistic title="Pending" value={statistics.pending} prefix={<HourglassOutlined />} />
                         </Col>
                       </Row>
                       <Row gutter={defaultRowGutter}>

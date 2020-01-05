@@ -10,7 +10,7 @@ function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: n
     static async getInitialProps(context: NextPageContext) {
       try {
         const alias = context.query.course;
-        const courses = await new UserService().getCourses();
+        const courses = await new UserService(context).getCourses();
         const course = courses.find(c => (courseId ? c.id === courseId : c.alias === alias)) || null;
         return { course };
       } catch (e) {

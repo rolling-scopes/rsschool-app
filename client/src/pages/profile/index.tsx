@@ -1,4 +1,13 @@
 import {
+  IdcardOutlined,
+  ProfileOutlined,
+  SafetyCertificateTwoTone,
+  SmileOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+import {
   Button,
   Descriptions,
   Table,
@@ -10,7 +19,6 @@ import {
   Row,
   Card,
   Tag,
-  Icon,
   Result,
 } from 'antd';
 import { Rating } from 'components';
@@ -130,7 +138,7 @@ class ProfilePage extends React.Component<Props, State> {
 
     const statsTitle = (
       <h2>
-        <Icon type="profile" /> Statistics
+        <ProfileOutlined /> Statistics
       </h2>
     );
     const coursesAsMentor = entries.filter(e => e.mentor && e.mentor.students.length);
@@ -197,61 +205,59 @@ class ProfilePage extends React.Component<Props, State> {
         );
       });
     const emptyValue = '(Empty)';
-    return (
-      <>
-        <Row type="flex" justify="space-between">
-          <GithubAvatar size={96} githubId={profile.githubId} />
-          {!user ? (
-            <Button type="primary" onClick={() => this.props.router.push('/profile/edit')} color="primary">
-              Edit Profile
-            </Button>
-          ) : (
-            <Button
-              onClick={() => this.props.router.push(`/private-feedback?githubId=${user.githubId}&userId=${user.id}`)}
-            >
-              Leave Private Feedback
-            </Button>
-          )}
-        </Row>
-        <Descriptions
-          size="small"
-          bordered
-          column={1}
-          title={
-            <span>
-              <Icon type="idcard" /> General Info
-            </span>
-          }
-        >
-          <Descriptions.Item label="Name">
-            {profile.firstName} {profile.lastName}
-          </Descriptions.Item>
-          <Descriptions.Item label="Primary Email">{profile.primaryEmail}</Descriptions.Item>
-          <Descriptions.Item label="Location">{profile.locationName}</Descriptions.Item>
-          <Descriptions.Item label="Estimated english level">
-            {profile.englishLevel ? profile.englishLevel.toUpperCase() : null}
-          </Descriptions.Item>
-          <Descriptions.Item label="Github">
-            <a href={`https://github.com/${profile.githubId}`}>{`https://github.com/${profile.githubId}`}</a>
-          </Descriptions.Item>
+    return <>
+      <Row justify="space-between">
+        <GithubAvatar size={96} githubId={profile.githubId} />
+        {!user ? (
+          <Button type="primary" onClick={() => this.props.router.push('/profile/edit')} color="primary">
+            Edit Profile
+          </Button>
+        ) : (
+          <Button
+            onClick={() => this.props.router.push(`/private-feedback?githubId=${user.githubId}&userId=${user.id}`)}
+          >
+            Leave Private Feedback
+          </Button>
+        )}
+      </Row>
+      <Descriptions
+        size="small"
+        bordered
+        column={1}
+        title={
+          <span>
+            <IdcardOutlined /> General Info
+          </span>
+        }
+      >
+        <Descriptions.Item label="Name">
+          {profile.firstName} {profile.lastName}
+        </Descriptions.Item>
+        <Descriptions.Item label="Primary Email">{profile.primaryEmail}</Descriptions.Item>
+        <Descriptions.Item label="Location">{profile.locationName}</Descriptions.Item>
+        <Descriptions.Item label="Estimated english level">
+          {profile.englishLevel ? profile.englishLevel.toUpperCase() : null}
+        </Descriptions.Item>
+        <Descriptions.Item label="Github">
+          <a href={`https://github.com/${profile.githubId}`}>{`https://github.com/${profile.githubId}`}</a>
+        </Descriptions.Item>
 
-          <Descriptions.Item label="External Accounts">
-            {externalAccounts.length ? externalAccounts : emptyValue}
-          </Descriptions.Item>
-          <Descriptions.Item label="Education">{education.length ? education : emptyValue}</Descriptions.Item>
-          <Descriptions.Item label="Employment history">
-            {employmentHistory.length ? employmentHistory : emptyValue}
-          </Descriptions.Item>
-        </Descriptions>
-        <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
-          <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
-          <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
-          <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
-          <Descriptions.Item label="Telegram">{profile.contactsTelegram}</Descriptions.Item>
-          <Descriptions.Item label="EPAM Email">{profile.contactsEpamEmail}</Descriptions.Item>
-        </Descriptions>
-      </>
-    );
+        <Descriptions.Item label="External Accounts">
+          {externalAccounts.length ? externalAccounts : emptyValue}
+        </Descriptions.Item>
+        <Descriptions.Item label="Education">{education.length ? education : emptyValue}</Descriptions.Item>
+        <Descriptions.Item label="Employment history">
+          {employmentHistory.length ? employmentHistory : emptyValue}
+        </Descriptions.Item>
+      </Descriptions>
+      <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
+        <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
+        <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
+        <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
+        <Descriptions.Item label="Telegram">{profile.contactsTelegram}</Descriptions.Item>
+        <Descriptions.Item label="EPAM Email">{profile.contactsEpamEmail}</Descriptions.Item>
+      </Descriptions>
+    </>;
   }
 
   private renderStudentMentor(student: ResponseStudent) {
@@ -266,7 +272,7 @@ class ProfilePage extends React.Component<Props, State> {
   private renderMentorProfile(course: ResponseCourse, mentor: ResponseMentor) {
     const title = (
       <h2>
-        <Icon type="team" /> {course.name} (Mentor)
+        <TeamOutlined /> {course.name} (Mentor)
       </h2>
     );
     return (
@@ -348,7 +354,7 @@ class ProfilePage extends React.Component<Props, State> {
     const isNotStudent = this.state.roles && this.state.roles[course.id] !== 'student';
     const title = (
       <h2>
-        <Icon type="user" /> {course.name} (Student)
+        <UserOutlined /> {course.name} (Student)
       </h2>
     );
 
@@ -356,7 +362,7 @@ class ProfilePage extends React.Component<Props, State> {
       <Card bordered={false} size="small" title={title}>
         {student.certificatePublicId && (
           <div>
-            <Icon style={{ fontSize: '16px' }} type="safety-certificate" twoToneColor="#52c41a" theme="twoTone" />{' '}
+            <SafetyCertificateTwoTone style={{ fontSize: '16px' }} twoToneColor="#52c41a" />{' '}
             <a href={`/certificate/${student.certificatePublicId}`}>Certificate</a>
           </div>
         )}
@@ -446,7 +452,7 @@ class ProfilePage extends React.Component<Props, State> {
     }
     const title = (
       <h2>
-        <Icon type="smile" /> Public Feedback (#gratitude)
+        <SmileOutlined /> Public Feedback (#gratitude)
       </h2>
     );
     return (

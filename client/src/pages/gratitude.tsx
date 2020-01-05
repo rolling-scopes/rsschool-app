@@ -1,4 +1,6 @@
-import { Button, Col, Form, Input, message, Typography } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, message, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';

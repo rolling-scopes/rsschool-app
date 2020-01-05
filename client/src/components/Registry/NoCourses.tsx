@@ -1,11 +1,12 @@
-import { Button, Icon, Result } from 'antd';
+import { MehTwoTone } from '@ant-design/icons';
+import { Button, Result } from 'antd';
 import * as React from 'react';
 
 export function NoCourses() {
   return (
     <Result
       status="info"
-      icon={<Icon type="meh" theme="twoTone" />}
+      icon={<MehTwoTone />}
       title="There are no planned courses."
       subTitle="Please come back later."
       extra={

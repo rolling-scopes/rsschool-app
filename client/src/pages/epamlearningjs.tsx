@@ -1,4 +1,6 @@
-import { Button, Col, Form, message, Row, Table, Select, Typography, Spin } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, message, Row, Table, Select, Typography, Spin } from 'antd';
 import { NextPageContext } from 'next';
 import { FormComponentProps } from 'antd/lib/form';
 import { withSession } from 'components';

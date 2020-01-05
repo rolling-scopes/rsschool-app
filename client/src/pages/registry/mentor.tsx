@@ -1,4 +1,19 @@
-import { Button, Checkbox, Col, Spin, Form, Icon, Input, message, Radio, Result, Row, Select, Typography } from 'antd';
+import { MehTwoTone } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Spin,
+  Input,
+  message,
+  Radio,
+  Result,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import axios from 'axios';
 import { Header } from 'components/Header';
 import { LocationSelect } from 'components/LocationSelect';
@@ -57,7 +72,7 @@ class CourseRegistryPage extends React.Component<Props, State> {
       content = (
         <Result
           status="info"
-          icon={<Icon type="meh" theme="twoTone" />}
+          icon={<MehTwoTone />}
           title="There are no planned courses."
           subTitle="Please come back later."
           extra={
