@@ -22,7 +22,7 @@ type Props = {
 
 function renderStudentOption(githubId: string) {
   return (
-    <Option key={githubId} title={githubId}>
+    <Option value={githubId} key={githubId} title={githubId}>
       <div className="d-flex flex-row">
         <GithubAvatar githubId={githubId} size={24} />
         &nbsp;
@@ -79,12 +79,11 @@ class StudentsAutocomplete extends React.PureComponent<Props, State> {
         size="large"
         style={{ width: '100%' }}
         value={studentQuery}
-        dataSource={filteredStudents.map(renderStudentOption)}
+        dataSource={filteredStudents.map(renderStudentOption) as any}
         onChange={this.handleStudentInputChange}
         onSelect={this.handleStudentSelect}
         onSearch={this.handleStudentSearch}
         placeholder="Student Github"
-        optionLabelProp="title"
       />
     );
   }
