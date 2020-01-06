@@ -5,8 +5,8 @@ import {
   CodeTwoTone,
   DashboardTwoTone,
   FireTwoTone,
-  HighlightTwoTone,
-  InteractionTwoTone,
+  // HighlightTwoTone,
+  // InteractionTwoTone,
   PlayCircleTwoTone,
   StopTwoTone,
   ToolTwoTone,
@@ -107,16 +107,16 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
     newTab: false,
   },
-  {
-    name: () => (
-      <>
-        <InteractionTwoTone /> Stage Interview
-      </>
-    ),
-    getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
-  },
+  // {
+  //   name: () => (
+  //     <>
+  //       <InteractionTwoTone /> Stage Interview
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isStudent),
+  //   newTab: false,
+  // },
   {
     name: () => (
       <>
@@ -137,26 +137,26 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
-  {
-    name: () => (
-      <>
-        <InteractionTwoTone /> Stage Interviews
-      </>
-    ),
-    getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
-  },
-  {
-    name: () => (
-      <>
-        <HighlightTwoTone twoToneColor="#7f00ff" /> Stage Interview Feedback
-      </>
-    ),
-    getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
-  },
+  // {
+  //   name: () => (
+  //     <>
+  //       <InteractionTwoTone /> Stage Interviews
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  //   newTab: false,
+  // },
+  // {
+  //   name: () => (
+  //     <>
+  //       <HighlightTwoTone twoToneColor="#7f00ff" /> Stage Interview Feedback
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  //   newTab: false,
+  // },
   {
     name: () => (
       <>
