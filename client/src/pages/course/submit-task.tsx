@@ -61,7 +61,7 @@ function Page(props: CoursePageProps) {
       courseName={props.course.name}
       githubId={props.session.githubId}
     >
-      <Form className="m-2" onFinish={handleSubmit} layout="vertical">
+      <Form form={form} className="m-2" onFinish={handleSubmit} layout="vertical">
         <CourseTaskSelect
           onChange={courseTaskId => {
             setCourseTaskId(courseTaskId);

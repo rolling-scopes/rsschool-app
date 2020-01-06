@@ -137,7 +137,6 @@ function Page(props: CoursePageProps) {
   };
 
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
-  const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
@@ -155,7 +154,7 @@ function Page(props: CoursePageProps) {
               />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
-            <ScoreInput maxScore={maxScore} />
+            <ScoreInput courseTask={courseTask} />
             <CommentInput />
             <Button size="large" type="primary" htmlType="submit">
               Submit

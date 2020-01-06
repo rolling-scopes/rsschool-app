@@ -51,7 +51,6 @@ function Page(props: CoursePageProps) {
   };
 
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
-  const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
   return (
     <PageLayoutSimple
       loading={loading}
@@ -64,7 +63,7 @@ function Page(props: CoursePageProps) {
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
           <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={props.course.id} />
         </Form.Item>
-        <ScoreInput maxScore={maxScore} />
+        <ScoreInput courseTask={courseTask} />
         <CommentInput />
         <Button size="large" type="primary" htmlType="submit">
           Submit

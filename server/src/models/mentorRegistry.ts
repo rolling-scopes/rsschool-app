@@ -15,6 +15,9 @@ export class MentorRegistry {
   @Column({ type: 'simple-array', default: '' })
   preferedCourses: string[];
 
+  @Column({ type: 'simple-array', default: '' })
+  technicalMentoring: string[];
+
   @Column()
   maxStudentsLimit: number;
 

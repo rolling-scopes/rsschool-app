@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { InputNumber, Form } from 'antd';
+import { CourseTask } from 'services/course';
 
-type Props = { maxScore?: number };
+type Props = { maxScore?: number; courseTask?: CourseTask };
 
-export function ScoreInput({ maxScore }: Props) {
-  const maxScoreLabel = maxScore ? ` (Max ${maxScore} points)` : '';
+export function ScoreInput({ maxScore, courseTask }: Props) {
+  const maxScoreValue = maxScore || (courseTask ? courseTask.maxScore || 100 : undefined);
+  const maxScoreLabel = maxScoreValue ? ` (Max ${maxScoreValue} points)` : '';
   return (
     <Form.Item name="score" label={`Score${maxScoreLabel}`} rules={[{ required: true, message: 'Please enter score' }]}>
-      <InputNumber step={1} min={0} max={maxScore} />
+      <InputNumber step={1} min={0} max={maxScoreValue} />
     </Form.Item>
   );
 }

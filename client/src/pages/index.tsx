@@ -505,12 +505,12 @@ class IndexPage extends React.PureComponent<Props, State> {
           {summary.mentor && (
             <Col xs={24} sm={24} md={24} lg={12}>
               <Card size="small" title="Your mentor">
-                <p>
+                <div>
                   <div>{name}</div>
                   <div>
                     <GithubUserLink value={githubId!} />
                   </div>
-                </p>
+                </div>
                 {this.renderContact('Email', contactsEmail)}
                 {this.renderContact('Phone', contactsPhone)}
                 {this.renderContact('Skype', contactsSkype)}

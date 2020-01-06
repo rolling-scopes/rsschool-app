@@ -75,7 +75,6 @@ function Page(props: CoursePageProps) {
   };
 
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
-  const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
   return (
     <PageLayoutSimple
       loading={loading}
@@ -89,7 +88,7 @@ function Page(props: CoursePageProps) {
           <UserSearch defaultValues={students} disabled={!courseTaskId} searchFn={loadStudents} keyField="githubId" />
         </Form.Item>
         <GithubPrInput />
-        <ScoreInput maxScore={maxScore} />
+        <ScoreInput courseTask={courseTask} />
         <CommentInput />
         <Button type="primary" htmlType="submit">
           Submit

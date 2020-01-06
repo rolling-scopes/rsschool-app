@@ -12,15 +12,9 @@ import { emailPattern, epamEmailPattern, phonePattern } from 'services/validator
 import { Course } from '../../../../common/models';
 import { Props } from '../../configs/registry';
 
-const defaultColumnSizes = { xs: 18, sm: 12, md: 10, lg: 8 };
+const defaultColumnSizes = { xs: 20, sm: 16, md: 12, lg: 10 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
-
-const noticeStyle = {
-  lineHeight: '20px',
-  display: 'block',
-  fontStyle: 'italic',
-};
 
 function Page(props: Props) {
   const [form] = Form.useForm();
@@ -28,7 +22,7 @@ function Page(props: Props) {
   const [submitted, setSubmitted] = useState(false);
 
   const [courses, setCourses] = useState([] as Course[]);
-  const [initialData, setInitialData] = useState({} as Partial<UserFull>);
+  const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
   const update = useUpdate();
 
   useAsync(async () => {
@@ -46,7 +40,15 @@ function Page(props: Props) {
 
   const handleSubmit = useCallback(async (model: any) => {
     setLoading(true);
-    const { comment, location, preferedCourses, preferedStudentsLocation, maxStudentsLimit, englishMentoring } = model;
+    const {
+      comment,
+      location,
+      technicalMentoring,
+      preferedCourses,
+      preferedStudentsLocation,
+      maxStudentsLimit,
+      englishMentoring,
+    } = model;
 
     const registryModel = {
       comment,
@@ -54,6 +56,7 @@ function Page(props: Props) {
       maxStudentsLimit,
       englishMentoring,
       preferedStudentsLocation,
+      technicalMentoring,
     };
 
     const userModel = {
@@ -86,20 +89,27 @@ function Page(props: Props) {
     }
   }, []);
 
-  let content: React.ReactNode;
+  let content: React.ReactNode = null;
   if (loading) {
     content = null;
   } else if (submitted) {
     content = <SuccessComponent />;
-  } else {
+  } else if (initialData) {
     const location = form.getFieldValue('location');
     content = (
-      <Row gutter={defaultRowGutter}>
-        <Col lg={18}>
-          <Form form={form} initialValues={getInitialValues(initialData)} onChange={update} onFinish={handleSubmit}>
+      <Row style={{ margin: 16 }} gutter={defaultRowGutter}>
+        <Col xs={24} sm={20} md={18} lg={16} xl={16}>
+          <Form
+            style={{ margin: 16 }}
+            layout="vertical"
+            form={form}
+            initialValues={getInitialValues(initialData)}
+            onChange={update}
+            onFinish={handleSubmit}
+          >
             <Row style={{ marginBottom: 8 }}>
-              <Typography.Title level={4}>О менторинге</Typography.Title>
               <Typography.Paragraph>
+                <Typography.Title level={4}>О менторинге</Typography.Title>
                 <ul>
                   <li>Темы менторинга: html/css/vanillajs.</li>
                   <li>
@@ -205,6 +215,18 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
+                <Form.Item name="technicalMentoring" label="Please pick technologies which you want to mentor in">
+                  <Select mode="multiple" placeholder="Select technologies...">
+                    <Select.Option value={'nodejs'}>Node.js</Select.Option>
+                    <Select.Option value={'angular'}>React</Select.Option>
+                    <Select.Option value={'react'}>Angular</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={defaultRowGutter}>
+              <Col {...defaultColumnSizes}>
                 <Form.Item
                   name="location"
                   label="Location"
@@ -228,10 +250,10 @@ function Page(props: Props) {
               <Col {...defaultColumnSizes}>
                 <Form.Item
                   name="primaryEmail"
+                  help="Preferable to use Gmail because we use Google Drive for sharing"
                   label="Primary Email"
                   rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
                 >
-                  <span style={noticeStyle}>Preferable to use Gmail because we use Google Drive for sharing</span>
                   <Input placeholder="user@example.com" />
                 </Form.Item>
               </Col>
@@ -240,10 +262,8 @@ function Page(props: Props) {
                   name="contactsEpamEmail"
                   label="EPAM Email (if applicable)"
                   rules={[{ message: 'Please enter a valid EPAM email', pattern: epamEmailPattern }]}
+                  help="If you are EPAM employee, please specify your email to avoid some manual processes later"
                 >
-                  <span style={noticeStyle}>
-                    If you are EPAM employee, please specify your email to avoid some manual processes later
-                  </span>
                   <Input placeholder="first_last@epam.com" />
                 </Form.Item>
               </Col>
@@ -348,6 +368,7 @@ function getInitialValues(initialData) {
     ...initialData,
     preferedCourses: [],
     englishMentoring: false,
+    technicalMentoring: [],
   };
 }
 

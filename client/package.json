@@ -3,10 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "browserslist": [
-    "chrome >= 61",
-    "firefox >= 56",
+    "chrome >= 64",
+    "firefox >= 57",
     "ie >= 11",
-    "safari >= 10",
+    "safari >= 11",
     "edge >= 14"
   ],
   "scripts": {
@@ -36,11 +36,11 @@
     "styled-jsx": "~3.2.4"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
-    "@types/jest": "^24.0.18",
-    "@types/lodash": "^4.14.142",
+    "@types/jest": "^24.0.25",
+    "@types/lodash": "^4.14.149",
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^10.0",
     "@types/react": "~16.9.13",
@@ -48,9 +48,9 @@
     "express": "~4.17.1",
     "http-proxy-middleware": "~0.19.1",
     "jest": "~24.9.0",
-    "ts-jest": "~24.1.0",
+    "ts-jest": "~24.2.0",
     "tslint": "~5.20.1",
     "tslint-react": "~4.1.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.4"
   }
 }

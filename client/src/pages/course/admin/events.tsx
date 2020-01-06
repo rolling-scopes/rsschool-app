@@ -1,4 +1,17 @@
-import { Button, Col, DatePicker, Form, Input, message, Popconfirm, Row, Select, Table, TimePicker } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+  Table,
+  TimePicker,
+  Layout,
+} from 'antd';
 import { GithubUserLink, Header, UserSearch, withSession } from 'components';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
@@ -92,6 +105,9 @@ function Page(props: Props) {
   };
 
   const renderModal = (modalData: Partial<CourseEvent>) => {
+    if (modalData == null) {
+      return null;
+    }
     return (
       <ModalForm
         form={form}
@@ -126,11 +142,8 @@ function Page(props: Props) {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="time" label="Time">
-              <>
-                <TimePicker format="HH:mm" />
-                {timeZoneOffset}
-              </>
+            <Form.Item help={timeZoneOffset} name="time" label="Time">
+              <TimePicker format="HH:mm" />
             </Form.Item>
           </Col>
         </Row>
@@ -159,23 +172,32 @@ function Page(props: Props) {
   return (
     <div>
       <Header username={props.session.githubId} />
-      <Button type="primary" onClick={handleAddItem}>
-        Add Event
-      </Button>
-      <Select placeholder="Please select a timezone" defaultValue={timeZone} onChange={handleTimeZoneChange}>
-        {Object.entries(TIMEZONES).map(tz => (
-          <Select.Option key={tz[0]} value={tz[0]}>
-            {tz[0]}
-          </Select.Option>
-        ))}
-      </Select>
-      <Table
-        rowKey="id"
-        pagination={{ pageSize: 100 }}
-        size="small"
-        dataSource={data}
-        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
-      />
+      <Layout.Content style={{ margin: 16 }}>
+        <Button type="primary" onClick={handleAddItem}>
+          Add Event
+        </Button>
+        <Select
+          style={{ marginLeft: 16 }}
+          placeholder="Please select a timezone"
+          defaultValue={timeZone}
+          onChange={handleTimeZoneChange}
+        >
+          {Object.entries(TIMEZONES).map(tz => (
+            <Select.Option key={tz[0]} value={tz[0]}>
+              {tz[0]}
+            </Select.Option>
+          ))}
+        </Select>
+        <Table
+          style={{ margin: '16px 0' }}
+          rowKey="id"
+          bordered
+          pagination={{ pageSize: 100 }}
+          size="small"
+          dataSource={data}
+          columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
+        />
+      </Layout.Content>
       {renderModal(modalData!)}
     </div>
   );
@@ -191,30 +213,32 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
       dataIndex: 'eventId',
       render: idFromArrayRenderer(events),
     },
-    { title: 'Type', dataIndex: 'event.type' },
-    { title: 'Date', dataIndex: 'date', render: dateRenderer },
-    { title: 'Time', dataIndex: 'time', render: timeZoneRenderer(timeZone) },
+    { title: 'Type', dataIndex: ['event', 'type'] },
+    { title: 'Date', dataIndex: 'date', render: dateRenderer, width: 100 },
+    { title: 'Time', dataIndex: 'time', render: timeZoneRenderer(timeZone), width: 60 },
     { title: 'Place', dataIndex: 'place' },
     {
       title: 'Organizer',
-      dataIndex: 'organizer.githubId',
+      dataIndex: ['organizer', 'githubId'],
       render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
     },
     { title: 'Comment', dataIndex: 'comment' },
     {
       title: 'Stage',
       dataIndex: 'stageId',
+      width: 70,
       render: idFromArrayRenderer(stages),
     },
     {
       title: 'Actions',
       dataIndex: 'actions',
+      width: 110,
       render: (_, record: CourseEvent) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
           </span>
-          <span>
+          <span style={{ marginLeft: 8 }}>
             <Popconfirm
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
