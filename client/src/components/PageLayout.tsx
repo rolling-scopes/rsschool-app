@@ -1,7 +1,7 @@
 import { Header } from './Header';
 import { Spin, Row, Col } from 'antd';
 
-type Props = { loading: boolean; githubId: string; courseName?: string; title: string; children: any };
+type Props = { loading: boolean; githubId: string; courseName?: string; title?: string; children?: any };
 
 export function PageLayout(props: Props) {
   return (

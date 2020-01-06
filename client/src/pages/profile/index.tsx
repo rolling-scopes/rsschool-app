@@ -133,7 +133,7 @@ class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <Header username={this.props.session.githubId} />
-        <div className="m-3">
+        <div style={{ margin: 16 }}>
           {this.renderGeneralInfo(profile.user)}
           <Divider dashed />
           {this.renderPublicFeedback(profile)}
@@ -150,7 +150,7 @@ class ProfilePage extends React.Component<Props, State> {
           </Card>
           <Divider dashed />
           {entries.map((entry, i) => (
-            <div className="mb-3" key={i}>
+            <div key={i}>
               {entry.student && this.renderStudentProfile(entry.course, entry.student)}
               {entry.mentor && this.renderMentorProfile(entry.course, entry.mentor)}
             </div>
@@ -238,7 +238,7 @@ class ProfilePage extends React.Component<Props, State> {
             {employmentHistory.length ? employmentHistory : emptyValue}
           </Descriptions.Item>
         </Descriptions>
-        <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
+        <Descriptions style={{ marginTop: 16 }} size="small" title="Contacts" bordered column={1}>
           <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
           <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
           <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
@@ -360,7 +360,7 @@ class ProfilePage extends React.Component<Props, State> {
         </div>
         {this.renderStudentMentor(student)}
         {hasTasks && (
-          <div className="mt-2">
+          <div style={{ marginTop: 16 }}>
             <h4>Tasks</h4>
             <Table
               pagination={{ pageSize: 30 }}
@@ -370,7 +370,7 @@ class ProfilePage extends React.Component<Props, State> {
               columns={[
                 {
                   title: 'Name',
-                  dataIndex: 'courseTask.name',
+                  dataIndex: ['courseTask', 'name'],
                 },
                 {
                   title: 'Score',
