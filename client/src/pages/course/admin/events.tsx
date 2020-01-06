@@ -1,279 +1,254 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, DatePicker, Input, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
-import { Header, withSession, GithubUserLink } from 'components';
+import { Button, Col, DatePicker, Form, Input, message, Popconfirm, Row, Select, Table, TimePicker } from 'antd';
+import { GithubUserLink, Header, UserSearch, withSession } from 'components';
+import { CommentInput, ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import moment from 'moment';
-import * as React from 'react';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
 import { formatDate, formatTime } from 'services/formatter';
-import { CoursePageProps, PageWithModalState } from 'services/models';
+import { CoursePageProps } from 'services/models';
 import { Stage, StageService } from 'services/stage';
-import { urlPattern } from 'services/validators';
 import { UserService } from 'services/user';
-import { UserSearch } from 'components/UserSearch';
+import { urlPattern } from 'services/validators';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
 
-type Props = CoursePageProps & FormComponentProps;
+type Props = CoursePageProps;
 
-interface State extends PageWithModalState<CourseEvent> {
-  events: Event[];
-  stages: Stage[];
-  timeZone: string;
-}
+const timeZoneRenderer = timeZone => value => {
+  return value
+    ? moment(value, 'HH:mm:ssZ')
+        .tz(timeZone)
+        .format('HH:mm')
+    : '';
+};
 
-class CourseEventsPage extends React.Component<Props, State> {
-  state: State = {
-    events: [],
-    data: [],
-    stages: [],
-    modalData: null,
-    modalAction: 'update',
-    timeZone: DEFAULT_TIMEZONE,
-  };
+function Page(props: Props) {
+  const [form] = Form.useForm();
+  const courseId = props.course.id;
+  const timeZoneOffset = moment().format('Z');
+  const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
+  const userService = new UserService();
+  const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const [data, setData] = useState([] as CourseEvent[]);
+  const [stages, setStages] = useState([] as Stage[]);
+  const [events, setEvents] = useState([] as Event[]);
+  const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
+  const [modalAction, setModalAction] = useState('update');
 
-  private timeZoneOffset = moment().format('Z');
-
-  private userService = new UserService();
-
-  private courseService: CourseService;
-
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    const courseId = this.props.course.id;
+  useAsync(async () => {
     const [data, stages, events] = await Promise.all([
-      this.courseService.getCourseEvents(),
+      service.getCourseEvents(),
       new StageService().getCourseStages(courseId),
       new EventService().getEvents(),
     ]);
-    this.setState({ data, stages, events });
-  }
+    setData(data);
+    setStages(stages);
+    setEvents(events);
+  }, [courseId]);
 
-  private handleTimeZoneChange = (timeZone: string) => {
-    this.setState({ timeZone });
+  const handleTimeZoneChange = (timeZone: string) => {
+    setTimeZone(timeZone);
   };
 
-  timeZoneRenderer = value => {
-    return value
-      ? moment(value, 'HH:mm:ssZ')
-          .tz(this.state.timeZone)
-          .format('HH:mm')
-      : '';
+  const refreshData = async () => {
+    const data = await service.getCourseEvents();
+    setData(data);
   };
 
-  private refreshData = async () => {
-    const data = await this.courseService.getCourseEvents();
-    this.setState({ data });
+  const loadUsers = async (searchText: string) => {
+    return userService.searchUser(searchText);
   };
 
-  private handleModalSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
-        return;
-      }
-      const data = {
-        place: values.place,
-        date: values.date ? formatDate(values.date) : undefined,
-        time: values.time ? formatTime(values.time) : undefined,
-        eventId: values.eventId,
-        stageId: values.stageId,
-        comment: values.comment,
-        courseId: this.props.course.id,
-        coordinator: values.coordinator,
-        organizerId: values.organizerId,
-        broadcastUrl: values.broadcastUrl,
-      };
-
-      this.state.modalAction === 'update'
-        ? await this.courseService.updateCourseEvent(this.state.modalData!.id!, data)
-        : await this.courseService.createCourseEvent(data);
-
-      await this.refreshData();
-      this.setState({ modalData: null });
-    });
+  const handleAddItem = () => {
+    setModalData({});
+    setModalAction('create');
   };
 
-  render() {
-    return (
-      <div>
-        <Header username={this.props.session.githubId} />
-        <Button type="primary" className="mt-3 ml-3" onClick={this.handleAddItem}>
-          Add Event
-        </Button>
-        <Select
-          className="mt-3 ml-3"
-          placeholder="Please select a timezone"
-          defaultValue={this.state.timeZone}
-          onChange={this.handleTimeZoneChange}
-        >
-          {Object.entries(TIMEZONES).map(tz => (
-            <Select.Option key={tz[0]} value={tz[0]}>
-              {tz[0]}
-            </Select.Option>
-          ))}
-        </Select>
-        <Table
-          className="m-3"
-          rowKey="id"
-          pagination={{ pageSize: 100 }}
-          size="small"
-          dataSource={this.state.data}
-          columns={[
-            { title: 'Id', dataIndex: 'id' },
-            {
-              title: 'Name',
-              dataIndex: 'eventId',
-              render: idFromArrayRenderer(this.state.events),
-            },
-            { title: 'Type', dataIndex: 'event.type' },
-            { title: 'Date', dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', dataIndex: 'time', render: this.timeZoneRenderer },
-            { title: 'Place', dataIndex: 'place' },
-            {
-              title: 'Organizer',
-              dataIndex: 'organizer.githubId',
-              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
-            },
-            { title: 'Comment', dataIndex: 'comment' },
-            {
-              title: 'Stage',
-              dataIndex: 'stageId',
-              render: idFromArrayRenderer(this.state.stages),
-            },
-            {
-              title: 'Actions',
-              dataIndex: 'actions',
-              render: (_, record: CourseEvent) => (
-                <>
-                  <span>
-                    <a onClick={() => this.handleEditItem(record)}>Edit</a>{' '}
-                  </span>
-                  <span className="ml-1 mr-1">
-                    <a onClick={() => this.handleDeleteItem(record.id)}>Delete</a>
-                  </span>
-                </>
-              ),
-            },
-          ]}
-        />
+  const handleEditItem = (record: CourseEvent) => {
+    setModalData(record);
+    setModalAction('update');
+  };
 
-        {this.renderModal()}
-      </div>
-    );
-  }
-
-  private renderModal() {
-    const { getFieldDecorator: field } = this.props.form;
-    const { events, stages } = this.state;
-    const modalData = this.state.modalData as CourseEvent;
-    if (modalData == null) {
-      return null;
+  const handleDeleteItem = async (id: number) => {
+    try {
+      await service.deleteCourseEvent(id);
+      await refreshData();
+    } catch {
+      message.error('Failed to delete item. Please try later.');
     }
+  };
+
+  const handleModalSubmit = async (values: any) => {
+    const data = createRecord(values, courseId);
+    modalAction === 'update'
+      ? await service.updateCourseEvent(modalData!.id!, data)
+      : await service.createCourseEvent(data);
+
+    await refreshData();
+    setModalData(null);
+  };
+
+  const renderModal = (modalData: Partial<CourseEvent>) => {
     return (
-      <Modal
-        visible={!!modalData}
+      <ModalForm
+        form={form}
+        getInitialValues={getInitialValues}
+        data={modalData}
         title="Course Event"
-        okText="Save"
-        onOk={this.handleModalSubmit}
-        onCancel={() => this.setState({ modalData: null })}
+        submit={handleModalSubmit}
+        cancel={() => setModalData(null)}
       >
-        <Form layout="vertical">
-          <Form.Item label="Event">
-            {field<CourseEvent>('eventId', {
-              initialValue: modalData.eventId,
-              rules: [{ required: true, message: 'Please select an event' }],
-            })(
-              <Select placeholder="Please select an event">
-                {events.map(event => (
-                  <Select.Option key={event.id} value={event.id}>
-                    {event.name}
-                  </Select.Option>
-                ))}
-              </Select>,
-            )}
-          </Form.Item>
-          <Form.Item label="Stage">
-            {field<CourseEvent>('stageId', {
-              initialValue: modalData.stageId,
-              rules: [{ required: true, message: 'Please select a stage' }],
-            })(
-              <Select placeholder="Please select a stage">
-                {stages.map((stage: Stage) => (
-                  <Select.Option key={stage.id} value={stage.id}>
-                    {stage.name}
-                  </Select.Option>
-                ))}
-              </Select>,
-            )}
-          </Form.Item>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item label="Date">
-                {field('date', {
-                  initialValue: modalData.date ? moment(modalData.date) : null,
-                  rules: [{ required: true, message: 'Please enter date' }],
-                })(<DatePicker />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Time">
-                {field('time', {
-                  initialValue: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
-                })(<TimePicker format="HH:mm" />)}{' '}
-                {this.timeZoneOffset}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item label="Place">
-            {field<CourseEvent>('place', { initialValue: modalData.place })(<Input />)}
-          </Form.Item>
-          <Form.Item label="Organizer">
-            {field('organizerId', {
-              initialValue: modalData.organizerId,
-            })(
-              <UserSearch
-                defaultValues={modalData.organizer ? [modalData.organizer] : []}
-                user={modalData.organizer}
-                searchFn={this.loadUsers}
-              />,
-            )}
-          </Form.Item>
-          <Form.Item label="Broadcast URL">
-            {field<CourseEvent>('broadcastUrl', {
-              initialValue: modalData.broadcastUrl,
-              rules: [{ pattern: urlPattern, message: 'Enter valid url' }],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item label="Comment">
-            {field<CourseEvent>('comment', { initialValue: modalData.comment })(<Input.TextArea />)}
-          </Form.Item>
-        </Form>
-      </Modal>
+        <Form.Item name="eventId" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
+          <Select placeholder="Please select an event">
+            {events.map(event => (
+              <Select.Option key={event.id} value={event.id}>
+                {event.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="stageId" label="Stage" rules={[{ required: true, message: 'Please select a stage' }]}>
+          <Select placeholder="Please select a stage">
+            {stages.map((stage: Stage) => (
+              <Select.Option key={stage.id} value={stage.id}>
+                {stage.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter date' }]}>
+              <DatePicker />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="time" label="Time">
+              <>
+                <TimePicker format="HH:mm" />
+                {timeZoneOffset}
+              </>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item name="place" label="Place">
+          <Input />
+        </Form.Item>
+        <Form.Item name="organizerId" label="Organizer">
+          <UserSearch
+            defaultValues={modalData.organizer ? [modalData.organizer] : []}
+            user={modalData.organizer}
+            searchFn={loadUsers}
+          />
+        </Form.Item>
+        <Form.Item
+          name="broadcastUrl"
+          label="Broadcast URL"
+          rules={[{ pattern: urlPattern, message: 'Enter valid url' }]}
+        >
+          <Input />
+        </Form.Item>
+        <CommentInput />
+      </ModalForm>
     );
-  }
-
-  private loadUsers = async (searchText: string) => {
-    return this.userService.searchUser(searchText);
   };
 
-  private handleAddItem = () => this.setState({ modalData: {}, modalAction: 'create' });
-
-  private handleEditItem = (record: CourseEvent) => this.setState({ modalData: record, modalAction: 'update' });
-
-  private handleDeleteItem = async (id: number) => {
-    await this.courseService.deleteCourseEvent(id);
-    const records = await this.courseService.getCourseEvents();
-    this.setState({ data: records });
-  };
+  return (
+    <div>
+      <Header username={props.session.githubId} />
+      <Button type="primary" onClick={handleAddItem}>
+        Add Event
+      </Button>
+      <Select placeholder="Please select a timezone" defaultValue={timeZone} onChange={handleTimeZoneChange}>
+        {Object.entries(TIMEZONES).map(tz => (
+          <Select.Option key={tz[0]} value={tz[0]}>
+            {tz[0]}
+          </Select.Option>
+        ))}
+      </Select>
+      <Table
+        rowKey="id"
+        pagination={{ pageSize: 100 }}
+        size="small"
+        dataSource={data}
+        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
+      />
+      {renderModal(modalData!)}
+    </div>
+  );
 }
 
-export default withCourseData(withSession(Form.create()(CourseEventsPage)));
+export default withCourseData(withSession(Page));
+
+function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events, stages }) {
+  return [
+    { title: 'Id', dataIndex: 'id' },
+    {
+      title: 'Name',
+      dataIndex: 'eventId',
+      render: idFromArrayRenderer(events),
+    },
+    { title: 'Type', dataIndex: 'event.type' },
+    { title: 'Date', dataIndex: 'date', render: dateRenderer },
+    { title: 'Time', dataIndex: 'time', render: timeZoneRenderer(timeZone) },
+    { title: 'Place', dataIndex: 'place' },
+    {
+      title: 'Organizer',
+      dataIndex: 'organizer.githubId',
+      render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
+    },
+    { title: 'Comment', dataIndex: 'comment' },
+    {
+      title: 'Stage',
+      dataIndex: 'stageId',
+      render: idFromArrayRenderer(stages),
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
+      render: (_, record: CourseEvent) => (
+        <>
+          <span>
+            <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
+          </span>
+          <span>
+            <Popconfirm
+              onConfirm={() => handleDeleteItem(record.id)}
+              title="Are you sure you want to delete this item?"
+            >
+              <a href="#">Delete</a>
+            </Popconfirm>
+          </span>
+        </>
+      ),
+    },
+  ];
+}
+
+function createRecord(values: any, courseId) {
+  const data = {
+    courseId,
+    place: values.place,
+    date: values.date ? formatDate(values.date) : undefined,
+    time: values.time ? formatTime(values.time) : undefined,
+    eventId: values.eventId,
+    stageId: values.stageId,
+    comment: values.comment,
+
+    coordinator: values.coordinator,
+    organizerId: values.organizerId,
+    broadcastUrl: values.broadcastUrl,
+  };
+  return data;
+}
+
+function getInitialValues(modalData: Partial<CourseEvent>) {
+  return {
+    ...modalData,
+    date: modalData.date ? moment(modalData.date) : null,
+    time: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
+  };
+}

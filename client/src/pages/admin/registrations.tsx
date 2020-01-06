@@ -1,14 +1,11 @@
-import { DislikeOutlined, HourglassOutlined, LikeOutlined, MehTwoTone } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Layout, Result, Row, Select, Statistic, Table, Typography } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
+import { Button, Col, Layout, Row, Select, Spin, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
-import { AdminSider, GithubUserLink, Header, LoadingScreen } from 'components';
+import { AdminSider, GithubUserLink, Header } from 'components';
 import { stringSorter } from 'components/Table';
 import withCourses from 'components/withCourses';
 import withSession, { Session } from 'components/withSession';
-import * as React from 'react';
+import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 
@@ -18,21 +15,14 @@ const PAGINATION = 200;
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
 
 type Props = {
-  courses?: Course[];
-  session?: Session;
-} & FormComponentProps;
-
-type State = {
-  data: any[];
   courses: Course[];
-  showSuccess: boolean;
-  selectedIds: number[];
-  isLoading: boolean;
-  statistics: {
-    approved: number;
-    rejected: number;
-    pending: number;
-  };
+  session: Session;
+};
+
+type Stats = {
+  approved: number;
+  rejected: number;
+  pending: number;
 };
 
 interface Registration {
@@ -46,35 +36,22 @@ interface Registration {
   githubId: string;
 }
 
-class RegistrationsPage extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const courses: Course[] = (this.props.courses || []).filter(
-      (course: Course) => !course.completed && !course.inviteOnly,
-    );
+function Page(props: Props) {
+  const [courses] = useState((props.courses || []).filter((course: Course) => !course.completed && !course.inviteOnly));
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [stats, setStats] = useState(DEFAULT_STATISTICS as Stats);
+  const [courseId, setCourseId] = useState(null as number | null);
 
-    this.state = {
-      courses,
-      data: [],
-      showSuccess: false,
-      selectedIds: [],
-      isLoading: true,
-      statistics: { ...DEFAULT_STATISTICS },
-    };
-  }
-
-  componentDidMount() {
-    if (this.state.courses.length) {
-      this.getRegistrations();
-    }
-  }
-
-  changeSelection = (_: any, selectedRows: any) => {
-    this.setState({ selectedIds: selectedRows.map((row: any) => row.id) });
+  const changeSelection = (_: any, selectedRows: any) => {
+    setSelectedIds(selectedRows.map((row: any) => row.id));
   };
 
-  getRegistrations = async (id?: number) => {
-    const courseId = id || this.props.form.getFieldValue('courseId');
+  const handleCourseChange = async (id: number | string) => {
+    const courseId = Number(id);
+    setCourseId(courseId);
+
     const url = `/api/registry?type=mentor&courseId=${courseId}`;
     const {
       data: { data: registrations },
@@ -94,221 +71,173 @@ class RegistrationsPage extends React.Component<Props, State> {
           break;
       }
     }
+    setLoading(false);
+    const data = registrations.map((registration: any) => {
+      const {
+        user,
+        id,
+        status,
+        comment,
+        attributes: { maxStudentsLimit },
+      } = registration;
+      const { firstName, lastName, githubId, contactsEpamEmail, locationName: city } = user || {
+        firstName: '',
+        lastName: '',
+        githubId: '',
+        contactsEpamEmail: '',
+        locationName: '',
+      };
 
-    this.setState({
-      isLoading: false,
-      data: registrations.map((registration: any) => {
-        const {
-          user,
-          id,
-          status,
-          comment,
-          attributes: { maxStudentsLimit },
-        } = registration;
-        const { firstName, lastName, githubId, contactsEpamEmail, locationName: city } = user || {
-          firstName: '',
-          lastName: '',
-          githubId: '',
-          contactsEpamEmail: '',
-          locationName: '',
-        };
-
-        return {
-          id,
-          status,
-          comment,
-          githubId,
-          maxStudentsLimit,
-          user: { name: `${firstName} ${lastName}`, profileUrl: `/profile?githubId=${githubId}` },
-          isFromEpam: !!contactsEpamEmail,
-          city,
-        };
-      }),
-      selectedIds: [],
-      statistics,
+      return {
+        id,
+        status,
+        comment,
+        githubId,
+        maxStudentsLimit,
+        user: { name: `${firstName} ${lastName}`, profileUrl: `/profile?githubId=${githubId}` },
+        isFromEpam: !!contactsEpamEmail,
+        city,
+      };
     });
+    setData(data);
+    setSelectedIds([]);
+    setStats(statistics);
   };
 
-  handleSubmit = async (_: any, status: string) => {
-    const { selectedIds } = this.state;
-    const courseId = this.props.form.getFieldValue('courseId');
-
+  const handleSubmit = async (_: any, status: string) => {
     if (selectedIds.length) {
       try {
-        this.setState({ isLoading: true });
+        setLoading(true);
         await axios.put('/api/registry', { ids: selectedIds, status });
-        this.getRegistrations(courseId);
+        await handleCourseChange(courseId as number);
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  approve = (e: any) => {
-    this.handleSubmit(e, 'approved');
-  };
+  const handleApprove = (e: any) => handleSubmit(e, 'approved');
 
-  reject = async (e: any) => {
-    this.handleSubmit(e, 'rejected');
-  };
+  const handleReject = async (e: any) => handleSubmit(e, 'rejected');
 
-  render() {
-    if (!this.props.session) {
-      return null;
-    }
+  const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
+  const rowSelection = { onChange: changeSelection };
 
-    const { session } = this.props;
-    const { courses, isLoading, data, statistics } = this.state;
-    const { getFieldDecorator: field, getFieldValue } = this.props.form;
-    const courseId = getFieldValue('courseId');
-    const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
-    const rowSelection = {
-      onChange: this.changeSelection,
-    };
-
-    return (
-      <div>
-        <Layout style={{ minHeight: '100vh' }}>
-          <AdminSider />
-          <Layout style={{ background: '#fff' }}>
-            <Header username={session.githubId} />
-            <Content>
-              {!courses.length && (
-                <Result
-                  status="info"
-                  icon={<MehTwoTone />}
-                  title="There are no planned courses."
-                  subTitle="Please come back later."
-                  extra={
-                    <Button type="primary" href="/">
-                      Back to Home
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <AdminSider />
+      <Layout style={{ background: '#fff' }}>
+        <Header title="Registrations" username={props.session.githubId} />
+        <Content style={{ margin: 8 }}>
+          <Spin spinning={loading}>
+            <Col>
+              <Row gutter={defaultRowGutter}>
+                <Col>
+                  <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
+                    {courses.map(course => (
+                      <Select.Option key={course.id} value={course.id}>
+                        {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
+                      </Select.Option>
+                    ))}
+                  </Select>
+                  <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
+                </Col>
+              </Row>
+              {courseId && (
+                <Row gutter={defaultRowGutter}>
+                  <Col span={12}>
+                    <Button type="primary" onClick={handleApprove}>
+                      Approve
                     </Button>
-                  }
+                    <span>&nbsp;</span>
+                    <Button type="danger" onClick={handleReject}>
+                      Reject
+                    </Button>
+                  </Col>
+                  <Col span={4}>
+                    <Statistic
+                      title="Approved"
+                      value={stats.approved}
+                      valueStyle={{ color: '#3f8600' }}
+                      prefix={<LikeOutlined />}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Statistic
+                      title="Rejected"
+                      value={stats.rejected}
+                      valueStyle={{ color: '#cf1322' }}
+                      prefix={<DislikeOutlined />}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Statistic title="Pending" value={stats.pending} prefix={<HourglassOutlined />} />
+                  </Col>
+                </Row>
+              )}
+              {courseId && (
+                <Table<Registration>
+                  bordered
+                  pagination={{ pageSize: PAGINATION }}
+                  size="small"
+                  rowKey="id"
+                  dataSource={data}
+                  rowSelection={rowSelection}
+                  columns={[
+                    {
+                      title: 'Name',
+                      dataIndex: 'lastName',
+                      key: 'lastName',
+                      width: 150,
+                      sorter: stringSorter('lastName'),
+                      render: (_: any, record: Registration) => <a href={record.user.profileUrl}>{record.user.name}</a>,
+                    },
+                    {
+                      title: 'Github',
+                      dataIndex: 'githubId',
+                      key: 'githubId',
+                      width: 100,
+                      sorter: stringSorter('githubId'),
+                      render: (value: string) => <GithubUserLink value={value} />,
+                    },
+                    {
+                      title: 'Status',
+                      dataIndex: 'status',
+                      key: 'status',
+                      sorter: stringSorter('status'),
+                      width: 50,
+                    },
+                    {
+                      title: 'City',
+                      dataIndex: 'city',
+                      key: 'city',
+                      width: 50,
+                    },
+                    {
+                      title: 'Max students amount',
+                      dataIndex: 'maxStudentsLimit',
+                      key: 'maxStudentsLimit',
+                      width: 100,
+                    },
+                    {
+                      title: 'From EPAM',
+                      dataIndex: 'isFromEpam',
+                      key: 'isFromEpam',
+                      width: 30,
+                      render: (value: boolean) => (value ? 'Y' : 'N'),
+                    },
+                    { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
+                  ]}
                 />
               )}
-              {courses.length && (
-                <LoadingScreen show={isLoading}>
-                  <div className="m-3">
-                    <Col>
-                      <Row>
-                        <Typography.Title level={4}>Registrations</Typography.Title>
-                      </Row>
-                      <Row gutter={defaultRowGutter}>
-                        <Col span={10}>
-                          <Form.Item>
-                            {field('courseId', { initialValue: courses[0].id })(
-                              <Select placeholder="Select course..." onChange={this.getRegistrations}>
-                                {courses.map(course => (
-                                  <Select.Option key={course.id} value={course.id}>
-                                    {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
-                                  </Select.Option>
-                                ))}
-                              </Select>,
-                            )}
-                          </Form.Item>
-                          <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
-                        </Col>
-                      </Row>
-                      <Row gutter={defaultRowGutter}>
-                        <Col span={12}>
-                          <Button size="large" type="primary" onClick={this.approve}>
-                            Approve
-                          </Button>
-                          <span>&nbsp;</span>
-                          <Button size="large" type="danger" onClick={this.reject}>
-                            Reject
-                          </Button>
-                        </Col>
-                        <Col span={4}>
-                          <Statistic
-                            title="Approved"
-                            value={statistics.approved}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<LikeOutlined />}
-                          />
-                        </Col>
-                        <Col span={4}>
-                          <Statistic
-                            title="Rejected"
-                            value={statistics.rejected}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<DislikeOutlined />}
-                          />
-                        </Col>
-                        <Col span={4}>
-                          <Statistic title="Pending" value={statistics.pending} prefix={<HourglassOutlined />} />
-                        </Col>
-                      </Row>
-                      <Row gutter={defaultRowGutter}>
-                        <Col>
-                          <Table<Registration>
-                            className="m-3"
-                            bordered
-                            pagination={{ pageSize: PAGINATION }}
-                            size="small"
-                            rowKey="id"
-                            dataSource={data}
-                            rowSelection={rowSelection}
-                            columns={[
-                              {
-                                title: 'Name',
-                                dataIndex: 'lastName',
-                                key: 'lastName',
-                                width: 150,
-                                sorter: stringSorter('lastName'),
-                                render: (_: any, record: Registration) => (
-                                  <a href={record.user.profileUrl}>{record.user.name}</a>
-                                ),
-                              },
-                              {
-                                title: 'Github',
-                                dataIndex: 'githubId',
-                                key: 'githubId',
-                                width: 100,
-                                sorter: stringSorter('githubId'),
-                                render: (value: string) => <GithubUserLink value={value} />,
-                              },
-                              {
-                                title: 'Status',
-                                dataIndex: 'status',
-                                key: 'status',
-                                sorter: stringSorter('status'),
-                                width: 50,
-                              },
-                              {
-                                title: 'City',
-                                dataIndex: 'city',
-                                key: 'city',
-                                width: 50,
-                              },
-                              {
-                                title: 'Max students amount',
-                                dataIndex: 'maxStudentsLimit',
-                                key: 'maxStudentsLimit',
-                                width: 100,
-                              },
-                              {
-                                title: 'From EPAM',
-                                dataIndex: 'isFromEpam',
-                                key: 'isFromEpam',
-                                width: 30,
-                                render: (value: boolean) => (value ? 'Y' : 'N'),
-                              },
-                              { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
-                            ]}
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                  </div>
-                </LoadingScreen>
-              )}
-            </Content>
-          </Layout>
-        </Layout>
-      </div>
-    );
-  }
+            </Col>
+          </Spin>
+        </Content>
+      </Layout>
+    </Layout>
+  );
 }
 
-export default withCourses(withSession(Form.create()(RegistrationsPage)));
+export default withCourses(withSession(Page));

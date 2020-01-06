@@ -1,44 +1,30 @@
-import { Divider, Statistic, Table, Button, Spin, message } from 'antd';
+import { Button, Divider, message, Spin, Statistic, Table } from 'antd';
 import { GithubUserLink, Header, withSession } from 'components';
 import StudentsAddModal from 'components/StudentsAddModal';
-import { getColumnSearchProps, stringSorter, numberSorter } from 'components/Table';
+import { getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import _ from 'lodash';
-import * as React from 'react';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseService, MentorDetails } from 'services/course';
-import { CoursePageProps } from 'services/models';
 import { relativeDays } from 'services/formatter';
+import { CoursePageProps } from 'services/models';
 
-type State = {
-  records: MentorDetails[];
-  isLoading: boolean;
-  stats: {
-    recordCount: number;
-    countries: { name: string; totalCount: number }[];
-  };
+type Stats = {
+  recordCount: number;
+  countries: { name: string; totalCount: number }[];
 };
 
-class ScorePage extends React.Component<CoursePageProps, State> {
-  state: State = {
-    isLoading: false,
-    records: [],
-    stats: {
-      recordCount: 0,
-      countries: [],
-    },
-  };
+function Page(props: CoursePageProps) {
+  const courseId = props.course.id;
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState(null as Stats | null);
+  const [mentors, setMentors] = useState([] as MentorDetails[]);
 
-  private courseService: CourseService;
+  const service = useMemo(() => new CourseService(courseId), [courseId]);
 
-  constructor(props: CoursePageProps) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-
-    const records: any[] = await this.courseService.getMentorsWithDetails();
+  useAsync(async () => {
+    setLoading(true);
+    const records: any[] = await service.getMentorsWithDetails();
     const countries: Record<string, { totalCount: number }> = {};
 
     for (const record of records) {
@@ -48,149 +34,142 @@ class ScorePage extends React.Component<CoursePageProps, State> {
       }
       countries[countryName].totalCount++;
     }
-
-    this.setState({
-      records,
-      isLoading: false,
-      stats: {
-        recordCount: records.length,
-        countries: _.keys(countries).map(k => ({
-          name: k,
-          totalCount: countries[k].totalCount,
-        })),
-      },
+    setLoading(false);
+    setMentors(records);
+    setStats({
+      recordCount: records.length,
+      countries: Object.keys(countries).map(k => ({
+        name: k,
+        totalCount: countries[k].totalCount,
+      })),
     });
-  }
+  }, []);
 
-  render() {
-    const courseId = this.props.course.id;
-
-    return (
-      <>
-        <Header title="Course Mentors" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <Spin spinning={this.state.isLoading}>
-          <Statistic className="m-3" title="Total Count" value={this.state.stats.recordCount} />
-          <Table
-            className="m-3"
-            pagination={false}
-            size="small"
-            rowKey="name"
-            dataSource={this.state.stats.countries}
-            columns={[
-              { title: 'Country', dataIndex: 'name' },
-              { title: 'Count', dataIndex: 'totalCount' },
-            ]}
-          />
-          <Divider dashed />
-          <Table<MentorDetails>
-            bordered
-            className="m-3"
-            rowKey="githubId"
-            rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
-            pagination={{ pageSize: 100 }}
-            size="small"
-            dataSource={this.state.records}
-            columns={[
-              {
-                title: 'Github',
-                dataIndex: 'githubId',
-                sorter: stringSorter('githubId'),
-                width: 100,
-                render: (value: string) => <GithubUserLink value={value} />,
-                ...getColumnSearchProps('githubId'),
-              },
-              {
-                title: 'Name',
-                dataIndex: 'name',
-                width: 120,
-                sorter: stringSorter('name'),
-                ...getColumnSearchProps('name'),
-              },
-              {
-                title: 'Location',
-                dataIndex: 'locationName',
-                key: 'locationName',
-                width: 100,
-                sorter: stringSorter('locationName'),
-                ...getColumnSearchProps('locationName'),
-              },
-              {
-                title: 'Country',
-                dataIndex: 'countryName',
-                key: 'countryName',
-                width: 100,
-                sorter: stringSorter('countryName'),
-                ...getColumnSearchProps('countryName'),
-              },
-              {
-                title: 'Max Student',
-                dataIndex: 'maxStudentsLimit',
-                sorter: numberSorter('maxStudentsLimit'),
-                width: 80,
-              },
-              {
-                title: 'Interviews Count',
-                dataIndex: 'interviewsCount',
-                sorter: numberSorter('interviewsCount'),
-                width: 80,
-              },
-              {
-                title: 'Students Count',
-                dataIndex: 'studentsCount',
-                sorter: numberSorter('studentsCount' as any),
-                width: 80,
-              },
-              {
-                title: 'Checked Tasks',
-                dataIndex: 'taskResultsStats',
-                sorter: numberSorter('taskResultsStats.checked' as any),
-                render: (value: any) => `${value.checked} / ${value.total}`,
-              },
-              {
-                title: 'Last Checked Task',
-                dataIndex: 'taskResultsStats.lastUpdatedDate',
-                sorter: numberSorter('taskResultsStats.lastUpdatedDate' as any),
-                render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
-              },
-              {
-                title: 'Students',
-                dataIndex: 'students',
-                width: 80,
-                render: (_: string, mentor: MentorDetails) => (
-                  <>
-                    <StudentsAddModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
-                  </>
-                ),
-              },
-              {
-                title: 'Actions',
-                dataIndex: 'actions',
-                render: (_: string, mentor: MentorDetails) => (
-                  <>
-                    <Button type="link" onClick={() => this.handleExpell(mentor)}>
-                      Expel
-                    </Button>
-                  </>
-                ),
-              },
-            ]}
-          />
-        </Spin>
-      </>
-    );
-  }
-
-  private async handleExpell({ githubId }: MentorDetails) {
+  const handleExpell = async ({ githubId }: MentorDetails) => {
     try {
-      this.setState({ isLoading: true });
-      await this.courseService.expelMentor(githubId);
-      const records = this.state.records.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
-      this.setState({ isLoading: false, records });
+      setLoading(true);
+      await service.expelMentor(githubId);
+      const records = mentors.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
+      setMentors(records);
     } catch (e) {
       message.error('An error occured. Please try later.');
-      this.setState({ isLoading: false });
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
+  return (
+    <>
+      <Header title="Course Mentors" username={props.session.githubId} courseName={props.course.name} />
+      <Spin spinning={loading}>
+        <Statistic title="Total Count" value={stats?.recordCount} />
+        <Table
+          pagination={false}
+          size="small"
+          rowKey="name"
+          dataSource={stats?.countries ?? []}
+          columns={[
+            { title: 'Country', dataIndex: 'name' },
+            { title: 'Count', dataIndex: 'totalCount' },
+          ]}
+        />
+        <Divider dashed />
+        <Table<MentorDetails>
+          bordered
+          className="m-3"
+          rowKey="githubId"
+          rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
+          pagination={{ pageSize: 100 }}
+          size="small"
+          dataSource={mentors}
+          columns={[
+            {
+              title: 'Github',
+              dataIndex: 'githubId',
+              sorter: stringSorter('githubId'),
+              width: 100,
+              render: (value: string) => <GithubUserLink value={value} />,
+              ...getColumnSearchProps('githubId'),
+            },
+            {
+              title: 'Name',
+              dataIndex: 'name',
+              width: 120,
+              sorter: stringSorter('name'),
+              ...getColumnSearchProps('name'),
+            },
+            {
+              title: 'Location',
+              dataIndex: 'locationName',
+              key: 'locationName',
+              width: 100,
+              sorter: stringSorter('locationName'),
+              ...getColumnSearchProps('locationName'),
+            },
+            {
+              title: 'Country',
+              dataIndex: 'countryName',
+              key: 'countryName',
+              width: 100,
+              sorter: stringSorter('countryName'),
+              ...getColumnSearchProps('countryName'),
+            },
+            {
+              title: 'Max Student',
+              dataIndex: 'maxStudentsLimit',
+              sorter: numberSorter('maxStudentsLimit'),
+              width: 80,
+            },
+            {
+              title: 'Interviews Count',
+              dataIndex: 'interviewsCount',
+              sorter: numberSorter('interviewsCount'),
+              width: 80,
+            },
+            {
+              title: 'Students Count',
+              dataIndex: 'studentsCount',
+              sorter: numberSorter('studentsCount' as any),
+              width: 80,
+            },
+            {
+              title: 'Checked Tasks',
+              dataIndex: 'taskResultsStats',
+              sorter: numberSorter('taskResultsStats.checked' as any),
+              render: (value: any) => `${value.checked} / ${value.total}`,
+            },
+            {
+              title: 'Last Checked Task',
+              dataIndex: 'taskResultsStats.lastUpdatedDate',
+              sorter: numberSorter('taskResultsStats.lastUpdatedDate' as any),
+              render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
+            },
+            {
+              title: 'Students',
+              dataIndex: 'students',
+              width: 80,
+              render: (_: string, mentor: MentorDetails) => (
+                <>
+                  <StudentsAddModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
+                </>
+              ),
+            },
+            {
+              title: 'Actions',
+              dataIndex: 'actions',
+              render: (_: string, mentor: MentorDetails) => (
+                <>
+                  <Button type="link" onClick={() => handleExpell(mentor)}>
+                    Expel
+                  </Button>
+                </>
+              ),
+            },
+          ]}
+        />
+      </Spin>
+    </>
+  );
 }
 
-export default withCourseData(withSession(ScorePage));
+export default withCourseData(withSession(Page));

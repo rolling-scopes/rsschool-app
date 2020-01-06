@@ -1,308 +1,38 @@
-import * as React from 'react';
-import _ from 'lodash';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import {
-  Table,
-  Typography,
-  Statistic,
-  Divider,
-  Button,
-  Select,
-  message,
-  Row,
-  Modal,
-  Spin,
-  Col,
-} from 'antd';
-import { Header, withSession, GithubUserLink, StudentExpelModal } from 'components';
+import { Button, Col, Divider, Form, Layout, message, Row, Spin, Statistic, Table, Typography } from 'antd';
+import { GithubUserLink, Header, StudentExpelModal, withSession } from 'components';
+import { CourseTaskSelect, ModalForm } from 'components/Forms';
+import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import { getColumnSearchProps, stringSorter, numberSorter, boolIconRenderer } from 'components/Table';
-import { CourseService, StudentDetails } from 'services/course';
+import _ from 'lodash';
+import { useCallback, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService, CourseTask, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { FormComponentProps } from 'antd/lib/form';
-
 import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 
-type Props = CoursePageProps & FormComponentProps;
-
-type State = {
-  students: StudentDetails[];
-  isLoading: boolean;
-  expelledStudent: StudentDetails | null;
-  stats: {
-    studentCount: number;
-    activeStudentCount: number;
-    countries: { name: string; count: number; totalCount: number }[];
-  };
-  crossCheckTasks: { id: number; name: string }[];
-  crossCheckModal: 'distribution' | 'completion' | null;
+type Stats = {
+  activeStudentCount: number;
+  studentCount: number;
+  countries: any[];
 };
+type Props = CoursePageProps;
 
-class ScorePage extends React.Component<Props, State> {
-  state: State = {
-    isLoading: false,
-    students: [],
-    expelledStudent: null,
-    crossCheckModal: null,
-    crossCheckTasks: [],
-    stats: {
-      studentCount: 0,
-      activeStudentCount: 0,
-      countries: [],
-    },
-  };
+function Page(props: Props) {
+  const courseId = props.course.id;
 
-  private courseService: CourseService;
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const [students, setStudents] = useState([] as StudentDetails[]);
+  const [stats, setStats] = useState(null as Stats | null);
+  const [crossCheckTasks, setCrossCheckTasks] = useState([] as CourseTask[]);
+  const [crossCheckModal, setCrossCheckModal] = useState(null as string | null);
+  const [expelledStudent, setExpelledStudent] = useState(null as Partial<StudentDetails> | null);
 
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-    await this.loadStudents();
-    const tasks = await this.courseService.getCourseTasks();
-    const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
-    this.setState({ crossCheckTasks, isLoading: false });
-  }
-
-  render() {
-    const { expelledStudent } = this.state;
-    const { getFieldDecorator: field } = this.props.form;
-
-    return (
-      <>
-        <Header title="Course Students" username={this.props.session.githubId} courseName={this.props.course.name} />
-        <Spin spinning={this.state.isLoading}>
-          <Statistic
-            className="m-3"
-            title="Active Students"
-            value={this.state.stats.activeStudentCount}
-            suffix={`/ ${this.state.stats.studentCount}`}
-          />
-
-          <Table
-            className="m-3"
-            pagination={false}
-            size="small"
-            rowKey="name"
-            dataSource={this.state.stats.countries}
-            columns={[
-              { title: 'Country', dataIndex: 'name' },
-              { title: 'Active Students', dataIndex: 'count' },
-              { title: 'Total Students', dataIndex: 'totalCount' },
-            ]}
-          />
-          <Divider dashed />
-          <StudentExpelModal
-            onCancel={() => this.setState({ expelledStudent: null })}
-            onOk={() => {
-              const { expelledStudent } = this.state;
-              const students = this.state.students.map(s =>
-                expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
-              );
-              this.setState({ students, expelledStudent: null });
-            }}
-            githubId={expelledStudent?.githubId}
-            visible={!!expelledStudent}
-            courseId={this.props.course.id}
-          />
-          <Modal
-            title="Choose Task"
-            visible={!!this.state.crossCheckModal}
-            okText="Submit"
-            okButtonProps={{ type: 'danger' }}
-            onOk={this.handleCrossCheckSubmit}
-            onCancel={this.handleCrossCheckCancel}
-          >
-            <Form layout="vertical">
-              <Spin spinning={this.state.isLoading}>
-                <Row gutter={24}>
-                  <Col span={24}>
-                    <Form.Item label="Task">
-                      {field('courseTaskId', {
-                        rules: [{ required: true, message: 'Please select a task' }],
-                      })(
-                        <Select>
-                          {this.state.crossCheckTasks.map(task => (
-                            <Select.Option key={task.id} value={task.id}>
-                              {task.name}
-                            </Select.Option>
-                          ))}
-                        </Select>,
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Spin>
-            </Form>
-          </Modal>
-          <Row type="flex" justify="end" className="m-3">
-            {this.props.session.isAdmin && (
-              <>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleCreateRepos}>
-                  Create Repos
-                </Button>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleCrossCheckDistribution}>
-                  Cross-Check Distribution
-                </Button>
-                <Button style={{ marginLeft: 8 }} onClick={this.handleCrossCheckCompletion}>
-                  Cross-Check Completion
-                </Button>
-              </>
-            )}
-          </Row>
-          <Table<StudentDetails>
-            bordered
-            className="m-3"
-            pagination={{ pageSize: 100 }}
-            size="small"
-            rowKey="githubId"
-            rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
-            dataSource={this.state.students}
-            columns={[
-              {
-                title: 'Github',
-                dataIndex: 'githubId',
-                sorter: stringSorter('githubId'),
-                width: 120,
-                key: 'githubId',
-                render: (value: string) => <GithubUserLink value={value} />,
-                ...getColumnSearchProps('githubId'),
-              },
-              {
-                title: 'Name',
-                dataIndex: 'name',
-                width: 200,
-                sorter: stringSorter('name'),
-                ...getColumnSearchProps('name'),
-              },
-              {
-                title: 'Mentor',
-                dataIndex: 'mentor.githubId',
-                key: 'mentor.githubId',
-                width: 100,
-                render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
-                ...getColumnSearchProps('mentor.githubId'),
-              },
-              {
-                title: 'Location',
-                dataIndex: 'locationName',
-                key: 'locationName',
-                width: 120,
-                sorter: stringSorter('locationName'),
-                ...getColumnSearchProps('locationName'),
-              },
-              {
-                title: 'Country',
-                dataIndex: 'countryName',
-                key: 'countryName',
-                width: 80,
-                sorter: stringSorter('countryName'),
-                ...getColumnSearchProps('countryName'),
-              },
-              {
-                title: 'Screening Interview',
-                dataIndex: 'interviews',
-                width: 50,
-                render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
-              },
-              {
-                title: 'Repository',
-                dataIndex: 'repository',
-                key: 'repository',
-                width: 80,
-                render: value => (value ? <a href={value}>Link</a> : null),
-              },
-              {
-                title: 'Total',
-                dataIndex: 'totalScore',
-                key: 'totalScore',
-                width: 80,
-                sorter: numberSorter('totalScore'),
-                render: value => <Text strong>{value}</Text>,
-              },
-              {
-                title: 'Actions',
-                dataIndex: 'actions',
-                render: (_, record: StudentDetails) => (
-                  <>
-                    {!record.repository && record.isActive && (
-                      <Button
-                        style={{ marginRight: '8px' }}
-                        type="dashed"
-                        onClick={() => this.handleCreateRepo(record)}
-                      >
-                        Create Repo
-                      </Button>
-                    )}
-                    {record.isActive && (
-                      <Button type="dashed" onClick={() => this.setState({ expelledStudent: record })}>
-                        Expel
-                      </Button>
-                    )}
-                  </>
-                ),
-              },
-            ]}
-          />
-        </Spin>
-        <style jsx>{styles}</style>
-      </>
-    );
-  }
-
-  private async handleCreateRepo({ githubId }: StudentDetails) {
-    try {
-      this.setState({ isLoading: true });
-      const { repository } = await this.courseService.createRepository(githubId);
-      const students = this.state.students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      this.setState({ students, isLoading: false });
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-      this.setState({ isLoading: false });
-    }
-  }
-
-  private handleCrossCheckDistribution = () => {
-    this.setState({ crossCheckModal: 'distribution' });
-  };
-
-  private handleCrossCheckCompletion = () => {
-    this.setState({ crossCheckModal: 'completion' });
-  };
-
-  private handleCrossCheckCancel = () => {
-    this.setState({ crossCheckModal: null });
-  };
-
-  private handleCrossCheckSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
-        return;
-      }
-      try {
-        if (this.state.crossCheckModal === 'distribution') {
-          await this.courseService.createCrossCheckDistribution(values.courseTaskId);
-        } else {
-          await this.courseService.createCrossCheckCompletion(values.courseTaskId);
-        }
-        this.props.form.resetFields();
-        message.success('Cross-check distrubtion has been created');
-        this.setState({ crossCheckModal: null });
-      } catch (e) {
-        message.error('An error occurred.');
-      }
-    });
-  };
-
-  private async loadStudents() {
-    const courseStudents = await this.courseService.getCourseStudentsWithDetails();
+  const loadStudents = useCallback(async () => {
+    const courseStudents = await service.getCourseStudentsWithDetails();
     let activeStudentCount = 0;
     const countries: Record<string, { count: number; totalCount: number }> = {};
 
@@ -317,29 +47,228 @@ class ScorePage extends React.Component<Props, State> {
         countries[countryName].count++;
       }
     }
-
-    this.setState({
-      students: courseStudents,
-      stats: {
-        activeStudentCount,
-        studentCount: courseStudents.length,
-        countries: _.keys(countries).map(k => ({
-          name: k,
-          count: countries[k].count,
-          totalCount: countries[k].totalCount,
-        })),
-      },
+    setStudents(courseStudents);
+    setStats({
+      activeStudentCount,
+      studentCount: courseStudents.length,
+      countries: _.keys(countries).map(k => ({
+        name: k,
+        count: countries[k].count,
+        totalCount: countries[k].totalCount,
+      })),
     });
-  }
+  }, [courseId]);
 
-  private handleCreateRepos = () => {
+  useAsync(async () => {
+    await loadStudents();
+    const tasks = await service.getCourseTasks();
+    const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
+    setCrossCheckTasks(crossCheckTasks);
+    setLoading(false);
+  }, [courseId]);
+
+  const handleExpel = record => setExpelledStudent(record);
+
+  const handleCreateRepo = async ({ githubId }: StudentDetails) => {
     try {
-      this.courseService.createRepositories();
+      setLoading(true);
+      const { repository } = await service.createRepository(githubId);
+      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+      setStudents(newStudents);
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCrossCheckDistribution = () => setCrossCheckModal('distribution');
+  const handleCrossCheckCompletion = () => setCrossCheckModal('completion');
+  const handleCrossCheckCancel = () => setCrossCheckModal(null);
+
+  const handleCreateRepos = () => {
+    try {
+      service.createRepositories();
       message.info('The job for creating repositories has been submitted');
     } catch (e) {
       message.error('An error occured. Please try later.');
     }
   };
+
+  const handleModalSubmit = async (values: any) => {
+    try {
+      if (crossCheckModal === 'distribution') {
+        await service.createCrossCheckDistribution(values.courseTaskId);
+      } else {
+        await service.createCrossCheckCompletion(values.courseTaskId);
+      }
+      form.resetFields();
+      message.success('Cross-check distrubtion has been created');
+      setCrossCheckModal(null);
+    } catch (e) {
+      message.error('An error occurred.');
+    }
+  };
+
+  const renderModal = modalData => {
+    return (
+      <ModalForm
+        form={form}
+        getInitialValues={getInitialValues}
+        data={modalData}
+        title="Cross-Check"
+        submit={handleModalSubmit}
+        cancel={handleCrossCheckCancel}
+      >
+        <Spin spinning={loading}>
+          <Row gutter={24}>
+            <Col span={24}>
+              <CourseTaskSelect data={crossCheckTasks} />
+            </Col>
+          </Row>
+        </Spin>
+      </ModalForm>
+    );
+  };
+
+  return (
+    <div>
+      <Header username={props.session.githubId} />
+      <Layout.Content style={{ margin: 8 }}>
+        <Spin spinning={loading}>
+          <Statistic
+            className="m-3"
+            title="Active Students"
+            value={stats?.activeStudentCount}
+            suffix={`/ ${stats?.studentCount}`}
+          />
+          <Divider dashed />
+          <Row justify="end" className="m-3">
+            {props.session.isAdmin && (
+              <>
+                <Button style={{ marginLeft: 8 }} onClick={handleCreateRepos}>
+                  Create Repos
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckDistribution}>
+                  Cross-Check Distribution
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckCompletion}>
+                  Cross-Check Completion
+                </Button>
+              </>
+            )}
+          </Row>
+          <Table
+            rowKey="id"
+            pagination={{ pageSize: 100 }}
+            size="small"
+            dataSource={students}
+            columns={getColumns(handleCreateRepo, handleExpel)}
+          />
+        </Spin>
+        <StudentExpelModal
+          onCancel={() => setExpelledStudent(null)}
+          onOk={() => {
+            const newStudents = students.map(s =>
+              expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
+            );
+            setStudents(newStudents);
+            setExpelledStudent(null);
+          }}
+          githubId={expelledStudent?.githubId}
+          visible={!!expelledStudent}
+          courseId={courseId}
+        />
+        {renderModal(crossCheckModal)}
+      </Layout.Content>
+      <style jsx>{styles}</style>
+    </div>
+  );
+}
+
+function getColumns(handleCreateRepo: any, handleExpel: any) {
+  return [
+    {
+      title: 'Github',
+      dataIndex: 'githubId',
+      sorter: stringSorter('githubId'),
+      width: 120,
+      key: 'githubId',
+      render: (value: string) => <GithubUserLink value={value} />,
+      ...getColumnSearchProps('githubId'),
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      width: 200,
+      sorter: stringSorter('name'),
+      ...getColumnSearchProps('name'),
+    },
+    {
+      title: 'Mentor',
+      dataIndex: ['mentor', 'githubId'],
+      width: 100,
+      render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
+      ...getColumnSearchProps('mentor.githubId'),
+    },
+    {
+      title: 'Location',
+      dataIndex: 'locationName',
+      width: 120,
+      sorter: stringSorter('locationName'),
+      ...getColumnSearchProps('locationName'),
+    },
+    {
+      title: 'Country',
+      dataIndex: 'countryName',
+      key: 'countryName',
+      width: 80,
+      sorter: stringSorter('countryName'),
+      ...getColumnSearchProps('countryName'),
+    },
+    {
+      title: 'Screening Interview',
+      dataIndex: 'interviews',
+      width: 50,
+      render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
+    },
+    {
+      title: 'Repository',
+      dataIndex: 'repository',
+      width: 80,
+      render: value => (value ? <a href={value}>Link</a> : null),
+    },
+    {
+      title: 'Total',
+      dataIndex: 'totalScore',
+      key: 'totalScore',
+      width: 80,
+      sorter: numberSorter('totalScore'),
+      render: value => <Text strong>{value}</Text>,
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
+      render: (_, record: StudentDetails) => (
+        <>
+          {!record.repository && record.isActive && (
+            <Button style={{ marginRight: '8px' }} type="dashed" onClick={() => handleCreateRepo(record)}>
+              Create Repo
+            </Button>
+          )}
+          {record.isActive && (
+            <Button type="dashed" onClick={() => handleExpel()}>
+              Expel
+            </Button>
+          )}
+        </>
+      ),
+    },
+  ];
+}
+
+function getInitialValues(modalData) {
+  return modalData;
 }
 
 const styles = css`
@@ -348,4 +277,4 @@ const styles = css`
   }
 `;
 
-export default withCourseData(withSession(Form.create()(ScorePage)));
+export default withCourseData(withSession(Page));

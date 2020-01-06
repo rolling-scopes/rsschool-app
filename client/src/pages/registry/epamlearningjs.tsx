@@ -1,13 +1,10 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Checkbox, Col, Input, message, Result, Row, Typography } from 'antd';
+import { Button, Checkbox, Form, Col, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
 import { LocationSelect } from 'components/LocationSelect';
 import withSession from 'components/withSession';
 import * as React from 'react';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
-
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from '../../configs/registry';

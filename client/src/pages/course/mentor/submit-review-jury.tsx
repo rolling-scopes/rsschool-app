@@ -17,8 +17,7 @@ function Page(props: CoursePageProps) {
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
   useAsync(async () => {
-    const courseTasks = (await courseService.getCourseTasks())
-      .filter(task => task.checker === 'jury');
+    const courseTasks = (await courseService.getCourseTasks()).filter(task => task.checker === 'jury');
 
     setCourseTasks(courseTasks);
   }, []);

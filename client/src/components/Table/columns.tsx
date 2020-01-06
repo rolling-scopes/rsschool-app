@@ -15,7 +15,13 @@ export function getColumnSearchProps(dataIndex: string, label?: string) {
           onChange={e => setSelectedKeys([e.target.value])}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
-        <Button onClick={confirm} type="primary" icon={<SearchOutlined />} size="small" style={{ width: 90, marginRight: 8 }}>
+        <Button
+          onClick={confirm}
+          type="primary"
+          icon={<SearchOutlined />}
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
           Search
         </Button>
         <Button onClick={clearFilters} size="small" style={{ width: 90 }}>

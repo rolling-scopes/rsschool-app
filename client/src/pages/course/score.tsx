@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Table, Typography, Button, Popover, Spin, Switch } from 'antd';
-import { Header, withSession, GithubAvatar } from 'components';
+import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
+import { GithubAvatar, Header, withSession } from 'components';
+import { dateRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import { getColumnSearchProps, stringSorter, dateRenderer, numberSorter } from 'components/Table';
-import { CourseTask, CourseService, StudentScore } from 'services/course';
+import { useEffect, useMemo, useState } from 'react';
+import { CourseService, CourseTask, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 
-export function ScorePage(props: CoursePageProps) {
-  const courseService = new CourseService(props.course.id);
+export function Page(props: CoursePageProps) {
+  const courseService = useMemo(() => new CourseService(props.course.id), []);
+
   const [loading, setLoading] = useState(false);
   const [activeOnly, setActiveOnly] = useState(true);
   const [students, setStudents] = useState([] as StudentScore[]);
@@ -30,6 +31,8 @@ export function ScorePage(props: CoursePageProps) {
     );
   }, []);
 
+  const columns = useMemo(() => getColumns(courseTasks), [courseTasks]);
+
   const handleActiveOnlyChange = async () => {
     const value = !activeOnly;
     setActiveOnly(value);
@@ -46,97 +49,101 @@ export function ScorePage(props: CoursePageProps) {
   const courseId = props.course.id;
   const csvEnabled =
     isAdmin || isHirer || roles[courseId] === 'coursemanager' || coursesRoles?.[courseId]?.includes('manager');
-  // const columnWidth = 90;
+  const columnWidth = 90;
   // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
-  // const tableWidth = this.getColumns().length * columnWidth + 800;
+  const tableWidth = columns.length * columnWidth + 800;
   return (
     <>
       <Header title="Score" username={props.session.githubId} courseName={props.course.name} />
-      <Spin spinning={loading}>
-        <div className="d-flex justify-content-between align-items-center m-2">
-          <div>
-            <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
-            <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
-          </div>
-          <Text mark>Score is refreshed every 5 minutes</Text>
-          {csvEnabled && (
-            <Button
-              icon={<FileExcelOutlined />}
-              onClick={() => (window.location.href = `/api/course/${props.course.id}/students/score/csv`)}
-            >
-              Export CSV
-            </Button>
-          )}
-        </div>
+      <Layout.Content style={{ margin: 8 }}>
+        <Spin spinning={loading}>
+          <Row style={{ margin: '8px 0' }} justify="space-between">
+            <div>
+              <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+              <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
+            </div>
+            <Text mark>Score is refreshed every 5 minutes</Text>
+            {csvEnabled && (
+              <Button
+                icon={<FileExcelOutlined />}
+                onClick={() => (window.location.href = `/api/course/${props.course.id}/students/score/csv`)}
+              >
+                Export CSV
+              </Button>
+            )}
+          </Row>
 
-        <Table<StudentScore>
-          className="m-3 table-score"
-          bordered
-          style={{ overflowY: 'scroll' }}
-          pagination={{ pageSize: 100 }}
-          size="small"
-          rowKey="githubId"
-          rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
-          dataSource={students}
-          columns={[
-            {
-              title: '#',
-              fixed: 'left',
-              dataIndex: 'rank',
-              width: 50,
-              sorter: numberSorter('rank'),
-            },
-            {
-              title: 'Github',
-              fixed: 'left',
-              dataIndex: 'githubId',
-              sorter: stringSorter('githubId'),
-              width: 150,
-              render: (value: string) => (
-                <div className="d-flex flex-row">
-                  <GithubAvatar githubId={value} size={24} />
-                  &nbsp;
-                  <a target="_blank" href={`https://github.com/${value}`}>
-                    {value}
-                  </a>
-                </div>
-              ),
-              ...getColumnSearchProps('githubId'),
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              width: 150,
-              sorter: stringSorter('name'),
-              render: (value: any, record: StudentScore) => (
-                <a href={`/profile?githubId=${record.githubId}`}>{value}</a>
-              ),
-              ...getColumnSearchProps('name'),
-            },
-            {
-              title: 'Location',
-              dataIndex: 'locationName',
-              width: 150,
-              sorter: stringSorter('locationName'),
-              ...getColumnSearchProps('locationName'),
-            },
-            {
-              title: 'Total',
-              dataIndex: 'totalScore',
-              width: 80,
-              sorter: numberSorter('totalScore'),
-              render: value => <Text strong>{value}</Text>,
-            },
-            ...getColumns(courseTasks),
-            {
-              title: 'Mentor',
-              dataIndex: 'mentor.githubId',
-              render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
-              ...getColumnSearchProps('mentor.githubId'),
-            },
-          ]}
-        />
-      </Spin>
+          <Table<StudentScore>
+            className="table-score"
+            showHeader
+            scroll={{ x: tableWidth, y: 'calc(100vh - 240px)' as any }}
+            pagination={{ pageSize: 100 }}
+            rowKey="githubId"
+            rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
+            dataSource={students}
+            columns={[
+              {
+                title: '#',
+                fixed: 'left',
+                dataIndex: 'rank',
+                key: 'rank',
+                width: 50,
+                sorter: numberSorter('rank'),
+              },
+              {
+                title: 'Github',
+                fixed: 'left',
+                key: 'githubId',
+                dataIndex: 'githubId',
+                sorter: stringSorter('githubId'),
+                width: 150,
+                render: (value: string) => (
+                  <div>
+                    <GithubAvatar githubId={value} size={24} />
+                    &nbsp;
+                    <a target="_blank" href={`https://github.com/${value}`}>
+                      {value}
+                    </a>
+                  </div>
+                ),
+                ...getColumnSearchProps('githubId'),
+              },
+              {
+                title: 'Name',
+                dataIndex: 'name',
+                width: 150,
+                sorter: stringSorter('name'),
+                render: (value: any, record: StudentScore) => (
+                  <a href={`/profile?githubId=${record.githubId}`}>{value}</a>
+                ),
+                ...getColumnSearchProps('name'),
+              },
+              {
+                title: 'Location',
+                dataIndex: 'locationName',
+                width: 150,
+                sorter: stringSorter('locationName'),
+                ...getColumnSearchProps('locationName'),
+              },
+              {
+                title: 'Total',
+                dataIndex: 'totalScore',
+                width: 80,
+                sorter: numberSorter('totalScore'),
+                render: value => <Text strong>{value}</Text>,
+              },
+              ...columns,
+              {
+                title: 'Mentor',
+                dataIndex: ['mentor', 'githubId'],
+                width: 150,
+                render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
+                ...getColumnSearchProps('mentor.githubId'),
+              },
+            ]}
+          />
+        </Spin>
+      </Layout.Content>
       <style jsx>{styles}</style>
     </>
   );
@@ -172,7 +179,7 @@ function getColumns(courseTasks: any[]) {
         </div>
       );
     },
-    width: 120,
+    width: 100,
     className: 'align-right',
     render: (_: any, d: StudentScore) => {
       const currentTask = d.taskResults.find((taskResult: any) => taskResult.courseTaskId === task.courseTaskId);
@@ -181,17 +188,6 @@ function getColumns(courseTasks: any[]) {
   }));
   return columns;
 }
-
-// private handleActiveOnlyChange = async () => {
-//   const activeOnly = !this.state.activeOnly;
-//   this.setState({ activeOnly, isLoading: true });
-//   try {
-//     const courseScore = await this.courseService.getCourseScore(activeOnly);
-//     this.setState({ students: courseScore, isLoading: false });
-//   } catch (err) {
-//     this.setState({ isLoading: false });
-//   }
-// };
 
 const styles = css`
   :global(.rs-table-row-disabled) {
@@ -206,4 +202,4 @@ const styles = css`
   }
 `;
 
-export default withCourseData(withSession(ScorePage));
+export default withCourseData(withSession(Page));

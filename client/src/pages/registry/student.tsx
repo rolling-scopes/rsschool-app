@@ -45,37 +45,34 @@ function Page(props: Props & { courseAlias?: string }) {
     setInitialData(profile.user);
   }, []);
 
-  const handleSubmit = useCallback(
-    () => async (model: any) => {
-      const { comment, location, courseId } = model;
-      const registryModel = {
-        type: TYPES.STUDENT,
-        courseId,
-        comment,
-      };
-      const userModel = {
-        locationId: location.key ? location.key : undefined,
-        locationName: !location.key ? model.otherLocationName : location.label,
-        primaryEmail: model.primaryEmail,
-        firstName: model.firstName,
-        lastName: model.lastName,
-      };
+  const handleSubmit = useCallback(async (model: any) => {
+    const { comment, location, courseId } = model;
+    const registryModel = {
+      type: TYPES.STUDENT,
+      courseId,
+      comment,
+    };
+    const userModel = {
+      locationId: location.key ? location.key : undefined,
+      locationName: !location.key ? model.otherLocationName : location.label,
+      primaryEmail: model.primaryEmail,
+      firstName: model.firstName,
+      lastName: model.lastName,
+    };
 
-      try {
-        const userResponse = await axios.post('/api/profile/registry', userModel);
-        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-        if (githubId) {
-          await axios.post('/api/registry', registryModel);
-          setSubmitted(true);
-        } else {
-          message.error('Invalid github id');
-        }
-      } catch (e) {
-        message.error('An error occured. Please try later.');
+    try {
+      const userResponse = await axios.post('/api/profile/registry', userModel);
+      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+      if (githubId) {
+        await axios.post('/api/registry', registryModel);
+        setSubmitted(true);
+      } else {
+        message.error('Invalid github id');
       }
-    },
-    [],
-  );
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    }
+  }, []);
 
   let content: React.ReactNode;
   const location = form.getFieldValue('location');

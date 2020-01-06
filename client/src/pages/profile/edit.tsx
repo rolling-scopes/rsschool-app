@@ -8,7 +8,7 @@ import { emailPattern, phonePattern, englishNamePattern, epamEmailPattern } from
 import { LocationSelect } from 'components/LocationSelect';
 import { TSHIRT_SIZES } from 'services/reference-data';
 
-type Props = { session: Session; }
+type Props = { session: Session };
 
 type State = {
   isLoading: boolean;
