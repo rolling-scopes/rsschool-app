@@ -1,121 +1,82 @@
-import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
-import { Header, withSession, StudentSearch } from 'components';
+import { Button, Form, message } from 'antd';
+import { PageLayoutSimple, StudentSearch, withSession } from 'components';
+import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
-import * as React from 'react';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
-import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
+import { sortTasksByEndDate } from 'services/rules';
 
 type Props = CoursePageProps;
 
-type State = {
-  courseTasks: CourseTask[];
-  isLoading: boolean;
-  courseTaskId: number | null;
-};
+function Page(props: Props) {
+  const courseId = props.course.id;
 
-class TaskScorePage extends React.Component<Props, State> {
-  state: State = {
-    isLoading: false,
-    courseTasks: [],
-    courseTaskId: null,
-  };
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
-  private courseService: CourseService;
-
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    const courseTasks = (await this.courseService.getCourseTasks())
+  useAsync(async () => {
+    const courseTasks = (await courseService.getCourseTasks())
       .sort(sortTasksByEndDate)
       .filter(task => task.checker === 'jury');
 
-    this.setState({ courseTasks });
-  }
+    setCourseTasks(courseTasks);
+  });
 
-  render() {
-    const { getFieldDecorator: field, getFieldValue } = this.props.form;
-    const courseTaskId = getFieldValue('courseTaskId');
-    const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
-    const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
-    return (
-      <>
-        <Header
-          title="Submit Review By Jury"
-          courseName={this.props.course.name}
-          username={this.props.session.githubId}
-        />
-        <Col className="m-2" sm={12}>
-          <Form onSubmit={this.handleSubmit} layout="vertical">
-            <Form.Item label="Task">
-              {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
-                <Select size="large" placeholder="Select task" onChange={this.handleTaskChange}>
-                  {this.state.courseTasks.map(task => (
-                    <Select.Option key={task.id} value={task.id}>
-                      {task.name}
-                    </Select.Option>
-                  ))}
-                </Select>,
-              )}
-            </Form.Item>
-            <Form.Item label="Student">
-              {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={this.props.course.id} />,
-              )}
-            </Form.Item>
-            <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
-              {field('score', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please enter task score',
-                  },
-                ],
-              })(<InputNumber size="large" step={1} min={0} max={maxScore} />)}
-            </Form.Item>
-            <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
-            <Button size="large" type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </>
-    );
-  }
-
-  private handleTaskChange = async (value: number) => {
+  const handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
-    const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
+    const courseTask = courseTasks.find(t => t.courseTaskId === courseTaskId);
     if (courseTask == null) {
       return;
     }
-    this.setState({ courseTaskId });
+    setCourseTaskId(courseTaskId);
   };
 
-  private handleSubmit = async (e: any) => {
-    e.preventDefault();
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err || this.state.isLoading) {
-        return;
-      }
-      try {
-        this.setState({ isLoading: true });
+  const handleSubmit = async (values: any) => {
+    if (loading) {
+      return;
+    }
+    try {
+      setLoading(true);
 
-        const { githubId, courseTaskId, ...data } = values;
-        await this.courseService.postStudentScore(githubId, courseTaskId, data);
+      const { githubId, courseTaskId, ...data } = values;
+      await courseService.postStudentScore(githubId, courseTaskId, data);
 
-        this.setState({ isLoading: false });
-        message.success('Score has been submitted.');
-        this.props.form.resetFields();
-      } catch (e) {
-        this.setState({ isLoading: false });
-        message.error('An error occured. Please try later.');
-      }
-    });
+      message.success('Score has been submitted.');
+      form.resetFields();
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
+  const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
+  return (
+    <PageLayoutSimple
+      loading={loading}
+      title="Submit Review By Jury"
+      githubId={props.session.githubId}
+      courseName={props.course.name}
+    >
+      <Form onFinish={handleSubmit} layout="vertical">
+        <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
+        <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
+          <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={props.course.id} />
+        </Form.Item>
+        <ScoreInput maxScore={maxScore} />
+        <CommentInput />
+        <Button size="large" type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form>
+    </PageLayoutSimple>
+  );
 }
 
-export default withCourseData(withSession(TaskScorePage));
+export default withCourseData(withSession(Page));
