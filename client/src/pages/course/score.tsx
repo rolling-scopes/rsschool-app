@@ -5,7 +5,6 @@ import { Header, withSession, GithubAvatar } from 'components';
 import withCourseData from 'components/withCourseData';
 import { getColumnSearchProps, stringSorter, dateRenderer, numberSorter } from 'components/Table';
 import { CourseTask, CourseService, StudentScore } from 'services/course';
-import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
@@ -22,9 +21,7 @@ export function ScorePage(props: CoursePageProps) {
     setLoading(true);
     Promise.all([courseService.getCourseScore(activeOnly), courseService.getCourseTasks()]).then(
       ([courseScore, courseTasks]) => {
-        const sortedTasks = courseTasks
-          .filter(task => !!task.studentEndDate || props.course.completed)
-          .sort(sortTasksByEndDate);
+        const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
 
         setLoading(false);
         setStudents(courseScore);

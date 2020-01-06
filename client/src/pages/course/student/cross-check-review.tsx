@@ -1,15 +1,14 @@
 import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
 import { Button, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
 import { PageLayout, PersonSelect } from 'components';
-import { CommentInput, ScoreInput, CourseTaskSelect } from 'components/Forms';
+import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
-import withSession, { Session } from 'components/withSession';
+import withSession from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { Course, StudentBasic } from 'services/models';
+import { CoursePageProps, StudentBasic } from 'services/models';
 
-type Props = { session: Session; course: Course };
 type Assignment = { student: StudentBasic; url: string };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -77,7 +76,7 @@ function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignment }) {
   );
 }
 
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState(false);

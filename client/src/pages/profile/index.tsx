@@ -7,20 +7,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 
-import {
-  Button,
-  Descriptions,
-  Table,
-  Statistic,
-  Col,
-  List,
-  Typography,
-  Divider,
-  Row,
-  Card,
-  Tag,
-  Result,
-} from 'antd';
+import { Button, Descriptions, Table, Statistic, Col, List, Typography, Divider, Row, Card, Tag, Result } from 'antd';
 import { Rating } from 'components';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
@@ -30,7 +17,7 @@ import withSession, { Session } from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { UserService, UserFull, ProfileResponse, ResponseCourse, ResponseMentor, ResponseStudent } from 'services/user';
 import { formatDate } from 'services/formatter';
-import { SKILLS_LEVELS, CODING_LEVELS } from '../course/mentor/stage-interview-feedback';
+import { SKILLS_LEVELS, CODING_LEVELS } from '../../services/reference-data/stageInterview';
 
 type Props = {
   router: NextRouter;
@@ -205,59 +192,61 @@ class ProfilePage extends React.Component<Props, State> {
         );
       });
     const emptyValue = '(Empty)';
-    return <>
-      <Row justify="space-between">
-        <GithubAvatar size={96} githubId={profile.githubId} />
-        {!user ? (
-          <Button type="primary" onClick={() => this.props.router.push('/profile/edit')} color="primary">
-            Edit Profile
-          </Button>
-        ) : (
-          <Button
-            onClick={() => this.props.router.push(`/private-feedback?githubId=${user.githubId}&userId=${user.id}`)}
-          >
-            Leave Private Feedback
-          </Button>
-        )}
-      </Row>
-      <Descriptions
-        size="small"
-        bordered
-        column={1}
-        title={
-          <span>
-            <IdcardOutlined /> General Info
-          </span>
-        }
-      >
-        <Descriptions.Item label="Name">
-          {profile.firstName} {profile.lastName}
-        </Descriptions.Item>
-        <Descriptions.Item label="Primary Email">{profile.primaryEmail}</Descriptions.Item>
-        <Descriptions.Item label="Location">{profile.locationName}</Descriptions.Item>
-        <Descriptions.Item label="Estimated english level">
-          {profile.englishLevel ? profile.englishLevel.toUpperCase() : null}
-        </Descriptions.Item>
-        <Descriptions.Item label="Github">
-          <a href={`https://github.com/${profile.githubId}`}>{`https://github.com/${profile.githubId}`}</a>
-        </Descriptions.Item>
+    return (
+      <>
+        <Row justify="space-between">
+          <GithubAvatar size={96} githubId={profile.githubId} />
+          {!user ? (
+            <Button type="primary" onClick={() => this.props.router.push('/profile/edit')} color="primary">
+              Edit Profile
+            </Button>
+          ) : (
+            <Button
+              onClick={() => this.props.router.push(`/private-feedback?githubId=${user.githubId}&userId=${user.id}`)}
+            >
+              Leave Private Feedback
+            </Button>
+          )}
+        </Row>
+        <Descriptions
+          size="small"
+          bordered
+          column={1}
+          title={
+            <span>
+              <IdcardOutlined /> General Info
+            </span>
+          }
+        >
+          <Descriptions.Item label="Name">
+            {profile.firstName} {profile.lastName}
+          </Descriptions.Item>
+          <Descriptions.Item label="Primary Email">{profile.primaryEmail}</Descriptions.Item>
+          <Descriptions.Item label="Location">{profile.locationName}</Descriptions.Item>
+          <Descriptions.Item label="Estimated english level">
+            {profile.englishLevel ? profile.englishLevel.toUpperCase() : null}
+          </Descriptions.Item>
+          <Descriptions.Item label="Github">
+            <a href={`https://github.com/${profile.githubId}`}>{`https://github.com/${profile.githubId}`}</a>
+          </Descriptions.Item>
 
-        <Descriptions.Item label="External Accounts">
-          {externalAccounts.length ? externalAccounts : emptyValue}
-        </Descriptions.Item>
-        <Descriptions.Item label="Education">{education.length ? education : emptyValue}</Descriptions.Item>
-        <Descriptions.Item label="Employment history">
-          {employmentHistory.length ? employmentHistory : emptyValue}
-        </Descriptions.Item>
-      </Descriptions>
-      <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
-        <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
-        <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
-        <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
-        <Descriptions.Item label="Telegram">{profile.contactsTelegram}</Descriptions.Item>
-        <Descriptions.Item label="EPAM Email">{profile.contactsEpamEmail}</Descriptions.Item>
-      </Descriptions>
-    </>;
+          <Descriptions.Item label="External Accounts">
+            {externalAccounts.length ? externalAccounts : emptyValue}
+          </Descriptions.Item>
+          <Descriptions.Item label="Education">{education.length ? education : emptyValue}</Descriptions.Item>
+          <Descriptions.Item label="Employment history">
+            {employmentHistory.length ? employmentHistory : emptyValue}
+          </Descriptions.Item>
+        </Descriptions>
+        <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
+          <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
+          <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
+          <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
+          <Descriptions.Item label="Telegram">{profile.contactsTelegram}</Descriptions.Item>
+          <Descriptions.Item label="EPAM Email">{profile.contactsEpamEmail}</Descriptions.Item>
+        </Descriptions>
+      </>
+    );
   }
 
   private renderStudentMentor(student: ResponseStudent) {

@@ -2,13 +2,12 @@ import { UserOutlined } from '@ant-design/icons';
 import { Button, Col, Comment, Divider, Form, Input, message, Row, Select, Typography } from 'antd';
 import { PageLayout } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { Session } from 'components/withSession';
+import withSession from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask } from 'services/course';
-import { Course } from 'services/models';
+import { CoursePageProps } from 'services/models';
 import { urlPattern } from 'services/validators';
 
-type Props = { session: Session; course: Course };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 function CrossCheckComments({ comments }: { comments: any[] }) {
@@ -35,7 +34,7 @@ function CrossCheckComments({ comments }: { comments: any[] }) {
   );
 }
 
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);

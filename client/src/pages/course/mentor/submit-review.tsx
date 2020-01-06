@@ -1,16 +1,13 @@
 import { Button, Form, message } from 'antd';
-import { PageLayoutSimple, UserSearch, withSession, Session } from 'components';
+import { PageLayoutSimple, Session, UserSearch, withSession } from 'components';
 import { CommentInput, CourseTaskSelect, GithubPrInput, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
-import { sortTasksByEndDate } from 'services/rules';
 
-type Props = CoursePageProps;
-
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const { session, course } = props;
 
   const courseId = course.id;
@@ -25,20 +22,22 @@ function Page(props: Props) {
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
   useAsync(async () => {
-    const courseTasks = (await courseService.getCourseTasks())
-      .sort(sortTasksByEndDate)
-      .filter(
-        task =>
-          isSumbitedByPowerAdmin(session, courseId)(task) ||
-          isSumbitedByTaskOwner(githubId)(task) ||
-          isSumbitedByMentor(session, courseId)(task),
-      );
+    const [tasks, allStudents] = await Promise.all([
+      courseService.getCourseTasks(),
+      courseService.getAllMentorStudents().catch(() => ({ students: [] })),
+    ]);
 
-    const { students } = await courseService.getAllMentorStudents().catch(() => ({ students: [] }));
+    const courseTasks = tasks.filter(
+      task =>
+        isSumbitedByPowerAdmin(session, courseId)(task) ||
+        isSumbitedByTaskOwner(githubId)(task) ||
+        isSumbitedByMentor(session, courseId)(task),
+    );
+    const { students } = allStudents;
 
     setStudents(students);
     setCourseTasks(courseTasks);
-  });
+  }, []);
 
   const loadStudents = async (searchText: string) => {
     const task = courseTasks.find(t => t.id === courseTaskId);

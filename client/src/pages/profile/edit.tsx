@@ -1,19 +1,14 @@
 import * as React from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Row, Col, Result, Input, Typography, Button, message, Select } from 'antd';
+import { Row, Col, Result, Form, Input, Typography, Button, message, Select } from 'antd';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
-import { FormComponentProps } from 'antd/lib/form';
 import { UserService, UserFull } from 'services/user';
 import { emailPattern, phonePattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { LocationSelect } from 'components/LocationSelect';
 import { TSHIRT_SIZES } from 'services/reference-data';
 
-type Props = {
-  session: Session;
-} & FormComponentProps;
+type Props = { session: Session; }
 
 type State = {
   isLoading: boolean;
@@ -326,4 +321,4 @@ class EditProfilePage extends React.Component<Props, State> {
   }
 }
 
-export default withSession(Form.create()(EditProfilePage));
+export default withSession(EditProfilePage);

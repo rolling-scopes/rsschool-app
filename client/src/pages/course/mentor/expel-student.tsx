@@ -1,16 +1,14 @@
 import { Button, Form, Input, message, Typography } from 'antd';
 import { PageLayoutSimple, PersonSelect } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { Session } from 'components/withSession';
+import withSession from 'components/withSession';
 import { uniqBy } from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { Course, StudentBasic } from 'services/models';
+import { CoursePageProps, StudentBasic } from 'services/models';
 
-type Props = { session: Session; course: Course };
-
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const [form] = Form.useForm();

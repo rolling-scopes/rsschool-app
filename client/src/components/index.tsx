@@ -7,6 +7,7 @@ export * from './GithubUserLink';
 export * from './Header';
 export * from './Help';
 export * from './LoadingScreen';
+export * from './LocationSelect';
 export * from './PageLayout';
 export * from './PersonSelect';
 export * from './Rating';

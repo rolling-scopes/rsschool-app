@@ -1,18 +1,14 @@
-import { Form, Button, Col, Input, message, Row, Typography } from 'antd';
-import { withSession, PageLayoutSimple } from 'components';
+import { Button, Col, Form, Input, message, Row, Typography } from 'antd';
+import { PageLayoutSimple, withSession } from 'components';
+import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { sortTasksByEndDate } from 'services/rules';
 import { notUrlPattern, udemyCertificateId } from 'services/validators';
-import { CourseTaskSelect } from 'components/Forms';
 
-type Props = CoursePageProps;
-
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const [form] = Form.useForm();
@@ -22,58 +18,31 @@ function Page(props: Props) {
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
   useAsync(async () => {
-    const courseTasks = await courseService.getCourseTasks();
+    const tasks = await courseService.getCourseTasks();
 
-    const filteredCourseTasks = courseTasks
-      .sort(sortTasksByEndDate)
-      .filter(
-        task =>
-          task.studentEndDate &&
-          (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
-          task.verification === 'auto' &&
-          (task.type === 'htmlcssacademy' || task.type === 'codewars' || task.type === 'jstask'),
-      );
-    setCourseTasks(filteredCourseTasks);
-  });
+    const courseTasks = tasks.filter(
+      task =>
+        task.studentEndDate &&
+        (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
+        task.verification === 'auto' &&
+        (task.type === 'htmlcssacademy' || task.type === 'codewars' || task.type === 'jstask'),
+    );
+    setCourseTasks(courseTasks);
+  }, []);
 
   const handleSubmit = async (values: any) => {
-    const { courseTaskId, ...other } = values;
+    const { courseTaskId } = values;
     const task = courseTasks.find(t => t.courseTaskId === courseTaskId);
     if (!task) {
       return;
     }
     try {
-      let data: object = {};
-      if (task.type === 'htmlcssacademy') {
-        if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
-          message.error('Enter any Account / Cerficate Id');
-          return;
-        }
-
-        setLoading(true);
-        data = {
-          codecademy: other.codecademy,
-          htmlacademy: other.htmlacademy,
-          udemy: [other.udemy1, other.udemy2].filter(it => !!it),
-        };
-      } else if (task.type === 'codewars') {
-        if (!values.codewars) {
-          message.error('Enter Account');
-          return;
-        }
-
-        setLoading(true);
-        data = {
-          codewars: other.codewars,
-          deadline: task.studentEndDate,
-        };
-      } else if (task.type === 'jstask') {
-        data = {
-          githubRepoName: task.githubRepoName,
-          sourceGithubRepoUrl: task.sourceGithubRepoUrl,
-        };
+      const data = getSubmitData(task, values);
+      if (data == null) {
+        return;
       }
 
+      setLoading(true);
       await courseService.postTaskVerification(courseTaskId, data);
       message.success('The task has been submitted for verification and it will be checked soon.');
       form.resetFields();
@@ -85,7 +54,6 @@ function Page(props: Props) {
   };
 
   const task = courseTasks.find(t => t.courseTaskId === courseTaskId);
-
   return (
     <PageLayoutSimple
       loading={loading}
@@ -200,3 +168,45 @@ function Page(props: Props) {
 }
 
 export default withCourseData(withSession(Page));
+
+function getSubmitData(task: CourseTask, values: any) {
+  let data: object = {};
+  switch (task.type) {
+    case 'htmlcssacademy':
+      if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
+        message.error('Enter any Account / Cerficate Id');
+        return null;
+      }
+
+      data = {
+        codecademy: values.codecademy,
+        htmlacademy: values.htmlacademy,
+        udemy: [values.udemy1, values.udemy2].filter(it => !!it),
+      };
+      break;
+
+    case 'codewars':
+      if (!values.codewars) {
+        message.error('Enter Account');
+        return null;
+      }
+
+      data = {
+        codewars: values.codewars,
+        deadline: task.studentEndDate,
+      };
+      break;
+
+    case 'jstask':
+      data = {
+        githubRepoName: task.githubRepoName,
+        sourceGithubRepoUrl: task.sourceGithubRepoUrl,
+      };
+      break;
+
+    default:
+      return null;
+  }
+
+  return data;
+}

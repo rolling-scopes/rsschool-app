@@ -6,11 +6,8 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { sortTasksByEndDate } from 'services/rules';
 
-type Props = CoursePageProps;
-
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -21,11 +18,10 @@ function Page(props: Props) {
 
   useAsync(async () => {
     const courseTasks = (await courseService.getCourseTasks())
-      .sort(sortTasksByEndDate)
       .filter(task => task.checker === 'jury');
 
     setCourseTasks(courseTasks);
-  });
+  }, []);
 
   const handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
