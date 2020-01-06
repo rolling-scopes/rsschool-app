@@ -13,7 +13,7 @@ import * as React from 'react';
 
 const { Sider } = Layout;
 
-type State = { collapsed: boolean; };
+type State = { collapsed: boolean };
 
 class AdminSider extends React.Component<any, any> {
   state: State = {
@@ -29,8 +29,7 @@ class AdminSider extends React.Component<any, any> {
   render() {
     const menuIconProps = {
       onClick: this.toggle,
-      className: 'trigger',
-      style: { fontSize: '20px', lineHeight: '30px', padding: '20px 32px' },
+      style: { fontSize: '20px', display: 'block', lineHeight: '30px', padding: '20px 32px' },
     };
     return (
       <Sider trigger={null} collapsible collapsed={this.state.collapsed} theme="dark">

@@ -1,7 +1,4 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Input, InputNumber, message, Select } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
 import { Header, withSession, StudentSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
@@ -9,7 +6,7 @@ import { CourseService, CourseTask } from 'services/course';
 import { sortTasksByEndDate } from 'services/rules';
 import { CoursePageProps } from 'services/models';
 
-type Props = CoursePageProps & FormComponentProps;
+type Props = CoursePageProps;
 
 type State = {
   courseTasks: CourseTask[];
@@ -121,4 +118,4 @@ class TaskScorePage extends React.Component<Props, State> {
   };
 }
 
-export default withCourseData(withSession(Form.create()(TaskScorePage)));
+export default withCourseData(withSession(TaskScorePage));

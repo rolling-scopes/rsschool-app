@@ -15,7 +15,7 @@ export class LocationSelect extends React.PureComponent<Props> {
     return (
       <Select labelInValue showSearch optionFilterProp="children" placeholder="Select..." {...this.props}>
         {options.map((location, i) => (
-          <Select.Option key={location.id || i} value={location.id}>
+          <Select.Option key={location.id || i} value={location.id!}>
             {location.name}
           </Select.Option>
         ))}

@@ -1,14 +1,13 @@
 import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
-import { Button, Col, Form, message, Row, Select, Spin, Timeline, Typography } from 'antd';
-import { GithubAvatar, PageLayout } from 'components';
-import { CommentInput, ScoreInput } from 'components/Forms';
+import { Button, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
+import { PageLayout, PersonSelect } from 'components';
+import { CommentInput, ScoreInput, CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import withSession, { Session } from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { formatDateTime } from 'services/formatter';
-import { Course } from 'services/models';
-import { StudentBasic } from '../../../../../common/models';
+import { Course, StudentBasic } from 'services/models';
 
 type Props = { session: Session; course: Course };
 type Assignment = { student: StudentBasic; url: string };
@@ -147,23 +146,14 @@ function Page(props: Props) {
       <Row gutter={24} style={{ margin: 16 }}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <Form.Item name="courseTaskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-              <Select onChange={handleTaskChange}>
-                {courseTasks.map(t => (
-                  <Select.Option value={t.id} key={t.id}>
-                    {t.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
+            <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-              <Select onChange={handleStudentChange} disabled={!courseTaskId}>
-                {assignments.map(({ student }) => (
-                  <Select.Option value={student.githubId} key={student.githubId}>
-                    <GithubAvatar size={24} githubId={student.githubId} /> {student.name} ({student.githubId})
-                  </Select.Option>
-                ))}
-              </Select>
+              <PersonSelect
+                keyField="githubId"
+                onChange={handleStudentChange}
+                disabled={!courseTaskId}
+                data={assignments.map(({ student }) => student)}
+              />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
             <ScoreInput maxScore={maxScore} />

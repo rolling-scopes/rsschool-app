@@ -46,7 +46,6 @@ export class UserSearch extends React.Component<Props, State> {
         showArrow={this.props.defaultValues ? Boolean(this.props.defaultValues.length) : false}
         filterOption={false}
         onSearch={this.handleSearch}
-        size="large"
         placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? 'Select...' : 'Search...'}
         notFoundContent={null}
       >

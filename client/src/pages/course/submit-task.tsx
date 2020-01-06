@@ -1,7 +1,4 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, message, Row, Select, Typography } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession } from 'components';
 import withCourseData from 'components/withCourseData';
 import * as React from 'react';
@@ -10,7 +7,7 @@ import { CoursePageProps } from 'services/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { notUrlPattern, udemyCertificateId } from 'services/validators';
 
-type Props = CoursePageProps & FormComponentProps;
+type Props = CoursePageProps;
 
 type State = {
   courseTasks: CourseTask[];
