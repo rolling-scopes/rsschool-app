@@ -75,7 +75,7 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
           onOk={this.addStudent}
           onCancel={this.reset}
         >
-          <Row type="flex">
+          <Row>
             <StudentSearch onChange={this.handleStudentSelect} courseId={courseId} />
           </Row>
         </Modal>
