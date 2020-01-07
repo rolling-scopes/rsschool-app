@@ -1,5 +1,5 @@
-import { Button, Col, Divider, Form, Layout, message, Row, Spin, Statistic, Table, Typography } from 'antd';
-import { GithubUserLink, Header, StudentExpelModal, withSession } from 'components';
+import { Button, Col, Divider, Form, message, Row, Spin, Statistic, Table, Typography } from 'antd';
+import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
 import { CourseTaskSelect, ModalForm } from 'components/Forms';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -60,6 +60,7 @@ function Page(props: Props) {
   }, [courseId]);
 
   useAsync(async () => {
+    setLoading(true);
     await loadStudents();
     const tasks = await service.getCourseTasks();
     const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
@@ -137,57 +138,52 @@ function Page(props: Props) {
   };
 
   return (
-    <div>
-      <Header username={props.session.githubId} />
-      <Layout.Content style={{ margin: 8 }}>
-        <Spin spinning={loading}>
-          <Statistic
-            className="m-3"
-            title="Active Students"
-            value={stats?.activeStudentCount}
-            suffix={`/ ${stats?.studentCount}`}
-          />
-          <Divider dashed />
-          <Row justify="end" className="m-3">
-            {props.session.isAdmin && (
-              <>
-                <Button style={{ marginLeft: 8 }} onClick={handleCreateRepos}>
-                  Create Repos
-                </Button>
-                <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckDistribution}>
-                  Cross-Check Distribution
-                </Button>
-                <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckCompletion}>
-                  Cross-Check Completion
-                </Button>
-              </>
-            )}
-          </Row>
-          <Table
-            rowKey="id"
-            pagination={{ pageSize: 100 }}
-            size="small"
-            dataSource={students}
-            columns={getColumns(handleCreateRepo, handleExpel)}
-          />
-        </Spin>
-        <StudentExpelModal
-          onCancel={() => setExpelledStudent(null)}
-          onOk={() => {
-            const newStudents = students.map(s =>
-              expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
-            );
-            setStudents(newStudents);
-            setExpelledStudent(null);
-          }}
-          githubId={expelledStudent?.githubId}
-          visible={!!expelledStudent}
-          courseId={courseId}
-        />
-        {renderModal(crossCheckModal)}
-      </Layout.Content>
+    <PageLayout loading={loading} githubId={props.session.githubId}>
+      <Statistic
+        className="m-3"
+        title="Active Students"
+        value={stats?.activeStudentCount}
+        suffix={`/ ${stats?.studentCount}`}
+      />
+      <Divider dashed />
+      <Row justify="end" className="m-3">
+        {props.session.isAdmin && (
+          <>
+            <Button style={{ marginLeft: 8 }} onClick={handleCreateRepos}>
+              Create Repos
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckDistribution}>
+              Cross-Check Distribution
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckCompletion}>
+              Cross-Check Completion
+            </Button>
+          </>
+        )}
+      </Row>
+      <Table
+        rowKey="id"
+        pagination={{ pageSize: 100 }}
+        size="small"
+        dataSource={students}
+        columns={getColumns(handleCreateRepo, handleExpel)}
+      />
+      <StudentExpelModal
+        onCancel={() => setExpelledStudent(null)}
+        onOk={() => {
+          const newStudents = students.map(s =>
+            expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
+          );
+          setStudents(newStudents);
+          setExpelledStudent(null);
+        }}
+        githubId={expelledStudent?.githubId}
+        visible={!!expelledStudent}
+        courseId={courseId}
+      />
+      {renderModal(crossCheckModal)}
       <style jsx>{styles}</style>
-    </div>
+    </PageLayout>
   );
 }
 

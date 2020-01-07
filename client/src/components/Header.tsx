@@ -37,7 +37,7 @@ const styles = css`
     font-size: 120%;
     align-self: center;
   }
-  @media all and (max-width: 480px) {
+  @media all and (max-width: 540px) {
     .title {
       width: 100%;
       order: 3;

@@ -1,18 +1,5 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Popconfirm,
-  Row,
-  Select,
-  Table,
-  TimePicker,
-  Layout,
-} from 'antd';
-import { GithubUserLink, Header, UserSearch, withSession } from 'components';
+import { Button, Col, DatePicker, Form, Input, message, Popconfirm, Row, Select, Table, TimePicker } from 'antd';
+import { GithubUserLink, UserSearch, withSession, PageLayout } from 'components';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -45,6 +32,7 @@ function Page(props: Props) {
   const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseEvent[]);
   const [stages, setStages] = useState([] as Stage[]);
   const [events, setEvents] = useState([] as Event[]);
@@ -52,6 +40,7 @@ function Page(props: Props) {
   const [modalAction, setModalAction] = useState('update');
 
   useAsync(async () => {
+    setLoading(true);
     const [data, stages, events] = await Promise.all([
       service.getCourseEvents(),
       new StageService().getCourseStages(courseId),
@@ -60,6 +49,7 @@ function Page(props: Props) {
     setData(data);
     setStages(stages);
     setEvents(events);
+    setLoading(false);
   }, [courseId]);
 
   const handleTimeZoneChange = (timeZone: string) => {
@@ -175,36 +165,33 @@ function Page(props: Props) {
   };
 
   return (
-    <div>
-      <Header username={props.session.githubId} />
-      <Layout.Content style={{ margin: 16 }}>
-        <Button type="primary" onClick={handleAddItem}>
-          Add Event
-        </Button>
-        <Select
-          style={{ marginLeft: 16 }}
-          placeholder="Please select a timezone"
-          defaultValue={timeZone}
-          onChange={handleTimeZoneChange}
-        >
-          {Object.entries(TIMEZONES).map(tz => (
-            <Select.Option key={tz[0]} value={tz[0]}>
-              {tz[0]}
-            </Select.Option>
-          ))}
-        </Select>
-        <Table
-          style={{ margin: '16px 0' }}
-          rowKey="id"
-          bordered
-          pagination={{ pageSize: 100 }}
-          size="small"
-          dataSource={data}
-          columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
-        />
-      </Layout.Content>
+    <PageLayout loading={loading} githubId={props.session.githubId}>
+      <Button type="primary" onClick={handleAddItem}>
+        Add Event
+      </Button>
+      <Select
+        style={{ marginLeft: 16 }}
+        placeholder="Please select a timezone"
+        defaultValue={timeZone}
+        onChange={handleTimeZoneChange}
+      >
+        {Object.entries(TIMEZONES).map(tz => (
+          <Select.Option key={tz[0]} value={tz[0]}>
+            {tz[0]}
+          </Select.Option>
+        ))}
+      </Select>
+      <Table
+        style={{ margin: '16px 0' }}
+        rowKey="id"
+        bordered
+        pagination={{ pageSize: 100 }}
+        size="small"
+        dataSource={data}
+        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
+      />
       {renderModal(modalData!)}
-    </div>
+    </PageLayout>
   );
 }
 

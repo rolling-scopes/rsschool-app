@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Button, Col, Form, DatePicker, Popconfirm, InputNumber, message, Radio, Row, Select, Table } from 'antd';
-import { Header, withSession } from 'components';
+import { withSession, PageLayout } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { CourseService, CourseTask } from 'services/course';
@@ -22,6 +22,7 @@ function Page(props: Props) {
   const courseId = props.course.id;
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseTask[]);
   const [stages, setStages] = useState([] as Stage[]);
   const [tasks, setTasks] = useState([] as Task[]);
@@ -29,6 +30,7 @@ function Page(props: Props) {
   const [modalAction, setModalAction] = useState('update');
 
   useAsync(async () => {
+    setLoading(true);
     const [data, stages, tasks] = await Promise.all([
       service.getCourseTasks(),
       new StageService().getCourseStages(courseId),
@@ -37,6 +39,7 @@ function Page(props: Props) {
     setData(data);
     setStages(stages);
     setTasks(tasks);
+    setLoading(false);
   }, [courseId]);
 
   const handleAddItem = () => {
@@ -164,8 +167,7 @@ function Page(props: Props) {
   };
 
   return (
-    <div>
-      <Header username={props.session.githubId} />
+    <PageLayout loading={loading} githubId={props.session.githubId}>
       <Button type="primary" onClick={handleAddItem}>
         Add Task
       </Button>
@@ -176,9 +178,8 @@ function Page(props: Props) {
         dataSource={data}
         columns={getColumns(handleEditItem, handleDeleteItem, { tasks, stages })}
       />
-
       {renderModal(modalData!)}
-    </div>
+    </PageLayout>
   );
 }
 
@@ -201,7 +202,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { tasks, stages 
     },
     { title: 'Score Weight', dataIndex: 'scoreWeight' },
     { title: 'Who Checks', dataIndex: 'checker' },
-    { title: 'Task Owner', dataIndex: ['taskOwner','githubId'] },
+    { title: 'Task Owner', dataIndex: ['taskOwner', 'githubId'] },
     {
       title: 'Actions',
       dataIndex: 'actions',
