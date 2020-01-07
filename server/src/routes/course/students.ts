@@ -15,7 +15,8 @@ export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => 
 
 export const getStudentsWithDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
-  const students = await courseService.getStudentsWithDetails(courseId);
+  const status: string = ctx.query.status;
+  const students = await courseService.getStudentsWithDetails(courseId, status === 'active');
   setResponse(ctx, OK, students);
 };
 

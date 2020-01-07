@@ -1,10 +1,8 @@
 import { Form, Modal } from 'antd';
 import * as React from 'react';
-import { FormInstance } from 'antd/lib/form';
 
 type Props = {
   data: any;
-  form?: FormInstance;
   title?: string;
   submit: (arg: any) => void;
   cancel: (arg: any) => void;

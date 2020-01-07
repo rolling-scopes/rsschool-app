@@ -83,6 +83,12 @@ function Page(props: Props) {
     setModalData(null);
   };
 
+  const handleDistribute = async (record: CourseTask) => {
+    setLoading(true);
+    await service.createInterviewDistribution(record.id);
+    setLoading(false);
+  };
+
   const renderModal = (modalData: Partial<CourseTask>) => {
     if (modalData == null) {
       return null;
@@ -178,14 +184,14 @@ function Page(props: Props) {
         pagination={{ pageSize: 100 }}
         size="small"
         dataSource={data}
-        columns={getColumns(handleEditItem, handleDeleteItem, { tasks, stages })}
+        columns={getColumns({ handleEditItem, handleDeleteItem, handleDistribute }, { tasks, stages })}
       />
       {renderModal(modalData!)}
     </PageLayout>
   );
 }
 
-function getColumns(handleEditItem: any, handleDeleteItem: any, { tasks, stages }) {
+function getColumns(actions: { handleEditItem: any; handleDeleteItem: any; handleDistribute: any }, { tasks, stages }) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -211,16 +217,21 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { tasks, stages 
       render: (_, record: CourseTask) => (
         <>
           <span>
-            <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
+            <a onClick={() => actions.handleEditItem(record)}>Edit</a>{' '}
           </span>
           <span>
             <Popconfirm
-              onConfirm={() => handleDeleteItem(record.id)}
+              onConfirm={() => actions.handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
               <a href="#">Delete</a>
             </Popconfirm>
-          </span>
+          </span>{' '}
+          {record.type === 'interview' && (
+            <span>
+              <a onClick={() => actions.handleDistribute(record)}>Distribute</a>{' '}
+            </span>
+          )}
         </>
       ),
     },

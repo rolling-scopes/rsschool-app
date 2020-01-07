@@ -27,7 +27,6 @@ import {
   getStageInterviews,
   postStageInterview,
   postStageInterviews,
-  getStudentInterviews,
   getStageInterviewStudents,
   getAvailableStudentsForInterviews,
   postStageInterviewFeedback,
@@ -35,11 +34,13 @@ import {
   deleteStageInterview,
 } from './stageInterview';
 
+import { getStudentInterviews } from './interviews';
+
 import {
   getCourseTasks,
   getCourseTasksWithTaskCheckers,
   getCourseTasksForTaskOwner,
-  postShuffleCourseTask,
+  postCourseTaskDistribution,
 } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
@@ -114,7 +115,7 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasksTaskOwner', taskOwnerGuard, getCourseTasksForTaskOwner(logger));
   router.get('/tasksCheckers', courseGuard, getCourseTasksWithTaskCheckers(logger));
-  router.post('/task/:courseTaskId/shuffle', adminGuard, postShuffleCourseTask(logger));
+  router.post('/task/:courseTaskId/distribution', adminGuard, postCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', adminGuard, postTaskSolutionDistribution(logger));
   router.post('/task/:courseTaskId/cross-check/completion', adminGuard, postTaskSolutionCompletion(logger));

@@ -5,6 +5,7 @@ import {
   CodeTwoTone,
   DashboardTwoTone,
   FireTwoTone,
+  AudioTwoTone,
   // HighlightTwoTone,
   // InteractionTwoTone,
   PlayCircleTwoTone,
@@ -134,6 +135,16 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
+  {
+    name: () => (
+      <>
+        <AudioTwoTone /> Interviews
+      </>
+    ),
+    getLink: (course: Course) => `/course/student/interviews?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },

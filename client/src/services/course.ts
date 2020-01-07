@@ -11,7 +11,7 @@ export interface CourseTask {
   name: string;
   maxScore: number | null;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test';
+  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test' | 'interview';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   scoreWeight: number;
@@ -112,8 +112,10 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseStudentsWithDetails() {
-    const result = await this.axios.get<{ data: StudentDetails[] }>(`/students/details`);
+  async getCourseStudentsWithDetails(activeOnly?: boolean) {
+    const result = await this.axios.get<{ data: StudentDetails[] }>(
+      `/students/details?status=${activeOnly ? 'active' : 'all'}`,
+    );
     return result.data.data;
   }
 
@@ -295,6 +297,11 @@ export class CourseService {
     return result.data;
   }
 
+  async createInterviewDistribution(courseTaskId: number) {
+    const result = await this.axios.post(`/task/${courseTaskId}/distribution`);
+    return result.data;
+  }
+
   async createCrossCheckCompletion(courseTaskId: number) {
     const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
     return result.data;
@@ -323,6 +330,11 @@ export class CourseService {
   async getStudentScore(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/score`);
     return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
+  }
+
+  async getStudentInterviews(githubId: string) {
+    const result = await this.axios.get(`/student/${githubId}/interviews`);
+    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }
 
   isPowerUser(courseId: number, session: Session) {
