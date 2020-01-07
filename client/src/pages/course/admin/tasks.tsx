@@ -82,6 +82,9 @@ function Page(props: Props) {
   };
 
   const renderModal = (modalData: Partial<CourseTask>) => {
+    if (modalData == null) {
+      return null;
+    }
     return (
       <ModalForm
         form={form}
@@ -198,7 +201,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { tasks, stages 
     },
     { title: 'Score Weight', dataIndex: 'scoreWeight' },
     { title: 'Who Checks', dataIndex: 'checker' },
-    { title: 'Task Owner', dataIndex: 'taskOwner.githubId' },
+    { title: 'Task Owner', dataIndex: ['taskOwner','githubId'] },
     {
       title: 'Actions',
       dataIndex: 'actions',
