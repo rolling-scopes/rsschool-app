@@ -4,17 +4,19 @@ import { FormInstance } from 'antd/lib/form';
 
 type Props = {
   data: any;
+  form?: FormInstance;
   title?: string;
-  form: FormInstance;
   submit: (arg: any) => void;
   cancel: (arg: any) => void;
   getInitialValues: (arg: any) => any;
   children: any;
 };
+
 export function ModalForm(props: Props) {
   if (props.data == null) {
     return null;
   }
+  const [form] = Form.useForm();
   const initialValues = props.getInitialValues(props.data);
   return (
     <Modal
@@ -22,10 +24,20 @@ export function ModalForm(props: Props) {
       visible={true}
       title={props.title}
       okText="Save"
-      onOk={props.submit}
-      onCancel={props.cancel}
+      onOk={async e => {
+        e.preventDefault();
+        const values = await form.validateFields().catch(() => null);
+        if (values == null) {
+          return;
+        }
+        props.submit(values);
+      }}
+      onCancel={e => {
+        props.cancel(e);
+        form.resetFields();
+      }}
     >
-      <Form form={props.form} initialValues={initialValues} layout="vertical">
+      <Form form={form} initialValues={initialValues} layout="vertical">
         {props.children}
       </Form>
     </Modal>

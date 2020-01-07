@@ -19,7 +19,6 @@ function Page(props: Props) {
   const [courses, setCourses] = useState([] as Course[]);
   const [modalData, setModalData] = useState(null as Partial<Stage> | null);
   const [modalAction, setModalAction] = useState('update');
-  const [form] = Form.useForm();
   const service = new StageService();
 
   useAsync(async () => {
@@ -39,13 +38,8 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = useCallback(
-    async (event: React.FormEvent) => {
-      event.preventDefault();
+    async (values: any) => {
       try {
-        const values = await form.validateFields().catch(() => null);
-        if (values == null) {
-          return;
-        }
         const record = createRecord(values);
         const item =
           modalAction === 'update'
@@ -65,7 +59,6 @@ function Page(props: Props) {
   const renderModal = useCallback(() => {
     return (
       <ModalForm
-        form={form}
         data={modalData}
         title="Stage"
         submit={handleModalSubmit}

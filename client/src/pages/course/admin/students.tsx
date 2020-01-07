@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, message, Row, Spin, Statistic, Table, Typography } from 'antd';
+import { Button, Col, Divider, message, Row, Spin, Statistic, Table, Typography } from 'antd';
 import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
 import { CourseTaskSelect, ModalForm } from 'components/Forms';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
@@ -22,7 +22,6 @@ type Props = CoursePageProps;
 function Page(props: Props) {
   const courseId = props.course.id;
 
-  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
@@ -96,19 +95,13 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (event: React.FormEvent) => {
+  const handleModalSubmit = async (values: any) => {
     try {
-      event.preventDefault();
-      const values = await form.validateFields().catch(() => null);
-      if (values == null) {
-        return;
-      }
       if (crossCheckModal === 'distribution') {
         await service.createCrossCheckDistribution(values.courseTaskId);
       } else {
         await service.createCrossCheckCompletion(values.courseTaskId);
       }
-      form.resetFields();
       message.success('Cross-check distrubtion has been created');
       setCrossCheckModal(null);
     } catch (e) {
@@ -119,7 +112,6 @@ function Page(props: Props) {
   const renderModal = modalData => {
     return (
       <ModalForm
-        form={form}
         getInitialValues={getInitialValues}
         data={modalData}
         title="Cross-Check"

@@ -26,7 +26,6 @@ const timeZoneRenderer = timeZone => value => {
 };
 
 function Page(props: Props) {
-  const [form] = Form.useForm();
   const courseId = props.course.id;
   const timeZoneOffset = moment().format('Z');
   const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
@@ -84,12 +83,7 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const values = await form.validateFields().catch(() => null);
-    if (values == null) {
-      return;
-    }
+  const handleModalSubmit = async (values: any) => {
     const data = createRecord(values, courseId);
     modalAction === 'update'
       ? await service.updateCourseEvent(modalData!.id!, data)
@@ -105,7 +99,6 @@ function Page(props: Props) {
     }
     return (
       <ModalForm
-        form={form}
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course Event"

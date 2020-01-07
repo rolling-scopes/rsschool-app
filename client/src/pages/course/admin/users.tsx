@@ -15,7 +15,6 @@ type Props = CoursePageProps;
 function Page(props: Props) {
   const courseId = props.course.id;
 
-  const [form] = Form.useForm();
   const userService = new UserService();
   const [loading, setLoading] = useState(false);
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -57,7 +56,6 @@ function Page(props: Props) {
   const renderModal = modalData => {
     return (
       <ModalForm
-        form={form}
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course User"

@@ -248,7 +248,7 @@ export async function getStudentsByMentorId(mentorId: number) {
   return students;
 }
 
-export async function getInterviewStudentsByMentorId(mentorId: number) {
+export async function getStageInterviewStudentsByMentorId(mentorId: number) {
   const records = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
     .innerJoinAndSelect('stageInterview.mentor', 'mentor')
@@ -604,4 +604,18 @@ export async function getTaskSolutionCheckers(courseTaskId: number) {
     studentId: record.studentId,
     score: Number(record.score),
   }));
+}
+
+export async function getInterviewStudentsByMentorId(courseTaskId: number, mentorId: number) {
+  const records = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoin('student.user', 'user')
+    .innerJoin('student.taskChecker', 'taskChecker')
+    .addSelect(getPrimaryUserFields())
+    .where('"taskChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+    .andWhere('"taskChecker"."mentorId" = :mentorId', { mentorId })
+    .getMany();
+
+  const students = records.map(record => convertToStudentBasic(record));
+  return students;
 }

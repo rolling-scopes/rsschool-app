@@ -13,12 +13,11 @@ import { UserService } from 'services/user';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
 import moment from 'moment-timezone';
 import { useAsync } from 'react-use';
-import { ModalForm, ScoreInput } from 'components/Forms';
+import { ModalForm } from 'components/Forms';
 
 type Props = CoursePageProps;
 
 function Page(props: Props) {
-  const [form] = Form.useForm();
   const courseId = props.course.id;
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -90,12 +89,13 @@ function Page(props: Props) {
     }
     return (
       <ModalForm
-        form={form}
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course Task"
         submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
+        cancel={() => {
+          setModalData(null);
+        }}
       >
         <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
           <Select placeholder="Please select a task">
@@ -140,7 +140,9 @@ function Page(props: Props) {
         </Form.Item>
         <Row gutter={24}>
           <Col span={12}>
-            <ScoreInput />
+            <Form.Item name="maxScore" label="Score" rules={[{ required: true, message: 'Please enter max score' }]}>
+              <InputNumber step={1} min={0} />
+            </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item

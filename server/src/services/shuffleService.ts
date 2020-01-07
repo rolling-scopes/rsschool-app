@@ -10,9 +10,8 @@ export const shuffleCourseMentors = (logger: ILogger) => async (courseId: number
 
   const mentors = await mentorRepository
     .createQueryBuilder('mentor')
-    .innerJoinAndSelect('mentor.course', 'course')
     .innerJoinAndSelect('mentor.students', 'students')
-    .where('mentor.course.id = :courseId', { courseId })
+    .where('mentor."courseId" = :courseId', { courseId })
     .getMany();
 
   if (mentors === undefined) {

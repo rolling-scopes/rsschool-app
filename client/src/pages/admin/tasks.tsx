@@ -1,6 +1,5 @@
-import { Button, Checkbox, Form, Input, Layout, message, Radio, Select, Table } from 'antd';
+import { Button, Modal, Checkbox, Form, Input, Layout, message, Radio, Select, Table } from 'antd';
 import { AdminSider, Header, Session, withSession } from 'components';
-import { ModalForm } from 'components/Forms';
 import { boolRenderer, stringSorter, tagsRenderer } from 'components/Table';
 import { union } from 'lodash';
 import { useCallback, useState } from 'react';
@@ -34,13 +33,8 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = useCallback(
-    async (event: React.FormEvent) => {
-      event.preventDefault();
+    async (values: any) => {
       try {
-        const values = await form.validateFields().catch(() => null);
-        if (values == null) {
-          return;
-        }
         const record = createRecord(values);
         const item =
           modalAction === 'update'
@@ -58,82 +52,97 @@ function Page(props: Props) {
   );
 
   const renderModal = useCallback(() => {
+    if (modalData == null) {
+      return null;
+    }
     const isAutoTask = (form.getFieldValue('verification') || modalData?.verification) === 'auto';
     const type = form.getFieldValue('type') || modalData?.type;
     const allTags = union(...data.map(d => d.tags || []));
     return (
-      <ModalForm
-        form={form}
-        data={modalData}
+      <Modal
+        style={{ top: 20 }}
+        visible={true}
         title="Stage"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
+        okText="Save"
+        onOk={async e => {
+          e.preventDefault();
+          const values = await form.validateFields().catch(() => null);
+          if (values == null) {
+            return;
+          }
+          handleModalSubmit(values);
+        }}
+        onCancel={() => {
+          setModalData(null);
+          form.resetFields();
+        }}
       >
-        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter stage name' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="tags" label="Tags">
-          <Select mode="tags">
-            {allTags.map(tag => (
-              <Select.Option key={tag} value={tag}>
-                {tag}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="descriptionUrl"
-          label="Description URL"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter description URL',
-            },
-            {
-              message: 'Please enter valid URL',
-              pattern: urlPattern,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item name="githubPrRequired" label="Github" valuePropName="checked">
-          <Checkbox>Github Pull Request required</Checkbox>
-        </Form.Item>
-        <Form.Item name="type" label="Task Type" rules={[{ required: true, message: 'Please select a type' }]}>
-          <Select>
-            <Select.Option value="jstask">JS task</Select.Option>
-            <Select.Option value="htmltask">HTML task</Select.Option>
-            <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
-            <Select.Option value="codewars">Codewars</Select.Option>
-            <Select.Option value="test">Test</Select.Option>
-            <Select.Option value="codejam">Code Jam</Select.Option>
-            <Select.Option value="interview">Interview</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="verification" label="Verification">
-          <Radio.Group>
-            <Radio value="manual">Manual</Radio>
-            <Radio value="auto">Auto</Radio>
-          </Radio.Group>
-        </Form.Item>
-        {isAutoTask && (
-          <Form.Item name="githubRepoName" label="Expected Github Repo Name">
+        <Form form={form} initialValues={getInitialValues(modalData)} layout="vertical">
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter stage name' }]}>
             <Input />
           </Form.Item>
-        )}
-        {isAutoTask && type === 'jstask' && (
+          <Form.Item name="tags" label="Tags">
+            <Select mode="tags">
+              {allTags.map(tag => (
+                <Select.Option key={tag} value={tag}>
+                  {tag}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item
-            name="sourceGithubRepoUrl"
-            label="Source Github Repo Url"
-            rules={[{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }]}
+            name="descriptionUrl"
+            label="Description URL"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter description URL',
+              },
+              {
+                message: 'Please enter valid URL',
+                pattern: urlPattern,
+              },
+            ]}
           >
             <Input />
           </Form.Item>
-        )}
-      </ModalForm>
+
+          <Form.Item name="githubPrRequired" label="Github" valuePropName="checked">
+            <Checkbox>Github Pull Request required</Checkbox>
+          </Form.Item>
+          <Form.Item name="type" label="Task Type" rules={[{ required: true, message: 'Please select a type' }]}>
+            <Select>
+              <Select.Option value="jstask">JS task</Select.Option>
+              <Select.Option value="htmltask">HTML task</Select.Option>
+              <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
+              <Select.Option value="codewars">Codewars</Select.Option>
+              <Select.Option value="test">Test</Select.Option>
+              <Select.Option value="codejam">Code Jam</Select.Option>
+              <Select.Option value="interview">Interview</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="verification" label="Verification">
+            <Radio.Group>
+              <Radio value="manual">Manual</Radio>
+              <Radio value="auto">Auto</Radio>
+            </Radio.Group>
+          </Form.Item>
+          {isAutoTask && (
+            <Form.Item name="githubRepoName" label="Expected Github Repo Name">
+              <Input />
+            </Form.Item>
+          )}
+          {isAutoTask && type === 'jstask' && (
+            <Form.Item
+              name="sourceGithubRepoUrl"
+              label="Source Github Repo Url"
+              rules={[{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }]}
+            >
+              <Input />
+            </Form.Item>
+          )}
+        </Form>
+      </Modal>
     );
   }, [modalData, handleModalSubmit]);
 
@@ -194,6 +203,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Description URL',
       dataIndex: 'descriptionUrl',
+      width: 200,
     },
     {
       title: 'Github PR Required',

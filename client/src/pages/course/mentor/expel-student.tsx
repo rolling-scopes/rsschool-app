@@ -2,7 +2,6 @@ import { Button, Form, Input, message, Typography } from 'antd';
 import { PageLayoutSimple, PersonSelect } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { uniqBy } from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
@@ -17,11 +16,7 @@ function Page(props: CoursePageProps) {
   const [students, setStudents] = useState([] as StudentBasic[]);
 
   useAsync(async () => {
-    const [mentorStudents, interviewStudents] = await Promise.all([
-      courseService.getMentorStudents(),
-      courseService.getInterviewStudents(),
-    ]);
-    const students = uniqBy(mentorStudents.concat(interviewStudents), 'id');
+    const students = await courseService.getMentorStudents();
     const activeStudents = students.filter(student => student.isActive);
     setStudents(activeStudents);
   }, [courseId]);

@@ -13,7 +13,6 @@ const { Content } = Layout;
 type Props = { session: Session };
 
 function Page(props: Props) {
-  const [form] = Form.useForm();
   const [data, setData] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
@@ -45,14 +44,8 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = useCallback(
-    async (event: React.FormEvent) => {
-      event.preventDefault();
+    async (values: any) => {
       try {
-        const values = await form.validateFields().catch(() => null);
-        if (values == null) {
-          return;
-        }
-
         const record = createRecord(values);
         const item =
           modalAction === 'update'
@@ -73,7 +66,6 @@ function Page(props: Props) {
   const renderModal = useCallback(() => {
     return (
       <ModalForm
-        form={form}
         data={modalData}
         title="Event"
         submit={handleModalSubmit}
