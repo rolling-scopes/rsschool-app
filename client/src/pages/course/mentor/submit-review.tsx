@@ -7,9 +7,7 @@ import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
 
-function Page(props: CoursePageProps) {
-  const { session, course } = props;
-
+function Page({ session, course }: CoursePageProps) {
   const courseId = course.id;
   const { githubId } = session;
 
@@ -48,15 +46,6 @@ function Page(props: CoursePageProps) {
         );
   };
 
-  const handleTaskChange = async (value: number) => {
-    const courseTaskId = Number(value);
-    const courseTask = courseTasks.find(t => t.courseTaskId === courseTaskId);
-    if (courseTask == null) {
-      return;
-    }
-    setCourseTaskId(courseTaskId);
-  };
-
   const handleSubmit = async (values: any) => {
     if (loading) {
       return;
@@ -76,14 +65,9 @@ function Page(props: CoursePageProps) {
 
   const courseTask = courseTasks.find(t => t.id === courseTaskId);
   return (
-    <PageLayoutSimple
-      loading={loading}
-      title="Submit Review"
-      courseName={props.course.name}
-      githubId={props.session.githubId}
-    >
+    <PageLayoutSimple loading={loading} title="Submit Review" courseName={course.name} githubId={githubId}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
-        <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
+        <CourseTaskSelect data={courseTasks} onChange={setCourseTaskId} />
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
           <UserSearch defaultValues={students} disabled={!courseTaskId} searchFn={loadStudents} keyField="githubId" />
         </Form.Item>

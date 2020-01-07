@@ -17,12 +17,6 @@ const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
-const noticeStyle = {
-  lineHeight: '20px',
-  display: 'block',
-  fontStyle: 'italic',
-};
-
 function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
 
@@ -145,14 +139,11 @@ function Page(props: Props & { courseAlias?: string }) {
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
               <Form.Item
+                help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
                 name="location"
                 label="Location"
                 rules={[{ required: true, message: 'Please select city or "Other"' }]}
               >
-                <span style={noticeStyle}>
-                  We need your location for understanding audience and use it for mentor distribution. If you live close
-                  to any city from the list, please choose it.
-                </span>
                 <LocationSelect placeholder="Select city" />
               </Form.Item>
             </Col>
@@ -169,11 +160,11 @@ function Page(props: Props & { courseAlias?: string }) {
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
               <Form.Item
+                help="We will use your email only for course purposes. No spam emails."
                 name="primaryEmail"
                 label="Primary Email"
                 rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
               >
-                <span style={noticeStyle}>We will use your email only for course purposes. No spam emails.</span>
                 <Input placeholder="user@example.com" />
               </Form.Item>
             </Col>

@@ -17,19 +17,10 @@ function Page(props: CoursePageProps) {
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
   useAsync(async () => {
-    const courseTasks = (await courseService.getCourseTasks()).filter(task => task.checker === 'jury');
-
+    const data = await courseService.getCourseTasks();
+    const courseTasks = data.filter(task => task.checker === 'jury');
     setCourseTasks(courseTasks);
   }, []);
-
-  const handleTaskChange = async (value: number) => {
-    const courseTaskId = Number(value);
-    const courseTask = courseTasks.find(t => t.courseTaskId === courseTaskId);
-    if (courseTask == null) {
-      return;
-    }
-    setCourseTaskId(courseTaskId);
-  };
 
   const handleSubmit = async (values: any) => {
     if (loading) {
@@ -37,10 +28,8 @@ function Page(props: CoursePageProps) {
     }
     try {
       setLoading(true);
-
       const { githubId, courseTaskId, ...data } = values;
       await courseService.postStudentScore(githubId, courseTaskId, data);
-
       message.success('Score has been submitted.');
       form.resetFields();
     } catch (e) {
@@ -59,7 +48,7 @@ function Page(props: CoursePageProps) {
       courseName={props.course.name}
     >
       <Form onFinish={handleSubmit} layout="vertical">
-        <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
+        <CourseTaskSelect data={courseTasks} onChange={setCourseTaskId} />
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
           <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={props.course.id} />
         </Form.Item>
