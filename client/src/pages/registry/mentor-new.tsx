@@ -106,6 +106,7 @@ function Page(props: Props) {
             initialValues={getInitialValues(initialData)}
             onChange={update}
             onFinish={handleSubmit}
+            onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
           >
             <Row style={{ marginBottom: 8 }}>
               <Typography.Paragraph>

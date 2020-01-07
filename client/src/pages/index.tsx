@@ -406,7 +406,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       return null;
     }
     return (
-      <div>
+      <div style={{ margin: '16px 0' }}>
         <RegistryBanner />
       </div>
     );
