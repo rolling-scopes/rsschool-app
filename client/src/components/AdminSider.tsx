@@ -7,6 +7,7 @@ import {
   OrderedListOutlined,
   QuestionOutlined,
   TeamOutlined,
+  IdcardFilled,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import * as React from 'react';
@@ -78,6 +79,13 @@ class AdminSider extends React.Component<any, any> {
             <a href="/admin/registrations">
               <IdcardOutlined />
               <span>Registrations</span>
+            </a>
+          </Menu.Item>
+
+          <Menu.Item key="7">
+            <a href="/admin/mentor-registry">
+              <IdcardFilled />
+              <span>Mentor Registry</span>
             </a>
           </Menu.Item>
         </Menu>

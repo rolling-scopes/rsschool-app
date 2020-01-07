@@ -94,7 +94,12 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (values: any) => {
+  const handleModalSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const values = await form.validateFields().catch(() => null);
+    if (values == null) {
+      return;
+    }
     const data = createRecord(values, courseId);
     modalAction === 'update'
       ? await service.updateCourseEvent(modalData!.id!, data)

@@ -67,10 +67,7 @@ export function registryRouter(logger?: ILogger) {
 
     const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
     if (mentorRegistry == null) {
-      await getRepository(MentorRegistry).insert({
-        userId,
-        ...mentorData,
-      });
+      await getRepository(MentorRegistry).insert({ userId, ...mentorData });
     } else {
       await getRepository(MentorRegistry).update(mentorRegistry.id, mentorData);
     }
@@ -88,6 +85,29 @@ export function registryRouter(logger?: ILogger) {
     }
 
     setResponse(ctx, OK);
+  });
+
+  router.get('/mentors', adminGuard, async (ctx: Router.RouterContext) => {
+    const mentorRegistries = await getRepository(MentorRegistry)
+      .createQueryBuilder('mentorRegistry')
+      .innerJoin('mentorRegistry.user', 'user')
+      .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId', 'user.locationName'])
+      .getMany();
+    const data = mentorRegistries.map(mentorRegistry => {
+      const user = mentorRegistry.user;
+      return {
+        comment: mentorRegistry.comment,
+        englishMentoring: mentorRegistry.englishMentoring,
+        githubId: user.githubId,
+        locationName: user.locationName,
+        maxStudentsLimit: mentorRegistry.maxStudentsLimit,
+        name: `${user.firstName} ${user.lastName}`,
+        preferedCourses: mentorRegistry.preferedCourses,
+        preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
+        technicalMentoring: mentorRegistry.technicalMentoring,
+      };
+    });
+    setResponse(ctx, OK, data);
   });
 
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));

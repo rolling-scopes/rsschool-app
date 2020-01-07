@@ -140,7 +140,7 @@ function Page(props: CoursePageProps) {
             },
             {
               title: 'Last Checked Task',
-              dataIndex: 'taskResultsStats.lastUpdatedDate',
+              dataIndex: ['taskResultsStats', 'lastUpdatedDate'],
               sorter: numberSorter('taskResultsStats.lastUpdatedDate' as any),
               render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
             },
@@ -158,11 +158,9 @@ function Page(props: CoursePageProps) {
               title: 'Actions',
               dataIndex: 'actions',
               render: (_: string, mentor: MentorDetails) => (
-                <>
-                  <Button type="link" onClick={() => handleExpell(mentor)}>
-                    Expel
-                  </Button>
-                </>
+                <Button type="link" onClick={() => handleExpell(mentor)}>
+                  Expel
+                </Button>
               ),
             },
           ]}

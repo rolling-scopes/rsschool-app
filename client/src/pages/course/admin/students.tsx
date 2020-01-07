@@ -95,8 +95,13 @@ function Page(props: Props) {
     }
   };
 
-  const handleModalSubmit = async (values: any) => {
+  const handleModalSubmit = async (event: React.FormEvent) => {
     try {
+      event.preventDefault();
+      const values = await form.validateFields().catch(() => null);
+      if (values == null) {
+        return;
+      }
       if (crossCheckModal === 'distribution') {
         await service.createCrossCheckDistribution(values.courseTaskId);
       } else {
