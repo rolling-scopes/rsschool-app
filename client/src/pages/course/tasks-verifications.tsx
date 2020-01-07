@@ -1,76 +1,66 @@
 import { Table } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
-import { Header, withSession } from 'components';
+import { withSession, PageLayout } from 'components';
 import withCourseData from 'components/withCourseData';
 import { dateTimeRenderer } from 'components/Table/renderers';
-import * as React from 'react';
-import { CourseService, CourseTask } from 'services/course';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
-type Props = CoursePageProps & FormComponentProps;
+function Page(props: CoursePageProps) {
+  const courseId = props.course.id;
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-type State = {
-  data: CourseTask[];
-  isLoading: boolean;
-};
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([] as any[]);
 
-class TasksVerificationsPage extends React.Component<Props, State> {
-  state: State = {
-    isLoading: false,
-    data: [],
-  };
+  useAsync(async () => {
+    try {
+      setLoading(true);
+      const data = await courseService.getTaskVerifications();
+      setData(data);
+    } catch {
+      setLoading(false);
+    }
+  }, [courseId]);
 
-  private courseService: CourseService;
-
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    const data = await this.courseService.getTaskVerifications();
-    this.setState({ data });
-  }
-
-  render() {
-    return (
-      <>
-        <Header
-          title="Tasks Verifications"
-          courseName={this.props.course.name}
-          username={this.props.session.githubId}
-        />
-        <Table
-          size="small"
-          pagination={{ pageSize: 100 }}
-          bordered
-          columns={[
-            {
-              title: 'Date/Time',
-              dataIndex: 'createdDate',
-              render: dateTimeRenderer,
-              width: 200,
-            },
-            {
-              title: 'Task Name',
-              dataIndex: 'courseTask.task.name',
-              width: 300,
-            },
-            {
-              title: 'Score',
-              dataIndex: 'score',
-              width: 100,
-            },
-            {
-              title: 'Details',
-              dataIndex: 'details',
-            },
-          ]}
-          dataSource={this.state.data}
-        />
-      </>
-    );
-  }
+  return (
+    <PageLayout
+      loading={loading}
+      title="Tasks Verifications"
+      courseName={props.course.name}
+      githubId={props.session.githubId}
+    >
+      <Table
+        size="small"
+        pagination={{ pageSize: 100 }}
+        bordered
+        columns={[
+          {
+            title: 'Date/Time',
+            dataIndex: 'createdDate',
+            render: dateTimeRenderer,
+            width: 200,
+          },
+          {
+            title: 'Task Name',
+            dataIndex: 'courseTask.task.name',
+            width: 300,
+          },
+          {
+            title: 'Score',
+            dataIndex: 'score',
+            width: 100,
+          },
+          {
+            title: 'Details',
+            dataIndex: 'details',
+          },
+        ]}
+        dataSource={data}
+      />
+    </PageLayout>
+  );
 }
 
-export default withCourseData(withSession(TasksVerificationsPage));
+export default withCourseData(withSession(Page));

@@ -1,5 +1,6 @@
 import moment from 'moment';
-import { Tag, Icon } from 'antd';
+import { CheckCircleFilled, MinusCircleOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -19,9 +20,9 @@ export function boolRenderer(value: string) {
 
 export function boolIconRenderer(value: any) {
   return value ? (
-    <Icon title={(!!value).toString()} type="check-circle" theme="filled" />
+    <CheckCircleFilled title={(!!value).toString()} />
   ) : (
-    <Icon title={(!!value).toString()} type="minus-circle" />
+    <MinusCircleOutlined title={(!!value).toString()} />
   );
 }
 

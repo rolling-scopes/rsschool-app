@@ -1,183 +1,183 @@
-import { Button, DatePicker, Form, Input, Layout, message, Modal, Select, Table } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { Button, DatePicker, Form, Input, Layout, message, Select, Table } from 'antd';
 import { AdminSider, Header } from 'components';
+import { ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer, stringSorter } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
 import moment from 'moment';
-import * as React from 'react';
+import { useCallback, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { formatDate } from 'services/formatter';
-import { Course, PageWithModalState } from 'services/models';
+import { Course } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 
 const { Content } = Layout;
+type Props = { session: Session };
 
-type Props = { session: Session } & FormComponentProps;
+function Page(props: Props) {
+  const [data, setData] = useState([] as Stage[]);
+  const [courses, setCourses] = useState([] as Course[]);
+  const [modalData, setModalData] = useState(null as Partial<Stage> | null);
+  const [modalAction, setModalAction] = useState('update');
+  const [form] = Form.useForm();
+  const service = new StageService();
 
-interface State extends PageWithModalState<Stage> {
-  courses: Course[];
-}
+  useAsync(async () => {
+    const [stages, courses] = await Promise.all([service.getStages(), new CoursesService().getCourses()]);
+    setData(stages);
+    setCourses(courses);
+  }, []);
 
-class StagesPage extends React.Component<Props, State> {
-  readonly state: State = {
-    data: [],
-    courses: [],
-    modalData: null,
-    modalAction: 'update',
+  const handleAddItem = () => {
+    setModalData({});
+    setModalAction('create');
   };
 
-  private stageService = new StageService();
+  const handleEditItem = (record: Stage) => {
+    setModalData(record);
+    setModalAction('update');
+  };
 
-  async componentDidMount() {
-    const [data, courses] = await Promise.all([this.stageService.getStages(), new CoursesService().getCourses()]);
-    this.setState({ data: data.sort((a, b) => a.id - b.id), courses });
-  }
-
-  render() {
-    return (
-      <div>
-        <Layout style={{ minHeight: '100vh' }}>
-          <AdminSider />
-          <Layout style={{ background: '#fff' }}>
-            <Header title="Manage Stages" username={this.props.session.githubId} />
-            <Content>
-              <Button type="primary" className="mt-3 mr-3 ml-3" onClick={this.handleAddItem}>
-                Add Stage
-              </Button>
-
-              <Table
-                size="small"
-                className="m-3"
-                dataSource={this.state.data}
-                pagination={{ pageSize: 100 }}
-                rowKey="id"
-                columns={[
-                  {
-                    title: 'Id',
-                    dataIndex: 'id',
-                  },
-                  {
-                    title: 'Name',
-                    dataIndex: 'name',
-                    sorter: stringSorter<Stage>('name'),
-                  },
-                  {
-                    title: 'Course',
-                    dataIndex: 'courseId',
-                    render: idFromArrayRenderer(this.state.courses),
-                    sorter: stringSorter<Stage>('courseId'),
-                  },
-                  {
-                    title: 'Start Date',
-                    dataIndex: 'startDate',
-                    render: dateRenderer,
-                  },
-                  {
-                    title: 'End Date',
-                    dataIndex: 'endDate',
-                    render: dateRenderer,
-                  },
-                  {
-                    title: 'Actions',
-                    dataIndex: 'actions',
-                    render: (_, record) => <a onClick={() => this.handleEditItem(record)}>Edit</a>,
-                  },
-                ]}
-              />
-
-              {this.renderModal()}
-            </Content>
-          </Layout>
-        </Layout>
-      </div>
-    );
-  }
-
-  private renderModal() {
-    const { getFieldDecorator: field } = this.props.form;
-    const { courses } = this.state;
-    const modalData = this.state.modalData as Stage;
-    if (modalData == null) {
-      return null;
-    }
-    return (
-      <Modal
-        visible={!!modalData}
-        title="Stage"
-        okText="Save"
-        onOk={this.handleModalSubmit}
-        onCancel={() => this.setState({ modalData: null })}
-      >
-        <Form layout="vertical">
-          <Form.Item label="Name">
-            {field('name', {
-              initialValue: modalData.name,
-              rules: [{ required: true, message: 'Please enter stage name' }],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item label="Course">
-            {field('courseId', {
-              initialValue: modalData.courseId,
-              rules: [{ required: true, message: 'Please select a course' }],
-            })(
-              <Select placeholder="Please select a course">
-                {courses.map((course: Course) => (
-                  <Select.Option key={course.id} value={course.id}>
-                    {course.name}
-                  </Select.Option>
-                ))}
-              </Select>,
-            )}
-          </Form.Item>
-          <Form.Item label="Start Date - End Date">
-            {field('range', {
-              initialValue:
-                modalData.startDate && modalData.endDate
-                  ? [
-                      modalData.startDate ? moment(modalData.startDate) : null,
-                      modalData.endDate ? moment(modalData.endDate) : null,
-                    ]
-                  : null,
-              rules: [{ required: true, type: 'array', message: 'Please enter course start and end date' }],
-            })(<DatePicker.RangePicker />)}
-          </Form.Item>
-        </Form>
-      </Modal>
-    );
-  }
-
-  private handleAddItem = () => this.setState({ modalData: {}, modalAction: 'create' });
-
-  private handleEditItem = (record: Stage) => this.setState({ modalData: record, modalAction: 'update' });
-
-  private handleModalSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
-        return;
-      }
-      const [startDate, endDate] = values.range || [null, null];
-      const data: Partial<Stage> = {
-        name: values.name,
-        startDate: startDate ? formatDate(startDate) : null,
-        endDate: endDate ? formatDate(endDate) : null,
-        courseId: values.courseId,
-      };
+  const handleModalSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
       try {
-        const stage =
-          this.state.modalAction === 'update'
-            ? await this.stageService.updateStage(this.state.modalData!.id!, data)
-            : await this.stageService.createStage(data);
+        const values = await form.validateFields().catch(() => null);
+        if (values == null) {
+          return;
+        }
+        const record = createRecord(values);
+        const item =
+          modalAction === 'update'
+            ? await service.updateStage(modalData!.id!, record)
+            : await service.createStage(record);
         const updatedData =
-          this.state.modalAction === 'update'
-            ? this.state.data.map(d => (d.id === stage.id ? { ...d, ...stage } : d))
-            : this.state.data.concat([stage]);
-        this.setState({ modalData: null, data: updatedData });
+          modalAction === 'update' ? data.map(d => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
+        setModalData(null);
+        setData(updatedData);
       } catch (e) {
-        message.error('An error occurred. Can not save the stage.');
+        message.error('An error occurred. Please try again later.');
       }
-    });
+    },
+    [modalData, modalAction],
+  );
+
+  const renderModal = useCallback(() => {
+    return (
+      <ModalForm
+        form={form}
+        data={modalData}
+        title="Stage"
+        submit={handleModalSubmit}
+        cancel={() => setModalData(null)}
+        getInitialValues={getInitialValues}
+      >
+        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter stage name' }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="courseId" label="Course" rules={[{ required: true, message: 'Please select a course' }]}>
+          <Select placeholder="Please select a course">
+            {courses.map((course: Course) => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="range"
+          label="Start Date - End Date"
+          rules={[{ required: true, type: 'array', message: 'Please enter course start and end date' }]}
+        >
+          <DatePicker.RangePicker />
+        </Form.Item>
+      </ModalForm>
+    );
+  }, [modalData, handleModalSubmit]);
+
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <AdminSider />
+      <Layout style={{ background: '#fff' }}>
+        <Header title="Manage Stages" username={props.session.githubId} />
+        <Content style={{ margin: 8 }}>
+          <Button type="primary" onClick={handleAddItem}>
+            Add Stage
+          </Button>
+
+          <Table
+            size="small"
+            style={{ marginTop: 8 }}
+            dataSource={data}
+            pagination={{ pageSize: 100 }}
+            rowKey="id"
+            columns={getColumns(handleEditItem, courses)}
+          />
+        </Content>
+      </Layout>
+      {renderModal()}
+    </Layout>
+  );
+}
+
+function createRecord(values: any) {
+  const [startDate, endDate] = values.range || [null, null];
+
+  const record: Partial<Stage> = {
+    name: values.name,
+    startDate: startDate ? formatDate(startDate) : null,
+    endDate: endDate ? formatDate(endDate) : null,
+    courseId: values.courseId,
+  };
+  return record;
+}
+
+function getColumns(handleEditItem: any, courses: any) {
+  return [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: stringSorter<Stage>('name'),
+    },
+    {
+      title: 'Course',
+      dataIndex: 'courseId',
+      render: idFromArrayRenderer(courses),
+      sorter: stringSorter<Stage>('courseId'),
+    },
+    {
+      title: 'Start Date',
+      dataIndex: 'startDate',
+      render: dateRenderer,
+    },
+    {
+      title: 'End Date',
+      dataIndex: 'endDate',
+      render: dateRenderer,
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
+      render: (_, record) => <a onClick={() => handleEditItem(record)}>Edit</a>,
+    },
+  ];
+}
+
+function getInitialValues(modalData: Partial<Stage>) {
+  return {
+    ...modalData,
+    range:
+      modalData.startDate && modalData.endDate
+        ? [
+            modalData.startDate ? moment(modalData.startDate) : null,
+            modalData.endDate ? moment(modalData.endDate) : null,
+          ]
+        : null,
   };
 }
 
-export default withSession(Form.create()(StagesPage));
+export default withSession(Page);

@@ -47,13 +47,22 @@ export function registryRouter(logger?: ILogger) {
   router.post('/mentor', async (ctx: Router.RouterContext) => {
     const { id: userId } = ctx.state!.user as IUserSession;
 
-    const { comment, maxStudentsLimit, preferedStudentsLocation, preferedCourses, englishMentoring } = ctx.request.body;
-    const mentorData = {
+    const {
+      comment,
+      maxStudentsLimit,
+      technicalMentoring,
+      preferedStudentsLocation,
+      preferedCourses,
+      englishMentoring,
+    } = ctx.request.body;
+
+    const mentorData: Partial<MentorRegistry> = {
       comment,
       maxStudentsLimit,
       preferedStudentsLocation,
       englishMentoring,
       preferedCourses,
+      technicalMentoring,
     };
 
     const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });

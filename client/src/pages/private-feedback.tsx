@@ -1,6 +1,4 @@
 import { Button, Col, Form, Input, message, Typography } from 'antd';
-
-import { FormComponentProps } from 'antd/lib/form';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { PersonSelect } from 'components/PersonSelect';
@@ -13,7 +11,7 @@ import { UserService } from 'services/user';
 type Props = {
   router: NextRouter;
   session: Session;
-} & FormComponentProps;
+};
 
 type State = {
   user: { id: number; githubId: string } | null;
@@ -38,7 +36,6 @@ class PrivateFeedbackPage extends React.Component<Props, State> {
   }
 
   render() {
-    const { getFieldDecorator: field } = this.props.form;
     return (
       <>
         <Header username={this.props.session.githubId} title="Private Feedback" />
@@ -47,30 +44,23 @@ class PrivateFeedbackPage extends React.Component<Props, State> {
             Your feedback will be visible to course administrator/manager only
           </Typography.Text>
           <LoadingScreen show={this.state.isLoading}>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Item label="Person">
-                {field('userId', {
-                  initialValue: this.state.user ? this.state.user.id : undefined,
-                  rules: [{ required: true, message: 'Please select a person' }],
-                })(
-                  this.state.user ? (
-                    <PersonSelect data={[this.state.user]} />
-                  ) : (
-                    <UserSearch searchFn={this.loadUsers} />
-                  ),
-                )}
+            <Form initialValues={getInitialValues(this.state.user)} onFinish={this.handleSubmit}>
+              <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
+                {this.state.user ? <PersonSelect data={[this.state.user]} /> : <UserSearch searchFn={this.loadUsers} />}
               </Form.Item>
-              <Form.Item label="Comment">
-                {field('comment', {
-                  rules: [
-                    {
-                      required: true,
-                      min: 20,
-                      whitespace: true,
-                      message: 'Please give us more details',
-                    },
-                  ],
-                })(<Input.TextArea style={{ height: 200 }} />)}
+              <Form.Item
+                name="comment"
+                label="Comment"
+                rules={[
+                  {
+                    required: true,
+                    min: 20,
+                    whitespace: true,
+                    message: 'Please give us more details',
+                  },
+                ]}
+              >
+                <Input.TextArea style={{ height: 200 }} />
               </Form.Item>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -86,27 +76,26 @@ class PrivateFeedbackPage extends React.Component<Props, State> {
     return this.userService.searchUser(searchText);
   };
 
-  private handleSubmit = async (e: any) => {
-    e.preventDefault();
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
-        return;
-      }
-      try {
-        this.setState({ isLoading: true });
-        await this.userService.submitPrivateFeedback({
-          toUserId: values.userId,
-          comment: values.comment,
-        });
-        this.props.form.resetFields();
-        message.success('Your feedback has been submitted.');
-        this.setState({ isLoading: false });
-      } catch (e) {
-        message.success('An error occured. Please try later.');
-        this.setState({ isLoading: false });
-      }
-    });
+  private handleSubmit = async (values: any) => {
+    try {
+      this.setState({ isLoading: true });
+      await this.userService.submitPrivateFeedback({
+        toUserId: values.userId,
+        comment: values.comment,
+      });
+      message.success('Your feedback has been submitted.');
+      this.setState({ isLoading: false });
+    } catch (e) {
+      message.success('An error occured. Please try later.');
+      this.setState({ isLoading: false });
+    }
   };
 }
 
-export default withRouter(withSession(Form.create({ name: 'privateFeadback' })(PrivateFeedbackPage)));
+function getInitialValues(user) {
+  return {
+    userId: user ? user.id : undefined,
+  };
+}
+
+export default withRouter(withSession(PrivateFeedbackPage));

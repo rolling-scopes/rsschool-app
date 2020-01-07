@@ -24,7 +24,7 @@ function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: n
         return <WrappedComponent {...this.props} />;
       }
       return (
-        <Row type="flex" justify="center">
+        <Row justify="center">
           <Col md={12} xs={18} style={{ marginTop: '60px' }}>
             <Alert
               message="No Access"

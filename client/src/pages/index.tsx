@@ -1,12 +1,24 @@
-import { Button, List, Select, Result, Layout, Icon, Row, Col, Statistic, Card, Typography, Tag } from 'antd';
-import { Header, RegistryBanner, AdminSider, FooterLayout, GithubUserLink } from 'components';
+import {
+  CalendarTwoTone,
+  CheckCircleTwoTone,
+  CheckSquareTwoTone,
+  CodeTwoTone,
+  DashboardTwoTone,
+  FireTwoTone,
+  // HighlightTwoTone,
+  // InteractionTwoTone,
+  PlayCircleTwoTone,
+  StopTwoTone,
+  ToolTwoTone,
+} from '@ant-design/icons';
+import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography } from 'antd';
+import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
+import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { CourseService, StudentSummary } from 'services/course';
 import { Course } from 'services/models';
-import { isEmpty } from 'lodash';
-import '../styles/main.scss';
 
 const { Content } = Layout;
 
@@ -48,7 +60,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="fire" theme="twoTone" twoToneColor="orange" /> Score
+        <FireTwoTone twoToneColor="orange" /> Score
       </>
     ),
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
@@ -58,7 +70,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="calendar" theme="twoTone" twoToneColor="#eb2f96" /> Schedule <Tag color="volcano">alpha</Tag>
+        <CalendarTwoTone twoToneColor="#eb2f96" /> Schedule <Tag color="volcano">alpha</Tag>
       </>
     ),
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
@@ -68,7 +80,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> Submit Review
+        <CheckCircleTwoTone twoToneColor="#52c41a" /> Submit Review
       </>
     ),
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
@@ -78,7 +90,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="check-circle" theme="twoTone" /> Submit Review By Jury
+        <CheckCircleTwoTone /> Submit Review By Jury
       </>
     ),
     getLink: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
@@ -88,67 +100,67 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="check-square" theme="twoTone" twoToneColor="#52c41a" /> Submit Scores
+        <CheckSquareTwoTone twoToneColor="#52c41a" /> Submit Scores
       </>
     ),
     getLink: (course: Course) => `/course/task-owner/submit-scores?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
     newTab: false,
   },
+  // {
+  //   name: () => (
+  //     <>
+  //       <InteractionTwoTone /> Stage Interview
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isStudent),
+  //   newTab: false,
+  // },
   {
     name: () => (
       <>
-        <Icon type="interaction" theme="twoTone" /> Stage Interview
+        <CodeTwoTone /> Cross-Check: Submit
       </>
     ),
-    getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
+    getLink: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
   {
     name: () => (
       <>
-        <Icon type="code" twoToneColor="#f56161" theme="twoTone" /> Cross-Check: Submit
+        <CheckCircleTwoTone twoToneColor="#f56161" /> Cross-Check: Review
       </>
     ),
-    getLink: (course: Course) => `/course/student/task-solution?course=${course.alias}`,
+    getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
+  // {
+  //   name: () => (
+  //     <>
+  //       <InteractionTwoTone /> Stage Interviews
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  //   newTab: false,
+  // },
+  // {
+  //   name: () => (
+  //     <>
+  //       <HighlightTwoTone twoToneColor="#7f00ff" /> Stage Interview Feedback
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  //   newTab: false,
+  // },
   {
     name: () => (
       <>
-        <Icon type="check-circle" twoToneColor="#f56161" theme="twoTone" /> Cross-Check: Review
-      </>
-    ),
-    getLink: (course: Course) => `/course/student/cross-check?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
-  },
-  {
-    name: () => (
-      <>
-        <Icon type="interaction" theme="twoTone" /> Stage Interviews
-      </>
-    ),
-    getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
-  },
-  {
-    name: () => (
-      <>
-        <Icon type="highlight" theme="twoTone" twoToneColor="#7f00ff" /> Stage Interview Feedback
-      </>
-    ),
-    getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
-  },
-  {
-    name: () => (
-      <>
-        <Icon type="play-circle" theme="twoTone" twoToneColor="#7f00ff" /> Auto-Test: Submit
+        <PlayCircleTwoTone twoToneColor="#7f00ff" /> Auto-Test: Submit
       </>
     ),
     getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
@@ -158,7 +170,7 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="dashboard" theme="twoTone" twoToneColor="#7f00ff" /> Auto-Test: Verification Status
+        <DashboardTwoTone twoToneColor="#7f00ff" /> Auto-Test: Verification Status
       </>
     ),
     getLink: (course: Course) => `/course/tasks-verifications?course=${course.alias}`,
@@ -175,10 +187,10 @@ const routes = [
   {
     name: () => (
       <>
-        <Icon type="stop" theme="twoTone" twoToneColor="red" /> Expel Student
+        <StopTwoTone twoToneColor="red" /> Expel Student
       </>
     ),
-    getLink: (course: Course) => `/course/mentor/expel?course=${course.alias}`,
+    getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
     newTab: false,
   },
@@ -394,7 +406,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       return null;
     }
     return (
-      <div className="mb-3">
+      <div>
         <RegistryBanner />
       </div>
     );
@@ -405,7 +417,7 @@ class IndexPage extends React.PureComponent<Props, State> {
       return null;
     }
     return (
-      <Select style={{ width: 250 }} className="mb-2" defaultValue={course.id} onChange={this.handleChange}>
+      <Select style={{ width: 250, marginBottom: 16 }} defaultValue={course.id} onChange={this.handleChange}>
         {courses.map(course => (
           <Select.Option key={course.id} value={course.id}>
             {course.name} ({this.getStatus(course)})
@@ -440,7 +452,7 @@ class IndexPage extends React.PureComponent<Props, State> {
             style={{ marginTop: 16 }}
             header={
               <>
-                <Icon type="tool" theme="twoTone" twoToneColor="#000000" />
+                <ToolTwoTone twoToneColor="#000000" />
                 <Typography.Text strong> Course Management</Typography.Text>
               </>
             }
@@ -493,12 +505,12 @@ class IndexPage extends React.PureComponent<Props, State> {
           {summary.mentor && (
             <Col xs={24} sm={24} md={24} lg={12}>
               <Card size="small" title="Your mentor">
-                <p>
+                <div>
                   <div>{name}</div>
                   <div>
                     <GithubUserLink value={githubId!} />
                   </div>
-                </p>
+                </div>
                 {this.renderContact('Email', contactsEmail)}
                 {this.renderContact('Phone', contactsPhone)}
                 {this.renderContact('Skype', contactsSkype)}

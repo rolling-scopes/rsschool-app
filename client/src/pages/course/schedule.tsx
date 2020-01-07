@@ -1,5 +1,5 @@
-import { Form, Table, Tag, Row, Icon, Tooltip, Button, Typography, Select } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { CalendarOutlined, QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
+import { Table, Tag, Row, Tooltip, Button, Typography, Select } from 'antd';
 import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -13,7 +13,7 @@ import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
 
 const { Text } = Typography;
 
-type Props = CoursePageProps & FormComponentProps;
+type Props = CoursePageProps;
 
 interface State {
   data: CourseEvent[];
@@ -132,16 +132,15 @@ class SchedulePage extends React.Component<Props, State> {
     return (
       <div>
         <Header title="Schedule" username={this.props.session.githubId} />
-        <Row className="text-center">
+        <Row style={{ textAlign: 'center' }}>
           <p>
             <Text type="danger">This is a draft version!</Text>
           </p>
           <p>Please see the actual schedule here:</p>
           <p>
             <Button
-              className="mt-3 ml-3"
               type="primary"
-              icon="calendar"
+              icon={<CalendarOutlined />}
               target="_blank"
               href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
             >
@@ -161,13 +160,12 @@ class SchedulePage extends React.Component<Props, State> {
             </Select>
           </p>
         </Row>
-        <Row type="flex" justify="end" className="m-3">
-          <Button icon="calendar" href={`/api/course/${this.props.course.id}/events/ical`}>
+        <Row justify="end">
+          <Button icon={<CalendarOutlined />} href={`/api/course/${this.props.course.id}/events/ical`}>
             Events iCal
           </Button>
         </Row>
         <Table
-          className="m-3"
           rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
           pagination={{ pageSize: 100 }}
           size="small"
@@ -190,9 +188,9 @@ class SchedulePage extends React.Component<Props, State> {
               render: (value: string) => {
                 return value === 'Youtube Live' ? (
                   <div>
-                    <Icon type="youtube" /> {value}{' '}
+                    <YoutubeOutlined /> {value}{' '}
                     <Tooltip title="Ссылка будет в Discord">
-                      <Icon type="question-circle" />
+                      <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
                 ) : (
@@ -259,4 +257,4 @@ const styles = css`
   }
 `;
 
-export default withCourseData(withSession(Form.create()(SchedulePage)));
+export default withCourseData(withSession(SchedulePage));

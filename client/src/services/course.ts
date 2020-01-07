@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { Session } from '../components/withSession';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
+import { sortTasksByEndDate } from 'services/rules';
 
 export interface CourseTask {
   id: number;
@@ -76,7 +77,7 @@ export class CourseService {
   async getCourseTasks() {
     type Response = { data: CourseTask[] };
     const result = await this.axios.get<Response>('/tasks');
-    return result.data.data;
+    return result.data.data.sort(sortTasksByEndDate);
   }
 
   async getCourseTasksForTaskOwner() {

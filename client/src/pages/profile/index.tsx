@@ -1,18 +1,13 @@
 import {
-  Button,
-  Descriptions,
-  Table,
-  Statistic,
-  Col,
-  List,
-  Typography,
-  Divider,
-  Row,
-  Card,
-  Tag,
-  Icon,
-  Result,
-} from 'antd';
+  IdcardOutlined,
+  ProfileOutlined,
+  SafetyCertificateTwoTone,
+  SmileOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+import { Button, Descriptions, Table, Statistic, Col, List, Typography, Divider, Row, Card, Tag, Result } from 'antd';
 import { Rating } from 'components';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
@@ -22,7 +17,7 @@ import withSession, { Session } from 'components/withSession';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { UserService, UserFull, ProfileResponse, ResponseCourse, ResponseMentor, ResponseStudent } from 'services/user';
 import { formatDate } from 'services/formatter';
-import { SKILLS_LEVELS, CODING_LEVELS } from '../course/mentor/stage-interview-feedback';
+import { SKILLS_LEVELS, CODING_LEVELS } from '../../services/reference-data/stageInterview';
 
 type Props = {
   router: NextRouter;
@@ -130,7 +125,7 @@ class ProfilePage extends React.Component<Props, State> {
 
     const statsTitle = (
       <h2>
-        <Icon type="profile" /> Statistics
+        <ProfileOutlined /> Statistics
       </h2>
     );
     const coursesAsMentor = entries.filter(e => e.mentor && e.mentor.students.length);
@@ -138,7 +133,7 @@ class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <Header username={this.props.session.githubId} />
-        <div className="m-3">
+        <div style={{ margin: 16 }}>
           {this.renderGeneralInfo(profile.user)}
           <Divider dashed />
           {this.renderPublicFeedback(profile)}
@@ -155,7 +150,7 @@ class ProfilePage extends React.Component<Props, State> {
           </Card>
           <Divider dashed />
           {entries.map((entry, i) => (
-            <div className="mb-3" key={i}>
+            <div key={i}>
               {entry.student && this.renderStudentProfile(entry.course, entry.student)}
               {entry.mentor && this.renderMentorProfile(entry.course, entry.mentor)}
             </div>
@@ -199,7 +194,7 @@ class ProfilePage extends React.Component<Props, State> {
     const emptyValue = '(Empty)';
     return (
       <>
-        <Row type="flex" justify="space-between">
+        <Row justify="space-between">
           <GithubAvatar size={96} githubId={profile.githubId} />
           {!user ? (
             <Button type="primary" onClick={() => this.props.router.push('/profile/edit')} color="primary">
@@ -219,7 +214,7 @@ class ProfilePage extends React.Component<Props, State> {
           column={1}
           title={
             <span>
-              <Icon type="idcard" /> General Info
+              <IdcardOutlined /> General Info
             </span>
           }
         >
@@ -243,7 +238,7 @@ class ProfilePage extends React.Component<Props, State> {
             {employmentHistory.length ? employmentHistory : emptyValue}
           </Descriptions.Item>
         </Descriptions>
-        <Descriptions className="mt-3" size="small" title="Contacts" bordered column={1}>
+        <Descriptions style={{ marginTop: 16 }} size="small" title="Contacts" bordered column={1}>
           <Descriptions.Item label="Email">{profile.contactsEmail}</Descriptions.Item>
           <Descriptions.Item label="Phone">{profile.contactsPhone}</Descriptions.Item>
           <Descriptions.Item label="Skype">{profile.contactsSkype}</Descriptions.Item>
@@ -266,7 +261,7 @@ class ProfilePage extends React.Component<Props, State> {
   private renderMentorProfile(course: ResponseCourse, mentor: ResponseMentor) {
     const title = (
       <h2>
-        <Icon type="team" /> {course.name} (Mentor)
+        <TeamOutlined /> {course.name} (Mentor)
       </h2>
     );
     return (
@@ -348,7 +343,7 @@ class ProfilePage extends React.Component<Props, State> {
     const isNotStudent = this.state.roles && this.state.roles[course.id] !== 'student';
     const title = (
       <h2>
-        <Icon type="user" /> {course.name} (Student)
+        <UserOutlined /> {course.name} (Student)
       </h2>
     );
 
@@ -356,7 +351,7 @@ class ProfilePage extends React.Component<Props, State> {
       <Card bordered={false} size="small" title={title}>
         {student.certificatePublicId && (
           <div>
-            <Icon style={{ fontSize: '16px' }} type="safety-certificate" twoToneColor="#52c41a" theme="twoTone" />{' '}
+            <SafetyCertificateTwoTone style={{ fontSize: '16px' }} twoToneColor="#52c41a" />{' '}
             <a href={`/certificate/${student.certificatePublicId}`}>Certificate</a>
           </div>
         )}
@@ -365,7 +360,7 @@ class ProfilePage extends React.Component<Props, State> {
         </div>
         {this.renderStudentMentor(student)}
         {hasTasks && (
-          <div className="mt-2">
+          <div style={{ marginTop: 16 }}>
             <h4>Tasks</h4>
             <Table
               pagination={{ pageSize: 30 }}
@@ -375,7 +370,7 @@ class ProfilePage extends React.Component<Props, State> {
               columns={[
                 {
                   title: 'Name',
-                  dataIndex: 'courseTask.name',
+                  dataIndex: ['courseTask', 'name'],
                 },
                 {
                   title: 'Score',
@@ -446,7 +441,7 @@ class ProfilePage extends React.Component<Props, State> {
     }
     const title = (
       <h2>
-        <Icon type="smile" /> Public Feedback (#gratitude)
+        <SmileOutlined /> Public Feedback (#gratitude)
       </h2>
     );
     return (

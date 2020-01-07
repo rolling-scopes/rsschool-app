@@ -2,7 +2,7 @@ import * as React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
 
-import '../styles/main.scss';
+import '../styles/main.css';
 import 'antd/dist/antd.css';
 
 class RsSchoolApp extends App {

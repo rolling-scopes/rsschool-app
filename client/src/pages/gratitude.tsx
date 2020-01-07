@@ -1,5 +1,4 @@
-import { Button, Col, Form, Input, message, Typography } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { Button, Col, Input, Form, message, Typography } from 'antd';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { UserSearch } from 'components/UserSearch';
@@ -10,7 +9,7 @@ import { UserService } from 'services/user';
 
 type Props = {
   session: Session;
-} & FormComponentProps;
+};
 
 type Badge = {
   id: string;
@@ -42,7 +41,6 @@ class GratitudePage extends React.Component<Props, State> {
   private gratitudeService = new GratitudeService();
 
   render() {
-    const { getFieldDecorator: field } = this.props.form;
     return (
       <>
         <Header title="#gratitude" username={this.props.session.githubId} />
@@ -51,34 +49,23 @@ class GratitudePage extends React.Component<Props, State> {
             Your feedback will be posted to #gratitude channel and to the Profile page of selected person
           </Typography.Text>
           <LoadingScreen show={this.state.isLoading}>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Item label="Person">
-                {field('userId', { rules: [{ required: true, message: 'Please select a person' }] })(
-                  <UserSearch searchFn={this.loadUsers} />,
-                )}
+            <Form onFinish={this.handleSubmit}>
+              <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
+                <UserSearch searchFn={this.loadUsers} />
               </Form.Item>
-              {/* <Form.Item label="Badge">
-                {field('badgeId')(
-                  <Select size="large" placeholder="Select a badge">
-                    {this.state.badges.map(badge => (
-                      <Select.Option key={badge.id} value={badge.id}>
-                        {badge.name}
-                      </Select.Option>
-                    ))}
-                  </Select>,
-                )}
-              </Form.Item> */}
-              <Form.Item label="Comment">
-                {field('comment', {
-                  rules: [
-                    {
-                      required: true,
-                      min: 20,
-                      whitespace: true,
-                      message: 'The comment must contain at least 20 characters',
-                    },
-                  ],
-                })(<Input.TextArea style={{ height: 200 }} />)}
+              <Form.Item
+                name="comment"
+                label="Comment"
+                rules={[
+                  {
+                    required: true,
+                    min: 20,
+                    whitespace: true,
+                    message: 'The comment must contain at least 20 characters',
+                  },
+                ]}
+              >
+                <Input.TextArea rows={5} />
               </Form.Item>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -94,29 +81,20 @@ class GratitudePage extends React.Component<Props, State> {
     return this.userService.searchUser(searchText);
   };
 
-  private handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err) {
-        return;
-      }
-
-      try {
-        this.setState({ isLoading: true });
-        await this.gratitudeService.postGratitude({
-          toUserId: values.userId,
-          comment: values.comment,
-        });
-        this.props.form.resetFields();
-        message.success('Your feedback has been submitted.');
-        this.setState({ isLoading: false });
-      } catch (e) {
-        message.error('An error occurred. Please try later.');
-        this.setState({ isLoading: false });
-      }
-    });
+  private handleSubmit = async (values: any) => {
+    try {
+      this.setState({ isLoading: true });
+      await this.gratitudeService.postGratitude({
+        toUserId: values.userId,
+        comment: values.comment,
+      });
+      message.success('Your feedback has been submitted.');
+      this.setState({ isLoading: false });
+    } catch (e) {
+      message.error('An error occurred. Please try later.');
+      this.setState({ isLoading: false });
+    }
   };
 }
 
-export default withSession(Form.create()(GratitudePage));
+export default withSession(GratitudePage);

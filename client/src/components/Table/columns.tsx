@@ -1,4 +1,5 @@
-import { Button, Icon, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input } from 'antd';
 import { get } from 'lodash';
 
 let searchInput: any;
@@ -14,7 +15,13 @@ export function getColumnSearchProps(dataIndex: string, label?: string) {
           onChange={e => setSelectedKeys([e.target.value])}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
-        <Button onClick={confirm} type="primary" icon="search" size="small" style={{ width: 90, marginRight: 8 }}>
+        <Button
+          onClick={confirm}
+          type="primary"
+          icon={<SearchOutlined />}
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
           Search
         </Button>
         <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
@@ -22,7 +29,7 @@ export function getColumnSearchProps(dataIndex: string, label?: string) {
         </Button>
       </div>
     ),
-    filterIcon: (filtered: boolean) => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
       return (get(record as any, dataIndex) || '')
         .toString()

@@ -1,178 +1,129 @@
-import { Button, Col, Form, Input, InputNumber, message, Select } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
-import { Header, UserSearch, withSession } from 'components';
+import { Button, Form, message } from 'antd';
+import { PageLayoutSimple, Session, UserSearch, withSession } from 'components';
+import { CommentInput, CourseTaskSelect, GithubPrInput, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
-import * as React from 'react';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
-import { sortTasksByEndDate } from 'services/rules';
-import { CoursePageProps } from 'services/models';
-import { StudentBasic } from '../../../../../common/models';
+import { CoursePageProps, StudentBasic } from 'services/models';
 
-type Props = CoursePageProps & FormComponentProps;
+function Page({ session, course }: CoursePageProps) {
+  const courseId = course.id;
+  const { githubId } = session;
 
-type State = {
-  students: StudentBasic[];
-  courseTasks: CourseTask[];
-  isLoading: boolean;
-  isPowerMentor: boolean;
-  courseTaskId: number | null;
-};
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-class TaskScorePage extends React.Component<Props, State> {
-  state: State = {
-    isLoading: false,
-    isPowerMentor: false,
-    students: [],
-    courseTasks: [],
-    courseTaskId: null,
-  };
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [students, setStudents] = useState([] as StudentBasic[]);
+  const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
-  private courseService: CourseService;
+  useAsync(async () => {
+    const [tasks, allStudents] = await Promise.all([
+      courseService.getCourseTasks(),
+      courseService.getAllMentorStudents().catch(() => ({ students: [] })),
+    ]);
 
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  async componentDidMount() {
-    const courseId = this.props.course.id;
-    const { isAdmin, roles, coursesRoles } = this.props.session;
-    const isCourseManager =
-      roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
-    const isMentor = roles[courseId] === 'mentor';
-    const isPowerMentor = isAdmin || isCourseManager;
-
-    const isCheckedByMentor = task => task.checker === 'mentor';
-    const isNotAutoChecked = task => task.verification !== 'auto';
-    const isCheckedByTaskOwner = task => task.checker === 'taskOwner';
-    const hasStudentEndDate = task => Boolean(task.studentEndDate);
-    const isNotUseJury = task => !task.useJury;
-
-    const isSumbitedByTaskOwner = task => this.isTaskOwner(task) && isCheckedByTaskOwner(task);
-
-    const isSumbitedByMentor = task =>
-      hasStudentEndDate(task) &&
-      isNotAutoChecked(task) &&
-      isNotUseJury(task) &&
-      isCheckedByMentor(task) &&
-      (isMentor || isPowerMentor);
-
-    const isSumbitedByPowerAdmin = task => isPowerMentor && (isCheckedByTaskOwner(task) || isSumbitedByMentor(task));
-
-    const courseTasks = (await this.courseService.getCourseTasks())
-      .sort(sortTasksByEndDate)
-      .filter(task => isSumbitedByPowerAdmin(task) || isSumbitedByTaskOwner(task) || isSumbitedByMentor(task));
-
-    const { students } = await this.courseService.getAllMentorStudents().catch(() => ({ students: [] }));
-
-    this.setState({ isPowerMentor, students, courseTasks });
-  }
-
-  render() {
-    const { getFieldDecorator: field, getFieldValue } = this.props.form;
-    const courseTaskId = getFieldValue('courseTaskId');
-    const courseTask = this.state.courseTasks.find(t => t.id === courseTaskId);
-    const maxScore = courseTask ? courseTask.maxScore || 100 : undefined;
-    return (
-      <>
-        <Header title="Submit Review" courseName={this.props.course.name} username={this.props.session.githubId} />
-        <Col className="m-2" sm={12}>
-          <Form onSubmit={this.handleSubmit} layout="vertical">
-            <Form.Item label="Task">
-              {field('courseTaskId', { rules: [{ required: true, message: 'Please select a task' }] })(
-                <Select size="large" placeholder="Select task" onChange={this.handleTaskChange}>
-                  {this.state.courseTasks.map(task => (
-                    <Select.Option key={task.id} value={task.id}>
-                      {task.name}
-                    </Select.Option>
-                  ))}
-                </Select>,
-              )}
-            </Form.Item>
-            <Form.Item label="Student">
-              {field('githubId', { rules: [{ required: true, message: 'Please select a student' }] })(
-                <UserSearch
-                  defaultValues={this.state.students}
-                  disabled={!courseTaskId}
-                  searchFn={this.loadStudents}
-                  keyField="githubId"
-                />,
-              )}
-            </Form.Item>
-            <Form.Item label="Github Pull Request URL">
-              {field('githubPrUrl', {
-                rules: [
-                  {
-                    message: 'Please enter a valid Github Pull Request URL',
-                    pattern: /https:\/\/github.com\/(\w|\d|\-)+\/(\w|\d|\-)+\/pull\/(\d)+/gi,
-                  },
-                ],
-              })(<Input size="large" />)}
-            </Form.Item>
-            <Form.Item label={`Score${maxScore ? ` (Max ${maxScore} points)` : ''}`}>
-              {field('score', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please enter task score',
-                  },
-                ],
-              })(<InputNumber size="large" step={1} min={0} max={maxScore} />)}
-            </Form.Item>
-            <Form.Item label="Comment">{field('comment')(<Input.TextArea />)}</Form.Item>
-            <Button size="large" type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </>
+    const courseTasks = tasks.filter(
+      task =>
+        isSumbitedByPowerAdmin(session, courseId)(task) ||
+        isSumbitedByTaskOwner(githubId)(task) ||
+        isSumbitedByMentor(session, courseId)(task),
     );
-  }
+    const { students } = allStudents;
 
-  private isTaskOwner = (task?: CourseTask) => {
-    return task?.taskOwner?.githubId === this.props.session.githubId;
-  };
+    setStudents(students);
+    setCourseTasks(courseTasks);
+  }, []);
 
-  private loadStudents = async (searchText: string) => {
-    const { isPowerMentor, courseTaskId, students } = this.state;
-
-    const task = this.state.courseTasks.find(t => t.id === courseTaskId);
-    return isPowerMentor || this.isTaskOwner(task)
-      ? this.courseService.searchCourseStudent(searchText)
+  const loadStudents = async (searchText: string) => {
+    const task = courseTasks.find(t => t.id === courseTaskId);
+    return isPowerMentor(session, courseId) || isTaskOwner(githubId)(task)
+      ? courseService.searchCourseStudent(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
           `${githubId} ${firstName} ${lastName}`.match(searchText),
         );
   };
 
-  private handleTaskChange = async (value: number) => {
-    const courseTaskId = Number(value);
-    const courseTask = this.state.courseTasks.find(t => t.courseTaskId === courseTaskId);
-    if (courseTask == null) {
+  const handleSubmit = async (values: any) => {
+    if (loading) {
       return;
     }
-    this.setState({ courseTaskId });
+    try {
+      setLoading(true);
+      const { githubId, courseTaskId, ...data } = values;
+      await courseService.postStudentScore(githubId, courseTaskId, data);
+      message.success('Score has been submitted.');
+      form.resetFields();
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  private handleSubmit = async (e: any) => {
-    e.preventDefault();
-    this.props.form.validateFields(async (err: any, values: any) => {
-      if (err || this.state.isLoading) {
-        return;
-      }
-      try {
-        this.setState({ isLoading: true });
-        const { githubId, courseTaskId, ...data } = values;
-        await this.courseService.postStudentScore(githubId, courseTaskId, data);
-
-        this.setState({ isLoading: false });
-        message.success('Score has been submitted.');
-        this.props.form.resetFields();
-      } catch (e) {
-        this.setState({ isLoading: false });
-        message.error('An error occured. Please try later.');
-      }
-    });
-  };
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
+  return (
+    <PageLayoutSimple loading={loading} title="Submit Review" courseName={course.name} githubId={githubId}>
+      <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <CourseTaskSelect data={courseTasks} onChange={setCourseTaskId} />
+        <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
+          <UserSearch defaultValues={students} disabled={!courseTaskId} searchFn={loadStudents} keyField="githubId" />
+        </Form.Item>
+        <GithubPrInput />
+        <ScoreInput courseTask={courseTask} />
+        <CommentInput />
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form>
+    </PageLayoutSimple>
+  );
 }
 
-export default withCourseData(withSession(Form.create()(TaskScorePage)));
+export default withCourseData(withSession(Page));
+
+const isCheckedByMentor = (task: CourseTask) => task.checker === 'mentor';
+const isNotAutoChecked = (task: CourseTask) => task.verification !== 'auto';
+const isCheckedByTaskOwner = (task: CourseTask) => task.checker === 'taskOwner';
+const hasStudentEndDate = (task: CourseTask) => Boolean(task.studentEndDate);
+const isNotUseJury = (task: CourseTask) => !task.useJury;
+
+const isMentor = (session: Session, courseId: number) => {
+  const { roles } = session;
+  return roles[courseId] === 'mentor';
+};
+
+const isPowerMentor = (session: Session, courseId: number) => {
+  const { roles, coursesRoles, isAdmin } = session;
+  const isCourseManager =
+    roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
+  return isAdmin || isCourseManager;
+};
+
+const isTaskOwner = (githubId: string) => (task?: CourseTask) => {
+  return task?.taskOwner?.githubId === githubId;
+};
+
+const isSumbitedByTaskOwner = (githubId: string) => (task: CourseTask) =>
+  isTaskOwner(githubId)(task) && isCheckedByTaskOwner(task);
+
+const isSumbitedByMentor = (session: Session, courseId: number) => (task: CourseTask) => {
+  return (
+    hasStudentEndDate(task) &&
+    isNotAutoChecked(task) &&
+    isNotUseJury(task) &&
+    isCheckedByMentor(task) &&
+    (isMentor(session, courseId) || isPowerMentor(session, courseId))
+  );
+};
+
+const isSumbitedByPowerAdmin = (session: Session, courseId: number) => (task: CourseTask) => {
+  const { roles, coursesRoles, isAdmin } = session;
+  const isCourseManager =
+    roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
+
+  const isPowerMentor = isAdmin || isCourseManager;
+  return isPowerMentor && (isCheckedByTaskOwner(task) || isSumbitedByMentor(session, courseId)(task));
+};

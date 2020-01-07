@@ -1,4 +1,4 @@
-import { Icon } from 'antd';
+import { GithubFilled } from '@ant-design/icons';
 import css from 'styled-jsx/css';
 
 export function GithubUserLink(props: { value: string }) {
@@ -14,7 +14,7 @@ export function GithubUserLink(props: { value: string }) {
         {props.value}
       </a>{' '}
       <a target="_blank" className="link-user-github" href={`https://github.com/${props.value}`}>
-        <Icon type="github" />
+        <GithubFilled />
       </a>
       <style jsx>{styles}</style>
     </div>
