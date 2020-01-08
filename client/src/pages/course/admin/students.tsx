@@ -257,7 +257,7 @@ function getColumns(handleCreateRepo: any, handleExpel: any) {
             </Button>
           )}
           {record.isActive && (
-            <Button type="dashed" onClick={() => handleExpel()}>
+            <Button type="dashed" onClick={() => handleExpel(record)}>
               Expel
             </Button>
           )}
