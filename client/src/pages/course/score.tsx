@@ -137,6 +137,7 @@ export function Page(props: CoursePageProps) {
                 title: 'Mentor',
                 dataIndex: ['mentor', 'githubId'],
                 width: 150,
+                sorter: stringSorter('mentor.githubId' as any),
                 render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
                 ...getColumnSearchProps('mentor.githubId'),
               },

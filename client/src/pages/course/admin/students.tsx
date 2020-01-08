@@ -198,9 +198,16 @@ function getColumns(handleCreateRepo: any, handleExpel: any) {
       ...getColumnSearchProps('name'),
     },
     {
+      title: 'isActive',
+      dataIndex: 'isActive',
+      width: 50,
+      render: boolIconRenderer,
+    },
+    {
       title: 'Mentor',
       dataIndex: ['mentor', 'githubId'],
       width: 100,
+      sorter: stringSorter<any>('mentor.githubId'),
       render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
       ...getColumnSearchProps('mentor.githubId'),
     },
