@@ -8,7 +8,6 @@ import { getMentorsWithStudents, getStudents } from '../../services/courseServic
 import { createInterviewPairs } from '../../rules/interviewPairs';
 import {
   getStageInterviewsPairs,
-  getInterviewsByGithubId,
   getStageInterviewsByMentorId,
   getStageInterviewStudentFeedback,
   getAvailableStudentsForStageInterview,
@@ -22,14 +21,14 @@ const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
 const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 
 export const getStageInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const stageId: number = Number(ctx.params.id);
+  const stageId = Number(ctx.params.id);
   const result = await getStageInterviewsPairs(stageId);
   setResponse(ctx, OK, result);
 };
 
 export const getStageInterviewStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const githubId = ctx.state!.user.githubId;
-  const stageId: number = Number(ctx.params.id);
+  const stageId = Number(ctx.params.id);
   const result = await getStageInterviewsByMentorId(stageId, githubId);
   setResponse(ctx, OK, result);
 };
@@ -42,8 +41,8 @@ type PostInput = {
 
 export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const inputData: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
-  const courseId: number = Number(ctx.params.courseId);
-  const stageId: number = Number(ctx.params.id);
+  const courseId = Number(ctx.params.courseId);
+  const stageId = Number(ctx.params.id);
 
   try {
     const result = [];
@@ -76,7 +75,7 @@ export const postStageInterview = (_: ILogger) => async (ctx: Router.RouterConte
 };
 
 export const deleteStageInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const interviewId: number = Number(ctx.params.interviewId);
+  const interviewId = Number(ctx.params.interviewId);
   try {
     const interview = await getRepository(StageInterview).delete(interviewId);
     setResponse(ctx, OK, interview);
@@ -128,32 +127,7 @@ async function getStundentAndMentor(courseId: number, mentorGithubId: string, st
   ]);
 }
 
-const shortTrackStudents = [
-  'albertkengerli',
-  'alphajax',
-  'antonionick',
-  'dsv-sergey',
-  'ieopvl',
-  'kalinatimka',
-  'katyyats',
-  'magerrrr',
-  'maliaxandr',
-  'nastyamedv',
-  'nikola2390',
-  'pyatromarchanka',
-  'romanrg',
-  'serezhishe',
-  'sk1ngr0s',
-  'skodasha',
-  'spaceearth',
-  'spinagrblzzz',
-  'timary13',
-  'viktarrudzenia',
-  'viktorguschin',
-  'vitbazylchik',
-  'vladislavbizin',
-  'wonderxuy',
-];
+const shortTrackStudents: string[] = [];
 
 export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
@@ -181,10 +155,7 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
       .filter(m => m.capacity > 0);
 
     const reservedMentors = getReservedMentors(mentorsWithCapacity, 'Minsk');
-    console.warn({ reservedMentors });
-
     mentorsWithCapacity = mentorsWithCapacity.filter(m => !reservedMentors.includes(m.githubId));
-
     const alreadyHasInterview = interviewPairs.map(pair => pair.student.githubId);
     const freeStudents = students
       .filter(
@@ -214,12 +185,6 @@ export const postStageInterviews = (_: ILogger) => async (ctx: Router.RouterCont
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
-};
-
-export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params;
-  const records = await getInterviewsByGithubId(courseId, githubId);
-  setResponse(ctx, OK, records);
 };
 
 export const getAvailableStudentsForInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -271,7 +236,7 @@ export const postStageInterviewFeedback = (_: ILogger) => async (ctx: Router.Rou
 
     if (!stageInterview) {
       throw new Error(
-        `Stage interview for userId='${userId}' and studentId='${studentId}' is not found at stage='${stageId}'`,
+        `Stage interview for userId='${userId}' and studentId='${studentId}' not found at stage='${stageId}'`,
       );
     }
 

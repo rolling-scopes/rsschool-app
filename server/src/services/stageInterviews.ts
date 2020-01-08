@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { StageInterview, StageInterviewFeedback, Student } from '../models';
 import { StageInterviewFeedbackJson } from '../../../common/models';
+import { StudentInterview } from './courseService';
 
 export async function getStageInterviewsPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
@@ -89,7 +90,7 @@ export async function getStageInterviewsByMentorId(stageId: number, githubId: st
   return result;
 }
 
-export async function getInterviewsByGithubId(courseId: number, githubId: string) {
+export async function getStageInterviewsByStudent(courseId: number, githubId: string): Promise<StudentInterview[]> {
   const stageInterviews = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
     .innerJoin('stageInterview.stage', 'stage')
@@ -119,7 +120,10 @@ export async function getInterviewsByGithubId(courseId: number, githubId: string
 
   const result = stageInterviews.map(it => {
     return {
-      mentor: {
+      name: 'Stage Interview',
+      completed: it.isCompleted,
+      endDate: null,
+      interviewer: {
         id: it.mentor.id,
         githubId: it.mentor.user.githubId,
         locationName: it.mentor.user.locationName,

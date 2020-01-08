@@ -170,7 +170,7 @@ export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router
   setResponse(ctx, OK, dataWithCheckers);
 };
 
-export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const postCourseTaskDistribution = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseTaskId = Number(ctx.params.courseTaskId);
   const courseId = Number(ctx.params.courseId);
   const courseTaskRepository = getRepository(CourseTask);
@@ -189,13 +189,14 @@ export const postShuffleCourseTask = (logger: ILogger) => async (ctx: Router.Rou
     .map((stm: any) =>
       stm.students.map((s: any) => ({
         courseTaskId,
-        mentor: stm.id,
-        student: s.id,
+        mentorId: stm.id,
+        studentId: s.id,
       })),
     )
     .reduce((acc: any, v: any) => acc.concat(v), []);
 
-  logger.info(JSON.stringify(studentWithChecker));
+  const bad = studentWithChecker.filter((s: any) => !s.mentor);
+  logger.info(JSON.stringify(bad));
 
   await checkerRepository.delete({ courseTaskId });
 

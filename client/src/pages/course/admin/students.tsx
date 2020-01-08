@@ -1,4 +1,4 @@
-import { Button, Col, Divider, message, Row, Spin, Statistic, Table, Typography } from 'antd';
+import { Button, Col, Switch, Divider, message, Row, Spin, Statistic, Table, Typography } from 'antd';
 import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
 import { CourseTaskSelect, ModalForm } from 'components/Forms';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
@@ -29,38 +29,42 @@ function Page(props: Props) {
   const [crossCheckTasks, setCrossCheckTasks] = useState([] as CourseTask[]);
   const [crossCheckModal, setCrossCheckModal] = useState(null as string | null);
   const [expelledStudent, setExpelledStudent] = useState(null as Partial<StudentDetails> | null);
+  const [activeOnly, setActiveOnly] = useState(true);
 
-  const loadStudents = useCallback(async () => {
-    const courseStudents = await service.getCourseStudentsWithDetails();
-    let activeStudentCount = 0;
-    const countries: Record<string, { count: number; totalCount: number }> = {};
+  const loadStudents = useCallback(
+    async (activeOnly: boolean) => {
+      const courseStudents = await service.getCourseStudentsWithDetails(activeOnly);
+      let activeStudentCount = 0;
+      const countries: Record<string, { count: number; totalCount: number }> = {};
 
-    for (const courseStudent of courseStudents) {
-      const { countryName } = courseStudent;
-      if (!countries[countryName]) {
-        countries[countryName] = { count: 0, totalCount: 0 };
+      for (const courseStudent of courseStudents) {
+        const { countryName } = courseStudent;
+        if (!countries[countryName]) {
+          countries[countryName] = { count: 0, totalCount: 0 };
+        }
+        countries[countryName].totalCount++;
+        if (courseStudent.isActive) {
+          activeStudentCount++;
+          countries[countryName].count++;
+        }
       }
-      countries[countryName].totalCount++;
-      if (courseStudent.isActive) {
-        activeStudentCount++;
-        countries[countryName].count++;
-      }
-    }
-    setStudents(courseStudents);
-    setStats({
-      activeStudentCount,
-      studentCount: courseStudents.length,
-      countries: _.keys(countries).map(k => ({
-        name: k,
-        count: countries[k].count,
-        totalCount: countries[k].totalCount,
-      })),
-    });
-  }, [courseId]);
+      setStudents(courseStudents);
+      setStats({
+        activeStudentCount,
+        studentCount: courseStudents.length,
+        countries: _.keys(countries).map(k => ({
+          name: k,
+          count: countries[k].count,
+          totalCount: countries[k].totalCount,
+        })),
+      });
+    },
+    [courseId],
+  );
 
   useAsync(async () => {
     setLoading(true);
-    await loadStudents();
+    await loadStudents(activeOnly);
     const tasks = await service.getCourseTasks();
     const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
     setCrossCheckTasks(crossCheckTasks);
@@ -109,6 +113,14 @@ function Page(props: Props) {
     }
   };
 
+  const handleActiveOnlyChange = async () => {
+    setLoading(true);
+    const value = !activeOnly;
+    setActiveOnly(value);
+    await loadStudents(value);
+    setLoading(false);
+  };
+
   const renderModal = modalData => {
     return (
       <ModalForm
@@ -138,6 +150,10 @@ function Page(props: Props) {
         suffix={`/ ${stats?.studentCount}`}
       />
       <Divider dashed />
+      <div>
+        <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+        <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
+      </div>
       <Row justify="end" className="m-3">
         {props.session.isAdmin && (
           <>
@@ -231,6 +247,12 @@ function getColumns(handleCreateRepo: any, handleExpel: any) {
       dataIndex: 'interviews',
       width: 50,
       render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
+    },
+    {
+      title: 'Assigned',
+      dataIndex: 'assignedChecks',
+      width: 50,
+      render: (value: any[]) => value.map(v => v.name).join(', '),
     },
     {
       title: 'Repository',
