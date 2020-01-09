@@ -67,6 +67,8 @@ export interface MentorWithContacts {
   phone: string;
 }
 
+export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
+
 export class CourseService {
   private axios: AxiosInstance;
 
@@ -167,9 +169,7 @@ export class CourseService {
   }
 
   async getAllMentorStudents() {
-    const result = await this.axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
-      `/mentor/me/students/all`,
-    );
+    const result = await this.axios.get<{ data: AllStudents }>(`/mentor/me/students/all`);
     return result.data.data;
   }
 
