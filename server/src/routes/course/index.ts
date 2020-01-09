@@ -11,6 +11,7 @@ import {
   getAllMentorStudents,
   getMentorStudents,
   getMentorInterviews,
+  getMentorInterview,
   deleteMentor as postMentorStatusExpelled,
 } from './mentor';
 import { getMentors, postMentors, getMentorsDetails } from './mentors';
@@ -44,7 +45,7 @@ import {
 } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
-import { postStudentStatus, getStudentSummary } from './student';
+import { postStudentStatus, getStudentSummary, postStudentInterviewResult } from './student';
 import {
   postTaskSolution,
   postTaskSolutionDistribution,
@@ -144,6 +145,7 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.post('/mentors', adminGuard, postMentors(logger));
   router.get('/mentors/details', courseManagerGuard, getMentorsDetails(logger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
+  router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, getMentorInterviews(logger));
   router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
   router.post('/mentor/:githubId/status/expelled', adminGuard, ...validators, postMentorStatusExpelled(logger));
@@ -162,6 +164,11 @@ function addStudentApi(router: Router, logger: ILogger) {
     courseGuard,
     ...validators,
     postTaskVerification(logger),
+  );
+  router.post(
+    '/student/:githubId/interview/:courseTaskId/result',
+    ...mentorValidators,
+    postStudentInterviewResult(logger),
   );
 
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));

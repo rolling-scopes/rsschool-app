@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance } from 'axios';
 import { Session } from '../components/withSession';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
@@ -73,7 +73,7 @@ export class CourseService {
   private axios: AxiosInstance;
 
   constructor(private courseId: number) {
-    this.axios = axios.create({ baseURL: `/api/course/${this.courseId}` });
+    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
   }
 
   async getCourseTasks() {
@@ -178,8 +178,13 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getInterviewStudents() {
-    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interviews`);
+  async getInterviewStudents(courseTaskId: number) {
+    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
+    return result.data.data;
+  }
+
+  async postStudentInterviewResult(githubId: string, courseTaskId: number, data: any) {
+    const result = await this.axios.post(`/student/${githubId}/interview/${courseTaskId}/result`, data);
     return result.data.data;
   }
 
