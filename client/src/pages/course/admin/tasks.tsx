@@ -227,7 +227,7 @@ function getColumns(actions: { handleEditItem: any; handleDeleteItem: any; handl
               <a href="#">Delete</a>
             </Popconfirm>
           </span>{' '}
-          {record.type === 'interview' && (
+          {(record.type === 'interview' || record.checker === 'assigned') && (
             <span>
               <a onClick={() => actions.handleDistribute(record)}>Distribute</a>{' '}
             </span>

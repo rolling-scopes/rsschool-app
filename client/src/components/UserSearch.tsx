@@ -37,20 +37,21 @@ export class UserSearch extends React.Component<Props, State> {
   };
 
   render() {
+    const { keyField, searchFn, defaultValues, ...props } = this.props;
     return (
       <Select
-        {...this.props}
+        {...props}
         showSearch
         defaultValue={undefined}
         defaultActiveFirstOption={false}
-        showArrow={this.props.defaultValues ? Boolean(this.props.defaultValues.length) : false}
+        showArrow={defaultValues ? Boolean(defaultValues.length) : false}
         filterOption={false}
         onSearch={this.handleSearch}
-        placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? 'Select...' : 'Search...'}
+        placeholder={defaultValues && defaultValues.length > 0 ? 'Select...' : 'Search...'}
         notFoundContent={null}
       >
         {this.state.data.map(person => (
-          <Select.Option key={person.id} value={this.props.keyField ? get(person, this.props.keyField) : person.id}>
+          <Select.Option key={person.id} value={keyField ? get(person, keyField) : person.id}>
             <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
           </Select.Option>
         ))}
