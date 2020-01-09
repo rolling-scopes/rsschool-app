@@ -4,7 +4,7 @@ import { ILogger } from '../../logger';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
 
-type Params = { courseId: number; githubId: string };
+type Params = { courseId: number; githubId: string; courseTaskId: number };
 
 export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as Params;
@@ -45,4 +45,15 @@ export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) =>
   const githubId: string = ctx.params.githubId;
   await courseService.expelMentor(courseId, githubId);
   setResponse(ctx, OK);
+};
+
+export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId, courseTaskId } = ctx.params as Params;
+  const mentor = await courseService.getMentorByGithubId(courseId, githubId);
+  if (mentor == null) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+  const students = await courseService.getInterviewStudentsByMentorId(courseTaskId, mentor.id);
+  setResponse(ctx, OK, students);
 };

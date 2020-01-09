@@ -148,6 +148,16 @@ const routes = [
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
+  {
+    name: () => (
+      <>
+        <AudioTwoTone /> Interview: CoreJS
+      </>
+    ),
+    getLink: (course: Course) => `/course/mentor/interview-corejs?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+    newTab: false,
+  },
   // {
   //   name: () => (
   //     <>
