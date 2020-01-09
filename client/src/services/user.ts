@@ -62,6 +62,13 @@ export class UserService {
     return response.data.data;
   }
 
+  async getProfileInfo(githubId: string) {
+    const response = await axios.get<{ data: ProfileResponse }>(`/api/profile/info`, {
+      params: { githubId },
+    });
+    return response.data.data;
+  }
+
   async updateUser(data: Partial<UserFull>) {
     const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
     return response.data.data;

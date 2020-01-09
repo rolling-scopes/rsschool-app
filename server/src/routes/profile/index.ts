@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { guard } from '../guards';
 import { getProfile } from './user';
+import { getProfileInfo } from './info';
 import { getMyProfile, updateMyProfile } from './me';
 
 export function profileRoute(logger: ILogger) {
@@ -26,6 +27,22 @@ export function profileRoute(logger: ILogger) {
   /**
    * @swagger
    *
+   * /profile:
+   *   get:
+   *      description: get student profile
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: profile
+   */
+  router.get('/info', guard, getProfileInfo(logger));
+
+  /**
+   * @swagger
+   *
    * /profile/me:
    *   get:
    *      description: get current user profile
@@ -43,8 +60,8 @@ export function profileRoute(logger: ILogger) {
    * @swagger
    *
    * /profile/me:
-   *   get:
-   *      description: get current user profile
+   *   post:
+   *      description: update current user profile
    *      security:
    *        - cookieAuth: []
    *      produces:
