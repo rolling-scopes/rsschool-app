@@ -667,6 +667,7 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
       'mentor.id',
       'task.id',
       'task.name',
+      'user.primaryEmail',
       'user.contactsNotes',
       'user.contactsPhone',
       'user.contactsSkype',
@@ -692,7 +693,6 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
     const {
       githubId,
       primaryEmail,
-      contactsEmail,
       contactsNotes,
       contactsPhone,
       contactsSkype,
@@ -706,7 +706,6 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
       interviewer: {
         githubId,
         primaryEmail,
-        contactsEmail,
         contactsNotes,
         contactsPhone,
         contactsSkype,
