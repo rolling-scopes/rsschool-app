@@ -25,7 +25,7 @@ const questions: { questionId: string; questionText: string }[] = [
   { questionId: 'capturing', questionText: 'Capturing' },
   { questionId: 'bubbling', questionText: 'Bubbling' },
   { questionId: 'event-delegation', questionText: 'Event Delegation' },
-  { questionId: 'event-prevention', questionText: 'PreventDefault, stopPropogation, stopImmidiatePropogation' },
+  { questionId: 'event-prevention', questionText: 'PreventDefault, stopPropagation, stopImmediatePropagation' },
   { questionId: 'event-listener', questionText: 'addEventListener' },
 
   { questionId: 'eventloop', questionText: 'What is Event Loop' },
