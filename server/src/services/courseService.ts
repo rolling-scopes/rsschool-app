@@ -193,8 +193,8 @@ export async function getMentorByGithubId(courseId: number, githubId: string): P
   return convertToMentorBasic(record!);
 }
 
-export async function getStudentByGithubId(courseId: number, githubId: string): Promise<{ id: number }> {
-  const record = (await queryStudentByGithubId(courseId, githubId))!;
+export async function getStudentByGithubId(courseId: number, githubId: string): Promise<{ id: number } | null> {
+  const record = await queryStudentByGithubId(courseId, githubId);
   return record;
 }
 
@@ -652,6 +652,9 @@ export type StudentInterview = {
 export async function getInterviewsByStudent(courseId: number, githubId: string): Promise<StudentInterview[]> {
   const student = await getStudentByGithubId(courseId, githubId);
 
+  if (student == null) {
+    return [];
+  }
   const interviews = await getRepository(TaskChecker)
     .createQueryBuilder('taskChecker')
     .innerJoin('taskChecker.courseTask', 'courseTask')
