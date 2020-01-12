@@ -3,7 +3,6 @@ import {
   CheckCircleTwoTone,
   CheckSquareTwoTone,
   CodeTwoTone,
-  DashboardTwoTone,
   FireTwoTone,
   AudioTwoTone,
   // HighlightTwoTone,
@@ -181,20 +180,10 @@ const routes = [
   {
     name: () => (
       <>
-        <PlayCircleTwoTone twoToneColor="#7f00ff" /> Auto-Test: Submit
+        <PlayCircleTwoTone twoToneColor="#7f00ff" /> Auto-Test
       </>
     ),
-    getLink: (course: Course) => `/course/submit-task?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
-  },
-  {
-    name: () => (
-      <>
-        <DashboardTwoTone twoToneColor="#7f00ff" /> Auto-Test: Verification Status
-      </>
-    ),
-    getLink: (course: Course) => `/course/tasks-verifications?course=${course.alias}`,
+    getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },
