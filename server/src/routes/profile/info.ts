@@ -161,7 +161,8 @@ const getMentorStats = async (githubId: string): Promise<MentorStats[]> => (awai
 
 const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (await getRepository(Student)
   .createQueryBuilder('student')
-  .select('"course"."name" AS "courseName"')
+  .select('"course"."id" AS "courseId"')
+  .addSelect('"course"."name" AS "courseName"')
   .addSelect('"course"."locationName" AS "locationName"')
   .addSelect('"course"."fullName" AS "courseFullName"')
   .addSelect('"student"."isExpelled" AS "isExpelled"')
@@ -175,6 +176,7 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
   .addSelect('ARRAY_AGG ("courseTask"."scoreWeight") AS "taskScoreWeights"')
   .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
   .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
+  .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"')
   .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
   .addSelect('ARRAY_AGG (COALESCE("taskResult"."comment", "taskInterview"."comment")) AS "taskComments"')
   .addSelect('ARRAY_AGG ("taskInterview"."formAnswers") AS "taskInterviewFormAnswers"')
@@ -189,9 +191,10 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
   .leftJoin(TaskInterviewResult, 'taskInterview', '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"')
   .where('"user"."githubId" = :githubId', { githubId })
   .groupBy('"course"."id", "student"."id", "userMentor"."id"')
-  .orderBy('"course"."updatedDate"', 'ASC')
+  .orderBy('"course"."updatedDate"', 'DESC')
   .getRawMany())
   .map(({
+    courseId,
     courseName,
     locationName,
     courseFullName,
@@ -206,6 +209,7 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
     taskScoreWeights,
     taskNames,
     taskDescriptionUris,
+    taskGithubPrUris,
     taskScores,
     taskComments,
     taskInterviewFormAnswers,
@@ -215,11 +219,13 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
       scoreWeight: taskScoreWeights[idx],
       name: taskNames[idx],
       descriptionUri: taskDescriptionUris[idx],
+      githubPrUri: taskGithubPrUris[idx],
       score: taskScores[idx],
       comment: taskComments[idx],
       interviewFormAnswers: taskInterviewFormAnswers[idx] || undefined,
     }));
     return {
+      courseId,
       courseName,
       locationName,
       courseFullName,
@@ -228,6 +234,7 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
       isCourseCompleted,
       totalScore,
       tasks,
+      position: null,
       mentor: {
         githubId: mentorGithubId,
         name: [mentorFirstName, mentorLastName].join(' '),
@@ -246,6 +253,7 @@ const getFeedback = async (githubId: string): Promise<PublicFeedback[]> => (awai
   .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
   .leftJoin(User, 'fromUser', '"fromUser"."id" = "feedback"."fromUserId"')
   .where('"user"."githubId" = :githubId', { githubId })
+  .orderBy('"feedback"."updatedDate"', 'DESC')
   .getRawMany())
   .map(({
     feedbackDate,
@@ -325,6 +333,22 @@ const getStageInterviewFeedback = async (githubId: string): Promise<StageIntervi
     } as StageInterviewDetailedFeedback;
   });
 
+type StudentPosition = {
+  courseId: number,
+  position: number,
+};
+
+const getStudentPosition = async ({ totalScore, courseId }: StudentStats): Promise<StudentPosition> => (
+  await getRepository(Student)
+    .createQueryBuilder('student')
+    .select('"student"."courseId" AS "courseId"')
+    .addSelect('COUNT(*) AS "position"')
+    .where('"student"."courseId" = :courseId', { courseId })
+    .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
+    .groupBy('"student"."courseId"')
+    .getRawMany())
+    .map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
+
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   // const { isAdmin, roles } = ctx.state!.user as IUserSession;
   const { githubId } = ctx.query as { githubId: string | undefined };
@@ -340,16 +364,21 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   const { generalInfo, contacts } = await getUserInfo(githubId);
   const publicFeedback = await getFeedback(githubId);
   const mentorStats = await getMentorStats(githubId);
+
   const studentStats = await getStudentStats(githubId);
+  const studentPositions = await Promise.all(studentStats.map((stats) => getStudentPosition(stats)));
+  const studentStatsWithPositions = studentStats
+    .map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
+
   const stageInterviewFeedback = await getStageInterviewFeedback(githubId);
 
   const profileInfo: ProfileInfo = {
     generalInfo,
     contacts,
     mentorStats,
-    studentStats,
     publicFeedback,
     stageInterviewFeedback,
+    studentStats: studentStatsWithPositions,
   };
 
   console.log(JSON.stringify(profileInfo, null, 2));

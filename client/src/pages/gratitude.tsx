@@ -6,6 +6,7 @@ import withSession, { Session } from 'components/withSession';
 import * as React from 'react';
 import { GratitudeService } from 'services/gratitude';
 import { UserService } from 'services/user';
+import heroesBadges from '../configs/heroes-badges';
 
 type Props = {
   session: Session;
@@ -21,19 +22,9 @@ type State = {
   isLoading: boolean;
 };
 
-const badges = [
-  { id: 'Congratulations', name: 'Congratulations' },
-  { id: 'Expert_help', name: 'Expert help' },
-  { id: 'Great_speaker', name: 'Great speaker' },
-  { id: 'Good_job', name: 'Good job' },
-  { id: 'Helping_hand', name: 'Helping hand' },
-  { id: 'Hero', name: 'Hero' },
-  { id: 'Thank_you', name: 'Thank you' },
-];
-
 class GratitudePage extends React.Component<Props, State> {
   state: State = {
-    badges,
+    badges: Object.entries(heroesBadges).map(([id, { name }]) => ({ id, name })),
     isLoading: false,
   };
 

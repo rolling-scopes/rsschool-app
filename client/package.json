@@ -32,13 +32,14 @@
     "react": "~16.12.0",
     "react-component-debounce": "^0.0.4",
     "react-dom": "~16.12.0",
+    "react-masonry-css": "^1.0.14",
     "react-use": "~13.14.0",
     "styled-jsx": "~3.2.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
     "@types/moment-timezone": "^0.5.12",
