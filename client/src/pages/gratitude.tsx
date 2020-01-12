@@ -5,6 +5,7 @@ import withSession, { Session } from 'components/withSession';
 import { useState } from 'react';
 import { GratitudeService } from 'services/gratitude';
 import { UserService } from 'services/user';
+import heroesBadges from '../configs/heroes-badges';
 
 type Props = {
   session: Session;

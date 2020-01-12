@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
+import { ProfileInfo } from '../../../common/models/profile';
 import { Course } from './models';
 
 export interface UserBasic {
@@ -63,7 +64,7 @@ export class UserService {
   }
 
   async getProfileInfo(githubId: string) {
-    const response = await axios.get<{ data: ProfileResponse }>(`/api/profile/info`, {
+    const response = await axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
     });
     return response.data.data;

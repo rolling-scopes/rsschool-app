@@ -29,6 +29,7 @@ export interface MentorStats {
 }
 
 export interface StudentStats {
+  courseId: number;
   courseName: string;
   locationName: string;
   courseFullName: string;
@@ -36,6 +37,7 @@ export interface StudentStats {
   expellingReason: string;
   isCourseCompleted: boolean;
   totalScore: number;
+  position: number | null;
   mentor: {
     githubId: string;
     name: string;
@@ -45,13 +47,14 @@ export interface StudentStats {
     scoreWeight: number;
     name: string;
     descriptionUri: string;
+    taskGithubPrUris: string;
     score: number;
     comment: string;
     interviewFormAnswers?: {
       questionText: string;
       answer: string;
     }[];
-  };
+  }[];
 };
 
 export interface PublicFeedback {
