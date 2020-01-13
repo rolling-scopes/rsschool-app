@@ -175,14 +175,6 @@ function Page(props: Props & { courseAlias?: string }) {
             </Col>
           </Row>
           <Row>
-            <Typography.Paragraph>
-              I hereby agree to the processing of my personal data contained in the application and sharing it with
-              companies only for employment purposes.
-            </Typography.Paragraph>
-            <Typography.Paragraph>
-              Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-              только в целях трудоустройства.
-            </Typography.Paragraph>
             <GdprCheckbox />
           </Row>
           <Button size="large" type="primary" disabled={!form.getFieldValue('gdpr')} htmlType="submit">
