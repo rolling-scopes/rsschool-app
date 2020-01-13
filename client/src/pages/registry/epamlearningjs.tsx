@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LocationSelect, PageLayout } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
 import withSession from 'components/withSession';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -23,7 +23,7 @@ function Page(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
   const [submitted, setSubmitted] = useState(false);
   const [activeCourse, setActiveCourse] = useState(null as Course | null);
-  const [initialData, setInitialData] = useState({} as Partial<UserFull>);
+  const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
 
   useAsync(async () => {
     const userService = new UserService();
@@ -35,7 +35,7 @@ function Page(props: Props & { courseAlias?: string }) {
     setInitialData(profile.user);
   }, []);
 
-  const handleSubmit = useCallback(async (model: any) => {
+  const handleSubmit = async (model: any) => {
     const { comment, location } = model;
     const registryModel = {
       type: TYPES.STUDENT,
@@ -62,7 +62,7 @@ function Page(props: Props & { courseAlias?: string }) {
     } catch (e) {
       message.error('An error occured. Please try later.');
     }
-  }, []);
+  };
 
   let content: React.ReactNode;
   const location = form.getFieldValue('location');
@@ -81,9 +81,10 @@ function Page(props: Props & { courseAlias?: string }) {
         }
       />
     );
-  } else {
+  } else if (initialData) {
     content = (
       <Form
+        layout="vertical"
         form={form}
         initialValues={getInitialValues(initialData)}
         onChange={update}
@@ -154,14 +155,6 @@ function Page(props: Props & { courseAlias?: string }) {
             </Col>
           </Row>
           <Row>
-            <Typography.Paragraph>
-              I hereby agree to the processing of my personal data contained in the application and sharing it with
-              companies only for employment purposes.
-            </Typography.Paragraph>
-            <Typography.Paragraph>
-              Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-              только в целях трудоустройства.
-            </Typography.Paragraph>
             <GdprCheckbox />
           </Row>
           <Button size="large" type="primary" disabled={!form.getFieldValue('gdpr')} htmlType="submit">
