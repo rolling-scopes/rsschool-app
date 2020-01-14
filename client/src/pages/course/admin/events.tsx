@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, message, Popconfirm, Row, Select, Table, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
 import { GithubUserLink, UserSearch, withSession, PageLayout } from 'components';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
-import { formatDate, formatTime } from 'services/formatter';
+import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { UserService } from 'services/user';
@@ -19,7 +19,7 @@ type Props = CoursePageProps;
 
 const timeZoneRenderer = timeZone => value => {
   return value
-    ? moment(value, 'HH:mm:ssZ')
+    ? moment(value, 'YYYY-MM-DD HH:mmZ')
         .tz(timeZone)
         .format('HH:mm')
     : '';
@@ -27,7 +27,6 @@ const timeZoneRenderer = timeZone => value => {
 
 function Page(props: Props) {
   const courseId = props.course.id;
-  const timeZoneOffset = moment().format('Z');
   const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -45,6 +44,11 @@ function Page(props: Props) {
       new StageService().getCourseStages(courseId),
       new EventService().getEvents(),
     ]);
+    data.forEach(d => {
+      if (!d.dateTime) {
+        d.dateTime = d.date + 'T' + d.time;
+      }
+    });
     setData(data);
     setStages(stages);
     setEvents(events);
@@ -123,18 +127,22 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter date' }]}>
-              <DatePicker />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item help={timeZoneOffset} name="time" label="Time">
-              <TimePicker format="HH:mm" />
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.Item name="timeZone" label="TimeZone">
+          <Select placeholder="Please select a timezone">
+            {Object.entries(TIMEZONES).map(tz => (
+              <Select.Option key={tz[0]} value={tz[0]}>
+                {tz[0]}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="dateTime"
+          label="Date and Time"
+          rules={[{ required: true, message: 'Please enter date and time' }]}
+        >
+          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+        </Form.Item>
         <Form.Item name="place" label="Place">
           <Input />
         </Form.Item>
@@ -199,8 +207,8 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
       render: idFromArrayRenderer(events),
     },
     { title: 'Type', dataIndex: ['event', 'type'] },
-    { title: 'Date', dataIndex: 'date', render: dateRenderer, width: 100 },
-    { title: 'Time', dataIndex: 'time', render: timeZoneRenderer(timeZone), width: 60 },
+    { title: 'Date', dataIndex: 'dateTime', render: dateRenderer, width: 100 },
+    { title: 'Time', dataIndex: 'dateTime', render: timeZoneRenderer(timeZone), width: 60 },
     { title: 'Place', dataIndex: 'place' },
     {
       title: 'Organizer',
@@ -241,8 +249,7 @@ function createRecord(values: any, courseId) {
   const data = {
     courseId,
     place: values.place,
-    date: values.date ? formatDate(values.date) : undefined,
-    time: values.time ? formatTime(values.time) : undefined,
+    dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     eventId: values.eventId,
     stageId: values.stageId,
     comment: values.comment,
@@ -257,7 +264,7 @@ function createRecord(values: any, courseId) {
 function getInitialValues(modalData: Partial<CourseEvent>) {
   return {
     ...modalData,
-    date: modalData.date ? moment(modalData.date) : null,
-    time: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
+    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, DEFAULT_TIMEZONE) : null,
+    timeZone: DEFAULT_TIMEZONE,
   };
 }

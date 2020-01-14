@@ -124,7 +124,7 @@ class SchedulePage extends React.Component<Props, State> {
           return acc;
         }, []),
       )
-      .sort((a, b) => (a.date ? a.date.localeCompare(b.date) : -1));
+      .sort((a, b) => (a.date && b.date ? a.date.localeCompare(b.date) : -1));
     this.setState({ data });
   }
 
