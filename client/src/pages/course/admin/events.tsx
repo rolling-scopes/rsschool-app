@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, Form, Col, Row, Modal, Select, Table, TimePicker } from 'antd';
+import { Button, DatePicker, Input, Form, Modal, Select, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Header, withSession, GithubUserLink } from 'components';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
@@ -7,7 +7,7 @@ import moment from 'moment';
 import * as React from 'react';
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
-import { formatDate, formatTime } from 'services/formatter';
+import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps, PageWithModalState } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { urlPattern } from 'services/validators';
@@ -33,8 +33,6 @@ class CourseEventsPage extends React.Component<Props, State> {
     timeZone: DEFAULT_TIMEZONE,
   };
 
-  private timeZoneOffset = moment().format('Z');
-
   private courseService = new CourseService();
   private userService = new UserService();
 
@@ -45,6 +43,11 @@ class CourseEventsPage extends React.Component<Props, State> {
       new StageService().getCourseStages(courseId),
       new EventService().getEvents(),
     ]);
+    data.forEach(d => {
+      if (!d.dateTime) {
+        d.dateTime = d.date + 'T' + d.time;
+      }
+    });
     this.setState({ data, stages, events });
   }
 
@@ -54,7 +57,7 @@ class CourseEventsPage extends React.Component<Props, State> {
 
   timeZoneRenderer = value => {
     return value
-      ? moment(value, 'HH:mm:ssZ')
+      ? moment(value, 'YYYY-MM-DD HH:mmZ')
           .tz(this.state.timeZone)
           .format('HH:mm')
       : '';
@@ -75,8 +78,7 @@ class CourseEventsPage extends React.Component<Props, State> {
       }
       const data = {
         place: values.place,
-        date: values.date ? formatDate(values.date) : undefined,
-        time: values.time ? formatTime(values.time) : undefined,
+        dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
         eventId: values.eventId,
         stageId: values.stageId,
         comment: values.comment,
@@ -128,8 +130,8 @@ class CourseEventsPage extends React.Component<Props, State> {
               render: idFromArrayRenderer(this.state.events),
             },
             { title: 'Type', dataIndex: 'event.type' },
-            { title: 'Date', dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', dataIndex: 'time', render: this.timeZoneRenderer },
+            { title: 'Date', dataIndex: 'dateTime', render: dateRenderer },
+            { title: 'Time', dataIndex: 'dateTime', render: this.timeZoneRenderer },
             { title: 'Place', dataIndex: 'place' },
             {
               title: 'Organizer',
@@ -208,24 +210,25 @@ class CourseEventsPage extends React.Component<Props, State> {
               </Select>,
             )}
           </Form.Item>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item label="Date">
-                {field('date', {
-                  initialValue: modalData.date ? moment(modalData.date) : null,
-                  rules: [{ required: true, message: 'Please enter date' }],
-                })(<DatePicker />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Time">
-                {field('time', {
-                  initialValue: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
-                })(<TimePicker format="HH:mm" />)}{' '}
-                {this.timeZoneOffset}
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item label="TimeZone">
+            {field('timeZone', {
+              initialValue: DEFAULT_TIMEZONE,
+            })(
+              <Select placeholder="Please select a timezone">
+                {Object.entries(TIMEZONES).map(tz => (
+                  <Select.Option key={tz[0]} value={tz[0]}>
+                    {tz[0]}
+                  </Select.Option>
+                ))}
+              </Select>,
+            )}
+          </Form.Item>
+          <Form.Item label="Date and Time">
+            {field('dateTime', {
+              initialValue: modalData.dateTime ? moment.tz(modalData.dateTime, DEFAULT_TIMEZONE) : null,
+              rules: [{ required: false, message: 'Please enter date and time' }],
+            })(<DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />)}
+          </Form.Item>
           <Form.Item label="Place">
             {field<CourseEvent>('place', { initialValue: modalData.place })(<Input />)}
           </Form.Item>
