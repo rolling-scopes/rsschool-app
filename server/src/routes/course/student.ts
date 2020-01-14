@@ -136,3 +136,14 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
   const result = await repository.save(entry);
   setResponse(ctx, OK, result);
 };
+
+export const getCrossMentorsTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId } = ctx.params as {
+    githubId: string;
+    courseId: number;
+  };
+
+  const taskCheckers = await courseService.getCrossMentorsByStudent(courseId, githubId);
+
+  setResponse(ctx, OK, taskCheckers);
+};

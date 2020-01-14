@@ -5,6 +5,7 @@ import {
   CodeTwoTone,
   FireTwoTone,
   AudioTwoTone,
+  CompassTwoTone,
   // HighlightTwoTone,
   // InteractionTwoTone,
   PlayCircleTwoTone,
@@ -144,6 +145,16 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/interviews?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+    newTab: false,
+  },
+  {
+    name: () => (
+      <>
+        <CompassTwoTone twoToneColor="#52c41a" /> Cross Mentors <Tag color="magenta">new!</Tag>
+      </>
+    ),
+    getLink: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
     newTab: false,
   },

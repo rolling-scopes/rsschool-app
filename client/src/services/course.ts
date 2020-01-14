@@ -342,6 +342,11 @@ export class CourseService {
     return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }
 
+  async getStudentCrossMentors(githubId: string) {
+    const result = await this.axios.get(`/student/${githubId}/tasks/cross-mentors`);
+    return result.data.data as { name: string; mentor: any }[];
+  }
+
   isPowerUser(courseId: number, session: Session) {
     return (
       session.isAdmin ||
