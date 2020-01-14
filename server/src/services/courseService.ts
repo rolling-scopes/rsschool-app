@@ -649,6 +649,19 @@ export type StudentInterview = {
   };
 };
 
+export type StudentCrossMentor = {
+  name: string;
+  mentor: {
+    githubId: string;
+    locationName?: string;
+    contactsPhone?: string;
+    contactsTelegram?: string;
+    contactsSkype?: string;
+    contactsNotes?: string;
+    contactsEmail?: string;
+  };
+};
+
 export async function getInterviewsByStudent(courseId: number, githubId: string): Promise<StudentInterview[]> {
   const student = await getStudentByGithubId(courseId, githubId);
 
@@ -704,6 +717,67 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
       endDate: record.courseTask.studentEndDate,
       completed: taskResults.some(taskResult => taskResult.courseTaskId === record.courseTaskId),
       interviewer: {
+        githubId,
+        primaryEmail,
+        contactsNotes,
+        contactsPhone,
+        contactsSkype,
+        contactsTelegram,
+        locationName,
+      },
+    };
+  });
+  return students;
+}
+
+export async function getCrossMentorsByStudent(courseId: number, githubId: string): Promise<StudentCrossMentor[]> {
+  const student = await getStudentByGithubId(courseId, githubId);
+
+  if (student == null) {
+    return [];
+  }
+  const taskCheckers = await getRepository(TaskChecker)
+    .createQueryBuilder('taskChecker')
+    .innerJoin('taskChecker.courseTask', 'courseTask')
+    .innerJoin('courseTask.task', 'task')
+    .innerJoin('taskChecker.mentor', 'mentor')
+    .innerJoin('mentor.user', 'user')
+    .addSelect([
+      'courseTask.id',
+      'courseTask.studentEndDate',
+      'mentor.id',
+      'task.id',
+      'task.name',
+      'user.primaryEmail',
+      'user.contactsNotes',
+      'user.contactsPhone',
+      'user.contactsSkype',
+      'user.contactsTelegram',
+      'user.githubId',
+      'user.id',
+      'user.locationName',
+    ])
+    .where('"taskChecker"."studentId" = :studentId', { studentId: student.id })
+    .andWhere('task.type <> :type', { type: 'interview' })
+    .getMany();
+
+  if (taskCheckers.length === 0) {
+    return [];
+  }
+
+  const students = taskCheckers.map(record => {
+    const {
+      githubId,
+      primaryEmail,
+      contactsNotes,
+      contactsPhone,
+      contactsSkype,
+      contactsTelegram,
+      locationName,
+    } = record.mentor.user;
+    return {
+      name: record.courseTask.task.name,
+      mentor: {
         githubId,
         primaryEmail,
         contactsNotes,
