@@ -32,7 +32,7 @@ export interface CourseEvent {
   event: Event;
   date?: string;
   time?: string;
-  dateTime?: string;
+  dateTime: string;
   place: string;
   comment: string;
   stageId: number;

@@ -6,9 +6,8 @@ import withCourseData from 'components/withCourseData';
 import * as React from 'react';
 import { CourseEvent, CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
 
 const { Text } = Typography;
@@ -85,7 +84,7 @@ class SchedulePage extends React.Component<Props, State> {
 
   timeZoneRenderer = value => {
     return value
-      ? moment(value, 'HH:mm:ssZ')
+      ? moment(value, 'YYYY-MM-DD HH:mmZ')
           .tz(this.state.timeZone)
           .format('HH:mm')
       : '';
@@ -102,8 +101,7 @@ class SchedulePage extends React.Component<Props, State> {
           if (task.type !== TaskTypes.test) {
             acc.push({
               id: task.id,
-              date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
-              time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
+              dateTime: task.studentStartDate || '',
               event: {
                 type: task.type,
                 name: task.name,
@@ -113,8 +111,7 @@ class SchedulePage extends React.Component<Props, State> {
           }
           acc.push({
             id: task.id,
-            date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
-            time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
+            dateTime: task.studentEndDate || '',
             event: {
               type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
               name: task.name,
@@ -124,7 +121,7 @@ class SchedulePage extends React.Component<Props, State> {
           return acc;
         }, []),
       )
-      .sort((a, b) => (a.date && b.date ? a.date.localeCompare(b.date) : -1));
+      .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
     this.setState({ data });
   }
 
@@ -132,35 +129,42 @@ class SchedulePage extends React.Component<Props, State> {
     return (
       <div>
         <Header title="Schedule" username={this.props.session.githubId} />
-        <Row style={{ textAlign: 'center' }}>
+        <Row
+          style={{
+            display: 'flex',
+            flexFlow: 'row',
+            justifyContent: 'center',
+            alignItems: 'baseline',
+            textAlign: 'center',
+          }}
+        >
           <p>
             <Text type="danger">This is a draft version!</Text>
           </p>
           <p>Please see the actual schedule here:</p>
-          <p>
-            <Button
-              type="primary"
-              icon={<CalendarOutlined />}
-              target="_blank"
-              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
-            >
-              See Schedule
-            </Button>
-            <Select
-              className="mt-3 ml-3"
-              placeholder="Please select a timezone"
-              defaultValue={this.state.timeZone}
-              onChange={this.handleTimeZoneChange}
-            >
-              {Object.entries(TIMEZONES).map(tz => (
-                <Select.Option key={tz[0]} value={tz[0]}>
-                  {tz[0]}
-                </Select.Option>
-              ))}
-            </Select>
-          </p>
+          <Button
+            style={{ marginLeft: '10px' }}
+            type="primary"
+            icon={<CalendarOutlined />}
+            target="_blank"
+            href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
+          >
+            See Schedule
+          </Button>
         </Row>
-        <Row justify="end">
+        <Row justify="space-between">
+          <Select
+            className="mt-3 ml-3"
+            placeholder="Please select a timezone"
+            defaultValue={this.state.timeZone}
+            onChange={this.handleTimeZoneChange}
+          >
+            {Object.entries(TIMEZONES).map(tz => (
+              <Select.Option key={tz[0]} value={tz[0]}>
+                {tz[0]}
+              </Select.Option>
+            ))}
+          </Select>
           <Button icon={<CalendarOutlined />} href={`/api/course/${this.props.course.id}/events/ical`}>
             Events iCal
           </Button>
@@ -170,10 +174,10 @@ class SchedulePage extends React.Component<Props, State> {
           pagination={{ pageSize: 100 }}
           size="small"
           dataSource={this.state.data}
-          rowClassName={record => (moment(record.date).isBefore(this.startOfToday) ? 'rs-table-row-disabled' : '')}
+          rowClassName={record => (moment(record.dateTime).isBefore(this.startOfToday) ? 'rs-table-row-disabled' : '')}
           columns={[
-            { title: 'Date', width: 120, dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', width: 60, dataIndex: 'time', render: this.timeZoneRenderer },
+            { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer },
+            { title: 'Time', width: 60, dataIndex: 'dateTime', render: this.timeZoneRenderer },
             {
               title: 'Type',
               width: 100,
