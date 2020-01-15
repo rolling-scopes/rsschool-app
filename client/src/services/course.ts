@@ -30,8 +30,9 @@ export interface CourseTask {
 export interface CourseEvent {
   id: number;
   event: Event;
-  date: string;
-  time: string;
+  date?: string;
+  time?: string;
+  dateTime?: string;
   place: string;
   comment: string;
   stageId: number;
