@@ -44,11 +44,6 @@ function Page(props: Props) {
       new StageService().getCourseStages(courseId),
       new EventService().getEvents(),
     ]);
-    data.forEach(d => {
-      if (!d.dateTime) {
-        d.dateTime = d.date + 'T' + d.time;
-      }
-    });
     setData(data);
     setStages(stages);
     setEvents(events);
