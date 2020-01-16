@@ -181,7 +181,7 @@ class SchedulePage extends React.Component<Props, State> {
             {
               title: 'Type',
               width: 100,
-              dataIndex: 'event.type',
+              dataIndex: ['event', 'type'],
               render: (value: keyof typeof EventTypeColor) => (
                 <Tag color={EventTypeColor[value]}>{this.eventTypeToName[value] || value}</Tag>
               ),
@@ -204,7 +204,7 @@ class SchedulePage extends React.Component<Props, State> {
             },
             {
               title: 'Name',
-              dataIndex: 'event.name',
+              dataIndex: ['event', 'name'],
               render: (value: string, record) => {
                 return record.event.descriptionUrl ? (
                   <a target="_blank" href={record.event.descriptionUrl}>
@@ -231,7 +231,7 @@ class SchedulePage extends React.Component<Props, State> {
             {
               title: 'Organizer',
               width: 140,
-              dataIndex: 'organizer.githubId',
+              dataIndex: ['organizer', 'githubId'],
               render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
             },
             {
