@@ -73,6 +73,21 @@ class SchedulePage extends React.Component<Props, State> {
   readonly eventTypeToName = EventTypeToName;
   private courseService: CourseService;
 
+  private createCourseEventFromTask(task, type): CourseEvent {
+    return {
+      id: task.id,
+      dateTime: task.studentStartDate || '',
+      event: {
+        type: type,
+        name: task.name,
+        descriptionUrl: task.descriptionUrl,
+      },
+      organizer: {
+        githubId: task.taskOwner ? task.taskOwner.githubId : '',
+      },
+    } as CourseEvent;
+  }
+
   constructor(props: Props) {
     super(props);
     this.courseService = new CourseService(props.course.id);
@@ -99,25 +114,11 @@ class SchedulePage extends React.Component<Props, State> {
       .concat(
         tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
           if (task.type !== TaskTypes.test) {
-            acc.push({
-              id: task.id,
-              dateTime: task.studentStartDate || '',
-              event: {
-                type: task.type,
-                name: task.name,
-                descriptionUrl: task.descriptionUrl,
-              },
-            } as CourseEvent);
+            acc.push(this.createCourseEventFromTask(task, task.type));
           }
-          acc.push({
-            id: task.id,
-            dateTime: task.studentEndDate || '',
-            event: {
-              type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
-              name: task.name,
-              descriptionUrl: task.descriptionUrl,
-            },
-          } as CourseEvent);
+          acc.push(
+            this.createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline),
+          );
           return acc;
         }, []),
       )
