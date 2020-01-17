@@ -69,7 +69,18 @@ class StudentStatsCard extends React.Component<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={stats}
-              renderItem={({ courseName, locationName, mentor, totalScore, isExpelled, position }, idx) => (
+              renderItem={(
+                {
+                  courseName,
+                  locationName,
+                  mentor,
+                  totalScore,
+                  isExpelled,
+                  position,
+                  isCourseCompleted,
+                },
+                idx,
+              ) => (
                 <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ flexGrow: 2 }}>
                     <p style={{ marginBottom: 0 }}>
@@ -78,7 +89,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                     <div style={{ width: '80%', marginBottom: 5 }}>
                       <Progress
                         percent={coursesProgress.length ? coursesProgress[idx] : 0}
-                        status={isExpelled ? 'exception' : undefined}
+                        status={isExpelled ? 'exception' : isCourseCompleted ? 'success' : undefined}
                         size="small"
                       />
                     </div>

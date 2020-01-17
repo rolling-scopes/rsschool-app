@@ -136,13 +136,15 @@ const getMentorStats = async (githubId: string): Promise<MentorStats[]> => (awai
   .addSelect('ARRAY_AGG ("userStudent"."githubId") AS "studentGithubIds"')
   .addSelect('ARRAY_AGG ("userStudent"."firstName") AS "studentFirstNames"')
   .addSelect('ARRAY_AGG ("userStudent"."lastName") AS "studentLastNames"')
+  .addSelect('ARRAY_AGG ("student"."isExpelled") AS "studentIsExpelledStatuses"')
+  .addSelect('ARRAY_AGG ("student"."totalScore") AS "studentTotalScores"')
   .leftJoin(User, 'user', '"user"."id" = "mentor"."userId"')
   .leftJoin(Course, 'course', '"course"."id" = "mentor"."courseId"')
   .leftJoin(Student, 'student', '"student"."mentorId" = "mentor"."id"')
   .leftJoin(User, 'userStudent', '"userStudent"."id" = "student"."userId"')
   .where('"user"."githubId" = :githubId', { githubId })
   .groupBy('"course"."id"')
-  .orderBy('"course"."updatedDate"', 'ASC')
+  .orderBy('"course"."updatedDate"', 'DESC')
   .getRawMany())
   .map(({
     courseName,
@@ -151,10 +153,14 @@ const getMentorStats = async (githubId: string): Promise<MentorStats[]> => (awai
     studentGithubIds,
     studentFirstNames,
     studentLastNames,
+    studentIsExpelledStatuses,
+    studentTotalScores,
   }: any) => {
     const students = studentGithubIds.map((githubId: string, idx: number) => ({
       githubId,
       name: [studentFirstNames[idx], studentLastNames[idx]].join(' '),
+      isExpelled: studentIsExpelledStatuses[idx],
+      totalScore: studentTotalScores[idx],
     }));
     return { courseName, locationName, courseFullName, students };
   });
