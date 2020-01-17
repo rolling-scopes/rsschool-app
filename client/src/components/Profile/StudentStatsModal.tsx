@@ -21,7 +21,7 @@ type Props = {
 class StudentStatsModal extends React.Component<Props> {
   render() {
     const { stats, courseProgress } = this.props;
-    const { tasks, courseFullName, mentor, totalScore, isExpelled, position } = stats;
+    const { tasks, courseFullName, mentor, totalScore, isExpelled, position, isCourseCompleted } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore) ?
       tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur) :
@@ -39,7 +39,7 @@ class StudentStatsModal extends React.Component<Props> {
           <Col style={{ marginBottom: 5, marginRight: 20 }}>
             <Progress
               percent={courseProgress}
-              status={isExpelled ? 'exception' : undefined}
+              status={isExpelled ? 'exception' : isCourseCompleted ? 'success' : undefined}
               type="circle"
               width={80}
             />
@@ -72,22 +72,28 @@ class StudentStatsModal extends React.Component<Props> {
               render: (task: string, { descriptionUri }: any) => (descriptionUri ?
                 <a href={descriptionUri} target="_blank">{task}</a>
                 : task),
-              ellipsis: true,
             },
             {
-              title: 'Score / Max [*Weight]',
+              title: 'Score / Max',
               dataIndex: 'score',
-              render: (score: string, { maxScore, scoreWeight }: any) => (
+              render: (score: string, { maxScore }: any) => (
                 <>
                   <Text strong>
-                    {score ? score : '-'}
-                  </Text> / {maxScore ? maxScore : '-'
-                  } <Text style={{ fontSize: 10, verticalAlign: 'top' }}>
-                    [*{scoreWeight}{score ? <Text> = <Text strong>{Number(score) * scoreWeight}</Text></Text> : ''}]
-                  </Text>
+                    {score !== null ? score : '-'}
+                  </Text> / {maxScore ? maxScore : '-'}
                 </>
               ),
-              ellipsis: true,
+            },
+            {
+              title: '*Weight',
+              dataIndex: 'scoreWeight',
+              render: (scoreWeight: number, { score }: any) => (
+                <Text>
+                  *{scoreWeight}{score ? <Text> = <Text strong>{
+                    (Number(score) * scoreWeight).toFixed(2)
+                  }</Text></Text> : ''}
+                </Text>
+              ),
             },
             {
               title: 'Comment',

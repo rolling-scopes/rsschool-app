@@ -18,6 +18,7 @@ import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
+import MentorStatsCard from 'components/Profile/MentorStatsCard';
 
 type Props = {
   router: NextRouter;
@@ -75,6 +76,7 @@ class ProfilePage extends React.Component<Props, State> {
       profile?.contacts && <ContactsCard data={profile.contacts}/>,
       profile?.publicFeedback.length && <PublicFeedbackCard data={profile.publicFeedback}/>,
       profile?.studentStats.length && <StudentStatsCard data={profile.studentStats}/>,
+      profile?.mentorStats.length && <MentorStatsCard data={profile.mentorStats}/>,
     ].filter(Boolean) as JSX.Element[];
 
     return (

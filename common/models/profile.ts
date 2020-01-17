@@ -25,6 +25,8 @@ export interface MentorStats {
   students: {
     githubId: string;
     name: string;
+    isExpelled: boolean;
+    totalScore: number;
   }[]
 }
 
