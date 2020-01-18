@@ -283,16 +283,19 @@ export async function getAssignedStudentsByMentorId(mentorId: number) {
     .andWhere('"student"."isExpelled" = false')
     .getMany();
 
-  const students = records.map<AssignedStudent>(record => {
-    const student = convertToStudentBasic(record);
-    student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
+  const students = records
+    .map<AssignedStudent[]>(record => {
+      const student = convertToStudentBasic(record);
+      student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
 
-    const [taskChecker] = record.taskChecker || [null];
-    return {
-      ...student,
-      courseTaskId: taskChecker ? taskChecker.courseTaskId : null,
-    };
-  });
+      return (
+        record.taskChecker?.map(taskChecker => ({
+          ...student,
+          courseTaskId: taskChecker ? taskChecker.courseTaskId : null,
+        })) ?? []
+      );
+    })
+    .flat();
 
   return students;
 }

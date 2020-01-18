@@ -5,7 +5,8 @@
     "lib": [
       "es2017",
       "dom",
-      "esnext.asynciterable"
+      "esnext.asynciterable",
+      "ES2019.Array",
     ],
     "baseUrl": ".",
     "noImplicitAny": true,
