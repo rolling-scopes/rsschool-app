@@ -14,7 +14,7 @@ import {
   TaskSolutionChecker,
   TaskSolutionResult,
   TaskChecker,
-  TaskResult,
+  TaskInterviewResult,
 } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
@@ -700,9 +700,9 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
     return [];
   }
 
-  const taskResults = await getRepository(TaskResult)
-    .createQueryBuilder('taskResult')
-    .where('"taskResult"."courseTaskId" IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
+  const taskResults = await getRepository(TaskInterviewResult)
+    .createQueryBuilder('taskInterviewResult')
+    .where('"taskInterviewResult"."courseTaskId" IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
     .getMany();
 
   const students = interviews.map(record => {
