@@ -14,7 +14,7 @@ import {
   TaskSolutionChecker,
   TaskSolutionResult,
   TaskChecker,
-  TaskResult,
+  TaskInterviewResult,
 } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
@@ -283,16 +283,19 @@ export async function getAssignedStudentsByMentorId(mentorId: number) {
     .andWhere('"student"."isExpelled" = false')
     .getMany();
 
-  const students = records.map<AssignedStudent>(record => {
-    const student = convertToStudentBasic(record);
-    student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
+  const students = records
+    .map<AssignedStudent[]>(record => {
+      const student = convertToStudentBasic(record);
+      student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
 
-    const [taskChecker] = record.taskChecker || [null];
-    return {
-      ...student,
-      courseTaskId: taskChecker ? taskChecker.courseTaskId : null,
-    };
-  });
+      return (
+        record.taskChecker?.map(taskChecker => ({
+          ...student,
+          courseTaskId: taskChecker ? taskChecker.courseTaskId : null,
+        })) ?? []
+      );
+    })
+    .flat();
 
   return students;
 }
@@ -697,9 +700,9 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
     return [];
   }
 
-  const taskResults = await getRepository(TaskResult)
-    .createQueryBuilder('taskResult')
-    .where('"taskResult"."courseTaskId" IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
+  const taskResults = await getRepository(TaskInterviewResult)
+    .createQueryBuilder('taskInterviewResult')
+    .where('"taskInterviewResult"."courseTaskId" IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
     .getMany();
 
   const students = interviews.map(record => {
