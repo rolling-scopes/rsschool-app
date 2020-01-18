@@ -1,5 +1,4 @@
 const path = require('path');
-const withCSS = require('@zeit/next-css');
 const webpack = require('webpack');
 
 const nextConfig = {
@@ -19,4 +18,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withCSS(nextConfig);
+module.exports = nextConfig;
