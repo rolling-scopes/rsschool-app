@@ -21,6 +21,9 @@ phases:
           docker pull rsschool/ui:latest
           docker-compose up -d ui
           docker system prune -f "
+  post_build:
+    commands:
+      - curl https://app.rs.school
 
 cache:
   paths:
