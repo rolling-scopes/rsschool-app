@@ -241,6 +241,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
       countryName: countriesMap[citiesMap[student.locationName]] || 'Other',
       mentorGithubId: student.mentor ? (student.mentor as any).githubId : '',
       totalScore: student.totalScore,
+      isActive: student.isActive,
       ...getTasksResults(student.taskResults, courseTasks),
     };
   });

@@ -62,17 +62,12 @@ export interface StudentWithResults {
   id: number;
   name: string;
   githubId: string;
-  mentor?: {
-    name: string;
-    githubId: string;
-  };
+  mentor?: { name: string; githubId: string };
   totalScore: number;
   rank: number;
   locationName: string;
-  taskResults: {
-    courseTaskId: number;
-    score: number;
-  }[];
+  isActive: boolean;
+  taskResults: { courseTaskId: number; score: number }[];
 }
 
 export interface MentorDetails extends MentorBasic {
