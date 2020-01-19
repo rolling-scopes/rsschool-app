@@ -9,7 +9,7 @@ import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from 'services/user';
-import { ProfileInfo } from '../../../../common/models/profile';
+import { ProfileInfo, StudentStats } from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
@@ -19,6 +19,9 @@ import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
+import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
+import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
+import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 
 type Props = {
   router: NextRouter;
@@ -37,6 +40,27 @@ class ProfilePage extends React.Component<Props, State> {
   };
 
   private userService = new UserService();
+
+  private hadStudentCoreJSInterview = (stats: StudentStats[]) => stats
+    .some((student: StudentStats) => student.tasks
+    .some(({ interviewFormAnswers }) => interviewFormAnswers));
+
+  private getStudentCoreJSInterviews = (stats: StudentStats[]) => stats
+    .filter((student: StudentStats) => student.tasks
+    .some(({ interviewFormAnswers }) => interviewFormAnswers))
+    .map(({ tasks, courseFullName, courseName, locationName }) => ({
+      courseFullName,
+      courseName,
+      locationName,
+      interview: tasks
+        .filter(({ interviewFormAnswers }) => interviewFormAnswers)
+        .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
+          score,
+          comment,
+          interviewer,
+          answers: interviewFormAnswers,
+        }))[0],
+    })) as CoreJsInterviewData[];
 
   private fetchData = async () => {
     this.setState({ isLoading: true });
@@ -77,6 +101,10 @@ class ProfilePage extends React.Component<Props, State> {
       profile?.publicFeedback.length && <PublicFeedbackCard data={profile.publicFeedback}/>,
       profile?.studentStats.length && <StudentStatsCard data={profile.studentStats}/>,
       profile?.mentorStats.length && <MentorStatsCard data={profile.mentorStats}/>,
+      profile?.studentStats.length &&
+        this.hadStudentCoreJSInterview(profile.studentStats) &&
+        <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,
+      profile?.stageInterviewFeedback.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback}/>,
     ].filter(Boolean) as JSX.Element[];
 
     return (

@@ -52,6 +52,10 @@ export interface StudentStats {
     taskGithubPrUris: string;
     score: number;
     comment: string;
+    interviewer?: {
+      name: string;
+      githubId: string;
+    };
     interviewFormAnswers?: {
       questionText: string;
       answer: string;

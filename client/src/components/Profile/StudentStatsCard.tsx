@@ -23,6 +23,7 @@ type Props = {
 type State = {
   courseIndex: number;
   coursesProgress: number[];
+  scoredTasks: number[];
   isStudentStatsModalVisible: boolean;
 };
 
@@ -30,6 +31,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   state = {
     courseIndex: 0,
     coursesProgress: [],
+    scoredTasks: [],
     isStudentStatsModalVisible: false,
   };
 
@@ -41,24 +43,27 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isStudentStatsModalVisible: false });
   }
 
+  private countScoredTasks = (tasks) => tasks.filter(({ score }) => score !== null).length;
   private countCourseCompletionPercentage = (tasks) => Number((tasks
     .filter(({ score }) => score !== null).length / tasks.length * 100)
     .toFixed(1));
 
   componentDidMount() {
     const stats = this.props.data;
+    const scoredTasks = stats.map(({ tasks }) => this.countScoredTasks(tasks));
     const coursesProgress = stats.map(({ tasks }) => this.countCourseCompletionPercentage(tasks));
-    this.setState({ coursesProgress });
+    this.setState({ coursesProgress, scoredTasks });
   }
 
   render() {
     const stats = this.props.data;
-    const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
+    const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
       <>
         <StudentStatsModal
           stats={stats[courseIndex]}
           courseProgress={coursesProgress[courseIndex]}
+          scoredTasks={scoredTasks[courseIndex]}
           isVisible={isStudentStatsModalVisible}
           onHide={this.hideStudentStatsModal}
         />

@@ -13,3 +13,9 @@ export const CODING_LEVELS = [
   'Good coding ability (makes not critical mistakes)',
   'Great coding ability',
 ];
+
+export enum SKILL_NAME {
+  htmlCss = 'HTML/CSS',
+  dataStructures = 'Data structures',
+  common = 'Common of CS / Programming',
+}

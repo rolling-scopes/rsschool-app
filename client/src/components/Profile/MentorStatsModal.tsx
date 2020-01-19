@@ -39,6 +39,7 @@ class MentorStatsModal extends React.Component<Props> {
         <Row gutter={[16, 16]}>
         {
           students.map(({ name, githubId, isExpelled, totalScore }) => {
+            const profile = `/profile?githubId=${githubId}`;
             const guithubLink = `https://github.com/${githubId}`;
             const privateRepoLink = `https://github.com/rolling-scopes-school/${githubId}-${courseYearPostfix}`;
 
@@ -61,7 +62,11 @@ class MentorStatsModal extends React.Component<Props> {
                   </Col>
                   <Col>
                     <p style={{ fontSize: 16 }}>
-                      <Text strong>{name}</Text>
+                      <Text strong>
+                        <a href={profile}>
+                          {name}
+                        </a>
+                      </Text>
                     </p>
                     <p style={{ marginBottom: 5 }}>
                     {
