@@ -1,4 +1,4 @@
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { BAD_REQUEST, CONFLICT, OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
@@ -92,7 +92,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
 
   const inputData: Input = ctx.request.body;
 
-  if (!inputData.score) {
+  if (inputData.score == null) {
     setResponse(ctx, BAD_REQUEST, 'no score');
     return;
   }
@@ -121,7 +121,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
     .getOne();
 
   if (existingResult != null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'Feedback already submitted' });
+    setResponse(ctx, CONFLICT, { message: 'Feedback already submitted' });
     return;
   }
 

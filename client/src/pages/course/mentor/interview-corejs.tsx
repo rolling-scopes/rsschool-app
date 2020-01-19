@@ -56,7 +56,7 @@ export const initialValues: any = {
   hoisting: false,
   inheritance: '',
   scope: false,
-  score: '0',
+  score: null,
 };
 
 function Page(props: CoursePageProps) {
@@ -90,15 +90,16 @@ function Page(props: CoursePageProps) {
         questionId: questionId,
         questionText: questionText,
       }));
-      const score = Number(values.score);
+      const score = Number(values.score) - 1;
       const body = { formAnswers, score, comment: values.comment || '' };
       await courseService.postStudentInterviewResult(values.githubId, courseTaskId!, body);
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
       const error = e as AxiosError;
-      const meesage = error.response?.data?.data?.message ?? 'An error occurred. Please try later.';
-      message.error(meesage);
+      const response = error.response;
+      const errorMessage = response?.data?.data?.message ?? 'An error occurred. Please try later.';
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -176,8 +177,12 @@ function Page(props: CoursePageProps) {
           <Input.TextArea rows={4} />
         </Form.Item>
         <Typography.Title level={4}>Общая оценка</Typography.Title>
-        <Form.Item name="score" rules={[{ required: true }]}>
-          <Rate count={10} tooltips={_.range(1, 11).map(_.toString)} style={{ marginBottom: '5px' }} />
+        <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please set Score' }]}>
+          <Rate
+            count={11}
+            tooltips={['0 (No Interview, Rejected etc.)'].concat(_.range(1, 11).map(_.toString))}
+            style={{ marginBottom: '5px' }}
+          />
         </Form.Item>
         <Typography.Title level={4}>Комментарий</Typography.Title>
         <CommentInput />
