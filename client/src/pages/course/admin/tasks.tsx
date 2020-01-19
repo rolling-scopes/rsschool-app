@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Button, Col, Form, DatePicker, Popconfirm, InputNumber, message, Radio, Row, Select, Table } from 'antd';
 import { withSession, PageLayout } from 'components';
 import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
@@ -89,6 +89,17 @@ function Page(props: Props) {
     setLoading(false);
   };
 
+  const filterOption = useCallback(
+    (input, option) => {
+      if (!input) {
+        return false;
+      }
+      const task = tasks.find(t => t.id === option?.value);
+      return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
+    },
+    [tasks],
+  );
+
   const renderModal = (modalData: Partial<CourseTask>) => {
     if (modalData == null) {
       return null;
@@ -104,7 +115,7 @@ function Page(props: Props) {
         }}
       >
         <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-          <Select placeholder="Please select a task">
+          <Select filterOption={filterOption} showSearch placeholder="Please select a task">
             {tasks.map((task: Task) => (
               <Select.Option key={task.id} value={task.id}>
                 {task.name} {tagsRenderer(task.tags)}

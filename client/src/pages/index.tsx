@@ -104,7 +104,7 @@ const routes = [
         <CheckSquareTwoTone twoToneColor="#52c41a" /> Submit Scores
       </>
     ),
-    getLink: (course: Course) => `/course/task-owner/submit-scores?course=${course.alias}`,
+    getLink: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
     newTab: false,
   },
