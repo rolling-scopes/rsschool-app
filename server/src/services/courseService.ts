@@ -178,14 +178,17 @@ export async function expelMentor(courseId: number, githubId: string) {
     .execute();
 }
 
-export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic> {
+export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {
   const record = await mentorQuery()
     .innerJoin('mentor.user', 'user')
     .addSelect(getPrimaryUserFields())
     .where('user.githubId = :githubId', { githubId })
     .andWhere('mentor."courseId" = :courseId', { courseId })
     .getOne();
-  return convertToMentorBasic(record!);
+  if (record == null) {
+    return null;
+  }
+  return convertToMentorBasic(record);
 }
 
 export async function getStudentByGithubId(courseId: number, githubId: string): Promise<{ id: number } | null> {
