@@ -75,6 +75,8 @@ import {
     Feedback
 */
 
+const getFullName = (firstName: string, lastName: string) => [firstName, lastName].filter(Boolean).join(' ') || '';
+
 const getUserInfo = async (githubId: string): Promise<UserInfo> => {
   const rawUser = await getRepository(User)
     .createQueryBuilder('user')
@@ -116,7 +118,7 @@ const getUserInfo = async (githubId: string): Promise<UserInfo> => {
       educationHistory,
       employmentHistory,
       englishLevel,
-      name: [firstName, lastName].join(' '),
+      name: getFullName(firstName, lastName),
     },
     contacts: {
       phone: contactsPhone,
@@ -158,7 +160,7 @@ const getMentorStats = async (githubId: string): Promise<MentorStats[]> => (awai
   }: any) => {
     const students = studentGithubIds.map((githubId: string, idx: number) => ({
       githubId,
-      name: [studentFirstNames[idx], studentLastNames[idx]].join(' '),
+      name: getFullName(studentFirstNames[idx], studentLastNames[idx]),
       isExpelled: studentIsExpelledStatuses[idx],
       totalScore: studentTotalScores[idx],
     }));
@@ -186,6 +188,9 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
   .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
   .addSelect('ARRAY_AGG (COALESCE("taskResult"."comment", "taskInterview"."comment")) AS "taskComments"')
   .addSelect('ARRAY_AGG ("taskInterview"."formAnswers") AS "taskInterviewFormAnswers"')
+  .addSelect('ARRAY_AGG ("interviewer"."githubId") AS "interviewerGithubId"')
+  .addSelect('ARRAY_AGG ("interviewer"."firstName") AS "interviewerFirstName"')
+  .addSelect('ARRAY_AGG ("interviewer"."lastName") AS "interviewerLastName"')
   .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
   .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"')
   .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
@@ -195,6 +200,8 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
   .leftJoin(Task, 'task', '"courseTask"."taskId" = "task"."id"')
   .leftJoin(TaskResult, 'taskResult', '"taskResult"."studentId" = "student"."id" AND "taskResult"."courseTaskId" = "courseTask"."id"')
   .leftJoin(TaskInterviewResult, 'taskInterview', '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"')
+  .leftJoin(Mentor, 'mentorInterviewer', '"mentorInterviewer"."id" = "taskInterview"."mentorId"')
+  .leftJoin(User, 'interviewer', '"interviewer"."id" = "mentorInterviewer"."userId"')
   .where('"user"."githubId" = :githubId', { githubId })
   .groupBy('"course"."id", "student"."id", "userMentor"."id"')
   .orderBy('"course"."updatedDate"', 'DESC')
@@ -219,6 +226,9 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
     taskScores,
     taskComments,
     taskInterviewFormAnswers,
+    interviewerGithubId,
+    interviewerFirstName,
+    interviewerLastName,
   }: any) => {
     const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
       maxScore,
@@ -229,6 +239,10 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
       score: taskScores[idx],
       comment: taskComments[idx],
       interviewFormAnswers: taskInterviewFormAnswers[idx] || undefined,
+      interviewer: interviewerGithubId[idx] ? {
+        name: getFullName(interviewerFirstName[idx], interviewerLastName[idx]),
+        githubId: interviewerGithubId[idx],
+      } : undefined,
     }));
     return {
       courseId,
@@ -243,7 +257,7 @@ const getStudentStats = async (githubId: string): Promise<StudentStats[]> => (aw
       position: null,
       mentor: {
         githubId: mentorGithubId,
-        name: [mentorFirstName, mentorLastName].join(' '),
+        name: getFullName(mentorFirstName, mentorLastName),
       },
     };
   });
@@ -275,7 +289,7 @@ const getFeedback = async (githubId: string): Promise<PublicFeedback[]> => (awai
     comment,
     heroesUri,
     fromUser: {
-      name: [fromUserFirstName, fromUserLastName].join(' '),
+      name: getFullName(fromUserFirstName, fromUserLastName),
       githubId: fromUserGithubId,
     },
   }));
@@ -333,7 +347,7 @@ const getStageInterviewFeedback = async (githubId: string): Promise<StageIntervi
         dataStructures,
       },
       interviewer: {
-        name: [interviewerFirstName, interviewerLastName].join(' '),
+        name: getFullName(interviewerFirstName, interviewerLastName),
         githubId: interviewerGithubId,
       },
     } as StageInterviewDetailedFeedback;

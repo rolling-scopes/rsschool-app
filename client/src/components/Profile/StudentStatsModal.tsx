@@ -14,13 +14,14 @@ const { Text } = Typography;
 type Props = {
   stats: StudentStats;
   courseProgress: number;
+  scoredTasks: number;
   isVisible: boolean;
   onHide: () => void;
 };
 
 class StudentStatsModal extends React.Component<Props> {
   render() {
-    const { stats, courseProgress } = this.props;
+    const { stats, courseProgress, scoredTasks } = this.props;
     const { tasks, courseFullName, mentor, totalScore, isExpelled, position, isCourseCompleted } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore) ?
@@ -55,8 +56,11 @@ class StudentStatsModal extends React.Component<Props> {
                 Position: <Text strong>{position}</Text>
               </p>
             }
-            <p style={{ marginBottom: 30 }}>
+            <p style={{ marginBottom: 5 }}>
               Total Score: <Text mark>{totalScore}</Text>{maxCourseScore && ` / ${maxCourseScore}`}
+            </p>
+            <p style={{ marginBottom: 30 }}>
+              Course progress: {`${scoredTasks} / ${tasks.length} tasks were scored (${courseProgress}%)`}
             </p>
           </Col>
         </Row>
