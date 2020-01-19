@@ -168,7 +168,8 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         continue;
       }
 
-      if (existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
+      const user = ctx.state!.user as IUserSession;
+      if (user && existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
         const message = `${existingResult.id}. Possible user data override`;
         result.push({ status: 'skipped', value: message });
         continue;
