@@ -50,6 +50,7 @@ export async function createUser(profile: Profile, teamsIds: string[] = []): Pro
       lastActivityTime: Date.now(),
       isActive: true,
       courseManagers: [],
+      profilePermissions: null,
     };
     const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;

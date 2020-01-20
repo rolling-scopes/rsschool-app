@@ -15,6 +15,7 @@ import {
   TaskResult,
   TaskInterviewResult,
   StageInterviewFeedback,
+  ProfilePermissions,
 } from '../../models';
 // import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
@@ -25,7 +26,6 @@ import {
   PublicFeedback,
   StageInterviewDetailedFeedback,
   ProfileInfo,
-  UserInfo,
 } from '../../../../common/models/profile';
 
 /*
@@ -35,19 +35,20 @@ import {
                                 1. General info [+]
     Name                 | Yes             | Yes     | Yes              | Yes
     Github               | Yes             | Yes     | *                | *
-    Primary email        | *               | *       | *                | *
-    English              | Yes             | Yes     | *                | *
-    Education            | *               | *       | *                | *
-    LinkedIn profile     | *               | *       | *                | *
     Location (main)      | Yes             | Yes     | *                | *
-    Other location       | *               | *       | *                | *
+
+    Education            | *               | *       | *                | *
+
+    English              | Yes             | Yes     | *                | *
 
                                 2. Contacts [+]
     EPAM email           | No              | No      | No               | No
+    Primary email        | *               | *       | *                | *
     Telegram             | *               | *       | *                | *
     Skype                | *               | *       | *                | *
     Phone                | *               | *       | *                | *
     Contact notes        | *               | *       | *                | *
+    LinkedIn profile     | *               | *       | *                | *
 
                                 3. Public feedback (Gratitude) [+]
     *
@@ -76,59 +77,6 @@ import {
 */
 
 const getFullName = (firstName: string, lastName: string) => [firstName, lastName].filter(Boolean).join(' ') || '';
-
-const getUserInfo = async (githubId: string): Promise<UserInfo> => {
-  const rawUser = await getRepository(User)
-    .createQueryBuilder('user')
-    .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
-    .addSelect('"user"."githubId" AS "githubId"')
-    .addSelect('"user"."locationName" AS "locationName"')
-    .addSelect('"user"."educationHistory" AS "educationHistory"')
-    .addSelect('"user"."employmentHistory" AS "employmentHistory"')
-    .addSelect('"user"."englishLevel" AS "englishLevel"')
-    .addSelect('"user"."contactsPhone" AS "contactsPhone"')
-    .addSelect('"user"."contactsEmail" AS "contactsEmail"')
-    .addSelect('"user"."contactsTelegram" AS "contactsTelegram"')
-    .addSelect('"user"."contactsSkype" AS "contactsSkype"')
-    .addSelect('"user"."contactsNotes" AS "contactsNotes"')
-    .addSelect('"user"."aboutMyself" AS "aboutMyself"')
-    .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne();
-
-  const {
-    firstName,
-    lastName,
-    locationName,
-    educationHistory,
-    employmentHistory,
-    englishLevel,
-    contactsPhone,
-    contactsEmail,
-    contactsTelegram,
-    contactsSkype,
-    contactsNotes,
-    aboutMyself,
-  } = rawUser;
-
-  return {
-    generalInfo: {
-      githubId,
-      aboutMyself,
-      locationName,
-      educationHistory,
-      employmentHistory,
-      englishLevel,
-      name: getFullName(firstName, lastName),
-    },
-    contacts: {
-      phone: contactsPhone,
-      email: contactsEmail,
-      skype: contactsSkype,
-      telegram: contactsTelegram,
-      notes: contactsNotes,
-    },
-  };
-};
 
 const getMentorStats = async (githubId: string): Promise<MentorStats[]> => (await getRepository(Mentor)
   .createQueryBuilder('mentor')
@@ -369,7 +317,29 @@ const getStudentPosition = async ({ totalScore, courseId }: StudentStats): Promi
     .getRawMany())
     .map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
 
+const getProfilePermissions = async (githubId: string): Promise<any> => (
+  await getRepository(ProfilePermissions)
+    .createQueryBuilder('pp')
+    .select('"pp"."isProfileVisible" AS "isProfileVisible"')
+    .addSelect('"pp"."isAboutVisible" AS "isAboutVisible"')
+    .addSelect('"pp"."isEducationVisible" AS "isEducationVisible"')
+    .addSelect('"pp"."isEnglishVisible" AS "isEnglishVisible"')
+    .addSelect('"pp"."isEmailVisible" AS "isEmailVisible"')
+    .addSelect('"pp"."isTelegramVisible" AS "isTelegramVisible"')
+    .addSelect('"pp"."isSkypeVisible" AS "isSkypeVisible"')
+    .addSelect('"pp"."isPhoneVisible" AS "isPhoneVisible"')
+    .addSelect('"pp"."isContactsNotesVisible" AS "isContactsNotesVisible"')
+    .addSelect('"pp"."isLinkedInVisible" AS "isLinkedInVisible"')
+    .addSelect('"pp"."isPublicFeedbackVisible" AS "isPublicFeedbackVisible"')
+    .addSelect('"pp"."isMentorStatsVisible" AS "isMentorStatsVisible"')
+    .addSelect('"pp"."isStudentStatsVisible" AS "isStudentStatsVisible"')
+    .leftJoin(User, 'user', '"user"."id" = "pp"."userId"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .getRawOne()
+);
+
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  // const { id: userId } = ctx.state!.user as IUserSession;
   // const { isAdmin, roles } = ctx.state!.user as IUserSession;
   const { githubId } = ctx.query as { githubId: string | undefined };
 
@@ -380,6 +350,12 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   if (!githubId) {
     return setResponse(ctx, NOT_FOUND);
   }
+
+  // await getRepository(ProfilePermissions).save({ userId });
+
+  const permissions = await getProfilePermissions(githubId);
+
+  console.log(JSON.stringify(permissions, null, 2));
 
   const { generalInfo, contacts } = await getUserInfo(githubId);
   const publicFeedback = await getFeedback(githubId);
@@ -401,7 +377,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     studentStats: studentStatsWithPositions,
   };
 
-  console.log(JSON.stringify(profileInfo, null, 2));
+  // console.log(JSON.stringify(profileInfo, null, 2));
 
   setResponse(ctx, OK, profileInfo);
 };
