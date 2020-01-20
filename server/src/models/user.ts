@@ -7,10 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
   Index,
+  JoinColumn,
 } from 'typeorm';
 import { Student } from './student';
 import { Mentor } from './mentor';
+import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { CourseManager } from './courseManager';
@@ -172,6 +175,10 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToOne(() => ProfilePermissions, profilePermissions => profilePermissions.user)
+  @JoinColumn()
+  profilePermissions: ProfilePermissions | null;
 
   @OneToMany(
     _ => CourseManager,
