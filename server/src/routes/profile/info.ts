@@ -1,19 +1,15 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import Router from 'koa-router';
-import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
-import {
-  User,
-  ProfilePermissions,
-  IUserSession,
-} from '../../models';
+import { IUserSession } from '../../models';
 import { ProfileInfo } from '../../../../common/models/profile';
 import { getMentorStats } from './mentor-stats';
 import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
 import { getStudentStats } from './student-stats';
 import { getUserInfo } from './user-info';
+import { getPermissions } from './permissions';
 
 /*
   WHO CAN SEE
@@ -63,37 +59,6 @@ import { getUserInfo } from './user-info';
     Feedback
 */
 
-const getProfilePermissions = async (githubId: string): Promise<any> => (
-  await getRepository(ProfilePermissions)
-    .createQueryBuilder('pp')
-    .select('"pp"."isProfileVisible" AS "isProfileVisible"')
-    .addSelect('"pp"."isAboutVisible" AS "isAboutVisible"')
-    .addSelect('"pp"."isEducationVisible" AS "isEducationVisible"')
-    .addSelect('"pp"."isEnglishVisible" AS "isEnglishVisible"')
-    .addSelect('"pp"."isEmailVisible" AS "isEmailVisible"')
-    .addSelect('"pp"."isTelegramVisible" AS "isTelegramVisible"')
-    .addSelect('"pp"."isSkypeVisible" AS "isSkypeVisible"')
-    .addSelect('"pp"."isPhoneVisible" AS "isPhoneVisible"')
-    .addSelect('"pp"."isContactsNotesVisible" AS "isContactsNotesVisible"')
-    .addSelect('"pp"."isLinkedInVisible" AS "isLinkedInVisible"')
-    .addSelect('"pp"."isPublicFeedbackVisible" AS "isPublicFeedbackVisible"')
-    .addSelect('"pp"."isMentorStatsVisible" AS "isMentorStatsVisible"')
-    .addSelect('"pp"."isStudentStatsVisible" AS "isStudentStatsVisible"')
-    .leftJoin(User, 'user', '"user"."id" = "pp"."userId"')
-    .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne()
-);
-
-const getRelationRole = async (githubId: string): Promise<any> => (
-  await getRepository(User)
-    .createQueryBuilder('pp')
-    .select('"pp"."isProfileVisible" AS "isProfileVisible"')
-    .addSelect('"pp"."isAboutVisible" AS "isAboutVisible"')
-    .leftJoin(User, 'user', '"user"."id" = "pp"."userId"')
-    .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne()
-);
-
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const {
     // id: userId,
@@ -112,12 +77,11 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   // await getRepository(ProfilePermissions).save({ userId });
 
-  const permissions = await getProfilePermissions(githubId);
-  const role = await getRelationRole(githubId, userGithubId);
+  const permissions = await getPermissions(userGithubId, githubId);
 
   console.log(JSON.stringify(permissions, null, 2));
 
-  const { generalInfo, contacts } = await getUserInfo(githubId);
+  const { generalInfo, contacts } = await getUserInfo(githubId, permissions);
   const publicFeedback = await getPublicFeedback(githubId);
   const mentorStats = await getMentorStats(githubId);
   const studentStats = await getStudentStats(githubId);
