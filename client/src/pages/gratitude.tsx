@@ -21,7 +21,6 @@ const heroBadges = [
   { id: 'Hero', name: 'Hero' },
   { id: 'Thank_you', name: 'Thank you' },
 ];
-const alertMessage = `"Your feedback will be posted to #gratitude channel and to the Profile page of selected person"`;
 
 function Page(props: Props) {
   const [badges] = useState(heroBadges as Badge[]);
@@ -53,7 +52,16 @@ function Page(props: Props) {
 
   return (
     <PageLayoutSimple loading={loading} title="#gratitude" githubId={props.session.githubId}>
-      <Alert message={alertMessage} />
+      <Alert
+        message={
+          <span>
+            Your feedback will be posted to #gratitude channel and to <a href="https://heroes.by">heroes.by</a> (if
+            badge is selected)
+          </span>
+        }
+        style={{ marginBottom: 16 }}
+      />
+
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
           <UserSearch searchFn={loadUsers} />
