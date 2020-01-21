@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import { UserInfo } from '../../../../common/models/profile';
+import { getFullName } from '../../lib/utils';
 import {
   User,
 } from '../../models';
@@ -45,7 +46,7 @@ export const getUserInfo = async (githubId: string): Promise<UserInfo> => {
       educationHistory,
       employmentHistory,
       englishLevel,
-      name: getFullName(firstName, lastName),
+      name: getFullName(firstName, lastName, githubId),
     },
     contacts: {
       phone: contactsPhone,
