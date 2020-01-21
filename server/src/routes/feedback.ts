@@ -87,6 +87,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
 
   const postToDiscord = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
     if (!fromUser || !toUser || !data.comment) {
+      logger.info('No fromUser or toUser or comment');
       return Promise.resolve(null);
     }
     return discordService.pushGratitude({

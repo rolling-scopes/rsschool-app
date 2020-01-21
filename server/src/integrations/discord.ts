@@ -25,6 +25,7 @@ export class DiscordService {
 
   public async pushGratitude(params: BadgeParams) {
     if (this.isDisabled()) {
+      this.logger.info('pushGratitude is disabled');
       return null;
     }
     const { gratitudeUrl } = config.integrations.discord;

@@ -40,6 +40,7 @@ function Page(props: Props) {
       await gratitudeService.postGratitude({
         toUserId: values.userId,
         comment: values.comment,
+        badgeId: values.badgeId,
       });
       form.resetFields();
       message.success('Your feedback has been submitted.');
