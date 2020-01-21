@@ -109,7 +109,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const userRepository = getRepository(User);
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
-    const heroesUrl = await postToHeroes(fromUser, toUser, data);
+    const heroesUrl = (await postToHeroes(fromUser, toUser, data)) ?? undefined;
     await postToDiscord(fromUser, toUser, data);
     const feedback: Partial<Feedback> = {
       comment: data.comment,

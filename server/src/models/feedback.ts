@@ -22,7 +22,7 @@ export class Feedback {
   badgeId: string;
 
   @Column({ nullable: true })
-  heroesUrl: string | null;
+  heroesUrl: string;
 
   @CreateDateColumn()
   createdDate: number;
