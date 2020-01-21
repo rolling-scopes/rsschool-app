@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm';
 import { UserInfo } from '../../../../common/models/profile';
 import { getFullName } from '../../lib/utils';
-import {
-  User,
-} from '../../models';
+import { User } from '../../models';
 
-export const getUserInfo = async (githubId: string): Promise<UserInfo> => {
-  const rawUser = await getRepository(User)
+export const getUserInfo = async (githubId: string, permissions: any): Promise<UserInfo> => {
+  const { isAboutVisible } = permissions;
+
+  const query = await getRepository(User)
     .createQueryBuilder('user')
     .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
     .addSelect('"user"."githubId" AS "githubId"')
@@ -18,8 +18,13 @@ export const getUserInfo = async (githubId: string): Promise<UserInfo> => {
     .addSelect('"user"."contactsEmail" AS "contactsEmail"')
     .addSelect('"user"."contactsTelegram" AS "contactsTelegram"')
     .addSelect('"user"."contactsSkype" AS "contactsSkype"')
-    .addSelect('"user"."contactsNotes" AS "contactsNotes"')
-    .addSelect('"user"."aboutMyself" AS "aboutMyself"')
+    .addSelect('"user"."contactsNotes" AS "contactsNotes"');
+
+  if (isAboutVisible) {
+    query.addSelect('"user"."aboutMyself" AS "aboutMyself"');
+  }
+
+  const rawUser = await query
     .where('"user"."githubId" = :githubId', { githubId })
     .getRawOne();
 
