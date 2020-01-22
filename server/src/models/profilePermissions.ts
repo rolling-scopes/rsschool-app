@@ -1,20 +1,20 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { User } from './user';
 
-interface PublicVisibilitySettings {
+export interface PublicVisibilitySettings {
   all: boolean;
 }
 
-interface VisibilitySettings extends PublicVisibilitySettings {
+export interface VisibilitySettings extends PublicVisibilitySettings {
   mentor: boolean;
   student: boolean;
 }
 
-const defaultPublicVisibilitySettings = {
+export const defaultPublicVisibilitySettings = {
   all: false,
 };
 
-const defaultVisibilitySettings = {
+export const defaultVisibilitySettings = {
   mentor: false,
   student: false,
   all: false,

@@ -3,26 +3,25 @@ import { EnglishLevel } from './';
 export interface GeneralInfo {
   name: string;
   githubId: string;
-  aboutMyself: string;
+  aboutMyself?: string;
   locationName: string;
-  educationHistory: any;
-  employmentHistory: any;
-  englishLevel: EnglishLevel;
+  educationHistory?: any;
+  englishLevel?: EnglishLevel;
 }
 
 export interface Contacts {
-  phone: string;
-  email: string;
-  skype: string;
-  telegram: string;
-  notes: string;
+  phone?: string;
+  email?: string;
+  skype?: string;
+  telegram?: string;
+  notes?: string;
 }
 
 export interface MentorStats {
   courseName: string;
   locationName: string;
   courseFullName: string;
-  students: {
+  students?: {
     githubId: string;
     name: string;
     isExpelled: boolean;
@@ -102,14 +101,14 @@ export interface StageInterviewDetailedFeedback {
 
 export interface UserInfo {
   generalInfo: GeneralInfo;
-  contacts: Contacts;
+  contacts?: Contacts;
 };
 
 export interface ProfileInfo {
   generalInfo?: GeneralInfo;
   contacts?: Contacts;
-  mentorStats: MentorStats[];
-  studentStats: StudentStats[];
-  publicFeedback: PublicFeedback[];
+  mentorStats?: MentorStats[];
+  studentStats?: StudentStats[];
+  publicFeedback?: PublicFeedback[];
   stageInterviewFeedback: StageInterviewDetailedFeedback[];
 };

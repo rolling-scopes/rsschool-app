@@ -2,23 +2,53 @@ import { getRepository } from 'typeorm';
 import { UserInfo } from '../../../../common/models/profile';
 import { getFullName } from '../../lib/utils';
 import { User } from '../../models';
+import { Permissions } from './permissions';
 
-export const getUserInfo = async (githubId: string, permissions: any): Promise<UserInfo> => {
-  const { isAboutVisible } = permissions;
+export const getUserInfo = async (githubId: string, permissions: Permissions): Promise<UserInfo> => {
+  const {
+    isAboutVisible,
+    isEducationVisible,
+    isEnglishVisible,
+    isPhoneVisible,
+    isEmailVisible,
+    isTelegramVisible,
+    isSkypeVisible,
+    isContactsNotesVisible,
+  } = permissions;
 
   const query = await getRepository(User)
     .createQueryBuilder('user')
     .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
     .addSelect('"user"."githubId" AS "githubId"')
-    .addSelect('"user"."locationName" AS "locationName"')
-    .addSelect('"user"."educationHistory" AS "educationHistory"')
-    .addSelect('"user"."employmentHistory" AS "employmentHistory"')
-    .addSelect('"user"."englishLevel" AS "englishLevel"')
-    .addSelect('"user"."contactsPhone" AS "contactsPhone"')
-    .addSelect('"user"."contactsEmail" AS "contactsEmail"')
-    .addSelect('"user"."contactsTelegram" AS "contactsTelegram"')
-    .addSelect('"user"."contactsSkype" AS "contactsSkype"')
-    .addSelect('"user"."contactsNotes" AS "contactsNotes"');
+    .addSelect('"user"."locationName" AS "locationName"');
+
+  if (isEducationVisible) {
+    query.addSelect('"user"."educationHistory" AS "educationHistory"');
+  }
+
+  if (isEnglishVisible) {
+    query.addSelect('"user"."englishLevel" AS "englishLevel"');
+  }
+
+  if (isPhoneVisible) {
+    query.addSelect('"user"."contactsPhone" AS "contactsPhone"');
+  }
+
+  if (isEmailVisible) {
+    query.addSelect('"user"."contactsEmail" AS "contactsEmail"');
+  }
+
+  if (isTelegramVisible) {
+    query.addSelect('"user"."contactsTelegram" AS "contactsTelegram"');
+  }
+
+  if (isSkypeVisible) {
+    query.addSelect('"user"."contactsSkype" AS "contactsSkype"');
+  }
+
+  if (isContactsNotesVisible) {
+    query.addSelect('"user"."contactsNotes" AS "contactsNotes"');
+  }
 
   if (isAboutVisible) {
     query.addSelect('"user"."aboutMyself" AS "aboutMyself"');
@@ -33,7 +63,6 @@ export const getUserInfo = async (githubId: string, permissions: any): Promise<U
     lastName,
     locationName,
     educationHistory,
-    employmentHistory,
     englishLevel,
     contactsPhone,
     contactsEmail,
@@ -49,16 +78,15 @@ export const getUserInfo = async (githubId: string, permissions: any): Promise<U
       aboutMyself,
       locationName,
       educationHistory,
-      employmentHistory,
       englishLevel,
       name: getFullName(firstName, lastName, githubId),
     },
-    contacts: {
+    contacts: contactsPhone || contactsEmail || contactsSkype || contactsTelegram || contactsNotes ? {
       phone: contactsPhone,
       email: contactsEmail,
       skype: contactsSkype,
       telegram: contactsTelegram,
       notes: contactsNotes,
-    },
+    } : undefined,
   };
 };

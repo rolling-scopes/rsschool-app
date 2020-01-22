@@ -1,3 +1,4 @@
+import { get, mapValues } from 'lodash';
 import { getRepository } from 'typeorm';
 import {
   User,
@@ -8,6 +9,12 @@ import {
   TaskInterviewResult,
   StageInterview,
 } from '../../models';
+import {
+  PublicVisibilitySettings,
+  VisibilitySettings,
+  defaultPublicVisibilitySettings,
+  defaultVisibilitySettings,
+} from '../../models/profilePermissions';
 
 interface Relations {
   student: string;
@@ -19,7 +26,43 @@ interface Relations {
 
 type RelationRole = 'student' | 'mentor' | 'all';
 
-const getAllProfilePermissions = async (githubId: string): Promise<any> => (
+interface SuperAccessRights {
+  isProfileOwner: boolean;
+}
+
+interface ConfigurableProfilePermissions {
+  isProfileVisible: PublicVisibilitySettings;
+  isAboutVisible: VisibilitySettings;
+  isEducationVisible: VisibilitySettings;
+  isEnglishVisible: VisibilitySettings;
+  isEmailVisible: VisibilitySettings;
+  isTelegramVisible: VisibilitySettings;
+  isSkypeVisible: VisibilitySettings;
+  isPhoneVisible: VisibilitySettings;
+  isContactsNotesVisible: VisibilitySettings;
+  isLinkedInVisible: VisibilitySettings;
+  isPublicFeedbackVisible: VisibilitySettings;
+  isMentorStatsVisible: VisibilitySettings;
+  isStudentStatsVisible: VisibilitySettings;
+}
+
+export interface Permissions {
+  isProfileVisible: boolean;
+  isAboutVisible: boolean;
+  isEducationVisible: boolean;
+  isEnglishVisible: boolean;
+  isEmailVisible: boolean;
+  isTelegramVisible: boolean;
+  isSkypeVisible: boolean;
+  isPhoneVisible: boolean;
+  isContactsNotesVisible: boolean;
+  isLinkedInVisible: boolean;
+  isPublicFeedbackVisible: boolean;
+  isMentorStatsVisible: boolean;
+  isStudentStatsVisible: boolean;
+}
+
+const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> => (
   (await getRepository(ProfilePermissions)
     .createQueryBuilder('pp')
     .select('"pp"."isProfileVisible" AS "isProfileVisible"')
@@ -85,16 +128,67 @@ const getRelationRole = async (userGithubId: string, requestedGithubId: string):
   return 'all';
 };
 
-const matchPermissions = (permissions: any, role: RelationRole) => {
-  const obj: any = {};
-  Object.keys(permissions).forEach((key) => {
-    obj[key] = permissions[key].all || permissions[key][role];
-  });
-  return obj;
+const matchPermissions = (
+  permissions: ConfigurableProfilePermissions,
+  role: RelationRole,
+  { isProfileOwner }: SuperAccessRights,
+): Permissions => {
+  const p: Permissions = {
+    isProfileVisible: false,
+    isAboutVisible: false,
+    isEducationVisible: false,
+    isEnglishVisible: false,
+    isEmailVisible: false,
+    isTelegramVisible: false,
+    isSkypeVisible: false,
+    isPhoneVisible: false,
+    isContactsNotesVisible: false,
+    isLinkedInVisible: false,
+    isPublicFeedbackVisible: false,
+    isMentorStatsVisible: false,
+    isStudentStatsVisible: false,
+  };
+
+  // (Object.keys(p) as (keyof Permissions)[]).forEach((key) => {
+  //   p[key] = isProfileOwner || permissions[key].all || permissions[key][role];
+  // });
+
+  // return p;
+
+  return mapValues(p, (_, key) => isProfileOwner ||
+    get(permissions, `${key}.all`) ||
+    get(permissions, `${key}.${role}`) ||
+    false,
+  );
 };
 
-export const getPermissions = async (userGithubId: string, requestedGithubId: string) => {
-  const permissions = await getAllProfilePermissions(requestedGithubId);
+export const getPermissions = async (
+  userGithubId: string,
+  requestedGithubId: string,
+  superAccessRights: SuperAccessRights,
+) => {
+  const permissions = await getConfigurableProfilePermissions(requestedGithubId);
   const role = await getRelationRole(userGithubId, requestedGithubId);
-  return matchPermissions(permissions, role);
+  return matchPermissions(permissions, role, superAccessRights);
+};
+
+export const getOwnerPermissions = async (githubId: string) => {
+  const permissions = await getConfigurableProfilePermissions(githubId);
+  const p: ConfigurableProfilePermissions = {
+    isProfileVisible: defaultPublicVisibilitySettings,
+    isAboutVisible: defaultVisibilitySettings,
+    isEducationVisible: defaultVisibilitySettings,
+    isEnglishVisible: defaultVisibilitySettings,
+    isEmailVisible: defaultVisibilitySettings,
+    isTelegramVisible: defaultVisibilitySettings,
+    isSkypeVisible: defaultVisibilitySettings,
+    isPhoneVisible: defaultVisibilitySettings,
+    isContactsNotesVisible: defaultVisibilitySettings,
+    isLinkedInVisible: defaultVisibilitySettings,
+    isPublicFeedbackVisible: defaultVisibilitySettings,
+    isMentorStatsVisible: defaultVisibilitySettings,
+    isStudentStatsVisible: defaultVisibilitySettings,
+  };
+
+  return mapValues(p, (value, key) => get(permissions, key, value));
 };
