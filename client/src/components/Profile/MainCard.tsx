@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { GeneralInfo } from '../../../../common/models/profile';
+import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { GithubAvatar } from 'components';
 import {
   Card,
   Typography,
-  Drawer,
-  Checkbox,
 } from 'antd';
+import VisibilitySettingsDrawer from './VisibilitySettingsDrawer';
 
 const { Title, Paragraph } = Typography;
 
@@ -20,6 +19,7 @@ import {
 type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
+  permissionsSettings?: ConfigurableProfilePermissions;
 };
 
 type State = {
@@ -40,17 +40,17 @@ class MainCard extends React.Component<Props, State> {
   }
 
   render() {
+    const { isEditingModeEnabled, permissionsSettings } = this.props;
     const { githubId, name, locationName } = this.props.data;
     const { isSettingsVisible } = this.state;
 
     return (
       <>
-
         <Card
-          actions={[
+          actions={isEditingModeEnabled ? [
             <EditOutlined key="main-card-actions-edit"/>,
             <SettingOutlined key="main-card-actions-settings" onClick={this.showSettings} />,
-          ]}
+          ] : undefined}
         >
           <GithubAvatar size={96} githubId={githubId} style={{ margin: '0 auto 10px', display: 'block' }} />
           <Title level={1} style={{ fontSize: 24, textAlign: 'center', margin: 0 }}>{name}</Title>
@@ -64,17 +64,14 @@ class MainCard extends React.Component<Props, State> {
               <EnvironmentFilled /> {locationName}
             </span>
           </Paragraph>
-          <Drawer
-            title="Who can see my profile?"
-            placement="top"
-            closable={true}
-            onClose={this.hideSettings}
-            visible={isSettingsVisible}
-            getContainer={false}
-            style={{ position: 'absolute', display: isSettingsVisible ? 'block' : 'none' }}
-          >
-            <Checkbox>Nobody</Checkbox>
-          </Drawer>
+          {
+            isEditingModeEnabled &&
+              <VisibilitySettingsDrawer
+                isSettingsVisible={isSettingsVisible}
+                hideSettings={this.hideSettings}
+                permissionsSettings={permissionsSettings}
+              />
+          }
         </Card>
       </>
     );

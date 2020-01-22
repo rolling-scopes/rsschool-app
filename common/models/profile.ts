@@ -1,5 +1,31 @@
 import { EnglishLevel } from './';
 
+
+export interface PublicVisibilitySettings {
+  all: boolean;
+}
+
+export interface VisibilitySettings extends PublicVisibilitySettings {
+  mentor: boolean;
+  student: boolean;
+}
+
+export interface ConfigurableProfilePermissions {
+  isProfileVisible: PublicVisibilitySettings;
+  isAboutVisible: VisibilitySettings;
+  isEducationVisible: VisibilitySettings;
+  isEnglishVisible: VisibilitySettings;
+  isEmailVisible: VisibilitySettings;
+  isTelegramVisible: VisibilitySettings;
+  isSkypeVisible: VisibilitySettings;
+  isPhoneVisible: VisibilitySettings;
+  isContactsNotesVisible: VisibilitySettings;
+  isLinkedInVisible: VisibilitySettings;
+  isPublicFeedbackVisible: VisibilitySettings;
+  isMentorStatsVisible: VisibilitySettings;
+  isStudentStatsVisible: VisibilitySettings;
+}
+
 export interface GeneralInfo {
   name: string;
   githubId: string;
@@ -105,6 +131,7 @@ export interface UserInfo {
 };
 
 export interface ProfileInfo {
+  permissionsSettings?: ConfigurableProfilePermissions;
   generalInfo?: GeneralInfo;
   contacts?: Contacts;
   mentorStats?: MentorStats[];
