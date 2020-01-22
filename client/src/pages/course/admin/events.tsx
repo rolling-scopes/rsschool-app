@@ -155,7 +155,7 @@ function Page(props: Props) {
         >
           <Input />
         </Form.Item>
-        <CommentInput />
+        <CommentInput notRequired />
       </ModalForm>
     );
   };

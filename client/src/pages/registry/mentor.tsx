@@ -313,7 +313,7 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...textColumnSizes}>
-                <CommentInput />
+                <CommentInput notRequired />
               </Col>
             </Row>
 

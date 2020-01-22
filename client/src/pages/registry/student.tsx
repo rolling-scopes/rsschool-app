@@ -171,7 +171,7 @@ function Page(props: Props & { courseAlias?: string }) {
           </Row>
           <Row gutter={defaultRowGutter}>
             <Col {...textColumnSizes}>
-              <CommentInput />
+              <CommentInput notRequired />
             </Col>
           </Row>
           <Row>
