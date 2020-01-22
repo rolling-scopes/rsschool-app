@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Result,
+  Button,
 } from 'antd';
 import css from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
@@ -23,18 +24,25 @@ import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 
+import {
+  EditOutlined,
+  EyeOutlined,
+} from '@ant-design/icons';
+
 type Props = {
   router: NextRouter;
   session: Session;
 };
 
 type State = {
+  isEditingModeEnabled: boolean;
   profile: ProfileInfo | null;
   isLoading: boolean;
 };
 
 class ProfilePage extends React.Component<Props, State> {
   state: State = {
+    isEditingModeEnabled: false,
     isLoading: true,
     profile: null,
   };
@@ -79,6 +87,12 @@ class ProfilePage extends React.Component<Props, State> {
     }
   };
 
+  private toggleEditViewProfileButton = () => {
+    const { isEditingModeEnabled } = this.state;
+
+    this.setState({ isEditingModeEnabled: !isEditingModeEnabled });
+  }
+
   async componentDidMount() {
     await this.fetchData();
   }
@@ -90,21 +104,29 @@ class ProfilePage extends React.Component<Props, State> {
   }
 
   render() {
-    const { profile } = this.state;
+    const { profile, isEditingModeEnabled } = this.state;
 
     const cards = [
-      profile?.generalInfo && <MainCard data={profile.generalInfo}/>,
-      profile?.generalInfo?.aboutMyself && <AboutCard data={profile.generalInfo}/>,
-      profile?.generalInfo?.englishLevel && <EnglishCard data={profile.generalInfo}/>,
-      profile?.generalInfo?.educationHistory.length && <EducationCard data={profile.generalInfo}/>,
-      profile?.contacts && <ContactsCard data={profile.contacts}/>,
-      profile?.publicFeedback.length && <PublicFeedbackCard data={profile.publicFeedback}/>,
-      profile?.studentStats.length && <StudentStatsCard data={profile.studentStats}/>,
-      profile?.mentorStats.length && <MentorStatsCard data={profile.mentorStats}/>,
-      profile?.studentStats.length &&
-        this.hadStudentCoreJSInterview(profile.studentStats) &&
+      profile?.generalInfo &&
+        <MainCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.generalInfo?.aboutMyself &&
+        <AboutCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.generalInfo?.englishLevel &&
+        <EnglishCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.generalInfo?.educationHistory?.length &&
+        <EducationCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.contacts &&
+        <ContactsCard data={profile.contacts} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.publicFeedback?.length &&
+        <PublicFeedbackCard data={profile.publicFeedback} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.studentStats?.length &&
+        <StudentStatsCard data={profile.studentStats} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.mentorStats?.length &&
+        <MentorStatsCard data={profile.mentorStats} isEditingModeEnabled={isEditingModeEnabled}/>,
+      profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) &&
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,
-      profile?.stageInterviewFeedback.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback}/>,
+      profile?.stageInterviewFeedback.length &&
+        <PreScreeningIviewCard data={profile.stageInterviewFeedback}/>,
     ].filter(Boolean) as JSX.Element[];
 
     return (
@@ -114,6 +136,17 @@ class ProfilePage extends React.Component<Props, State> {
           {
             this.state.profile
               ? <div style={{ padding: 10 }}>
+                  <Button
+                    type="ghost"
+                    style={{ position: 'fixed', width: 80, right: 10, zIndex: 1 }}
+                    onClick={this.toggleEditViewProfileButton}
+                  >
+                  {
+                    isEditingModeEnabled ?
+                      <span><EditOutlined/> Edit</span> :
+                      <span><EyeOutlined /> View</span>
+                  }
+                  </Button>
                   <Masonry
                     breakpointCols={{
                       default: 4,

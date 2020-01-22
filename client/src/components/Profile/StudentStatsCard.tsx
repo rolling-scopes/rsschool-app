@@ -18,6 +18,7 @@ import {
 
 type Props = {
   data: StudentStats[];
+  isEditingModeEnabled: boolean;
 };
 
 type State = {

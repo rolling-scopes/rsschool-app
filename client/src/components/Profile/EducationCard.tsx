@@ -12,6 +12,7 @@ import { ReadOutlined } from '@ant-design/icons';
 
 type Props = {
   data: GeneralInfo;
+  isEditingModeEnabled: boolean;
 };
 
 class EducationCard extends React.Component<Props> {

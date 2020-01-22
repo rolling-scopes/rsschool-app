@@ -18,6 +18,7 @@ import {
 
 type Props = {
   data: MentorStats[];
+  isEditingModeEnabled: boolean;
 };
 
 type State = {
@@ -80,7 +81,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                         <Text strong>{courseName}{locationName && ` / ${locationName}`}</Text>
                       </p>
                       {
-                        idx === 0 && (
+                        students ? idx === 0 && (
                           <List
                             itemLayout="horizontal"
                             dataSource={students}
@@ -116,12 +117,14 @@ class MentorStatsCard extends React.Component<Props, State> {
                               </List.Item>
                             )}
                           />
-                        )
+                        ) : <p>Doesn't have students at this course yet</p>
                       }
                     </div>
-                    <Button type="dashed" onClick={this.showMentorStatsModal.bind(null, idx)}>
-                      <FullscreenOutlined/>
-                    </Button>
+                    {
+                      students && <Button type="dashed" onClick={this.showMentorStatsModal.bind(null, idx)}>
+                        <FullscreenOutlined/>
+                      </Button>
+                    }
                   </List.Item>
                 )}
               />

@@ -1,4 +1,4 @@
-import { NOT_FOUND, OK } from 'http-status-codes';
+import { NOT_FOUND, OK, FORBIDDEN } from 'http-status-codes';
 import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
@@ -9,7 +9,7 @@ import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
 import { getStudentStats } from './student-stats';
 import { getUserInfo } from './user-info';
-import { getPermissions } from './permissions';
+import { getPermissions, getOwnerPermissions } from './permissions';
 
 /*
   WHO CAN SEE
@@ -60,13 +60,9 @@ import { getPermissions } from './permissions';
 */
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const {
-    // id: userId,
-    githubId: userGithubId,
-  } = ctx.state!.user as IUserSession;
+  const { githubId: userGithubId } = ctx.state!.user as IUserSession;
   // const { isAdmin, roles } = ctx.state!.user as IUserSession;
-  const { githubId } = ctx.query as { githubId: string | undefined };
-
+  const { githubId = userGithubId } = ctx.query as { githubId: string | undefined };
   // console.log('GITHUB =>', githubId);
   // console.log('ADMIN =>', isAdmin);
   // console.log('ROLES =>', roles);
@@ -75,16 +71,28 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     return setResponse(ctx, NOT_FOUND);
   }
 
+  const isProfileOwner = githubId === userGithubId;
+  console.log('isProfileOwner', isProfileOwner);
   // await getRepository(ProfilePermissions).save({ userId });
 
-  const permissions = await getPermissions(userGithubId, githubId);
+  const permissions = await getPermissions(userGithubId, githubId, { isProfileOwner });
 
-  console.log(JSON.stringify(permissions, null, 2));
+  const { isProfileVisible, isPublicFeedbackVisible, isMentorStatsVisible, isStudentStatsVisible } = permissions;
+
+  if (!isProfileVisible && !isProfileOwner) {
+    return setResponse(ctx, FORBIDDEN);
+  }
+
+  if (isProfileOwner) {
+    const ownerPermissions = await getOwnerPermissions(userGithubId);
+
+    console.log('OWN =>', ownerPermissions);
+  }
 
   const { generalInfo, contacts } = await getUserInfo(githubId, permissions);
-  const publicFeedback = await getPublicFeedback(githubId);
-  const mentorStats = await getMentorStats(githubId);
-  const studentStats = await getStudentStats(githubId);
+  const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(githubId) : undefined;
+  const mentorStats = isMentorStatsVisible ? await getMentorStats(githubId) : undefined;
+  const studentStats = isStudentStatsVisible ? await getStudentStats(githubId) : undefined;
   const stageInterviewFeedback = await getStageInterviewFeedback(githubId);
 
   const profileInfo: ProfileInfo = {
@@ -96,7 +104,8 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     studentStats,
   };
 
-  // console.log(JSON.stringify(profileInfo, null, 2));
+  console.log(JSON.stringify(permissions, null, 2));
+  console.log(JSON.stringify(profileInfo, null, 2));
 
   setResponse(ctx, OK, profileInfo);
 };

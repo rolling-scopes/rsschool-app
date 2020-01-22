@@ -11,6 +11,7 @@ import { TagOutlined } from '@ant-design/icons';
 
 type Props = {
   data: GeneralInfo;
+  isEditingModeEnabled: boolean;
 };
 
 class EnglishCard extends React.Component<Props> {

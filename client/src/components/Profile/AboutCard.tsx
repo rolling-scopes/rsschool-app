@@ -11,6 +11,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 
 type Props = {
   data: GeneralInfo;
+  isEditingModeEnabled: boolean;
 };
 
 class AboutCard extends React.Component<Props> {

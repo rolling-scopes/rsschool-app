@@ -22,6 +22,7 @@ import {
 
 type Props = {
   data: PublicFeedback[];
+  isEditingModeEnabled: boolean;
 };
 
 interface State {

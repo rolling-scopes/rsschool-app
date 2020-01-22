@@ -12,7 +12,10 @@ import { ContactsOutlined } from '@ant-design/icons';
 
 type Props = {
   data: Contacts;
+  isEditingModeEnabled: boolean;
 };
+
+type Contact = { name: string, value?: string };
 
 class ContactsCard extends React.Component<Props> {
   render() {
@@ -32,7 +35,7 @@ class ContactsCard extends React.Component<Props> {
     }, {
       name: 'Notes',
       value: notes,
-    }].filter(({ value }: { name: string, value: string | null }) => value);
+    }].filter(({ value }: Contact) => value);
 
     return (
       <CommonCard
@@ -42,7 +45,7 @@ class ContactsCard extends React.Component<Props> {
           <List
             itemLayout="horizontal"
             dataSource={contacts}
-            renderItem={({ name, value }: { name: string, value: string }) => (
+            renderItem={({ name, value }: Contact) => (
               <List.Item>
                 <Text strong>{name}:</Text> {value}
               </List.Item>

@@ -38,7 +38,7 @@ class MentorStatsModal extends React.Component<Props> {
       >
         <Row gutter={[16, 16]}>
         {
-          students.map(({ name, githubId, isExpelled, totalScore }) => {
+          students?.map(({ name, githubId, isExpelled, totalScore }) => {
             const profile = `/profile?githubId=${githubId}`;
             const guithubLink = `https://github.com/${githubId}`;
             const privateRepoLink = `https://github.com/rolling-scopes-school/${githubId}-${courseYearPostfix}`;

@@ -36,11 +36,11 @@ export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =
     studentIsExpelledStatuses,
     studentTotalScores,
   }: any) => {
-    const students = studentGithubIds.map((githubId: string, idx: number) => ({
+    const students = studentGithubIds[0] ? studentGithubIds.map((githubId: string, idx: number) => ({
       githubId,
       name: getFullName(studentFirstNames[idx], studentLastNames[idx], githubId),
       isExpelled: studentIsExpelledStatuses[idx],
       totalScore: studentTotalScores[idx],
-    }));
+    })) : undefined;
     return { courseName, locationName, courseFullName, students };
   });
