@@ -108,7 +108,11 @@ class ProfilePage extends React.Component<Props, State> {
 
     const cards = [
       profile?.generalInfo &&
-        <MainCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <MainCard
+          data={profile.generalInfo}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.generalInfo?.aboutMyself &&
         <AboutCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
       profile?.generalInfo?.englishLevel &&

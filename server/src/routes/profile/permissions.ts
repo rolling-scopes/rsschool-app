@@ -10,11 +10,10 @@ import {
   StageInterview,
 } from '../../models';
 import {
-  PublicVisibilitySettings,
-  VisibilitySettings,
   defaultPublicVisibilitySettings,
   defaultVisibilitySettings,
 } from '../../models/profilePermissions';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 interface Relations {
   student: string;
@@ -28,22 +27,6 @@ type RelationRole = 'student' | 'mentor' | 'all';
 
 interface SuperAccessRights {
   isProfileOwner: boolean;
-}
-
-interface ConfigurableProfilePermissions {
-  isProfileVisible: PublicVisibilitySettings;
-  isAboutVisible: VisibilitySettings;
-  isEducationVisible: VisibilitySettings;
-  isEnglishVisible: VisibilitySettings;
-  isEmailVisible: VisibilitySettings;
-  isTelegramVisible: VisibilitySettings;
-  isSkypeVisible: VisibilitySettings;
-  isPhoneVisible: VisibilitySettings;
-  isContactsNotesVisible: VisibilitySettings;
-  isLinkedInVisible: VisibilitySettings;
-  isPublicFeedbackVisible: VisibilitySettings;
-  isMentorStatsVisible: VisibilitySettings;
-  isStudentStatsVisible: VisibilitySettings;
 }
 
 export interface Permissions {

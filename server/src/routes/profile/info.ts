@@ -83,11 +83,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     return setResponse(ctx, FORBIDDEN);
   }
 
-  if (isProfileOwner) {
-    const ownerPermissions = await getOwnerPermissions(userGithubId);
-
-    console.log('OWN =>', ownerPermissions);
-  }
+  const permissionsSettings = isProfileOwner ? await getOwnerPermissions(userGithubId) : undefined;
 
   const { generalInfo, contacts } = await getUserInfo(githubId, permissions);
   const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(githubId) : undefined;
@@ -96,6 +92,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   const stageInterviewFeedback = await getStageInterviewFeedback(githubId);
 
   const profileInfo: ProfileInfo = {
+    permissionsSettings,
     generalInfo,
     contacts,
     mentorStats,
@@ -106,6 +103,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   console.log(JSON.stringify(permissions, null, 2));
   console.log(JSON.stringify(profileInfo, null, 2));
+  console.log('OWN =>', permissionsSettings);
 
   setResponse(ctx, OK, profileInfo);
 };
