@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { StudentStats } from '../../../../common/models/profile';
 import {
   Typography,
   List,
@@ -8,6 +7,8 @@ import {
 } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
+import { StudentStats } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 const { Text } = Typography;
 
@@ -19,6 +20,7 @@ import {
 type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
+  permissionsSettings?: ConfigurableProfilePermissions;
 };
 
 type State = {
@@ -35,6 +37,10 @@ class StudentStatsCard extends React.Component<Props, State> {
     scoredTasks: [],
     isStudentStatsModalVisible: false,
   };
+
+  private filterPermissions = ({ isStudentStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
+    isStudentStatsVisible,
+  });
 
   private showStudentStatsModal = (courseIndex: number) => {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
@@ -57,6 +63,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
+    const { isEditingModeEnabled, permissionsSettings } = this.props;
     const stats = this.props.data;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
@@ -118,6 +125,8 @@ class StudentStatsCard extends React.Component<Props, State> {
               )}
             />
           }
+          permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+          isEditingModeEnabled={isEditingModeEnabled}
         />
       </>
     );

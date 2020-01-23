@@ -1,7 +1,5 @@
 import * as React from 'react';
 import moment from 'moment';
-import { PublicFeedback } from '../../../../common/models/profile';
-// import { GithubAvatar } from 'components';
 import {
   Typography,
   Comment,
@@ -12,6 +10,8 @@ import {
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
+import { PublicFeedback } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 const { Text, Paragraph } = Typography;
 
@@ -23,6 +23,7 @@ import {
 type Props = {
   data: PublicFeedback[];
   isEditingModeEnabled: boolean;
+  permissionsSettings?: ConfigurableProfilePermissions;
 };
 
 interface State {
@@ -37,6 +38,10 @@ class PublicFeedbackCard extends React.Component<Props, State> {
     badgesCount: {},
     isPublicFeedbackModalVisible: false,
   };
+
+  private filterPermissions = ({ isPublicFeedbackVisible }: Partial<ConfigurableProfilePermissions>) => ({
+    isPublicFeedbackVisible,
+  });
 
   private showPublicFeedbackModal = () => {
     this.setState({ isPublicFeedbackModalVisible: true });
@@ -67,6 +72,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
   };
 
   render() {
+    const { isEditingModeEnabled, permissionsSettings } = this.props;
     const badges = this.props.data;
     const { badgesCount } = this.state;
 
@@ -143,6 +149,8 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               }
             </>
           }
+          permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+          isEditingModeEnabled={isEditingModeEnabled}
         />
       </>
     );

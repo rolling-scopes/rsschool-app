@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { GeneralInfo } from '../../../../common/models/profile';
 import {
   Typography,
   List,
 } from 'antd';
 import CommonCard from './CommonCard';
+import { GeneralInfo } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 const { Text } = Typography;
 
@@ -13,10 +14,16 @@ import { ReadOutlined } from '@ant-design/icons';
 type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
+  permissionsSettings?: ConfigurableProfilePermissions;
 };
 
 class EducationCard extends React.Component<Props> {
+  private filterPermissions = ({ isEducationVisible }: Partial<ConfigurableProfilePermissions>) => ({
+    isEducationVisible,
+  })
+
   render() {
+    const { isEditingModeEnabled, permissionsSettings } = this.props;
     const { educationHistory } = this.props.data;
     return (
       <CommonCard
@@ -33,6 +40,8 @@ class EducationCard extends React.Component<Props> {
             )}
           />
         }
+        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+        isEditingModeEnabled={isEditingModeEnabled}
       />
     );
   };

@@ -114,19 +114,47 @@ class ProfilePage extends React.Component<Props, State> {
           permissionsSettings={profile.permissionsSettings}
         />,
       profile?.generalInfo?.aboutMyself &&
-        <AboutCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <AboutCard
+          data={profile.generalInfo}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.generalInfo?.englishLevel &&
-        <EnglishCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <EnglishCard
+          data={profile.generalInfo}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.generalInfo?.educationHistory?.length &&
-        <EducationCard data={profile.generalInfo} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <EducationCard
+          data={profile.generalInfo}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.contacts &&
-        <ContactsCard data={profile.contacts} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <ContactsCard
+          data={profile.contacts}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.publicFeedback?.length &&
-        <PublicFeedbackCard data={profile.publicFeedback} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <PublicFeedbackCard
+          data={profile.publicFeedback}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.studentStats?.length &&
-        <StudentStatsCard data={profile.studentStats} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <StudentStatsCard
+          data={profile.studentStats}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.mentorStats?.length &&
-        <MentorStatsCard data={profile.mentorStats} isEditingModeEnabled={isEditingModeEnabled}/>,
+        <MentorStatsCard
+          data={profile.mentorStats}
+          isEditingModeEnabled={isEditingModeEnabled}
+          permissionsSettings={profile.permissionsSettings}
+        />,
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) &&
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,
       profile?.stageInterviewFeedback.length &&

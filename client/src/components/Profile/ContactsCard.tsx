@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Contacts } from '../../../../common/models/profile';
 import {
   List,
   Typography,
 } from 'antd';
 import CommonCard from './CommonCard';
+import { Contacts } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 const { Text } = Typography;
 
@@ -13,12 +14,30 @@ import { ContactsOutlined } from '@ant-design/icons';
 type Props = {
   data: Contacts;
   isEditingModeEnabled: boolean;
+  permissionsSettings?: ConfigurableProfilePermissions;
 };
 
 type Contact = { name: string, value?: string };
 
 class ContactsCard extends React.Component<Props> {
+  private filterPermissions = ({
+    isEmailVisible,
+    isTelegramVisible,
+    isPhoneVisible,
+    isSkypeVisible,
+    isContactsNotesVisible,
+    isLinkedInVisible,
+  }: Partial<ConfigurableProfilePermissions>) => ({
+    isEmailVisible,
+    isTelegramVisible,
+    isPhoneVisible,
+    isSkypeVisible,
+    isContactsNotesVisible,
+    isLinkedInVisible,
+  });
+
   render() {
+    const { isEditingModeEnabled, permissionsSettings } = this.props;
     const { email, telegram, phone, skype, notes } = this.props.data;
     const contacts = [{
       name: 'E-mail',
@@ -52,6 +71,8 @@ class ContactsCard extends React.Component<Props> {
             )}
           />
         }
+        permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+        isEditingModeEnabled={isEditingModeEnabled}
       />
     );
   }
