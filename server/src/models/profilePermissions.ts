@@ -1,6 +1,6 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { User } from './user';
-import { PublicVisibilitySettings, VisibilitySettings } from '../../../common/models/profile';
+import { PublicVisibilitySettings, VisibilitySettings, ConfigurableProfilePermissions } from '../../../common/models/profile';
 
 export const defaultPublicVisibilitySettings = {
   all: false,
@@ -10,6 +10,22 @@ export const defaultVisibilitySettings = {
   mentor: false,
   student: false,
   all: false,
+};
+
+export const defaultProfilePermissionsSettings: ConfigurableProfilePermissions = {
+  isProfileVisible: defaultPublicVisibilitySettings,
+  isAboutVisible: defaultVisibilitySettings,
+  isEducationVisible: defaultVisibilitySettings,
+  isEnglishVisible: defaultVisibilitySettings,
+  isEmailVisible: defaultVisibilitySettings,
+  isTelegramVisible: defaultVisibilitySettings,
+  isSkypeVisible: defaultVisibilitySettings,
+  isPhoneVisible: defaultVisibilitySettings,
+  isContactsNotesVisible: defaultVisibilitySettings,
+  isLinkedInVisible: defaultVisibilitySettings,
+  isPublicFeedbackVisible: defaultVisibilitySettings,
+  isMentorStatsVisible: defaultVisibilitySettings,
+  isStudentStatsVisible: defaultVisibilitySettings,
 };
 
 @Entity()

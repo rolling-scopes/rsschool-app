@@ -1,4 +1,4 @@
-import { get, mapValues } from 'lodash';
+import { get, mapValues, mergeWith } from 'lodash';
 import { getRepository } from 'typeorm';
 import {
   User,
@@ -10,8 +10,7 @@ import {
   StageInterview,
 } from '../../models';
 import {
-  defaultPublicVisibilitySettings,
-  defaultVisibilitySettings,
+  defaultProfilePermissionsSettings,
 } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
@@ -116,7 +115,7 @@ const matchPermissions = (
   role: RelationRole,
   { isProfileOwner }: SuperAccessRights,
 ): Permissions => {
-  const p: Permissions = {
+  const defaultPermissions: Permissions = {
     isProfileVisible: false,
     isAboutVisible: false,
     isEducationVisible: false,
@@ -132,13 +131,7 @@ const matchPermissions = (
     isStudentStatsVisible: false,
   };
 
-  // (Object.keys(p) as (keyof Permissions)[]).forEach((key) => {
-  //   p[key] = isProfileOwner || permissions[key].all || permissions[key][role];
-  // });
-
-  // return p;
-
-  return mapValues(p, (_, key) => isProfileOwner ||
+  return mapValues(defaultPermissions, (_, key) => isProfileOwner ||
     get(permissions, `${key}.all`) ||
     get(permissions, `${key}.${role}`) ||
     false,
@@ -157,21 +150,10 @@ export const getPermissions = async (
 
 export const getOwnerPermissions = async (githubId: string) => {
   const permissions = await getConfigurableProfilePermissions(githubId);
-  const p: ConfigurableProfilePermissions = {
-    isProfileVisible: defaultPublicVisibilitySettings,
-    isAboutVisible: defaultVisibilitySettings,
-    isEducationVisible: defaultVisibilitySettings,
-    isEnglishVisible: defaultVisibilitySettings,
-    isEmailVisible: defaultVisibilitySettings,
-    isTelegramVisible: defaultVisibilitySettings,
-    isSkypeVisible: defaultVisibilitySettings,
-    isPhoneVisible: defaultVisibilitySettings,
-    isContactsNotesVisible: defaultVisibilitySettings,
-    isLinkedInVisible: defaultVisibilitySettings,
-    isPublicFeedbackVisible: defaultVisibilitySettings,
-    isMentorStatsVisible: defaultVisibilitySettings,
-    isStudentStatsVisible: defaultVisibilitySettings,
-  };
 
-  return mapValues(p, (value, key) => get(permissions, key, value));
+  mergeWith(permissions, defaultProfilePermissionsSettings, (setting, defaultSetting) => (
+    mapValues(defaultSetting, (value, key) => get(setting, key, value))
+  ));
+
+  return permissions;
 };

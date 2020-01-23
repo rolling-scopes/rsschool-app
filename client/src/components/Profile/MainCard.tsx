@@ -39,6 +39,10 @@ class MainCard extends React.Component<Props, State> {
     this.setState({ isSettingsVisible: false });
   }
 
+  private filterPermissions = ({ isProfileVisible }: Partial<ConfigurableProfilePermissions>) => ({
+    isProfileVisible,
+  })
+
   render() {
     const { isEditingModeEnabled, permissionsSettings } = this.props;
     const { githubId, name, locationName } = this.props.data;
@@ -69,7 +73,7 @@ class MainCard extends React.Component<Props, State> {
               <VisibilitySettingsDrawer
                 isSettingsVisible={isSettingsVisible}
                 hideSettings={this.hideSettings}
-                permissionsSettings={permissionsSettings}
+                permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
               />
           }
         </Card>
