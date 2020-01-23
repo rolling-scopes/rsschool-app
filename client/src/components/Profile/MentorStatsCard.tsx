@@ -9,6 +9,8 @@ import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -21,6 +23,7 @@ type Props = {
   data: MentorStats[];
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 type State = {
@@ -51,7 +54,7 @@ class MentorStatsCard extends React.Component<Props, State> {
   );
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const stats = this.props.data;
     const { courseIndex, isMentorStatsModalVisible } = this.state;
 
@@ -139,6 +142,7 @@ class MentorStatsCard extends React.Component<Props, State> {
           }
           permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
           isEditingModeEnabled={isEditingModeEnabled}
+          onSettingsChange={onSettingsChange}
         />
       </>
     );

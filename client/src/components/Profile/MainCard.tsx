@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { GithubAvatar } from 'components';
 import {
   Card,
   Typography,
 } from 'antd';
+import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import VisibilitySettingsDrawer from './VisibilitySettingsDrawer';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Title, Paragraph } = Typography;
 
@@ -20,6 +22,7 @@ type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 type State = {
@@ -44,7 +47,7 @@ class MainCard extends React.Component<Props, State> {
   })
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const { githubId, name, locationName } = this.props.data;
     const { isSettingsVisible } = this.state;
 
@@ -74,6 +77,7 @@ class MainCard extends React.Component<Props, State> {
                 isSettingsVisible={isSettingsVisible}
                 hideSettings={this.hideSettings}
                 permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+                onSettingsChange={onSettingsChange}
               />
           }
         </Card>

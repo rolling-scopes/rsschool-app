@@ -7,12 +7,15 @@ import {
   List,
   Typography,
 } from 'antd';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
 type Props = {
   isSettingsVisible: boolean;
   hideSettings: () => void;
+  onSettingsChange?: (event: CheckboxChangeEvent, changed: ChangedSettings) => void;
   permissionsSettings?: Partial<ConfigurableProfilePermissions>;
 };
 
@@ -40,7 +43,7 @@ enum roles {
 
 class VisibilitySettingsDrawer extends React.Component<Props> {
   render() {
-    const { isSettingsVisible, hideSettings, permissionsSettings } = this.props;
+    const { isSettingsVisible, hideSettings, permissionsSettings, onSettingsChange } = this.props;
     return (
       <Drawer
         title="Visibility settings"
@@ -63,7 +66,17 @@ class VisibilitySettingsDrawer extends React.Component<Props> {
                 {values(
                   mapValues(actualPermissions, (isChecked, role) => (
                     <p key={`visibility-settings-${permissionName}-${role}`} style={{ marginBottom: 0 }}>
-                      <Checkbox defaultChecked={isChecked} style={{ fontSize: 12 }}>
+                      <Checkbox
+                        checked={isChecked}
+                        style={{ fontSize: 12 }}
+                        onChange={
+                          onSettingsChange ?
+                            (event) => onSettingsChange(event, { permissionName, role }) :
+                            undefined
+                        }
+                        // data-permission-name={permissionName}
+                        // data-role={role}
+                      >
                         {roles[role]}
                       </Checkbox>
                     </p>

@@ -5,6 +5,8 @@ import {
 } from 'antd';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import VisibilitySettingsDrawer from './VisibilitySettingsDrawer';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Title } = Typography;
 
@@ -20,6 +22,7 @@ type Props = {
   icon: any;
   content: any;
   actions?: any;
+  onSettingsChange?: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 type State = {
@@ -39,7 +42,7 @@ class CommonCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { title, icon, content, isEditingModeEnabled, permissionsSettings } = this.props;
+    const { title, icon, content, isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const { isSettingsVisible } = this.state;
 
     return (
@@ -65,6 +68,7 @@ class CommonCard extends React.Component<Props, State> {
                 isSettingsVisible={isSettingsVisible}
                 hideSettings={this.hideSettings}
                 permissionsSettings={permissionsSettings}
+                onSettingsChange={onSettingsChange}
               />
           }
       </Card>

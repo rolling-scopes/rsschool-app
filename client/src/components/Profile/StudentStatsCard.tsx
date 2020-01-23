@@ -9,6 +9,8 @@ import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -21,6 +23,7 @@ type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 type State = {
@@ -63,7 +66,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const stats = this.props.data;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
@@ -127,6 +130,7 @@ class StudentStatsCard extends React.Component<Props, State> {
           }
           permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
           isEditingModeEnabled={isEditingModeEnabled}
+          onSettingsChange={onSettingsChange}
         />
       </>
     );

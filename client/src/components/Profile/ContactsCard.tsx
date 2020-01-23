@@ -6,6 +6,8 @@ import {
 import CommonCard from './CommonCard';
 import { Contacts } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -15,6 +17,7 @@ type Props = {
   data: Contacts;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 type Contact = { name: string, value?: string };
@@ -37,7 +40,7 @@ class ContactsCard extends React.Component<Props> {
   });
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const { email, telegram, phone, skype, notes } = this.props.data;
     const contacts = [{
       name: 'E-mail',
@@ -73,6 +76,7 @@ class ContactsCard extends React.Component<Props> {
         }
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
+        onSettingsChange={onSettingsChange}
       />
     );
   }
