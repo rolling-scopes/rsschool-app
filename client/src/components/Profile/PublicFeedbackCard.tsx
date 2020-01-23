@@ -12,6 +12,8 @@ import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text, Paragraph } = Typography;
 
@@ -24,6 +26,7 @@ type Props = {
   data: PublicFeedback[];
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 interface State {
@@ -72,7 +75,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const badges = this.props.data;
     const { badgesCount } = this.state;
 
@@ -151,6 +154,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
           }
           permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
           isEditingModeEnabled={isEditingModeEnabled}
+          onSettingsChange={onSettingsChange}
         />
       </>
     );

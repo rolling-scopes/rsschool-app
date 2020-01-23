@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { get } from 'lodash';
 import {
   Result,
   Button,
@@ -28,6 +29,7 @@ import {
   EditOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 type Props = {
   router: NextRouter;
@@ -40,12 +42,36 @@ type State = {
   isLoading: boolean;
 };
 
+export type ChangedSettings = {
+  permissionName: string;
+  role: string;
+}
+
 class ProfilePage extends React.Component<Props, State> {
   state: State = {
     isEditingModeEnabled: false,
     isLoading: true,
     profile: null,
   };
+
+  private onSettingsChange = (event: CheckboxChangeEvent, { permissionName, role }: ChangedSettings) => {
+    const { profile } = this.state;
+    const { checked } = event.target;
+
+    if (profile && profile.permissionsSettings) {
+      const changed = get(profile.permissionsSettings, `${permissionName}`);
+      changed[role] = checked;
+      this.setState({
+        profile: {
+          ...profile,
+          permissionsSettings: {
+            ...profile.permissionsSettings,
+            [permissionName]: changed,
+          },
+        },
+      });
+    }
+  }
 
   private userService = new UserService();
 
@@ -112,48 +138,56 @@ class ProfilePage extends React.Component<Props, State> {
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.generalInfo?.aboutMyself &&
         <AboutCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.generalInfo?.englishLevel &&
         <EnglishCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.generalInfo?.educationHistory?.length &&
         <EducationCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.contacts &&
         <ContactsCard
           data={profile.contacts}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.publicFeedback?.length &&
         <PublicFeedbackCard
           data={profile.publicFeedback}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.studentStats?.length &&
         <StudentStatsCard
           data={profile.studentStats}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.mentorStats?.length &&
         <MentorStatsCard
           data={profile.mentorStats}
           isEditingModeEnabled={isEditingModeEnabled}
           permissionsSettings={profile.permissionsSettings}
+          onSettingsChange={this.onSettingsChange}
         />,
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) &&
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,

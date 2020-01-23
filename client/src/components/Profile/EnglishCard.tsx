@@ -5,6 +5,8 @@ import {
 import CommonCard from './CommonCard';
 import { GeneralInfo } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -14,6 +16,7 @@ type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 class EnglishCard extends React.Component<Props> {
@@ -22,7 +25,7 @@ class EnglishCard extends React.Component<Props> {
   })
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const { englishLevel } = this.props.data;
     return (
       <CommonCard
@@ -31,6 +34,7 @@ class EnglishCard extends React.Component<Props> {
         content={<Text style={{ textTransform: 'capitalize', fontSize: '48px' }}>{englishLevel}</Text>}
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
+        onSettingsChange={onSettingsChange}
       />
     );
   }

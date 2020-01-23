@@ -6,6 +6,8 @@ import {
 import CommonCard from './CommonCard';
 import { GeneralInfo } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ChangedSettings } from 'pages/profile';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
@@ -15,6 +17,7 @@ type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
+  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
 };
 
 class EducationCard extends React.Component<Props> {
@@ -23,7 +26,7 @@ class EducationCard extends React.Component<Props> {
   })
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
     const { educationHistory } = this.props.data;
     return (
       <CommonCard
@@ -42,6 +45,7 @@ class EducationCard extends React.Component<Props> {
         }
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
+        onSettingsChange={onSettingsChange}
       />
     );
   };
