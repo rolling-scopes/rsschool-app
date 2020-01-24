@@ -2,7 +2,6 @@ import * as React from 'react';
 import { get } from 'lodash';
 import {
   Result,
-  Button,
 } from 'antd';
 import css from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
@@ -25,10 +24,6 @@ import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 
-import {
-  EditOutlined,
-  EyeOutlined,
-} from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 type Props = {
@@ -113,10 +108,8 @@ class ProfilePage extends React.Component<Props, State> {
     }
   };
 
-  private toggleEditViewProfileButton = () => {
-    const { isEditingModeEnabled } = this.state;
-
-    this.setState({ isEditingModeEnabled: !isEditingModeEnabled });
+  private changeProfilePageMode = (mode: 'edit' | 'view') => {
+    this.setState({ isEditingModeEnabled: mode === 'edit' ? true : false });
   }
 
   async componentDidMount() {
@@ -198,21 +191,15 @@ class ProfilePage extends React.Component<Props, State> {
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
-          <Header username={this.props.session.githubId} />
+          <Header
+            username={this.props.session.githubId}
+            isProfilePage={true}
+            isProfileEditingModeEnabled={isEditingModeEnabled}
+            onChangeProfilePageMode={this.changeProfilePageMode}
+          />
           {
             this.state.profile
               ? <div style={{ padding: 10 }}>
-                  <Button
-                    type="ghost"
-                    style={{ position: 'fixed', width: 80, right: 10, zIndex: 1 }}
-                    onClick={this.toggleEditViewProfileButton}
-                  >
-                  {
-                    isEditingModeEnabled ?
-                      <span><EditOutlined/> Edit</span> :
-                      <span><EyeOutlined /> View</span>
-                  }
-                  </Button>
                   <Masonry
                     breakpointCols={{
                       default: 4,
