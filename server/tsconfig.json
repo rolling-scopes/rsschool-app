@@ -1,36 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "target": "es2017",
-    "lib": [
-      "es2017",
-      "dom",
-      "esnext.asynciterable",
-      "ES2019.Array",
-    ],
-    "baseUrl": ".",
-    "noImplicitAny": true,
     "outDir": "./dist",
-    "sourceMap": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "noUnusedParameters": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "src/typings"
-    ],
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
-    "emitDecoratorMetadata": true
+    "lib": ["es2017", "dom", "esnext.asynciterable", "ES2019.Array"]
   },
-  "include": [
-    "./**/*.ts",
-    "./**/*.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "extends": "../tsconfig.base.json",
+  "include": ["./**/*.ts", "./**/*.js"],
+  "exclude": ["node_modules", "dist"]
 }
