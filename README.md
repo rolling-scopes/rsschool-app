@@ -1,5 +1,23 @@
 # Rolling Scopes School Application
 
+### UNDER ACTIVE DEVELOPMENT
+
+
+The [web application](https://app.rs.school) which powers [Rolling Scopes School](https://rs.school) education process. It helps thousands students to become JavaScipt developers.
+
+
+---
+
+## Technology stack
+ - Typescript, 
+ - Next.js, 
+ - React 
+ - Node.js
+ - Koa.js
+ - Docker
+ - PostgreSQL
+
+---
 
 ## Contributors
 
