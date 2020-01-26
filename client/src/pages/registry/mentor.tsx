@@ -272,7 +272,7 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...textColumnSizes}>
-                <Form.Item name="aboutMyself" label="About Youself">
+                <Form.Item name="aboutMyself" label="About Yourself">
                   <Input.TextArea placeholder="A couple words about yourself..." />
                 </Form.Item>
               </Col>
