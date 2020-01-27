@@ -12,6 +12,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
+import { NextPageContext } from 'next';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -21,11 +22,13 @@ function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
 
   const update = useUpdate();
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [courses, setCourses] = useState([] as Course[]);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
   useAsync(async () => {
+    setLoading(true);
     const userService = new UserService();
     const courseService = new CoursesService();
     const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
@@ -37,6 +40,7 @@ function Page(props: Props & { courseAlias?: string }) {
 
     setCourses(activeCourses);
     setInitialData(profile.user);
+    setLoading(false);
   }, []);
 
   const handleSubmit = useCallback(async (model: any) => {
@@ -70,7 +74,9 @@ function Page(props: Props & { courseAlias?: string }) {
 
   let content: React.ReactNode;
   const location = form.getFieldValue('location');
-  if (!courses.length) {
+  if (loading) {
+    content = undefined;
+  } else if (!courses.length) {
     content = <NoCourses />;
   } else if (submitted) {
     content = (
@@ -92,7 +98,6 @@ function Page(props: Props & { courseAlias?: string }) {
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        className="m-2"
         onFinish={handleSubmit}
       >
         <Col style={{ margin: '0 20px' }}>
@@ -186,7 +191,7 @@ function Page(props: Props & { courseAlias?: string }) {
   }
 
   return (
-    <PageLayout loading={false} title="Registration" githubId={props.session.githubId}>
+    <PageLayout loading={loading} title="Registration" githubId={props.session.githubId}>
       {content}
     </PageLayout>
   );
@@ -200,4 +205,15 @@ function getInitialValues(initialData, courses) {
   };
 }
 
-export default withSession(Page);
+const RegistryStudentPage: any = withSession(Page);
+RegistryStudentPage.getInitialProps = async (context: NextPageContext) => {
+  try {
+    const courseAlias = context.query.course;
+    return { courseAlias };
+  } catch (e) {
+    console.error(e.message);
+    return { courseAlias: undefined };
+  }
+};
+
+export default RegistryStudentPage;
