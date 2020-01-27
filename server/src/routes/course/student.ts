@@ -1,4 +1,4 @@
-import { BAD_REQUEST, CONFLICT, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
