@@ -95,6 +95,7 @@ function Page(props: Props & { courseAlias?: string }) {
     const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
     content = (
       <Form
+        layout="vertical"
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
