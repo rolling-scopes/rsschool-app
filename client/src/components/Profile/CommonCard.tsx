@@ -42,7 +42,7 @@ class CommonCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { title, icon, content, isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
+    const { title, icon, content, isEditingModeEnabled, permissionsSettings, onSettingsChange, actions } = this.props;
     const { isSettingsVisible } = this.state;
 
     return (
@@ -59,7 +59,7 @@ class CommonCard extends React.Component<Props, State> {
         actions={isEditingModeEnabled ? [
           <EditOutlined key="main-card-actions-edit"/>,
           <SettingOutlined key="main-card-actions-settings" onClick={this.showSettings} />,
-        ] : undefined}
+        ] : actions}
       >
         {content}
         {
