@@ -101,8 +101,9 @@ const { className, styles } = css.resolve`
     overflow: hidden;
   }
 
-  :global(.antd-drawer-body) {
-    height: calc(100% - 55%);
+  :global(.ant-drawer-body) {
+    height: calc(100% - 55px);
+    overflow: auto;
   }
 `;
 
