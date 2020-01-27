@@ -10,6 +10,7 @@ import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
 
 type Assignment = { student: StudentBasic; url: string };
+type HistoryItem = { comment: string;  score: number; dateTime: number; }
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
@@ -19,7 +20,7 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
   const githubId = props.githubId;
   const courseTaskId = props.courseTaskId;
 
-  const [state, setState] = useState({ loading: false, data: [] as any[] });
+  const [state, setState] = useState({ loading: false, data: [] as HistoryItem[] });
 
   const loadStudentScoreHistory = async (githubId: string) => {
     const courseService = new CourseService(props.courseId);

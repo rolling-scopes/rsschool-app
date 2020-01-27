@@ -21,7 +21,7 @@ function Page(props: Props) {
   useAsync(async () => {
     const data = await service.getEvents();
     setData(data);
-  }, []);
+  }, [service]);
 
   const handleAddItem = () => {
     setModalData({});
@@ -163,7 +163,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Actions',
       dataIndex: 'actions',
       width: 100,
-      render: (_, record) => (
+      render: (_: any, record: Event) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}

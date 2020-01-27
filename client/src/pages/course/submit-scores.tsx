@@ -58,7 +58,7 @@ export function Page(props: CoursePageProps) {
     setSubmitResults([]);
   };
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values: any) => {
     try {
       setLoading(true);
       const results = await parseFiles(values.files);

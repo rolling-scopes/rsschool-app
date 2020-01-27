@@ -231,7 +231,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <a onClick={() => handleEditItem(record)}>Edit</a>,
+      render: (_: any, record: Task) => <a onClick={() => handleEditItem(record)}>Edit</a>,
     },
   ];
 }

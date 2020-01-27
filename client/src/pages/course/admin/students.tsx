@@ -11,7 +11,7 @@ import { GithubUserLink, PageLayout, StudentExpelModal, withSession, Session } f
 import { boolIconRenderer, boolSorter, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, ReactElement } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
@@ -49,7 +49,7 @@ function Page(props: Props) {
     setLoading(false);
   }, [courseService]);
 
-  const handleExpel = record => setExpelledStudent(record);
+  const handleExpel = (record: StudentDetails) => setExpelledStudent(record);
 
   const handleCreateRepo = useCallback(
     async ({ githubId }: { githubId: string }) => {
@@ -156,7 +156,7 @@ function Page(props: Props) {
   );
 }
 
-function getColumns(getActionsMenu): ColumnProps<any>[] {
+function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): ColumnProps<any>[] {
   return [
     {
       title: 'Active',
@@ -217,7 +217,7 @@ function getColumns(getActionsMenu): ColumnProps<any>[] {
       title: <BranchesOutlined />,
       dataIndex: 'repository',
       width: 80,
-      render: value => (value ? <a href={value}>Link</a> : null),
+      render: (value: string) => (value ? <a href={value}>Link</a> : null),
     },
     {
       title: 'Total',

@@ -346,7 +346,7 @@ class IndexPage extends React.PureComponent<Props, State> {
               {hasPlanned
                 ? 'You can register to the upcoming course.'
                 : 'Unfortunately, there are no any planned courses for students but you can always register as mentor'}
-              <Button target="_blank" size="small" type="link"  href="https://docs.rs.school/#/how-to-enroll">
+              <Button target="_blank" size="small" type="link" href="https://docs.rs.school/#/how-to-enroll">
                 More info
               </Button>
             </span>

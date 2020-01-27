@@ -45,10 +45,8 @@
     "@types/react-dom": "~16.9.4",
     "express": "~4.17.1",
     "http-proxy-middleware": "~0.19.1",
-    "jest": "~24.9.0",
-    "ts-jest": "~24.2.0",
-    "tslint": "~5.20.1",
-    "tslint-react": "~4.1.0",
+    "jest": "~25.1.0",
+    "ts-jest": "~25.0.0",
     "typescript": "~3.7.5"
   }
 }

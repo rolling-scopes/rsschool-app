@@ -172,7 +172,7 @@ function Page(props: Props & { courseAlias?: string }) {
   );
 }
 
-function getInitialValues(initialData) {
+function getInitialValues(initialData: Partial<UserFull>) {
   return {
     ...initialData,
     location: initialData.locationId ? { key: initialData.locationId } : undefined,

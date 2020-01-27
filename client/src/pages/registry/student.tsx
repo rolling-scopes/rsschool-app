@@ -198,7 +198,7 @@ function Page(props: Props & { courseAlias?: string }) {
   );
 }
 
-function getInitialValues(initialData, courses) {
+function getInitialValues(initialData: Partial<UserFull>, courses: Course[]) {
   return {
     ...initialData,
     courseId: courses[0].id,

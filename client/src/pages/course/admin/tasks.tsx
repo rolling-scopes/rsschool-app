@@ -249,7 +249,10 @@ function Page(props: CoursePageProps) {
   );
 }
 
-function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks, stages }) {
+function getColumns(
+  getDropdownMenu: (record: CourseTaskDetails) => any,
+  { tasks, stages }: { tasks: any[]; stages: any[] },
+) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -276,12 +279,12 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
     {
       title: 'Task Owner',
       dataIndex: ['taskOwner', 'githubId'],
-      render: value => (value ? <GithubUserLink value={value} /> : null),
+      render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
     },
     {
       dataIndex: 'actions',
       width: 80,
-      render: (_, record: CourseTaskDetails) => {
+      render: (_: any, record: CourseTaskDetails) => {
         return getDropdownMenu(record);
       },
     },

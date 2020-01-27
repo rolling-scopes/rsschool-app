@@ -8,7 +8,7 @@ export function relativeDays(value: string) {
   return moment().diff(moment(value), 'day');
 }
 
-export function formatDateTime(value: string) {
+export function formatDateTime(value: string | number) {
   return moment(value).format('YYYY-MM-DD HH:mm');
 }
 

@@ -278,7 +278,7 @@ class ProfilePage extends React.Component<Props, State> {
     );
   }
 
-  private renderStageInterviews(stageInterviews) {
+  private renderStageInterviews(stageInterviews: any[]) {
     return (
       <>
         <h4>Pre-screening Interviews</h4>
@@ -301,7 +301,7 @@ class ProfilePage extends React.Component<Props, State> {
                 <Typography.Text>{interview.comment}</Typography.Text>
               </Descriptions.Item>
               {Object.keys(interview.skills).map(key => (
-                <Descriptions.Item key={`stageInterview-${interview.date}-skills-${key}`} label={Skill[key]}>
+                <Descriptions.Item key={`stageInterview-${interview.date}-skills-${key}`} label={(Skill as any)[key]}>
                   <Rating rating={interview.skills[key]} tooltips={SKILLS_LEVELS} />
                 </Descriptions.Item>
               ))}

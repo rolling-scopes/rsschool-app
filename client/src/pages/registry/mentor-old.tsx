@@ -364,7 +364,7 @@ function Page(props: Props) {
 
 export default withSession(Page);
 
-function getInitialValues(initialData, courses) {
+function getInitialValues(initialData: any, courses: any[]) {
   return {
     ...initialData,
     courseId: courses?.[0]?.id,

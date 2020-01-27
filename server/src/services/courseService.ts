@@ -20,7 +20,7 @@ import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
 
-const getPrimaryUserFields = (modelName: string = 'user') => [
+const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
   `${modelName}.firstName`,
   `${modelName}.lastName`,
@@ -437,7 +437,7 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
   return students;
 }
 
-export async function getStudentsScore(courseId: number, activeOnly: boolean = false) {
+export async function getStudentsScore(courseId: number, activeOnly = false) {
   let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
