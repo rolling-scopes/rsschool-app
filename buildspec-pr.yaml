@@ -4,13 +4,15 @@ phases:
   install:
     runtime-versions:
       nodejs: 12
+
   build:
     commands:
-      - yarn
-      - yarn test
-      - yarn ci:format
-      - yarn ci:lint
-      - yarn ci:build
+      - npm i
+      - npm run boot
+      - npm test
+      - npm run ci:format
+      - npm run ci:lint
+      - npm run ci:build
 
 cache:
   paths:

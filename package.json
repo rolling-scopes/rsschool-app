@@ -1,31 +1,31 @@
 {
+  "name": "rsschool-app",
   "private": true,
   "workspaces": [
     "client",
     "server"
   ],
   "scripts": {
+    "boot": "lerna bootstrap",
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "start": "concurrently -n server,client \"yarn server:start\" \"yarn client:start\"",
-    "server:build": "yarn workspace server build",
-    "server:start": "yarn workspace server start",
-    "client:build": "yarn workspace client build",
-    "client:start": "yarn workspace client start",
-    "client:test": "yarn workspace client test",
-    "client:test-watch": "yarn workspace client test-watch",
-    "test": "yarn workspace client test",
-    "test-watch": "yarn workspace client test-watch",
-    "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "ci:lint": "yarn workspace server lint && yarn workspace client lint",
-    "ci:build": "yarn workspace server build && yarn workspace client build:tsc"
+    "start": "lerna run start --stream",
+    "server:build": "lerna run build --scope server",
+    "server:start": "lerna run start --scope server",
+    "client:build": "lerna run build --scope client",
+    "client:start": "lerna run start --scope client",
+    "test-watch": "lerna run test-watch",
+    "test": "lerna run test",
+    "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
+    "ci:lint": "eslint . --ext .ts,.tsx",
+    "ci:build": "lerna run build --stream"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
-    "concurrently": "^5.0.1",
     "eslint": "^6.8.0",
+    "lerna": "^3.20.2",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "prettier": {
     "trailingComma": "all",

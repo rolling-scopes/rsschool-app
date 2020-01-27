@@ -6,10 +6,10 @@ phases:
       nodejs: 12
   build:
     commands:
-      - yarn
-      - yarn client:test
-      - yarn client:build
       - cd ./client
+      - npm i
+      - npm test
+      - npm run build
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/ui:latest .
       - docker push rsschool/ui:latest

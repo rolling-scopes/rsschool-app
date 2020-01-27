@@ -10,7 +10,7 @@ import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
 
 type Assignment = { student: StudentBasic; url: string };
-type HistoryItem = { comment: string;  score: number; dateTime: number; }
+type HistoryItem = { comment: string; score: number; dateTime: number };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
