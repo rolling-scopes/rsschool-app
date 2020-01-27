@@ -114,14 +114,22 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
   }
 
   const repository = getRepository(TaskInterviewResult);
-  const existingResult = await repository
+  let existingResult = await repository
     .createQueryBuilder('taskInterviewResult')
     .where('"taskInterviewResult"."studentId" = :studentId', { studentId: student.id })
     .andWhere('"taskInterviewResult"."courseTaskId" = :courseTaskId', { courseTaskId: courseTask.id })
+    .andWhere('"taskInterviewResult"."mentorId" = :mentorId', { mentorId: mentor.id })
     .getOne();
 
   if (existingResult != null) {
-    setResponse(ctx, CONFLICT, { message: 'Feedback already submitted' });
+    existingResult = {
+      ...existingResult,
+      formAnswers: inputData.formAnswers,
+      score: Math.round(Number(inputData.score)),
+      comment: inputData.comment || '',
+    };
+    const result = await repository.update(existingResult.id, existingResult);
+    setResponse(ctx, OK, result);
     return;
   }
 
@@ -133,7 +141,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
     comment: inputData.comment || '',
     courseTaskId: courseTask.id,
   };
-  const result = await repository.save(entry);
+  const result = await repository.insert(entry);
   setResponse(ctx, OK, result);
 };
 
