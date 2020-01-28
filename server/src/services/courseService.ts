@@ -464,7 +464,6 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
       const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
         .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
         .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
-
       const taskResults =
         student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
 
