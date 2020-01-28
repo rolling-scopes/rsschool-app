@@ -19,6 +19,14 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 
 ---
 
+## Getting Started
+
+Run the following commands in the root folder:
+
+- `npm install` - installs dependencies in the root folder and `client` / `server` folders.
+
+- `npm start` - starts application (runs Next.js and REST API server)
+
 ## Contributors
 
 ### Code Contributors
