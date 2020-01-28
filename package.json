@@ -1,29 +1,26 @@
 {
   "name": "rsschool-app",
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "scripts": {
-    "boot": "lerna bootstrap",
+    "postinstall": "concurrently \"npm install --prefix client\" \"npm install --prefix server\"",
+    "start": "concurrently \"npm start --prefix client\" \"npm start --prefix server\"",
+    "server:build": "npm run build --prefix server",
+    "server:start": "npm start --prefix client",
+    "client:build": "npm run build --prefix client",
+    "client:start": "npm start --prefix client",
+    "test-watch": "npm run test-watch --prefix client",
+    "test": "npm run test --prefix client",
+    "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "start": "lerna run start --stream",
-    "server:build": "lerna run build --scope server",
-    "server:start": "lerna run start --scope server",
-    "client:build": "lerna run build --scope client",
-    "client:start": "lerna run start --scope client",
-    "test-watch": "lerna run test-watch",
-    "test": "lerna run test",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:lint": "eslint . --ext .ts,.tsx",
-    "ci:build": "lerna run build --stream"
+    "ci:build": "concurrently \"npm run build --prefix client\" \"npm run build --prefix server\""
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
-    "eslint": "^6.8.0",
-    "lerna": "^3.20.2",
+    "concurrently": "5.1.0",
+    "eslint": "~6.8.0",
     "prettier": "^1.19.1",
     "typescript": "^3.7.5"
   },

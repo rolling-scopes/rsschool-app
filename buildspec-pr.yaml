@@ -7,8 +7,7 @@ phases:
 
   build:
     commands:
-      - npm i
-      - npm run boot
+      - npm i --unsafe-perm
       - npm test
       - npm run ci:format
       - npm run ci:lint
