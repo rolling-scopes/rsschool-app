@@ -43,34 +43,36 @@ function Page(props: Props & { courseAlias?: string }) {
     setLoading(false);
   }, []);
 
-  const handleSubmit = useCallback(async (model: any) => {
-    const { comment, location, courseId } = model;
-    const registryModel = {
-      type: TYPES.STUDENT,
-      courseId,
-      comment,
-    };
-    const userModel = {
-      locationId: location.key ? location.key : undefined,
-      locationName: !location.key ? model.otherLocationName : location.label,
-      primaryEmail: model.primaryEmail,
-      firstName: model.firstName,
-      lastName: model.lastName,
-    };
-
-    try {
-      const userResponse = await axios.post('/api/profile/registry', userModel);
-      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-      if (githubId) {
-        await axios.post('/api/registry', registryModel);
-        setSubmitted(true);
-      } else {
-        message.error('Invalid github id');
+  const handleSubmit = useCallback(
+    async (values: any) => {
+      if (loading) {
+        return;
       }
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    }
-  }, []);
+      const { comment, location, courseId } = values;
+      const registryModel = { type: TYPES.STUDENT, courseId, comment };
+      const userModel = {
+        locationId: location.key ? location.key : undefined,
+        locationName: !location.key ? values.otherLocationName : location.label,
+        primaryEmail: values.primaryEmail,
+        firstName: values.firstName,
+        lastName: values.lastName,
+      };
+
+      try {
+        const userResponse = await axios.post('/api/profile/registry', userModel);
+        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+        if (githubId) {
+          await axios.post('/api/registry', registryModel);
+          setSubmitted(true);
+        } else {
+          message.error('Invalid github id');
+        }
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      }
+    },
+    [loading],
+  );
 
   let content: React.ReactNode;
   const location = form.getFieldValue('location');
