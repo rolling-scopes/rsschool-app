@@ -14,7 +14,6 @@ import {
 } from '../guards';
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
-import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
 import {
   getAllMentorStudents,
   getMentorStudents,
@@ -74,8 +73,6 @@ export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course/:courseId' });
 
   router.get('/externalAccounts', adminGuard, getExternalAccounts(logger));
-  router.post('/interviewFeedback', courseGuard, postInterviewFeedback(logger));
-  router.post('/interviewFeedbacks', adminGuard, postInterviewFeedbacks(logger));
   router.post('/studentsFeedbacks', adminGuard, postStudentsFeedbacks(logger));
   router.post('/certificates', adminGuard, postCertificates(logger));
   router.post('/repositories', adminGuard, postRepositories(logger));
