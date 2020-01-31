@@ -27,7 +27,7 @@ type State = {
   isPreScreeningIviewModalVisible: boolean;
 };
 
-class CoreJSIviewsCard extends React.Component<Props, State> {
+class CoreJSIviewsCard extends React.PureComponent<Props, State> {
   state = {
     courseIndex: 0,
     isPreScreeningIviewModalVisible: false,

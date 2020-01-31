@@ -6,6 +6,11 @@ export const defaultPublicVisibilitySettings = {
   all: false,
 };
 
+export const defaultPartialStudentVisibilitySettings = {
+  student: false,
+  all: false,
+};
+
 export const defaultVisibilitySettings = {
   mentor: false,
   student: false,
@@ -16,16 +21,16 @@ export const defaultProfilePermissionsSettings: ConfigurableProfilePermissions =
   isProfileVisible: defaultPublicVisibilitySettings,
   isAboutVisible: defaultVisibilitySettings,
   isEducationVisible: defaultVisibilitySettings,
-  isEnglishVisible: defaultVisibilitySettings,
-  isEmailVisible: defaultVisibilitySettings,
-  isTelegramVisible: defaultVisibilitySettings,
-  isSkypeVisible: defaultVisibilitySettings,
-  isPhoneVisible: defaultVisibilitySettings,
-  isContactsNotesVisible: defaultVisibilitySettings,
+  isEnglishVisible: defaultPartialStudentVisibilitySettings,
+  isEmailVisible: defaultPartialStudentVisibilitySettings,
+  isTelegramVisible: defaultPartialStudentVisibilitySettings,
+  isSkypeVisible: defaultPartialStudentVisibilitySettings,
+  isPhoneVisible: defaultPartialStudentVisibilitySettings,
+  isContactsNotesVisible: defaultPartialStudentVisibilitySettings,
   isLinkedInVisible: defaultVisibilitySettings,
   isPublicFeedbackVisible: defaultVisibilitySettings,
   isMentorStatsVisible: defaultVisibilitySettings,
-  isStudentStatsVisible: defaultVisibilitySettings,
+  isStudentStatsVisible: defaultPartialStudentVisibilitySettings,
 };
 
 @Entity()
@@ -47,28 +52,28 @@ export class ProfilePermissions {
   @Column({ type: 'json', default: defaultPublicVisibilitySettings })
   isProfileVisible: PublicVisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPublicVisibilitySettings })
+  @Column({ type: 'json', default: defaultVisibilitySettings })
   isAboutVisible: VisibilitySettings;
 
   @Column({ type: 'json', default: defaultVisibilitySettings })
   isEducationVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isEnglishVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isEmailVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isTelegramVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isSkypeVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isPhoneVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isContactsNotesVisible: VisibilitySettings;
 
   @Column({ type: 'json', default: defaultVisibilitySettings })
@@ -80,6 +85,6 @@ export class ProfilePermissions {
   @Column({ type: 'json', default: defaultVisibilitySettings })
   isMentorStatsVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultVisibilitySettings })
+  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isStudentStatsVisible: VisibilitySettings;
 }

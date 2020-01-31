@@ -4,6 +4,7 @@ import { guard } from '../guards';
 import { getProfile } from './user';
 import { getProfileInfo } from './info';
 import { getMyProfile, updateMyProfile } from './me';
+import { updateProfile } from './save';
 
 export function profileRoute(logger: ILogger) {
   const router = new Router({ prefix: '/profile' });
@@ -70,6 +71,9 @@ export function profileRoute(logger: ILogger) {
    *        200:
    *          description: profile
    */
+
+  router.post('/info', guard, updateProfile(logger));
+
   router.post('/me', guard, updateMyProfile(logger));
 
   router.post('/registry', guard, updateMyProfile(logger));

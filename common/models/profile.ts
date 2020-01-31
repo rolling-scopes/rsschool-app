@@ -5,6 +5,10 @@ export interface PublicVisibilitySettings {
   all: boolean;
 }
 
+export interface PartialStudentVisibilitySettings extends PublicVisibilitySettings {
+  student: boolean;
+}
+
 export interface VisibilitySettings extends PublicVisibilitySettings {
   mentor: boolean;
   student: boolean;
@@ -14,33 +18,34 @@ export interface ConfigurableProfilePermissions {
   isProfileVisible: PublicVisibilitySettings;
   isAboutVisible: VisibilitySettings;
   isEducationVisible: VisibilitySettings;
-  isEnglishVisible: VisibilitySettings;
-  isEmailVisible: VisibilitySettings;
-  isTelegramVisible: VisibilitySettings;
-  isSkypeVisible: VisibilitySettings;
-  isPhoneVisible: VisibilitySettings;
-  isContactsNotesVisible: VisibilitySettings;
+  isEnglishVisible: PartialStudentVisibilitySettings;
+  isEmailVisible: PartialStudentVisibilitySettings;
+  isTelegramVisible: PartialStudentVisibilitySettings;
+  isSkypeVisible: PartialStudentVisibilitySettings;
+  isPhoneVisible: PartialStudentVisibilitySettings;
+  isContactsNotesVisible: PartialStudentVisibilitySettings;
   isLinkedInVisible: VisibilitySettings;
   isPublicFeedbackVisible: VisibilitySettings;
   isMentorStatsVisible: VisibilitySettings;
-  isStudentStatsVisible: VisibilitySettings;
+  isStudentStatsVisible: PartialStudentVisibilitySettings;
 }
 
 export interface GeneralInfo {
   name: string;
   githubId: string;
-  aboutMyself?: string;
+  aboutMyself?: string | null;
   locationName: string;
-  educationHistory?: any;
-  englishLevel?: EnglishLevel;
+  locationId: string;
+  educationHistory?: any | null;
+  englishLevel?: EnglishLevel | null;
 }
 
 export interface Contacts {
-  phone?: string;
-  email?: string;
-  skype?: string;
-  telegram?: string;
-  notes?: string;
+  phone: string | null;
+  email: string | null;
+  skype: string | null;
+  telegram: string | null;
+  notes: string | null;
 }
 
 export interface MentorStats {
@@ -137,5 +142,5 @@ export interface ProfileInfo {
   mentorStats?: MentorStats[];
   studentStats?: StudentStats[];
   publicFeedback?: PublicFeedback[];
-  stageInterviewFeedback: StageInterviewDetailedFeedback[];
+  stageInterviewFeedback?: StageInterviewDetailedFeedback[];
 };

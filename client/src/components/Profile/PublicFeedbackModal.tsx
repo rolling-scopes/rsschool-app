@@ -20,7 +20,7 @@ type Props = {
   onHide: () => void;
 };
 
-class PublicFeedbackModal extends React.Component<Props> {
+class PublicFeedbackModal extends React.PureComponent<Props> {
   render() {
     const badges = this.props.data;
 

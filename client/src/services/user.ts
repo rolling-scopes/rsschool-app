@@ -64,9 +64,14 @@ export class UserService {
   }
 
   async getProfileInfo(githubId: string) {
-    const response = await axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
+    const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
     });
+    return response.data.data;
+  }
+
+  async saveProfileInfo(profile: Partial<ProfileInfo>) {
+    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/info`, profile);
     return response.data.data;
   }
 

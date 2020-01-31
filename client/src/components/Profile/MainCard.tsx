@@ -1,15 +1,19 @@
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components';
 import {
   Card,
   Typography,
+  Input,
 } from 'antd';
 import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
-import VisibilitySettingsDrawer from './VisibilitySettingsDrawer';
-import { ChangedSettings } from 'pages/profile';
+import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
+import ProfileSettingsDrawer from './ProfileSettingsDrawer';
+import { LocationSelect } from '../LocationSelect';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 import {
   GithubFilled,
@@ -22,41 +26,58 @@ type Props = {
   data: GeneralInfo;
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
-  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
+  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
+  onProfileSettingsChange: (event: any, path: string) => void;
 };
 
 type State = {
-  isSettingsVisible: boolean;
+  isVisibilitySettingsVisible: boolean;
+  isProfileSettingsVisible: boolean;
 }
 
 class MainCard extends React.Component<Props, State> {
   state = {
-    isSettingsVisible: false,
+    isVisibilitySettingsVisible: false,
+    isProfileSettingsVisible: false,
   }
 
-  private showSettings = () => {
-    this.setState({ isSettingsVisible: true });
+  shouldComponentUpdate = (nextProps: Props, nextState: State) => (
+    !isEqual(nextProps.data.locationId, this.props.data.locationId) ||
+    !isEqual(nextProps.data.name, this.props.data.name) ||
+    !isEqual(nextProps.permissionsSettings?.isProfileVisible, this.props.permissionsSettings?.isProfileVisible) ||
+    nextState !== this.state
+  );
+
+  private showVisibilitySettings = () => {
+    this.setState({ isVisibilitySettingsVisible: true });
   }
 
-  private hideSettings = () => {
-    this.setState({ isSettingsVisible: false });
+  private hideVisibilitySettings = () => {
+    this.setState({ isVisibilitySettingsVisible: false });
   }
 
+  private showProfileSettings = () => {
+    this.setState({ isProfileSettingsVisible: true });
+  }
+
+  private hideProfileSettings = () => {
+    this.setState({ isProfileSettingsVisible: false });
+  }
   private filterPermissions = ({ isProfileVisible }: Partial<ConfigurableProfilePermissions>) => ({
     isProfileVisible,
   })
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
-    const { githubId, name, locationName } = this.props.data;
-    const { isSettingsVisible } = this.state;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const { githubId, name, locationName, locationId } = this.props.data;
+    const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
 
     return (
       <>
         <Card
           actions={isEditingModeEnabled ? [
-            <EditOutlined key="main-card-actions-edit"/>,
-            <SettingOutlined key="main-card-actions-settings" onClick={this.showSettings} />,
+            <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings}/>,
+            <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />,
           ] : undefined}
         >
           <GithubAvatar size={96} githubId={githubId} style={{ margin: '0 auto 10px', display: 'block' }} />
@@ -73,12 +94,30 @@ class MainCard extends React.Component<Props, State> {
           </Paragraph>
           {
             isEditingModeEnabled &&
-              <VisibilitySettingsDrawer
-                isSettingsVisible={isSettingsVisible}
-                hideSettings={this.hideSettings}
-                permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
-                onSettingsChange={onSettingsChange}
-              />
+              <>
+                <PermissionsSettingsDrawer
+                  isSettingsVisible={isVisibilitySettingsVisible}
+                  hideSettings={this.hideVisibilitySettings}
+                  permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
+                  onPermissionsSettingsChange={onPermissionsSettingsChange}
+                />
+                <ProfileSettingsDrawer
+                  isSettingsVisible={isProfileSettingsVisible}
+                  hideSettings={this.hideProfileSettings}
+                  content={
+                    <div>
+                      <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Name:</Text></p>
+                      <p style={{ marginBottom: 20 }}>
+                        <Input value={name} placeholder="Firstname Lastname"/>
+                      </p>
+                      <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Location:</Text></p>
+                      <div style={{ marginBottom: 5 }}>
+                        <LocationSelect style={{ width: '100%' }} defaultValue={locationId} />
+                      </div>
+                    </div>
+                  }
+                />
+              </>
           }
         </Card>
       </>

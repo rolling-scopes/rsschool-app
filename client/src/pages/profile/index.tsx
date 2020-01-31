@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { get } from 'lodash';
+import { get, set, isEqual, cloneDeep, mapValues, clone } from 'lodash';
 import {
   Result,
+  Spin,
+  message,
 } from 'antd';
 import css from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
@@ -10,7 +12,7 @@ import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from 'services/user';
-import { ProfileInfo, StudentStats } from '../../../../common/models/profile';
+import { ProfileInfo, StudentStats, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
@@ -32,41 +34,71 @@ type Props = {
 };
 
 type State = {
-  isEditingModeEnabled: boolean;
   profile: ProfileInfo | null;
+  initialPermissionsSettings: ConfigurableProfilePermissions | null;
   isLoading: boolean;
+  isSaving: boolean;
+  isEditingModeEnabled: boolean;
+  isInitialPermissionsSettingsChanged: boolean;
 };
 
-export type ChangedSettings = {
+export type ChangedPermissionsSettings = {
   permissionName: string;
   role: string;
 }
-
 class ProfilePage extends React.Component<Props, State> {
   state: State = {
-    isEditingModeEnabled: false,
-    isLoading: true,
     profile: null,
+    initialPermissionsSettings: null,
+    isLoading: true,
+    isSaving: false,
+    isEditingModeEnabled: false,
+    isInitialPermissionsSettingsChanged: false,
   };
 
-  private onSettingsChange = (event: CheckboxChangeEvent, { permissionName, role }: ChangedSettings) => {
-    const { profile } = this.state;
+  private onPermissionsSettingsChange = async (
+    event: CheckboxChangeEvent, { permissionName, role }: ChangedPermissionsSettings,
+  ) => {
+    const { profile, initialPermissionsSettings } = this.state;
     const { checked } = event.target;
 
-    if (profile && profile.permissionsSettings) {
-      const changed = get(profile.permissionsSettings, `${permissionName}`);
-      changed[role] = checked;
-      this.setState({
+    if (profile?.permissionsSettings) {
+      let changed = clone(get(profile.permissionsSettings, permissionName));
+
+      if (role === 'all') {
+        changed = mapValues(changed, () => checked);
+      } else {
+        changed[role] = checked;
+      }
+
+      const newPermissionsSettings = {
+        ...profile.permissionsSettings,
+        [permissionName]: changed,
+      }
+      const isInitialPermissionsSettingsChanged = !isEqual(newPermissionsSettings, initialPermissionsSettings);
+
+      await this.setState({
         profile: {
           ...profile,
-          permissionsSettings: {
-            ...profile.permissionsSettings,
-            [permissionName]: changed,
-          },
+          permissionsSettings: newPermissionsSettings,
         },
+        isInitialPermissionsSettingsChanged,
       });
     }
   }
+
+  private onProfileSettingsChange = async ( { target: { value: changed } }: any, path: string ) => {
+    const { profile } = this.state;
+
+    if (profile) {
+      // const current = get(profile, path);
+      const newProfile = cloneDeep(profile);
+      set(newProfile, path, changed);
+      // console.log(this.state);
+      await this.setState({ profile: newProfile });
+      // console.log(path, current, changed, this.state);
+    }
+  };
 
   private userService = new UserService();
 
@@ -92,19 +124,19 @@ class ProfilePage extends React.Component<Props, State> {
     })) as CoreJsInterviewData[];
 
   private fetchData = async () => {
-    this.setState({ isLoading: true });
+    await this.setState({ isLoading: true });
 
     const { router } = this.props;
 
     try {
       const githubId = router.query ? (router.query.githubId as string) : '';
       const profile = await this.userService.getProfileInfo(githubId);
+      const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
+      const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      console.log(profile);
-
-      this.setState({ isLoading: false, profile });
+      await this.setState({ isLoading: false, profile, initialPermissionsSettings, isEditingModeEnabled });
     } catch (e) {
-      this.setState({ isLoading: false, profile: null });
+      await this.setState({ isLoading: false, profile: null, initialPermissionsSettings: null });
     }
   };
 
@@ -112,79 +144,111 @@ class ProfilePage extends React.Component<Props, State> {
     this.setState({ isEditingModeEnabled: mode === 'edit' ? true : false });
   }
 
+  private onSaveSuccess() {
+    message.success('Profile was successesfully saved');
+  };
+
+  private onSaveError() {
+    message.error('Error has occured. Please check your connection and try again');
+  };
+
+  private saveProfile = async () => {
+    const { profile } = this.state;
+
+    await this.setState({ isSaving: true });
+
+    if (profile) {
+      try {
+        const { permissionsSettings, generalInfo, contacts } = profile;
+        await this.userService.saveProfileInfo({ permissionsSettings, generalInfo, contacts });
+
+        const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
+        await this.setState({
+          isSaving: false,
+          initialPermissionsSettings,
+          isInitialPermissionsSettingsChanged: false,
+        });
+        this.onSaveSuccess();
+      } catch (e) {
+        await this.setState({ isSaving: false });
+        this.onSaveError();
+      }
+    }
+  }
+
   async componentDidMount() {
     await this.fetchData();
   }
 
-  async componentDidUpdate(prevProps: { router: { query?: any } }) {
-    if (prevProps.router.query.githubId !== this.props.router.query!.githubId) {
-      await this.fetchData();
-    }
-  }
-
   render() {
-    const { profile, isEditingModeEnabled } = this.state;
+    const { profile, isEditingModeEnabled, initialPermissionsSettings } = this.state;
+    const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
 
     const cards = [
       profile?.generalInfo &&
         <MainCard
           data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
         />,
-      profile?.generalInfo?.aboutMyself &&
+      profile?.generalInfo?.aboutMyself !== undefined &&
         <AboutCard
           data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
         />,
-      profile?.generalInfo?.englishLevel &&
+      profile?.generalInfo?.englishLevel !== undefined &&
         <EnglishCard
           data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
         />,
-      profile?.generalInfo?.educationHistory?.length &&
+      profile?.generalInfo?.educationHistory !== undefined &&
         <EducationCard
           data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
         />,
-      profile?.contacts &&
+      profile?.contacts !== undefined &&
         <ContactsCard
           data={profile.contacts}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
         />,
       profile?.publicFeedback?.length &&
         <PublicFeedbackCard
           data={profile.publicFeedback}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
         />,
       profile?.studentStats?.length &&
         <StudentStatsCard
           data={profile.studentStats}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
         />,
       profile?.mentorStats?.length &&
         <MentorStatsCard
           data={profile.mentorStats}
-          isEditingModeEnabled={isEditingModeEnabled}
+          isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
-          onSettingsChange={this.onSettingsChange}
+          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
         />,
       profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) &&
         <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,
-      profile?.stageInterviewFeedback.length &&
+      profile?.stageInterviewFeedback?.length &&
         <PreScreeningIviewCard data={profile.stageInterviewFeedback}/>,
     ].filter(Boolean) as JSX.Element[];
 
@@ -193,10 +257,13 @@ class ProfilePage extends React.Component<Props, State> {
         <LoadingScreen show={this.state.isLoading}>
           <Header
             username={this.props.session.githubId}
-            isProfilePage={true}
-            isProfileEditingModeEnabled={isEditingModeEnabled}
             onChangeProfilePageMode={this.changeProfilePageMode}
+            isProfilePage={initialPermissionsSettings ? true : false}
+            isProfileEditingModeEnabled={isEditingModeVisible}
+            isSaveButtonVisible={this.state.isInitialPermissionsSettingsChanged}
+            onSaveClick={this.saveProfile}
           />
+          <Spin spinning={this.state.isSaving} delay={200}>
           {
             this.state.profile
               ? <div style={{ padding: 10 }}>
@@ -224,6 +291,7 @@ class ProfilePage extends React.Component<Props, State> {
                 <Result status="403" title="No access or user does not exist" />
               </>
           }
+          </Spin>
         </LoadingScreen>
       </>
     );

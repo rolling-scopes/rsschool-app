@@ -7,7 +7,7 @@ import {
   List,
   Typography,
 } from 'antd';
-import { ChangedSettings } from 'pages/profile';
+import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import css from 'styled-jsx/css';
 
@@ -16,7 +16,7 @@ const { Text } = Typography;
 type Props = {
   isSettingsVisible: boolean;
   hideSettings: () => void;
-  onSettingsChange?: (event: CheckboxChangeEvent, changed: ChangedSettings) => void;
+  onPermissionsSettingsChange?: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   permissionsSettings?: Partial<ConfigurableProfilePermissions>;
 };
 
@@ -38,13 +38,13 @@ enum permissionNames {
 
 enum roles {
   all = 'Everybody',
-  mentor = 'Mentor assigned (who can check your tasks / interview)',
-  student = 'Student assigned to you',
+  mentor = 'Mentor assigned (who can check your tasks or interview)',
+  student = 'Student assigned to you (if you are a mentor)',
 }
 
-class VisibilitySettingsDrawer extends React.Component<Props> {
+class PermissionsSettingsDrawer extends React.Component<Props> {
   render() {
-    const { isSettingsVisible, hideSettings, permissionsSettings, onSettingsChange } = this.props;
+    const { isSettingsVisible, hideSettings, permissionsSettings, onPermissionsSettingsChange } = this.props;
     return (
       <Drawer
         title="Visibility settings"
@@ -72,8 +72,8 @@ class VisibilitySettingsDrawer extends React.Component<Props> {
                         checked={isChecked}
                         style={{ fontSize: 12 }}
                         onChange={
-                          onSettingsChange ?
-                            (event) => onSettingsChange(event, { permissionName, role }) :
+                          onPermissionsSettingsChange ?
+                            (event) => onPermissionsSettingsChange(event, { permissionName, role }) :
                             undefined
                         }
                       >
@@ -107,4 +107,4 @@ const { className, styles } = css.resolve`
   }
 `;
 
-export default VisibilitySettingsDrawer;
+export default PermissionsSettingsDrawer;

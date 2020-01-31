@@ -22,7 +22,7 @@ type Props = {
   onHide: () => void;
 };
 
-class MentorStatsModal extends React.Component<Props> {
+class MentorStatsModal extends React.PureComponent<Props> {
   render() {
     const { stats, isVisible, onHide } = this.props;
     const { courseFullName, students, courseName } = stats;
