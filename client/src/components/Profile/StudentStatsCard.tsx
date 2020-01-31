@@ -9,7 +9,7 @@ import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
-import { ChangedSettings } from 'pages/profile';
+import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
@@ -23,7 +23,7 @@ type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
-  onSettingsChange: (event: CheckboxChangeEvent, changedSettings: ChangedSettings) => void;
+  onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
 };
 
 type State = {
@@ -33,7 +33,7 @@ type State = {
   isStudentStatsModalVisible: boolean;
 };
 
-class StudentStatsCard extends React.Component<Props, State> {
+class StudentStatsCard extends React.PureComponent<Props, State> {
   state = {
     courseIndex: 0,
     coursesProgress: [],
@@ -66,7 +66,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onSettingsChange } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
     const stats = this.props.data;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
@@ -130,7 +130,7 @@ class StudentStatsCard extends React.Component<Props, State> {
           }
           permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
           isEditingModeEnabled={isEditingModeEnabled}
-          onSettingsChange={onSettingsChange}
+          onPermissionsSettingsChange={onPermissionsSettingsChange}
         />
       </>
     );

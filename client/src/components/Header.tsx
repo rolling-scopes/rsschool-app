@@ -1,6 +1,8 @@
 import * as React from 'react';
+// import { useMemo } from 'react';
 import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
+// import { UserService } from 'services/user';
 import css from 'styled-jsx/css';
 
 import {
@@ -16,11 +18,19 @@ type Props = {
   title?: string;
   isProfilePage?: boolean;
   isProfileEditingModeEnabled?: boolean;
+  isSaveButtonVisible?: boolean;
   onChangeProfilePageMode?: (mode: 'edit' | 'view') => void;
+  onSaveClick?: () => void;
 };
 
 export function Header(props: Props) {
-  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled } = props;
+  const {
+    isProfilePage,
+    onChangeProfilePageMode,
+    isProfileEditingModeEnabled,
+    isSaveButtonVisible,
+  } = props;
+
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
     <Menu>
@@ -37,7 +47,7 @@ export function Header(props: Props) {
       <Menu.Item key="1" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={props.isProfilePage ? "#edit" : "/profile?mode=edit"}
+          href={props.isProfilePage ? "#edit" : "/profile#edit"}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('edit') : undefined}
           style={{ textAlign: "left" }}
         >
@@ -45,8 +55,14 @@ export function Header(props: Props) {
         </Button>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="2" disabled>
-        <LogoutOutlined/> Logout
+      <Menu.Item key="2">
+        <Button
+          type="link"
+          href={'/api/auth/logout'}
+          style={{ textAlign: "left" }}
+        >
+          <LogoutOutlined/> Logout
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -67,10 +83,19 @@ export function Header(props: Props) {
         <b>{props.title}</b> {props.courseName}
       </div>
       <div className="profile">
-        <Button type="danger" ghost size="large" style={{ marginRight: 16 }}>
-          <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
-          <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
-        </Button>
+        {
+          isSaveButtonVisible &&
+            <Button
+              type="danger"
+              ghost
+              size="large"
+              style={{ marginRight: 16, height: 38 }}
+              onClick={props.onSaveClick}
+            >
+              <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
+              <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
+            </Button>
+        }
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="dashed" size="large">
             <GithubAvatar githubId={props.username} size={24} />

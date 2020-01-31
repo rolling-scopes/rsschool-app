@@ -18,7 +18,7 @@ type Props = {
   onHide: () => void;
 };
 
-class PreScreeningIviewModal extends React.Component<Props> {
+class PreScreeningIviewModal extends React.PureComponent<Props> {
   render() {
     const { feedback, isVisible, onHide } = this.props;
     const {

@@ -16,13 +16,13 @@ import { ConfigurableProfilePermissions } from '../../../../common/models/profil
 
 interface Relations {
   student: string;
-  mentors: string[] ;
+  mentors: string[];
   interviewers: string[];
   stageInterviewers: string[];
   checkers: string[];
 }
 
-type RelationRole = 'student' | 'mentor' | 'all';
+export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'all';
 
 interface SuperAccessRights {
   isProfileOwner: boolean;
@@ -42,9 +42,20 @@ export interface Permissions {
   isPublicFeedbackVisible: boolean;
   isMentorStatsVisible: boolean;
   isStudentStatsVisible: boolean;
+  isStageInterviewFeedbackVisible: boolean;
+  isCoreJsFeedbackVisible: boolean;
 }
 
-const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> => (
+export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => (
+  (await getRepository(User)
+    .createQueryBuilder('user')
+    .select('"student"."courseId" AS "courseId"')
+    .leftJoin(Student, 'student', '"student"."userId" = "user"."id"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .getRawMany()) || null
+);
+
+export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> => (
   (await getRepository(ProfilePermissions)
     .createQueryBuilder('pp')
     .select('"pp"."isProfileVisible" AS "isProfileVisible"')
@@ -65,8 +76,8 @@ const getConfigurableProfilePermissions = async (githubId: string): Promise<Conf
     .getRawOne()) || {}
 );
 
-const getRelationRole = async (userGithubId: string, requestedGithubId: string): Promise<RelationRole> => {
-  const relations: Relations | undefined = await getRepository(Student)
+export const getRelationsRoles = async (userGithubId: string, requestedGithubId: string): Promise<Relations | null> => (
+  await getRepository(Student)
     .createQueryBuilder('student')
     .select('"userStudent"."githubId" AS "student"')
     .addSelect('ARRAY_AGG("userMentor"."githubId") as "mentors"')
@@ -96,24 +107,39 @@ const getRelationRole = async (userGithubId: string, requestedGithubId: string):
       "userInterviewer"."githubId" = :userGithubId OR
       "userChecker"."githubId" = :userGithubId)`)
     .groupBy('"userStudent"."githubId"')
-    .getRawOne();
+    .getRawOne() || null
+);
 
-  if (relations) {
-    const { student, mentors, interviewers, stageInterviewers, checkers } = relations;
+export const mergeRoles = ({
+  relationsRoles,
+  studentCourses,
+  roles,
+  userGithubId,
+}: {
+  relationsRoles: Relations | null,
+  studentCourses: { courseId: number }[] | null,
+  roles: { [courseId: string]: 'student' | 'mentor' | 'coursemanager' },
+  userGithubId: string,
+}): RelationRole => {
+  if (relationsRoles) {
+    const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;
 
     if (student === userGithubId) {
       return 'student';
     } else if (new Set([...mentors, ...interviewers, ...stageInterviewers, ...checkers]).has(userGithubId)) {
       return 'mentor';
     }
+  } else if (studentCourses?.some(({ courseId }) => roles[courseId] === 'mentor')) {
+    return 'coursementor';
   }
+
   return 'all';
 };
 
-const matchPermissions = (
-  permissions: ConfigurableProfilePermissions,
-  role: RelationRole,
+export const getPermissions = (
   { isProfileOwner }: SuperAccessRights,
+  role?: RelationRole,
+  permissions?: ConfigurableProfilePermissions,
 ): Permissions => {
   const defaultPermissions: Permissions = {
     isProfileVisible: false,
@@ -129,23 +155,37 @@ const matchPermissions = (
     isPublicFeedbackVisible: false,
     isMentorStatsVisible: false,
     isStudentStatsVisible: false,
+    isStageInterviewFeedbackVisible: false,
+    isCoreJsFeedbackVisible: false,
   };
 
-  return mapValues(defaultPermissions, (_, key) => isProfileOwner ||
-    get(permissions, `${key}.all`) ||
-    get(permissions, `${key}.${role}`) ||
-    false,
-  );
-};
-
-export const getPermissions = async (
-  userGithubId: string,
-  requestedGithubId: string,
-  superAccessRights: SuperAccessRights,
-) => {
-  const permissions = await getConfigurableProfilePermissions(requestedGithubId);
-  const role = await getRelationRole(userGithubId, requestedGithubId);
-  return matchPermissions(permissions, role, superAccessRights);
+  return mapValues(defaultPermissions, (_, permission) => (
+    role && (
+      ([
+        'isStageInterviewFeedbackVisible',
+        'isStudentStatsVisible',
+        'isCoreJsFeedbackVisible',
+        'isProfileVisible',
+      ].includes(permission) && ['mentor', 'coursementor'].includes(role)) ||
+      ([
+        'isEmailVisible',
+        'isTelegramVisible',
+        'isSkypeVisible',
+        'isPhoneVisible',
+        'isContactsNodesVisible',
+      ].includes(permission) && ['mentor'].includes(role)) ||
+      ([
+        'isProfileVisible',
+      ].includes(permission) && ['student'].includes(role))
+    ) ?
+      true :
+      (
+        isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission) ||
+        get(permissions, `${permission}.all`) ||
+        get(permissions, `${permission}.${role}`) ||
+        false
+      )
+  ));
 };
 
 export const getOwnerPermissions = async (githubId: string) => {

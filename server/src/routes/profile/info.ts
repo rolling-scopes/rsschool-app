@@ -9,7 +9,16 @@ import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
 import { getStudentStats } from './student-stats';
 import { getUserInfo } from './user-info';
-import { getPermissions, getOwnerPermissions } from './permissions';
+import {
+  getOwnerPermissions,
+  getConfigurableProfilePermissions,
+  getRelationsRoles,
+  getStudentCourses,
+  getPermissions,
+  mergeRoles,
+  RelationRole,
+  Permissions,
+} from './permissions';
 
 /*
   WHO CAN SEE
@@ -60,24 +69,38 @@ import { getPermissions, getOwnerPermissions } from './permissions';
 */
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: userGithubId } = ctx.state!.user as IUserSession;
-  // const { isAdmin, roles } = ctx.state!.user as IUserSession;
-  const { githubId = userGithubId } = ctx.query as { githubId: string | undefined };
-  // console.log('GITHUB =>', githubId);
-  // console.log('ADMIN =>', isAdmin);
-  // console.log('ROLES =>', roles);
+  const { githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
+  const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
 
-  if (!githubId) {
+  if (!requestedGithubId) {
     return setResponse(ctx, NOT_FOUND);
   }
 
-  const isProfileOwner = githubId === userGithubId;
-  console.log('isProfileOwner', isProfileOwner);
-  // await getRepository(ProfilePermissions).save({ userId });
+  const isProfileOwner = requestedGithubId === userGithubId;
 
-  const permissions = await getPermissions(userGithubId, githubId, { isProfileOwner });
+  let role: RelationRole;
+  let permissions: Permissions;
+  if (isProfileOwner) {
+    role = 'all';
+    permissions = getPermissions({ isProfileOwner });
+  } else {
+    const profilePermissions = await getConfigurableProfilePermissions(requestedGithubId);
+    const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
+    const studentCourses = !relationsRoles ? await getStudentCourses(requestedGithubId) : null;
+    role = mergeRoles({ relationsRoles, studentCourses, roles, userGithubId });
+    permissions = getPermissions({ isProfileOwner }, role, profilePermissions);
+  }
 
-  const { isProfileVisible, isPublicFeedbackVisible, isMentorStatsVisible, isStudentStatsVisible } = permissions;
+  console.log(JSON.stringify(permissions, null, 2));
+  console.log(JSON.stringify(role, null, 2));
+
+  const {
+    isProfileVisible,
+    isPublicFeedbackVisible,
+    isMentorStatsVisible,
+    isStudentStatsVisible,
+    isStageInterviewFeedbackVisible,
+  } = permissions;
 
   if (!isProfileVisible && !isProfileOwner) {
     return setResponse(ctx, FORBIDDEN);
@@ -85,11 +108,13 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   const permissionsSettings = isProfileOwner ? await getOwnerPermissions(userGithubId) : undefined;
 
-  const { generalInfo, contacts } = await getUserInfo(githubId, permissions);
-  const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(githubId) : undefined;
-  const mentorStats = isMentorStatsVisible ? await getMentorStats(githubId) : undefined;
-  const studentStats = isStudentStatsVisible ? await getStudentStats(githubId) : undefined;
-  const stageInterviewFeedback = await getStageInterviewFeedback(githubId);
+  const { generalInfo, contacts } = await getUserInfo(requestedGithubId, permissions);
+  const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(requestedGithubId) : undefined;
+  const mentorStats = isMentorStatsVisible ? await getMentorStats(requestedGithubId) : undefined;
+  const studentStats = isStudentStatsVisible ? await getStudentStats(requestedGithubId, permissions) : undefined;
+  const stageInterviewFeedback = isStageInterviewFeedbackVisible ?
+    await getStageInterviewFeedback(requestedGithubId) :
+    undefined;
 
   const profileInfo: ProfileInfo = {
     permissionsSettings,
@@ -101,9 +126,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     studentStats,
   };
 
-  console.log(JSON.stringify(permissions, null, 2));
-  console.log(JSON.stringify(profileInfo, null, 2));
-  console.log('OWN =>', permissionsSettings);
+  // console.log(JSON.stringify(profileInfo, null, 2));
 
   setResponse(ctx, OK, profileInfo);
 };

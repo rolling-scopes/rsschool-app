@@ -5,6 +5,7 @@ export interface IUserSession {
   githubId: string;
   roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' };
   coursesRoles?: CourseRoles;
+  isGuest?: boolean;
 }
 
 export interface CourseRoles {

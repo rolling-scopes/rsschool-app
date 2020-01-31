@@ -20,7 +20,8 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     .createQueryBuilder('user')
     .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
     .addSelect('"user"."githubId" AS "githubId"')
-    .addSelect('"user"."locationName" AS "locationName"');
+    .addSelect('"user"."locationName" AS "locationName"')
+    .addSelect('"user"."locationId" AS "locationId"');
 
   if (isEducationVisible) {
     query.addSelect('"user"."educationHistory" AS "educationHistory"');
@@ -58,30 +59,38 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     .where('"user"."githubId" = :githubId', { githubId })
     .getRawOne();
 
+  const isContactsVisible = isPhoneVisible ||
+    isEmailVisible ||
+    isTelegramVisible ||
+    isSkypeVisible ||
+    isContactsNotesVisible;
+
   const {
     firstName,
     lastName,
     locationName,
-    educationHistory,
-    englishLevel,
-    contactsPhone,
-    contactsEmail,
-    contactsTelegram,
-    contactsSkype,
-    contactsNotes,
-    aboutMyself,
+    locationId,
+    educationHistory = null,
+    englishLevel = null,
+    contactsPhone = null,
+    contactsEmail = null,
+    contactsTelegram = null,
+    contactsSkype = null,
+    contactsNotes = null,
+    aboutMyself = null,
   } = rawUser;
 
   return {
     generalInfo: {
       githubId,
-      aboutMyself,
       locationName,
-      educationHistory,
-      englishLevel,
+      locationId,
+      aboutMyself: isAboutVisible ? aboutMyself : undefined,
+      educationHistory: isEducationVisible ? educationHistory : undefined,
+      englishLevel: isEnglishVisible ? englishLevel : undefined,
       name: getFullName(firstName, lastName, githubId),
     },
-    contacts: contactsPhone || contactsEmail || contactsSkype || contactsTelegram || contactsNotes ? {
+    contacts: isContactsVisible ? {
       phone: contactsPhone,
       email: contactsEmail,
       skype: contactsSkype,
