@@ -231,7 +231,8 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
     task =>
       task.studentEndDate &&
       (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
-      task.verification === 'auto' && task.type !== 'test',
+      task.verification === 'auto' &&
+      task.type !== 'test',
   );
 }
 
@@ -268,6 +269,10 @@ function getSubmitData(task: CourseTask, values: any) {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
       };
+      break;
+
+    case null:
+      data = {};
       break;
 
     default:
