@@ -77,7 +77,7 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
       <Row gutter={24}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
-          <Form form={form} className="m-2" onFinish={handleSubmit} layout="vertical">
+          <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect onChange={handleCourseTaskChange} data={courseTasks} />
             {type === 'htmlcssacademy' && (
               <>
@@ -231,8 +231,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
     task =>
       task.studentEndDate &&
       (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
-      task.verification === 'auto' &&
-      (task.type === 'htmlcssacademy' || task.type === 'codewars' || task.type === 'jstask'),
+      task.verification === 'auto' && task.type !== 'test',
   );
 }
 
