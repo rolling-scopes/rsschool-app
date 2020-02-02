@@ -134,6 +134,7 @@ function Page(props: CoursePageProps) {
                   {
                     title: 'Score',
                     dataIndex: 'score',
+                    width: 60,
                   },
                   {
                     title: 'Details',
