@@ -134,7 +134,12 @@ export const getProfileByGithubId = async (ctx: Router.RouterContext, githubId: 
       }));
     const stageInterviewsResult = stageInterviews
       ? stageInterviews
-          .filter(stageInterview => stageInterview.isCompleted && stageInterview.stage.courseId === course.id)
+          .filter(
+            stageInterview =>
+              stageInterview.isCompleted &&
+              stageInterview.stageInterviewFeedbacks.length > 0 &&
+              stageInterview.stage.courseId === course.id,
+          )
           .map(stageInterview => {
             const [feedback] = stageInterview.stageInterviewFeedbacks;
             const stageInterviewFeedbackJson = JSON.parse(feedback.json);
