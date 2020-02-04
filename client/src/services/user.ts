@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
-import { ProfileInfo } from '../../../common/models/profile';
+import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
 import { Course } from './models';
 
 export interface UserBasic {
@@ -70,8 +70,8 @@ export class UserService {
     return response.data.data;
   }
 
-  async saveProfileInfo(profile: Partial<ProfileInfo>) {
-    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/info`, profile);
+  async saveProfileInfo(profile: SaveProfileInfo) {
+    const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
     return response.data.data;
   }
 

@@ -144,3 +144,11 @@ export interface ProfileInfo {
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
 };
+
+export interface SaveProfileInfo {
+  permissionsSettings: ConfigurableProfilePermissions;
+  generalInfo: GeneralInfo;
+  contacts: Contacts;
+  isPermissionsSettingsChanged: boolean,
+  isProfileSettingsChanged: boolean,
+}

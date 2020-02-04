@@ -40,7 +40,9 @@ class EducationCard extends React.Component<Props> {
   )
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const {
+      isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange,
+    } = this.props;
     const { educationHistory } = this.props.data;
     return (
       <CommonCard
@@ -50,9 +52,16 @@ class EducationCard extends React.Component<Props> {
           <List
             itemLayout="horizontal"
             dataSource={educationHistory}
-            renderItem={(item: { university: string, faculty: string, graduationYear: string }) => (
+            renderItem={({ graduationYear, university, faculty }:
+              { university: string, faculty: string, graduationYear: string }) => (
               <List.Item>
-                <Text strong>{item.graduationYear}</Text> {`${item.university} / ${item.faculty}`}
+                <p>
+                  {
+                    graduationYear && university && faculty ?
+                    <><Text strong>{graduationYear}</Text> {` ${university} / ${faculty}`}</> :
+                    '(Empty)'
+                  }
+                </p>
               </List.Item>
             )}
           /> : undefined
@@ -66,33 +75,65 @@ class EducationCard extends React.Component<Props> {
             <List
               itemLayout="horizontal"
               dataSource={educationHistory}
-              renderItem={({ university, faculty, graduationYear }:
-                { university: string, faculty: string, graduationYear: string }) => (
+              renderItem={(
+                { university, faculty, graduationYear }:
+                { university: string, faculty: string, graduationYear: string },
+                index,
+              ) => (
                 <List.Item>
                   <div style={{ width: '100%' }}>
                     <p style={{ marginBottom: 5 }}>
-                      <Text strong>{graduationYear}</Text> {`${university} / ${faculty}`}
+                      {
+                        graduationYear && university && faculty ?
+                          <><Text strong>{graduationYear}</Text> {`${university} / ${faculty}`}</> :
+                          '(Empty)'
+                      }
                     </p>
                     <p style={{ marginBottom: 10 }}>
-                      <Button size="small" type="dashed"><DeleteOutlined/> Delete</Button>
+                      <Button
+                        size="small"
+                        type="dashed"
+                        onClick={
+                          () => onProfileSettingsChange({ type: 'delete', index }, 'generalInfo.educationHistory')}
+                      >
+                        <DeleteOutlined/> Delete
+                      </Button>
                     </p>
                     <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>University:</Text></p>
                     <p style={{ fontSize: 18, marginBottom: 10 }}>
-                      <Input value={university} style={{ width: '100%' }}/>
+                      <Input
+                        value={university}
+                        style={{ width: '100%' }}
+                        onChange={(event) => onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].university`)}
+                      />
                     </p>
                     <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Faculty</Text></p>
                     <p style={{ fontSize: 18, marginBottom: 10 }}>
-                      <Input value={faculty} style={{ width: '100%' }}/>
+                      <Input
+                        value={faculty}
+                        style={{ width: '100%' }}
+                        onChange={(event) => onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].faculty`)}
+                      />
                     </p>
                     <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Graduation year:</Text></p>
                     <p style={{ fontSize: 18, marginBottom: 10 }}>
-                      <Input value={graduationYear} style={{ width: '100%' }}/>
+                      <Input
+                        value={graduationYear}
+                        style={{ width: '100%' }}
+                        onChange={(event) => onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].graduationYear`)}
+                      />
                     </p>
                   </div>
                 </List.Item>
               )}
             />
-            <Button type="dashed" style={{ width: '100%' }}><FileAddOutlined /> Add new university</Button>
+            <Button
+              type="dashed"
+              style={{ width: '100%' }}
+              onClick={() => onProfileSettingsChange({ type: 'add'}, 'generalInfo.educationHistory')}
+            >
+              <FileAddOutlined /> Add new university
+            </Button>
           </>
         }
       />
