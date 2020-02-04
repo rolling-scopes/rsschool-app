@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import { PublicFeedback } from '../../../../common/models/profile';
 import {

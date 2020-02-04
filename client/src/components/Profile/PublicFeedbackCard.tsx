@@ -1,4 +1,5 @@
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import {
   Typography,
@@ -36,7 +37,7 @@ interface State {
   isPublicFeedbackModalVisible: boolean;
 }
 
-class PublicFeedbackCard extends React.PureComponent<Props, State> {
+class PublicFeedbackCard extends React.Component<Props, State> {
   state = {
     badgesCount: {},
     isPublicFeedbackModalVisible: false,
@@ -68,6 +69,13 @@ class PublicFeedbackCard extends React.PureComponent<Props, State> {
 
     return badgesCount;
   };
+
+  shouldComponentUpdate = (nextProps: Props, nextState: State) => (
+    !isEqual(nextProps.permissionsSettings?.isPublicFeedbackVisible,
+      this.props.permissionsSettings?.isPublicFeedbackVisible) ||
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+    !isEqual(nextState.isPublicFeedbackModalVisible, this.state.isPublicFeedbackModalVisible)
+  );
 
   componentDidMount() {
     const badgesCount = this.countBadges();

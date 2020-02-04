@@ -1,4 +1,5 @@
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 import {
   Typography,
   List,
@@ -33,13 +34,21 @@ type State = {
   isStudentStatsModalVisible: boolean;
 };
 
-class StudentStatsCard extends React.PureComponent<Props, State> {
+class StudentStatsCard extends React.Component<Props, State> {
   state = {
     courseIndex: 0,
     coursesProgress: [],
     scoredTasks: [],
     isStudentStatsModalVisible: false,
   };
+
+  shouldComponentUpdate = (nextProps: Props, nextState: State) => (
+    !isEqual(nextProps.permissionsSettings?.isStudentStatsVisible,
+      this.props.permissionsSettings?.isStudentStatsVisible) ||
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+    !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
+    !isEqual(nextState.coursesProgress, this.state.coursesProgress)
+  );
 
   private filterPermissions = ({ isStudentStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
     isStudentStatsVisible,

@@ -31,7 +31,7 @@ class AboutCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) => (
     !isEqual(nextProps.data.aboutMyself, this.props.data.aboutMyself) ||
     !isEqual(nextProps.permissionsSettings?.isAboutVisible, this.props.permissionsSettings?.isAboutVisible) ||
-    nextProps.isEditingModeEnabled !== this.props.isEditingModeEnabled
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
   );
 
   render() {

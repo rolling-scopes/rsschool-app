@@ -1,4 +1,5 @@
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 import {
   Typography,
   List,
@@ -42,11 +43,15 @@ type State = {
   isCoreJsIviewModalVisible: boolean;
 };
 
-class CoreJSIviewsCard extends React.PureComponent<Props, State> {
+class CoreJSIviewsCard extends React.Component<Props, State> {
   state = {
     courseIndex: 0,
     isCoreJsIviewModalVisible: false,
   };
+
+  shouldComponentUpdate = (_: Props, nextState: State) => (
+    !isEqual(nextState.isCoreJsIviewModalVisible, this.state.isCoreJsIviewModalVisible)
+  );
 
   private showCoreJsIviewModal = (courseIndex: number) => {
     this.setState({ courseIndex, isCoreJsIviewModalVisible: true });

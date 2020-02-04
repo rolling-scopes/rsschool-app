@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import isEqual from 'lodash/isEqual'
 import { CoreJsInterviewData } from './CoreJsIviewsCard';
 import {
   Modal,

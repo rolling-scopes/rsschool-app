@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { get, set, isEqual, cloneDeep, mapValues, clone } from 'lodash';
+import { get, isEqual, cloneDeep, mapValues, clone } from 'lodash';
+import set from 'lodash/set';
 import {
   Result,
   Spin,
@@ -85,18 +86,31 @@ class ProfilePage extends React.Component<Props, State> {
         isInitialPermissionsSettingsChanged,
       });
     }
-  }
+  };
 
-  private onProfileSettingsChange = async ( { target: { value: changed } }: any, path: string ) => {
+  private onProfileSettingsChange = async ( event: any = {}, path: string ) => {
     const { profile } = this.state;
 
     if (profile) {
-      // const current = get(profile, path);
       const newProfile = cloneDeep(profile);
-      set(newProfile, path, changed);
-      // console.log(this.state);
+
+      switch (path) {
+        case 'generalInfo.location': {
+          set(newProfile, `${path}Id`, event.id);
+          set(newProfile, `${path}Name`, event.name);
+          break;
+        }
+        case 'generalInfo.englishLevel': {
+          set(newProfile, path, event);
+          break;
+        }
+        default: {
+          set(newProfile, path, event.target.value);
+        }
+      }
+
       await this.setState({ profile: newProfile });
-      // console.log(path, current, changed, this.state);
+
     }
   };
 
