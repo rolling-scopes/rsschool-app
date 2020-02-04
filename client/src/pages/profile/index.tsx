@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { get, isEqual, cloneDeep, mapValues, clone } from 'lodash';
+import get from 'lodash/get';
 import set from 'lodash/set';
+import isEqual from 'lodash/isEqual';
+import cloneDeep from 'lodash/cloneDeep';
+import mapValues from 'lodash/mapValues';
+import clone from 'lodash/clone';
+import pullAt from 'lodash/pullAt';
 import {
   Result,
   Spin,
@@ -13,7 +18,7 @@ import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from 'services/user';
-import { ProfileInfo, StudentStats, ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ProfileInfo, StudentStats, ConfigurableProfilePermissions, Contacts, GeneralInfo } from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
@@ -37,10 +42,12 @@ type Props = {
 type State = {
   profile: ProfileInfo | null;
   initialPermissionsSettings: ConfigurableProfilePermissions | null;
+  initialProfileSettings: ProfileInfo | null;
   isLoading: boolean;
   isSaving: boolean;
   isEditingModeEnabled: boolean;
   isInitialPermissionsSettingsChanged: boolean;
+  isInitialProfileSettingsChanged: boolean;
 };
 
 export type ChangedPermissionsSettings = {
@@ -51,10 +58,12 @@ class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
     initialPermissionsSettings: null,
+    initialProfileSettings: null,
     isLoading: true,
     isSaving: false,
     isEditingModeEnabled: false,
     isInitialPermissionsSettingsChanged: false,
+    isInitialProfileSettingsChanged: false,
   };
 
   private onPermissionsSettingsChange = async (
@@ -89,28 +98,47 @@ class ProfilePage extends React.Component<Props, State> {
   };
 
   private onProfileSettingsChange = async ( event: any = {}, path: string ) => {
-    const { profile } = this.state;
+    const { profile, initialProfileSettings } = this.state;
 
     if (profile) {
       const newProfile = cloneDeep(profile);
 
+      let isInitialProfileSettingsChanged;
       switch (path) {
         case 'generalInfo.location': {
           set(newProfile, `${path}Id`, event.id);
           set(newProfile, `${path}Name`, event.name);
+          isInitialProfileSettingsChanged = initialProfileSettings?.generalInfo?.locationId !== event.id;
           break;
         }
         case 'generalInfo.englishLevel': {
           set(newProfile, path, event);
+          isInitialProfileSettingsChanged = initialProfileSettings?.generalInfo?.englishLevel !== event;
+          break;
+        }
+        case 'generalInfo.educationHistory': {
+          if (event.type === 'add') {
+            newProfile.generalInfo?.educationHistory.push({
+              graduationYear: null,
+              faculty: null,
+              university: null,
+            });
+          } else if (event.type === 'delete') {
+            pullAt(newProfile.generalInfo?.educationHistory, [event.index]);
+          }
+          isInitialProfileSettingsChanged = !isEqual(
+            initialProfileSettings?.generalInfo?.educationHistory,
+            newProfile.generalInfo?.educationHistory,
+          );
           break;
         }
         default: {
           set(newProfile, path, event.target.value);
+          isInitialProfileSettingsChanged = get(newProfile, path) !== get(initialProfileSettings, path);
         }
       }
 
-      await this.setState({ profile: newProfile });
-
+      await this.setState({ profile: newProfile, isInitialProfileSettingsChanged });
     }
   };
 
@@ -146,11 +174,16 @@ class ProfilePage extends React.Component<Props, State> {
       const githubId = router.query ? (router.query.githubId as string) : '';
       const profile = await this.userService.getProfileInfo(githubId);
       const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
+      const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      await this.setState({ isLoading: false, profile, initialPermissionsSettings, isEditingModeEnabled });
+      await this.setState({
+        isLoading: false, profile, initialPermissionsSettings, isEditingModeEnabled, initialProfileSettings,
+      });
     } catch (e) {
-      await this.setState({ isLoading: false, profile: null, initialPermissionsSettings: null });
+      await this.setState({
+        isLoading: false, profile: null, initialPermissionsSettings: null, initialProfileSettings: null,
+      });
     }
   };
 
@@ -167,20 +200,29 @@ class ProfilePage extends React.Component<Props, State> {
   };
 
   private saveProfile = async () => {
-    const { profile } = this.state;
+    const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
 
     await this.setState({ isSaving: true });
 
     if (profile) {
       try {
         const { permissionsSettings, generalInfo, contacts } = profile;
-        await this.userService.saveProfileInfo({ permissionsSettings, generalInfo, contacts });
+        await this.userService.saveProfileInfo({
+          permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
+          generalInfo: generalInfo as GeneralInfo,
+          contacts: contacts as Contacts,
+          isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
+          isProfileSettingsChanged: isInitialProfileSettingsChanged,
+        });
 
         const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
+        const initialProfileSettings = profile ? cloneDeep(profile) : null;
         await this.setState({
           isSaving: false,
           initialPermissionsSettings,
+          initialProfileSettings,
           isInitialPermissionsSettingsChanged: false,
+          isInitialProfileSettingsChanged: false,
         });
         this.onSaveSuccess();
       } catch (e) {
@@ -195,8 +237,15 @@ class ProfilePage extends React.Component<Props, State> {
   }
 
   render() {
-    const { profile, isEditingModeEnabled, initialPermissionsSettings } = this.state;
+    const {
+      profile,
+      isEditingModeEnabled,
+      initialPermissionsSettings,
+      isInitialPermissionsSettingsChanged,
+      isInitialProfileSettingsChanged,
+    } = this.state;
     const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
+    const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
 
     const cards = [
       profile?.generalInfo &&
@@ -274,7 +323,7 @@ class ProfilePage extends React.Component<Props, State> {
             onChangeProfilePageMode={this.changeProfilePageMode}
             isProfilePage={initialPermissionsSettings ? true : false}
             isProfileEditingModeEnabled={isEditingModeVisible}
-            isSaveButtonVisible={this.state.isInitialPermissionsSettingsChanged}
+            isSaveButtonVisible={isSaveButtonVisible}
             onSaveClick={this.saveProfile}
           />
           <Spin spinning={this.state.isSaving} delay={200}>
