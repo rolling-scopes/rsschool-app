@@ -12,6 +12,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
 import { LocationSelect } from '../LocationSelect';
+import { CITIES } from 'services/reference-data';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -45,7 +46,8 @@ class MainCard extends React.Component<Props, State> {
     !isEqual(nextProps.data.locationId, this.props.data.locationId) ||
     !isEqual(nextProps.data.name, this.props.data.name) ||
     !isEqual(nextProps.permissionsSettings?.isProfileVisible, this.props.permissionsSettings?.isProfileVisible) ||
-    nextState !== this.state
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
+    !isEqual(nextState, this.state)
   );
 
   private showVisibilitySettings = () => {
@@ -68,7 +70,9 @@ class MainCard extends React.Component<Props, State> {
   })
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const {
+      isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange,
+    } = this.props;
     const { githubId, name, locationName, locationId } = this.props.data;
     const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
 
@@ -108,11 +112,20 @@ class MainCard extends React.Component<Props, State> {
                     <div>
                       <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Name:</Text></p>
                       <p style={{ marginBottom: 20 }}>
-                        <Input value={name} placeholder="Firstname Lastname"/>
+                        <Input
+                          value={name}
+                          placeholder="Firstname Lastname"
+                          onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.name')}
+                        />
                       </p>
                       <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>Location:</Text></p>
                       <div style={{ marginBottom: 5 }}>
-                        <LocationSelect style={{ width: '100%' }} defaultValue={locationId} />
+                        <LocationSelect
+                          style={{ width: '100%' }}
+                          defaultValue={locationId}
+                          onChange={(locationId: string) => onProfileSettingsChange(
+                            CITIES.find(location => location.id === locationId), 'generalInfo.location')}
+                        />
                       </div>
                     </div>
                   }

@@ -23,7 +23,7 @@ type Props = {
   onProfileSettingsChange: (event: any, path: string) => void;
 };
 
-type Contact = { name: string, value: string | null };
+type Contact = { name: string, value: string | null, key: string };
 
 class ContactsCard extends React.Component<Props> {
   state = {
@@ -63,27 +63,34 @@ class ContactsCard extends React.Component<Props> {
       !isEqual(nextProps.permissionsSettings?.isSkypeVisible, isSkypeVisible) ||
       !isEqual(nextProps.permissionsSettings?.isContactsNotesVisible, isContactsNotesVisible) ||
       !isEqual(nextProps.permissionsSettings?.isLinkedInVisible, isLinkedInVisible) ||
-      nextProps.isEditingModeEnabled !== this.props.isEditingModeEnabled
+      !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const {
+      isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange,
+    } = this.props;
     const { email, telegram, phone, skype, notes } = this.props.data;
     const contacts = [{
       name: 'E-mail',
       value: email,
+      key: 'email',
     }, {
       name: 'Telegram',
-      value: telegram ? `@${telegram}` : telegram,
+      value: telegram,
+      key: 'telegram',
     }, {
       name: 'Phone',
       value: phone,
+      key: 'phone',
     }, {
       name: 'Skype',
       value: skype,
+      key: 'skype',
     }, {
       name: 'Notes',
       value: notes,
+      key: 'notes',
     }];
     const filledContacts = contacts.filter(({ value }: Contact) => value);
 
@@ -112,11 +119,15 @@ class ContactsCard extends React.Component<Props> {
           <List
             itemLayout="horizontal"
             dataSource={contacts}
-            renderItem={({ name, value }: Contact) => (
+            renderItem={({ name, value, key }: Contact) => (
               <List.Item>
                 <div style={{ width: '100%' }}>
                   <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>{name}:</Text></p>
-                  <Input value={value || ''} style={{ width: '100%' }}/>
+                  <Input
+                    value={value || ''}
+                    style={{ width: '100%' }}
+                    onChange={(event: any) => onProfileSettingsChange(event, `contacts.${key}`)}
+                  />
                 </div>
               </List.Item>
             )}

@@ -1,8 +1,6 @@
 import * as React from 'react';
-// import { useMemo } from 'react';
 import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-// import { UserService } from 'services/user';
 import css from 'styled-jsx/css';
 
 import {

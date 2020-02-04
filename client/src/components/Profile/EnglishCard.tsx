@@ -33,11 +33,13 @@ class EnglishCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) => (
     !isEqual(nextProps.data.englishLevel, this.props.data.englishLevel) ||
     !isEqual(nextProps.permissionsSettings?.isEnglishVisible, this.props.permissionsSettings?.isEnglishVisible) ||
-    nextProps.isEditingModeEnabled !== this.props.isEditingModeEnabled
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
   )
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const {
+      isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange,
+    } = this.props;
     const { englishLevel } = this.props.data;
     return (
       <CommonCard
@@ -55,7 +57,11 @@ class EnglishCard extends React.Component<Props> {
           <div>
             <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>English level:</Text></p>
             <div style={{ marginBottom: 20 }}>
-              <Select style={{ width: '100%' }} defaultValue={englishLevel || 'a0'}>
+              <Select
+                style={{ width: '100%' }}
+                defaultValue={englishLevel || 'a0'}
+                onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.englishLevel')}
+              >
                 {
                   ENGLISH_LEVELS.map((level) => (
                     <Option

@@ -36,7 +36,7 @@ class EducationCard extends React.Component<Props> {
   shouldComponentUpdate = (nextProps: Props) => (
     !isEqual(nextProps.data.educationHistory, this.props.data.educationHistory) ||
     !isEqual(nextProps.permissionsSettings?.isEducationVisible, this.props.permissionsSettings?.isEducationVisible) ||
-    nextProps.isEditingModeEnabled !== this.props.isEditingModeEnabled
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
   )
 
   render() {
