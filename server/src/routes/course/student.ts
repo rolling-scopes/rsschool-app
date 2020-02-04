@@ -122,13 +122,11 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
     .getOne();
 
   if (existingResult != null) {
-    existingResult = {
-      ...existingResult,
+    const result = await repository.update(existingResult.id, {
       formAnswers: inputData.formAnswers,
       score: Math.round(Number(inputData.score)),
       comment: inputData.comment || '',
-    };
-    const result = await repository.update(existingResult.id, existingResult);
+    });
     setResponse(ctx, OK, result);
     return;
   }
