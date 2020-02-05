@@ -28,7 +28,7 @@ export function profileRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /profile:
+   * /profile/info:
    *   get:
    *      description: get student profile
    *      security:
@@ -60,7 +60,7 @@ export function profileRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /profile/me:
+   * /profile/info:
    *   post:
    *      description: update current user profile
    *      security:

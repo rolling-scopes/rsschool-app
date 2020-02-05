@@ -20,54 +20,6 @@ import {
   Permissions,
 } from './permissions';
 
-/*
-  WHO CAN SEE
-    Admins               | Assigned mentor | Mentors | Assigned student | All
-    ***
-                                1. General info [+]
-    Name                 | Yes             | Yes     | Yes              | Yes
-    Github               | Yes             | Yes     | *                | *
-    Location (main)      | Yes             | Yes     | *                | *
-
-    Education            | *               | *       | *                | *
-
-    English              | Yes             | Yes     | *                | *
-
-                                2. Contacts [+]
-    EPAM email           | No              | No      | No               | No
-    Primary email        | *               | *       | *                | *
-    Telegram             | *               | *       | *                | *
-    Skype                | *               | *       | *                | *
-    Phone                | *               | *       | *                | *
-    Contact notes        | *               | *       | *                | *
-    LinkedIn profile     | *               | *       | *                | *
-
-                                3. Public feedback (Gratitude) [+]
-    *
-
-                                4. Statistics
-    Count of mentored    | Yes             | Yes     | Yes              | *
-    students
-    Number of courses    | Yes             | Yes     | Yes              | *
-    as a mentor
-
-                                5. Course statistics
-    Course when was      | Yes             | Yes     | Yes              | *
-    a mentor/student
-    List of students     | No              | No      | No               | No
-    for mentor for
-    each course
-    List of tasks/scores | Yes             | Yes     | No               | *
-    for student for
-    each course
-
-    Stage interview      | Yes             | Yes     | No               | *
-    Feedback
-    (Pre-Screening)
-    Core JS Interview    | Yes             | Yes     | No               | *
-    Feedback
-*/
-
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
   const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
@@ -88,7 +40,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
     const studentCourses = !relationsRoles ? await getStudentCourses(requestedGithubId) : null;
     role = mergeRoles({ relationsRoles, studentCourses, roles, userGithubId });
-    permissions = getPermissions({ isProfileOwner }, role, profilePermissions);
+    permissions = getPermissions({ isProfileOwner, role, permissions: profilePermissions });
   }
 
   console.log(JSON.stringify(permissions, null, 2));

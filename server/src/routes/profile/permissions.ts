@@ -24,8 +24,10 @@ interface Relations {
 
 export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'all';
 
-interface SuperAccessRights {
+interface PermissionsSetup {
   isProfileOwner: boolean;
+  role?: RelationRole;
+  permissions?: ConfigurableProfilePermissions;
 }
 
 export interface Permissions {
@@ -136,11 +138,7 @@ export const mergeRoles = ({
   return 'all';
 };
 
-export const getPermissions = (
-  { isProfileOwner }: SuperAccessRights,
-  role?: RelationRole,
-  permissions?: ConfigurableProfilePermissions,
-): Permissions => {
+export const getPermissions = ({ isProfileOwner, role, permissions }: PermissionsSetup): Permissions => {
   const defaultPermissions: Permissions = {
     isProfileVisible: false,
     isAboutVisible: false,
@@ -173,6 +171,7 @@ export const getPermissions = (
         'isSkypeVisible',
         'isPhoneVisible',
         'isContactsNodesVisible',
+        'isEnglishVisible',
       ].includes(permission) && ['mentor'].includes(role)) ||
       ([
         'isProfileVisible',

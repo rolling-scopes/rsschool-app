@@ -1,4 +1,4 @@
-import { OK, BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from 'koa-router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
@@ -24,45 +24,41 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
     generalInfo,
   } = profileInfo;
 
-  try {
-    if (isPermissionsSettingsChanged) {
-      const profileRepository = await getRepository(ProfilePermissions);
-      const userPermissions = (await profileRepository.findOne({ where: { userId } }));
+  if (isPermissionsSettingsChanged) {
+    const profileRepository = await getRepository(ProfilePermissions);
+    const userPermissions = (await profileRepository.findOne({ where: { userId } }));
 
-      await profileRepository.save({
-        id: userPermissions ? userPermissions.id : undefined,
-        userId,
-        ...permissionsSettings,
-      });
-    }
-
-    if (isProfileSettingsChanged) {
-      const [firstName, lastName = ''] = generalInfo.name.split(' ');
-      const { locationId, aboutMyself, locationName, educationHistory, englishLevel } = generalInfo;
-      const { skype, phone, email, telegram, notes} = contacts;
-      await getRepository(User)
-        .createQueryBuilder()
-        .update(User)
-        .set({
-          firstName,
-          lastName,
-          locationName,
-          locationId,
-          educationHistory,
-          englishLevel: englishLevel || 'a0',
-          aboutMyself: aboutMyself || '',
-          contactsTelegram: telegram || '',
-          contactsPhone: phone || '',
-          contactsEmail: email || '',
-          contactsNotes: notes || '',
-          contactsSkype: skype || '',
-        })
-        .where('id = :id', { id: userId })
-        .execute();
-    }
-
-    setResponse(ctx, OK);
-  } catch (error) {
-    setResponse(ctx, INTERNAL_SERVER_ERROR);
+    await profileRepository.save({
+      id: userPermissions ? userPermissions.id : undefined,
+      userId,
+      ...permissionsSettings,
+    });
   }
+
+  if (isProfileSettingsChanged) {
+    const [firstName, lastName = ''] = generalInfo.name.split(' ');
+    const { locationId, aboutMyself, locationName, educationHistory, englishLevel } = generalInfo;
+    const { skype, phone, email, telegram, notes} = contacts;
+    await getRepository(User)
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        firstName,
+        lastName,
+        locationName,
+        locationId,
+        educationHistory,
+        englishLevel: englishLevel || 'a0',
+        aboutMyself: aboutMyself || '',
+        contactsTelegram: telegram || '',
+        contactsPhone: phone || '',
+        contactsEmail: email || '',
+        contactsNotes: notes || '',
+        contactsSkype: skype || '',
+      })
+      .where('id = :id', { id: userId })
+      .execute();
+  }
+
+  setResponse(ctx, OK);
 };

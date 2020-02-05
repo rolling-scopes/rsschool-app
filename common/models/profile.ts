@@ -15,19 +15,19 @@ export interface VisibilitySettings extends PublicVisibilitySettings {
 }
 
 export interface ConfigurableProfilePermissions {
-  isProfileVisible: PublicVisibilitySettings;
-  isAboutVisible: VisibilitySettings;
-  isEducationVisible: VisibilitySettings;
-  isEnglishVisible: PartialStudentVisibilitySettings;
-  isEmailVisible: PartialStudentVisibilitySettings;
-  isTelegramVisible: PartialStudentVisibilitySettings;
-  isSkypeVisible: PartialStudentVisibilitySettings;
-  isPhoneVisible: PartialStudentVisibilitySettings;
-  isContactsNotesVisible: PartialStudentVisibilitySettings;
-  isLinkedInVisible: VisibilitySettings;
-  isPublicFeedbackVisible: VisibilitySettings;
-  isMentorStatsVisible: VisibilitySettings;
-  isStudentStatsVisible: PartialStudentVisibilitySettings;
+  isProfileVisible?: PublicVisibilitySettings;
+  isAboutVisible?: VisibilitySettings;
+  isEducationVisible?: VisibilitySettings;
+  isEnglishVisible?: PartialStudentVisibilitySettings;
+  isEmailVisible?: PartialStudentVisibilitySettings;
+  isTelegramVisible?: PartialStudentVisibilitySettings;
+  isSkypeVisible?: PartialStudentVisibilitySettings;
+  isPhoneVisible?: PartialStudentVisibilitySettings;
+  isContactsNotesVisible?: PartialStudentVisibilitySettings;
+  isLinkedInVisible?: VisibilitySettings;
+  isPublicFeedbackVisible?: VisibilitySettings;
+  isMentorStatsVisible?: VisibilitySettings;
+  isStudentStatsVisible?: PartialStudentVisibilitySettings;
 }
 
 export interface GeneralInfo {
