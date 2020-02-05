@@ -14,3 +14,4 @@ serverless/**/.serverless
 serverless/**/.build
 .idea
 .DS_Store
+coverage
