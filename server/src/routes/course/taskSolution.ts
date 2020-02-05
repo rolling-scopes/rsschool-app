@@ -8,7 +8,7 @@ import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } f
 import { courseService, taskResultsService, taskService } from '../../services';
 import { setResponse, setErrorResponse } from '../utils';
 
-const MIN_CHECKERS = 3;
+const MIN_CHECKERS = 4;
 
 type Input = { url: string };
 export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
