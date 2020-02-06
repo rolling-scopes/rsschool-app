@@ -24,11 +24,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       'course.primarySkillName',
     ]);
   if (Array.isArray(inputIds) && inputIds.length > 0) {
-    students = await initialQuery
-      .where('student."id" IN (:...ids)', {
-        ids: inputIds,
-      })
-      .getMany();
+    students = await initialQuery.where('student."id" IN (:...ids)', { ids: inputIds }).getMany();
   } else {
     students = await initialQuery
       .leftJoinAndSelect('student.certificate', 'certificate')
@@ -58,8 +54,8 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       timestamp: Date.now(),
     };
   });
-  await axios.post(config.aws.certificateGenerationUrl, result, {
-    headers: { 'x-api-key': config.aws.certificateGenerationApiKey },
+  await axios.post(config.aws.restApiUrl, result, {
+    headers: { 'x-api-key': config.aws.restApiKey },
   });
   setResponse(ctx, OK, result);
 };
