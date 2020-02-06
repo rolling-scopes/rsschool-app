@@ -1,10 +1,9 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { guard } from '../guards';
-import { getProfile } from './user';
 import { getProfileInfo } from './info';
-import { getMyProfile, updateMyProfile } from './me';
 import { updateProfile } from './save';
+import { getMyProfile, updateMyProfile } from './me';
 
 export function profileRoute(logger: ILogger) {
   const router = new Router({ prefix: '/profile' });
@@ -14,23 +13,7 @@ export function profileRoute(logger: ILogger) {
    *
    * /profile:
    *   get:
-   *      description: get student profile
-   *      security:
-   *        - cookieAuth: []
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: profile
-   */
-  router.get('/', guard, getProfile(logger));
-
-  /**
-   * @swagger
-   *
-   * /profile/info:
-   *   get:
-   *      description: get student profile
+   *      description: get user profile
    *      security:
    *        - cookieAuth: []
    *      produces:
@@ -40,6 +23,22 @@ export function profileRoute(logger: ILogger) {
    *          description: profile
    */
   router.get('/info', guard, getProfileInfo(logger));
+
+  /**
+   * @swagger
+   *
+   * /profile/info:
+   *   post:
+   *      description: save current user profile info
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: profile
+   */
+  router.post('/info', guard, updateProfile(logger));
 
   /**
    * @swagger
@@ -60,8 +59,8 @@ export function profileRoute(logger: ILogger) {
   /**
    * @swagger
    *
-   * /profile/info:
-   *   post:
+   * /profile/me:
+   *   get:
    *      description: update current user profile
    *      security:
    *        - cookieAuth: []
@@ -71,12 +70,7 @@ export function profileRoute(logger: ILogger) {
    *        200:
    *          description: profile
    */
-
-  router.post('/info', guard, updateProfile(logger));
-
   router.post('/me', guard, updateMyProfile(logger));
-
-  router.post('/registry', guard, updateMyProfile(logger));
 
   return router;
 }

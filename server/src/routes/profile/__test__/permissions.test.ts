@@ -1,4 +1,4 @@
-import { getPermissions, mergeRoles } from '../permissions';
+import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
 
 describe('getPermissions', () => {
   it('Should be an instance of Function', () => {
@@ -183,14 +183,14 @@ describe('getPermissions', () => {
   });
 });
 
-describe('mergeRoles', () => {
+describe('defineRole', () => {
   it('Should be an instance of Function', () => {
-    expect(mergeRoles).toBeInstanceOf(Function);
+    expect(defineRole).toBeInstanceOf(Function);
   });
 
   describe('Should return user role', () => {
     it('"student", if user is a student', () => {
-      expect(mergeRoles({
+      expect(defineRole({
         relationsRoles: {
           student: 'dima',
           mentors: ['andrey', 'dasha'],
@@ -208,7 +208,7 @@ describe('mergeRoles', () => {
       })).toBe('student');
     });
     it('"mentor", if user is an assigned mentor', () => {
-      expect(mergeRoles({
+      expect(defineRole({
         relationsRoles: {
           student: 'dima',
           mentors: ['andrey', 'dasha'],
@@ -226,7 +226,7 @@ describe('mergeRoles', () => {
       })).toBe('mentor');
     });
     it('"mentor", if user is an interviewer', () => {
-      expect(mergeRoles({
+      expect(defineRole({
         relationsRoles: {
           student: 'dima',
           mentors: ['andrey', 'dasha'],
@@ -244,7 +244,7 @@ describe('mergeRoles', () => {
       })).toBe('mentor');
     });
     it('"mentor", if user is a stage-interviewer', () => {
-      expect(mergeRoles({
+      expect(defineRole({
         relationsRoles: {
           student: 'dima',
           mentors: ['andrey', 'dasha'],
@@ -262,7 +262,7 @@ describe('mergeRoles', () => {
       })).toBe('mentor');
     });
     it('"mentor", if user is assigned for checking a task', () => {
-      expect(mergeRoles({
+      expect(defineRole({
         relationsRoles: {
           student: 'dima',
           mentors: ['andrey', 'dasha'],
@@ -280,14 +280,8 @@ describe('mergeRoles', () => {
       })).toBe('mentor');
     });
     it('"coursementor", if user is a mentor at the same course where requested user is a student', () => {
-      expect(mergeRoles({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
+      expect(defineRole({
+        relationsRoles: null,
         studentCourses: [
           { courseId: 1 },
           { courseId: 11 },
@@ -299,6 +293,73 @@ describe('mergeRoles', () => {
         },
         userGithubId: 'denis',
       })).toBe('coursementor');
+    });
+    it('"all", if user is not a mentor at the same course where requested user is a student', () => {
+      expect(defineRole({
+        relationsRoles: null,
+        studentCourses: [
+          { courseId: 1 },
+        ],
+        roles: {
+          '1': 'student',
+          '2': 'mentor',
+          '11': 'mentor',
+        },
+        userGithubId: 'denis',
+      })).toBe('all');
+    });
+    it('"all", if user if student has not registered to any course', () => {
+      expect(defineRole({
+        relationsRoles: null,
+        studentCourses: null,
+        roles: {
+          '1': 'student',
+          '2': 'mentor',
+          '11': 'mentor',
+        },
+        userGithubId: 'denis',
+      })).toBe('all');
+    });
+  });
+});
+
+describe('getProfilePermissionsSettings', () => {
+  it('Should be an instance of Function', () => {
+    expect(defineRole).toBeInstanceOf(Function);
+  });
+
+  it('Should not mutate param "permissions"', () => {
+    const permissions = {
+      isProfileVisible: { all: true },
+    };
+    const permissionsSettings = getProfilePermissionsSettings(permissions);
+
+    expect(permissions).toEqual({ isProfileVisible: { all: true } });
+    expect(permissionsSettings).not.toEqual({ isProfileVisible: { all: true } });
+  });
+
+  it('Should return permissions settings with defaults if all have not been passed', () => {
+    const permissions = {
+      isProfileVisible: { all: false },
+      isAboutVisible: { all: true, mentor: true, student: true },
+      isEducationVisible: { all: true, mentor: true, student: true },
+    };
+    const permissionsSettings = getProfilePermissionsSettings(permissions);
+
+    expect(permissionsSettings).toEqual({
+      isProfileVisible: { all: false },
+      isAboutVisible: { all: true, mentor: true, student: true },
+      isEducationVisible: { all: true, mentor: true, student: true },
+      isEnglishVisible: { all: false, student: false },
+      isEmailVisible: { all: false, student: false },
+      isTelegramVisible: { all: false, student: false },
+      isSkypeVisible: { all: false, student: false },
+      isPhoneVisible: { all: false, student: false },
+      isContactsNotesVisible: { all: false, student: false },
+      isLinkedInVisible: { all: false, mentor: false, student: false },
+      isPublicFeedbackVisible: { all: false, mentor: false, student: false },
+      isMentorStatsVisible: { all: false, mentor: false, student: false },
+      isStudentStatsVisible: { all: false, student: false },
     });
   });
 });

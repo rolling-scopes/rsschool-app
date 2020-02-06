@@ -56,14 +56,17 @@ export class UserService {
     });
   }
 
-  async getProfile(githubId?: string) {
-    const response = await this.axios.get<{ data: ProfileResponse }>(`/api/profile${githubId ? '' : '/me'}`, {
-      params: { githubId },
-    });
+  async getMyProfile() {
+    const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
     return response.data.data;
   }
 
-  async getProfileInfo(githubId: string) {
+  async updateMyProfile(data: Partial<UserFull>) {
+    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
+    return response.data.data;
+  }
+
+  async getProfileInfo(githubId?: string) {
     const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
     });
@@ -72,11 +75,6 @@ export class UserService {
 
   async saveProfileInfo(profile: SaveProfileInfo) {
     const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
-    return response.data.data;
-  }
-
-  async updateUser(data: Partial<UserFull>) {
-    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
     return response.data.data;
   }
 }

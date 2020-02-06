@@ -3,19 +3,19 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
-import { ProfileInfo } from '../../../../common/models/profile';
+import { ProfileInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { getMentorStats } from './mentor-stats';
 import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';
 import { getStudentStats } from './student-stats';
 import { getUserInfo } from './user-info';
 import {
-  getOwnerPermissions,
+  getProfilePermissionsSettings,
   getConfigurableProfilePermissions,
   getRelationsRoles,
   getStudentCourses,
   getPermissions,
-  mergeRoles,
+  defineRole,
   RelationRole,
   Permissions,
 } from './permissions';
@@ -30,21 +30,21 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   const isProfileOwner = requestedGithubId === userGithubId;
 
+  const profilePermissions = await getConfigurableProfilePermissions(requestedGithubId);
+
   let role: RelationRole;
   let permissions: Permissions;
+  let permissionsSettings: ConfigurableProfilePermissions | undefined;
   if (isProfileOwner) {
     role = 'all';
     permissions = getPermissions({ isProfileOwner });
+    permissionsSettings = getProfilePermissionsSettings(profilePermissions);
   } else {
-    const profilePermissions = await getConfigurableProfilePermissions(requestedGithubId);
     const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
     const studentCourses = !relationsRoles ? await getStudentCourses(requestedGithubId) : null;
-    role = mergeRoles({ relationsRoles, studentCourses, roles, userGithubId });
+    role = defineRole({ relationsRoles, studentCourses, roles, userGithubId });
     permissions = getPermissions({ isProfileOwner, role, permissions: profilePermissions });
   }
-
-  console.log(JSON.stringify(permissions, null, 2));
-  console.log(JSON.stringify(role, null, 2));
 
   const {
     isProfileVisible,
@@ -57,8 +57,6 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   if (!isProfileVisible && !isProfileOwner) {
     return setResponse(ctx, FORBIDDEN);
   }
-
-  const permissionsSettings = isProfileOwner ? await getOwnerPermissions(userGithubId) : undefined;
 
   const { generalInfo, contacts } = await getUserInfo(requestedGithubId, permissions);
   const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(requestedGithubId) : undefined;
@@ -77,8 +75,6 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     stageInterviewFeedback,
     studentStats,
   };
-
-  // console.log(JSON.stringify(profileInfo, null, 2));
 
   setResponse(ctx, OK, profileInfo);
 };

@@ -1,4 +1,7 @@
-import { get, mapValues, mergeWith } from 'lodash';
+import get from 'lodash/get';
+import mapValues from 'lodash/mapValues';
+import mergeWith from 'lodash/mergeWith';
+import cloneDeep from 'lodash/cloneDeep';
 import { getRepository } from 'typeorm';
 import {
   User,
@@ -112,7 +115,7 @@ export const getRelationsRoles = async (userGithubId: string, requestedGithubId:
     .getRawOne() || null
 );
 
-export const mergeRoles = ({
+export const defineRole = ({
   relationsRoles,
   studentCourses,
   roles,
@@ -187,12 +190,12 @@ export const getPermissions = ({ isProfileOwner, role, permissions }: Permission
   ));
 };
 
-export const getOwnerPermissions = async (githubId: string) => {
-  const permissions = await getConfigurableProfilePermissions(githubId);
+export const getProfilePermissionsSettings = (permissions: ConfigurableProfilePermissions) => {
+  const newPermissions = cloneDeep(permissions);
 
-  mergeWith(permissions, defaultProfilePermissionsSettings, (setting, defaultSetting) => (
+  mergeWith(newPermissions, defaultProfilePermissionsSettings, (setting, defaultSetting) => (
     mapValues(defaultSetting, (value, key) => get(setting, key, value))
   ));
 
-  return permissions;
+  return newPermissions;
 };
