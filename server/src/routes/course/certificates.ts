@@ -54,7 +54,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       timestamp: Date.now(),
     };
   });
-  await axios.post(config.aws.restApiUrl, result, {
+  await axios.post(`${config.aws.restApiUrl}/certificate`, result, {
     headers: { 'x-api-key': config.aws.restApiKey },
   });
   setResponse(ctx, OK, result);
