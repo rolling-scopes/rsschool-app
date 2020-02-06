@@ -27,14 +27,14 @@ function Page(props: Props) {
 
   useAsync(async () => {
     setLoading(true);
-    const [profile, courses] = await Promise.all([new UserService().getProfile(), new CoursesService().getCourses()]);
+    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), new CoursesService().getCourses()]);
 
     const activeCourses = courses
       .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
       .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     setLoading(false);
-    setInitialData(profile.user);
+    setInitialData(profile);
     setCourses(activeCourses);
   }, []);
 

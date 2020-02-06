@@ -28,7 +28,7 @@ function Page(props: Props & { courseAlias?: string }) {
   useAsync(async () => {
     const userService = new UserService();
     const courseService = new CoursesService();
-    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+    const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
       : courses
@@ -36,7 +36,7 @@ function Page(props: Props & { courseAlias?: string }) {
           .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     setCourses(activeCourses);
-    setInitialData(profile.user);
+    setInitialData(profile);
   }, []);
 
   const handleSubmit = useCallback(async (model: any) => {

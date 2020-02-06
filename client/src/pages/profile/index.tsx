@@ -171,7 +171,7 @@ class ProfilePage extends React.Component<Props, State> {
     const { router } = this.props;
 
     try {
-      const githubId = router.query ? (router.query.githubId as string) : '';
+      const githubId = router.query ? (router.query.githubId as string) : undefined;
       const profile = await this.userService.getProfileInfo(githubId);
       const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
