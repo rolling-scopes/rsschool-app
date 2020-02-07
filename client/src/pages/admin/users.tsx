@@ -20,7 +20,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider />
+      <AdminSider isAdmin={props.session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Users" username={props.session.githubId} />
         <Content>

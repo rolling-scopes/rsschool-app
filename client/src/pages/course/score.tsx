@@ -47,8 +47,13 @@ export function Page(props: CoursePageProps) {
 
   const { isAdmin, isHirer, roles, coursesRoles } = props.session;
   const courseId = props.course.id;
+  const courseRole = coursesRoles?.[courseId];
   const csvEnabled =
-    isAdmin || isHirer || roles[courseId] === 'coursemanager' || coursesRoles?.[courseId]?.includes('manager');
+    isAdmin ||
+    isHirer ||
+    roles[courseId] === 'coursemanager' ||
+    courseRole?.includes('manager') ||
+    courseRole?.includes('supervisor');
   const columnWidth = 90;
   // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
   const tableWidth = columns.length * columnWidth + 800;

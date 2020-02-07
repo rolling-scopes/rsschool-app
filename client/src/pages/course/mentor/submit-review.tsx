@@ -111,8 +111,11 @@ const isMentor = (session: Session, courseId: number) => {
 
 const isPowerMentor = (session: Session, courseId: number) => {
   const { roles, coursesRoles, isAdmin } = session;
+  const courseRole = coursesRoles?.[courseId];
   const isCourseManager =
-    roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
+    roles[courseId] === 'coursemanager' ||
+    (courseRole?.includes('manager') ?? false) ||
+    (courseRole?.includes('supervisor') ?? false);
   return isAdmin || isCourseManager;
 };
 
@@ -136,8 +139,11 @@ const isSubmittedByMentor = (session: Session, courseId: number) => (task: Cours
 
 const isSubmittedByPowerAdmin = (session: Session, courseId: number) => (task: CourseTask) => {
   const { roles, coursesRoles, isAdmin } = session;
+  const courseRole = coursesRoles?.[courseId];
   const isCourseManager =
-    roles[courseId] === 'coursemanager' || (coursesRoles?.[courseId]?.includes('manager') ?? false);
+    roles[courseId] === 'coursemanager' ||
+    (courseRole?.includes('manager') ?? false) ||
+    (courseRole?.includes('supervisor') ?? false);
 
   const isPowerMentor = isAdmin || isCourseManager;
   return isPowerMentor && (isCheckedByTaskOwner(task) || isSubmittedByMentor(session, courseId)(task));

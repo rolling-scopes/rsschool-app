@@ -16,7 +16,7 @@ import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, T
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
-import { isEmpty } from 'lodash';
+import { isEmpty, values } from 'lodash';
 import * as React from 'react';
 import { CourseService, StudentSummary } from 'services/course';
 import { Course } from 'services/models';
@@ -42,6 +42,8 @@ const isMentor = (_: Course, role: Role, session: Session) => role === 'mentor' 
 const isStudent = (_: Course, role: Role, session: Session) => role === 'student' || session.isAdmin;
 const isCourseManager = (course: Course, role: Role, session: Session) =>
   role === 'coursemanager' || session.coursesRoles?.[course.id]?.includes('manager');
+const isCourseSupervisor = (course: Course, _: Role, session: Session) =>
+  session.coursesRoles?.[course.id]?.includes('supervisor');
 const isTaskOwner = (course: Course, _: Role, session: Session) =>
   session.coursesRoles?.[course.id]?.includes('taskOwner') ?? false;
 
@@ -66,7 +68,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,
-    newTab: false,
   },
   {
     name: () => (
@@ -76,7 +77,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/schedule?course=${course.alias}`,
     access: anyAccess,
-    newTab: false,
   },
   {
     name: () => (
@@ -86,7 +86,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole)),
-    newTab: false,
   },
   {
     name: () => (
@@ -96,7 +95,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isAdminRole, isJuryActivist)),
-    newTab: false,
   },
   {
     name: () => (
@@ -106,7 +104,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
-    newTab: false,
   },
   // {
   //   name: () => (
@@ -126,7 +123,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
   },
   {
     name: () => (
@@ -136,7 +132,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
   },
   {
     name: () => (
@@ -146,17 +141,15 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/student/interviews?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
   },
   {
     name: () => (
       <>
-        <CompassTwoTone twoToneColor="#52c41a" /> Cross Mentors <Tag color="magenta">new!</Tag>
+        <CompassTwoTone twoToneColor="#52c41a" /> Cross Mentors
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
   },
   {
     name: () => (
@@ -166,7 +159,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/mentor/interview-corejs?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
   },
   // {
   //   name: () => (
@@ -196,7 +188,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
-    newTab: false,
   },
 
   // {
@@ -213,7 +204,6 @@ const routes = [
     ),
     getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isMentor),
-    newTab: false,
   },
 ];
 
@@ -221,32 +211,27 @@ const courseManagementRoutes = [
   {
     name: () => `Course Events`,
     getLink: (course: Course) => `/course/admin/events?course=${course.alias}`,
-    access: isAdminRole,
-    newTab: false,
+    access: combineOr(isAdminRole, isCourseManager),
   },
   {
     name: () => `Course Tasks`,
     getLink: (course: Course) => `/course/admin/tasks?course=${course.alias}`,
-    access: isAdminRole,
-    newTab: false,
+    access: combineOr(isAdminRole, isCourseManager),
   },
   {
     name: () => `Course Students`,
     getLink: (course: Course) => `/course/admin/students?course=${course.alias}`,
-    access: combineOr(isAdminRole, isCourseManager),
-    newTab: false,
+    access: combineOr(isAdminRole, isCourseManager, isCourseSupervisor),
   },
   {
     name: () => `Course Mentors`,
     getLink: (course: Course) => `/course/admin/mentors?course=${course.alias}`,
-    access: combineOr(isAdminRole, isCourseManager),
-    newTab: false,
+    access: combineOr(isAdminRole, isCourseManager, isCourseSupervisor),
   },
   {
     name: () => `Course Users`,
     getLink: (course: Course) => `/course/admin/users?course=${course.alias}`,
     access: isAdminRole,
-    newTab: false,
   },
 ];
 
@@ -277,7 +262,6 @@ class IndexPage extends React.PureComponent<Props, State> {
       .map(route => ({
         name: route.name(),
         link: route.getLink(course),
-        newTab: route.newTab,
       }));
   };
 
@@ -292,7 +276,6 @@ class IndexPage extends React.PureComponent<Props, State> {
       .map(route => ({
         name: route.name(),
         link: route.getLink(course),
-        newTab: route.newTab,
       }));
   };
 
@@ -392,13 +375,14 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { isAdmin } = this.props.session;
+    const { isAdmin, coursesRoles } = this.props.session;
+    const isCourseManager = values(coursesRoles).some(item => item?.includes('manager'));
     const activeCourse = this.getActiveCourse();
     const courses = this.getCourses();
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {isAdmin && <AdminSider />}
+          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} />}
 
           <Layout style={{ background: '#fff' }}>
             <Header username={this.props.session.githubId} />
@@ -557,6 +541,6 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 }
 
-type LinkInfo = { name: React.ReactNode; link: string; newTab: boolean };
+type LinkInfo = { name: React.ReactNode; link: string; newTab?: boolean };
 
 export default withCourses(withSession(IndexPage));

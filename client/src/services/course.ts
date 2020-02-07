@@ -1,5 +1,4 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { Session } from '../components/withSession';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
@@ -346,14 +345,6 @@ export class CourseService {
   async getStudentCrossMentors(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/tasks/cross-mentors`);
     return result.data.data as { name: string; mentor: any }[];
-  }
-
-  isPowerUser(courseId: number, session: Session) {
-    return (
-      session.isAdmin ||
-      session.roles[courseId] === 'coursemanager' ||
-      session.coursesRoles?.[courseId]?.includes('manager')
-    );
   }
 }
 

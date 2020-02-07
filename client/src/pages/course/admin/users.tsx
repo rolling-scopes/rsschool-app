@@ -93,7 +93,7 @@ function Page(props: Props) {
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
           <Button type="primary" onClick={handleAddItem}>
-            Add Task
+            Add User
           </Button>
           <Table
             rowKey="id"
