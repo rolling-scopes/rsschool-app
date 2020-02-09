@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-
-export type TaskType = | 'jstask'
-| 'htmltask'
-| 'htmlcssacademy'
-| 'cv:markdown'
-| 'cv:html'
-| 'codewars:stage1'
-| 'codewars:stage2'
-| 'test'
-| 'interview'
-| 'codejam';
+export type TaskType =
+  | 'jstask'
+  | 'htmltask'
+  | 'htmlcssacademy'
+  | 'cv:markdown'
+  | 'cv:html'
+  | 'codewars:stage1'
+  | 'codewars:stage2'
+  | 'test'
+  | 'interview'
+  | 'codejam';
 
 export interface Task {
   id: number;

@@ -235,7 +235,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
         task.type === 'codewars:stage1' ||
         task.type === 'codewars:stage2') &&
       task.verification === 'auto' &&
-      task.checker !== 'taskOwner' && 
+      task.checker !== 'taskOwner' &&
       task.type !== 'test',
   );
 }

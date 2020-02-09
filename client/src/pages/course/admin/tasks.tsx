@@ -222,7 +222,7 @@ function Page(props: CoursePageProps) {
           <Select placeholder="Please select who checks">
             <Option value="mentor">Mentor</Option>
             <Option value="assigned">Assigned</Option>
-            {modalData?.verification == 'auto' && <Option value="autoTest">Auto-Test</Option>}
+            {modalData?.verification === 'auto' && <Option value="autoTest">Auto-Test</Option>}
             <Option value="taskOwner">Task Owner</Option>
             <Option value="crossCheck">Cross-Check</Option>
             <Option value="jury">Jury</Option>

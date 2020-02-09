@@ -94,10 +94,7 @@ export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, ne
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseSupervisorGuard = async (
-  ctx: Router.RouterContext<any, any>,
-  next: () => Promise<void>,
-) => {
+export const courseSupervisorGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
   const { courseId } = ctx.params;
