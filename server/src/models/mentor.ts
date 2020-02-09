@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { User } from './user';
 import { Student } from './student';
@@ -14,6 +15,7 @@ import { TaskChecker } from './taskChecker';
 import { StageInterview } from './stageInterview';
 
 @Entity()
+@Index(['courseId'])
 export class Mentor {
   @PrimaryGeneratedColumn() id: number;
 

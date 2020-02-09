@@ -3,7 +3,7 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard, courseGuard, courseMentorGuard, courseManagerGuard, taskOwnerGuard } from '../guards';
+import { adminGuard, guard, courseGuard, courseMentorGuard, courseSupervisorGuard, taskOwnerGuard } from '../guards';
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
@@ -141,9 +141,9 @@ function addCourseUserApi(router: Router, logger: ILogger) {
 
 function addMentorApi(router: Router, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
-  router.get('/mentors', courseManagerGuard, getMentors(logger));
+  router.get('/mentors', courseSupervisorGuard, getMentors(logger));
   router.post('/mentors', adminGuard, postMentors(logger));
-  router.get('/mentors/details', courseManagerGuard, getMentorsDetails(logger));
+  router.get('/mentors/details', courseSupervisorGuard, getMentorsDetails(logger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, getMentorInterviews(logger));
@@ -176,11 +176,11 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
 
-  router.get('/students', courseManagerGuard, getStudents(logger));
+  router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.post('/students', adminGuard, postStudents(logger));
-  router.get('/students/details', courseManagerGuard, getStudentsWithDetails(logger));
+  router.get('/students/details', courseSupervisorGuard, getStudentsWithDetails(logger));
   router.get('/students/score', courseGuard, getScore(logger));
-  router.get('/students/score/csv', courseManagerGuard, getScoreAsCsv(logger));
+  router.get('/students/score/csv', courseSupervisorGuard, getScoreAsCsv(logger));
 
   router.get('/students/search/:searchText', courseGuard, searchCourseStudent(logger));
 }

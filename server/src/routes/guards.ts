@@ -16,6 +16,7 @@ const userGuards = (user: IUserSession) => {
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
     isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false,
     isLoggedIn: (ctx: Router.RouterContext<any, any>) => user != null && (ctx.isAuthenticated() || config.isDevMode),
+    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes('supervisor') ?? false,
   };
   return {
     ...guards,
@@ -87,6 +88,20 @@ export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, ne
   const guards = userGuards(user);
   const { courseId } = ctx.params;
   if (guards.isLoggedIn(ctx) && guards.isPowerUser(courseId)) {
+    await next();
+    return;
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const courseSupervisorGuard = async (
+  ctx: Router.RouterContext<any, any>,
+  next: () => Promise<void>,
+) => {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  const { courseId } = ctx.params;
+  if (guards.isLoggedIn(ctx) && (guards.isPowerUser(courseId) || guards.isSupervisor(courseId))) {
     await next();
     return;
   }
