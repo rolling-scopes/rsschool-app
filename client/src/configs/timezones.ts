@@ -1,12 +1,12 @@
-export const TIMEZONES = {
-  'Europe/London': 'UTC+1',
-  'Europe/Warsaw': 'UTC+2',
-  'Europe/Kiev': 'UTC+2',
-  'Europe/Minsk': 'UTC+3',
-  'Europe/Moscow': 'UTC+3',
-  'Europe/Volgograd': 'UTC+4',
-  'Europe/Yekaterinburg': 'UTC+5',
-  'Asia/Tashkent': 'UTC+5',
-};
+export const TIMEZONES = [
+  'Europe/London',
+  'Europe/Warsaw',
+  'Europe/Kiev',
+  'Europe/Minsk',
+  'Europe/Moscow',
+  'Europe/Volgograd',
+  'Europe/Yekaterinburg',
+  'Asia/Tashkent',
+];
 
 export const DEFAULT_TIMEZONE = 'Europe/Minsk';

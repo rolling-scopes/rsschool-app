@@ -141,9 +141,9 @@ function Page(props: Props) {
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
-            {Object.entries(TIMEZONES).map(tz => (
-              <Select.Option key={tz[0]} value={tz[0]}>
-                {tz[0]}
+            {TIMEZONES.map(tz => (
+              <Select.Option key={tz} value={tz}>
+                {tz}
               </Select.Option>
             ))}
           </Select>
