@@ -59,7 +59,8 @@ const EventTypeToName = {
   codejam: 'code jam',
   externaltask: 'external task',
   htmlcssacademy: 'html/css academy',
-  codewars: 'codewars',
+  'codewars:stage1': 'codewars',
+  'codewars:stage2': 'codewars',
 };
 
 class SchedulePage extends React.Component<Props, State> {
