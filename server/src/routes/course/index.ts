@@ -103,9 +103,9 @@ function addStageApi(router: Router, logger: ILogger) {
 }
 
 function addEventApi(router: Router, logger: ILogger) {
-  router.put('/event/:id', adminGuard, createPutRoute(CourseEvent, logger));
-  router.post('/event', adminGuard, createPostRoute(CourseEvent, logger));
-  router.delete('/event/:id', adminGuard, createDeleteRoute(CourseEvent, logger));
+  router.put('/event/:id', courseManagerGuard, createPutRoute(CourseEvent, logger));
+  router.post('/event', courseManagerGuard, createPostRoute(CourseEvent, logger));
+  router.delete('/event/:id', courseManagerGuard, createDeleteRoute(CourseEvent, logger));
 
   router.get('/events', courseGuard, getCourseEvents(logger));
   router.get('/events/ical', courseGuard, getCourseEventsCalendar(logger));
