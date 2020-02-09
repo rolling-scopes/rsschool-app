@@ -5,24 +5,28 @@ import { sortTasksByEndDate } from 'services/rules';
 
 export interface CourseTask {
   id: number;
-  courseTaskId?: number;
   taskId: number;
   name: string;
   maxScore: number | null;
+  scoreWeight: number;
   verification: 'auto' | 'manual';
   type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars:stage1' | 'codewars:stage2' | 'test' | 'interview';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
-  scoreWeight: number;
-  stageId: number;
   githubPrRequired: boolean;
-  description: string | null;
   descriptionUrl: string | null;
   studentStartDate: string | null;
   studentEndDate: string | null;
-  taskResultCount: number;
   useJury: boolean;
   checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  taskOwnerId: number | null;
+}
+
+export interface CourseTaskDetails extends CourseTask {
+  
+  stageId: number;
+  description: string | null;
+  taskResultCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
 }
 
@@ -82,9 +86,10 @@ export class CourseService {
     return result.data.data.sort(sortTasksByEndDate);
   }
 
-  async getCourseTasksForTaskOwner() {
-    const result = await this.axios.get<{ data: CourseTask[] }>(`/tasksTaskOwner`);
-    return result.data.data;
+  async getCourseTasksDetails() {
+    type Response = { data: CourseTaskDetails[] };
+    const result = await this.axios.get<Response>('/tasks/details');
+    return result.data.data.sort(sortTasksByEndDate);
   }
 
   async getCourseEvents() {
@@ -345,6 +350,15 @@ export class CourseService {
   async getStudentCrossMentors(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/tasks/cross-mentors`);
     return result.data.data as { name: string; mentor: any }[];
+  }
+
+  async createCertificate(githubId: string) {
+    const result = await this.axios.post(`/student/${githubId}/certificate`);
+    return result.data.data;
+  }
+
+  exportStudentsCsv(activeOnly?: boolean) {
+    window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
 }
 

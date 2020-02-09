@@ -9,7 +9,7 @@ import { CoursePageProps, StudentBasic } from 'services/models';
 
 function Page({ session, course }: CoursePageProps) {
   const courseId = course.id;
-  const { githubId } = session;
+  const { githubId, id: userId } = session;
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
@@ -31,7 +31,7 @@ function Page({ session, course }: CoursePageProps) {
       .filter(
         task =>
           isSubmittedByPowerAdmin(session, courseId)(task) ||
-          isSubmittedByTaskOwner(githubId)(task) ||
+          isSubmittedByTaskOwner(userId)(task) ||
           isSubmittedByMentor(session, courseId)(task),
       );
     setAllStudents(allStudents);
@@ -40,7 +40,7 @@ function Page({ session, course }: CoursePageProps) {
 
   const loadStudents = async (searchText: string) => {
     const task = courseTasks.find(t => t.id === courseTaskId);
-    return isPowerMentor(session, courseId) || isTaskOwner(githubId)(task)
+    return isPowerMentor(session, courseId) || isTaskOwner(userId)(task)
       ? courseService.searchCourseStudent(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
           `${githubId} ${firstName} ${lastName}`.match(searchText),
@@ -119,12 +119,12 @@ const isPowerMentor = (session: Session, courseId: number) => {
   return isAdmin || isCourseManager;
 };
 
-const isTaskOwner = (githubId: string) => (task?: CourseTask) => {
-  return task?.taskOwner?.githubId === githubId;
+const isTaskOwner = (userId: number) => (task?: CourseTask) => {
+  return task?.taskOwnerId === userId;
 };
 
-const isSubmittedByTaskOwner = (githubId: string) => (task: CourseTask) =>
-  isTaskOwner(githubId)(task) && isCheckedByTaskOwner(task);
+const isSubmittedByTaskOwner = (userId: number) => (task: CourseTask) =>
+  isTaskOwner(userId)(task) && isCheckedByTaskOwner(task);
 
 const isSubmittedByMentor = (session: Session, courseId: number) => (task: CourseTask) => {
   return (

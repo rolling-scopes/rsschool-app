@@ -1,44 +1,24 @@
 import Router from 'koa-router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { Course, CourseTask, TaskChecker, TaskResult, Task, Stage } from '../../models';
+import { CourseTask, TaskChecker, TaskResult, Task } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { IUserSession } from '../../models/session';
 import { shuffleService } from '../../services';
 
-export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
-
-  const course = await getRepository(Course).findOne(courseId, {
-    relations: ['stages', 'stages.courseTasks'],
-  });
-
-  if (course === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const courseTaskIds: number[] = course!.stages
-    .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
-    .map(task => task.id);
-
-  if (courseTaskIds.length === 0) {
-    setResponse(ctx, OK, []);
-    return;
-  }
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .addSelect('COUNT(taskResult.id)', 'taskResultCount')
     .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .innerJoinAndSelect('courseTask.task', 'task')
-    .innerJoinAndSelect('courseTask.stage', 'stage')
-    .leftJoinAndSelect('courseTask.taskOwner', 'taskOwner')
-    .where(`courseTask.id IN (${courseTaskIds.join(',')})`)
+    .leftJoin('courseTask.taskOwner', 'taskOwner')
+    .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
+    .where(`courseTask.courseId = :courseId`, { courseId })
     .addGroupBy('courseTask.id')
     .addGroupBy('task.id')
-    .addGroupBy('stage.id')
     .addGroupBy('taskOwner.id')
     .getRawAndEntities();
 
@@ -52,7 +32,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       name: (item.task as Task).name,
       maxScore: item.maxScore,
       scoreWeight: item.scoreWeight,
-      stageId: (item.stage as Stage).id,
+      stageId: item.stageId,
       githubPrRequired: !!(item.task as Task).githubPrRequired,
       verification: (item.task as Task).verification,
       description: (item.task as Task).description,
@@ -80,94 +60,40 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
   setResponse(ctx, OK, data);
 };
 
-export const getCourseTasksForTaskOwner = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { isAdmin } = ctx.state!.user as IUserSession;
+export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
-  const taskOwnerId: number = ctx.state.user.id;
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
-    .select(`"courseTask"."id" AS "id", "task"."name" AS "name"`)
-    .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
-    .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
-    .leftJoin(Task, 'task', '"task"."id" = "courseTask"."taskId"')
-    .where(`"course"."id" = :courseId`, { courseId })
-    .andWhere(`"courseTask"."checker" = 'taskOwner'`)
-    .andWhere(`("courseTask"."taskOwnerId" = :taskOwnerId OR :isAdmin = TRUE)`, { taskOwnerId, isAdmin })
-    .getRawMany();
-
-  setResponse(ctx, OK, courseTasks);
-};
-
-export const getCourseTasksWithTaskCheckers = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
-
-  const course = await getRepository(Course).findOne(courseId, {
-    relations: ['stages', 'stages.courseTasks'],
-  });
-
-  if (course === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const courseTaskIds: number[] = course!.stages
-    .reduce<CourseTask[]>((acc, stage) => acc.concat(stage.courseTasks || []), [])
-    .map(task => task.id);
-
-  if (courseTaskIds.length === 0) {
-    setResponse(ctx, OK, []);
-    return;
-  }
-
-  const courseTasks = await getRepository(CourseTask)
-    .createQueryBuilder('courseTask')
-    .addSelect('COUNT(taskResult.id)', 'taskResultCount')
     .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .innerJoinAndSelect('courseTask.task', 'task')
-    .innerJoinAndSelect('courseTask.stage', 'stage')
-    .where(`courseTask.id IN (${courseTaskIds.join(',')})`)
-    .addGroupBy('courseTask.id')
-    .addGroupBy('task.id')
-    .addGroupBy('stage.id')
-    .getRawAndEntities();
+    .leftJoin('courseTask.taskOwner', 'taskOwner')
+    .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
+    .where(`courseTask.courseId = :courseId`, { courseId })
+    .getMany();
 
-  const data = courseTasks.entities.map(item => {
-    const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
-
+  const data = courseTasks.map(item => {
     return {
       id: item.id,
-      courseTaskId: item.id,
       taskId: (item.task as Task).id,
       name: (item.task as Task).name,
       maxScore: item.maxScore,
       scoreWeight: item.scoreWeight,
-      stageId: (item.stage as Stage).id,
       githubPrRequired: !!(item.task as Task).githubPrRequired,
       verification: (item.task as Task).verification,
-      description: (item.task as Task).description,
       descriptionUrl: (item.task as Task).descriptionUrl,
       studentStartDate: item.studentStartDate,
       studentEndDate: item.studentEndDate,
-      taskResultCount: raw ? Number(raw.taskResultCount) : 0,
-      allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
       useJury: (item.task as Task).useJury,
-      taskCheckers: [],
+      checker: item.checker,
+      taskOwnerId: item.taskOwnerId,
+      githubRepoName: (item.task as Task).githubRepoName,
+      sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
+      type: (item.task as Task).type,
     };
   });
 
-  const dataWithCheckers = await Promise.all(
-    data.map(async d => {
-      const taskCheckers = await getRepository(TaskChecker).find({
-        where: { courseTaskId: d.courseTaskId },
-        relations: ['student', 'student.user', 'mentor', 'mentor.user'],
-      });
-
-      return { ...d, taskCheckers };
-    }),
-  );
-
-  setResponse(ctx, OK, dataWithCheckers);
+  setResponse(ctx, OK, data);
 };
 
 export const postCourseTaskDistribution = (logger: ILogger) => async (ctx: Router.RouterContext) => {

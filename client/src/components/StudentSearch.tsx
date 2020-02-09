@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Select } from 'antd';
 import { get } from 'lodash';
 import { GithubAvatar } from 'components';
@@ -13,60 +13,42 @@ type Props = {
   keyField?: 'id' | 'githubId';
 };
 
-type State = {
-  data: Person[];
-};
+export function StudentSearch(props: Props) {
+  const [data, setData] = useState<Person[]>([]);
 
-export class StudentSearch extends React.Component<Props, State> {
-  state: State = { data: [] };
+  useEffect(() => setData(props.defaultValues ?? []), [props.defaultValues]);
+  const courseService = useMemo(() => new CourseService(props.courseId), [props.courseId]);
+  const handleSearch = useCallback(
+    async (value: string) => {
+      if (value) {
+        const data = await courseService.searchCourseStudent(value);
+        setData(data);
+      } else {
+        setData(props.defaultValues ?? []);
+      }
+    },
+    [props.defaultValues, courseService],
+  );
 
-  private courseService: CourseService;
-
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.courseId);
-  }
-
-  componentDidUpdate = prevProps => {
-    if (prevProps.defaultValues !== this.props.defaultValues) {
-      this.setState({ data: this.props.defaultValues || [] });
-    }
-  };
-
-  render() {
-    return (
-      <Select
-        {...this.props}
-        showSearch
-        defaultValue={undefined}
-        defaultActiveFirstOption={false}
-        showArrow={this.props.defaultValues ? Boolean(this.props.defaultValues.length) : false}
-        filterOption={false}
-        onSearch={this.handleSearch}
-        size="large"
-        placeholder={this.props.defaultValues && this.props.defaultValues.length > 0 ? 'Select...' : 'Search...'}
-        notFoundContent={null}
-        style={{ width: '100%' }}
-      >
-        {this.state.data.map(person => (
-          <Select.Option key={person.id} value={this.props.keyField ? get(person, this.props.keyField) : person.id}>
-            <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
-          </Select.Option>
-        ))}
-      </Select>
-    );
-  }
-
-  private searchStudents = async (searchText: string) => {
-    return this.courseService.searchCourseStudent(searchText);
-  };
-
-  private handleSearch = async (value: string) => {
-    if (value) {
-      const data = await this.searchStudents(value);
-      this.setState({ data });
-    } else {
-      this.setState({ data: this.props.defaultValues || [] });
-    }
-  };
+  const { keyField, courseId, defaultValues, ...otherProps } = props;
+  return (
+    <Select
+      {...otherProps}
+      showSearch
+      defaultValue={undefined}
+      defaultActiveFirstOption={false}
+      showArrow={defaultValues ? Boolean(defaultValues.length) : false}
+      filterOption={false}
+      onSearch={handleSearch}
+      placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
+      notFoundContent={null}
+      style={{ width: '100%' }}
+    >
+      {data.map(person => (
+        <Select.Option key={person.id} value={keyField ? get(person, keyField) : person.id}>
+          <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
+        </Select.Option>
+      ))}
+    </Select>
+  );
 }

@@ -1,4 +1,10 @@
-import { BranchesOutlined, CloseCircleOutlined, DownOutlined } from '@ant-design/icons';
+import {
+  BranchesOutlined,
+  FileExcelOutlined,
+  MoreOutlined,
+  SolutionOutlined,
+  CloseCircleTwoTone,
+} from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
@@ -13,7 +19,7 @@ import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 
-type Stats = { activeStudentCount: number; studentCount: number; countries: any[] };
+type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
 type Props = CoursePageProps;
 
 function Page(props: Props) {
@@ -35,6 +41,8 @@ function Page(props: Props) {
     [courseService],
   );
 
+  const actions = useMemo(() => createActions(courseService, setLoading), [courseService, setLoading]);
+
   useAsync(async () => {
     setLoading(true);
     await loadStudents(activeOnly);
@@ -43,27 +51,21 @@ function Page(props: Props) {
 
   const handleExpel = record => setExpelledStudent(record);
 
-  const handleCreateRepo = async ({ githubId }: StudentDetails) => {
-    try {
-      setLoading(true);
-      const { repository } = await courseService.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      setStudents(newStudents);
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateRepos = () => {
-    try {
-      courseService.createRepositories();
-      message.info('The job for creating repositories has been submitted');
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    }
-  };
+  const handleCreateRepo = useCallback(
+    async ({ githubId }: { githubId: string }) => {
+      try {
+        setLoading(true);
+        const { repository } = await courseService.createRepository(githubId);
+        const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+        setStudents(newStudents);
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [courseService],
+  );
 
   const handleActiveOnlyChange = async () => {
     setLoading(true);
@@ -77,35 +79,50 @@ function Page(props: Props) {
     return (
       <Menu>
         <Menu.Item onClick={() => handleExpel(record)}>
-          <CloseCircleOutlined />
-          Expel
+          <CloseCircleTwoTone twoToneColor="red" />
+          Expel Student
         </Menu.Item>
-        <Menu.Item onClick={() => handleCreateRepo(record)}>
+        <Menu.Item disabled={!!record.repository} onClick={() => handleCreateRepo(record)}>
           <BranchesOutlined />
           Create Repository
         </Menu.Item>
-        {/* <Menu.Item key="3">
+        <Menu.Item onClick={() => actions.issueCertificate(record)}>
           <SolutionOutlined />
           Issue Certificate
-        </Menu.Item> */}
+        </Menu.Item>
       </Menu>
     );
   }
 
-  const getToolbarActions = () => {
+  const getToolbarActions = useCallback(() => {
+    const { isAdmin, coursesRoles } = props.session;
+    const isManager = coursesRoles?.[props.course.id]?.includes('manager');
     return (
       <>
-        <Button style={{ marginRight: 8 }} onClick={handleCreateRepos}>
-          Create Repos
+        {isManager || isAdmin ? (
+          <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={actions.createRepositories}>
+            Create Repos
+          </Button>
+        ) : null}
+        <Button
+          icon={<FileExcelOutlined />}
+          style={{ marginRight: 8 }}
+          onClick={() => courseService.exportStudentsCsv(activeOnly)}
+        >
+          Export CSV
         </Button>
       </>
     );
-  };
+  }, [courseService, actions]);
 
   return (
     <PageLayout loading={loading} githubId={props.session.githubId}>
-      <Statistic title="Active Students" value={stats?.activeStudentCount} suffix={`/ ${stats?.studentCount}`} />
-      <Row justify="space-between" style={{ marginBottom: 16 }}>
+      <Statistic
+        title="Active Students"
+        value={stats?.activeStudentsCount ?? 0}
+        suffix={`/ ${stats?.studentsCount ?? 0}`}
+      />
+      <Row justify="space-between" style={{ marginBottom: 16, marginTop: 16 }}>
         <div>
           <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
           <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
@@ -183,7 +200,7 @@ function getColumns(getActionsMenu): ColumnProps<any>[] {
       ...getColumnSearchProps('countryName'),
     },
     {
-      title: 'Interviews',
+      title: 'Interview',
       dataIndex: 'interviews',
       width: 60,
       render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
@@ -213,9 +230,10 @@ function getColumns(getActionsMenu): ColumnProps<any>[] {
       dataIndex: 'actions',
       render: (_, record: StudentDetails) => (
         <Dropdown trigger={['click']} overlay={getActionsMenu(record)}>
-          <a href="#">
-            More <DownOutlined />
-          </a>
+          <Button size="small" type="default">
+            More
+            <MoreOutlined />
+          </Button>
         </Dropdown>
       ),
     },
@@ -223,7 +241,7 @@ function getColumns(getActionsMenu): ColumnProps<any>[] {
 }
 
 function calculateStats(students: StudentDetails[]) {
-  let activeStudentCount = 0;
+  let activeStudentsCount = 0;
   const countries: Record<string, { count: number; totalCount: number }> = {};
 
   for (const student of students) {
@@ -233,18 +251,45 @@ function calculateStats(students: StudentDetails[]) {
     }
     countries[countryName].totalCount++;
     if (student.isActive) {
-      activeStudentCount++;
+      activeStudentsCount++;
       countries[countryName].count++;
     }
   }
   return {
-    activeStudentCount,
-    studentCount: students.length,
+    activeStudentsCount,
+    studentsCount: students.length,
     countries: _.keys(countries).map(k => ({
       name: k,
       count: countries[k].count,
       totalCount: countries[k].totalCount,
     })),
+  };
+}
+
+function createActions(courseService: CourseService, setLoading: (value: boolean) => void) {
+  return {
+    issueCertificate: async ({ githubId }: { githubId: string }) => {
+      try {
+        setLoading(true);
+        await courseService.createCertificate(githubId);
+        message.info('The certificate has been requested.');
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    createRepositories: async () => {
+      try {
+        setLoading(true);
+        await courseService.createRepositories();
+        message.info('The job for creating repositories has been submitted');
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
   };
 }
 

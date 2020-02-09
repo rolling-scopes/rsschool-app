@@ -4,7 +4,7 @@ import { withSession, GithubUserLink, PageLayout } from 'components';
 import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
-import { CourseEvent, CourseService, CourseTask } from 'services/course';
+import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
@@ -67,10 +67,13 @@ export function SchedulePage(props: CoursePageProps) {
   useAsync(async () => {
     try {
       setLoading(true);
-      const [events, tasks] = await Promise.all([courseService.getCourseEvents(), courseService.getCourseTasks()]);
+      const [events, tasks] = await Promise.all([
+        courseService.getCourseEvents(),
+        courseService.getCourseTasksDetails(),
+      ]);
       const data = events
         .concat(
-          tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
+          tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
             if (task.type !== TaskTypes.test) {
               acc.push(createCourseEventFromTask(task, task.type));
             }
@@ -222,7 +225,7 @@ const timeZoneRenderer = (timeZone: string) => (value: string) =>
         .format('HH:mm')
     : '';
 
-const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent => {
+const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent => {
   return {
     id: task.id,
     dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',

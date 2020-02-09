@@ -3,7 +3,15 @@ import Router from 'koa-router';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard, courseGuard, courseMentorGuard, courseSupervisorGuard, taskOwnerGuard } from '../guards';
+import {
+  adminGuard,
+  guard,
+  courseGuard,
+  courseMentorGuard,
+  courseSupervisorGuard,
+  taskOwnerGuard,
+  courseManagerGuard,
+} from '../guards';
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
 import { postInterviewFeedback, postInterviewFeedbacks } from './interviewFeedback';
@@ -17,9 +25,9 @@ import {
 import { getMentors, postMentors, getMentorsDetails } from './mentors';
 import { getScore, getScoreAsCsv, postScore, postMultipleScores, getScoreByStudent } from './score';
 import { getCourseStages, postCourseStages } from './stages';
-import { postCertificates } from './certificates';
+import { postCertificates, postStudentCertificate } from './certificates';
 import { postStudentsFeedbacks } from './studentFeedback';
-import { getStudents, postStudents, searchCourseStudent, getStudentsWithDetails } from './students';
+import { getStudents, postStudents, searchCourseStudent, getStudentsWithDetails, getStudentsCsv } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { postTaskVerification } from './taskVerification';
 import { getCourseEvents, getCourseEventsCalendar } from './events';
@@ -37,12 +45,7 @@ import {
 
 import { getStudentInterviews } from './interviews';
 
-import {
-  getCourseTasks,
-  getCourseTasksWithTaskCheckers,
-  getCourseTasksForTaskOwner,
-  postCourseTaskDistribution,
-} from './tasks';
+import { getCourseTasksDetails, postCourseTaskDistribution, getCourseTasks } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import { postStudentStatus, getStudentSummary, postStudentInterviewResult, getCrossMentorsTasks } from './student';
@@ -114,8 +117,7 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.delete('/task/:id', adminGuard, createDeleteRoute(CourseTask, logger));
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
-  router.get('/tasksTaskOwner', taskOwnerGuard, getCourseTasksForTaskOwner(logger));
-  router.get('/tasksCheckers', courseGuard, getCourseTasksWithTaskCheckers(logger));
+  router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
   router.post('/task/:courseTaskId/distribution', adminGuard, postCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', adminGuard, postTaskSolutionDistribution(logger));
@@ -175,8 +177,10 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
+  router.post('/student/:githubId/certificate', courseManagerGuard, ...validators, postStudentCertificate(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
+  router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
   router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/details', courseSupervisorGuard, getStudentsWithDetails(logger));
   router.get('/students/score', courseGuard, getScore(logger));

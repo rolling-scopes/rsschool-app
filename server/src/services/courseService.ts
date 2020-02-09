@@ -442,11 +442,14 @@ export async function getStudentsScore(courseId: number, activeOnly: boolean = f
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
     .addSelect(getPrimaryUserFields().concat(['user.locationName']))
-    .leftJoinAndSelect('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
-    .leftJoinAndSelect('student.taskResults', 'taskResults')
-    .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
-    .leftJoin('mentor.user', 'mentorUser')
-    .addSelect(getPrimaryUserFields('mentorUser'))
+    .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
+    .addSelect(['mentor.id', 'mentor.userId'])
+    .leftJoin('student.taskResults', 'tr')
+    .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId'])
+    .leftJoin('student.taskInterviewResults', 'tir')
+    .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
+    .leftJoin('mentor.user', 'mu')
+    .addSelect(getPrimaryUserFields('mu'))
     .where('student."courseId" = :courseId', { courseId });
 
   if (activeOnly) {
@@ -458,15 +461,12 @@ export async function getStudentsScore(courseId: number, activeOnly: boolean = f
     .sort((a, b) => b.totalScore - a.totalScore)
     .map<StudentWithResults>((student, i) => {
       const user = student.user as User;
+      const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
+        .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
+        .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
+
       const taskResults =
-        student.taskResults
-          ?.map(({ courseTaskId, score }) => ({ courseTaskId, score }))
-          .concat(
-            student.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
-              courseTaskId,
-              score,
-            })) ?? [],
-          ) ?? [];
+        student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
 
       const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
       return {
@@ -530,7 +530,8 @@ export function isPowerUser(courseId: number, session: IUserSession) {
   return (
     session.isAdmin ||
     session.roles[courseId] === 'coursemanager' ||
-    session.coursesRoles?.[courseId]?.includes('manager')
+    session.coursesRoles?.[courseId]?.includes('manager') ||
+    session.coursesRoles?.[courseId]?.includes('supervisor')
   );
 }
 

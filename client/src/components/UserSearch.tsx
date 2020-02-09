@@ -38,7 +38,7 @@ export function UserSearch(props: Props) {
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
       onSearch={handleSearch}
-      placeholder={defaultValues && defaultValues.length > 0 ? 'Select...' : 'Search...'}
+      placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
       {data.map(person => (

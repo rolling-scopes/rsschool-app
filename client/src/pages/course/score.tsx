@@ -4,7 +4,7 @@ import { GithubAvatar, Header, withSession } from 'components';
 import { dateRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTask, StudentScore } from 'services/course';
+import { CourseService, StudentScore, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
@@ -155,16 +155,16 @@ export function Page(props: CoursePageProps) {
   );
 }
 
-function getColumns(courseTasks: any[]) {
-  const columns = courseTasks.map(task => ({
-    dataIndex: task.id.toString(),
+function getColumns(courseTasks: CourseTask[]) {
+  const columns = courseTasks.map(courseTask => ({
+    dataIndex: courseTask.id.toString(),
     title: () => {
       const icon = (
         <Popover
           content={
             <ul>
-              <li>Coefficient: {task.scoreWeight}</li>
-              <li>Deadline: {dateRenderer(task.studentEndDate)}</li>
+              <li>Coefficient: {courseTask.scoreWeight}</li>
+              <li>Deadline: {dateRenderer(courseTask.studentEndDate)}</li>
             </ul>
           }
           trigger="click"
@@ -172,23 +172,23 @@ function getColumns(courseTasks: any[]) {
           <QuestionCircleOutlined title="Click for detatils" />
         </Popover>
       );
-      return task.descriptionUrl ? (
+      return courseTask.descriptionUrl ? (
         <>
-          <a className="table-header-link" target="_blank" href={task.descriptionUrl}>
-            {task.name}
+          <a className="table-header-link" target="_blank" href={courseTask.descriptionUrl}>
+            {courseTask.name}
           </a>{' '}
           {icon}
         </>
       ) : (
         <div>
-          {task.name} {icon}
+          {courseTask.name} {icon}
         </div>
       );
     },
     width: 100,
     className: 'align-right',
     render: (_: any, d: StudentScore) => {
-      const currentTask = d.taskResults.find((taskResult: any) => taskResult.courseTaskId === task.courseTaskId);
+      const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
       return currentTask ? <div>{currentTask.score}</div> : 0;
     },
   }));

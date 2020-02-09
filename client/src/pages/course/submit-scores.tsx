@@ -28,8 +28,8 @@ export function Page(props: CoursePageProps) {
   const [selectedFileList, setSelectedFileList] = useState(new Map() as Map<string, UploadFile>);
 
   useAsync(async () => {
-    const data = await courseService.getCourseTasksForTaskOwner();
-    setCourseTasks(data);
+    const data = await courseService.getCourseTasks();
+    setCourseTasks(data.filter(item => (item.taskOwnerId === props.session.id || props.session.isAdmin) && item.checker === 'taskOwner'));
   }, [courseService]);
 
   const handleTaskChange = () => setSubmitResults([]);

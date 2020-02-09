@@ -8,7 +8,7 @@ import withCourseData from 'components/withCourseData';
 import moment from 'moment-timezone';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask } from 'services/course';
+import { CourseService, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Stage, StageService } from 'services/stage';
@@ -23,16 +23,16 @@ function Page(props: Props) {
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([] as CourseTask[]);
+  const [data, setData] = useState([] as CourseTaskDetails[]);
   const [stages, setStages] = useState([] as Stage[]);
   const [tasks, setTasks] = useState([] as Task[]);
-  const [modalData, setModalData] = useState(null as Partial<CourseTask> | null);
+  const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = useCallback(async () => {
     setLoading(true);
     const [data, stages, tasks] = await Promise.all([
-      service.getCourseTasks(),
+      service.getCourseTasksDetails(),
       new StageService().getCourseStages(courseId),
       new TaskService().getTasks(),
     ]);
@@ -49,7 +49,7 @@ function Page(props: Props) {
     setModalAction('create');
   };
 
-  const handleEditItem = (record: CourseTask) => {
+  const handleEditItem = (record: CourseTaskDetails) => {
     setModalData(record);
     setModalAction('update');
   };
@@ -61,8 +61,7 @@ function Page(props: Props) {
         return;
       }
       await service.deleteCourseTask(id);
-      const data = await service.getCourseTasks();
-      setData(data);
+      await loadData();
     } catch {
       message.error('Failed to delete item. Please try later.');
     }
@@ -73,21 +72,19 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = async (values: any) => {
-    const record = createRecord(values);
+    const record = createRecord(values, props.course.id);
 
     if (modalAction === 'update') {
       await service.updateCourseTask(modalData!.id!, record);
-      await loadData();
     } else {
-      const courseTask = await service.createCourseTask(record);
-      const updatedData = data.concat([courseTask]);
-      setData(updatedData);
+      await service.createCourseTask(record);
     }
+    await loadData();
 
     setModalData(null);
   };
 
-  const handleDistribute = async (record: CourseTask) => {
+  const handleDistribute = async (record: CourseTaskDetails) => {
     setLoading(true);
     await service.createInterviewDistribution(record.id);
     setLoading(false);
@@ -104,7 +101,7 @@ function Page(props: Props) {
     [tasks],
   );
 
-  const getDropdownMenu = (record: CourseTask) => {
+  const getDropdownMenu = (record: CourseTaskDetails) => {
     const hasDistibute = record.type === 'interview' || record.checker === 'assigned';
     const hasCrossCheck = record.checker === 'crossCheck';
     return (
@@ -132,7 +129,7 @@ function Page(props: Props) {
     );
   };
 
-  const handleCrossCheckDistribution = async (record: CourseTask) => {
+  const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
     try {
       await service.createCrossCheckDistribution(record.id);
       message.success('Cross-check Distrubtion has been created');
@@ -141,7 +138,7 @@ function Page(props: Props) {
     }
   };
 
-  const handleCrossCheckCompletion = async (record: CourseTask) => {
+  const handleCrossCheckCompletion = async (record: CourseTaskDetails) => {
     try {
       setLoading(true);
       await service.createCrossCheckCompletion(record.id);
@@ -154,7 +151,7 @@ function Page(props: Props) {
     }
   };
 
-  const renderModal = (modalData: Partial<CourseTask> | null) => {
+  const renderModal = (modalData: Partial<CourseTaskDetails> | null) => {
     return (
       <ModalForm
         getInitialValues={getInitialValues}
@@ -251,7 +248,7 @@ function Page(props: Props) {
   );
 }
 
-function getColumns(getDropdownMenu: (record: CourseTask) => any, { tasks, stages }) {
+function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks, stages }) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -283,16 +280,17 @@ function getColumns(getDropdownMenu: (record: CourseTask) => any, { tasks, stage
     {
       dataIndex: 'actions',
       width: 80,
-      render: (_, record: CourseTask) => {
+      render: (_, record: CourseTaskDetails) => {
         return getDropdownMenu(record);
       },
     },
   ];
 }
 
-function createRecord(values: any) {
+function createRecord(values: any, courseId: number) {
   const [startDate, endDate] = values.range || [null, null];
   const data = {
+    courseId,
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
     taskId: values.taskId,
@@ -305,7 +303,7 @@ function createRecord(values: any) {
   return data;
 }
 
-function getInitialValues(modalData: Partial<CourseTask>) {
+function getInitialValues(modalData: Partial<CourseTaskDetails>) {
   return {
     ...modalData,
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
