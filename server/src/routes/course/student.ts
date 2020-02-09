@@ -114,7 +114,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
   }
 
   const repository = getRepository(TaskInterviewResult);
-  let existingResult = await repository
+  const existingResult = await repository
     .createQueryBuilder('taskInterviewResult')
     .where('"taskInterviewResult"."studentId" = :studentId', { studentId: student.id })
     .andWhere('"taskInterviewResult"."courseTaskId" = :courseTaskId', { courseTaskId: courseTask.id })

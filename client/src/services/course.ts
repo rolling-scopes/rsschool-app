@@ -11,7 +11,7 @@ export interface CourseTask {
   name: string;
   maxScore: number | null;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test' | 'interview';
+  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars:stage1' | 'codewars:stage2' | 'test' | 'interview';
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   scoreWeight: number;

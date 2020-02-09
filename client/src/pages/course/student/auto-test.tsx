@@ -85,7 +85,7 @@ function Page(props: CoursePageProps) {
                 {renderHtmlCssAcademyFields()}
               </>
             )}
-            {type === 'codewars' && (
+            {(type === 'codewars:stage1' || type === 'codewars:stage2') && (
               <>
                 {renderDescription(descriptionUrl)}
                 <Form.Item
@@ -231,7 +231,9 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
     task =>
       task.studentEndDate &&
-      (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
+      (new Date(task.studentEndDate).getTime() > Date.now() ||
+        task.type === 'codewars:stage1' ||
+        task.type === 'codewars:stage2') &&
       task.verification === 'auto' &&
       task.type !== 'test',
   );
@@ -253,7 +255,8 @@ function getSubmitData(task: CourseTask, values: any) {
       };
       break;
 
-    case 'codewars':
+    case 'codewars:stage1':
+    case 'codewars:stage2':
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -262,6 +265,7 @@ function getSubmitData(task: CourseTask, values: any) {
       data = {
         codewars: values.codewars,
         deadline: task.studentEndDate,
+        variant: task.type.split(':')[1],
       };
       break;
 

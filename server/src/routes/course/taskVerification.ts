@@ -64,4 +64,5 @@ export type Codewars = {
   type: 'codewars';
   codewars: string;
   deadline: string;
+  variant: 'stage1' | 'stage2';
 };
