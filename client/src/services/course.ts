@@ -2,6 +2,7 @@ import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
+import { TaskType } from './task';
 
 export interface CourseTask {
   id: number;
@@ -10,7 +11,7 @@ export interface CourseTask {
   maxScore: number | null;
   scoreWeight: number;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars:stage1' | 'codewars:stage2' | 'test' | 'interview';
+  type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   githubPrRequired: boolean;
@@ -18,12 +19,11 @@ export interface CourseTask {
   studentStartDate: string | null;
   studentEndDate: string | null;
   useJury: boolean;
-  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: 'autoTest' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwnerId: number | null;
 }
 
 export interface CourseTaskDetails extends CourseTask {
-  
   stageId: number;
   description: string | null;
   taskResultCount: number;

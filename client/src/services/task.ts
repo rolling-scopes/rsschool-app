@@ -1,5 +1,17 @@
 import axios from 'axios';
 
+
+export type TaskType = | 'jstask'
+| 'htmltask'
+| 'htmlcssacademy'
+| 'cv:markdown'
+| 'cv:html'
+| 'codewars:stage1'
+| 'codewars:stage2'
+| 'test'
+| 'interview'
+| 'codejam';
+
 export interface Task {
   id: number;
   createdDate: string;
@@ -9,15 +21,7 @@ export interface Task {
   description: string | null;
   githubPrRequired: boolean | null;
   verification: 'manual' | 'auto';
-  type:
-    | 'jstask'
-    | 'htmltask'
-    | 'htmlcssacademy'
-    | 'codewars:stage1'
-    | 'codewars:stage2'
-    | 'test'
-    | 'interview'
-    | 'codejam';
+  type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   tags: string[];

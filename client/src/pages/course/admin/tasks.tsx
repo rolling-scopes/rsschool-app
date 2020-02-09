@@ -1,5 +1,5 @@
-import { DownOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Radio, Row, Select, Table } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
 import { GithubUserLink, PageLayout, withSession } from 'components';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer, stringSorter, tagsRenderer } from 'components/Table';
@@ -16,9 +16,9 @@ import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
 import { DEFAULT_TIMEZONE, TIMEZONES } from 'configs/timezones';
 
-type Props = CoursePageProps;
+const Option = Select.Option;
 
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const courseId = props.course.id;
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -122,9 +122,9 @@ function Page(props: Props) {
           </Menu>
         }
       >
-        <a href="#">
-          More <DownOutlined />
-        </a>
+        <Button size="small">
+          More <MoreOutlined />
+        </Button>
       </Dropdown>
     );
   };
@@ -163,18 +163,18 @@ function Page(props: Props) {
         <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
           <Select filterOption={filterOption} showSearch placeholder="Please select a task">
             {tasks.map((task: Task) => (
-              <Select.Option key={task.id} value={task.id}>
+              <Option key={task.id} value={task.id}>
                 {task.name} {tagsRenderer(task.tags)}
-              </Select.Option>
+              </Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item name="stageId" label="Stage" rules={[{ required: true, message: 'Please select a stage' }]}>
           <Select placeholder="Please select a stage">
             {stages.map((stage: Stage) => (
-              <Select.Option key={stage.id} value={stage.id}>
+              <Option key={stage.id} value={stage.id}>
                 {stage.name}
-              </Select.Option>
+              </Option>
             ))}
           </Select>
         </Form.Item>
@@ -188,9 +188,9 @@ function Page(props: Props) {
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
             {TIMEZONES.map(tz => (
-              <Select.Option key={tz} value={tz}>
+              <Option key={tz} value={tz}>
                 {tz}
-              </Select.Option>
+              </Option>
             ))}
           </Select>
         </Form.Item>
@@ -218,14 +218,15 @@ function Page(props: Props) {
           </Col>
         </Row>
 
-        <Form.Item name="checker" label="Who Checks">
-          <Radio.Group>
-            <Radio value="mentor">Mentor</Radio>
-            <Radio value="assigned">Assigned</Radio>
-            <Radio value="taskOwner">Task Owner</Radio>
-            <Radio value="crossCheck">Cross-Check</Radio>
-            <Radio value="jury">Jury</Radio>
-          </Radio.Group>
+        <Form.Item name="checker" required label="Checker">
+          <Select placeholder="Please select who checks">
+            <Option value="mentor">Mentor</Option>
+            <Option value="assigned">Assigned</Option>
+            {modalData?.verification == 'auto' && <Option value="autoTest">Auto-Test</Option>}
+            <Option value="taskOwner">Task Owner</Option>
+            <Option value="crossCheck">Cross-Check</Option>
+            <Option value="jury">Jury</Option>
+          </Select>
         </Form.Item>
       </ModalForm>
     );
