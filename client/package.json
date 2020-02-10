@@ -15,8 +15,9 @@
     "build:tsc": "tsc -p ./src/tsconfig.json",
     "prod": "next start -p 8080",
     "lint": "tslint -c tslint.json -p ./src/tsconfig.json",
-    "test": "jest",
-    "test-watch": "jest --watch"
+    "test": "jest --config=./src/jest.config.js",
+    "test-watch": "jest --config=./src/jest.config.js --watch",
+    "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
     "@types/csvtojson": "~1.1.5",
@@ -46,6 +47,9 @@
     "@types/node": "^10.0",
     "@types/react": "~16.9.13",
     "@types/react-dom": "~16.9.4",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
     "express": "~4.17.1",
     "http-proxy-middleware": "~0.19.1",
     "jest": "~24.9.0",

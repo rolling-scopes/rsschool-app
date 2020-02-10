@@ -13,6 +13,7 @@
     "client:start": "yarn workspace client start",
     "client:test": "yarn workspace client test",
     "client:test-watch": "yarn workspace client test-watch",
+    "client:coverage": "yarn workspace client coverage",
     "server:test": "yarn workspace server test-watch",
     "server:coverage": "yarn workspace server coverage",
     "server:test-watch": "yarn workspace server test-watch",
