@@ -35,7 +35,7 @@ function Page(props: CoursePageProps) {
 
   const handleSubmit = async (values: any) => {
     const { courseTaskId } = values;
-    const task = courseTasks.find(t => t.courseTaskId === courseTaskId);
+    const task = courseTasks.find(t => t.id === courseTaskId);
     if (!task) {
       return;
     }
@@ -72,7 +72,7 @@ function Page(props: CoursePageProps) {
     loadVerifications();
   };
 
-  const { type, descriptionUrl, githubRepoName } = courseTasks.find(t => t.courseTaskId === courseTaskId) ?? {};
+  const { type, descriptionUrl, githubRepoName } = courseTasks.find(t => t.id === courseTaskId) ?? {};
   return (
     <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
       <Row gutter={24}>
@@ -235,6 +235,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
         task.type === 'codewars:stage1' ||
         task.type === 'codewars:stage2') &&
       task.verification === 'auto' &&
+      task.checker !== 'taskOwner' &&
       task.type !== 'test',
   );
 }
@@ -276,6 +277,8 @@ function getSubmitData(task: CourseTask, values: any) {
       };
       break;
 
+    case 'cv:markdown':
+    case 'cv:html':
     case null:
       data = {};
       break;

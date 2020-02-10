@@ -19,7 +19,8 @@ type ScoreRecord = {
 };
 
 @Entity()
-@Index(['courseTaskId', 'studentId'])
+@Index(['courseTaskId'])
+@Index(['studentId'])
 @Unique(['courseTaskId', 'studentId'])
 export class TaskResult {
   @PrimaryGeneratedColumn() id: number;

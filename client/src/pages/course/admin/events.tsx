@@ -36,6 +36,7 @@ function Page(props: Props) {
   const [events, setEvents] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
   const [modalAction, setModalAction] = useState('update');
+  const [modalLoading, setModalLoading] = useState(false);
 
   useAsync(async () => {
     setLoading(true);
@@ -83,25 +84,30 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = async (values: any) => {
-    const data = createRecord(values, courseId);
-    modalAction === 'update'
-      ? await service.updateCourseEvent(modalData!.id!, data)
-      : await service.createCourseEvent(data);
+    try {
+      setModalLoading(true);
+      const data = createRecord(values, courseId);
+      modalAction === 'update'
+        ? await service.updateCourseEvent(modalData!.id!, data)
+        : await service.createCourseEvent(data);
 
-    await refreshData();
-    setModalData(null);
+      await refreshData();
+      setModalData(null);
+    } catch {
+      message.error('An error occurred. Please try later.');
+    } finally {
+      setModalLoading(false);
+    }
   };
 
-  const renderModal = (modalData: Partial<CourseEvent>) => {
-    if (modalData == null) {
-      return null;
-    }
+  const renderModal = (modalData: Partial<CourseEvent> | null) => {
     return (
       <ModalForm
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course Event"
         submit={handleModalSubmit}
+        loading={modalLoading}
         cancel={() => setModalData(null)}
       >
         <Form.Item name="eventId" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
@@ -124,9 +130,9 @@ function Page(props: Props) {
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
-            {Object.entries(TIMEZONES).map(tz => (
-              <Select.Option key={tz[0]} value={tz[0]}>
-                {tz[0]}
+            {TIMEZONES.map(tz => (
+              <Select.Option key={tz} value={tz}>
+                {tz}
               </Select.Option>
             ))}
           </Select>
@@ -142,11 +148,7 @@ function Page(props: Props) {
           <Input />
         </Form.Item>
         <Form.Item name="organizerId" label="Organizer">
-          <UserSearch
-            defaultValues={modalData.organizer ? [modalData.organizer] : []}
-            user={modalData.organizer}
-            searchFn={loadUsers}
-          />
+          <UserSearch defaultValues={modalData?.organizer ? [modalData.organizer] : []} searchFn={loadUsers} />
         </Form.Item>
         <Form.Item
           name="broadcastUrl"
@@ -171,9 +173,9 @@ function Page(props: Props) {
         defaultValue={timeZone}
         onChange={handleTimeZoneChange}
       >
-        {Object.entries(TIMEZONES).map(tz => (
-          <Select.Option key={tz[0]} value={tz[0]}>
-            {tz[0]}
+        {TIMEZONES.map(tz => (
+          <Select.Option key={tz} value={tz}>
+            {tz}
           </Select.Option>
         ))}
       </Select>
@@ -181,7 +183,7 @@ function Page(props: Props) {
         style={{ margin: '16px 0' }}
         rowKey="id"
         bordered
-        pagination={{ pageSize: 100 }}
+        pagination={false}
         size="small"
         dataSource={data}
         columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}

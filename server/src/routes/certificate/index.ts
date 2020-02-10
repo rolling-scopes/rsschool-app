@@ -38,12 +38,12 @@ export function certificateRoute(logger: ILogger) {
   router.post('/', adminGuard, async (ctx: Router.RouterContext) => {
     const data = ctx.request.body;
     try {
-      const existing = await getRepository(Certificate).findOne({
-        where: { studentId: data.studentId },
-      });
-      const result = await getRepository(Certificate).save(existing == null ? data : { ...existing, ...data });
+      const existing = await getRepository(Certificate).findOne({ where: { studentId: data.studentId } });
+      const result =
+        existing == null
+          ? await getRepository(Certificate).save(data)
+          : await getRepository(Certificate).update(existing.id, data);
       setResponse(ctx, OK, result);
-      return;
     } catch (e) {
       if (logger) {
         logger.error(e.message);

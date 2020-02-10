@@ -1,4 +1,4 @@
-import { Form, Modal } from 'antd';
+import { Form, Modal, Spin } from 'antd';
 import * as React from 'react';
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   cancel: (arg: any) => void;
   getInitialValues: (arg: any) => any;
   children: any;
+  loading?: boolean;
 };
 
 export function ModalForm(props: Props) {
@@ -35,9 +36,11 @@ export function ModalForm(props: Props) {
         form.resetFields();
       }}
     >
-      <Form form={form} initialValues={initialValues} layout="vertical">
-        {props.children}
-      </Form>
+      <Spin spinning={props.loading ?? false}>
+        <Form form={form} initialValues={initialValues} layout="vertical">
+          {props.children}
+        </Form>
+      </Spin>
     </Modal>
   );
 }

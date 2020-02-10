@@ -1,29 +1,32 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { Session } from '../components/withSession';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
+import { TaskType } from './task';
 
 export interface CourseTask {
   id: number;
-  courseTaskId?: number;
   taskId: number;
   name: string;
   maxScore: number | null;
+  scoreWeight: number;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars:stage1' | 'codewars:stage2' | 'test' | 'interview';
+  type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
-  scoreWeight: number;
-  stageId: number;
   githubPrRequired: boolean;
-  description: string | null;
   descriptionUrl: string | null;
   studentStartDate: string | null;
   studentEndDate: string | null;
-  taskResultCount: number;
   useJury: boolean;
-  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: 'autoTest' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  taskOwnerId: number | null;
+}
+
+export interface CourseTaskDetails extends CourseTask {
+  stageId: number;
+  description: string | null;
+  taskResultCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
 }
 
@@ -83,9 +86,10 @@ export class CourseService {
     return result.data.data.sort(sortTasksByEndDate);
   }
 
-  async getCourseTasksForTaskOwner() {
-    const result = await this.axios.get<{ data: CourseTask[] }>(`/tasksTaskOwner`);
-    return result.data.data;
+  async getCourseTasksDetails() {
+    type Response = { data: CourseTaskDetails[] };
+    const result = await this.axios.get<Response>('/tasks/details');
+    return result.data.data.sort(sortTasksByEndDate);
   }
 
   async getCourseEvents() {
@@ -348,12 +352,13 @@ export class CourseService {
     return result.data.data as { name: string; mentor: any }[];
   }
 
-  isPowerUser(courseId: number, session: Session) {
-    return (
-      session.isAdmin ||
-      session.roles[courseId] === 'coursemanager' ||
-      session.coursesRoles?.[courseId]?.includes('manager')
-    );
+  async createCertificate(githubId: string) {
+    const result = await this.axios.post(`/student/${githubId}/certificate`);
+    return result.data.data;
+  }
+
+  exportStudentsCsv(activeOnly?: boolean) {
+    window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
 }
 
