@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] = `
+<CommonCard
+  content={null}
+  icon={<ForwardRef(InfoCircleOutlined) />}
+  isEditingModeEnabled={false}
+  noDataDescrption="About info isn't written"
+  onPermissionsSettingsChange={[Function]}
+  profileSettingsContent={
+    <div>
+      <p
+        style={
+          Object {
+            "fontSize": 18,
+            "marginBottom": 5,
+          }
+        }
+      >
+        <Text
+          strong={true}
+        >
+          About myself:
+        </Text>
+      </p>
+      <TextArea
+        onChange={[Function]}
+        rows={4}
+        value=""
+      />
+    </div>
+  }
+  title="About"
+/>
+`;
+
+exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
+<CommonCard
+  content={
+    <Paragraph
+      ellipsis={
+        Object {
+          "expandable": true,
+          "rows": 2,
+        }
+      }
+    >
+      Top contributor of Rolling Scopes
+    </Paragraph>
+  }
+  icon={<ForwardRef(InfoCircleOutlined) />}
+  isEditingModeEnabled={false}
+  noDataDescrption="About info isn't written"
+  onPermissionsSettingsChange={[Function]}
+  profileSettingsContent={
+    <div>
+      <p
+        style={
+          Object {
+            "fontSize": 18,
+            "marginBottom": 5,
+          }
+        }
+      >
+        <Text
+          strong={true}
+        >
+          About myself:
+        </Text>
+      </p>
+      <TextArea
+        onChange={[Function]}
+        rows={4}
+        value="Top contributor of Rolling Scopes"
+      />
+    </div>
+  }
+  title="About"
+/>
+`;
