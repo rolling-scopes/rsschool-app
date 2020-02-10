@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommonCard Should render correctly if is editing mode enabled 1`] = `
+<Card
+  actions={
+    Array [
+      <ForwardRef(EditOutlined)
+        onClick={[Function]}
+      />,
+      <ForwardRef(SettingOutlined)
+        onClick={[Function]}
+      />,
+    ]
+  }
+  title={
+    <Title
+      ellipsis={true}
+      level={2}
+      style={
+        Object {
+          "fontSize": 16,
+          "marginBottom": 0,
+        }
+      }
+    >
+      <i>
+        Icon
+      </i>
+       
+      Test
+    </Title>
+  }
+>
+  <p>
+    Card body
+  </p>
+  <PermissionsSettingsDrawer
+    hideSettings={[Function]}
+    isSettingsVisible={false}
+  />
+  <ProfileSettingsDrawer
+    content={
+      <p>
+        Settings
+      </p>
+    }
+    hideSettings={[Function]}
+    isSettingsVisible={false}
+  />
+</Card>
+`;
+
+exports[`CommonCard Should render correctly if is null content passed 1`] = `
+<Card
+  title={
+    <Title
+      ellipsis={true}
+      level={2}
+      style={
+        Object {
+          "fontSize": 16,
+          "marginBottom": 0,
+        }
+      }
+    >
+      <i>
+        Icon
+      </i>
+       
+      Test
+    </Title>
+  }
+>
+  <Empty
+    image={<Simple />}
+  />
+</Card>
+`;
+
+exports[`CommonCard Should render correctly if just basic props is present 1`] = `
+<Card
+  title={
+    <Title
+      ellipsis={true}
+      level={2}
+      style={
+        Object {
+          "fontSize": 16,
+          "marginBottom": 0,
+        }
+      }
+    >
+      <i>
+        Icon
+      </i>
+       
+      Test
+    </Title>
+  }
+>
+  <p>
+    Card body
+  </p>
+</Card>
+`;
