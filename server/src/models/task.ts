@@ -48,7 +48,9 @@ export class Task {
     | 'codewars:stage2'
     | 'test'
     | 'codejam'
-    | 'interview';
+    | 'interview'
+    | 'cv:html'
+    | 'cv:markdown';
 
   @Column({ default: false })
   useJury: boolean;
