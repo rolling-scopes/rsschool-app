@@ -15,8 +15,7 @@
     "build:tsc": "tsc -p ./src/tsconfig.json",
     "prod": "next start -p 8080",
     "test": "jest",
-    "test-watch": "jest --watch",
-    "analyze": "ANALYZE=true next build src"
+    "test-watch": "jest --watch"
   },
   "dependencies": {
     "antd": "~4.0.0-rc.3",
@@ -33,7 +32,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
-    "@next/bundle-analyzer": "^9.2.1",
     "@types/csvtojson": "~1.1.5",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
