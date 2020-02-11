@@ -7,7 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
+import { GithubUserLink, PageLayout, StudentExpelModal, withSession, Session } from 'components';
 import { boolIconRenderer, boolSorter, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
@@ -86,7 +86,10 @@ function Page(props: Props) {
           <BranchesOutlined />
           Create Repository
         </Menu.Item>
-        <Menu.Item onClick={() => actions.issueCertificate(record)}>
+        <Menu.Item
+          hidden={!checkIfManager(props.course.id, props.session)}
+          onClick={() => actions.issueCertificate(record)}
+        >
           <SolutionOutlined />
           Issue Certificate
         </Menu.Item>
@@ -95,11 +98,10 @@ function Page(props: Props) {
   }
 
   const getToolbarActions = useCallback(() => {
-    const { isAdmin, coursesRoles } = props.session;
-    const isManager = coursesRoles?.[props.course.id]?.includes('manager');
+    const isManager = checkIfManager(props.course.id, props.session);
     return (
       <>
-        {isManager || isAdmin ? (
+        {isManager ? (
           <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={actions.createRepositories}>
             Create Repos
           </Button>
@@ -291,6 +293,10 @@ function createActions(courseService: CourseService, setLoading: (value: boolean
       }
     },
   };
+}
+
+function checkIfManager(courseId: number, session: Session) {
+  return session.coursesRoles?.[courseId]?.includes('manager') || session.isAdmin;
 }
 
 const styles = css`
