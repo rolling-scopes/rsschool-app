@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Select, Form } from 'antd';
 import { CourseTask } from 'services/course';
 
-type Props = { data: CourseTask[]; onChange?: any };
+type Props = { data: CourseTask[]; onChange?: (id: number) => void };
 
 export function CourseTaskSelect(props: Props) {
   const { data, onChange, ...rest } = props;

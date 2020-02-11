@@ -10,7 +10,7 @@ import { urlPattern } from 'services/validators';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
-function CrossCheckComments({ comments }: { comments: any[] }) {
+function CrossCheckComments({ comments }: { comments: { comment: string }[] }) {
   if (!comments || comments.length === 0) {
     return null;
   }

@@ -20,7 +20,7 @@ import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
 import countries from './reference-data/countries.json';
 
-const getPrimaryUserFields = (modelName: string = 'user') => [
+const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
   `${modelName}.firstName`,
   `${modelName}.lastName`,
@@ -437,7 +437,7 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
   return students;
 }
 
-export async function getStudentsScore(courseId: number, activeOnly: boolean = false) {
+export async function getStudentsScore(courseId: number, activeOnly = false) {
   let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
@@ -464,7 +464,6 @@ export async function getStudentsScore(courseId: number, activeOnly: boolean = f
       const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
         .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
         .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
-
       const taskResults =
         student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
 
@@ -472,12 +471,7 @@ export async function getStudentsScore(courseId: number, activeOnly: boolean = f
       return {
         id: student.id,
         rank: i + 1,
-        mentor: mentor
-          ? {
-              githubId: mentor.githubId,
-              name: mentor.name,
-            }
-          : undefined,
+        mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
         name: createName(user),
         githubId: user.githubId,
         totalScore: student.totalScore,

@@ -42,7 +42,7 @@ const TaskTypes = {
   lecture: 'lecture',
 };
 
-const EventTypeToName = {
+const EventTypeToName: Record<string, string> = {
   lecture_online: 'online lecture',
   lecture_offline: 'offline lecture',
   lecture_mixed: 'mixed lecture',

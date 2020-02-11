@@ -14,18 +14,18 @@ export function StudentExpelModal(props: Props) {
   const courseService = new CourseService(props.courseId);
   const [loading, setLoading] = useState(false);
 
-  const handleExpelStudent = async values => {
+  const handleExpelStudent = async (values: any) => {
     if (!props.githubId) {
       return;
     }
     try {
       setLoading(true);
       await courseService.expelStudent(props.githubId, values.comment);
-      setLoading(false);
       props.onOk();
     } catch (e) {
-      setLoading(false);
       message.error('An error occurred.');
+    } finally {
+      setLoading(false);
     }
   };
 

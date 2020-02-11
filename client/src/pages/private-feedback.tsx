@@ -7,10 +7,8 @@ import { NextRouter, withRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { UserService } from 'services/user';
 
-type Props = {
-  router: NextRouter;
-  session: Session;
-};
+type Props = { router: NextRouter; session: Session };
+type User = { githubId: string; id: number };
 
 function Page(props: Props) {
   const { router } = props;
@@ -18,7 +16,7 @@ function Page(props: Props) {
   const userId = router.query ? (router.query.userId as string) : null;
 
   const userService = useMemo(() => new UserService(), []);
-  const [user] = useState(githubId && userId ? { githubId, id: Number(userId) } : null);
+  const [user] = useState<User | null>(githubId && userId ? { githubId, id: Number(userId) } : null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -70,7 +68,7 @@ function Page(props: Props) {
   );
 }
 
-function getInitialValues(user) {
+function getInitialValues(user: User | null) {
   return {
     userId: user ? user.id : undefined,
   };

@@ -356,7 +356,7 @@ const SuccessComponent = () => {
   return <Result status="info" title={titleCmp} />;
 };
 
-function getInitialValues(initialData) {
+function getInitialValues(initialData: Partial<UserFull>) {
   return {
     ...initialData,
     preferedCourses: [],
