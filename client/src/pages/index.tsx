@@ -122,7 +122,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
+    access: combineAnd(isCourseNotCompleted, isStudent),
   },
   {
     name: () => (
@@ -131,7 +131,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
+    access: combineAnd(isCourseNotCompleted, isStudent),
   },
   {
     name: () => (
@@ -187,7 +187,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
+    access: combineAnd(isCourseNotCompleted, isStudent),
   },
 
   // {
@@ -203,7 +203,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor, isCourseManager),
+    access: combineAnd(isCourseNotCompleted, isMentor),
   },
 ];
 
