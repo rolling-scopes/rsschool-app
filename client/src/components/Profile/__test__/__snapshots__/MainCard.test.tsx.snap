@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
+<Fragment>
+  <Card>
+    <GithubAvatar
+      githubId="piter"
+      size={96}
+      style={
+        Object {
+          "display": "block",
+          "margin": "0 auto 10px",
+        }
+      }
+    />
+    <Title
+      level={1}
+      style={
+        Object {
+          "fontSize": 24,
+          "margin": 0,
+          "textAlign": "center",
+        }
+      }
+    >
+      Petr Pervyi
+    </Title>
+    <Paragraph
+      style={
+        Object {
+          "marginBottom": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      <a
+        href="https://github.com/piter"
+        style={
+          Object {
+            "fontSize": 16,
+            "marginLeft": "-14px",
+          }
+        }
+        target="_blank"
+      >
+        <ForwardRef(GithubFilled) />
+         
+        piter
+      </a>
+    </Paragraph>
+    <Paragraph
+      style={
+        Object {
+          "margin": 0,
+          "textAlign": "center",
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "marginLeft": "-14px",
+          }
+        }
+      >
+        <ForwardRef(EnvironmentFilled) />
+         
+        SPB
+      </span>
+    </Paragraph>
+  </Card>
+</Fragment>
+`;

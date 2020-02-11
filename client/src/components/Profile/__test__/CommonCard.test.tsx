@@ -38,15 +38,16 @@ describe('CommonCard', () => {
       expect(shallowToJson(output)).toMatchSnapshot();
     });
   });
+
+  const wrapper = shallow(
+    <CommonCard
+      title="Test"
+      icon={<i>Icon</i>}
+      content={<p>Content</p>}
+    />);
+  const instance = wrapper.instance();
   describe('showVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "true"', () => {
-      const wrapper = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={<p>Content</p>}
-        />);
-      const instance = wrapper.instance();
       expect(instance.state.isVisibilitySettingsVisible).toBe(false);
       instance.showVisibilitySettings();
       expect(instance.state.isVisibilitySettingsVisible).toBe(true);
@@ -54,13 +55,6 @@ describe('CommonCard', () => {
   });
   describe('hideVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "false"', () => {
-      const wrapper = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={<p>Content</p>}
-        />);
-      const instance = wrapper.instance();
       instance.state.isVisibilitySettingsVisible = true;
       expect(instance.state.isVisibilitySettingsVisible).toBe(true);
       instance.hideVisibilitySettings();
@@ -69,13 +63,6 @@ describe('CommonCard', () => {
   });
   describe('showProfileSettings', () => {
     it('should set "state.isProfileSettingsVisible" as "true"', () => {
-      const wrapper = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={<p>Content</p>}
-        />);
-      const instance = wrapper.instance();
       expect(instance.state.isProfileSettingsVisible).toBe(false);
       instance.showProfileSettings();
       expect(instance.state.isProfileSettingsVisible).toBe(true);
@@ -83,13 +70,6 @@ describe('CommonCard', () => {
   });
   describe('hideProfileSettings', () => {
     it('should set "state.isProfileSettingsVisible" as "false"', () => {
-      const wrapper = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={<p>Content</p>}
-        />);
-      const instance = wrapper.instance();
       instance.state.isProfileSettingsVisible = true;
       expect(instance.state.isProfileSettingsVisible).toBe(true);
       instance.hideProfileSettings();

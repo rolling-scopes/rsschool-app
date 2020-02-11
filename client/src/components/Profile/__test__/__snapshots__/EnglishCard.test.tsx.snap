@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`] = `
+<CommonCard
+  icon={<ForwardRef(TagOutlined) />}
+  isEditingModeEnabled={false}
+  noDataDescrption="English level isn't choosen"
+  onPermissionsSettingsChange={[Function]}
+  profileSettingsContent={
+    <div>
+      <p
+        style={
+          Object {
+            "fontSize": 18,
+            "marginBottom": 5,
+          }
+        }
+      >
+        <Text
+          strong={true}
+        >
+          English level:
+        </Text>
+      </p>
+      <div
+        style={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      >
+        <Select
+          choiceTransitionName="zoom"
+          defaultValue="a0"
+          onChange={[Function]}
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+          transitionName="slide-up"
+        >
+          <Option
+            value="a0"
+          >
+            A0
+          </Option>
+          <Option
+            value="a1"
+          >
+            A1
+          </Option>
+          <Option
+            value="a1+"
+          >
+            A1+
+          </Option>
+          <Option
+            value="a2"
+          >
+            A2
+          </Option>
+          <Option
+            value="a2+"
+          >
+            A2+
+          </Option>
+          <Option
+            value="b1"
+          >
+            B1
+          </Option>
+          <Option
+            value="b1+"
+          >
+            B1+
+          </Option>
+          <Option
+            value="b2"
+          >
+            B2
+          </Option>
+          <Option
+            value="b2+"
+          >
+            B2+
+          </Option>
+          <Option
+            value="c1"
+          >
+            C1
+          </Option>
+          <Option
+            value="c1+"
+          >
+            C1+
+          </Option>
+          <Option
+            value="c2"
+          >
+            C2
+          </Option>
+        </Select>
+      </div>
+    </div>
+  }
+  title="Estimated English level"
+/>
+`;
+
+exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = `
+<CommonCard
+  content={
+    <Text
+      style={
+        Object {
+          "fontSize": "48px",
+          "textTransform": "capitalize",
+        }
+      }
+    >
+      a2
+    </Text>
+  }
+  icon={<ForwardRef(TagOutlined) />}
+  isEditingModeEnabled={false}
+  noDataDescrption="English level isn't choosen"
+  onPermissionsSettingsChange={[Function]}
+  profileSettingsContent={
+    <div>
+      <p
+        style={
+          Object {
+            "fontSize": 18,
+            "marginBottom": 5,
+          }
+        }
+      >
+        <Text
+          strong={true}
+        >
+          English level:
+        </Text>
+      </p>
+      <div
+        style={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      >
+        <Select
+          choiceTransitionName="zoom"
+          defaultValue="a2"
+          onChange={[Function]}
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+          transitionName="slide-up"
+        >
+          <Option
+            value="a0"
+          >
+            A0
+          </Option>
+          <Option
+            value="a1"
+          >
+            A1
+          </Option>
+          <Option
+            value="a1+"
+          >
+            A1+
+          </Option>
+          <Option
+            value="a2"
+          >
+            A2
+          </Option>
+          <Option
+            value="a2+"
+          >
+            A2+
+          </Option>
+          <Option
+            value="b1"
+          >
+            B1
+          </Option>
+          <Option
+            value="b1+"
+          >
+            B1+
+          </Option>
+          <Option
+            value="b2"
+          >
+            B2
+          </Option>
+          <Option
+            value="b2+"
+          >
+            B2+
+          </Option>
+          <Option
+            value="c1"
+          >
+            C1
+          </Option>
+          <Option
+            value="c1+"
+          >
+            C1+
+          </Option>
+          <Option
+            value="c2"
+          >
+            C2
+          </Option>
+        </Select>
+      </div>
+    </div>
+  }
+  title="Estimated English level"
+/>
+`;
