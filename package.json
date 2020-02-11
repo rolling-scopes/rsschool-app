@@ -14,7 +14,8 @@
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:lint": "eslint . --ext .ts,.tsx",
-    "ci:build": "concurrently \"npm run build --prefix client\" \"npm run build --prefix server\""
+    "ci:build": "concurrently \"npm run build --prefix client\" \"npm run build --prefix server\"",
+    "analyze": "ANALYZE=true npm run analyze --prefix client"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.17.0",

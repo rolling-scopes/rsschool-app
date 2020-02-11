@@ -206,7 +206,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Description URL',
       dataIndex: 'descriptionUrl',
-      render: value =>
+      render: (value: string) =>
         value ? (
           <a title={value} href={value}>
             Link

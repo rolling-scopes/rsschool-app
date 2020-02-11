@@ -48,6 +48,7 @@ function Page(props: Props & { courseAlias?: string }) {
       if (loading) {
         return;
       }
+      setLoading(true);
       const { comment, location, courseId } = values;
       const registryModel = { type: TYPES.STUDENT, courseId, comment };
       const userModel = {
@@ -69,6 +70,8 @@ function Page(props: Props & { courseAlias?: string }) {
         }
       } catch (e) {
         message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
       }
     },
     [loading],

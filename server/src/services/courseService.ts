@@ -471,12 +471,7 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
       return {
         id: student.id,
         rank: i + 1,
-        mentor: mentor
-          ? {
-              githubId: mentor.githubId,
-              name: mentor.name,
-            }
-          : undefined,
+        mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
         name: createName(user),
         githubId: user.githubId,
         totalScore: student.totalScore,
