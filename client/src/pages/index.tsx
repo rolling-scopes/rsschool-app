@@ -103,7 +103,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/submit-scores?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole)),
+    access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole, isCourseManager)),
   },
   // {
   //   name: () => (
@@ -122,7 +122,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
+    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
   },
   {
     name: () => (
@@ -131,7 +131,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
+    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
   },
   {
     name: () => (
@@ -187,7 +187,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
+    access: combineAnd(isCourseNotCompleted, isStudent, isCourseManager),
   },
 
   // {
@@ -203,7 +203,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
+    access: combineAnd(isCourseNotCompleted, isMentor, isCourseManager),
   },
 ];
 
