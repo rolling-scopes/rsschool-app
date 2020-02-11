@@ -11,6 +11,9 @@ import {
   PlayCircleTwoTone,
   StopTwoTone,
   ToolTwoTone,
+  UserOutlined,
+  StarOutlined,
+  QuestionCircleTwoTone,
 } from '@ant-design/icons';
 import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography } from 'antd';
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
@@ -20,6 +23,7 @@ import { isEmpty, values } from 'lodash';
 import * as React from 'react';
 import { CourseService, StudentSummary } from 'services/course';
 import { Course } from 'services/models';
+import { CoursesService } from 'services/courses';
 
 const { Content } = Layout;
 
@@ -35,6 +39,7 @@ type State = {
   collapsed: boolean;
   studentSummary: StudentSummary | null;
   courseTasks: { id: number }[];
+  allCourses: Course[];
 };
 
 const anyAccess = () => true;
@@ -243,12 +248,11 @@ class IndexPage extends React.PureComponent<Props, State> {
     collapsed: false,
     studentSummary: null,
     courseTasks: [],
+    allCourses: [],
   };
 
   toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
+    this.setState({ collapsed: !this.state.collapsed });
   };
 
   private getLinks = (course: Course) => {
@@ -326,27 +330,35 @@ class IndexPage extends React.PureComponent<Props, State> {
       plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
     const activeCourse = this.getActiveCourse();
-    await this.loadCourseData(activeCourse?.id);
+    const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
+    this.setState({ allCourses });
   }
 
   renderNoCourse() {
-    const hasPlanned = (this.props.courses || []).some(course => course.planned && !course.completed);
+    const hasPlanned = this.state.allCourses?.some(course => course.planned && !course.completed);
     return (
       <Result
-        status="info"
+        icon={<QuestionCircleTwoTone twoToneColor="#52c41a" />}
         title="You are not student or mentor in any active course"
         subTitle={
-          hasPlanned
-            ? 'You can register to the upcoming course.'
-            : 'Unfortunately, there are no any planned courses for students but you can always register as mentor'
+          <div>
+            <span>
+              {hasPlanned
+                ? 'You can register to the upcoming course.'
+                : 'Unfortunately, there are no any planned courses for students but you can always register as mentor'}
+              <Button target="_blank" size="small" type="link"  href="https://docs.rs.school/#/how-to-enroll">
+                More info
+              </Button>
+            </span>
+          </div>
         }
         extra={
           <>
-            <Button type="primary" href="/registry/mentor">
+            <Button size="large" icon={<StarOutlined />} type="primary" href="/registry/mentor">
               Register as Mentor
             </Button>
             {hasPlanned && (
-              <Button href="/registry/student" type="primary">
+              <Button size="large" icon={<UserOutlined />} href="/registry/student" type="danger">
                 Register as Student
               </Button>
             )}
