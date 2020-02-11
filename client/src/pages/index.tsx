@@ -85,7 +85,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole)),
+    access: combineAnd(isCourseNotCompleted, combineOr(isMentor, isTaskOwner, isAdminRole, isCourseManager)),
   },
   {
     name: () => (
@@ -187,7 +187,7 @@ const routes = [
       </>
     ),
     getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isStudent),
+    access: combineAnd(isCourseNotCompleted, combineOr(isStudent, isCourseManager)),
   },
 
   // {
