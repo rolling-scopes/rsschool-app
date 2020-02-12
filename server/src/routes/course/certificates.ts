@@ -75,7 +75,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
       'course.primarySkillName',
     ])
     .where('student."courseId" = :courseId', { courseId })
-    .andWhere('user."githubId" = :githubId', { githubId })
+    .andWhere('"user"."githubId" = :githubId', { githubId })
     .getOne();
 
   if (student == null) {
