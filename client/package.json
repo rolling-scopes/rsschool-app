@@ -35,7 +35,7 @@
     "react-dom": "~16.12.0",
     "react-masonry-css": "^1.0.14",
     "react-use": "~13.14.0",
-    "styled-jsx": "~3.2.4"
+    "styled-jsx": "^3.2.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",

@@ -7,4 +7,5 @@ module.exports = {
     '^services(.*)$': '<rootDir>/services/$1',
     '^utils(.*)$': '<rootDir>/utils/$1',
   },
+  verbose: true,
 };

@@ -71,3 +71,158 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
   </Card>
 </Fragment>
 `;
+
+exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
+<Fragment>
+  <Card
+    actions={
+      Array [
+        <ForwardRef(EditOutlined)
+          onClick={[Function]}
+        />,
+        <ForwardRef(SettingOutlined)
+          onClick={[Function]}
+        />,
+      ]
+    }
+  >
+    <GithubAvatar
+      githubId="piter"
+      size={96}
+      style={
+        Object {
+          "display": "block",
+          "margin": "0 auto 10px",
+        }
+      }
+    />
+    <Title
+      level={1}
+      style={
+        Object {
+          "fontSize": 24,
+          "margin": 0,
+          "textAlign": "center",
+        }
+      }
+    >
+      Petr Pervyi
+    </Title>
+    <Paragraph
+      style={
+        Object {
+          "marginBottom": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      <a
+        href="https://github.com/piter"
+        style={
+          Object {
+            "fontSize": 16,
+            "marginLeft": "-14px",
+          }
+        }
+        target="_blank"
+      >
+        <ForwardRef(GithubFilled) />
+         
+        piter
+      </a>
+    </Paragraph>
+    <Paragraph
+      style={
+        Object {
+          "margin": 0,
+          "textAlign": "center",
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "marginLeft": "-14px",
+          }
+        }
+      >
+        <ForwardRef(EnvironmentFilled) />
+         
+        SPB
+      </span>
+    </Paragraph>
+    <PermissionsSettingsDrawer
+      hideSettings={[Function]}
+      isSettingsVisible={false}
+      onPermissionsSettingsChange={[Function]}
+    />
+    <ProfileSettingsDrawer
+      content={
+        <div>
+          <p
+            style={
+              Object {
+                "fontSize": 18,
+                "marginBottom": 5,
+              }
+            }
+          >
+            <Text
+              strong={true}
+            >
+              Name:
+            </Text>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 20,
+              }
+            }
+          >
+            <Input
+              onChange={[Function]}
+              placeholder="Firstname Lastname"
+              type="text"
+              value="Petr Pervyi"
+            />
+          </p>
+          <p
+            style={
+              Object {
+                "fontSize": 18,
+                "marginBottom": 5,
+              }
+            }
+          >
+            <Text
+              strong={true}
+            >
+              Location:
+            </Text>
+          </p>
+          <div
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <LocationSelect
+              defaultValue="1"
+              onChange={[Function]}
+              style={
+                Object {
+                  "width": "100%",
+                }
+              }
+            />
+          </div>
+        </div>
+      }
+      hideSettings={[Function]}
+      isSettingsVisible={false}
+    />
+  </Card>
+</Fragment>
+`;

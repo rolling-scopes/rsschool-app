@@ -53,7 +53,7 @@ describe('EducationCard', () => {
   });
 
   describe('filterPermissions', () => {
-    it('should left only contacts in "permissionsSettings" object', () => {
+    it('should left only "isEducationVisible" in "permissionsSettings" object', () => {
       const permissionsSettings = {
         isProfileVisible: { all: true },
         isAboutVisible: { all: true, mentor: true, student: true },
