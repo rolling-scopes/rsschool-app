@@ -4,12 +4,17 @@ phases:
   install:
     runtime-versions:
       nodejs: 12
+    commands:
+      - mkdir -p  /tmp/.next/cache
   build:
     commands:
+      - mkdir -p  ./client/src/.next/cache/
+      - cp -a /tmp/.next/cache/. ./client/src/.next/cache/
       - cd ./client
       - npm i
       - npm test
       - npm run build
+      - cp -a ./src/.next/cache/. /tmp/.next/cache/
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/ui:latest .
       - docker push rsschool/ui:latest
@@ -29,3 +34,4 @@ cache:
   paths:
     - /root/.npm/**/*
     - /usr/local/share/.cache/**/*
+    - /tmp/.next/cache/
