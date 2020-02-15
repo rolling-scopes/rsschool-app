@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { Mentor, User } from '../../models';
 

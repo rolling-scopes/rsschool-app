@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { User } from '../../models';

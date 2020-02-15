@@ -1,5 +1,5 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';

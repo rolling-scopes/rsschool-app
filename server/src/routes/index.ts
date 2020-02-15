@@ -1,6 +1,6 @@
 export * from './logging';
 
-import Router from 'koa-router';
+import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';

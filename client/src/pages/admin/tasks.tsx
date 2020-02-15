@@ -18,7 +18,7 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as Partial<Task> | null);
   const [modalAction, setModalAction] = useState('update');
   const [form] = Form.useForm();
-  
+
   useAsync(async () => {
     const tasks = await service.getTasks();
     setData(tasks);

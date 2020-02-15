@@ -1,4 +1,4 @@
-import octokit from '@octokit/rest';
+import { Octokit } from '@octokit/rest';
 import passport from 'koa-passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
@@ -22,7 +22,7 @@ export function setupPassport(logger: ILogger) {
       },
       (accessToken: string, _, profile, cb) => {
         logger.info('token', { accessToken });
-        const github = new octokit();
+        const github = new Octokit();
         github.authenticate({ token: accessToken, type: 'oauth' });
 
         logger.info('request users');
@@ -36,7 +36,7 @@ export function setupPassport(logger: ILogger) {
           )
           .catch(err => {
             logger.error(err, 'Failed to create user');
-            cb(err, null);
+            cb(err, undefined);
           });
       },
     ),

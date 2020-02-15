@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { setResponse } from './utils';
 import { BAD_REQUEST, FORBIDDEN } from 'http-status-codes';
 const auth = require('basic-auth'); //tslint:disable-line

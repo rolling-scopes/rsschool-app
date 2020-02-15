@@ -1,5 +1,5 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { DiscordService, HeroesService } from '../integrations';
 import { ILogger } from '../logger';

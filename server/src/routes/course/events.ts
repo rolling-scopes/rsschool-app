@@ -1,7 +1,7 @@
 // tslint:disable-next-line
 const ics = require('ics');
 import { OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { DateTime } from 'luxon';
 import { ILogger } from '../../logger';
 import { CourseEvent } from '../../models';

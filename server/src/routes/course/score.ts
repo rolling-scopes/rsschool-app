@@ -1,6 +1,6 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import _ from 'lodash';
 import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';

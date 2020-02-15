@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { ILogger } from '../logger';
 import { config } from '../config';
 
@@ -34,13 +34,7 @@ export class DiscordService {
       username: params.fromGithubId,
       content: `@${params.toGithubId}\n${params.comment}`,
     };
-    const result = await fetch(gratitudeUrl!, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    });
+    const result = await axios.post(gratitudeUrl!, message);
     this.logger.info(result.status.toString());
   }
 

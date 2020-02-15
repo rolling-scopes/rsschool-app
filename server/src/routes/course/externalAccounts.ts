@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { OK } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';

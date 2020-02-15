@@ -1,5 +1,5 @@
 import { OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { getInterviewsByStudent } from '../../services/courseService';
 import { getStageInterviewsByStudent } from '../../services/stageInterviews';
