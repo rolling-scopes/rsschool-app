@@ -38,7 +38,7 @@ interface State {
 }
 
 class PublicFeedbackCard extends React.Component<Props, State> {
-  state = {
+  state: State = {
     badgesCount: {},
     isPublicFeedbackModalVisible: false,
   };
@@ -57,13 +57,13 @@ class PublicFeedbackCard extends React.Component<Props, State> {
 
   private countBadges = () => {
     const receivedBadges = this.props.data;
-    const badgesCount = {};
+    const badgesCount: any = {};
 
     receivedBadges.forEach(({ badgeId }) => {
       if (badgeId) {
         badgesCount[badgeId] ?
-          badgesCount[badgeId] += 1 :
-          badgesCount[badgeId] = 1;
+        badgesCount[badgeId] += 1 :
+        badgesCount[badgeId] = 1;
       }
     });
 
@@ -110,9 +110,9 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                   Object.keys(badgesCount).map((badgeId) => (
                     <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
                       <Badge count={badgesCount[badgeId]}>
-                        <Tooltip title={heroesBadges[badgeId].name}>
+                        <Tooltip title={(heroesBadges as any)[badgeId].name}>
                           <Avatar
-                            src={`https://heroes.by/api/images/${heroesBadges[badgeId].pictureId}/content/original`}
+                            src={`https://heroes.by/api/images/${(heroesBadges as any)[badgeId].pictureId}/content/original`}
                             alt={`${badgeId} badge`}
                             size={48}
                           />
@@ -141,7 +141,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                         {
                           badgeId ?
                             <Text strong style={{ fontSize: 12 }}>
-                              {heroesBadges[badgeId].name}
+                              {(heroesBadges as any)[badgeId].name}
                             </Text> :
                             ''
                         }

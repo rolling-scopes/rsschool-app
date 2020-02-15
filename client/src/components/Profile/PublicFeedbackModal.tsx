@@ -50,7 +50,7 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
                       {
                         badgeId ?
                           <Text strong style={{ fontSize: 12 }}>
-                            {heroesBadges[badgeId].name}
+                            {(heroesBadges as any)[badgeId].name}
                           </Text> :
                           ''
                       }

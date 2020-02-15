@@ -35,6 +35,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@types/csvtojson": "~1.1.5",
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
     "@types/moment-timezone": "^0.5.12",

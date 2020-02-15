@@ -39,13 +39,13 @@ describe('CommonCard', () => {
     });
   });
 
-  const wrapper = shallow(
+  const wrapper = shallow<CommonCard>(
     <CommonCard
       title="Test"
       icon={<i>Icon</i>}
       content={<p>Content</p>}
     />);
-  const instance = wrapper.instance();
+  const instance: any = wrapper.instance();
   describe('showVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "true"', () => {
       expect(instance.state.isVisibilitySettingsVisible).toBe(false);

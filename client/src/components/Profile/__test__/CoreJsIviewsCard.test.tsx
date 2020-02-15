@@ -4,7 +4,7 @@ import { shallowToJson } from 'enzyme-to-json';
 import CoreJsIviewsCard from '../CoreJsIviewsCard';
 
 describe('CoreJSIviewsCard', () => {
-  const wrapper = mount(<CoreJsIviewsCard
+  const wrapper = mount<CoreJsIviewsCard>(<CoreJsIviewsCard
     data={[{
       courseFullName: 'rs-2019',
       courseName: 'rs-2019',
@@ -32,11 +32,11 @@ describe('CoreJSIviewsCard', () => {
     }]}
   />);
   it('Should render correctly', () => {
-    expect(shallowToJson(wrapper)).toMatchSnapshot();
+    expect(shallowToJson(wrapper as any)).toMatchSnapshot();
   });
   describe('showCoreJsIviewModal', () => {
     it('should set "state.isCoreJsIviewModalVisible" as "true", "state.courseIndex" as passed', () => {
-      const instance = wrapper.instance();
+      const instance: any = wrapper.instance();
       expect(instance.state.isCoreJsIviewModalVisible).toBe(false);
       instance.showCoreJsIviewModal(0);
       expect(instance.state.isCoreJsIviewModalVisible).toBe(true);
@@ -47,7 +47,7 @@ describe('CoreJSIviewsCard', () => {
       const instance = wrapper.instance();
       instance.state.isCoreJsIviewModalVisible = true;
       expect(instance.state.isCoreJsIviewModalVisible).toBe(true);
-      instance.hideCoreJsIviewModal();
+      (instance as any).hideCoreJsIviewModal();
       expect(instance.state.isCoreJsIviewModalVisible).toBe(false);
     });
   });

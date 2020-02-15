@@ -1,5 +1,5 @@
 import { NOT_FOUND, OK, FORBIDDEN } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';

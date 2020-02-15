@@ -7,7 +7,7 @@ import { GeneralInfo } from '../../../../../common/models/profile';
 describe('EducationCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper = mount(<EducationCard
+      const wrapper: any = mount(<EducationCard
         data={{
           educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
         } as GeneralInfo}
@@ -18,7 +18,7 @@ describe('EducationCard', () => {
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper = mount(<EducationCard
+      const wrapper: any = mount(<EducationCard
         data={{
           educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
         } as GeneralInfo}
@@ -29,7 +29,7 @@ describe('EducationCard', () => {
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if "educationHistory" has element with "null" values', () => {
-      const wrapper = mount(<EducationCard
+      const wrapper: any = mount(<EducationCard
         data={{
           educationHistory: [{ graduationYear: null, faculty: null, university: null }],
         } as GeneralInfo}
@@ -79,7 +79,7 @@ describe('EducationCard', () => {
           onPermissionsSettingsChange={() => {}}
           onProfileSettingsChange={() => {}}
         />);
-      const instance = wrapper.instance();
+      const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isEducationVisible: { all: true, mentor: true, student: true },

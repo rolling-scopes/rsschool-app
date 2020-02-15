@@ -56,7 +56,7 @@ describe('EnglishCard', () => {
           onPermissionsSettingsChange={() => {}}
           onProfileSettingsChange={() => {}}
         />);
-      const instance = wrapper.instance();
+      const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isEnglishVisible: { all: false, student: false },

@@ -185,6 +185,7 @@ export const getPermissions = ({ isProfileOwner, role, permissions }: Permission
         isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission) ||
         get(permissions, `${permission}.all`) ||
         get(permissions, `${permission}.${role}`) ||
+
         false
       )
   ));
