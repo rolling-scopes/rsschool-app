@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { BAD_REQUEST } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { uniq } from 'lodash';

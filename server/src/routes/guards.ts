@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { config } from '../config';
 import { IUserSession } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line

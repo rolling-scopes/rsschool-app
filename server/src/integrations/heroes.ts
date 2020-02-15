@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { ILogger } from '../logger';
 import { config } from '../config';
 
@@ -29,21 +29,13 @@ export class HeroesService {
       return null;
     }
     const { url, username, password } = config.integrations.heroes;
-    const result = await fetch(url!, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${Buffer.from(username + ':' + password).toString('base64')}`,
-      },
-      body: JSON.stringify(params),
-    });
+    const result = await axios
+      .post<HeroesResponse>(url!, params, { auth: { username, password } })
+      .catch(() => ({ data: {} as HeroesResponse }));
     this.logger.info('request', params);
-    const response: HeroesResponse = await result.json();
+    const response: HeroesResponse = result.data;
     this.logger.info('response', response);
-    if (result.ok && response.content) {
-      return response.content;
-    }
-    return null;
+    return response.content;
   }
 
   private isDisabled() {

@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { OK } from 'http-status-codes';
 import { Stage } from '../../models';
 import { ILogger } from '../../logger';

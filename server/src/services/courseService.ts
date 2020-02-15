@@ -319,14 +319,12 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     .createQueryBuilder('courseTask')
     .select(['courseTask.id'])
     .leftJoin('courseTask.task', 'task')
-    .leftJoin('courseTask.stage', 'stage')
     .where('task.verification = :manual', { manual: 'manual' })
     .andWhere('"courseTask".checker = :mentor', { mentor: 'mentor' })
-    .andWhere('stage."courseId" = :courseId', { courseId })
+    .andWhere('"courseTask"."courseId" = :courseId', { courseId })
     .andWhere('"courseTask"."studentEndDate" < NOW()');
 
   const courseTasks = await courseTaskQuery.getMany();
-  const count = courseTasks.length;
 
   const query = mentorQuery()
     .innerJoin('mentor.user', 'user')
@@ -334,7 +332,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     .leftJoin('mentor.students', 'students')
     .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
     .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
-      taskIds: courseTasks.map(t => t.id),
+      taskIds: courseTasks.length > 0 ? courseTasks.map(t => t.id) : [null],
     })
     .addSelect(['taskResults.id', 'taskResults.score', 'taskResults.courseTaskId', 'taskResults.updatedDate'])
     .where(`"mentor"."courseId" = :courseId`, { courseId })
@@ -342,6 +340,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
 
   const records = await query.getMany();
 
+  const count = courseTasks.length;
   const mentors = records.map(mentor => {
     const mentorBasic = convertToMentorBasic(mentor);
     const user = (mentor.user as User)!;

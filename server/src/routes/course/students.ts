@@ -1,6 +1,6 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { MentorBasic } from '../../../../common/models';
 import { ILogger } from '../../logger';

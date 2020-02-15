@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import * as AWS from 'aws-sdk';
 import { OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { ILogger } from '../../logger';

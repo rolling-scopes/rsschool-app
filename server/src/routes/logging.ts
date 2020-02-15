@@ -1,7 +1,7 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../logger';
 
-export const routeLoggerMiddleware: Router.IMiddleware = async (ctx: Router.RouterContext<any, any>, next: any) => {
+export const routeLoggerMiddleware: Router.Middleware = async (ctx: Router.RouterContext<any, any>, next: any) => {
   const oldLogger = ctx.logger;
   const userId = ctx.state && ctx.state.user ? ctx.state.user.id : undefined;
   ctx.logger = ctx.logger.child({ module: 'route', userId });

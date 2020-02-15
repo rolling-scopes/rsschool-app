@@ -1,5 +1,5 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { StageInterview, Mentor, Student, IUserSession } from '../../models';
