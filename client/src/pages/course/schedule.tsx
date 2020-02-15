@@ -1,5 +1,5 @@
 import { CalendarOutlined, QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Table, Tag, Row, Tooltip, Button, Typography, Select, message } from 'antd';
+import { Table, Tag, Row, Tooltip, Button, Select, message } from 'antd';
 import { withSession, GithubUserLink, PageLayout } from 'components';
 import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -10,8 +10,6 @@ import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
 import { useAsync } from 'react-use';
-
-const { Text } = Typography;
 
 enum EventTypeColor {
   deadline = 'red',
@@ -94,7 +92,7 @@ export function SchedulePage(props: CoursePageProps) {
 
   return (
     <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
-      <Row
+      {/* <Row
         style={{
           display: 'flex',
           flexFlow: 'row',
@@ -115,7 +113,7 @@ export function SchedulePage(props: CoursePageProps) {
         >
           See Schedule
         </Button>
-      </Row>
+      </Row> */}
       <Row justify="space-between">
         <Select
           style={{ width: 200 }}

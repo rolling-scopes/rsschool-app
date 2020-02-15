@@ -11,17 +11,17 @@ import { useAsync } from 'react-use';
 const { Content } = Layout;
 
 type Props = { session: Session };
+const service = new EventService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
-  const service = new EventService();
 
   useAsync(async () => {
     const data = await service.getEvents();
     setData(data);
-  }, [service]);
+  }, []);
 
   const handleAddItem = () => {
     setModalData({});

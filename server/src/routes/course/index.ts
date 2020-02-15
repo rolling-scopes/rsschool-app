@@ -109,16 +109,16 @@ function addEventApi(router: Router, logger: ILogger) {
 }
 
 function addTaskApi(router: Router, logger: ILogger) {
-  router.post('/task', adminGuard, createPostRoute(CourseTask, logger));
-  router.put('/task/:id', adminGuard, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', adminGuard, createDeleteRoute(CourseTask, logger));
+  router.post('/task', courseMentorGuard, createPostRoute(CourseTask, logger));
+  router.put('/task/:id', courseMentorGuard, createPutRoute(CourseTask, logger));
+  router.delete('/task/:id', courseMentorGuard, createDeleteRoute(CourseTask, logger));
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
-  router.post('/task/:courseTaskId/distribution', adminGuard, postCourseTaskDistribution(logger));
+  router.post('/task/:courseTaskId/distribution', courseMentorGuard, postCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
-  router.post('/task/:courseTaskId/cross-check/distribution', adminGuard, postTaskSolutionDistribution(logger));
-  router.post('/task/:courseTaskId/cross-check/completion', adminGuard, postTaskSolutionCompletion(logger));
+  router.post('/task/:courseTaskId/cross-check/distribution', courseMentorGuard, postTaskSolutionDistribution(logger));
+  router.post('/task/:courseTaskId/cross-check/completion', courseMentorGuard, postTaskSolutionCompletion(logger));
 }
 
 function addStageInterviewApi(router: Router, logger: ILogger) {
@@ -147,7 +147,7 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, getMentorInterviews(logger));
   router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
-  router.post('/mentor/:githubId/status/expelled', adminGuard, ...validators, postMentorStatusExpelled(logger));
+  router.post('/mentor/:githubId/status/expelled', courseMentorGuard, ...validators, postMentorStatusExpelled(logger));
 }
 
 function addStudentApi(router: Router, logger: ILogger) {

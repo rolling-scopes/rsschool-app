@@ -10,6 +10,7 @@ import { ModalForm } from 'components/Forms';
 
 const { Content } = Layout;
 type Props = { session: Session };
+const service = new TaskService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
@@ -17,8 +18,7 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as Partial<Task> | null);
   const [modalAction, setModalAction] = useState('update');
   const [form] = Form.useForm();
-  const service = new TaskService();
-
+  
   useAsync(async () => {
     const tasks = await service.getTasks();
     setData(tasks);
