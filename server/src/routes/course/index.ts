@@ -126,7 +126,7 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
   router.get('/stage/:id/interviews/student/:studentId', courseMentorGuard, getStageInterviewFeedback(logger));
   router.get('/stage/:id/interviews/students', courseMentorGuard, getStageInterviewStudents(logger));
   router.post('/stage/:id/interview', courseMentorGuard, postStageInterview(logger));
-  router.post('/stage/:id/interviews', adminGuard, postStageInterviews(logger));
+  router.post('/stage/:id/interviews', courseManagerGuard, postStageInterviews(logger));
   router.get('/stage/:id/interviews', courseMentorGuard, getStageInterviews(logger));
   router.delete('/stage/:id/interview/:interviewId', courseMentorGuard, deleteStageInterview(logger));
   router.post('/stage/:id/interviews/feedback', courseMentorGuard, postStageInterviewFeedback(logger));
@@ -171,7 +171,7 @@ function addStudentApi(router: Router, logger: ILogger) {
     postStudentInterviewResult(logger),
   );
 
-  router.post('/student/:githubId/repository', adminGuard, ...validators, postRepository(logger));
+  router.post('/student/:githubId/repository', courseManagerGuard, ...validators, postRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, ...validators, postStudentCertificate(logger));

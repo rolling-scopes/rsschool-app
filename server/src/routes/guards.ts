@@ -20,7 +20,7 @@ const userGuards = (user: IUserSession) => {
   };
   return {
     ...guards,
-    isPowerUser: (courseId: number) => guards.isAdmin() || guards.isHirer() || guards.isManager(courseId),
+    isPowerUser: (courseId: number) => guards.isAdmin() || guards.isManager(courseId),
   };
 };
 

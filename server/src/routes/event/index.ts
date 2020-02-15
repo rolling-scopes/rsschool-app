@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { Event } from '../../models';
 import { createGetRoute, createPostRoute, createPutRoute, createDeleteRoute } from '../common';
-import { adminGuard } from '../guards';
+import { courseManagerGuard } from '../guards';
 import { setResponse } from '../utils';
 
 const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
@@ -19,10 +19,10 @@ const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
 export function lectureRoute(logger: ILogger) {
   const router = new Router({ prefix: '/event' });
 
-  router.get('/:id', adminGuard, validateTaskId, createGetRoute(Event, logger));
-  router.post('/', adminGuard, createPostRoute(Event, logger));
-  router.put('/:id', adminGuard, validateTaskId, createPutRoute(Event, logger));
-  router.delete('/:id', adminGuard, validateTaskId, createDeleteRoute(Event, logger));
+  router.get('/:id', courseManagerGuard, validateTaskId, createGetRoute(Event, logger));
+  router.post('/', courseManagerGuard, createPostRoute(Event, logger));
+  router.put('/:id', courseManagerGuard, validateTaskId, createPutRoute(Event, logger));
+  router.delete('/:id', courseManagerGuard, validateTaskId, createDeleteRoute(Event, logger));
 
   return router;
 }
