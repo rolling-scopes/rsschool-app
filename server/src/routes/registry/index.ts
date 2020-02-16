@@ -75,6 +75,20 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK);
   });
 
+  router.put('/mentor/:mentorId', adminGuard, async (ctx: Router.RouterContext) => {
+    const mentorId = Number(ctx.params.mentorId);
+
+    const { preselectedCourses } = ctx.request.body;
+
+    const mentorData: Partial<MentorRegistry> = {
+      preselectedCourses,
+    };
+
+    await getRepository(MentorRegistry).update(mentorId, mentorData);
+
+    setResponse(ctx, OK);
+  });
+
   router.get('/mentor', async (ctx: Router.RouterContext) => {
     const { id: userId } = ctx.state!.user as IUserSession;
 
@@ -92,10 +106,12 @@ export function registryRouter(logger?: ILogger) {
       .createQueryBuilder('mentorRegistry')
       .innerJoin('mentorRegistry.user', 'user')
       .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId', 'user.locationName'])
+      .orderBy('"mentorRegistry"."updatedDate"', 'DESC')
       .getMany();
     const data = mentorRegistries.map(mentorRegistry => {
       const user = mentorRegistry.user;
       return {
+        id: mentorRegistry.id,
         comment: mentorRegistry.comment,
         englishMentoring: mentorRegistry.englishMentoring,
         githubId: user.githubId,
@@ -103,8 +119,10 @@ export function registryRouter(logger?: ILogger) {
         maxStudentsLimit: mentorRegistry.maxStudentsLimit,
         name: `${user.firstName} ${user.lastName}`,
         preferedCourses: mentorRegistry.preferedCourses,
+        preselectedCourses: mentorRegistry.preselectedCourses,
         preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
         technicalMentoring: mentorRegistry.technicalMentoring,
+        updatedDate: mentorRegistry.updatedDate,
       };
     });
     setResponse(ctx, OK, data);
