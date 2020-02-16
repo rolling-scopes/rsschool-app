@@ -16,6 +16,9 @@ export class MentorRegistry {
   preferedCourses: string[];
 
   @Column({ type: 'simple-array', default: '' })
+  preselectedCourses: string[];
+
+  @Column({ type: 'simple-array', default: '' })
   technicalMentoring: string[];
 
   @Column()

@@ -1,28 +1,86 @@
-import { Col, Layout, Spin, Table } from 'antd';
+import { Col, Layout, Select, Spin, Table, Form, message } from 'antd';
 import { AdminSider, GithubUserLink, Header } from 'components';
-import { stringSorter, boolIconRenderer, tagsRenderer, getColumnSearchProps } from 'components/Table';
+import { stringSorter, boolIconRenderer, tagsRenderer, getColumnSearchProps, dateRenderer } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
 import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
+import { CoursesService } from 'services/courses';
+import { ModalForm } from 'components/Forms';
 
 const { Content } = Layout;
 const PAGINATION = 200;
 
 type Props = { courses: Course[]; session: Session };
+const mentorRegistryService = new MentorRegistryService();
+const coursesService = new CoursesService();
 
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [modalLoading, setModalLoading] = useState(false);
 
-  useAsync(async () => {
+  const [data, setData] = useState([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [modalData, setModalData] = useState(null as Partial<any> | null);
+
+  const loadData = useCallback(async () => {
     setLoading(true);
-    const service = new MentorRegistryService();
-    const data = await service.getMentors();
+
+    const data = await mentorRegistryService.getMentors();
+    const courses = await coursesService.getCourses();
+
     setData(data);
+    setCourses(courses);
     setLoading(false);
   }, []);
+
+  useAsync(loadData, []);
+
+  const handleModalSubmit = useCallback(
+    async (values: any) => {
+      try {
+        setModalLoading(true);
+        await mentorRegistryService.updateMentor(modalData!.id!, values);
+        setModalData(null);
+        loadData();
+      } catch (e) {
+        message.error('An error occurred. Please try again later.');
+      } finally {
+        setModalLoading(false);
+      }
+    },
+    [modalData],
+  );
+
+  const renderModal = useCallback(() => {
+    return (
+      <ModalForm
+        data={modalData}
+        title="Task"
+        submit={handleModalSubmit}
+        cancel={() => setModalData(null)}
+        getInitialValues={getInitialValues}
+        loading={modalLoading}
+      >
+        <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
+          <Select mode="multiple">
+            {courses.map(course => (
+              <Select.Option disabled={course.completed} key={course.id} value={course.id}>
+                {course.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </ModalForm>
+    );
+  }, [modalData]);
+
+  function getInitialValues(modalData: Partial<any>) {
+    return {
+      preselectedCourses: modalData.preselectedCourses?.map((v: string) => Number(v)),
+    };
+  }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -42,14 +100,14 @@ function Page(props: Props) {
                   {
                     title: 'Name',
                     dataIndex: 'name',
-                    width: 150,
+                    width: 130,
                     sorter: stringSorter('name'),
                     ...getColumnSearchProps('name'),
                   },
                   {
                     title: 'Github',
                     dataIndex: 'githubId',
-                    width: 120,
+                    width: 110,
                     sorter: stringSorter('githubId'),
                     render: (value: string) => <GithubUserLink value={value} />,
                     ...getColumnSearchProps('githubId'),
@@ -60,9 +118,21 @@ function Page(props: Props) {
                     width: 80,
                   },
                   {
-                    title: 'Courses',
+                    title: 'Updated',
+                    dataIndex: 'updatedDate',
+                    render: dateRenderer,
+                  },
+                  {
+                    title: 'Prefered',
                     dataIndex: 'preferedCourses',
-                    render: tagsRenderer,
+                    render: (values: string[]) =>
+                      tagsRenderer(values.map(v => courses.find(c => c.id.toString() === v)?.name ?? v)),
+                  },
+                  {
+                    title: 'Pre-Selected',
+                    dataIndex: 'preselectedCourses',
+                    render: (values: string[]) =>
+                      tagsRenderer(values.map(v => courses.find(c => c.id.toString() === v)?.name ?? v)),
                   },
                   {
                     title: 'Max students',
@@ -76,10 +146,10 @@ function Page(props: Props) {
                     sorter: stringSorter('githubId'),
                   },
                   {
-                    title: 'English Mentoring',
+                    title: 'English',
                     dataIndex: 'englishMentoring',
                     render: boolIconRenderer,
-                    width: 80,
+                    width: 40,
                   },
                   {
                     title: 'Technical Mentoring',
@@ -89,12 +159,19 @@ function Page(props: Props) {
                   {
                     title: 'Comment',
                     dataIndex: 'comment',
+                    width: 150,
+                  },
+                  {
+                    title: 'Actions',
+                    dataIndex: 'actions',
+                    render: (_: any, record: any) => <a onClick={() => setModalData(record)}>Edit</a>,
                   },
                 ]}
               />
             </Col>
           </Spin>
         </Content>
+        {renderModal()}
       </Layout>
     </Layout>
   );

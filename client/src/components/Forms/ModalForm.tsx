@@ -6,6 +6,7 @@ type Props = {
   title?: string;
   submit: (arg: any) => void;
   cancel: (arg: any) => void;
+  onChange?: (values: any) => void;
   getInitialValues: (arg: any) => any;
   children: any;
   loading?: boolean;
@@ -37,7 +38,12 @@ export function ModalForm(props: Props) {
       }}
     >
       <Spin spinning={props.loading ?? false}>
-        <Form form={form} initialValues={initialValues} layout="vertical">
+        <Form
+          onValuesChange={() => props.onChange?.(form.getFieldsValue())}
+          form={form}
+          initialValues={initialValues}
+          layout="vertical"
+        >
           {props.children}
         </Form>
       </Spin>

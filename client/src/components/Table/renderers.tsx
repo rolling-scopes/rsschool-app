@@ -26,14 +26,14 @@ export function boolIconRenderer(value: any) {
   );
 }
 
-export function tagsRenderer(values: string[]) {
+export function tagsRenderer(values: (number | string)[]) {
   if (!Array.isArray(values)) {
     return '';
   }
   return <span>{values.map(renderTag)}</span>;
 }
 
-function renderTag(value: string) {
+function renderTag(value: number | string) {
   return <Tag key={value}>{value}</Tag>;
 }
 

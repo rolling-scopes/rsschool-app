@@ -17,4 +17,9 @@ export class MentorRegistryService {
     const response = await this.axios.get('/mentors');
     return response.data.data;
   }
+
+  public async updateMentor(id: number, data: any) {
+    const response = await this.axios.put(`/mentor/${id}`, data);
+    return response.data.data;
+  }
 }
