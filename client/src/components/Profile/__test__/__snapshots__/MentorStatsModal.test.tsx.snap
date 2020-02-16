@@ -1,0 +1,275 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MentorStatsModal Should render correctly 1`] = `
+<Modal
+  confirmLoading={false}
+  footer={null}
+  maskTransitionName="fade"
+  okType="primary"
+  onCancel={[Function]}
+  title="Rolling Scopes School 2018-Q1 statistics"
+  transitionName="zoom"
+  visible={true}
+  width="80%"
+>
+  <Row
+    gutter={
+      Array [
+        16,
+        16,
+      ]
+    }
+  >
+    <Col
+      key="mentor-stats-modal-student-alex"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Row
+        gutter={0}
+        style={
+          Object {
+            "marginBottom": 24,
+          }
+        }
+      >
+        <Col>
+          <Avatar
+            alt="alex avatar"
+            shape="circle"
+            size={64}
+            src="https://github.com/alex.png?size=128"
+            style={
+              Object {
+                "marginRight": 24,
+              }
+            }
+          />
+        </Col>
+        <Col>
+          <p
+            style={
+              Object {
+                "fontSize": 16,
+              }
+            }
+          >
+            <Text
+              strong={true}
+            >
+              <a
+                href="/profile?githubId=alex"
+              >
+                Alex Petrov
+              </a>
+            </Text>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <Tag
+              closable={false}
+              color="green"
+            >
+              active
+            </Tag>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            Score:  
+            <Text
+              mark={true}
+            >
+              3453
+            </Text>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <ForwardRef(GithubOutlined) />
+             
+            <a
+              href="https://github.com/alex"
+              target="_blank"
+            >
+              alex
+            </a>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <ForwardRef(LockFilled) />
+             
+            <a
+              href="https://github.com/rolling-scopes-school/alex-rs-2018-q1"
+              target="_blank"
+            >
+              alex-rs-2018-q1
+            </a>
+          </p>
+        </Col>
+      </Row>
+    </Col>
+    <Col
+      key="mentor-stats-modal-student-vasya"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Row
+        gutter={0}
+        style={
+          Object {
+            "marginBottom": 24,
+          }
+        }
+      >
+        <Col>
+          <Avatar
+            alt="vasya avatar"
+            shape="circle"
+            size={64}
+            src="https://github.com/vasya.png?size=128"
+            style={
+              Object {
+                "marginRight": 24,
+              }
+            }
+          />
+        </Col>
+        <Col>
+          <p
+            style={
+              Object {
+                "fontSize": 16,
+              }
+            }
+          >
+            <Text
+              strong={true}
+            >
+              <a
+                href="/profile?githubId=vasya"
+              >
+                Vasiliy Alexandrov
+              </a>
+            </Text>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <Tag
+              closable={false}
+              color="red"
+            >
+              expelled
+            </Tag>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            Score:  
+            <Text
+              mark={true}
+            >
+              120
+            </Text>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <ForwardRef(GithubOutlined) />
+             
+            <a
+              href="https://github.com/vasya"
+              target="_blank"
+            >
+              vasya
+            </a>
+          </p>
+          <p
+            style={
+              Object {
+                "marginBottom": 5,
+              }
+            }
+          >
+            <ForwardRef(LockFilled) />
+             
+            <a
+              href="https://github.com/rolling-scopes-school/vasya-rs-2018-q1"
+              target="_blank"
+            >
+              vasya-rs-2018-q1
+            </a>
+          </p>
+        </Col>
+      </Row>
+    </Col>
+  </Row>
+</Modal>
+`;

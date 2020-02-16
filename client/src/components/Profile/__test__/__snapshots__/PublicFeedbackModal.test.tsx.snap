@@ -1,0 +1,589 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PublicFeedbackModal Should render correctly 1`] = `
+<Modal
+  confirmLoading={false}
+  footer={null}
+  maskTransitionName="fade"
+  okType="primary"
+  onCancel={[Function]}
+  title="Public Feedback"
+  transitionName="zoom"
+  visible={true}
+  width="80%"
+>
+  <Row
+    gutter={
+      Array [
+        16,
+        16,
+      ]
+    }
+  >
+    <Col
+      key="modal-comment-0"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=apetr"
+          >
+            Anton Petrov
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="apetr avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/apetr.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Congratulations
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2018-12-01 15:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              a year ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+    <Col
+      key="modal-comment-1"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=temap"
+          >
+            Artem Petrov
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="temap avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/temap.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Great speaker
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2018-11-01 14:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              a year ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+    <Col
+      key="modal-comment-2"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=temap"
+          >
+            Artem Petrov
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="temap avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/temap.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Great speaker
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2018-09-01 14:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              a year ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+    <Col
+      key="modal-comment-3"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=temap"
+          >
+            Artem Petrov
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="temap avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/temap.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Great speaker
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2018-10-01 14:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              a year ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+    <Col
+      key="modal-comment-4"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=vasssa"
+          >
+            Anton Vasilyev
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="vasssa avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/vasssa.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Thank you
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2018-11-01 15:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              a year ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+    <Col
+      key="modal-comment-5"
+      lg={
+        Object {
+          "span": 6,
+        }
+      }
+      md={
+        Object {
+          "span": 8,
+        }
+      }
+      sm={
+        Object {
+          "span": 12,
+        }
+      }
+      xs={
+        Object {
+          "span": 24,
+        }
+      }
+    >
+      <Comment
+        author={
+          <a
+            href="/profile?githubId=demaa"
+          >
+            Dima Alexandrov
+          </a>
+        }
+        avatar={
+          <Avatar
+            alt="demaa avatar"
+            shape="circle"
+            size="default"
+            src="https://github.com/demaa.png?size=48"
+          />
+        }
+        content={
+          <React.Fragment>
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Thank you
+            </Text>
+            <p
+              style={
+                Object {
+                  "marginBottom": 5,
+                }
+              }
+            >
+              Test
+            </p>
+            <p
+              style={
+                Object {
+                  "fontSize": 12,
+                }
+              }
+            >
+              Look at on 
+              <a
+                href="https://heroes.by/"
+                target="_blank"
+              >
+                heroes.by
+              </a>
+            </p>
+          </React.Fragment>
+        }
+        datetime={
+          <Tooltip
+            arrowPointAtCenter={false}
+            autoAdjustOverflow={true}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="top"
+            title="2019-12-01 15:12:01"
+            transitionName="zoom-big-fast"
+          >
+            <span>
+              3 months ago
+            </span>
+          </Tooltip>
+        }
+      />
+    </Col>
+  </Row>
+</Modal>
+`;

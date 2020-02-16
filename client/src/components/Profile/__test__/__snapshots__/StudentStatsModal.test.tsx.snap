@@ -1,0 +1,164 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StudentStatsModal Should render correctly 1`] = `
+<Modal
+  confirmLoading={false}
+  footer={null}
+  maskTransitionName="fade"
+  okType="primary"
+  onCancel={[Function]}
+  title="Rolling Scopes School 2018 Q1 statistics"
+  transitionName="zoom"
+  visible={true}
+  width="80%"
+>
+  <Row
+    gutter={0}
+  >
+    <Col
+      style={
+        Object {
+          "marginBottom": 5,
+          "marginRight": 20,
+        }
+      }
+    >
+      <Progress
+        gapDegree={0}
+        percent={71}
+        showInfo={true}
+        size="default"
+        status="success"
+        strokeLinecap="round"
+        trailColor={null}
+        type="circle"
+        width={80}
+      />
+    </Col>
+    <Col>
+      <p
+        style={
+          Object {
+            "marginBottom": 5,
+          }
+        }
+      >
+        Mentor: 
+        <a
+          href="/profile?githubId=andrew123"
+        >
+          Andrey Andreev
+        </a>
+      </p>
+      <p
+        style={
+          Object {
+            "marginBottom": 5,
+          }
+        }
+      >
+        Position: 
+        <Text
+          strong={true}
+        >
+          32
+        </Text>
+      </p>
+      <p
+        style={
+          Object {
+            "marginBottom": 5,
+          }
+        }
+      >
+        Total Score: 
+        <Text
+          mark={true}
+        >
+          1201
+        </Text>
+         / 340
+      </p>
+      <p
+        style={
+          Object {
+            "marginBottom": 30,
+          }
+        }
+      >
+        Course progress: 
+        4 / 3 tasks were scored (71%)
+      </p>
+    </Col>
+  </Row>
+  <Table
+    columns={
+      Array [
+        Object {
+          "dataIndex": "name",
+          "render": [Function],
+          "title": "Task",
+        },
+        Object {
+          "dataIndex": "score",
+          "render": [Function],
+          "title": "Score / Max",
+        },
+        Object {
+          "dataIndex": "scoreWeight",
+          "render": [Function],
+          "title": "*Weight",
+        },
+        Object {
+          "dataIndex": "comment",
+          "ellipsis": true,
+          "title": "Comment",
+        },
+        Object {
+          "dataIndex": "githubPrUri",
+          "ellipsis": true,
+          "render": [Function],
+          "title": "Github PR Uri",
+        },
+      ]
+    }
+    dataSource={
+      Array [
+        Object {
+          "comment": "test",
+          "descriptionUri": "https://description.com",
+          "key": "student-stats-modal-task-0",
+          "maxScore": 130,
+          "name": "Task 1",
+          "score": 120,
+          "scoreWeight": 1,
+          "taskGithubPrUris": "https://description.com",
+        },
+        Object {
+          "comment": "test",
+          "descriptionUri": "https://description.com",
+          "key": "student-stats-modal-task-1",
+          "maxScore": 100,
+          "name": "Task 2",
+          "score": 20,
+          "scoreWeight": 1,
+          "taskGithubPrUris": "https://description.com",
+        },
+        Object {
+          "comment": "test",
+          "descriptionUri": "https://description.com",
+          "key": "student-stats-modal-task-2",
+          "maxScore": 110,
+          "name": "Task 3",
+          "score": 90,
+          "scoreWeight": 1,
+          "taskGithubPrUris": "https://description.com",
+        },
+      ]
+    }
+    pagination={false}
+    rowKey="key"
+    size="small"
+  />
+</Modal>
+`;

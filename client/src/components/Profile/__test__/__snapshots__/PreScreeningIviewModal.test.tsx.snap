@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PreScreeningIviewModal Should render correctly 1`] = `
+<Modal
+  confirmLoading={false}
+  footer={null}
+  maskTransitionName="fade"
+  okType="primary"
+  onCancel={[Function]}
+  title="Rolling Scopes School 2019 Q1 Pre-Screening Interview Feedback"
+  transitionName="zoom"
+  visible={true}
+  width="80%"
+>
+  <Rating
+    rating={4.23}
+  />
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Date: 
+    2019-12-01
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Good candidate: 
+    <Tag
+      closable={false}
+      color="green"
+    >
+      Yes
+    </Tag>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 20,
+      }
+    }
+  >
+    Interviewer: 
+    <a
+      href="/profile?githubId=alexs"
+    >
+      Alex Smirnov
+    </a>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 20,
+      }
+    }
+  >
+    <Text
+      strong={true}
+    >
+      Comment: 
+    </Text>
+    Not bad
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Programming task(s): 
+    <Text
+      code={true}
+    >
+      aaa === 3a
+    </Text>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Has the student solved the task(s)? 
+    <Tag
+      closable={false}
+      color="green"
+    >
+      Yes
+    </Tag>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Comments about coding level: 
+    Not bad coder
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Estimated English level: 
+    A2+
+  </p>
+  <Table
+    columns={
+      Array [
+        Object {
+          "dataIndex": "name",
+          "ellipsis": true,
+          "width": "30%",
+        },
+        Object {
+          "dataIndex": "rating",
+          "render": [Function],
+        },
+      ]
+    }
+    dataSource={
+      Array [
+        Object {
+          "isNotCodeWritingLevel": true,
+          "key": "stageInterview-rs-2019-q1-2019-12-01-skills-htmlCss",
+          "name": "HTML/CSS",
+          "rating": 3,
+        },
+        Object {
+          "isNotCodeWritingLevel": true,
+          "key": "stageInterview-rs-2019-q1-2019-12-01-skills-common",
+          "name": "Common of CS / Programming",
+          "rating": 4,
+        },
+        Object {
+          "isNotCodeWritingLevel": true,
+          "key": "stageInterview-rs-2019-q1-2019-12-01-skills-dataStructures",
+          "name": "Data structures",
+          "rating": 3,
+        },
+        Object {
+          "isNotCodeWritingLevel": false,
+          "key": "stageInterview-rs-2019-q1-2019-12-01-skills-codeWritingLevel",
+          "name": "Code writing level",
+          "rating": 4,
+        },
+      ]
+    }
+    pagination={false}
+    rowKey="key"
+    size="small"
+  />
+</Modal>
+`;
