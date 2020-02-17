@@ -18,8 +18,13 @@ export class MentorRegistryService {
     return response.data.data;
   }
 
-  public async updateMentor(id: number, data: any) {
-    const response = await this.axios.put(`/mentor/${id}`, data);
+  public async updateMentor(githubId: string, data: any) {
+    const response = await this.axios.put(`/mentor/${githubId}`, data);
+    return response.data.data;
+  }
+
+  public async getMentor() {
+    const response = await this.axios.get(`/mentor`);
     return response.data.data;
   }
 }

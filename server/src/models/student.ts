@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToOne,
   Index,
+  Unique,
 } from 'typeorm';
 import { User } from './user';
 import { Course } from './course';
@@ -24,6 +25,7 @@ import { StageInterview } from './stageInterview';
 @Index(['courseId'])
 @Index(['userId'])
 @Index(['mentorId'])
+@Unique(['courseId', 'userId'])
 export class Student {
   @PrimaryGeneratedColumn() id: number;
 

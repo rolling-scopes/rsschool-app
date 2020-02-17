@@ -357,6 +357,14 @@ export class CourseService {
     return result.data.data;
   }
 
+  async createMentor(
+    githubId: string,
+    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: string },
+  ) {
+    const result = await this.axios.post(`/mentor/${githubId}`, data);
+    return result.data.data;
+  }
+
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
