@@ -166,7 +166,7 @@ function renderJsTaskFields(githubId: string, githubRepoName: string | undefined
         </a>
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
-        IMPORTANT: Tests are run using NodeJS 10. Please make sure your solution works in NodeJS 10.
+        IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
       </Typography.Paragraph>
     </Row>
   );
