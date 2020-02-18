@@ -1,5 +1,5 @@
-import { CalendarOutlined, QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Table, Tag, Row, Tooltip, Button, Select, message } from 'antd';
+import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
+import { Table, Tag, Row, Tooltip, Select, message } from 'antd';
 import { withSession, GithubUserLink, PageLayout } from 'components';
 import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -127,9 +127,6 @@ export function SchedulePage(props: CoursePageProps) {
             </Select.Option>
           ))}
         </Select>
-        <Button icon={<CalendarOutlined />} href={`/api/course/${props.course.id}/events/ical`}>
-          Events iCal
-        </Button>
       </Row>
       <Table
         rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
