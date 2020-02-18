@@ -37,6 +37,9 @@ function Page(props: Props) {
   const handleModalSubmit = useCallback(
     async (values: any) => {
       try {
+        if (modalLoading) {
+          return;
+        }
         setModalLoading(true);
         const record = createRecord(values);
         const item =
@@ -54,7 +57,7 @@ function Page(props: Props) {
         setModalLoading(false);
       }
     },
-    [modalData, modalAction],
+    [modalData, modalAction, modalLoading],
   );
 
   const renderModal = useCallback(() => {
