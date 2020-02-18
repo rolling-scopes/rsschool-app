@@ -1,10 +1,11 @@
-import { Entity, Column, CreateDateColumn, OneToMany, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, OneToMany, UpdateDateColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Stage } from './stage';
 import { Student } from './student';
 import { Mentor } from './mentor';
 import { Registry } from './registry';
 
 @Entity()
+@Unique(['name', 'alias'])
 export class Course {
   @PrimaryGeneratedColumn() id: number;
 
