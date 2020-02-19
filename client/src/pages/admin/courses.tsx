@@ -16,6 +16,7 @@ function Page(props: Props) {
   const [data, setData] = useState([] as Course[]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
+  const [modalLoading, setModalLoading] = useState(false);
   const courseService = new CoursesService();
 
   useAsync(async () => {
@@ -36,6 +37,10 @@ function Page(props: Props) {
   const handleModalSubmit = useCallback(
     async (values: any) => {
       try {
+        if (modalLoading) {
+          return;
+        }
+        setModalLoading(true);
         const record = createRecord(values);
         const item =
           modalAction === 'update'
@@ -47,15 +52,14 @@ function Page(props: Props) {
         setData(updatedData);
       } catch (e) {
         message.error('An error occurred. Can not save the task.');
+      } finally {
+        setModalLoading(false);
       }
     },
-    [modalAction, modalData],
+    [modalAction, modalData, modalLoading],
   );
 
   const renderModal = useCallback(() => {
-    if (modalData == null) {
-      return null;
-    }
     return (
       <ModalForm
         data={modalData}
@@ -63,6 +67,7 @@ function Page(props: Props) {
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}
         getInitialValues={getInitialValues}
+        loading={modalLoading}
       >
         <Row gutter={24}>
           <Col span={12}>

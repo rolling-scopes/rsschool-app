@@ -10,6 +10,10 @@ const userGuards = (user: IUserSession) => {
     isAdmin: () => user.isAdmin,
     isHirer: () => user.isHirer,
     hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
+    isAnyManager: () =>
+      Object.keys(user.coursesRoles ?? {}).some((courseId: string) =>
+        user.coursesRoles?.[courseId]?.includes('manager'),
+      ),
     isManager: (courseId: number) =>
       user.roles[courseId] === 'coursemanager' || (user.coursesRoles?.[courseId]?.includes('manager') ?? false),
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
@@ -20,7 +24,7 @@ const userGuards = (user: IUserSession) => {
   };
   return {
     ...guards,
-    isPowerUser: (courseId: number) => guards.isAdmin() || guards.isHirer() || guards.isManager(courseId),
+    isPowerUser: (courseId: number) => guards.isAdmin() || guards.isManager(courseId),
   };
 };
 
@@ -88,6 +92,16 @@ export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, ne
   const guards = userGuards(user);
   const { courseId } = ctx.params;
   if (guards.isLoggedIn(ctx) && guards.isPowerUser(courseId)) {
+    await next();
+    return;
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const anyCourseManagerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  if (guards.isLoggedIn(ctx) && (guards.isAnyManager() || guards.isAdmin())) {
     await next();
     return;
   }
