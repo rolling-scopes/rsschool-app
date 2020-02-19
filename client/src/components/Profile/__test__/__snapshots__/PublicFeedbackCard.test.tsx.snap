@@ -162,11 +162,11 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
               mouseEnterDelay={0.1}
               mouseLeaveDelay={0.1}
               placement="top"
-              title="2018-12-01 15:12:01"
+              title="2018-12-01T12:12:01.000Z"
               transitionName="zoom-big-fast"
             >
               <span>
-                a year ago
+                fromNow
               </span>
             </Tooltip>
           }
@@ -343,11 +343,11 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
               mouseEnterDelay={0.1}
               mouseLeaveDelay={0.1}
               placement="top"
-              title="2018-12-01 15:12:01"
+              title="2018-12-01T12:12:01.000Z"
               transitionName="zoom-big-fast"
             >
               <span>
-                a year ago
+                fromNow
               </span>
             </Tooltip>
           }

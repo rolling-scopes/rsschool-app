@@ -3,6 +3,15 @@ import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import PublicFeedbackModal from '../PublicFeedbackModal';
 
+jest.mock('moment', () => (value: any) => ({
+  format() {
+    return value;
+  },
+  fromNow() {
+    return 'fromNow';
+  },
+}));
+
 describe('PublicFeedbackModal', () => {
   const data = [
     {
