@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PreScreeningIviewCard Should render correctly 1`] = `
-<CoreJSIviewsCard
+<PreScreeningIviewsCard
   data={
     Array [
       Object {
@@ -3015,5 +3015,5 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
       </div>
     </Card>
   </CommonCard>
-</CoreJSIviewsCard>
+</PreScreeningIviewsCard>
 `;
