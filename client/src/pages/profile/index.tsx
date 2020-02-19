@@ -179,7 +179,6 @@ export class ProfilePage extends React.Component<Props, State> {
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      console.log(profile);
       await this.setState({
         isLoading: false,
         profile,
