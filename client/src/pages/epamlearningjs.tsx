@@ -104,6 +104,7 @@ class EpamLearningJs extends React.Component<Props, State> {
                 dataSource={courseTasks}
                 pagination={false}
                 size="small"
+                rowKey="id"
                 columns={[
                   {
                     title: 'Name',

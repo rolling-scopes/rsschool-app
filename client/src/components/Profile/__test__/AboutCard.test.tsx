@@ -7,7 +7,7 @@ import { GeneralInfo } from '../../../../../common/models/profile';
 describe('AboutCard', () => {
   describe('Should render correctly', () => {
     it('if "aboutMyself" is present', () => {
-      const output = shallow(
+      const output = shallow<AboutCard>(
         <AboutCard
           data={{
             aboutMyself: 'Top contributor of Rolling Scopes',
@@ -48,7 +48,7 @@ describe('AboutCard', () => {
         isMentorStatsVisible: { all: true, mentor: true, student: true },
         isStudentStatsVisible: { all: true, student: true },
       };
-      const wrapper = shallow(
+      const wrapper = shallow<AboutCard>(
         <AboutCard
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
@@ -57,7 +57,7 @@ describe('AboutCard', () => {
           onProfileSettingsChange={() => {}}
         />);
       const instance = wrapper.instance();
-      const result = instance.filterPermissions(permissionsSettings);
+      const result = (instance as any).filterPermissions(permissionsSettings);
       expect(result).toEqual({ isAboutVisible: {
         all: true, mentor: true, student: true,
       } });

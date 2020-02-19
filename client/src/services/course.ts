@@ -1,37 +1,41 @@
-import axios, { AxiosInstance } from 'axios';
-import { Session } from '../components/withSession';
+import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
+import { TaskType } from './task';
 
 export interface CourseTask {
   id: number;
-  courseTaskId?: number;
   taskId: number;
   name: string;
   maxScore: number | null;
+  scoreWeight: number;
   verification: 'auto' | 'manual';
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test' | 'interview';
+  type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
-  scoreWeight: number;
-  stageId: number;
   githubPrRequired: boolean;
-  description: string | null;
   descriptionUrl: string | null;
   studentStartDate: string | null;
   studentEndDate: string | null;
-  taskResultCount: number;
   useJury: boolean;
-  checker: 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: 'autoTest' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  taskOwnerId: number | null;
+}
+
+export interface CourseTaskDetails extends CourseTask {
+  stageId: number;
+  description: string | null;
+  taskResultCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
 }
 
 export interface CourseEvent {
   id: number;
   event: Event;
-  date: string;
-  time: string;
+  date?: string;
+  time?: string;
+  dateTime: string;
   place: string;
   comment: string;
   stageId: number;
@@ -67,11 +71,13 @@ export interface MentorWithContacts {
   phone: string;
 }
 
+export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
+
 export class CourseService {
   private axios: AxiosInstance;
 
   constructor(private courseId: number) {
-    this.axios = axios.create({ baseURL: `/api/course/${this.courseId}` });
+    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
   }
 
   async getCourseTasks() {
@@ -80,9 +86,10 @@ export class CourseService {
     return result.data.data.sort(sortTasksByEndDate);
   }
 
-  async getCourseTasksForTaskOwner() {
-    const result = await this.axios.get<{ data: CourseTask[] }>(`/tasksTaskOwner`);
-    return result.data.data;
+  async getCourseTasksDetails() {
+    type Response = { data: CourseTaskDetails[] };
+    const result = await this.axios.get<Response>('/tasks/details');
+    return result.data.data.sort(sortTasksByEndDate);
   }
 
   async getCourseEvents() {
@@ -167,9 +174,7 @@ export class CourseService {
   }
 
   async getAllMentorStudents() {
-    const result = await this.axios.get<{ data: { students: StudentBasic[]; assignedStudents: AssignedStudent[] } }>(
-      `/mentor/me/students/all`,
-    );
+    const result = await this.axios.get<{ data: AllStudents }>(`/mentor/me/students/all`);
     return result.data.data;
   }
 
@@ -178,8 +183,13 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getInterviewStudents() {
-    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interviews`);
+  async getInterviewStudents(courseTaskId: number) {
+    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
+    return result.data.data;
+  }
+
+  async postStudentInterviewResult(githubId: string, courseTaskId: number, data: any) {
+    const result = await this.axios.post(`/student/${githubId}/interview/${courseTaskId}/result`, data);
     return result.data.data;
   }
 
@@ -337,12 +347,18 @@ export class CourseService {
     return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }
 
-  isPowerUser(courseId: number, session: Session) {
-    return (
-      session.isAdmin ||
-      session.roles[courseId] === 'coursemanager' ||
-      session.coursesRoles?.[courseId]?.includes('manager')
-    );
+  async getStudentCrossMentors(githubId: string) {
+    const result = await this.axios.get(`/student/${githubId}/tasks/cross-mentors`);
+    return result.data.data as { name: string; mentor: any }[];
+  }
+
+  async createCertificate(githubId: string) {
+    const result = await this.axios.post(`/student/${githubId}/certificate`);
+    return result.data.data;
+  }
+
+  exportStudentsCsv(activeOnly?: boolean) {
+    window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
 }
 

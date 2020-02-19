@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { config } from '../config';
 
 type TaskVerificationEvent = {
@@ -11,7 +11,12 @@ type TaskVerificationEvent = {
 };
 
 export async function postTaskVerification(data: TaskVerificationEvent[]) {
-  return axios.post(`${config.aws.taskApiUrl}/task`, data, {
-    headers: { 'x-api-key': config.aws.taskApiKey },
-  });
+  try {
+    return axios.post(`${config.aws.restApiUrl}/task`, data, {
+      headers: { 'x-api-key': config.aws.restApiKey },
+    });
+  } catch (err) {
+    const error = err as AxiosError;
+    throw error.response?.data ?? error.message;
+  }
 }

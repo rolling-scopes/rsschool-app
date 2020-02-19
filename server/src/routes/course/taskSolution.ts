@@ -1,5 +1,5 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { shuffleRec } from '../../lib/distribution';
@@ -8,7 +8,7 @@ import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } f
 import { courseService, taskResultsService, taskService } from '../../services';
 import { setResponse, setErrorResponse } from '../utils';
 
-const MIN_CHECKERS = 3;
+const MIN_CHECKERS = 4;
 
 type Input = { url: string };
 export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {

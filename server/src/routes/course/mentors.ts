@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { OK, NOT_FOUND } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { Mentor } from '../../models';

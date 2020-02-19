@@ -1,7 +1,7 @@
 import { App } from '@octokit/app';
-import octokit from '@octokit/rest';
+import { Octokit } from '@octokit/rest';
 import { OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { camelCase, toUpper } from 'lodash';
 import { getRepository } from 'typeorm';
 import { config } from '../../config';
@@ -41,7 +41,7 @@ async function createRepository(course: Course, githubId: string, logger: ILogge
   const installationAccessToken = await app.getInstallationAccessToken({
     installationId: Number(installationId),
   });
-  const github = new octokit({ auth: `token ${installationAccessToken}` });
+  const github = new Octokit({ auth: `token ${installationAccessToken}` });
   if (!teamId) {
     teamId = await createTeam(github, teamName, course.id, logger);
   }
@@ -75,7 +75,7 @@ function getRepoName(githubId: string, course: Course) {
   return `${githubId}-${toUpper(camelCase(course.alias))}`;
 }
 
-async function createTeam(github: octokit, teamName: string, courseId: number, logger: ILogger) {
+async function createTeam(github: Octokit, teamName: string, courseId: number, logger: ILogger) {
   const { org } = config.github;
   const { data: teams } = await github.teams.list({ org });
   let courseTeam = teams.find(d => d.name === teamName);

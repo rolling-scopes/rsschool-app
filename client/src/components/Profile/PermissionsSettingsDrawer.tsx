@@ -64,7 +64,7 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
           ) => (
             <List.Item>
               <div>
-                <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>{permissionNames[permissionName]}</Text></p>
+                <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>{(permissionNames as any)[permissionName]}</Text></p>
                 {values(
                   mapValues(actualPermissions, (isChecked, role) => (
                     <p key={`visibility-settings-${permissionName}-${role}`} style={{ marginBottom: 0 }}>
@@ -77,7 +77,7 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
                             undefined
                         }
                       >
-                        {roles[role]}
+                        {(roles as any)[role]}
                       </Checkbox>
                     </p>
                   )),

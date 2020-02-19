@@ -1,7 +1,7 @@
 import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
 import { getRepository } from 'typeorm';
 
-const getPrimaryUserFields = (modelName: string = 'user') => [
+const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
   `${modelName}.firstName`,
   `${modelName}.lastName`,

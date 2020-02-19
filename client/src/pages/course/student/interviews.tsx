@@ -64,7 +64,7 @@ function Page(props: CoursePageProps) {
               return (
                 <ul>
                   {renderContact('Phone', value.contactsPhone)}
-                  {renderContact('Email', value.contactsEmail)}
+                  {renderContact('Email', value.primaryEmail)}
                   {renderContact('Telegram', value.contactsTelegram)}
                   {renderContact('Skype', value.contactsSkype)}
                   {renderContact('Notes', value.contactsNotes)}

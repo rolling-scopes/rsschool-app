@@ -1,6 +1,6 @@
 import { OK } from 'http-status-codes';
 import jsonwebtoken from 'jsonwebtoken';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { guard } from '../guards';
 import { config } from '../../config';
 import { ILogger } from '../../logger';

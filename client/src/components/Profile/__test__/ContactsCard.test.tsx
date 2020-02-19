@@ -7,7 +7,7 @@ import { Contacts } from '../../../../../common/models/profile';
 describe('ContactsCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper = mount(<ContactsCard
+      const wrapper: any = mount(<ContactsCard
         data={{
           phone: '1232422',
           email: 'vasya@tut.by',
@@ -22,7 +22,7 @@ describe('ContactsCard', () => {
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper = mount(<ContactsCard
+      const wrapper: any = mount(<ContactsCard
         data={{
           phone: '1232422',
           email: 'vasya@tut.by',
@@ -63,7 +63,7 @@ describe('ContactsCard', () => {
           onPermissionsSettingsChange={() => {}}
           onProfileSettingsChange={() => {}}
         />);
-      const instance = wrapper.instance();
+      const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isEmailVisible: { all: true, student: true },

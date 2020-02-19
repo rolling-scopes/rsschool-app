@@ -12,13 +12,12 @@ import { StudentStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-
-const { Text } = Typography;
-
 import {
   BookOutlined,
   FullscreenOutlined,
 } from '@ant-design/icons';
+
+const { Text } = Typography;
 
 type Props = {
   data: StudentStats[];
@@ -62,8 +61,8 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isStudentStatsModalVisible: false });
   }
 
-  private countScoredTasks = (tasks) => tasks.filter(({ score }) => score !== null).length;
-  private countCourseCompletionPercentage = (tasks) => Number((tasks
+  private countScoredTasks = (tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length;
+  private countCourseCompletionPercentage = (tasks: { score: number }[]) => Number((tasks
     .filter(({ score }) => score !== null).length / tasks.length * 100)
     .toFixed(1));
 

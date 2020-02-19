@@ -40,7 +40,17 @@ export class Task {
   sourceGithubRepoUrl: string;
 
   @Column({ nullable: true })
-  type: 'jstask' | 'htmltask' | 'htmlcssacademy' | 'codewars' | 'test' | 'codejam' | 'interview';
+  type:
+    | 'jstask'
+    | 'htmltask'
+    | 'htmlcssacademy'
+    | 'codewars:stage1'
+    | 'codewars:stage2'
+    | 'test'
+    | 'codejam'
+    | 'interview'
+    | 'cv:html'
+    | 'cv:markdown';
 
   @Column({ default: false })
   useJury: boolean;

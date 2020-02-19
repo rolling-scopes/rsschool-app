@@ -27,7 +27,7 @@ class FooterLayout extends React.Component<any, any> {
           <p>
             <object
               type="image/svg+xml"
-              data="https://opencollective.com/rsschool/backers.svg?avatarHeight=28&button=false"
+              data="https://opencollective.com/rsschool/backers.svg?avatarHeight=36&button=false&width=300"
             />
           </p>
           <p>
@@ -36,7 +36,7 @@ class FooterLayout extends React.Component<any, any> {
             </Button>
           </p>
           <p className="text-center">
-            <small>&copy; The Rolling Scopes 2019</small>
+            <small>&copy; The Rolling Scopes 2020</small>
           </p>
         </Footer>
       </div>

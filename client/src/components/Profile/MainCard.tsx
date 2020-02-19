@@ -37,7 +37,7 @@ type State = {
 }
 
 class MainCard extends React.Component<Props, State> {
-  state = {
+  state: State = {
     isVisibilitySettingsVisible: false,
     isProfileSettingsVisible: false,
   }

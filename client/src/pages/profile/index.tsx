@@ -54,7 +54,7 @@ export type ChangedPermissionsSettings = {
   permissionName: string;
   role: string;
 }
-export class ProfilePage extends React.Component<Props, State> {
+class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
     initialPermissionsSettings: null,

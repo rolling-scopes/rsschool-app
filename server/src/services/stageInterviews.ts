@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { StageInterview, StageInterviewFeedback, Student } from '../models';
 import { StageInterviewFeedbackJson } from '../../../common/models';

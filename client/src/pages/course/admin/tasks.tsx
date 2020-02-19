@@ -1,37 +1,38 @@
-import { useState, useMemo } from 'react';
-import { Button, Col, Form, DatePicker, Popconfirm, InputNumber, message, Radio, Row, Select, Table } from 'antd';
-import { withSession, PageLayout } from 'components';
-import { dateRenderer, idFromArrayRenderer, tagsRenderer } from 'components/Table';
+import { MoreOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
+import { GithubUserLink, PageLayout, withSession } from 'components';
+import { ModalForm } from 'components/Forms';
+import { dateRenderer, idFromArrayRenderer, stringSorter, tagsRenderer } from 'components/Table';
+import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import { CourseService, CourseTask } from 'services/course';
+import moment from 'moment-timezone';
+import { useCallback, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
-import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
-import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
-import moment from 'moment-timezone';
-import { useAsync } from 'react-use';
-import { ModalForm } from 'components/Forms';
+import { DEFAULT_TIMEZONE, TIMEZONES } from 'configs/timezones';
 
-type Props = CoursePageProps;
+const Option = Select.Option;
 
-function Page(props: Props) {
+function Page(props: CoursePageProps) {
   const courseId = props.course.id;
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([] as CourseTask[]);
+  const [data, setData] = useState([] as CourseTaskDetails[]);
   const [stages, setStages] = useState([] as Stage[]);
   const [tasks, setTasks] = useState([] as Task[]);
-  const [modalData, setModalData] = useState(null as Partial<CourseTask> | null);
+  const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
   const [modalAction, setModalAction] = useState('update');
 
-  useAsync(async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     const [data, stages, tasks] = await Promise.all([
-      service.getCourseTasks(),
+      service.getCourseTasksDetails(),
       new StageService().getCourseStages(courseId),
       new TaskService().getTasks(),
     ]);
@@ -41,21 +42,26 @@ function Page(props: Props) {
     setLoading(false);
   }, [courseId]);
 
+  useAsync(loadData, [courseId]);
+
   const handleAddItem = () => {
     setModalData({});
     setModalAction('create');
   };
 
-  const handleEditItem = (record: CourseTask) => {
+  const handleEditItem = (record: CourseTaskDetails) => {
     setModalData(record);
     setModalAction('update');
   };
 
   const handleDeleteItem = async (id: number) => {
     try {
+      const result = confirm('Are you sure you want to delete this item?');
+      if (!result) {
+        return;
+      }
       await service.deleteCourseTask(id);
-      const data = await service.getCourseTasks();
-      setData(data);
+      await loadData();
     } catch {
       message.error('Failed to delete item. Please try later.');
     }
@@ -66,58 +72,109 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = async (values: any) => {
-    const record = createRecord(values);
-    let courseTask;
-    let updatedData;
+    const record = createRecord(values, props.course.id);
 
     if (modalAction === 'update') {
-      courseTask = await service.updateCourseTask(modalData!.id!, record);
-      courseTask.taskOwnerId = values.taskOwnerId;
-      updatedData = data.map(d => (d.id === courseTask.id ? { ...d, ...courseTask } : d));
+      await service.updateCourseTask(modalData!.id!, record);
     } else {
-      courseTask = await service.createCourseTask(record);
-      updatedData = data.concat([courseTask]);
+      await service.createCourseTask(record);
     }
+    await loadData();
 
-    setData(updatedData);
     setModalData(null);
   };
 
-  const handleDistribute = async (record: CourseTask) => {
+  const handleDistribute = async (record: CourseTaskDetails) => {
     setLoading(true);
     await service.createInterviewDistribution(record.id);
     setLoading(false);
   };
 
-  const renderModal = (modalData: Partial<CourseTask>) => {
-    if (modalData == null) {
-      return null;
+  const filterOption = useCallback(
+    (input, option) => {
+      if (!input) {
+        return false;
+      }
+      const task = tasks.find(t => t.id === option?.value);
+      return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
+    },
+    [tasks],
+  );
+
+  const getDropdownMenu = (record: CourseTaskDetails) => {
+    const hasDistibute = record.type === 'interview' || record.checker === 'assigned';
+    const hasCrossCheck = record.checker === 'crossCheck';
+    return (
+      <Dropdown
+        trigger={['click']}
+        overlay={
+          <Menu style={{ width: 200 }}>
+            <Menu.Item onClick={() => handleEditItem(record)}>Edit</Menu.Item>
+            <Menu.Item onClick={() => handleDeleteItem(record.id)}>Delete</Menu.Item>
+            {hasDistibute && <Menu.Item onClick={() => handleDistribute(record)}>Distribute</Menu.Item>}
+            {hasCrossCheck && <Menu.Divider />}
+            {hasCrossCheck && (
+              <Menu.Item onClick={() => handleCrossCheckDistribution(record)}>Cross-Check: Distribute</Menu.Item>
+            )}
+            {hasCrossCheck && (
+              <Menu.Item onClick={() => handleCrossCheckCompletion(record)}>Cross-Check: Complete</Menu.Item>
+            )}
+          </Menu>
+        }
+      >
+        <Button size="small">
+          More <MoreOutlined />
+        </Button>
+      </Dropdown>
+    );
+  };
+
+  const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
+    try {
+      await service.createCrossCheckDistribution(record.id);
+      message.success('Cross-check Distrubtion has been created');
+    } catch (e) {
+      message.error('An error occurred.');
     }
+  };
+
+  const handleCrossCheckCompletion = async (record: CourseTaskDetails) => {
+    try {
+      setLoading(true);
+      await service.createCrossCheckCompletion(record.id);
+
+      message.success('Cross-Check completed has been created');
+    } catch {
+      message.error('An error occurred.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderModal = (modalData: Partial<CourseTaskDetails> | null) => {
     return (
       <ModalForm
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course Task"
         submit={handleModalSubmit}
-        cancel={() => {
-          setModalData(null);
-        }}
+        cancel={() => setModalData(null)}
       >
         <Form.Item name="taskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
-          <Select placeholder="Please select a task">
+          <Select filterOption={filterOption} showSearch placeholder="Please select a task">
             {tasks.map((task: Task) => (
-              <Select.Option key={task.id} value={task.id}>
+              <Option key={task.id} value={task.id}>
                 {task.name} {tagsRenderer(task.tags)}
-              </Select.Option>
+              </Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item name="stageId" label="Stage" rules={[{ required: true, message: 'Please select a stage' }]}>
           <Select placeholder="Please select a stage">
             {stages.map((stage: Stage) => (
-              <Select.Option key={stage.id} value={stage.id}>
+              <Option key={stage.id} value={stage.id}>
                 {stage.name}
-              </Select.Option>
+              </Option>
             ))}
           </Select>
         </Form.Item>
@@ -126,14 +183,14 @@ function Page(props: Props) {
           label="Task Owner"
           rules={[{ required: false, message: 'Please select a task owner' }]}
         >
-          <UserSearch defaultValues={modalData.taskOwner ? [modalData.taskOwner] : []} searchFn={loadUsers} />
+          <UserSearch defaultValues={modalData?.taskOwner ? [modalData.taskOwner] : []} searchFn={loadUsers} />
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
-            {Object.entries(TIMEZONES).map(tz => (
-              <Select.Option key={tz[0]} value={tz[0]}>
-                {tz[0]}
-              </Select.Option>
+            {TIMEZONES.map(tz => (
+              <Option key={tz} value={tz}>
+                {tz}
+              </Option>
             ))}
           </Select>
         </Form.Item>
@@ -161,14 +218,15 @@ function Page(props: Props) {
           </Col>
         </Row>
 
-        <Form.Item name="checker" label="Who Checks">
-          <Radio.Group>
-            <Radio value="mentor">Mentor</Radio>
-            <Radio value="assigned">Assigned</Radio>
-            <Radio value="taskOwner">Task Owner</Radio>
-            <Radio value="crossCheck">Cross-Check</Radio>
-            <Radio value="jury">Jury</Radio>
-          </Radio.Group>
+        <Form.Item name="checker" required label="Checker">
+          <Select placeholder="Please select who checks">
+            <Option value="mentor">Mentor</Option>
+            <Option value="assigned">Assigned</Option>
+            {modalData?.verification === 'auto' && <Option value="autoTest">Auto-Test</Option>}
+            <Option value="taskOwner">Task Owner</Option>
+            <Option value="crossCheck">Cross-Check</Option>
+            <Option value="jury">Jury</Option>
+          </Select>
         </Form.Item>
       </ModalForm>
     );
@@ -181,17 +239,20 @@ function Page(props: Props) {
       </Button>
       <Table
         rowKey="id"
-        pagination={{ pageSize: 100 }}
+        pagination={false}
         size="small"
         dataSource={data}
-        columns={getColumns({ handleEditItem, handleDeleteItem, handleDistribute }, { tasks, stages })}
+        columns={getColumns(getDropdownMenu, { tasks, stages })}
       />
-      {renderModal(modalData!)}
+      {renderModal(modalData)}
     </PageLayout>
   );
 }
 
-function getColumns(actions: { handleEditItem: any; handleDeleteItem: any; handleDistribute: any }, { tasks, stages }) {
+function getColumns(
+  getDropdownMenu: (record: CourseTaskDetails) => any,
+  { tasks, stages }: { tasks: any[]; stages: any[] },
+) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -200,8 +261,13 @@ function getColumns(actions: { handleEditItem: any; handleDeleteItem: any; handl
       render: idFromArrayRenderer(tasks),
     },
     { title: 'Scores Count', dataIndex: 'taskResultCount' },
-    { title: 'Start Date', dataIndex: 'studentStartDate', render: dateRenderer },
-    { title: 'End Date', dataIndex: 'studentEndDate', render: dateRenderer },
+    {
+      title: 'Start Date',
+      dataIndex: 'studentStartDate',
+      render: dateRenderer,
+      sorter: stringSorter('studentStartDate'),
+    },
+    { title: 'End Date', dataIndex: 'studentEndDate', render: dateRenderer, sorter: stringSorter('studentEndDate') },
     { title: 'Max Score', dataIndex: 'maxScore' },
     {
       title: 'Stage',
@@ -210,37 +276,25 @@ function getColumns(actions: { handleEditItem: any; handleDeleteItem: any; handl
     },
     { title: 'Score Weight', dataIndex: 'scoreWeight' },
     { title: 'Who Checks', dataIndex: 'checker' },
-    { title: 'Task Owner', dataIndex: ['taskOwner', 'githubId'] },
     {
-      title: 'Actions',
+      title: 'Task Owner',
+      dataIndex: ['taskOwner', 'githubId'],
+      render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
+    },
+    {
       dataIndex: 'actions',
-      render: (_, record: CourseTask) => (
-        <>
-          <span>
-            <a onClick={() => actions.handleEditItem(record)}>Edit</a>{' '}
-          </span>
-          <span>
-            <Popconfirm
-              onConfirm={() => actions.handleDeleteItem(record.id)}
-              title="Are you sure you want to delete this item?"
-            >
-              <a href="#">Delete</a>
-            </Popconfirm>
-          </span>{' '}
-          {record.type === 'interview' && (
-            <span>
-              <a onClick={() => actions.handleDistribute(record)}>Distribute</a>{' '}
-            </span>
-          )}
-        </>
-      ),
+      width: 80,
+      render: (_: any, record: CourseTaskDetails) => {
+        return getDropdownMenu(record);
+      },
     },
   ];
 }
 
-function createRecord(values: any) {
+function createRecord(values: any, courseId: number) {
   const [startDate, endDate] = values.range || [null, null];
   const data = {
+    courseId,
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
     taskId: values.taskId,
@@ -253,7 +307,7 @@ function createRecord(values: any) {
   return data;
 }
 
-function getInitialValues(modalData: Partial<CourseTask>) {
+function getInitialValues(modalData: Partial<CourseTaskDetails>) {
   return {
     ...modalData,
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,

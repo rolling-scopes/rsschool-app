@@ -215,7 +215,7 @@ function Page(props: Props) {
                 </Form.Item>
               </Col>
               <Col {...defaultColumnSizes}>
-                <Form.Item name="Codewars" label="Codewars">
+                <Form.Item name="сodewars" label="Codewars">
                   <Input />
                 </Form.Item>
               </Col>

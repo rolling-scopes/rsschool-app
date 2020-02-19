@@ -10,7 +10,7 @@ import { urlPattern } from 'services/validators';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
-function CrossCheckComments({ comments }: { comments: any[] }) {
+function CrossCheckComments({ comments }: { comments: { comment: string }[] }) {
   if (!comments || comments.length === 0) {
     return null;
   }
@@ -109,14 +109,14 @@ function Page(props: CoursePageProps) {
             {!isSubmitDisabled && task && (
               <>
                 <Form.Item
+                  help="NOT link to Github repository or pull request"
                   name="url"
                   label="Solution URL"
                   rules={[{ required: true, pattern: urlPattern, message: 'Please enter a valid url' }]}
                 >
-                  <Typography.Text type="secondary">NOT link to Github repository or pull request</Typography.Text>
                   <Input disabled={isSubmitDisabled} />
                 </Form.Item>
-                <Button size="large" type="primary" htmlType="submit">
+                <Button size="large" style={{ marginTop: 16 }} type="primary" htmlType="submit">
                   Submit
                 </Button>
               </>

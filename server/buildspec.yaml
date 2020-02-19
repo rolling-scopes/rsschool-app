@@ -3,12 +3,12 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 12
   build:
     commands:
-      - yarn
-      - yarn server:build
       - cd ./server
+      - npm i
+      - npm run build
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/api:latest .
       - docker push rsschool/api:latest

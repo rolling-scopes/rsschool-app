@@ -1,6 +1,6 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import _ from 'lodash';
 import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
@@ -168,7 +168,8 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         continue;
       }
 
-      if (existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
+      const user = ctx.state!.user as IUserSession;
+      if (user && existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
         const message = `${existingResult.id}. Possible user data override`;
         result.push({ status: 'skipped', value: message });
         continue;
@@ -241,6 +242,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
       countryName: countriesMap[citiesMap[student.locationName]] || 'Other',
       mentorGithubId: student.mentor ? (student.mentor as any).githubId : '',
       totalScore: student.totalScore,
+      isActive: student.isActive,
       ...getTasksResults(student.taskResults, courseTasks),
     };
   });

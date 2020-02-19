@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, message, Popconfirm, Row, Select, Table, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
 import { GithubUserLink, UserSearch, withSession, PageLayout } from 'components';
 import { CommentInput, ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
-import { formatDate, formatTime } from 'services/formatter';
+import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Stage, StageService } from 'services/stage';
 import { UserService } from 'services/user';
@@ -17,9 +17,9 @@ import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
 
 type Props = CoursePageProps;
 
-const timeZoneRenderer = timeZone => value => {
+const timeZoneRenderer = (timeZone: string) => (value: string) => {
   return value
-    ? moment(value, 'HH:mm:ssZ')
+    ? moment(value, 'YYYY-MM-DD HH:mmZ')
         .tz(timeZone)
         .format('HH:mm')
     : '';
@@ -27,7 +27,6 @@ const timeZoneRenderer = timeZone => value => {
 
 function Page(props: Props) {
   const courseId = props.course.id;
-  const timeZoneOffset = moment().format('Z');
   const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
@@ -37,6 +36,7 @@ function Page(props: Props) {
   const [events, setEvents] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
   const [modalAction, setModalAction] = useState('update');
+  const [modalLoading, setModalLoading] = useState(false);
 
   useAsync(async () => {
     setLoading(true);
@@ -84,25 +84,30 @@ function Page(props: Props) {
   };
 
   const handleModalSubmit = async (values: any) => {
-    const data = createRecord(values, courseId);
-    modalAction === 'update'
-      ? await service.updateCourseEvent(modalData!.id!, data)
-      : await service.createCourseEvent(data);
+    try {
+      setModalLoading(true);
+      const data = createRecord(values, courseId);
+      modalAction === 'update'
+        ? await service.updateCourseEvent(modalData!.id!, data)
+        : await service.createCourseEvent(data);
 
-    await refreshData();
-    setModalData(null);
+      await refreshData();
+      setModalData(null);
+    } catch {
+      message.error('An error occurred. Please try later.');
+    } finally {
+      setModalLoading(false);
+    }
   };
 
-  const renderModal = (modalData: Partial<CourseEvent>) => {
-    if (modalData == null) {
-      return null;
-    }
+  const renderModal = (modalData: Partial<CourseEvent> | null) => {
     return (
       <ModalForm
         getInitialValues={getInitialValues}
         data={modalData}
         title="Course Event"
         submit={handleModalSubmit}
+        loading={modalLoading}
         cancel={() => setModalData(null)}
       >
         <Form.Item name="eventId" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
@@ -123,27 +128,27 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter date' }]}>
-              <DatePicker />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item help={timeZoneOffset} name="time" label="Time">
-              <TimePicker format="HH:mm" />
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.Item name="timeZone" label="TimeZone">
+          <Select placeholder="Please select a timezone">
+            {TIMEZONES.map(tz => (
+              <Select.Option key={tz} value={tz}>
+                {tz}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="dateTime"
+          label="Date and Time"
+          rules={[{ required: true, message: 'Please enter date and time' }]}
+        >
+          <DatePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
+        </Form.Item>
         <Form.Item name="place" label="Place">
           <Input />
         </Form.Item>
         <Form.Item name="organizerId" label="Organizer">
-          <UserSearch
-            defaultValues={modalData.organizer ? [modalData.organizer] : []}
-            user={modalData.organizer}
-            searchFn={loadUsers}
-          />
+          <UserSearch defaultValues={modalData?.organizer ? [modalData.organizer] : []} searchFn={loadUsers} />
         </Form.Item>
         <Form.Item
           name="broadcastUrl"
@@ -152,7 +157,7 @@ function Page(props: Props) {
         >
           <Input />
         </Form.Item>
-        <CommentInput />
+        <CommentInput notRequired />
       </ModalForm>
     );
   };
@@ -168,9 +173,9 @@ function Page(props: Props) {
         defaultValue={timeZone}
         onChange={handleTimeZoneChange}
       >
-        {Object.entries(TIMEZONES).map(tz => (
-          <Select.Option key={tz[0]} value={tz[0]}>
-            {tz[0]}
+        {TIMEZONES.map(tz => (
+          <Select.Option key={tz} value={tz}>
+            {tz}
           </Select.Option>
         ))}
       </Select>
@@ -178,7 +183,7 @@ function Page(props: Props) {
         style={{ margin: '16px 0' }}
         rowKey="id"
         bordered
-        pagination={{ pageSize: 100 }}
+        pagination={false}
         size="small"
         dataSource={data}
         columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
@@ -190,7 +195,7 @@ function Page(props: Props) {
 
 export default withCourseData(withSession(Page));
 
-function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events, stages }) {
+function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events, stages }: any) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -199,8 +204,8 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
       render: idFromArrayRenderer(events),
     },
     { title: 'Type', dataIndex: ['event', 'type'] },
-    { title: 'Date', dataIndex: 'date', render: dateRenderer, width: 100 },
-    { title: 'Time', dataIndex: 'time', render: timeZoneRenderer(timeZone), width: 60 },
+    { title: 'Date', dataIndex: 'dateTime', render: dateRenderer, width: 100 },
+    { title: 'Time', dataIndex: 'dateTime', render: timeZoneRenderer(timeZone), width: 60 },
     { title: 'Place', dataIndex: 'place' },
     {
       title: 'Organizer',
@@ -218,7 +223,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
       title: 'Actions',
       dataIndex: 'actions',
       width: 110,
-      render: (_, record: CourseEvent) => (
+      render: (_: any, record: CourseEvent) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
@@ -237,12 +242,11 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
   ];
 }
 
-function createRecord(values: any, courseId) {
+function createRecord(values: any, courseId: number) {
   const data = {
     courseId,
     place: values.place,
-    date: values.date ? formatDate(values.date) : undefined,
-    time: values.time ? formatTime(values.time) : undefined,
+    dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     eventId: values.eventId,
     stageId: values.stageId,
     comment: values.comment,
@@ -257,7 +261,7 @@ function createRecord(values: any, courseId) {
 function getInitialValues(modalData: Partial<CourseEvent>) {
   return {
     ...modalData,
-    date: modalData.date ? moment(modalData.date) : null,
-    time: modalData.time ? moment(modalData.time, 'HH:mm:ssZ') : null,
+    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, DEFAULT_TIMEZONE) : null,
+    timeZone: DEFAULT_TIMEZONE,
   };
 }

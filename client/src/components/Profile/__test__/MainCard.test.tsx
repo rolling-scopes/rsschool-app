@@ -41,7 +41,7 @@ describe('MainCard', () => {
     });
   });
 
-  const wrapper = shallow(
+  const wrapper = shallow<MainCard>(
     <MainCard
       data={{
         name: 'Petr Pervyi',
@@ -57,7 +57,7 @@ describe('MainCard', () => {
   describe('showVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "true"', () => {
       expect(instance.state.isVisibilitySettingsVisible).toBe(false);
-      instance.showVisibilitySettings();
+      (instance as any).showVisibilitySettings();
       expect(instance.state.isVisibilitySettingsVisible).toBe(true);
     });
   });
@@ -65,14 +65,14 @@ describe('MainCard', () => {
     it('should set "state.isVisibilitySettingsVisible" as "false"', () => {
       instance.state.isVisibilitySettingsVisible = true;
       expect(instance.state.isVisibilitySettingsVisible).toBe(true);
-      instance.hideVisibilitySettings();
+      (instance as any).hideVisibilitySettings();
       expect(instance.state.isVisibilitySettingsVisible).toBe(false);
     });
   });
   describe('showProfileSettings', () => {
     it('should set "state.isProfileSettingsVisible" as "true"', () => {
       expect(instance.state.isProfileSettingsVisible).toBe(false);
-      instance.showProfileSettings();
+      (instance as any).showProfileSettings();
       expect(instance.state.isProfileSettingsVisible).toBe(true);
     });
   });
@@ -80,7 +80,7 @@ describe('MainCard', () => {
     it('should set "state.isProfileSettingsVisible" as "false"', () => {
       instance.state.isProfileSettingsVisible = true;
       expect(instance.state.isProfileSettingsVisible).toBe(true);
-      instance.hideProfileSettings();
+      (instance as any).hideProfileSettings();
       expect(instance.state.isProfileSettingsVisible).toBe(false);
     });
   });
@@ -102,7 +102,7 @@ describe('MainCard', () => {
         isStudentStatsVisible: { all: true, student: true },
       };
       const instance = wrapper.instance();
-      const result = instance.filterPermissions(permissionsSettings);
+      const result = (instance as any).filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isProfileVisible: { all: true },
       });

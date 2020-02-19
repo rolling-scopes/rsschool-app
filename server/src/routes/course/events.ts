@@ -1,7 +1,7 @@
 // tslint:disable-next-line
 const ics = require('ics');
 import { OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { DateTime } from 'luxon';
 import { ILogger } from '../../logger';
 import { CourseEvent } from '../../models';
@@ -27,7 +27,7 @@ async function createICalEvents(data: CourseEvent[]) {
   return new Promise<string>((resolve, reject) => {
     const { value, error } = ics.createEvents(
       data.map(d => {
-        const date = DateTime.fromISO(`${d.date}T${d.time}`).toUTC();
+        const date = DateTime.fromISO(`${d.dateTime}`).toUTC();
         return {
           uid: `${d.id}.event.course@app.rs.school`,
           title: d.event.name,

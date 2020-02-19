@@ -1,5 +1,4 @@
 const path = require('path');
-const withCSS = require('@zeit/next-css');
 const webpack = require('webpack');
 
 const nextConfig = {
@@ -11,6 +10,7 @@ const nextConfig = {
     APP_VERSION: process.env.APP_VERSION,
   },
   webpack: config => {
+    config.resolve.alias['configs'] = path.join(__dirname, 'configs');
     config.resolve.alias['components'] = path.join(__dirname, 'components');
     config.resolve.alias['services'] = path.join(__dirname, 'services');
     config.resolve.alias['utils'] = path.join(__dirname, 'utils');
@@ -19,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withCSS(nextConfig);
+module.exports = nextConfig;

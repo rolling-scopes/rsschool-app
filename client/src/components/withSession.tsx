@@ -42,6 +42,7 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
       } catch (e) {
         this.setState({ isLoading: false });
         Router.push('/login', {
+          pathname: '/login',
           query: {
             url: encodeURIComponent(document.location.pathname + document.location.search),
           },

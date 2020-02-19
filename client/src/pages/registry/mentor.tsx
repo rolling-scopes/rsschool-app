@@ -272,7 +272,7 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...textColumnSizes}>
-                <Form.Item name="aboutMyself" label="About Youself">
+                <Form.Item name="aboutMyself" label="About Yourself">
                   <Input.TextArea placeholder="A couple words about yourself..." />
                 </Form.Item>
               </Col>
@@ -313,19 +313,11 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...textColumnSizes}>
-                <CommentInput />
+                <CommentInput notRequired />
               </Col>
             </Row>
 
             <Row>
-              <Typography.Paragraph>
-                I hereby agree to the processing of my personal data contained in the application and sharing it with
-                companies only for students employment purposes.
-              </Typography.Paragraph>
-              <Typography.Paragraph>
-                Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-                только в целях трудоустройства студентов.
-              </Typography.Paragraph>
               <GdprCheckbox />
             </Row>
             <Button size="large" type="primary" disabled={!form.getFieldValue('gdpr') || loading} htmlType="submit">
@@ -364,7 +356,7 @@ const SuccessComponent = () => {
   return <Result status="info" title={titleCmp} />;
 };
 
-function getInitialValues(initialData) {
+function getInitialValues(initialData: Partial<UserFull>) {
   return {
     ...initialData,
     preferedCourses: [],

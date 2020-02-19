@@ -1,24 +1,15 @@
 import { CalendarOutlined, QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Table, Tag, Row, Tooltip, Button, Typography, Select } from 'antd';
-import { Header, withSession, GithubUserLink } from 'components';
+import { Table, Tag, Row, Tooltip, Button, Select, message } from 'antd';
+import { withSession, GithubUserLink, PageLayout } from 'components';
 import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import * as React from 'react';
-import { CourseEvent, CourseService, CourseTask } from 'services/course';
+import { useState, useMemo } from 'react';
+import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { formatTime } from 'services/formatter';
 import css from 'styled-jsx/css';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
-
-const { Text } = Typography;
-
-type Props = CoursePageProps;
-
-interface State {
-  data: CourseEvent[];
-  timeZone: string;
-}
+import { useAsync } from 'react-use';
 
 enum EventTypeColor {
   deadline = 'red',
@@ -49,7 +40,7 @@ const TaskTypes = {
   lecture: 'lecture',
 };
 
-const EventTypeToName = {
+const EventTypeToName: Record<string, string> = {
   lecture_online: 'online lecture',
   lecture_offline: 'offline lecture',
   lecture_mixed: 'mixed lecture',
@@ -60,196 +51,192 @@ const EventTypeToName = {
   codejam: 'code jam',
   externaltask: 'external task',
   htmlcssacademy: 'html/css academy',
-  codewars: 'codewars',
+  'codewars:stage1': 'codewars',
+  'codewars:stage2': 'codewars',
 };
 
-class SchedulePage extends React.Component<Props, State> {
-  state: State = {
-    data: [],
-    timeZone: DEFAULT_TIMEZONE,
-  };
+export function SchedulePage(props: CoursePageProps) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<CourseEvent[]>([]);
+  const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
+  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const startOfToday = moment().startOf('day');
 
-  startOfToday = moment().startOf('day');
+  useAsync(async () => {
+    try {
+      setLoading(true);
+      const [events, tasks] = await Promise.all([
+        courseService.getCourseEvents(),
+        courseService.getCourseTasksDetails(),
+      ]);
+      const data = events
+        .concat(
+          tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
+            if (task.type !== TaskTypes.test) {
+              acc.push(createCourseEventFromTask(task, task.type));
+            }
+            acc.push(
+              createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline),
+            );
+            return acc;
+          }, []),
+        )
+        .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+      setData(data);
+    } catch {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
+  }, [courseService]);
 
-  readonly eventTypeToName = EventTypeToName;
-  private courseService: CourseService;
-
-  constructor(props: Props) {
-    super(props);
-    this.courseService = new CourseService(props.course.id);
-  }
-
-  handleTimeZoneChange = timeZone => {
-    this.setState({ timeZone });
-  };
-
-  timeZoneRenderer = value => {
-    return value
-      ? moment(value, 'HH:mm:ssZ')
-          .tz(this.state.timeZone)
-          .format('HH:mm')
-      : '';
-  };
-
-  async componentDidMount() {
-    const [events, tasks] = await Promise.all([
-      this.courseService.getCourseEvents(),
-      this.courseService.getCourseTasks(),
-    ]);
-    const data = events
-      .concat(
-        tasks.reduce((acc: Array<CourseEvent>, task: CourseTask) => {
-          if (task.type !== TaskTypes.test) {
-            acc.push({
-              id: task.id,
-              date: task.studentStartDate ? dateRenderer(task.studentStartDate) : '',
-              time: task.studentStartDate ? formatTime(task.studentStartDate) : '',
-              event: {
-                type: task.type,
-                name: task.name,
-                descriptionUrl: task.descriptionUrl,
-              },
-            } as CourseEvent);
-          }
-          acc.push({
-            id: task.id,
-            date: task.studentEndDate ? dateRenderer(task.studentEndDate) : '',
-            time: task.studentEndDate ? formatTime(task.studentEndDate) : '',
-            event: {
-              type: task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline,
-              name: task.name,
-              descriptionUrl: task.descriptionUrl,
+  return (
+    <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
+      {/* <Row
+        style={{
+          display: 'flex',
+          flexFlow: 'row',
+          justifyContent: 'center',
+          alignItems: 'baseline',
+          textAlign: 'center',
+        }}
+      >
+        <p>
+          <Text type="danger">This is a draft version! </Text> Please see the actual schedule here:
+        </p>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="danger"
+          icon={<CalendarOutlined />}
+          target="_blank"
+          href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
+        >
+          See Schedule
+        </Button>
+      </Row> */}
+      <Row justify="space-between">
+        <Select
+          style={{ width: 200 }}
+          placeholder="Please select a timezone"
+          defaultValue={timeZone}
+          onChange={setTimeZone}
+        >
+          {TIMEZONES.map(tz => (
+            <Select.Option key={tz} value={tz}>
+              {tz}
+            </Select.Option>
+          ))}
+        </Select>
+        <Button icon={<CalendarOutlined />} href={`/api/course/${props.course.id}/events/ical`}>
+          Events iCal
+        </Button>
+      </Row>
+      <Table
+        rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
+        pagination={false}
+        size="small"
+        dataSource={data}
+        rowClassName={record => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
+        columns={[
+          { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer },
+          { title: 'Time', width: 60, dataIndex: 'dateTime', render: timeZoneRenderer(timeZone) },
+          {
+            title: 'Type',
+            width: 100,
+            dataIndex: ['event', 'type'],
+            render: (value: keyof typeof EventTypeColor) => (
+              <Tag color={EventTypeColor[value]}>{EventTypeToName[value] || value}</Tag>
+            ),
+          },
+          {
+            title: 'Place',
+            dataIndex: 'place',
+            render: (value: string) => {
+              return value === 'Youtube Live' ? (
+                <div>
+                  <YoutubeOutlined /> {value}{' '}
+                  <Tooltip title="Ссылка будет в Discord">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </div>
+              ) : (
+                value
+              );
             },
-          } as CourseEvent);
-          return acc;
-        }, []),
-      )
-      .sort((a, b) => (a.date ? a.date.localeCompare(b.date) : -1));
-    this.setState({ data });
-  }
-
-  render() {
-    return (
-      <div>
-        <Header title="Schedule" username={this.props.session.githubId} />
-        <Row style={{ textAlign: 'center' }}>
-          <p>
-            <Text type="danger">This is a draft version!</Text>
-          </p>
-          <p>Please see the actual schedule here:</p>
-          <p>
-            <Button
-              type="primary"
-              icon={<CalendarOutlined />}
-              target="_blank"
-              href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
-            >
-              See Schedule
-            </Button>
-            <Select
-              className="mt-3 ml-3"
-              placeholder="Please select a timezone"
-              defaultValue={this.state.timeZone}
-              onChange={this.handleTimeZoneChange}
-            >
-              {Object.entries(TIMEZONES).map(tz => (
-                <Select.Option key={tz[0]} value={tz[0]}>
-                  {tz[0]}
-                </Select.Option>
-              ))}
-            </Select>
-          </p>
-        </Row>
-        <Row justify="end">
-          <Button icon={<CalendarOutlined />} href={`/api/course/${this.props.course.id}/events/ical`}>
-            Events iCal
-          </Button>
-        </Row>
-        <Table
-          rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
-          pagination={{ pageSize: 100 }}
-          size="small"
-          dataSource={this.state.data}
-          rowClassName={record => (moment(record.date).isBefore(this.startOfToday) ? 'rs-table-row-disabled' : '')}
-          columns={[
-            { title: 'Date', width: 120, dataIndex: 'date', render: dateRenderer },
-            { title: 'Time', width: 60, dataIndex: 'time', render: this.timeZoneRenderer },
-            {
-              title: 'Type',
-              width: 100,
-              dataIndex: 'event.type',
-              render: (value: keyof typeof EventTypeColor) => (
-                <Tag color={EventTypeColor[value]}>{this.eventTypeToName[value] || value}</Tag>
+          },
+          {
+            title: 'Name',
+            dataIndex: ['event', 'name'],
+            render: (value: string, record) => {
+              return record.event.descriptionUrl ? (
+                <a target="_blank" href={record.event.descriptionUrl}>
+                  {value}
+                </a>
+              ) : (
+                value
+              );
+            },
+          },
+          {
+            title: 'Broadcast Url',
+            width: 140,
+            dataIndex: 'broadcastUrl',
+            render: (url: string) =>
+              url ? (
+                <a target="_blank" href={url}>
+                  Link
+                </a>
+              ) : (
+                ''
               ),
-            },
-            {
-              title: 'Place',
-              dataIndex: 'place',
-              render: (value: string) => {
-                return value === 'Youtube Live' ? (
-                  <div>
-                    <YoutubeOutlined /> {value}{' '}
-                    <Tooltip title="Ссылка будет в Discord">
-                      <QuestionCircleOutlined />
-                    </Tooltip>
-                  </div>
-                ) : (
-                  value
-                );
-              },
-            },
-            {
-              title: 'Name',
-              dataIndex: 'event.name',
-              render: (value: string, record) => {
-                return record.event.descriptionUrl ? (
-                  <a target="_blank" href={record.event.descriptionUrl}>
-                    {value}
-                  </a>
-                ) : (
-                  value
-                );
-              },
-            },
-            {
-              title: 'Broadcast Url',
-              width: 140,
-              dataIndex: 'broadcastUrl',
-              render: (url: string) =>
-                url ? (
-                  <a target="_blank" href={url}>
-                    Link
-                  </a>
-                ) : (
-                  ''
-                ),
-            },
-            {
-              title: 'Organizer',
-              width: 140,
-              dataIndex: 'organizer.githubId',
-              render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
-            },
-            {
-              title: 'Details Url',
-              dataIndex: 'detailsUrl',
-              render: (url: string) =>
-                url ? (
-                  <a target="_blank" href={url}>
-                    Details
-                  </a>
-                ) : (
-                  ''
-                ),
-            },
-            { title: 'Comment', dataIndex: 'comment' },
-          ]}
-        />
-        <style jsx>{styles}</style>
-      </div>
-    );
-  }
+          },
+          {
+            title: 'Organizer',
+            width: 140,
+            dataIndex: ['organizer', 'githubId'],
+            render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
+          },
+          {
+            title: 'Details Url',
+            dataIndex: 'detailsUrl',
+            render: (url: string) =>
+              url ? (
+                <a target="_blank" href={url}>
+                  Details
+                </a>
+              ) : (
+                ''
+              ),
+          },
+          { title: 'Comment', dataIndex: 'comment' },
+        ]}
+      />
+      <style jsx>{styles}</style>
+    </PageLayout>
+  );
 }
+
+const timeZoneRenderer = (timeZone: string) => (value: string) =>
+  value
+    ? moment(value, 'YYYY-MM-DD HH:mmZ')
+        .tz(timeZone)
+        .format('HH:mm')
+    : '';
+
+const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent => {
+  return {
+    id: task.id,
+    dateTime: (type === TaskTypes.deadline ? task.studentEndDate : task.studentStartDate) || '',
+    event: {
+      type: type,
+      name: task.name,
+      descriptionUrl: task.descriptionUrl,
+    },
+    organizer: {
+      githubId: task.taskOwner ? task.taskOwner.githubId : '',
+    },
+  } as CourseEvent;
+};
 
 const styles = css`
   :global(.rs-table-row-disabled) {

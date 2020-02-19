@@ -3,13 +3,18 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 12
+    commands:
+      - mkdir -p  /tmp/.next/cache
   build:
     commands:
-      - yarn
-      - yarn client:test
-      - yarn client:build
+      - mkdir -p  ./client/src/.next/cache/
+      - cp -a /tmp/.next/cache/. ./client/src/.next/cache/
       - cd ./client
+      - npm i
+      - npm test
+      - npm run build
+      - cp -a ./src/.next/cache/. /tmp/.next/cache/
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/ui:latest .
       - docker push rsschool/ui:latest
@@ -21,8 +26,12 @@ phases:
           docker pull rsschool/ui:latest
           docker-compose up -d ui
           docker system prune -f "
+  post_build:
+    commands:
+      - curl https://app.rs.school
 
 cache:
   paths:
     - /root/.npm/**/*
     - /usr/local/share/.cache/**/*
+    - /tmp/.next/cache/

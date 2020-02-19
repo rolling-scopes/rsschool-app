@@ -1,31 +1,25 @@
 {
+  "name": "rsschool-app",
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "scripts": {
+    "postinstall": "concurrently \"npm install --prefix client\" \"npm install --prefix server\"",
+    "start": "concurrently \"npm start --prefix client\" \"npm start --prefix server\"",
+    "test": "npm run test --prefix client && npm run test --prefix server",
+    "test-watch": "npm run test-watch --prefix client && npm run test-watch --prefix server",
+    "coverage": "npm run coverage --prefix client && npm run coverage --prefix server",
+    "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "start": "concurrently -n server,client \"yarn server:start\" \"yarn client:start\"",
-    "server:build": "yarn workspace server build",
-    "server:start": "yarn workspace server start",
-    "client:build": "yarn workspace client build",
-    "client:start": "yarn workspace client start",
-    "client:test": "yarn workspace client test",
-    "client:test-watch": "yarn workspace client test-watch",
-    "client:coverage": "yarn workspace client coverage",
-    "server:test": "yarn workspace server test-watch",
-    "server:coverage": "yarn workspace server coverage",
-    "server:test-watch": "yarn workspace server test-watch",
-    "test": "yarn workspace client test && yarn workspace server test",
-    "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"serverless/**/*.{ts,tsx,js}\"",
-    "ci:lint": "yarn workspace server lint && yarn workspace client lint",
-    "ci:build": "yarn workspace server build && yarn workspace client build:tsc"
+    "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
+    "ci:lint": "eslint . --ext .ts,.tsx",
+    "ci:build": "concurrently \"npm run build:tsc --prefix client\" \"npm run build --prefix server\""
   },
   "devDependencies": {
-    "concurrently": "^5.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "concurrently": "5.1.0",
+    "eslint": "~6.8.0",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "prettier": {
     "trailingComma": "all",

@@ -1,7 +1,8 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import pinoLogger from 'pino-multi-stream';
 const cloudwatch = require('pino-cloudwatch'); //tslint:disable-line
 import { config } from './config';
+import { AxiosError } from 'axios';
 
 export interface ILog {
   data?: any;
@@ -43,7 +44,15 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
     await next();
     data.status = ctx.status;
   } catch (e) {
-    logger.error(e);
+    if ((e as AxiosError).isAxiosError) {
+      const error = e as AxiosError;
+      logger.error(error.message, {
+        data: error.response?.data,
+        status: error.response?.status,
+      });
+    } else {
+      logger.error(e);
+    }
     data.status = e.status;
   }
   logger.info({

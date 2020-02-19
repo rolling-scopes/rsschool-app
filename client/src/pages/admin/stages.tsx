@@ -90,7 +90,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider />
+      <AdminSider isAdmin={props.session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Stages" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>
@@ -155,7 +155,7 @@ function getColumns(handleEditItem: any, courses: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <a onClick={() => handleEditItem(record)}>Edit</a>,
+      render: (_: any, record: Stage) => <a onClick={() => handleEditItem(record)}>Edit</a>,
     },
   ];
 }

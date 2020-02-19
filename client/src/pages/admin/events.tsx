@@ -11,12 +11,12 @@ import { useAsync } from 'react-use';
 const { Content } = Layout;
 
 type Props = { session: Session };
+const service = new EventService();
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
-  const service = new EventService();
 
   useAsync(async () => {
     const data = await service.getEvents();
@@ -103,7 +103,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider />
+      <AdminSider isAdmin={props.session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Events" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>
@@ -163,7 +163,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Actions',
       dataIndex: 'actions',
       width: 100,
-      render: (_, record) => (
+      render: (_: any, record: Event) => (
         <>
           <span>
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}

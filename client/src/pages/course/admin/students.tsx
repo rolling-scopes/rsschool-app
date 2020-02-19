@@ -1,117 +1,71 @@
-import { Button, Col, Switch, Divider, message, Row, Spin, Statistic, Table, Typography } from 'antd';
-import { GithubUserLink, PageLayout, StudentExpelModal, withSession } from 'components';
-import { CourseTaskSelect, ModalForm } from 'components/Forms';
-import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import {
+  BranchesOutlined,
+  FileExcelOutlined,
+  MoreOutlined,
+  SolutionOutlined,
+  CloseCircleTwoTone,
+} from '@ant-design/icons';
+import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
+import { ColumnProps } from 'antd/lib/table/Column';
+import { GithubUserLink, PageLayout, StudentExpelModal, withSession, Session } from 'components';
+import { boolIconRenderer, boolSorter, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, ReactElement } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask, StudentDetails } from 'services/course';
+import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 
-type Stats = {
-  activeStudentCount: number;
-  studentCount: number;
-  countries: any[];
-};
+type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
 type Props = CoursePageProps;
 
 function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, setLoading] = useState(false);
-  const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
-  const [crossCheckTasks, setCrossCheckTasks] = useState([] as CourseTask[]);
-  const [crossCheckModal, setCrossCheckModal] = useState(null as string | null);
   const [expelledStudent, setExpelledStudent] = useState(null as Partial<StudentDetails> | null);
   const [activeOnly, setActiveOnly] = useState(true);
 
   const loadStudents = useCallback(
     async (activeOnly: boolean) => {
-      const courseStudents = await service.getCourseStudentsWithDetails(activeOnly);
-      let activeStudentCount = 0;
-      const countries: Record<string, { count: number; totalCount: number }> = {};
-
-      for (const courseStudent of courseStudents) {
-        const { countryName } = courseStudent;
-        if (!countries[countryName]) {
-          countries[countryName] = { count: 0, totalCount: 0 };
-        }
-        countries[countryName].totalCount++;
-        if (courseStudent.isActive) {
-          activeStudentCount++;
-          countries[countryName].count++;
-        }
-      }
+      const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
       setStudents(courseStudents);
-      setStats({
-        activeStudentCount,
-        studentCount: courseStudents.length,
-        countries: _.keys(countries).map(k => ({
-          name: k,
-          count: countries[k].count,
-          totalCount: countries[k].totalCount,
-        })),
-      });
+      setStats(calculateStats(courseStudents));
     },
-    [courseId],
+    [courseService],
   );
+
+  const actions = useMemo(() => createActions(courseService, setLoading), [courseService, setLoading]);
 
   useAsync(async () => {
     setLoading(true);
     await loadStudents(activeOnly);
-    const tasks = await service.getCourseTasks();
-    const crossCheckTasks = tasks.filter(t => t.checker === 'crossCheck');
-    setCrossCheckTasks(crossCheckTasks);
     setLoading(false);
-  }, [courseId]);
+  }, [courseService]);
 
-  const handleExpel = record => setExpelledStudent(record);
+  const handleExpel = (record: StudentDetails) => setExpelledStudent(record);
 
-  const handleCreateRepo = async ({ githubId }: StudentDetails) => {
-    try {
-      setLoading(true);
-      const { repository } = await service.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      setStudents(newStudents);
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCrossCheckDistribution = () => setCrossCheckModal('distribution');
-  const handleCrossCheckCompletion = () => setCrossCheckModal('completion');
-  const handleCrossCheckCancel = () => setCrossCheckModal(null);
-
-  const handleCreateRepos = () => {
-    try {
-      service.createRepositories();
-      message.info('The job for creating repositories has been submitted');
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    }
-  };
-
-  const handleModalSubmit = async (values: any) => {
-    try {
-      if (crossCheckModal === 'distribution') {
-        await service.createCrossCheckDistribution(values.courseTaskId);
-      } else {
-        await service.createCrossCheckCompletion(values.courseTaskId);
+  const handleCreateRepo = useCallback(
+    async ({ githubId }: { githubId: string }) => {
+      try {
+        setLoading(true);
+        const { repository } = await courseService.createRepository(githubId);
+        const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+        setStudents(newStudents);
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
       }
-      message.success('Cross-check distrubtion has been created');
-      setCrossCheckModal(null);
-    } catch (e) {
-      message.error('An error occurred.');
-    }
-  };
+    },
+    [courseService],
+  );
 
   const handleActiveOnlyChange = async () => {
     setLoading(true);
@@ -121,60 +75,68 @@ function Page(props: Props) {
     setLoading(false);
   };
 
-  const renderModal = modalData => {
+  function getActionsMenu(record: StudentDetails) {
     return (
-      <ModalForm
-        getInitialValues={getInitialValues}
-        data={modalData}
-        title="Cross-Check"
-        submit={handleModalSubmit}
-        cancel={handleCrossCheckCancel}
-      >
-        <Spin spinning={loading}>
-          <Row gutter={24}>
-            <Col span={24}>
-              <CourseTaskSelect data={crossCheckTasks} />
-            </Col>
-          </Row>
-        </Spin>
-      </ModalForm>
+      <Menu>
+        <Menu.Item onClick={() => handleExpel(record)}>
+          <CloseCircleTwoTone twoToneColor="red" />
+          Expel Student
+        </Menu.Item>
+        <Menu.Item disabled={!!record.repository} onClick={() => handleCreateRepo(record)}>
+          <BranchesOutlined />
+          Create Repository
+        </Menu.Item>
+        <Menu.Item
+          hidden={!checkIfManager(props.course.id, props.session)}
+          onClick={() => actions.issueCertificate(record)}
+        >
+          <SolutionOutlined />
+          Issue Certificate
+        </Menu.Item>
+      </Menu>
     );
-  };
+  }
+
+  const getToolbarActions = useCallback(() => {
+    const isManager = checkIfManager(props.course.id, props.session);
+    return (
+      <>
+        {isManager ? (
+          <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={actions.createRepositories}>
+            Create Repos
+          </Button>
+        ) : null}
+        <Button
+          icon={<FileExcelOutlined />}
+          style={{ marginRight: 8 }}
+          onClick={() => courseService.exportStudentsCsv(activeOnly)}
+        >
+          Export CSV
+        </Button>
+      </>
+    );
+  }, [courseService, actions]);
 
   return (
     <PageLayout loading={loading} githubId={props.session.githubId}>
       <Statistic
-        className="m-3"
         title="Active Students"
-        value={stats?.activeStudentCount}
-        suffix={`/ ${stats?.studentCount}`}
+        value={stats?.activeStudentsCount ?? 0}
+        suffix={`/ ${stats?.studentsCount ?? 0}`}
       />
-      <Divider dashed />
-      <div>
-        <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
-        <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
-      </div>
-      <Row justify="end" className="m-3">
-        {props.session.isAdmin && (
-          <>
-            <Button style={{ marginLeft: 8 }} onClick={handleCreateRepos}>
-              Create Repos
-            </Button>
-            <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckDistribution}>
-              Cross-Check Distribution
-            </Button>
-            <Button style={{ marginLeft: 8 }} onClick={handleCrossCheckCompletion}>
-              Cross-Check Completion
-            </Button>
-          </>
-        )}
+      <Row justify="space-between" style={{ marginBottom: 16, marginTop: 16 }}>
+        <div>
+          <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+          <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
+        </div>
+        <div>{getToolbarActions()}</div>
       </Row>
       <Table
         rowKey="id"
         pagination={{ pageSize: 100 }}
         size="small"
         dataSource={students}
-        columns={getColumns(handleCreateRepo, handleExpel)}
+        columns={getColumns(getActionsMenu)}
       />
       <StudentExpelModal
         onCancel={() => setExpelledStudent(null)}
@@ -189,19 +151,24 @@ function Page(props: Props) {
         visible={!!expelledStudent}
         courseId={courseId}
       />
-      {renderModal(crossCheckModal)}
       <style jsx>{styles}</style>
     </PageLayout>
   );
 }
 
-function getColumns(handleCreateRepo: any, handleExpel: any) {
+function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): ColumnProps<any>[] {
   return [
+    {
+      title: 'Active',
+      dataIndex: 'isActive',
+      width: 50,
+      render: boolIconRenderer,
+      sorter: boolSorter('isActive'),
+    },
     {
       title: 'Github',
       dataIndex: 'githubId',
       sorter: stringSorter('githubId'),
-      width: 120,
       key: 'githubId',
       render: (value: string) => <GithubUserLink value={value} />,
       ...getColumnSearchProps('githubId'),
@@ -209,28 +176,20 @@ function getColumns(handleCreateRepo: any, handleExpel: any) {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: 200,
       sorter: stringSorter('name'),
       ...getColumnSearchProps('name'),
     },
     {
-      title: 'isActive',
-      dataIndex: 'isActive',
-      width: 50,
-      render: boolIconRenderer,
-    },
-    {
       title: 'Mentor',
       dataIndex: ['mentor', 'githubId'],
-      width: 100,
       sorter: stringSorter<any>('mentor.githubId'),
       render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
       ...getColumnSearchProps('mentor.githubId'),
     },
     {
-      title: 'Location',
+      title: 'City',
       dataIndex: 'locationName',
-      width: 120,
+      width: 80,
       sorter: stringSorter('locationName'),
       ...getColumnSearchProps('locationName'),
     },
@@ -243,54 +202,101 @@ function getColumns(handleCreateRepo: any, handleExpel: any) {
       ...getColumnSearchProps('countryName'),
     },
     {
-      title: 'Screening Interview',
+      title: 'Interview',
       dataIndex: 'interviews',
-      width: 50,
+      width: 60,
       render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
     },
+    // {
+    //   title: 'Assigned',
+    //   dataIndex: 'assignedChecks',
+    //   width: 50,
+    //   render: (value: any[]) => value.map(v => v.name).join(', '),
+    // },
     {
-      title: 'Assigned',
-      dataIndex: 'assignedChecks',
-      width: 50,
-      render: (value: any[]) => value.map(v => v.name).join(', '),
-    },
-    {
-      title: 'Repository',
+      title: <BranchesOutlined />,
       dataIndex: 'repository',
       width: 80,
-      render: value => (value ? <a href={value}>Link</a> : null),
+      render: (value: string) => (value ? <a href={value}>Link</a> : null),
     },
     {
       title: 'Total',
       dataIndex: 'totalScore',
       key: 'totalScore',
       width: 80,
+      align: 'right',
       sorter: numberSorter('totalScore'),
-      render: value => <Text strong>{value}</Text>,
+      render: (value: number) => <Text strong>{value.toFixed(1)}</Text>,
     },
     {
-      title: 'Actions',
       dataIndex: 'actions',
       render: (_, record: StudentDetails) => (
-        <>
-          {!record.repository && record.isActive && (
-            <Button style={{ marginRight: '8px' }} type="dashed" onClick={() => handleCreateRepo(record)}>
-              Create Repo
-            </Button>
-          )}
-          {record.isActive && (
-            <Button type="dashed" onClick={() => handleExpel(record)}>
-              Expel
-            </Button>
-          )}
-        </>
+        <Dropdown trigger={['click']} overlay={getActionsMenu(record)}>
+          <Button size="small" type="default">
+            More
+            <MoreOutlined />
+          </Button>
+        </Dropdown>
       ),
     },
   ];
 }
 
-function getInitialValues(modalData) {
-  return modalData;
+function calculateStats(students: StudentDetails[]) {
+  let activeStudentsCount = 0;
+  const countries: Record<string, { count: number; totalCount: number }> = {};
+
+  for (const student of students) {
+    const { countryName } = student;
+    if (!countries[countryName]) {
+      countries[countryName] = { count: 0, totalCount: 0 };
+    }
+    countries[countryName].totalCount++;
+    if (student.isActive) {
+      activeStudentsCount++;
+      countries[countryName].count++;
+    }
+  }
+  return {
+    activeStudentsCount,
+    studentsCount: students.length,
+    countries: _.keys(countries).map(k => ({
+      name: k,
+      count: countries[k].count,
+      totalCount: countries[k].totalCount,
+    })),
+  };
+}
+
+function createActions(courseService: CourseService, setLoading: (value: boolean) => void) {
+  return {
+    issueCertificate: async ({ githubId }: { githubId: string }) => {
+      try {
+        setLoading(true);
+        await courseService.createCertificate(githubId);
+        message.info('The certificate has been requested.');
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    createRepositories: async () => {
+      try {
+        setLoading(true);
+        await courseService.createRepositories();
+        message.info('The job for creating repositories has been submitted');
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+  };
+}
+
+function checkIfManager(courseId: number, session: Session) {
+  return session.coursesRoles?.[courseId]?.includes('manager') || session.isAdmin;
 }
 
 const styles = css`

@@ -53,7 +53,7 @@ function Page(props: Props) {
     loadData();
   };
 
-  const renderModal = modalData => {
+  const renderModal = (modalData: Partial<CourseUser>) => {
     return (
       <ModalForm
         getInitialValues={getInitialValues}
@@ -93,7 +93,7 @@ function Page(props: Props) {
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
           <Button type="primary" onClick={handleAddItem}>
-            Add Task
+            Add User
           </Button>
           <Table
             rowKey="id"
@@ -136,7 +136,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record: CourseUser) => (
+      render: (_: any, record: CourseUser) => (
         <>
           <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
         </>

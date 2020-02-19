@@ -1,16 +1,39 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
-import Router from 'koa-router';
+import { parseAsync } from 'json2csv';
+import Router from '@koa/router';
 import { getRepository } from 'typeorm';
+import { MentorBasic } from '../../../../common/models';
 import { ILogger } from '../../logger';
-import { User, Student } from '../../models';
+import { Student, User } from '../../models';
 import { courseService, OperationResult, studentsService, userService } from '../../services';
-import { setResponse } from '../utils';
+import { setCsvResponse, setResponse } from '../utils';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
   const status: string = ctx.query.status;
   const students = await courseService.getStudents(courseId, status === 'active');
   setResponse(ctx, OK, students);
+};
+
+export const getStudentsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const status: string = ctx.query.status;
+  const students = await courseService.getStudents(courseId, status === 'active');
+  const csv = await parseAsync(
+    students.map(student => ({
+      id: student.id,
+      githubId: student.githubId,
+      name: student.name,
+      isActive: student.isActive,
+      mentorName: (student.mentor as MentorBasic)?.name,
+      mentorGithubId: (student.mentor as MentorBasic)?.githubId,
+      totalScore: student.totalScore,
+      city: student.locationName,
+      country: student.countryName,
+      repository: student.repository,
+    })),
+  );
+  setCsvResponse(ctx, OK, csv, 'students');
 };
 
 export const getStudentsWithDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {

@@ -12,6 +12,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
+import { NextPageContext } from 'next';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -21,11 +22,13 @@ function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
 
   const update = useUpdate();
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [courses, setCourses] = useState([] as Course[]);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
   useAsync(async () => {
+    setLoading(true);
     const userService = new UserService();
     const courseService = new CoursesService();
     const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
@@ -37,40 +40,48 @@ function Page(props: Props & { courseAlias?: string }) {
 
     setCourses(activeCourses);
     setInitialData(profile);
+    setLoading(false);
   }, []);
 
-  const handleSubmit = useCallback(async (model: any) => {
-    const { comment, location, courseId } = model;
-    const registryModel = {
-      type: TYPES.STUDENT,
-      courseId,
-      comment,
-    };
-    const userModel = {
-      locationId: location.key ? location.key : undefined,
-      locationName: !location.key ? model.otherLocationName : location.label,
-      primaryEmail: model.primaryEmail,
-      firstName: model.firstName,
-      lastName: model.lastName,
-    };
-
-    try {
-      const userResponse = await axios.post('/api/profile/registry', userModel);
-      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-      if (githubId) {
-        await axios.post('/api/registry', registryModel);
-        setSubmitted(true);
-      } else {
-        message.error('Invalid github id');
+  const handleSubmit = useCallback(
+    async (values: any) => {
+      if (loading) {
+        return;
       }
-    } catch (e) {
-      message.error('An error occured. Please try later.');
-    }
-  }, []);
+      setLoading(true);
+      const { comment, location, courseId } = values;
+      const registryModel = { type: TYPES.STUDENT, courseId, comment };
+      const userModel = {
+        locationId: location.key ? location.key : undefined,
+        locationName: !location.key ? values.otherLocationName : location.label,
+        primaryEmail: values.primaryEmail,
+        firstName: values.firstName,
+        lastName: values.lastName,
+      };
+
+      try {
+        const userResponse = await axios.post('/api/profile/registry', userModel);
+        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+        if (githubId) {
+          await axios.post('/api/registry', registryModel);
+          setSubmitted(true);
+        } else {
+          message.error('Invalid github id');
+        }
+      } catch (e) {
+        message.error('An error occured. Please try later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loading],
+  );
 
   let content: React.ReactNode;
   const location = form.getFieldValue('location');
-  if (!courses.length) {
+  if (loading) {
+    content = undefined;
+  } else if (!courses.length) {
     content = <NoCourses />;
   } else if (submitted) {
     content = (
@@ -89,10 +100,10 @@ function Page(props: Props & { courseAlias?: string }) {
     const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
     content = (
       <Form
+        layout="vertical"
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        className="m-2"
         onFinish={handleSubmit}
       >
         <Col style={{ margin: '0 20px' }}>
@@ -171,18 +182,10 @@ function Page(props: Props & { courseAlias?: string }) {
           </Row>
           <Row gutter={defaultRowGutter}>
             <Col {...textColumnSizes}>
-              <CommentInput />
+              <CommentInput notRequired />
             </Col>
           </Row>
           <Row>
-            <Typography.Paragraph>
-              I hereby agree to the processing of my personal data contained in the application and sharing it with
-              companies only for employment purposes.
-            </Typography.Paragraph>
-            <Typography.Paragraph>
-              Я согласен на обработку моих персональных данных, содержащихся в приложении, и передачу их компаниям
-              только в целях трудоустройства.
-            </Typography.Paragraph>
             <GdprCheckbox />
           </Row>
           <Button size="large" type="primary" disabled={!form.getFieldValue('gdpr')} htmlType="submit">
@@ -194,13 +197,13 @@ function Page(props: Props & { courseAlias?: string }) {
   }
 
   return (
-    <PageLayout loading={false} title="Registration" githubId={props.session.githubId}>
+    <PageLayout loading={loading} title="Registration" githubId={props.session.githubId}>
       {content}
     </PageLayout>
   );
 }
 
-function getInitialValues(initialData, courses) {
+function getInitialValues(initialData: Partial<UserFull>, courses: Course[]) {
   return {
     ...initialData,
     courseId: courses[0].id,
@@ -208,4 +211,15 @@ function getInitialValues(initialData, courses) {
   };
 }
 
-export default withSession(Page);
+const RegistryStudentPage: any = withSession(Page);
+RegistryStudentPage.getInitialProps = async (context: NextPageContext) => {
+  try {
+    const courseAlias = context.query.course;
+    return { courseAlias };
+  } catch (e) {
+    console.error(e.message);
+    return { courseAlias: undefined };
+  }
+};
+
+export default RegistryStudentPage;

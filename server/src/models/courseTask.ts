@@ -12,6 +12,7 @@ import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskResult } from './taskResult';
 import { User } from './user';
+import { Course } from './course';
 
 @Entity()
 export class CourseTask {
@@ -55,6 +56,12 @@ export class CourseTask {
 
   @Column()
   stageId: number;
+
+  @ManyToOne(_ => Course, { nullable: true })
+  course: Course;
+
+  @Column({ nullable: true })
+  courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
   studentStartDate: string;

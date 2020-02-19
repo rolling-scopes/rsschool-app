@@ -1,4 +1,4 @@
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { TaskVerification } from '../../models';
 import { createPostRoute } from '../common';

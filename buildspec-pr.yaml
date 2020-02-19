@@ -3,14 +3,15 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 12
+
   build:
     commands:
-      - yarn
-      - yarn test
-      - yarn ci:format
-      - yarn ci:lint
-      - yarn ci:build
+      - npm i --unsafe-perm
+      - npm test
+      - npm run ci:format
+      - npm run ci:lint
+      - npm run ci:build
 
 cache:
   paths:

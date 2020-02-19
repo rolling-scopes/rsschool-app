@@ -1,6 +1,6 @@
 import { FORBIDDEN } from 'http-status-codes';
 import passport from 'koa-passport';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 
 import { config } from '../../config';

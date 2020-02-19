@@ -1,6 +1,6 @@
 import { Col, Layout, Spin, Table } from 'antd';
 import { AdminSider, GithubUserLink, Header } from 'components';
-import { stringSorter, boolIconRenderer, tagsRenderer } from 'components/Table';
+import { stringSorter, boolIconRenderer, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -26,7 +26,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider />
+      <AdminSider isAdmin={props.session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Mentor Registry" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>
@@ -44,6 +44,7 @@ function Page(props: Props) {
                     dataIndex: 'name',
                     width: 150,
                     sorter: stringSorter('name'),
+                    ...getColumnSearchProps('name'),
                   },
                   {
                     title: 'Github',
@@ -51,6 +52,7 @@ function Page(props: Props) {
                     width: 120,
                     sorter: stringSorter('githubId'),
                     render: (value: string) => <GithubUserLink value={value} />,
+                    ...getColumnSearchProps('githubId'),
                   },
                   {
                     title: 'City',

@@ -1,5 +1,5 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { awsTaskService, courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
@@ -64,4 +64,5 @@ export type Codewars = {
   type: 'codewars';
   codewars: string;
   deadline: string;
+  variant: 'stage1' | 'stage2';
 };
