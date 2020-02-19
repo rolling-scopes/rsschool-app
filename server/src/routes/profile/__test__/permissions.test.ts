@@ -9,6 +9,7 @@ describe('getPermissions', () => {
       expect(
         getPermissions({
           isProfileOwner: false,
+          isAdmin: false,
         }),
       ).toEqual({
         isProfileVisible: false,
@@ -35,6 +36,7 @@ describe('getPermissions', () => {
         expect(
           getPermissions({
             isProfileOwner: false,
+            isAdmin: false,
             role: 'all',
             permissions: {
               isProfileVisible: { all: true },
@@ -74,6 +76,7 @@ describe('getPermissions', () => {
         expect(
           getPermissions({
             isProfileOwner: false,
+            isAdmin: false,
             role: 'mentor',
             permissions: {
               isProfileVisible: { all: true },
@@ -113,6 +116,7 @@ describe('getPermissions', () => {
         expect(
           getPermissions({
             isProfileOwner: false,
+            isAdmin: false,
             role: 'student',
             permissions: {
               isProfileVisible: { all: true },
@@ -154,6 +158,7 @@ describe('getPermissions', () => {
         expect(
           getPermissions({
             isProfileOwner: true,
+            isAdmin: false,
             role: 'all',
             permissions: {
               isProfileVisible: { all: false },
