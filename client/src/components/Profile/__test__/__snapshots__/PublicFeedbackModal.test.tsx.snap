@@ -6,7 +6,7 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
   footer={null}
   maskTransitionName="fade"
   okType="primary"
-  onCancel={[Function]}
+  onCancel={[MockFunction]}
   title="Public Feedback"
   transitionName="zoom"
   visible={true}
@@ -87,7 +87,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"
@@ -181,7 +182,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"
@@ -275,7 +277,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"
@@ -369,7 +372,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"
@@ -463,7 +467,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"
@@ -557,7 +562,8 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
                 }
               }
             >
-              Look at on 
+              Look at on
+               
               <a
                 href="https://heroes.by/"
                 target="_blank"

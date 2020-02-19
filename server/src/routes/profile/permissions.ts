@@ -12,9 +12,7 @@ import {
   TaskInterviewResult,
   StageInterview,
 } from '../../models';
-import {
-  defaultProfilePermissionsSettings,
-} from '../../models/profilePermissions';
+import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 
 interface Relations {
@@ -29,6 +27,7 @@ export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'all';
 
 interface PermissionsSetup {
   isProfileOwner: boolean;
+  isAdmin: boolean;
   role?: RelationRole;
   permissions?: ConfigurableProfilePermissions;
 }
@@ -51,16 +50,15 @@ export interface Permissions {
   isCoreJsFeedbackVisible: boolean;
 }
 
-export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => (
+export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> =>
   (await getRepository(User)
     .createQueryBuilder('user')
     .select('"student"."courseId" AS "courseId"')
     .leftJoin(Student, 'student', '"student"."userId" = "user"."id"')
     .where('"user"."githubId" = :githubId', { githubId })
-    .getRawMany()) || null
-);
+    .getRawMany()) || null;
 
-export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> => (
+export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
   (await getRepository(ProfilePermissions)
     .createQueryBuilder('pp')
     .select('"pp"."isProfileVisible" AS "isProfileVisible"')
@@ -78,11 +76,10 @@ export const getConfigurableProfilePermissions = async (githubId: string): Promi
     .addSelect('"pp"."isStudentStatsVisible" AS "isStudentStatsVisible"')
     .leftJoin(User, 'user', '"user"."id" = "pp"."userId"')
     .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne()) || {}
-);
+    .getRawOne()) || {};
 
-export const getRelationsRoles = async (userGithubId: string, requestedGithubId: string): Promise<Relations | null> => (
-  await getRepository(Student)
+export const getRelationsRoles = async (userGithubId: string, requestedGithubId: string): Promise<Relations | null> =>
+  (await getRepository(Student)
     .createQueryBuilder('student')
     .select('"userStudent"."githubId" AS "student"')
     .addSelect('ARRAY_AGG("userMentor"."githubId") as "mentors"')
@@ -101,19 +98,23 @@ export const getRelationsRoles = async (userGithubId: string, requestedGithubId:
     .leftJoin(StageInterview, 'stageInterview', '"student"."id" = "stageInterview"."studentId"')
     .leftJoin(Mentor, 'mentorStageInterviewer', '"mentorStageInterviewer"."id" = "stageInterview"."mentorId"')
     .leftJoin(User, 'userStageInterviewer', '"mentorStageInterviewer"."userId" = "userStageInterviewer"."id"')
-    .where(`"userStudent"."githubId" = :userGithubId AND
+    .where(
+      `"userStudent"."githubId" = :userGithubId AND
       ("userMentor"."githubId" = :requestedGithubId OR
       "userStageInterviewer"."githubId" = :requestedGithubId OR
       "userInterviewer"."githubId" = :requestedGithubId OR
-      "userChecker"."githubId" = :requestedGithubId )`, { userGithubId, requestedGithubId })
-    .orWhere(`"userStudent"."githubId" = :requestedGithubId AND
+      "userChecker"."githubId" = :requestedGithubId )`,
+      { userGithubId, requestedGithubId },
+    )
+    .orWhere(
+      `"userStudent"."githubId" = :requestedGithubId AND
       ("userMentor"."githubId" = :userGithubId OR
       "userStageInterviewer"."githubId" = :userGithubId OR
       "userInterviewer"."githubId" = :userGithubId OR
-      "userChecker"."githubId" = :userGithubId)`)
+      "userChecker"."githubId" = :userGithubId)`,
+    )
     .groupBy('"userStudent"."githubId"')
-    .getRawOne() || null
-);
+    .getRawOne()) || null;
 
 export const defineRole = ({
   relationsRoles,
@@ -121,10 +122,10 @@ export const defineRole = ({
   roles,
   userGithubId,
 }: {
-  relationsRoles: Relations | null,
-  studentCourses: { courseId: number }[] | null,
-  roles: { [courseId: string]: 'student' | 'mentor' | 'coursemanager' },
-  userGithubId: string,
+  relationsRoles: Relations | null;
+  studentCourses: { courseId: number }[] | null;
+  roles: { [courseId: string]: 'student' | 'mentor' | 'coursemanager' };
+  userGithubId: string;
 }): RelationRole => {
   if (relationsRoles) {
     const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;
@@ -141,7 +142,7 @@ export const defineRole = ({
   return 'all';
 };
 
-export const getPermissions = ({ isProfileOwner, role, permissions }: PermissionsSetup): Permissions => {
+export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: PermissionsSetup): Permissions => {
   const defaultPermissions: Permissions = {
     isProfileVisible: false,
     isAboutVisible: false,
@@ -160,14 +161,15 @@ export const getPermissions = ({ isProfileOwner, role, permissions }: Permission
     isCoreJsFeedbackVisible: false,
   };
 
-  return mapValues(defaultPermissions, (_, permission) => (
-    role && (
-      ([
-        'isStageInterviewFeedbackVisible',
-        'isStudentStatsVisible',
-        'isCoreJsFeedbackVisible',
-        'isProfileVisible',
-      ].includes(permission) && ['mentor', 'coursementor'].includes(role)) ||
+  return mapValues(defaultPermissions, (_, permission) =>
+    role &&
+    (([
+      'isStageInterviewFeedbackVisible',
+      'isStudentStatsVisible',
+      'isCoreJsFeedbackVisible',
+      'isProfileVisible',
+    ].includes(permission) &&
+      ['mentor', 'coursementor'].includes(role)) ||
       ([
         'isEmailVisible',
         'isTelegramVisible',
@@ -175,27 +177,24 @@ export const getPermissions = ({ isProfileOwner, role, permissions }: Permission
         'isPhoneVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
-      ].includes(permission) && ['mentor'].includes(role)) ||
-      ([
-        'isProfileVisible',
-      ].includes(permission) && ['student'].includes(role))
-    ) ?
-      true :
-      (
-        isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission) ||
+      ].includes(permission) &&
+        ['mentor'].includes(role)) ||
+      (['isProfileVisible'].includes(permission) && ['student'].includes(role)))
+      ? true
+      : (isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission)) ||
         get(permissions, `${permission}.all`) ||
         get(permissions, `${permission}.${role}`) ||
-        false
-      )
-  ));
+        isAdmin ||
+        false,
+  );
 };
 
 export const getProfilePermissionsSettings = (permissions: ConfigurableProfilePermissions) => {
   const newPermissions = cloneDeep(permissions);
 
-  mergeWith(newPermissions, defaultProfilePermissionsSettings, (setting, defaultSetting) => (
-    mapValues(defaultSetting, (value, key) => get(setting, key, value))
-  ));
+  mergeWith(newPermissions, defaultProfilePermissionsSettings, (setting, defaultSetting) =>
+    mapValues(defaultSetting, (value, key) => get(setting, key, value)),
+  );
 
   return newPermissions;
 };

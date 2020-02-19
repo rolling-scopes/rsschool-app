@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  Card,
-  Typography,
-  Empty,
-} from 'antd';
+import { Card, Typography, Empty } from 'antd';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
@@ -12,10 +8,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Title } = Typography;
 
-import {
-  EditOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, SettingOutlined } from '@ant-design/icons';
 
 type Props = {
   permissionsSettings?: Partial<ConfigurableProfilePermissions>;
@@ -32,28 +25,28 @@ type Props = {
 type State = {
   isVisibilitySettingsVisible: boolean;
   isProfileSettingsVisible: boolean;
-}
+};
 class CommonCard extends React.Component<Props, State> {
   state = {
     isVisibilitySettingsVisible: false,
     isProfileSettingsVisible: false,
-  }
+  };
 
   private showVisibilitySettings = () => {
     this.setState({ isVisibilitySettingsVisible: true });
-  }
+  };
 
   private hideVisibilitySettings = () => {
     this.setState({ isVisibilitySettingsVisible: false });
-  }
+  };
 
   private showProfileSettings = () => {
     this.setState({ isProfileSettingsVisible: true });
-  }
+  };
 
   private hideProfileSettings = () => {
     this.setState({ isProfileSettingsVisible: false });
-  }
+  };
 
   render() {
     const {
@@ -72,40 +65,39 @@ class CommonCard extends React.Component<Props, State> {
     return (
       <Card
         title={
-          <Title
-            level={2}
-            ellipsis={true}
-            style={{ fontSize: 16, marginBottom: 0 }}
-          >
+          <Title level={2} ellipsis={true} style={{ fontSize: 16, marginBottom: 0 }}>
             {icon} {title}
           </Title>
         }
-        actions={isEditingModeEnabled ? [
-          profileSettingsContent && <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />,
-          <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />,
-        ].filter(Boolean) : actions}
-      >
-        {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescrption}/>}
-        {
-          isEditingModeEnabled !== undefined && isEditingModeEnabled && (
-            <>
-              <PermissionsSettingsDrawer
-                isSettingsVisible={isVisibilitySettingsVisible}
-                hideSettings={this.hideVisibilitySettings}
-                permissionsSettings={permissionsSettings}
-                onPermissionsSettingsChange={onPermissionsSettingsChange}
-              />
-              {
-                profileSettingsContent &&
-                  <ProfileSettingsDrawer
-                    isSettingsVisible={isProfileSettingsVisible}
-                    hideSettings={this.hideProfileSettings}
-                    content={profileSettingsContent}
-                  />
-              }
-            </>
-          )
+        actions={
+          isEditingModeEnabled
+            ? [
+                profileSettingsContent && (
+                  <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />
+                ),
+                <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />,
+              ].filter(Boolean)
+            : actions
         }
+      >
+        {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescrption} />}
+        {isEditingModeEnabled !== undefined && isEditingModeEnabled && (
+          <>
+            <PermissionsSettingsDrawer
+              isSettingsVisible={isVisibilitySettingsVisible}
+              hideSettings={this.hideVisibilitySettings}
+              permissionsSettings={permissionsSettings}
+              onPermissionsSettingsChange={onPermissionsSettingsChange}
+            />
+            {profileSettingsContent && (
+              <ProfileSettingsDrawer
+                isSettingsVisible={isProfileSettingsVisible}
+                hideSettings={this.hideProfileSettings}
+                content={profileSettingsContent}
+              />
+            )}
+          </>
+        )}
       </Card>
     );
   }

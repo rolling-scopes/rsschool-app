@@ -6,7 +6,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
   footer={null}
   maskTransitionName="fade"
   okType="primary"
-  onCancel={[Function]}
+  onCancel={[MockFunction]}
   title="Rolling Scopes School 2018-Q1 statistics"
   transitionName="zoom"
   visible={true}
@@ -103,7 +103,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
               }
             }
           >
-            Score:  
+            Score: 
             <Text
               mark={true}
             >
@@ -228,7 +228,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
               }
             }
           >
-            Score:  
+            Score: 
             <Text
               mark={true}
             >

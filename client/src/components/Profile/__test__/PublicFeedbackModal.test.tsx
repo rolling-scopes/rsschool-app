@@ -68,13 +68,7 @@ describe('PublicFeedbackModal', () => {
   ];
 
   it('Should render correctly', () => {
-    const output = shallow(
-      <PublicFeedbackModal
-        data={data}
-        isVisible={true}
-        onHide={() => {}}
-      />,
-    );
+    const output = shallow(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
     expect(shallowToJson(output)).toMatchSnapshot();
   });
 });

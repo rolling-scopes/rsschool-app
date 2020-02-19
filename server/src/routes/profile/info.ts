@@ -21,7 +21,7 @@ import {
 } from './permissions';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: userGithubId, roles } = ctx.state!.user as IUserSession;
+  const { githubId: userGithubId, roles, isAdmin } = ctx.state!.user as IUserSession;
   const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
 
   if (!requestedGithubId) {
@@ -37,13 +37,13 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   let permissionsSettings: ConfigurableProfilePermissions | undefined;
   if (isProfileOwner) {
     role = 'all';
-    permissions = getPermissions({ isProfileOwner });
+    permissions = getPermissions({ isProfileOwner, isAdmin });
     permissionsSettings = getProfilePermissionsSettings(profilePermissions);
   } else {
     const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
     const studentCourses = !relationsRoles ? await getStudentCourses(requestedGithubId) : null;
     role = defineRole({ relationsRoles, studentCourses, roles, userGithubId });
-    permissions = getPermissions({ isProfileOwner, role, permissions: profilePermissions });
+    permissions = getPermissions({ isAdmin, isProfileOwner, role, permissions: profilePermissions });
   }
 
   const {
@@ -62,9 +62,9 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(requestedGithubId) : undefined;
   const mentorStats = isMentorStatsVisible ? await getMentorStats(requestedGithubId) : undefined;
   const studentStats = isStudentStatsVisible ? await getStudentStats(requestedGithubId, permissions) : undefined;
-  const stageInterviewFeedback = isStageInterviewFeedbackVisible ?
-    await getStageInterviewFeedback(requestedGithubId) :
-    undefined;
+  const stageInterviewFeedback = isStageInterviewFeedbackVisible
+    ? await getStageInterviewFeedback(requestedGithubId)
+    : undefined;
 
   const profileInfo: ProfileInfo = {
     permissionsSettings,

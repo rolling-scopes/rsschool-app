@@ -6,11 +6,7 @@ import ProfileSettingsDrawer from '../ProfileSettingsDrawer';
 describe('ProfileSettingsDrawer', () => {
   it('Should render correctly', () => {
     const output = shallow(
-      <ProfileSettingsDrawer
-        isSettingsVisible={true}
-        hideSettings={() => {}}
-        content={(<div>content</div>)}
-      />,
+      <ProfileSettingsDrawer isSettingsVisible={true} hideSettings={jest.fn()} content={<div>content</div>} />,
     );
     expect(shallowToJson(output)).toMatchSnapshot();
   });

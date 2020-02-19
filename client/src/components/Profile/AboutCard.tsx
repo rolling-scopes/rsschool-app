@@ -1,9 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import {
-  Typography,
-  Input,
-} from 'antd';
+import { Typography, Input } from 'antd';
 import CommonCard from './CommonCard';
 import { GeneralInfo } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -28,11 +25,10 @@ class AboutCard extends React.Component<Props> {
     isAboutVisible,
   });
 
-  shouldComponentUpdate = (nextProps: Props) => (
+  shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.aboutMyself, this.props.data.aboutMyself) ||
     !isEqual(nextProps.permissionsSettings?.isAboutVisible, this.props.permissionsSettings?.isAboutVisible) ||
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
-  );
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
     const {
@@ -47,18 +43,16 @@ class AboutCard extends React.Component<Props> {
       <CommonCard
         title="About"
         icon={<InfoCircleOutlined />}
-        content={
-          aboutMyself ?
-            <Paragraph ellipsis={{ rows: 2, expandable: true }}>{aboutMyself}</Paragraph> :
-            null
-        }
+        content={aboutMyself ? <Paragraph ellipsis={{ rows: 2, expandable: true }}>{aboutMyself}</Paragraph> : null}
         noDataDescrption="About info isn't written"
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
         isEditingModeEnabled={isEditingModeEnabled}
         onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
           <div>
-            <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>About myself:</Text></p>
+            <p style={{ fontSize: 18, marginBottom: 5 }}>
+              <Text strong>About myself:</Text>
+            </p>
             <TextArea
               rows={4}
               value={aboutMyself || ''}

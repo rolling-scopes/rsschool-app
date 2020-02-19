@@ -18,7 +18,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
       <React.Fragment>
         <div>
           <p>
-            Mentored Students: 
+            Mentored Students:
+             
             <Text
               strong={true}
               style={
@@ -31,7 +32,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
             </Text>
           </p>
           <p>
-            Courses as Mentor: 
+            Courses as Mentor:
+             
             <Text
               strong={true}
               style={
@@ -84,7 +86,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
     }
     icon={<ForwardRef(TeamOutlined) />}
     isEditingModeEnabled={false}
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     title="Mentor Statistics"
   />
 </Fragment>
@@ -108,7 +110,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
       <React.Fragment>
         <div>
           <p>
-            Mentored Students: 
+            Mentored Students:
+             
             <Text
               strong={true}
               style={
@@ -121,7 +124,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
             </Text>
           </p>
           <p>
-            Courses as Mentor: 
+            Courses as Mentor:
+             
             <Text
               strong={true}
               style={
@@ -174,7 +178,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
     }
     icon={<ForwardRef(TeamOutlined) />}
     isEditingModeEnabled={true}
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     title="Mentor Statistics"
   />
 </Fragment>

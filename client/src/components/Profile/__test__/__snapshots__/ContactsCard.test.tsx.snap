@@ -5,6 +5,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
   data={
     Object {
       "email": "vasya@tut.by",
+      "linkedIn": "http://linkedin_test.com/vasya",
       "notes": "vasya",
       "phone": "1232422",
       "skype": "skype_vasya",
@@ -12,8 +13,8 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
     }
   }
   isEditingModeEnabled={false}
-  onPermissionsSettingsChange={[Function]}
-  onProfileSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
 >
   <CommonCard
     content={
@@ -46,6 +47,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
               "name": "Notes",
               "value": "vasya",
             },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
+              "value": "http://linkedin_test.com/vasya",
+            },
           ]
         }
         itemLayout="horizontal"
@@ -58,7 +64,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
     icon={<ForwardRef(ContactsOutlined) />}
     isEditingModeEnabled={false}
     noDataDescrption="Contacts aren't filled in"
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
       <List
         bordered={false}
@@ -88,6 +94,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
               "key": "notes",
               "name": "Notes",
               "value": "vasya",
+            },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
+              "value": "http://linkedin_test.com/vasya",
             },
           ]
         }
@@ -309,6 +320,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                   "key": "notes",
                   "name": "Notes",
                   "value": "vasya",
+                },
+                Object {
+                  "key": "linkedIn",
+                  "name": "LinkedIn",
+                  "value": "http://linkedin_test.com/vasya",
                 },
               ]
             }
@@ -641,6 +657,72 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           vasya
                         </li>
                       </Item>
+                      <Item
+                        key="linkedIn"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          LinkedIn
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          <a
+                            href="http://linkedin_test.com/vasya"
+                            target="__blank"
+                          >
+                            http://linkedin_test.com/vasya
+                          </a>
+                        </li>
+                      </Item>
                     </ul>
                   </div>
                 </div>
@@ -659,6 +741,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
   data={
     Object {
       "email": "vasya@tut.by",
+      "linkedIn": null,
       "notes": null,
       "phone": "1232422",
       "skype": "skype_vasya",
@@ -666,8 +749,8 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
     }
   }
   isEditingModeEnabled={true}
-  onPermissionsSettingsChange={[Function]}
-  onProfileSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
 >
   <CommonCard
     content={
@@ -702,7 +785,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
     icon={<ForwardRef(ContactsOutlined) />}
     isEditingModeEnabled={true}
     noDataDescrption="Contacts aren't filled in"
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
       <List
         bordered={false}
@@ -731,6 +814,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             Object {
               "key": "notes",
               "name": "Notes",
+              "value": null,
+            },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
               "value": null,
             },
           ]
@@ -1172,7 +1260,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           <PermissionsSettingsDrawer
             hideSettings={[Function]}
             isSettingsVisible={false}
-            onPermissionsSettingsChange={[Function]}
+            onPermissionsSettingsChange={[MockFunction]}
           >
             <withConfigConsumer(Drawer)
               className="jsx-2583821679"
@@ -1537,6 +1625,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       "name": "Notes",
                       "value": null,
                     },
+                    Object {
+                      "key": "linkedIn",
+                      "name": "LinkedIn",
+                      "value": null,
+                    },
                   ]
                 }
                 itemLayout="horizontal"
@@ -1807,6 +1900,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                         "name": "Notes",
                                         "value": null,
                                       },
+                                      Object {
+                                        "key": "linkedIn",
+                                        "name": "LinkedIn",
+                                        "value": null,
+                                      },
                                     ]
                                   }
                                   itemLayout="horizontal"
@@ -1920,7 +2018,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       element={
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -1931,6 +2031,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           value="vasya@tut.by"
                                                         />
                                                       }
+                                                      focused={false}
                                                       handleReset={[Function]}
                                                       inputType="input"
                                                       onChange={[Function]}
@@ -1945,7 +2046,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <input
                                                         className="ant-input"
+                                                        onBlur={[Function]}
                                                         onChange={[Function]}
+                                                        onFocus={[Function]}
                                                         onKeyDown={[Function]}
                                                         style={
                                                           Object {
@@ -2047,7 +2150,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       element={
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -2058,6 +2163,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           value=""
                                                         />
                                                       }
+                                                      focused={false}
                                                       handleReset={[Function]}
                                                       inputType="input"
                                                       onChange={[Function]}
@@ -2072,7 +2178,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <input
                                                         className="ant-input"
+                                                        onBlur={[Function]}
                                                         onChange={[Function]}
+                                                        onFocus={[Function]}
                                                         onKeyDown={[Function]}
                                                         style={
                                                           Object {
@@ -2174,7 +2282,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       element={
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -2185,6 +2295,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           value="1232422"
                                                         />
                                                       }
+                                                      focused={false}
                                                       handleReset={[Function]}
                                                       inputType="input"
                                                       onChange={[Function]}
@@ -2199,7 +2310,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <input
                                                         className="ant-input"
+                                                        onBlur={[Function]}
                                                         onChange={[Function]}
+                                                        onFocus={[Function]}
                                                         onKeyDown={[Function]}
                                                         style={
                                                           Object {
@@ -2301,7 +2414,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       element={
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -2312,6 +2427,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           value="skype_vasya"
                                                         />
                                                       }
+                                                      focused={false}
                                                       handleReset={[Function]}
                                                       inputType="input"
                                                       onChange={[Function]}
@@ -2326,7 +2442,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <input
                                                         className="ant-input"
+                                                        onBlur={[Function]}
                                                         onChange={[Function]}
+                                                        onFocus={[Function]}
                                                         onKeyDown={[Function]}
                                                         style={
                                                           Object {
@@ -2428,7 +2546,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       element={
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -2439,6 +2559,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           value=""
                                                         />
                                                       }
+                                                      focused={false}
                                                       handleReset={[Function]}
                                                       inputType="input"
                                                       onChange={[Function]}
@@ -2453,7 +2574,141 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <input
                                                         className="ant-input"
+                                                        onBlur={[Function]}
                                                         onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value=""
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="linkedIn"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    LinkedIn
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value=""
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value=""
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value=""
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
                                                         onKeyDown={[Function]}
                                                         style={
                                                           Object {

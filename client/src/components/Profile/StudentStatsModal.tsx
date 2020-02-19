@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { StudentStats } from '../../../../common/models/profile';
-import {
-  Modal,
-  Table,
-  Typography,
-  Progress,
-  Row,
-  Col,
-} from 'antd';
+import { Modal, Table, Typography, Progress, Row, Col } from 'antd';
 
 const { Text } = Typography;
 
@@ -24,9 +17,9 @@ class StudentStatsModal extends React.PureComponent<Props> {
     const { stats, courseProgress, scoredTasks } = this.props;
     const { tasks, courseFullName, mentor, totalScore, isExpelled, position, isCourseCompleted } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
-    const maxCourseScore = tasks.every(({ maxScore }) => maxScore) ?
-      tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur) :
-      null;
+    const maxCourseScore = tasks.every(({ maxScore }) => maxScore)
+      ? tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur)
+      : null;
 
     return (
       <Modal
@@ -46,18 +39,19 @@ class StudentStatsModal extends React.PureComponent<Props> {
             />
           </Col>
           <Col>
-            {
-              mentor.githubId && <p style={{ marginBottom: 5 }}>
+            {mentor.githubId && (
+              <p style={{ marginBottom: 5 }}>
                 Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
               </p>
-            }
-            {
-              position && <p style={{ marginBottom: 5 }}>
+            )}
+            {position && (
+              <p style={{ marginBottom: 5 }}>
                 Position: <Text strong>{position}</Text>
               </p>
-            }
+            )}
             <p style={{ marginBottom: 5 }}>
-              Total Score: <Text mark>{totalScore}</Text>{maxCourseScore && ` / ${maxCourseScore}`}
+              Total Score: <Text mark>{totalScore}</Text>
+              {maxCourseScore && ` / ${maxCourseScore}`}
             </p>
             <p style={{ marginBottom: 30 }}>
               Course progress: {`${scoredTasks} / ${tasks.length} tasks were scored (${courseProgress}%)`}
@@ -73,18 +67,21 @@ class StudentStatsModal extends React.PureComponent<Props> {
             {
               title: 'Task',
               dataIndex: 'name',
-              render: (task: string, { descriptionUri }: any) => (descriptionUri ?
-                <a href={descriptionUri} target="_blank">{task}</a>
-                : task),
+              render: (task: string, { descriptionUri }: any) =>
+                descriptionUri ? (
+                  <a href={descriptionUri} target="_blank">
+                    {task}
+                  </a>
+                ) : (
+                  task
+                ),
             },
             {
               title: 'Score / Max',
               dataIndex: 'score',
               render: (score: string, { maxScore }: any) => (
                 <>
-                  <Text strong>
-                    {score !== null ? score : '-'}
-                  </Text> / {maxScore ? maxScore : '-'}
+                  <Text strong>{score !== null ? score : '-'}</Text> / {maxScore ? maxScore : '-'}
                 </>
               ),
             },
@@ -93,9 +90,15 @@ class StudentStatsModal extends React.PureComponent<Props> {
               dataIndex: 'scoreWeight',
               render: (scoreWeight: number, { score }: any) => (
                 <Text>
-                  *{scoreWeight}{score ? <Text> = <Text strong>{
-                    (Number(score) * scoreWeight).toFixed(2)
-                  }</Text></Text> : ''}
+                  *{scoreWeight}
+                  {score ? (
+                    <Text>
+                      {' '}
+                      = <Text strong>{(Number(score) * scoreWeight).toFixed(2)}</Text>
+                    </Text>
+                  ) : (
+                    ''
+                  )}
                 </Text>
               ),
             },

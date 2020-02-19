@@ -9,12 +9,14 @@ describe('EnglishCard', () => {
     it('if "englishLevel" is present', () => {
       const output = shallow(
         <EnglishCard
-          data={{
-            englishLevel: 'a2',
-          } as GeneralInfo}
+          data={
+            {
+              englishLevel: 'a2',
+            } as GeneralInfo
+          }
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -24,8 +26,8 @@ describe('EnglishCard', () => {
         <EnglishCard
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -53,9 +55,10 @@ describe('EnglishCard', () => {
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
           permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
-        />);
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({

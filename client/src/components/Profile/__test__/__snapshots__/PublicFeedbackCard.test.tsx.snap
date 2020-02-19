@@ -175,7 +175,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
     }
     icon={<ForwardRef(MessageOutlined) />}
     isEditingModeEnabled={false}
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     title="Public Feedback"
   />
 </Fragment>
@@ -356,7 +356,7 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
     }
     icon={<ForwardRef(MessageOutlined) />}
     isEditingModeEnabled={true}
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     title="Public Feedback"
   />
 </Fragment>

@@ -5,7 +5,7 @@ exports[`ProfileSettingsDrawer Should render correctly 1`] = `
   className="jsx-2583821679"
   closable={true}
   getContainer={false}
-  onClose={[Function]}
+  onClose={[MockFunction]}
   placement="top"
   style={
     Object {

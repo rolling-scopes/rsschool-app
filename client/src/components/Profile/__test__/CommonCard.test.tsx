@@ -6,13 +6,7 @@ import CommonCard from '../CommonCard';
 describe('CommonCard', () => {
   describe('Should render correctly', () => {
     it('if just basic props is present', () => {
-      const output = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={<p>Card body</p>}
-        />,
-      );
+      const output = shallow(<CommonCard title="Test" icon={<i>Icon</i>} content={<p>Card body</p>} />);
       expect(shallowToJson(output)).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
@@ -28,23 +22,12 @@ describe('CommonCard', () => {
       expect(shallowToJson(output)).toMatchSnapshot();
     });
     it('if is null content passed', () => {
-      const output = shallow(
-        <CommonCard
-          title="Test"
-          icon={<i>Icon</i>}
-          content={null}
-        />,
-      );
+      const output = shallow(<CommonCard title="Test" icon={<i>Icon</i>} content={null} />);
       expect(shallowToJson(output)).toMatchSnapshot();
     });
   });
 
-  const wrapper = shallow<CommonCard>(
-    <CommonCard
-      title="Test"
-      icon={<i>Icon</i>}
-      content={<p>Content</p>}
-    />);
+  const wrapper = shallow<CommonCard>(<CommonCard title="Test" icon={<i>Icon</i>} content={<p>Content</p>} />);
   const instance: any = wrapper.instance();
   describe('showVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "true"', () => {

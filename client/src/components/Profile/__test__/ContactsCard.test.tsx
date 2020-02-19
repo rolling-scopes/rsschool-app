@@ -7,33 +7,39 @@ import { Contacts } from '../../../../../common/models/profile';
 describe('ContactsCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper: any = mount(<ContactsCard
-        data={{
-          phone: '1232422',
-          email: 'vasya@tut.by',
-          skype: 'skype_vasya',
-          telegram: 'televasya',
-          notes: 'vasya',
-        }}
-        isEditingModeEnabled={false}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper: any = mount(
+        <ContactsCard
+          data={{
+            phone: '1232422',
+            email: 'vasya@tut.by',
+            skype: 'skype_vasya',
+            telegram: 'televasya',
+            notes: 'vasya',
+            linkedIn: 'http://linkedin_test.com/vasya',
+          }}
+          isEditingModeEnabled={false}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper: any = mount(<ContactsCard
-        data={{
-          phone: '1232422',
-          email: 'vasya@tut.by',
-          skype: 'skype_vasya',
-          telegram: null,
-          notes: null,
-        }}
-        isEditingModeEnabled={true}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper: any = mount(
+        <ContactsCard
+          data={{
+            phone: '1232422',
+            email: 'vasya@tut.by',
+            skype: 'skype_vasya',
+            telegram: null,
+            notes: null,
+            linkedIn: null,
+          }}
+          isEditingModeEnabled={true}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
   });
@@ -60,9 +66,10 @@ describe('ContactsCard', () => {
           data={{} as Contacts}
           isEditingModeEnabled={false}
           permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
-        />);
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({

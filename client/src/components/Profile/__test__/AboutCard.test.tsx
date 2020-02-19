@@ -9,12 +9,14 @@ describe('AboutCard', () => {
     it('if "aboutMyself" is present', () => {
       const output = shallow<AboutCard>(
         <AboutCard
-          data={{
-            aboutMyself: 'Top contributor of Rolling Scopes',
-          } as GeneralInfo}
+          data={
+            {
+              aboutMyself: 'Top contributor of Rolling Scopes',
+            } as GeneralInfo
+          }
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -24,8 +26,8 @@ describe('AboutCard', () => {
         <AboutCard
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -53,14 +55,19 @@ describe('AboutCard', () => {
           data={{} as GeneralInfo}
           isEditingModeEnabled={false}
           permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
-        />);
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       const instance = wrapper.instance();
       const result = (instance as any).filterPermissions(permissionsSettings);
-      expect(result).toEqual({ isAboutVisible: {
-        all: true, mentor: true, student: true,
-      } });
+      expect(result).toEqual({
+        isAboutVisible: {
+          all: true,
+          mentor: true,
+          student: true,
+        },
+      });
     });
   });
 });

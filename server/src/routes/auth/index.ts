@@ -16,14 +16,11 @@ export function authRoute() {
       : (ctx, next) => passport.authenticate('github', { state: ctx.query.url })(ctx, next),
   );
 
-  router.get(
-    '/logout',
-    async (ctx: any) => {
-      await ctx.logout();
-      ctx.session = null;
-      ctx.redirect('/');
-    },
-  );
+  router.get('/logout', async (ctx: any) => {
+    await ctx.logout();
+    ctx.session = null;
+    ctx.redirect('/');
+  });
 
   router.get('/github/callback', passport.authenticate('github', { failureFlash: true }), ctx => {
     if (ctx.isAuthenticated() || config.isDevMode) {

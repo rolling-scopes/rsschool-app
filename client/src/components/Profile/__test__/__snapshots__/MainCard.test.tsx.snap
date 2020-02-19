@@ -154,7 +154,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
     <PermissionsSettingsDrawer
       hideSettings={[Function]}
       isSettingsVisible={false}
-      onPermissionsSettingsChange={[Function]}
+      onPermissionsSettingsChange={[MockFunction]}
     />
     <ProfileSettingsDrawer
       content={

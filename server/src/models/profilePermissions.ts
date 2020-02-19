@@ -1,6 +1,10 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { User } from './user';
-import { PublicVisibilitySettings, VisibilitySettings, ConfigurableProfilePermissions } from '../../../common/models/profile';
+import {
+  PublicVisibilitySettings,
+  VisibilitySettings,
+  ConfigurableProfilePermissions,
+} from '../../../common/models/profile';
 
 export const defaultPublicVisibilitySettings = {
   all: false,
@@ -46,7 +50,10 @@ export class ProfilePermissions {
   @Column({ unique: true })
   userId: number;
 
-  @OneToOne(() => User, user => user.profilePermissions)
+  @OneToOne(
+    () => User,
+    user => user.profilePermissions,
+  )
   user: User;
 
   @Column({ type: 'json', default: defaultPublicVisibilitySettings })

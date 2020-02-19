@@ -26,7 +26,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
 
   if (isPermissionsSettingsChanged) {
     const profileRepository = await getRepository(ProfilePermissions);
-    const userPermissions = (await profileRepository.findOne({ where: { userId } }));
+    const userPermissions = await profileRepository.findOne({ where: { userId } });
 
     await profileRepository.save({
       id: userPermissions ? userPermissions.id : undefined,
@@ -38,7 +38,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
   if (isProfileSettingsChanged) {
     const [firstName, lastName = ''] = generalInfo.name.split(' ');
     const { locationId, aboutMyself, locationName, educationHistory, englishLevel } = generalInfo;
-    const { skype, phone, email, telegram, notes} = contacts;
+    const { skype, phone, email, telegram, notes, linkedIn } = contacts;
     await getRepository(User)
       .createQueryBuilder()
       .update(User)
@@ -55,6 +55,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
         contactsEmail: email || '',
         contactsNotes: notes || '',
         contactsSkype: skype || '',
+        contactsLinkedIn: linkedIn || '',
       })
       .where('id = :id', { id: userId })
       .execute();

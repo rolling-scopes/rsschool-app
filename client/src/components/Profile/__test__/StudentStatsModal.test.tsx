@@ -14,6 +14,7 @@ describe('StudentStatsModal', () => {
       expellingReason: '',
       isCourseCompleted: true,
       totalScore: 1201,
+      certificateId: 'asd',
       position: 32,
       mentor: {
         githubId: 'andrew123',
@@ -51,13 +52,7 @@ describe('StudentStatsModal', () => {
     };
 
     const output = shallow(
-      <StudentStatsModal
-        stats={stats}
-        courseProgress={71}
-        scoredTasks={4}
-        isVisible={true}
-        onHide={() => {}}
-      />,
+      <StudentStatsModal stats={stats} courseProgress={71} scoredTasks={4} isVisible={true} onHide={jest.fn()} />,
     );
     expect(shallowToJson(output)).toMatchSnapshot();
   });

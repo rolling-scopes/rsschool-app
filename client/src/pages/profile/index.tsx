@@ -6,11 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import mapValues from 'lodash/mapValues';
 import clone from 'lodash/clone';
 import pullAt from 'lodash/pullAt';
-import {
-  Result,
-  Spin,
-  message,
-} from 'antd';
+import { Result, Spin, message } from 'antd';
 import css from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
 import { Header } from 'components/Header';
@@ -18,7 +14,13 @@ import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from 'services/user';
-import { ProfileInfo, StudentStats, ConfigurableProfilePermissions, Contacts, GeneralInfo } from '../../../../common/models/profile';
+import {
+  ProfileInfo,
+  StudentStats,
+  ConfigurableProfilePermissions,
+  Contacts,
+  GeneralInfo,
+} from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
@@ -53,8 +55,8 @@ type State = {
 export type ChangedPermissionsSettings = {
   permissionName: string;
   role: string;
-}
-class ProfilePage extends React.Component<Props, State> {
+};
+export class ProfilePage extends React.Component<Props, State> {
   state: State = {
     profile: null,
     initialPermissionsSettings: null,
@@ -67,7 +69,8 @@ class ProfilePage extends React.Component<Props, State> {
   };
 
   private onPermissionsSettingsChange = async (
-    event: CheckboxChangeEvent, { permissionName, role }: ChangedPermissionsSettings,
+    event: CheckboxChangeEvent,
+    { permissionName, role }: ChangedPermissionsSettings,
   ) => {
     const { profile, initialPermissionsSettings } = this.state;
     const { checked } = event.target;
@@ -84,7 +87,7 @@ class ProfilePage extends React.Component<Props, State> {
       const newPermissionsSettings = {
         ...profile.permissionsSettings,
         [permissionName]: changed,
-      }
+      };
       const isInitialPermissionsSettingsChanged = !isEqual(newPermissionsSettings, initialPermissionsSettings);
 
       await this.setState({
@@ -97,7 +100,7 @@ class ProfilePage extends React.Component<Props, State> {
     }
   };
 
-  private onProfileSettingsChange = async ( event: any = {}, path: string ) => {
+  private onProfileSettingsChange = async (event: any = {}, path: string) => {
     const { profile, initialProfileSettings } = this.state;
 
     if (profile) {
@@ -144,26 +147,25 @@ class ProfilePage extends React.Component<Props, State> {
 
   private userService = new UserService();
 
-  private hadStudentCoreJSInterview = (stats: StudentStats[]) => stats
-    .some((student: StudentStats) => student.tasks
-    .some(({ interviewFormAnswers }) => interviewFormAnswers));
+  private hadStudentCoreJSInterview = (stats: StudentStats[]) =>
+    stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
 
-  private getStudentCoreJSInterviews = (stats: StudentStats[]) => stats
-    .filter((student: StudentStats) => student.tasks
-    .some(({ interviewFormAnswers }) => interviewFormAnswers))
-    .map(({ tasks, courseFullName, courseName, locationName }) => ({
-      courseFullName,
-      courseName,
-      locationName,
-      interview: tasks
-        .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-        .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
-          score,
-          comment,
-          interviewer,
-          answers: interviewFormAnswers,
-        }))[0],
-    })) as CoreJsInterviewData[];
+  private getStudentCoreJSInterviews = (stats: StudentStats[]) =>
+    stats
+      .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
+      .map(({ tasks, courseFullName, courseName, locationName }) => ({
+        courseFullName,
+        courseName,
+        locationName,
+        interview: tasks
+          .filter(({ interviewFormAnswers }) => interviewFormAnswers)
+          .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
+            score,
+            comment,
+            interviewer,
+            answers: interviewFormAnswers,
+          }))[0],
+      })) as CoreJsInterviewData[];
 
   private fetchData = async () => {
     await this.setState({ isLoading: true });
@@ -177,27 +179,35 @@ class ProfilePage extends React.Component<Props, State> {
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
+      console.log(profile);
       await this.setState({
-        isLoading: false, profile, initialPermissionsSettings, isEditingModeEnabled, initialProfileSettings,
+        isLoading: false,
+        profile,
+        initialPermissionsSettings,
+        isEditingModeEnabled,
+        initialProfileSettings,
       });
     } catch (e) {
       await this.setState({
-        isLoading: false, profile: null, initialPermissionsSettings: null, initialProfileSettings: null,
+        isLoading: false,
+        profile: null,
+        initialPermissionsSettings: null,
+        initialProfileSettings: null,
       });
     }
   };
 
   private changeProfilePageMode = (mode: 'edit' | 'view') => {
     this.setState({ isEditingModeEnabled: mode === 'edit' ? true : false });
-  }
+  };
 
   private onSaveSuccess() {
     message.success('Profile was successesfully saved');
-  };
+  }
 
   private onSaveError() {
     message.error('Error has occured. Please check your connection and try again');
-  };
+  }
 
   private saveProfile = async () => {
     const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
@@ -230,7 +240,7 @@ class ProfilePage extends React.Component<Props, State> {
         this.onSaveError();
       }
     }
-  }
+  };
 
   async componentDidMount() {
     await this.fetchData();
@@ -248,71 +258,79 @@ class ProfilePage extends React.Component<Props, State> {
     const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
 
     const cards = [
-      profile?.generalInfo &&
+      profile?.generalInfo && (
         <MainCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
-        />,
-      profile?.generalInfo?.aboutMyself !== undefined &&
+        />
+      ),
+      profile?.generalInfo?.aboutMyself !== undefined && (
         <AboutCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
-        />,
-      profile?.generalInfo?.englishLevel !== undefined &&
+        />
+      ),
+      profile?.generalInfo?.englishLevel !== undefined && (
         <EnglishCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
-        />,
-      profile?.generalInfo?.educationHistory !== undefined &&
+        />
+      ),
+      profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
-        />,
-      profile?.contacts !== undefined &&
+        />
+      ),
+      profile?.contacts !== undefined && (
         <ContactsCard
           data={profile.contacts}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
           onProfileSettingsChange={this.onProfileSettingsChange}
-        />,
-      profile?.publicFeedback?.length &&
+        />
+      ),
+      profile?.publicFeedback?.length && (
         <PublicFeedbackCard
           data={profile.publicFeedback}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-        />,
-      profile?.studentStats?.length &&
+        />
+      ),
+      profile?.studentStats?.length && (
         <StudentStatsCard
           data={profile.studentStats}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-        />,
-      profile?.mentorStats?.length &&
+        />
+      ),
+      profile?.mentorStats?.length && (
         <MentorStatsCard
           data={profile.mentorStats}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-        />,
-      profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) &&
-        <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)}/>,
-      profile?.stageInterviewFeedback?.length &&
-        <PreScreeningIviewCard data={profile.stageInterviewFeedback}/>,
+        />
+      ),
+      profile?.studentStats?.length && this.hadStudentCoreJSInterview(profile.studentStats) && (
+        <CoreJsIviewsCard data={this.getStudentCoreJSInterviews(profile.studentStats)} />
+      ),
+      profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
     ].filter(Boolean) as JSX.Element[];
 
     return (
@@ -327,33 +345,32 @@ class ProfilePage extends React.Component<Props, State> {
             onSaveClick={this.saveProfile}
           />
           <Spin spinning={this.state.isSaving} delay={200}>
-          {
-            this.state.profile
-              ? <div style={{ padding: 10 }}>
-                  <Masonry
-                    breakpointCols={{
-                      default: 4,
-                      1100: 3,
-                      700: 2,
-                      500: 1,
-                    }}
-                    className={masonryClassName}
-                    columnClassName={masonryColumnClassName}
-                  >
-                    {cards.map((card, idx) => (
-                      <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
-                        {card}
-                      </div>
-                      ),
-                    )}
-                  </Masonry>
-                  {masonryStyles}
-                  {masonryColumnStyles}
+            {this.state.profile ? (
+              <div style={{ padding: 10 }}>
+                <Masonry
+                  breakpointCols={{
+                    default: 4,
+                    1100: 3,
+                    700: 2,
+                    500: 1,
+                  }}
+                  className={masonryClassName}
+                  columnClassName={masonryColumnClassName}
+                >
+                  {cards.map((card, idx) => (
+                    <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
+                      {card}
+                    </div>
+                  ))}
+                </Masonry>
+                {masonryStyles}
+                {masonryColumnStyles}
               </div>
-              : <>
+            ) : (
+              <>
                 <Result status="403" title="No access or user does not exist" />
               </>
-          }
+            )}
           </Spin>
         </LoadingScreen>
       </>

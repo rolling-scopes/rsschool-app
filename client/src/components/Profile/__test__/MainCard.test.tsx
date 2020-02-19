@@ -17,8 +17,8 @@ describe('MainCard', () => {
             locationId: '1',
           }}
           isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -33,8 +33,8 @@ describe('MainCard', () => {
             locationId: '1',
           }}
           isEditingModeEnabled={true}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
         />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
@@ -50,9 +50,10 @@ describe('MainCard', () => {
         locationId: '1',
       }}
       isEditingModeEnabled={false}
-      onPermissionsSettingsChange={() => {}}
-      onProfileSettingsChange={() => {}}
-    />);
+      onPermissionsSettingsChange={jest.fn()}
+      onProfileSettingsChange={jest.fn()}
+    />,
+  );
   const instance = wrapper.instance();
   describe('showVisibilitySettings', () => {
     it('should set "state.isVisibilitySettingsVisible" as "true"', () => {

@@ -6,7 +6,7 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
   footer={null}
   maskTransitionName="fade"
   okType="primary"
-  onCancel={[Function]}
+  onCancel={[MockFunction]}
   title="Rolling Scopes School 2019 Q1 Pre-Screening Interview Feedback"
   transitionName="zoom"
   visible={true}
@@ -89,7 +89,8 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
       }
     }
   >
-    Has the student solved the task(s)? 
+    Has the student solved the task(s)?
+     
     <Tag
       closable={false}
       color="green"

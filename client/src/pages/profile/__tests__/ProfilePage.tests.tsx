@@ -7,16 +7,15 @@ import { ProfilePage } from '../index';
 
 jest.mock('next/config', () => () => ({}));
 jest.mock('services/user', () => ({
-    UserService: class UserService {
-      getProfileInfo() {
-        return jest.fn();
-      }
-      saveProfileInfo() {
-        return jest.fn();
-      }
-    },
-  }),
-);
+  UserService: class UserService {
+    getProfileInfo() {
+      return jest.fn();
+    }
+    saveProfileInfo() {
+      return jest.fn();
+    }
+  },
+}));
 
 const profile = {
   permissionsSettings: {
@@ -36,19 +35,19 @@ const profile = {
   },
   generalInfo: {
     aboutMyself: 'Test',
-    educationHistory: [{
-      graduationYear: '2019',
-      faculty: 'TT',
-      university: 'Test',
-    }],
+    educationHistory: [
+      {
+        graduationYear: '2019',
+        faculty: 'TT',
+        university: 'Test',
+      },
+    ],
     englishLevel: 'a2+',
     locationId: 456,
     locationName: 'Brest',
   },
   contacts: {},
-  mentorStats: [
-    {},
-  ],
+  mentorStats: [{}],
   studentStats: [
     {
       courseFullName: 'test',
@@ -61,12 +60,8 @@ const profile = {
       ],
     },
   ],
-  publicFeedback: [
-    {},
-  ],
-  stageInterviewFeedback: [
-    {},
-  ],
+  publicFeedback: [{}],
+  stageInterviewFeedback: [{}],
 };
 const session = {
   id: 2020,
@@ -80,17 +75,15 @@ const session = {
     11: 'mentor',
   },
   coursesRoles: {
-    13: [
-      'manager',
-    ],
+    13: ['manager'],
   },
 } as Session;
-const router = {
+const router = ({
   query: {
     githubId: 'petrov',
   },
   asPath: '/#edit/',
-} as unknown as NextRouter;
+} as unknown) as NextRouter;
 const state = {
   profile,
   isInitialPermissionsSettingsChanged: false,
@@ -100,24 +93,14 @@ const state = {
 describe('ProfilePage', () => {
   describe('Should render correctly', () => {
     it('if full profile info is in the state', () => {
-      const wrapper = shallow(
-        <ProfilePage
-          session={session}
-          router={router}
-        />,
-      );
+      const wrapper = shallow(<ProfilePage session={session} router={router} />);
       wrapper.setState(state);
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
   });
 
-  const wrapper = shallow(
-    <ProfilePage
-      session={session}
-      router={router}
-    />,
-  );
-  const instance = wrapper.instance();
+  const wrapper = shallow(<ProfilePage session={session} router={router} />);
+  const instance: any = wrapper.instance();
   describe('onPermissionsSettingsChange', () => {
     describe('Should set state correctly', () => {
       it('if permissions for student role were changed', async () => {
@@ -125,51 +108,56 @@ describe('ProfilePage', () => {
           target: {
             checked: true,
           },
-        }
+        };
         const changedPermissionsSettings = {
           permissionName: 'isEmailVisible',
           role: 'student',
         };
         wrapper.setState(state);
         await instance.onPermissionsSettingsChange(event, changedPermissionsSettings);
-        expect(wrapper.state().profile.permissionsSettings.isEmailVisible).toEqual({
-          student: true, all: false,
+        expect((wrapper.state() as any).profile.permissionsSettings.isEmailVisible).toEqual({
+          student: true,
+          all: false,
         });
-        expect(wrapper.state().isInitialPermissionsSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(true);
       });
       it('if permissions for mentor role were changed', async () => {
         const event = {
           target: {
             checked: false,
           },
-        }
+        };
         const changedPermissionsSettings = {
           permissionName: 'isLinkedInVisible',
           role: 'mentor',
         };
         wrapper.setState(state);
         await instance.onPermissionsSettingsChange(event, changedPermissionsSettings);
-        expect(wrapper.state().profile.permissionsSettings.isLinkedInVisible).toEqual({
-          mentor: false, student: false, all: false,
+        expect((wrapper.state() as any).profile.permissionsSettings.isLinkedInVisible).toEqual({
+          mentor: false,
+          student: false,
+          all: false,
         });
-        expect(wrapper.state().isInitialPermissionsSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(true);
       });
       it('if permissions for all roles were changed', async () => {
         const event = {
           target: {
             checked: true,
           },
-        }
+        };
         const changedPermissionsSettings = {
           permissionName: 'isEducationVisible',
           role: 'all',
         };
         wrapper.setState(state);
         await instance.onPermissionsSettingsChange(event, changedPermissionsSettings);
-        expect(wrapper.state().profile.permissionsSettings.isEducationVisible).toEqual({
-          mentor: true, student: true, all: true,
+        expect((wrapper.state() as any).profile.permissionsSettings.isEducationVisible).toEqual({
+          mentor: true,
+          student: true,
+          all: true,
         });
-        expect(wrapper.state().isInitialPermissionsSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(true);
       });
     });
   });
@@ -179,20 +167,20 @@ describe('ProfilePage', () => {
         const event = {
           id: 123,
           name: 'Minsk',
-        }
+        };
         const path = 'generalInfo.location';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect(wrapper.state().profile.generalInfo.locationId).toBe(123);
-        expect(wrapper.state().profile.generalInfo.locationName).toBe('Minsk');
-        expect(wrapper.state().isInitialProfileSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).profile.generalInfo.locationId).toBe(123);
+        expect((wrapper.state() as any).profile.generalInfo.locationName).toBe('Minsk');
+        expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(true);
       });
       it('if "profile.generalInfo.englishLevel" was changed', async () => {
         const event = 'b2+';
         const path = 'generalInfo.englishLevel';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect(wrapper.state().profile.generalInfo.englishLevel).toBe('b2+');
+        expect((wrapper.state() as any).profile.generalInfo.englishLevel).toBe('b2+');
       });
       it('if field added to "profile.generalInfo.educationHistory"', async () => {
         const event = {
@@ -201,7 +189,7 @@ describe('ProfilePage', () => {
         const path = 'generalInfo.educationHistory';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect(wrapper.state().profile.generalInfo.educationHistory).toEqual([
+        expect((wrapper.state() as any).profile.generalInfo.educationHistory).toEqual([
           {
             graduationYear: '2019',
             faculty: 'TT',
@@ -213,7 +201,7 @@ describe('ProfilePage', () => {
             university: null,
           },
         ]);
-        expect(wrapper.state().isInitialProfileSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(true);
       });
       it('if field deleted from "profile.generalInfo.educationHistory"', async () => {
         const event = {
@@ -223,19 +211,19 @@ describe('ProfilePage', () => {
         const path = 'generalInfo.educationHistory';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect(wrapper.state().profile.generalInfo.educationHistory).toEqual([]);
+        expect((wrapper.state() as any).profile.generalInfo.educationHistory).toEqual([]);
       });
       it('if some other field was changed', async () => {
         const event = {
           target: {
             value: 'Hello everyone, my name is Mike.',
-          }
+          },
         };
         const path = 'generalInfo.aboutMyself';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect(wrapper.state().profile.generalInfo.aboutMyself).toEqual('Hello everyone, my name is Mike.');
-        expect(wrapper.state().isInitialProfileSettingsChanged).toBe(true);
+        expect((wrapper.state() as any).profile.generalInfo.aboutMyself).toEqual('Hello everyone, my name is Mike.');
+        expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(true);
       });
     });
   });
@@ -244,16 +232,16 @@ describe('ProfilePage', () => {
       it('if mode = "edit" was passed', async () => {
         const mode = 'edit';
         wrapper.setState({ ...state, isEditingModeEnabled: false });
-        expect(wrapper.state().isEditingModeEnabled).toBe(false);
+        expect((wrapper.state() as any).isEditingModeEnabled).toBe(false);
         await instance.changeProfilePageMode(mode);
-        expect(wrapper.state().isEditingModeEnabled).toBe(true);
+        expect((wrapper.state() as any).isEditingModeEnabled).toBe(true);
       });
       it('if mode = "view" was passed', async () => {
         const mode = 'view';
         wrapper.setState({ ...state, isEditingModeEnabled: true });
-        expect(wrapper.state().isEditingModeEnabled).toBe(true);
+        expect((wrapper.state() as any).isEditingModeEnabled).toBe(true);
         await instance.changeProfilePageMode(mode);
-        expect(wrapper.state().isEditingModeEnabled).toBe(false);
+        expect((wrapper.state() as any).isEditingModeEnabled).toBe(false);
       });
     });
   });
@@ -262,11 +250,13 @@ describe('ProfilePage', () => {
       const profile = {
         generalInfo: {
           aboutMyself: 'Hello',
-          educationHistory: [{
-            graduationYear: '2019',
-            faculty: 'TT',
-            university: 'Test',
-          }],
+          educationHistory: [
+            {
+              graduationYear: '2019',
+              faculty: 'TT',
+              university: 'Test',
+            },
+          ],
           englishLevel: 'c1',
           locationId: 778,
           locationName: 'Hrodna',
@@ -297,11 +287,11 @@ describe('ProfilePage', () => {
         isInitialProfileSettingsChanged: true,
       });
       await instance.saveProfile();
-      expect(wrapper.state().isSaving).toBe(false);
-      expect(wrapper.state().isInitialPermissionsSettingsChanged).toBe(false);
-      expect(wrapper.state().isInitialProfileSettingsChanged).toBe(false);
-      expect(wrapper.state().initialPermissionsSettings).toEqual(profile.permissionsSettings);
-      expect(wrapper.state().initialProfileSettings).toEqual(profile);
+      expect((wrapper.state() as any).isSaving).toBe(false);
+      expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(false);
+      expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(false);
+      expect((wrapper.state() as any).initialPermissionsSettings).toEqual(profile.permissionsSettings);
+      expect((wrapper.state() as any).initialProfileSettings).toEqual(profile);
     });
   });
   describe('hadStudentCoreJSInterview', () => {
@@ -331,11 +321,7 @@ describe('ProfilePage', () => {
             courseFullName: 'test',
             courseName: 'test',
             locationName: 'Minsk',
-            tasks: [
-              {},
-              {},
-              {},
-            ],
+            tasks: [{}, {}, {}],
           },
         ];
         const result = instance.hadStudentCoreJSInterview(studentStats);

@@ -28,38 +28,27 @@ describe('MentorStatsCard', () => {
           totalScore: 120,
         },
       ],
-    }]
+    },
+  ];
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
       const output = shallow(
-        <MentorStatsCard
-          data={mentorStats}
-          isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-        />,
+        <MentorStatsCard data={mentorStats} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
       const output = shallow(
-        <MentorStatsCard
-          data={mentorStats}
-          isEditingModeEnabled={true}
-          onPermissionsSettingsChange={() => {}}
-        />,
+        <MentorStatsCard data={mentorStats} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
     });
   });
 
   const wrapper = shallow(
-    <MentorStatsCard
-      data={mentorStats}
-      isEditingModeEnabled={false}
-      onPermissionsSettingsChange={() => {}}
-    />,
+    <MentorStatsCard data={mentorStats} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
   );
-  const instance = wrapper.instance();
+  const instance: any = wrapper.instance();
   describe('showMentorStatsModal', () => {
     it('should set "state.isMentorStatsModalVisible" as "true", "state.courseIndex" as index was passed', () => {
       expect(instance.state.isMentorStatsModalVisible).toBe(false);
@@ -94,7 +83,7 @@ describe('MentorStatsCard', () => {
         isMentorStatsVisible: { all: true, mentor: true, student: true },
         isStudentStatsVisible: { all: true, student: true },
       };
-      const instance = wrapper.instance();
+      const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({
         isMentorStatsVisible: { all: true, mentor: true, student: true },

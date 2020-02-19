@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { mountToJson } from 'enzyme-to-json';
 import PermissionsSettingsDrawer from '../PermissionsSettingsDrawer';
 
 describe('PermissionsSettingsDrawer', () => {
@@ -23,11 +23,11 @@ describe('PermissionsSettingsDrawer', () => {
     const output = mount(
       <PermissionsSettingsDrawer
         isSettingsVisible={true}
-        hideSettings={() => {}}
+        hideSettings={jest.fn()}
         permissionsSettings={permissionsSettings}
-        onPermissionsSettingsChange={() => {}}
+        onPermissionsSettingsChange={jest.fn()}
       />,
     );
-    expect(shallowToJson(output)).toMatchSnapshot();
+    expect(mountToJson(output)).toMatchSnapshot();
   });
 });

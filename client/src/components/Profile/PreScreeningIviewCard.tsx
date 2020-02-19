@@ -1,22 +1,14 @@
 import * as React from 'react';
-import {
-  Typography,
-  List,
-  Button,
-  Tag,
-} from 'antd';
+import { Typography, List, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
-import { StageInterviewDetailedFeedback } from '../../../../common/models/profile'
+import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
 import { formatDate } from 'services/formatter';
 import { Rating } from 'components';
 import PreScreeningIviewModal from './PreScreeningIviewModal';
 
 const { Text } = Typography;
 
-import {
-  QuestionCircleOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 type Props = {
   data: StageInterviewDetailedFeedback[];
@@ -35,11 +27,11 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
 
   private showPreScreeningIviewModal = (courseIndex: number) => {
     this.setState({ courseIndex, isPreScreeningIviewModalVisible: true });
-  }
+  };
 
   private hidePreScreeningIviewModal = () => {
     this.setState({ isPreScreeningIviewModalVisible: false });
-  }
+  };
 
   render() {
     const interviews = this.props.data;
@@ -59,25 +51,14 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={interviews}
-              renderItem={(
-                {
-                  courseName,
-                  interviewer,
-                  rating,
-                  date,
-                  isGoodCandidate,
-                },
-                idx,
-              ) => (
+              renderItem={({ courseName, interviewer, rating, date, isGoodCandidate }, idx) => (
                 <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ flexGrow: 2 }}>
                     <p style={{ marginBottom: 0 }}>
                       <Text strong>{courseName}</Text>
                     </p>
                     <Rating rating={rating} />
-                    <p style={{ fontSize: 12, marginBottom: 5 }}>
-                      Date: {formatDate(date)}
-                    </p>
+                    <p style={{ fontSize: 12, marginBottom: 5 }}>Date: {formatDate(date)}</p>
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
                       Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
                     </p>
@@ -86,7 +67,7 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
                     </p>
                   </div>
                   <Button type="dashed" onClick={this.showPreScreeningIviewModal.bind(null, idx)}>
-                    <FullscreenOutlined/>
+                    <FullscreenOutlined />
                   </Button>
                 </List.Item>
               )}

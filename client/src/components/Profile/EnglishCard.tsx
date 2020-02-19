@@ -1,9 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import {
-  Typography,
-  Select,
-} from 'antd';
+import { Typography, Select } from 'antd';
 import CommonCard from './CommonCard';
 import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { EnglishLevel } from '../../../../common/models/index';
@@ -28,26 +25,31 @@ type Props = {
 class EnglishCard extends React.Component<Props> {
   private filterPermissions = ({ isEnglishVisible }: Partial<ConfigurableProfilePermissions>) => ({
     isEnglishVisible,
-  })
+  });
 
-  shouldComponentUpdate = (nextProps: Props) => (
+  shouldComponentUpdate = (nextProps: Props) =>
     !isEqual(nextProps.data.englishLevel, this.props.data.englishLevel) ||
     !isEqual(nextProps.permissionsSettings?.isEnglishVisible, this.props.permissionsSettings?.isEnglishVisible) ||
-    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled)
-  )
+    !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
     const {
-      isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange,
+      isEditingModeEnabled,
+      permissionsSettings,
+      onPermissionsSettingsChange,
+      onProfileSettingsChange,
     } = this.props;
     const { englishLevel } = this.props.data;
     return (
       <CommonCard
         title="Estimated English level"
         icon={<TagOutlined />}
-        content={englishLevel ?
-          <Text style={{ textTransform: 'capitalize', fontSize: '48px' }}>{englishLevel}</Text> :
-          undefined
+        content={
+          englishLevel ? (
+            <Text style={{ textTransform: 'capitalize', fontSize: '48px' }}>{englishLevel}</Text>
+          ) : (
+            undefined
+          )
         }
         noDataDescrption="English level isn't choosen"
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}
@@ -55,23 +57,20 @@ class EnglishCard extends React.Component<Props> {
         onPermissionsSettingsChange={onPermissionsSettingsChange}
         profileSettingsContent={
           <div>
-            <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>English level:</Text></p>
+            <p style={{ fontSize: 18, marginBottom: 5 }}>
+              <Text strong>English level:</Text>
+            </p>
             <div style={{ marginBottom: 20 }}>
               <Select
                 style={{ width: '100%' }}
                 defaultValue={englishLevel || 'a0'}
                 onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.englishLevel')}
               >
-                {
-                  ENGLISH_LEVELS.map((level) => (
-                    <Option
-                      key={`settings-english-level-${level}`}
-                      value={level}
-                    >
-                      {level.toUpperCase()}
-                    </Option>
-                  ))
-                }
+                {ENGLISH_LEVELS.map(level => (
+                  <Option key={`settings-english-level-${level}`} value={level}>
+                    {level.toUpperCase()}
+                  </Option>
+                ))}
               </Select>
             </div>
           </div>

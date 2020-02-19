@@ -1,7 +1,5 @@
 module.exports = {
-  setupFiles: [
-    '<rootDir>/__mocks__/setupJest.ts',
-  ],
+  setupFiles: ['<rootDir>/__mocks__/setupJest.ts'],
   moduleNameMapper: {
     '^components(.*)$': '<rootDir>/components/$1',
     '^services(.*)$': '<rootDir>/services/$1',

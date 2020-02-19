@@ -1,19 +1,12 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import {
-  Typography,
-  List,
-  Button,
-} from 'antd';
+import { Typography, List, Button } from 'antd';
 import CommonCard from './CommonCard';
 import CoreJsIviewsModal from './CoreJsIviewsModal';
 
 const { Text } = Typography;
 
-import {
-  QuestionCircleOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 export interface CoreJsInterviewData {
   courseFullName: string;
@@ -28,11 +21,11 @@ export interface CoreJsInterviewData {
     interviewer: {
       name: string;
       githubId: string;
-    }
+    };
     comment: string;
     score: number;
   };
-};
+}
 
 type Props = {
   data: CoreJsInterviewData[];
@@ -49,17 +42,16 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
     isCoreJsIviewModalVisible: false,
   };
 
-  shouldComponentUpdate = (_: Props, nextState: State) => (
-    !isEqual(nextState.isCoreJsIviewModalVisible, this.state.isCoreJsIviewModalVisible)
-  );
+  shouldComponentUpdate = (_: Props, nextState: State) =>
+    !isEqual(nextState.isCoreJsIviewModalVisible, this.state.isCoreJsIviewModalVisible);
 
   private showCoreJsIviewModal = (courseIndex: number) => {
     this.setState({ courseIndex, isCoreJsIviewModalVisible: true });
-  }
+  };
 
   private hideCoreJsIviewModal = () => {
     this.setState({ isCoreJsIviewModalVisible: false });
-  }
+  };
 
   render() {
     const stats = this.props.data;
@@ -80,21 +72,14 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={stats}
-              renderItem={(
-                {
-                  courseName,
-                  locationName,
-                  interview: {
-                    score,
-                    interviewer,
-                  },
-                },
-                idx,
-              ) => (
+              renderItem={({ courseName, locationName, interview: { score, interviewer } }, idx) => (
                 <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ flexGrow: 2 }}>
                     <p style={{ marginBottom: 5 }}>
-                      <Text strong>{courseName}{locationName && ` / ${locationName}`}</Text>
+                      <Text strong>
+                        {courseName}
+                        {locationName && ` / ${locationName}`}
+                      </Text>
                     </p>
                     {
                       <p style={{ fontSize: 12, marginBottom: 5 }}>
@@ -108,7 +93,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                     }
                   </div>
                   <Button type="dashed" onClick={this.showCoreJsIviewModal.bind(null, idx)}>
-                    <FullscreenOutlined/>
+                    <FullscreenOutlined />
                   </Button>
                 </List.Item>
               )}

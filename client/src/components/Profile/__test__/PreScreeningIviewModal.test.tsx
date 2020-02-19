@@ -32,13 +32,7 @@ describe('PreScreeningIviewModal', () => {
       },
     } as StageInterviewDetailedFeedback;
 
-    const output = shallow(
-      <PreScreeningIviewModal
-        feedback={feedback}
-        isVisible={true}
-        onHide={() => {}}
-      />,
-    );
+    const output = shallow(<PreScreeningIviewModal feedback={feedback} isVisible={true} onHide={jest.fn()} />);
     expect(shallowToJson(output)).toMatchSnapshot();
   });
 });

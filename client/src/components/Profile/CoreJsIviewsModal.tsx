@@ -1,12 +1,7 @@
 import * as React from 'react';
 // import isEqual from 'lodash/isEqual'
 import { CoreJsInterviewData } from './CoreJsIviewsCard';
-import {
-  Modal,
-  Table,
-  Typography,
-  Tag,
-} from 'antd';
+import { Modal, Table, Typography, Tag } from 'antd';
 
 const { Text } = Typography;
 
@@ -36,12 +31,12 @@ class CoreJsIviewsModal extends React.PureComponent<Props> {
         <p style={{ marginBottom: 20 }}>
           Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
         </p>
-        {
-          comment &&
-            <p style={{ marginBottom: 20 }}>
-              <Text strong>Comment: </Text>{comment}
-            </p>
-        }
+        {comment && (
+          <p style={{ marginBottom: 20 }}>
+            <Text strong>Comment: </Text>
+            {comment}
+          </p>
+        )}
         <Table
           dataSource={answers}
           size="small"
@@ -54,13 +49,14 @@ class CoreJsIviewsModal extends React.PureComponent<Props> {
             },
             {
               dataIndex: 'answer',
-              render: (answer) => answer === 'true' ? (
-                <Tag color="green">Yes</Tag>
-              ) : answer === 'false' ? (
-                <Tag color="red">No</Tag>
-              ) : (
-                answer
-              ),
+              render: answer =>
+                answer === 'true' ? (
+                  <Tag color="green">Yes</Tag>
+                ) : answer === 'false' ? (
+                  <Tag color="red">No</Tag>
+                ) : (
+                  answer
+                ),
             },
           ]}
         />

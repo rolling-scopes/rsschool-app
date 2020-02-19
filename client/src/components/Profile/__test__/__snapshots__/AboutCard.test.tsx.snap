@@ -6,7 +6,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] =
   icon={<ForwardRef(InfoCircleOutlined) />}
   isEditingModeEnabled={false}
   noDataDescrption="About info isn't written"
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   profileSettingsContent={
     <div>
       <p
@@ -51,7 +51,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
   icon={<ForwardRef(InfoCircleOutlined) />}
   isEditingModeEnabled={false}
   noDataDescrption="About info isn't written"
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   profileSettingsContent={
     <div>
       <p

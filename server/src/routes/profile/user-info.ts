@@ -14,6 +14,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     isTelegramVisible,
     isSkypeVisible,
     isContactsNotesVisible,
+    isLinkedInVisible,
   } = permissions;
 
   const query = await getRepository(User)
@@ -51,19 +52,18 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     query.addSelect('"user"."contactsNotes" AS "contactsNotes"');
   }
 
+  if (isLinkedInVisible) {
+    query.addSelect('"user"."contactsLinkedIn" AS "contactsLinkedIn"');
+  }
+
   if (isAboutVisible) {
     query.addSelect('"user"."aboutMyself" AS "aboutMyself"');
   }
 
-  const rawUser = await query
-    .where('"user"."githubId" = :githubId', { githubId })
-    .getRawOne();
+  const rawUser = await query.where('"user"."githubId" = :githubId', { githubId }).getRawOne();
 
-  const isContactsVisible = isPhoneVisible ||
-    isEmailVisible ||
-    isTelegramVisible ||
-    isSkypeVisible ||
-    isContactsNotesVisible;
+  const isContactsVisible =
+    isPhoneVisible || isEmailVisible || isTelegramVisible || isSkypeVisible || isContactsNotesVisible;
 
   const {
     firstName,
@@ -77,6 +77,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     contactsTelegram = null,
     contactsSkype = null,
     contactsNotes = null,
+    contactsLinkedIn = null,
     aboutMyself = null,
   } = rawUser;
 
@@ -90,12 +91,15 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
       englishLevel: isEnglishVisible ? englishLevel : undefined,
       name: getFullName(firstName, lastName, githubId),
     },
-    contacts: isContactsVisible ? {
-      phone: contactsPhone,
-      email: contactsEmail,
-      skype: contactsSkype,
-      telegram: contactsTelegram,
-      notes: contactsNotes,
-    } : undefined,
+    contacts: isContactsVisible
+      ? {
+          phone: contactsPhone,
+          email: contactsEmail,
+          skype: contactsSkype,
+          telegram: contactsTelegram,
+          notes: contactsNotes,
+          linkedIn: contactsLinkedIn,
+        }
+      : undefined,
   };
 };

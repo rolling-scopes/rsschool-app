@@ -124,6 +124,9 @@ export class User {
   contactsSkype?: string;
 
   @Column({ nullable: true })
+  contactsLinkedIn?: string;
+
+  @Column({ nullable: true })
   aboutMyself?: string;
 
   @Column({
@@ -176,7 +179,10 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(() => ProfilePermissions, profilePermissions => profilePermissions.user)
+  @OneToOne(
+    () => ProfilePermissions,
+    profilePermissions => profilePermissions.user,
+  )
   @JoinColumn()
   profilePermissions: ProfilePermissions | null;
 

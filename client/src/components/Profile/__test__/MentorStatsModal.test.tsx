@@ -27,7 +27,7 @@ describe('MentorStatsModal', () => {
           ],
         }}
         isVisible={true}
-        onHide={() => {}}
+        onHide={jest.fn()}
       />,
     );
     expect(shallowToJson(output)).toMatchSnapshot();

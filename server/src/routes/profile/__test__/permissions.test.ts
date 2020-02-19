@@ -6,9 +6,11 @@ describe('getPermissions', () => {
   });
   describe('Should return permissions object with all keys equal "false"', () => {
     it('if "isProfileOwner" is "false" and no "role" and "permissions" have passed', () => {
-      expect(getPermissions({
-        isProfileOwner: false,
-      })).toEqual({
+      expect(
+        getPermissions({
+          isProfileOwner: false,
+        }),
+      ).toEqual({
         isProfileVisible: false,
         isAboutVisible: false,
         isEducationVisible: false,
@@ -30,25 +32,27 @@ describe('getPermissions', () => {
   describe('Should return permissions object depends on "role" and "permissions" have passed', () => {
     describe('if "isProfileOwner" is "false"', () => {
       it('"role" is "all" and some "permissions" set with "all" = "true"', () => {
-        expect(getPermissions({
-          isProfileOwner: false,
-          role: 'all',
-          permissions: {
-            isProfileVisible: { all: true },
-            isAboutVisible: { all: true, mentor: true, student: true },
-            isEducationVisible: { all: true, mentor: true, student: true },
-            isEnglishVisible: { all: false, student: false },
-            isEmailVisible: { all: true, student: true },
-            isTelegramVisible: { all: false, student: false },
-            isSkypeVisible: { all: true, student: true },
-            isPhoneVisible: { all: false, student: false },
-            isContactsNotesVisible: { all: true, student: true },
-            isLinkedInVisible: { all: false, mentor: false, student: false },
-            isPublicFeedbackVisible: { all: true, mentor: true, student: true },
-            isMentorStatsVisible: { all: true, mentor: true, student: true },
-            isStudentStatsVisible: { all: true, student: true },
-          },
-        })).toEqual({
+        expect(
+          getPermissions({
+            isProfileOwner: false,
+            role: 'all',
+            permissions: {
+              isProfileVisible: { all: true },
+              isAboutVisible: { all: true, mentor: true, student: true },
+              isEducationVisible: { all: true, mentor: true, student: true },
+              isEnglishVisible: { all: false, student: false },
+              isEmailVisible: { all: true, student: true },
+              isTelegramVisible: { all: false, student: false },
+              isSkypeVisible: { all: true, student: true },
+              isPhoneVisible: { all: false, student: false },
+              isContactsNotesVisible: { all: true, student: true },
+              isLinkedInVisible: { all: false, mentor: false, student: false },
+              isPublicFeedbackVisible: { all: true, mentor: true, student: true },
+              isMentorStatsVisible: { all: true, mentor: true, student: true },
+              isStudentStatsVisible: { all: true, student: true },
+            },
+          }),
+        ).toEqual({
           isProfileVisible: true,
           isAboutVisible: true,
           isEducationVisible: true,
@@ -67,25 +71,27 @@ describe('getPermissions', () => {
         });
       });
       it('"role" is "mentor" and some "permissions" set with "mentor" = "true"', () => {
-        expect(getPermissions({
-          isProfileOwner: false,
-          role: 'mentor',
-          permissions: {
-            isProfileVisible: { all: true },
-            isAboutVisible: { all: false, mentor: true, student: false },
-            isEducationVisible: { all: false, mentor: false, student: true },
-            isEnglishVisible: { all: false, student: false },
-            isEmailVisible: { all: false, student: true },
-            isTelegramVisible: { all: false, student: false },
-            isSkypeVisible: { all: false, student: true },
-            isPhoneVisible: { all: false, student: false },
-            isContactsNotesVisible: { all: true, student: true },
-            isLinkedInVisible: { all: false, mentor: false, student: false },
-            isPublicFeedbackVisible: { all: false, mentor: true, student: true },
-            isMentorStatsVisible: { all: false, mentor: true, student: true },
-            isStudentStatsVisible: { all: false, student: true },
-          },
-        })).toEqual({
+        expect(
+          getPermissions({
+            isProfileOwner: false,
+            role: 'mentor',
+            permissions: {
+              isProfileVisible: { all: true },
+              isAboutVisible: { all: false, mentor: true, student: false },
+              isEducationVisible: { all: false, mentor: false, student: true },
+              isEnglishVisible: { all: false, student: false },
+              isEmailVisible: { all: false, student: true },
+              isTelegramVisible: { all: false, student: false },
+              isSkypeVisible: { all: false, student: true },
+              isPhoneVisible: { all: false, student: false },
+              isContactsNotesVisible: { all: true, student: true },
+              isLinkedInVisible: { all: false, mentor: false, student: false },
+              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
+              isMentorStatsVisible: { all: false, mentor: true, student: true },
+              isStudentStatsVisible: { all: false, student: true },
+            },
+          }),
+        ).toEqual({
           isProfileVisible: true,
           isAboutVisible: true,
           isEducationVisible: false,
@@ -104,25 +110,27 @@ describe('getPermissions', () => {
         });
       });
       it('"role" is "student" and some "permissions" set with "student" = "true"', () => {
-        expect(getPermissions({
-          isProfileOwner: false,
-          role: 'student',
-          permissions: {
-            isProfileVisible: { all: true },
-            isAboutVisible: { all: false, mentor: true, student: true },
-            isEducationVisible: { all: false, mentor: false, student: false },
-            isEnglishVisible: { all: false, student: false },
-            isEmailVisible: { all: false, student: false },
-            isTelegramVisible: { all: false, student: true },
-            isSkypeVisible: { all: false, student: true },
-            isPhoneVisible: { all: false, student: false },
-            isContactsNotesVisible: { all: true, student: true },
-            isLinkedInVisible: { all: false, mentor: false, student: false },
-            isPublicFeedbackVisible: { all: false, mentor: true, student: true },
-            isMentorStatsVisible: { all: false, mentor: true, student: true },
-            isStudentStatsVisible: { all: false, student: true },
-          },
-        })).toEqual({
+        expect(
+          getPermissions({
+            isProfileOwner: false,
+            role: 'student',
+            permissions: {
+              isProfileVisible: { all: true },
+              isAboutVisible: { all: false, mentor: true, student: true },
+              isEducationVisible: { all: false, mentor: false, student: false },
+              isEnglishVisible: { all: false, student: false },
+              isEmailVisible: { all: false, student: false },
+              isTelegramVisible: { all: false, student: true },
+              isSkypeVisible: { all: false, student: true },
+              isPhoneVisible: { all: false, student: false },
+              isContactsNotesVisible: { all: true, student: true },
+              isLinkedInVisible: { all: false, mentor: false, student: false },
+              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
+              isMentorStatsVisible: { all: false, mentor: true, student: true },
+              isStudentStatsVisible: { all: false, student: true },
+            },
+          }),
+        ).toEqual({
           isProfileVisible: true,
           isAboutVisible: true,
           isEducationVisible: false,
@@ -143,25 +151,27 @@ describe('getPermissions', () => {
     });
     describe('if "isProfileOwner" is "true"', () => {
       it('"role" is "all" and all "permissions" set with "all" = "false"', () => {
-        expect(getPermissions({
-          isProfileOwner: true,
-          role: 'all',
-          permissions: {
-            isProfileVisible: { all: false },
-            isAboutVisible: { all: false, mentor: false, student: false },
-            isEducationVisible: { all: false, mentor: false, student: false },
-            isEnglishVisible: { all: false, student: false },
-            isEmailVisible: { all: false, student: false },
-            isTelegramVisible: { all: false, student: false },
-            isSkypeVisible: { all: false, student: false },
-            isPhoneVisible: { all: false, student: false },
-            isContactsNotesVisible: { all: false, student: false },
-            isLinkedInVisible: { all: false, mentor: false, student: false },
-            isPublicFeedbackVisible: { all: false, mentor: false, student: false },
-            isMentorStatsVisible: { all: false, mentor: false, student: false },
-            isStudentStatsVisible: { all: false, student: false },
-          },
-        })).toEqual({
+        expect(
+          getPermissions({
+            isProfileOwner: true,
+            role: 'all',
+            permissions: {
+              isProfileVisible: { all: false },
+              isAboutVisible: { all: false, mentor: false, student: false },
+              isEducationVisible: { all: false, mentor: false, student: false },
+              isEnglishVisible: { all: false, student: false },
+              isEmailVisible: { all: false, student: false },
+              isTelegramVisible: { all: false, student: false },
+              isSkypeVisible: { all: false, student: false },
+              isPhoneVisible: { all: false, student: false },
+              isContactsNotesVisible: { all: false, student: false },
+              isLinkedInVisible: { all: false, mentor: false, student: false },
+              isPublicFeedbackVisible: { all: false, mentor: false, student: false },
+              isMentorStatsVisible: { all: false, mentor: false, student: false },
+              isStudentStatsVisible: { all: false, student: false },
+            },
+          }),
+        ).toEqual({
           isProfileVisible: true,
           isAboutVisible: true,
           isEducationVisible: true,
@@ -190,135 +200,146 @@ describe('defineRole', () => {
 
   describe('Should return user role', () => {
     it('"student", if user is a student', () => {
-      expect(defineRole({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
-        studentCourses: null,
-        roles: {
-          1: 'student',
-          2: 'mentor',
-          11: 'mentor',
-        },
-        userGithubId: 'dima',
-      })).toBe('student');
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          studentCourses: null,
+          roles: {
+            1: 'student',
+            2: 'mentor',
+            11: 'mentor',
+          },
+          userGithubId: 'dima',
+        }),
+      ).toBe('student');
     });
     it('"mentor", if user is an assigned mentor', () => {
-      expect(defineRole({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
-        studentCourses: null,
-        roles: {
-          1: 'student',
-          2: 'mentor',
-          11: 'mentor',
-        },
-        userGithubId: 'andrey',
-      })).toBe('mentor');
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          studentCourses: null,
+          roles: {
+            1: 'student',
+            2: 'mentor',
+            11: 'mentor',
+          },
+          userGithubId: 'andrey',
+        }),
+      ).toBe('mentor');
     });
     it('"mentor", if user is an interviewer', () => {
-      expect(defineRole({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
-        studentCourses: null,
-        roles: {
-          1: 'student',
-          2: 'mentor',
-          11: 'mentor',
-        },
-        userGithubId: 'max',
-      })).toBe('mentor');
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          studentCourses: null,
+          roles: {
+            1: 'student',
+            2: 'mentor',
+            11: 'mentor',
+          },
+          userGithubId: 'max',
+        }),
+      ).toBe('mentor');
     });
     it('"mentor", if user is a stage-interviewer', () => {
-      expect(defineRole({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
-        studentCourses: null,
-        roles: {
-          1: 'student',
-          2: 'mentor',
-          11: 'mentor',
-        },
-        userGithubId: 'alex',
-      })).toBe('mentor');
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          studentCourses: null,
+          roles: {
+            1: 'student',
+            2: 'mentor',
+            11: 'mentor',
+          },
+          userGithubId: 'alex',
+        }),
+      ).toBe('mentor');
     });
     it('"mentor", if user is assigned for checking a task', () => {
-      expect(defineRole({
-        relationsRoles: {
-          student: 'dima',
-          mentors: ['andrey', 'dasha'],
-          interviewers: ['sasha', 'max'],
-          stageInterviewers: ['alex'],
-          checkers: ['masha', 'ivan'],
-        },
-        studentCourses: null,
-        roles: {
-          1: 'student',
-          2: 'mentor',
-          11: 'mentor',
-        },
-        userGithubId: 'masha',
-      })).toBe('mentor');
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          studentCourses: null,
+          roles: {
+            1: 'student',
+            2: 'mentor',
+            11: 'mentor',
+          },
+          userGithubId: 'masha',
+        }),
+      ).toBe('mentor');
     });
     it('"coursementor", if user is a mentor at the same course where requested user is a student', () => {
-      expect(defineRole({
-        relationsRoles: null,
-        studentCourses: [
-          { courseId: 1 },
-          { courseId: 11 },
-        ],
-        roles: {
-          '1': 'student',
-          '2': 'mentor',
-          '11': 'mentor',
-        },
-        userGithubId: 'denis',
-      })).toBe('coursementor');
+      expect(
+        defineRole({
+          relationsRoles: null,
+          studentCourses: [{ courseId: 1 }, { courseId: 11 }],
+          roles: {
+            '1': 'student',
+            '2': 'mentor',
+            '11': 'mentor',
+          },
+          userGithubId: 'denis',
+        }),
+      ).toBe('coursementor');
     });
     it('"all", if user is not a mentor at the same course where requested user is a student', () => {
-      expect(defineRole({
-        relationsRoles: null,
-        studentCourses: [
-          { courseId: 1 },
-        ],
-        roles: {
-          '1': 'student',
-          '2': 'mentor',
-          '11': 'mentor',
-        },
-        userGithubId: 'denis',
-      })).toBe('all');
+      expect(
+        defineRole({
+          relationsRoles: null,
+          studentCourses: [{ courseId: 1 }],
+          roles: {
+            '1': 'student',
+            '2': 'mentor',
+            '11': 'mentor',
+          },
+          userGithubId: 'denis',
+        }),
+      ).toBe('all');
     });
     it('"all", if user if student has not registered to any course', () => {
-      expect(defineRole({
-        relationsRoles: null,
-        studentCourses: null,
-        roles: {
-          '1': 'student',
-          '2': 'mentor',
-          '11': 'mentor',
-        },
-        userGithubId: 'denis',
-      })).toBe('all');
+      expect(
+        defineRole({
+          relationsRoles: null,
+          studentCourses: null,
+          roles: {
+            '1': 'student',
+            '2': 'mentor',
+            '11': 'mentor',
+          },
+          userGithubId: 'denis',
+        }),
+      ).toBe('all');
     });
   });
 });

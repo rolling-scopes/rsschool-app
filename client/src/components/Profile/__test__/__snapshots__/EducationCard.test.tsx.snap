@@ -14,8 +14,8 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
     }
   }
   isEditingModeEnabled={true}
-  onPermissionsSettingsChange={[Function]}
-  onProfileSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
 >
   <CommonCard
     content={
@@ -40,7 +40,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
     icon={<ForwardRef(ReadOutlined) />}
     isEditingModeEnabled={true}
     noDataDescrption="Education history isn't filled in"
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
       <React.Fragment>
         <List
@@ -326,7 +326,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
           <PermissionsSettingsDrawer
             hideSettings={[Function]}
             isSettingsVisible={false}
-            onPermissionsSettingsChange={[Function]}
+            onPermissionsSettingsChange={[MockFunction]}
           >
             <withConfigConsumer(Drawer)
               className="jsx-2583821679"
@@ -1174,7 +1174,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -1185,6 +1187,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             value={null}
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -1199,7 +1202,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -1293,7 +1298,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -1304,6 +1311,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             value={null}
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -1318,7 +1326,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -1412,7 +1422,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -1423,6 +1435,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             value={null}
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -1437,7 +1450,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -1776,7 +1791,7 @@ exports[`EducationCard Should render correctly if "educationHistory" is empty 1`
   icon={<ForwardRef(ReadOutlined) />}
   isEditingModeEnabled={false}
   noDataDescrption="Education history isn't filled in"
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   profileSettingsContent={
     <React.Fragment>
       <List
@@ -1824,8 +1839,8 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
     }
   }
   isEditingModeEnabled={false}
-  onPermissionsSettingsChange={[Function]}
-  onProfileSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
 >
   <CommonCard
     content={
@@ -1850,7 +1865,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
     icon={<ForwardRef(ReadOutlined) />}
     isEditingModeEnabled={false}
     noDataDescrption="Education history isn't filled in"
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
       <React.Fragment>
         <List
@@ -2195,8 +2210,8 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
     }
   }
   isEditingModeEnabled={true}
-  onPermissionsSettingsChange={[Function]}
-  onProfileSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
 >
   <CommonCard
     content={
@@ -2221,7 +2236,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
     icon={<ForwardRef(ReadOutlined) />}
     isEditingModeEnabled={true}
     noDataDescrption="Education history isn't filled in"
-    onPermissionsSettingsChange={[Function]}
+    onPermissionsSettingsChange={[MockFunction]}
     profileSettingsContent={
       <React.Fragment>
         <List
@@ -2558,7 +2573,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           <PermissionsSettingsDrawer
             hideSettings={[Function]}
             isSettingsVisible={false}
-            onPermissionsSettingsChange={[Function]}
+            onPermissionsSettingsChange={[MockFunction]}
           >
             <withConfigConsumer(Drawer)
               className="jsx-2583821679"
@@ -3457,7 +3472,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -3468,6 +3485,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             value="MIT"
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -3482,7 +3500,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -3576,7 +3596,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -3587,6 +3609,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             value="POIT"
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -3601,7 +3624,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {
@@ -3695,7 +3720,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                         element={
                                                           <input
                                                             className="ant-input"
+                                                            onBlur={[Function]}
                                                             onChange={[Function]}
+                                                            onFocus={[Function]}
                                                             onKeyDown={[Function]}
                                                             style={
                                                               Object {
@@ -3706,6 +3733,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             value={2002}
                                                           />
                                                         }
+                                                        focused={false}
                                                         handleReset={[Function]}
                                                         inputType="input"
                                                         onChange={[Function]}
@@ -3720,7 +3748,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       >
                                                         <input
                                                           className="ant-input"
+                                                          onBlur={[Function]}
                                                           onChange={[Function]}
+                                                          onFocus={[Function]}
                                                           onKeyDown={[Function]}
                                                           style={
                                                             Object {

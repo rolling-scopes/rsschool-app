@@ -70,34 +70,22 @@ describe('PublicFeedbackCard', () => {
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
       const output = shallow(
-        <PublicFeedbackCard
-          data={data}
-          isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-        />,
+        <PublicFeedbackCard data={data} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
       const output = shallow(
-        <PublicFeedbackCard
-          data={data}
-          isEditingModeEnabled={true}
-          onPermissionsSettingsChange={() => {}}
-        />,
+        <PublicFeedbackCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
       );
       expect(shallowToJson(output)).toMatchSnapshot();
     });
   });
 
   const wrapper = shallow(
-    <PublicFeedbackCard
-      data={data}
-      isEditingModeEnabled={true}
-      onPermissionsSettingsChange={() => {}}
-    />,
+    <PublicFeedbackCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
   );
-  const instance = wrapper.instance();
+  const instance: any = wrapper.instance();
   describe('showPublicFeedbackModal', () => {
     it('should set "state.isPublicFeedbackModalVisible" as "true"', () => {
       expect(instance.state.isPublicFeedbackModalVisible).toBe(false);

@@ -1,21 +1,13 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import {
-  Typography,
-  List,
-  Button,
-  Progress,
-} from 'antd';
+import { Typography, List, Button, Progress } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import {
-  BookOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -41,13 +33,14 @@ class StudentStatsCard extends React.Component<Props, State> {
     isStudentStatsModalVisible: false,
   };
 
-  shouldComponentUpdate = (nextProps: Props, nextState: State) => (
-    !isEqual(nextProps.permissionsSettings?.isStudentStatsVisible,
-      this.props.permissionsSettings?.isStudentStatsVisible) ||
+  shouldComponentUpdate = (nextProps: Props, nextState: State) =>
+    !isEqual(
+      nextProps.permissionsSettings?.isStudentStatsVisible,
+      this.props.permissionsSettings?.isStudentStatsVisible,
+    ) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
-    !isEqual(nextState.coursesProgress, this.state.coursesProgress)
-  );
+    !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
   private filterPermissions = ({ isStudentStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
     isStudentStatsVisible,
@@ -55,16 +48,15 @@ class StudentStatsCard extends React.Component<Props, State> {
 
   private showStudentStatsModal = (courseIndex: number) => {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
-  }
+  };
 
   private hideStudentStatsModal = () => {
     this.setState({ isStudentStatsModalVisible: false });
-  }
+  };
 
   private countScoredTasks = (tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length;
-  private countCourseCompletionPercentage = (tasks: { score: number }[]) => Number((tasks
-    .filter(({ score }) => score !== null).length / tasks.length * 100)
-    .toFixed(1));
+  private countCourseCompletionPercentage = (tasks: { score: number }[]) =>
+    Number(((tasks.filter(({ score }) => score !== null).length / tasks.length) * 100).toFixed(1));
 
   componentDidMount() {
     const stats = this.props.data;
@@ -102,13 +94,17 @@ class StudentStatsCard extends React.Component<Props, State> {
                   isExpelled,
                   position,
                   isCourseCompleted,
+                  certificateId,
                 },
                 idx,
               ) => (
                 <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ flexGrow: 2 }}>
                     <p style={{ marginBottom: 0 }}>
-                      <Text strong>{courseName}{locationName && ` / ${locationName}`}</Text>
+                      <Text strong>
+                        {courseName}
+                        {locationName && ` / ${locationName}`}
+                      </Text>
                     </p>
                     <div style={{ width: '80%', marginBottom: 5 }}>
                       <Progress
@@ -117,20 +113,30 @@ class StudentStatsCard extends React.Component<Props, State> {
                         size="small"
                       />
                     </div>
-                    {
-                      mentor.githubId && <p style={{ fontSize: 12, marginBottom: 5 }}>
+                    {certificateId && (
+                      <p style={{ fontSize: 16, marginBottom: 5 }}>
+                        <SafetyCertificateTwoTone twoToneColor="#52c41a" />{' '}
+                        <a target="__blank" href={`/certificate/${certificateId}`}>
+                          Certificate
+                        </a>
+                      </p>
+                    )}
+                    {mentor.githubId && (
+                      <p style={{ fontSize: 12, marginBottom: 5 }}>
                         Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
                       </p>
-                    }
-                    {
-                      position && <p style={{ fontSize: 12, marginBottom: 5 }}>
+                    )}
+                    {position && (
+                      <p style={{ fontSize: 12, marginBottom: 5 }}>
                         Position: <Text strong>{position}</Text>
                       </p>
-                    }
-                    <p style={{ fontSize: 12, marginBottom: 5 }}>Score: <Text mark>{totalScore}</Text></p>
+                    )}
+                    <p style={{ fontSize: 12, marginBottom: 5 }}>
+                      Score: <Text mark>{totalScore}</Text>
+                    </p>
                   </div>
                   <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
-                    <FullscreenOutlined/>
+                    <FullscreenOutlined />
                   </Button>
                 </List.Item>
               )}

@@ -46,6 +46,7 @@ export interface Contacts {
   skype: string | null;
   telegram: string | null;
   notes: string | null;
+  linkedIn: string | null;
 }
 
 export interface MentorStats {
@@ -57,7 +58,7 @@ export interface MentorStats {
     name: string;
     isExpelled: boolean;
     totalScore: number;
-  }[]
+  }[];
 }
 
 export interface StudentStats {
@@ -67,6 +68,7 @@ export interface StudentStats {
   courseFullName: string;
   isExpelled: boolean;
   expellingReason: string;
+  certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
   position: number | null;
@@ -91,7 +93,7 @@ export interface StudentStats {
       answer: string;
     }[];
   }[];
-};
+}
 
 export interface PublicFeedback {
   feedbackDate: string;
@@ -102,7 +104,7 @@ export interface PublicFeedback {
     name: string;
     githubId: string;
   };
-};
+}
 
 export interface StageInterviewDetailedFeedback {
   decision: string;
@@ -128,12 +130,12 @@ export interface StageInterviewDetailedFeedback {
     name: string;
     githubId: string;
   };
-};
+}
 
 export interface UserInfo {
   generalInfo: GeneralInfo;
   contacts?: Contacts;
-};
+}
 
 export interface ProfileInfo {
   permissionsSettings?: ConfigurableProfilePermissions;
@@ -143,12 +145,12 @@ export interface ProfileInfo {
   studentStats?: StudentStats[];
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
-};
+}
 
 export interface SaveProfileInfo {
   permissionsSettings: ConfigurableProfilePermissions;
   generalInfo: GeneralInfo;
   contacts: Contacts;
-  isPermissionsSettingsChanged: boolean,
-  isProfileSettingsChanged: boolean,
+  isPermissionsSettingsChanged: boolean;
+  isProfileSettingsChanged: boolean;
 }

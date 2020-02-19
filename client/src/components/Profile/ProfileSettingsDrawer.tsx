@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {
-  Drawer,
-} from 'antd';
+import { Drawer } from 'antd';
 import css from 'styled-jsx/css';
 
 type Props = {

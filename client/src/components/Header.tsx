@@ -3,12 +3,7 @@ import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import css from 'styled-jsx/css';
 
-import {
-  EyeOutlined,
-  EditOutlined,
-  LogoutOutlined,
-  SaveTwoTone,
-} from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone } from '@ant-design/icons';
 
 type Props = {
   username: string;
@@ -22,12 +17,7 @@ type Props = {
 };
 
 export function Header(props: Props) {
-  const {
-    isProfilePage,
-    onChangeProfilePageMode,
-    isProfileEditingModeEnabled,
-    isSaveButtonVisible,
-  } = props;
+  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible } = props;
 
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
@@ -35,31 +25,27 @@ export function Header(props: Props) {
       <Menu.Item key="0" style={isProfileEditingModeEnabled ? undefined : menuActiveItemStyle}>
         <Button
           type="link"
-          href={isProfilePage ? "#view" : "/profile"}
+          href={isProfilePage ? '#view' : '/profile'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('view') : undefined}
-          style={{ textAlign: "left" }}
+          style={{ textAlign: 'left' }}
         >
-          <EyeOutlined/> View
+          <EyeOutlined /> View
         </Button>
       </Menu.Item>
       <Menu.Item key="1" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
-          href={props.isProfilePage ? "#edit" : "/profile#edit"}
+          href={props.isProfilePage ? '#edit' : '/profile#edit'}
           onClick={onChangeProfilePageMode ? () => onChangeProfilePageMode('edit') : undefined}
-          style={{ textAlign: "left" }}
+          style={{ textAlign: 'left' }}
         >
-          <EditOutlined/> Edit
+          <EditOutlined /> Edit
         </Button>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="2">
-        <Button
-          type="link"
-          href={'/api/auth/logout'}
-          style={{ textAlign: "left" }}
-        >
-          <LogoutOutlined/> Logout
+        <Button type="link" href={'/api/auth/logout'} style={{ textAlign: 'left' }}>
+          <LogoutOutlined /> Logout
         </Button>
       </Menu.Item>
     </Menu>
@@ -81,19 +67,12 @@ export function Header(props: Props) {
         <b>{props.title}</b> {props.courseName}
       </div>
       <div className="profile">
-        {
-          isSaveButtonVisible &&
-            <Button
-              type="danger"
-              ghost
-              size="large"
-              style={{ marginRight: 16, height: 38 }}
-              onClick={props.onSaveClick}
-            >
-              <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
-              <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
-            </Button>
-        }
+        {isSaveButtonVisible && (
+          <Button type="danger" ghost size="large" style={{ marginRight: 16, height: 38 }} onClick={props.onSaveClick}>
+            <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
+            <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
+          </Button>
+        )}
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="dashed" size="large">
             <GithubAvatar githubId={props.username} size={24} />

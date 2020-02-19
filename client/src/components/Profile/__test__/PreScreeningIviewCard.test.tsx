@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { mountToJson } from 'enzyme-to-json';
 import PreScreeningIviewCard from '../PreScreeningIviewCard';
 import { StageInterviewDetailedFeedback } from '../../../../../common/models/profile';
 
@@ -59,16 +59,12 @@ describe('PreScreeningIviewCard', () => {
   ] as StageInterviewDetailedFeedback[];
 
   it('Should render correctly', () => {
-    const output = mount(
-      <PreScreeningIviewCard data={data} />,
-    );
-    expect(shallowToJson(output)).toMatchSnapshot();
+    const output = mount(<PreScreeningIviewCard data={data} />);
+    expect(mountToJson(output)).toMatchSnapshot();
   });
 
-  const wrapper = shallow(
-    <PreScreeningIviewCard data={data} />,
-  );
-  const instance = wrapper.instance();
+  const wrapper = shallow(<PreScreeningIviewCard data={data} />);
+  const instance: any = wrapper.instance();
   describe('showPreScreeningIviewModal', () => {
     it('should set "state.isPreScreeningIviewModalVisible" as "true", "state.courseIndex" as index was passed', () => {
       expect(instance.state.isPreScreeningIviewModalVisible).toBe(false);

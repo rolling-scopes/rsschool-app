@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { mountToJson } from 'enzyme-to-json';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from '../../../../../common/models/profile';
 
@@ -108,34 +108,22 @@ describe('', () => {
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
       const output = mount(
-        <StudentStatsCard
-          data={data}
-          isEditingModeEnabled={false}
-          onPermissionsSettingsChange={() => {}}
-        />,
+        <StudentStatsCard data={data} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
       );
-      expect(shallowToJson(output)).toMatchSnapshot();
+      expect(mountToJson(output)).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
       const output = mount(
-        <StudentStatsCard
-          data={data}
-          isEditingModeEnabled={true}
-          onPermissionsSettingsChange={() => {}}
-        />,
-        );
-      expect(shallowToJson(output)).toMatchSnapshot();
+        <StudentStatsCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
+      );
+      expect(mountToJson(output)).toMatchSnapshot();
     });
   });
 
   const wrapper = shallow(
-    <StudentStatsCard
-      data={data}
-      isEditingModeEnabled={true}
-      onPermissionsSettingsChange={() => {}}
-    />,
+    <StudentStatsCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
   );
-  const instance = wrapper.instance();
+  const instance: any = wrapper.instance();
   describe('showStudentStatsModal', () => {
     it('should set "state.isStudentStatsModalVisible" as "true", "state.courseIndex" as index was passed', () => {
       expect(instance.state.isStudentStatsModalVisible).toBe(false);

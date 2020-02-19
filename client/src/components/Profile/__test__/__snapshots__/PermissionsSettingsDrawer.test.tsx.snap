@@ -2,9 +2,9 @@
 
 exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
 <PermissionsSettingsDrawer
-  hideSettings={[Function]}
+  hideSettings={[MockFunction]}
   isSettingsVisible={true}
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   permissionsSettings={
     Object {
       "isAboutVisible": Object {
@@ -70,7 +70,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
     className="jsx-2583821679"
     closable={true}
     getContainer={false}
-    onClose={[Function]}
+    onClose={[MockFunction]}
     placement="top"
     style={
       Object {
@@ -91,7 +91,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
       level={null}
       mask={true}
       maskClosable={true}
-      onClose={[Function]}
+      onClose={[MockFunction]}
       placement="top"
       prefixCls="ant-drawer"
       renderEmpty={[Function]}
@@ -120,7 +120,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
         maskClosable={true}
         maskStyle={Object {}}
         onChange={[Function]}
-        onClose={[Function]}
+        onClose={[MockFunction]}
         open={true}
         placement="top"
         prefixCls="ant-drawer"
@@ -218,7 +218,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                       <button
                         aria-label="Close"
                         className="ant-drawer-close"
-                        onClick={[Function]}
+                        onClick={[MockFunction]}
                       >
                         <ForwardRef(CloseOutlined)>
                           <ForwardRef(AntdIcon)

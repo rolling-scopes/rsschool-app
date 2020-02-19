@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { toPairs, mapValues, values } from 'lodash';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
-import {
-  Drawer,
-  Checkbox,
-  List,
-  Typography,
-} from 'antd';
+import { Drawer, Checkbox, List, Typography } from 'antd';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import css from 'styled-jsx/css';
@@ -59,12 +54,12 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
         <List
           itemLayout="horizontal"
           dataSource={toPairs(permissionsSettings)}
-          renderItem={(
-            [permissionName, actualPermissions],
-          ) => (
+          renderItem={([permissionName, actualPermissions]) => (
             <List.Item>
               <div>
-                <p style={{ fontSize: 18, marginBottom: 5 }}><Text strong>{(permissionNames as any)[permissionName]}</Text></p>
+                <p style={{ fontSize: 18, marginBottom: 5 }}>
+                  <Text strong>{(permissionNames as any)[permissionName]}</Text>
+                </p>
                 {values(
                   mapValues(actualPermissions, (isChecked, role) => (
                     <p key={`visibility-settings-${permissionName}-${role}`} style={{ marginBottom: 0 }}>
@@ -72,9 +67,9 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
                         checked={isChecked}
                         style={{ fontSize: 12 }}
                         onChange={
-                          onPermissionsSettingsChange ?
-                            (event) => onPermissionsSettingsChange(event, { permissionName, role }) :
-                            undefined
+                          onPermissionsSettingsChange
+                            ? event => onPermissionsSettingsChange(event, { permissionName, role })
+                            : undefined
                         }
                       >
                         {(roles as any)[role]}

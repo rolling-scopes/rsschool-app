@@ -5,7 +5,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
   icon={<ForwardRef(TagOutlined) />}
   isEditingModeEnabled={false}
   noDataDescrption="English level isn't choosen"
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   profileSettingsContent={
     <div>
       <p
@@ -30,6 +30,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
         }
       >
         <Select
+          bordered={true}
           choiceTransitionName="zoom"
           defaultValue="a0"
           onChange={[Function]}
@@ -125,7 +126,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
   icon={<ForwardRef(TagOutlined) />}
   isEditingModeEnabled={false}
   noDataDescrption="English level isn't choosen"
-  onPermissionsSettingsChange={[Function]}
+  onPermissionsSettingsChange={[MockFunction]}
   profileSettingsContent={
     <div>
       <p
@@ -150,6 +151,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
         }
       >
         <Select
+          bordered={true}
           choiceTransitionName="zoom"
           defaultValue="a2"
           onChange={[Function]}

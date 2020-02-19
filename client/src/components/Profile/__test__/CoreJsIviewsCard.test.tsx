@@ -4,33 +4,37 @@ import { shallowToJson } from 'enzyme-to-json';
 import CoreJsIviewsCard from '../CoreJsIviewsCard';
 
 describe('CoreJSIviewsCard', () => {
-  const wrapper = mount<CoreJsIviewsCard>(<CoreJsIviewsCard
-    data={[{
-      courseFullName: 'rs-2019',
-      courseName: 'rs-2019',
-      locationName: 'minsk',
-      interview: {
-        answers: [
-          {
-            answer: 'yes',
-            questionText: 'test',
-            questionId: 'test',
+  const wrapper = mount<CoreJsIviewsCard>(
+    <CoreJsIviewsCard
+      data={[
+        {
+          courseFullName: 'rs-2019',
+          courseName: 'rs-2019',
+          locationName: 'minsk',
+          interview: {
+            answers: [
+              {
+                answer: 'yes',
+                questionText: 'test',
+                questionId: 'test',
+              },
+              {
+                answer: 'no',
+                questionText: 'test',
+                questionId: 'test',
+              },
+            ],
+            interviewer: {
+              name: 'Dzmitry Petrov',
+              githubId: 'dima',
+            },
+            comment: 'test',
+            score: 4,
           },
-          {
-            answer: 'no',
-            questionText: 'test',
-            questionId: 'test',
-          },
-        ],
-        interviewer: {
-          name: 'Dzmitry Petrov',
-          githubId: 'dima',
         },
-        comment: 'test',
-        score: 4,
-      },
-    }]}
-  />);
+      ]}
+    />,
+  );
   it('Should render correctly', () => {
     expect(shallowToJson(wrapper as any)).toMatchSnapshot();
   });

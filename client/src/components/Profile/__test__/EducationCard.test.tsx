@@ -7,47 +7,63 @@ import { GeneralInfo } from '../../../../../common/models/profile';
 describe('EducationCard', () => {
   describe('Should render correctly', () => {
     it('if editing mode is disabled', () => {
-      const wrapper: any = mount(<EducationCard
-        data={{
-          educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
-        } as GeneralInfo}
-        isEditingModeEnabled={false}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper: any = mount(
+        <EducationCard
+          data={
+            {
+              educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
+            } as GeneralInfo
+          }
+          isEditingModeEnabled={false}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if editing mode is enabled', () => {
-      const wrapper: any = mount(<EducationCard
-        data={{
-          educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
-        } as GeneralInfo}
-        isEditingModeEnabled={true}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper: any = mount(
+        <EducationCard
+          data={
+            {
+              educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
+            } as GeneralInfo
+          }
+          isEditingModeEnabled={true}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if "educationHistory" has element with "null" values', () => {
-      const wrapper: any = mount(<EducationCard
-        data={{
-          educationHistory: [{ graduationYear: null, faculty: null, university: null }],
-        } as GeneralInfo}
-        isEditingModeEnabled={true}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper: any = mount(
+        <EducationCard
+          data={
+            {
+              educationHistory: [{ graduationYear: null, faculty: null, university: null }],
+            } as GeneralInfo
+          }
+          isEditingModeEnabled={true}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
     it('if "educationHistory" is empty', () => {
-      const wrapper = shallow(<EducationCard
-        data={{
-          educationHistory: [],
-        } as GeneralInfo}
-        isEditingModeEnabled={false}
-        onPermissionsSettingsChange={() => {}}
-        onProfileSettingsChange={() => {}}
-      />);
+      const wrapper = shallow(
+        <EducationCard
+          data={
+            {
+              educationHistory: [],
+            } as GeneralInfo
+          }
+          isEditingModeEnabled={false}
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
   });
@@ -71,14 +87,17 @@ describe('EducationCard', () => {
       };
       const wrapper = shallow(
         <EducationCard
-          data={{
-            educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
-          } as GeneralInfo}
+          data={
+            {
+              educationHistory: [{ graduationYear: 2002, faculty: 'POIT', university: 'MIT' }],
+            } as GeneralInfo
+          }
           isEditingModeEnabled={false}
           permissionsSettings={permissionsSettings}
-          onPermissionsSettingsChange={() => {}}
-          onProfileSettingsChange={() => {}}
-        />);
+          onPermissionsSettingsChange={jest.fn()}
+          onProfileSettingsChange={jest.fn()}
+        />,
+      );
       const instance: any = wrapper.instance();
       const result = instance.filterPermissions(permissionsSettings);
       expect(result).toEqual({
