@@ -1,10 +1,10 @@
 import Router from '@koa/router';
-import { OK, NOT_FOUND } from 'http-status-codes';
+import { NOT_FOUND, OK } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { Mentor } from '../../models';
-import { getRepository } from 'typeorm';
+import { courseService, OperationResult, userService } from '../../services';
 import { setResponse } from '../utils';
-import { OperationResult, userService, courseService } from '../../services';
 
 export const getMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;

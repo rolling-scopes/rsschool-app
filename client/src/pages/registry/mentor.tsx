@@ -160,7 +160,7 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
-                <Form.Item name="preferedCourses" label="Prefered Courses">
+                <Form.Item name="preferedCourses" label="Preferred Courses">
                   <Checkbox.Group
                     options={courses.map(c => ({
                       label: (
@@ -202,10 +202,10 @@ function Page(props: Props) {
               <Col {...defaultColumnSizes}>
                 <Form.Item
                   name="preferedStudentsLocation"
-                  label="Prefered students location"
-                  rules={[{ required: true, message: 'Please select a prefered location option' }]}
+                  label="Preferred students location"
+                  rules={[{ required: true, message: 'Please select a preferred location option' }]}
                 >
-                  <Select placeholder="Select a prefered option...">
+                  <Select placeholder="Select a preferred option...">
                     <Select.Option value={'any'}>Any city or country</Select.Option>
                     <Select.Option value={'country'}>My country only</Select.Option>
                     <Select.Option value={'city'}>My city only</Select.Option>

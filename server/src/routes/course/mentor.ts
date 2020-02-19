@@ -1,8 +1,12 @@
-import { NOT_FOUND, OK } from 'http-status-codes';
+import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { courseService } from '../../services';
 import { setResponse } from '../utils';
+import { getUserByGithubId } from '../../services/userService';
+import { Mentor, Student } from '../../models';
+import { getRepository } from 'typeorm';
+import { updateSession } from '../../session';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 
@@ -56,4 +60,37 @@ export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterConte
   }
   const students = await courseService.getInterviewStudentsByMentorId(courseTaskId, mentor.id);
   setResponse(ctx, OK, students);
+};
+
+export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const githubId: string = ctx.params.githubId;
+
+  const input: { maxStudentsLimit: number; studentsPreference: any; students: number[] } = ctx.request.body;
+  const user = await getUserByGithubId(githubId);
+
+  if (user == null) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+
+  const { maxStudentsLimit, studentsPreference } = input;
+  const mentor = await getRepository(Mentor).save({
+    courseId,
+    userId: user.id,
+    ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
+    ...(studentsPreference ? { studentsPreference } : {}),
+  });
+
+  if (input.students.length > 0) {
+    await getRepository(Student).update(input.students, { mentorId: mentor.id });
+  }
+
+  updateSession(ctx, {
+    roles: {
+      [courseId]: 'mentor',
+    },
+  });
+
+  setResponse(ctx, OK);
 };

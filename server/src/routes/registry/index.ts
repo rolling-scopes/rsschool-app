@@ -8,6 +8,7 @@ import { createGetRoute } from '../common';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models/session';
 import { updateSession } from '../../session';
+import { getUserByGithubId } from '../../services/userService';
 
 interface LoggingError {
   logger?: ILogger;
@@ -75,17 +76,18 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK);
   });
 
-  router.put('/mentor/:mentorId', adminGuard, async (ctx: Router.RouterContext) => {
-    const mentorId = Number(ctx.params.mentorId);
+  router.put('/mentor/:githubId', adminGuard, async (ctx: Router.RouterContext) => {
+    const githubId = ctx.params.githubId;
 
     const { preselectedCourses } = ctx.request.body;
 
-    const mentorData: Partial<MentorRegistry> = {
-      preselectedCourses,
-    };
-
-    await getRepository(MentorRegistry).update(mentorId, mentorData);
-
+    const mentorData: Partial<MentorRegistry> = { preselectedCourses };
+    const user = await getUserByGithubId(githubId);
+    if (user == null) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+    await getRepository(MentorRegistry).update({ userId: user.id }, mentorData);
     setResponse(ctx, OK);
   });
 
@@ -98,7 +100,12 @@ export function registryRouter(logger?: ILogger) {
       return;
     }
 
-    setResponse(ctx, OK);
+    const result = {
+      maxStudentsLimit: mentorRegistry.maxStudentsLimit,
+      preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
+      preselectedCourses: mentorRegistry.preselectedCourses.map(c => Number(c)),
+    };
+    setResponse(ctx, OK, result);
   });
 
   router.get('/mentors', adminGuard, async (ctx: Router.RouterContext) => {
@@ -118,8 +125,8 @@ export function registryRouter(logger?: ILogger) {
         locationName: user.locationName,
         maxStudentsLimit: mentorRegistry.maxStudentsLimit,
         name: `${user.firstName} ${user.lastName}`,
-        preferedCourses: mentorRegistry.preferedCourses,
-        preselectedCourses: mentorRegistry.preselectedCourses,
+        preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
+        preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
         preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
         technicalMentoring: mentorRegistry.technicalMentoring,
         updatedDate: mentorRegistry.updatedDate,

@@ -41,7 +41,7 @@ function Page(props: Props) {
     async (values: any) => {
       try {
         setModalLoading(true);
-        await mentorRegistryService.updateMentor(modalData!.id!, values);
+        await mentorRegistryService.updateMentor(modalData!.githubId, values);
         setModalData(null);
         loadData();
       } catch (e) {
@@ -123,16 +123,16 @@ function Page(props: Props) {
                     render: dateRenderer,
                   },
                   {
-                    title: 'Prefered',
+                    title: 'Preferred',
                     dataIndex: 'preferedCourses',
-                    render: (values: string[]) =>
-                      tagsRenderer(values.map(v => courses.find(c => c.id.toString() === v)?.name ?? v)),
+                    render: (values: number[]) =>
+                      tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
                   },
                   {
                     title: 'Pre-Selected',
                     dataIndex: 'preselectedCourses',
-                    render: (values: string[]) =>
-                      tagsRenderer(values.map(v => courses.find(c => c.id.toString() === v)?.name ?? v)),
+                    render: (values: number[]) =>
+                      tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
                   },
                   {
                     title: 'Max students',

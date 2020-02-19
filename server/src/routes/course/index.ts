@@ -20,6 +20,7 @@ import {
   getMentorInterviews,
   getMentorInterview,
   deleteMentor as postMentorStatusExpelled,
+  postMentor,
 } from './mentor';
 import { getMentors, postMentors, getMentorsDetails } from './mentors';
 import { getScore, getScoreAsCsv, postScore, postMultipleScores, getScoreByStudent } from './score';
@@ -143,6 +144,7 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.get('/mentors', courseSupervisorGuard, getMentors(logger));
   router.post('/mentors', adminGuard, postMentors(logger));
   router.get('/mentors/details', courseSupervisorGuard, getMentorsDetails(logger));
+  router.post('/mentor/:githubId', guard, ...validators, postMentor(logger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, getMentorInterviews(logger));
@@ -183,7 +185,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.get('/students/score', courseGuard, getScore(logger));
   router.get('/students/score/csv', courseSupervisorGuard, getScoreAsCsv(logger));
 
-  router.get('/students/search/:searchText', courseGuard, searchCourseStudent(logger));
+  router.get('/students/search/:searchText', guard, searchCourseStudent(logger));
 }
 
 function addStudentCrossCheckApi(router: Router, logger: ILogger) {

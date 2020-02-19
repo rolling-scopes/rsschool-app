@@ -18,6 +18,7 @@ export function StudentSearch(props: Props) {
 
   useEffect(() => setData(props.defaultValues ?? []), [props.defaultValues]);
   const courseService = useMemo(() => new CourseService(props.courseId), [props.courseId]);
+
   const handleSearch = useCallback(
     async (value: string) => {
       if (value) {
