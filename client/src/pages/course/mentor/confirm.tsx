@@ -53,7 +53,7 @@ function Page(props: { session: Session }) {
       await courseService?.createMentor(props.session.githubId, {
         maxStudentsLimit: values.maxStudentsLimit,
         preferedStudentsLocation: values.preferedStudentsLocation,
-        students: values.students.map((s: any) => Number(s.value)),
+        students: values.students?.map((s: any) => Number(s.value)) ?? [],
       });
       setSuccess(true);
     } catch (e) {
