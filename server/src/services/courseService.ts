@@ -449,15 +449,14 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
     .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
     .leftJoin('mentor.user', 'mu')
     .addSelect(getPrimaryUserFields('mu'))
-    .where('student."courseId" = :courseId', { courseId });
+    .where('student."courseId" = :courseId', { courseId })
 
   if (activeOnly) {
     query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
   }
-  const students = await query.getMany();
+  const students = await query.orderBy('student."totalScore"', 'DESC').getMany();
 
   return students
-    .sort((a, b) => b.totalScore - a.totalScore)
     .map<StudentWithResults>((student, i) => {
       const user = student.user as User;
       const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))

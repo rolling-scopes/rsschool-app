@@ -69,7 +69,7 @@ export function createDefaultLogger() {
   const { accessKeyId, secretAccessKey, region } = config.aws;
   if (process.env.NODE_ENV === 'production' && accessKeyId && secretAccessKey) {
     const writeStream = cloudwatch({
-      interval: 2000,
+      interval: 5000,
       aws_access_key_id: accessKeyId,
       aws_secret_access_key: secretAccessKey,
       aws_region: region,
