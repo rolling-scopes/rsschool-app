@@ -1,21 +1,11 @@
 import Router from '@koa/router';
-import { OK, NOT_FOUND, UNAUTHORIZED } from 'http-status-codes';
+import { OK, UNAUTHORIZED } from 'http-status-codes';
 import { ILogger } from '../../logger';
-import { User } from '../../models';
-import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
 
-const getSession = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+const getSession = (_: ILogger) => async (ctx: Router.RouterContext) => {
   if (ctx.state == null || ctx.state.user == null || ctx.state.user.id == null) {
     setResponse(ctx, UNAUTHORIZED);
-    return;
-  }
-
-  const id = ctx.state.user.id;
-  const user = await getRepository(User).findOne(id);
-  if (user == null) {
-    logger.warn(`Cannot find user with id = [${id}]`);
-    setResponse(ctx, NOT_FOUND);
     return;
   }
 
