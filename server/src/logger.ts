@@ -39,6 +39,7 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
     url: ctx.url,
     query: ctx.query,
   };
+  const start = Date.now();
   try {
     ctx.logger = logger;
     await next();
@@ -58,6 +59,7 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
   logger.info({
     msg: 'Processed request',
     ...data,
+    duration: Date.now() - start,
     userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
   });
 };
