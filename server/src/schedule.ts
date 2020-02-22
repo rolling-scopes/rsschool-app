@@ -23,12 +23,17 @@ export function startBackgroundJobs(logger: ILogger) {
         .map(({ id, taskResults, totalScore }) => {
           const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
           const newTotalScore = round(score, 1);
-          return { id, totalScore: newTotalScore > 0 || totalScore !== newTotalScore ? newTotalScore : 0 };
+          return { id, totalScore: totalScore !== newTotalScore ? newTotalScore : -1 };
         })
-        .filter(it => it.totalScore > 0);
+        .filter(it => it.totalScore >= 0);
 
       await updateScoreStudents(scores);
-      logger.info({ msg: 'Updated course score', course: course.name, duration: Date.now() - start });
+      logger.info({
+        msg: 'Updated course score',
+        course: course.name,
+        itemsCounts: scores.length,
+        duration: Date.now() - start,
+      });
     }
   });
 }
