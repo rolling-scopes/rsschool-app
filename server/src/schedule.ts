@@ -4,13 +4,14 @@ import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } fro
 import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {
-  scheduleJob('*/5 * * * *', async () => {
-    logger.info('update scores');
+  scheduleJob('*/6 * * * *', async () => {
+    logger.info('Starting score update job');
 
     const courses = await getCourses();
 
-    for await (const course of courses) {
-      logger.info(`update course = [${course.id}]`);
+    for (const course of courses) {
+      const start = Date.now();
+      logger.info({ msg: `Updating course score`, course: course.name });
 
       const courseId = course.id;
       const [students, courseTasks] = await Promise.all([getStudentsScore(courseId), getCourseTasks(courseId)]);
@@ -24,8 +25,8 @@ export function startBackgroundJobs(logger: ILogger) {
         })
         .filter(it => it.totalScore > 0 || it.changed);
 
-      const result = updateScoreStudents(scores);
-      logger.info(result);
+      await updateScoreStudents(scores);
+      logger.info({ msg: 'Updated course score', course: course.name, duration: Date.now() - start });
     }
   });
 }

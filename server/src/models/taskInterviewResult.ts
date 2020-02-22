@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, ManyToOne, Index } from 'typeorm';
 import { CourseTask } from './courseTask';
 import { Student } from './student';
 import { Mentor } from './mentor';
@@ -20,9 +20,11 @@ export class TaskInterviewResult {
   updatedDate: string;
 
   @Column()
+  @Index()
   courseTaskId: number;
 
   @Column()
+  @Index()
   studentId: number;
 
   @ManyToOne(_ => Student)
@@ -32,6 +34,7 @@ export class TaskInterviewResult {
   mentor: Mentor;
 
   @Column()
+  @Index()
   mentorId: number;
 
   @ManyToOne(_ => CourseTask)
