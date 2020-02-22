@@ -3,7 +3,7 @@ import { BAD_REQUEST } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { uniq } from 'lodash';
 import { setResponse } from './utils';
-import { IUserSession, CourseUser, CourseRoles, CourseRole } from '../models';
+import { IUserSession, CourseUser, CourseRoles, CourseRole, CourseTask } from '../models';
 
 export const courseMiddleware = async (ctx: Router.RouterContext, next: any) => {
   if (!ctx.params.courseId) {
@@ -30,12 +30,20 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) 
     return;
   }
 
-  const items = await getRepository(CourseUser)
-    .createQueryBuilder('courseUser')
-    .where('"courseUser"."userId" = :userId', { userId: user.id })
-    .getMany();
+  const [items, taskOwnerCourses] = await Promise.all([
+    getRepository(CourseUser)
+      .createQueryBuilder('courseUser')
+      .where('courseUser.userId = :userId', { userId: user.id })
+      .getMany(),
+    getRepository(CourseTask)
+      .createQueryBuilder()
+      .select('"courseId"')
+      .where('"taskOwnerId" = :taskOwnerId', { taskOwnerId: user.id })
+      .groupBy('"courseId"')
+      .getRawMany(),
+  ]);
 
-  const courseRoles: CourseRoles = items.reduce(
+  let courseRoles: CourseRoles = items.reduce(
     (acc, item) => ({
       ...acc,
       [item.courseId]: uniq(
@@ -47,6 +55,12 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) 
     }),
     {},
   );
+  taskOwnerCourses.forEach(({ courseId }) => {
+    if (!courseRoles[courseId]) {
+      courseRoles[courseId] = [];
+    }
+    courseRoles[courseId]?.push('taskOwner');
+  });
   user.coursesRoles = courseRoles;
   await next();
 };

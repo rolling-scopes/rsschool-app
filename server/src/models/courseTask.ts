@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   Column,
   PrimaryGeneratedColumn,
+  Index,
 } from 'typeorm';
 import { Task } from './task';
 import { Stage } from './stage';
@@ -31,6 +32,7 @@ export class CourseTask {
   task: Task;
 
   @Column()
+  @Index()
   taskId: number;
 
   @OneToMany(
@@ -55,12 +57,14 @@ export class CourseTask {
   stage: Stage | number;
 
   @Column()
+  @Index()
   stageId: number;
 
   @ManyToOne(_ => Course, { nullable: true })
   course: Course;
 
   @Column({ nullable: true })
+  @Index()
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
@@ -82,11 +86,13 @@ export class CourseTask {
   scoreWeight: number;
 
   @Column({ default: 'mentor' })
+  @Index()
   checker: 'assigned' | 'mentor' | 'taskOwner' | 'crossCheck' | 'jury';
 
   @ManyToOne(_ => User, { nullable: true })
   taskOwner: User | null;
 
   @Column({ nullable: true })
+  @Index()
   taskOwnerId: number | null;
 }

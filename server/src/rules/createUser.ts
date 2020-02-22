@@ -4,7 +4,6 @@ import { config } from '../config';
 import { Course, CourseManager, IUserSession, CourseRoles, User, CourseTask, Stage, CourseUser } from '../models';
 import { userService } from '../services';
 
-const adminTeams: string[] = config.roles.adminTeams;
 const hirers: string[] = config.roles.hirers;
 
 type Profile = {
@@ -13,22 +12,18 @@ type Profile = {
     givenName: string;
     familyName: string;
   };
-  emails?: { value: string; primary: boolean }[];
+  emails?: { value: string; primary?: boolean }[];
 };
-
-function getAdminStatus(teamIds: string[]): boolean {
-  return adminTeams.some(team => teamIds.includes(team));
-}
 
 function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
   return emails.filter(email => email.primary);
 }
 
-export async function createUser(profile: Profile, teamsIds: string[] = []): Promise<IUserSession> {
+export async function createUser(profile: Profile, admin: boolean = false): Promise<IUserSession> {
   const id = profile.username!.toLowerCase();
   const result = await userService.getFullUserByGithubId(id);
 
-  const isAdmin = getAdminStatus(teamsIds);
+  const isAdmin = config.app.admins.includes(id) || admin;
   const isHirer = hirers.includes(id);
   if (result == null) {
     const email = getPrimaryEmail((profile.emails as any) || [])[0];

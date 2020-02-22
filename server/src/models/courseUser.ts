@@ -16,6 +16,7 @@ export class CourseUser {
   course: Course;
 
   @Column()
+  @Index()
   courseId: number;
 
   @ManyToOne(_ => User)
