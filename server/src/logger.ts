@@ -58,8 +58,8 @@ export const loggerMiddleware = (externalLogger: ILogger) => async (
   }
   logger.info({
     msg: 'Processed request',
-    ...data,
     duration: Date.now() - start,
+    ...data,
     userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
   });
 };
@@ -77,5 +77,5 @@ export function createDefaultLogger() {
     });
     streams.push(writeStream);
   }
-  return pinoLogger({ streams, base: null }) as ILogger;
+  return pinoLogger({ streams, base: null, timestamp: false }) as ILogger;
 }

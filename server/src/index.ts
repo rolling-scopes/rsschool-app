@@ -23,7 +23,7 @@ export class App {
   private server: Server | undefined = undefined;
 
   constructor(logger: ILogger = createDefaultLogger()) {
-    this.appLogger = logger.child({ module: 'app' });
+    this.appLogger = logger;
 
     this.koa.use(loggerMiddleware(this.appLogger));
 
