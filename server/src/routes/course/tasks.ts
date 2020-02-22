@@ -65,10 +65,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
-    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .innerJoinAndSelect('courseTask.task', 'task')
-    .leftJoin('courseTask.taskOwner', 'taskOwner')
-    .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
     .where(`courseTask.courseId = :courseId`, { courseId })
     .getMany();
 
