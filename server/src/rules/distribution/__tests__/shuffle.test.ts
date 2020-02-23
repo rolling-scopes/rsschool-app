@@ -1,4 +1,4 @@
-import { shuffleRec, isShuffledArrays } from '../distribution';
+import { shuffleRec, isShuffledArrays } from '../shuffle';
 
 test('shuffle', () => {
   for (let j = 0; j < 100; j++) {

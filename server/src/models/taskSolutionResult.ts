@@ -1,7 +1,7 @@
 import {
   Column,
-  Index,
   Unique,
+  Index,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -19,7 +19,6 @@ type ScoreRecord = {
 };
 
 @Entity()
-@Index(['courseTaskId', 'studentId', 'checkerId'])
 @Unique(['courseTaskId', 'studentId', 'checkerId'])
 export class TaskSolutionResult {
   @PrimaryGeneratedColumn() id: number;
@@ -34,18 +33,21 @@ export class TaskSolutionResult {
   courseTask: CourseTask;
 
   @Column()
+  @Index()
   courseTaskId: number;
 
   @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
+  @Index()
   studentId: number;
 
   @ManyToOne(_ => Student)
   checker: Student;
 
   @Column()
+  @Index()
   checkerId: number;
 
   @Column()

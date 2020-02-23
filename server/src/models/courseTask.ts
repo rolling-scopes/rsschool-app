@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   Index,
 } from 'typeorm';
-import { Task } from './task';
+import { Task, TaskType } from './task';
 import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskResult } from './taskResult';
@@ -95,4 +95,10 @@ export class CourseTask {
   @Column({ nullable: true })
   @Index()
   taskOwnerId: number | null;
+
+  @Column({ nullable: true, type: 'int' })
+  pairsCount: number | null;
+
+  @Column({ nullable: true, type: 'varchar' })
+  type: TaskType;
 }

@@ -547,14 +547,10 @@ export async function getEvents(courseId: number) {
 
 export async function getTaskSolutionsWithoutChecker(courseTaskId: number) {
   const records = await getRepository(TaskSolution)
-    .createQueryBuilder('taskSolution')
-    .leftJoin(
-      'task_solution_checker',
-      'taskSolutionChecker',
-      '"taskSolutionChecker"."taskSolutionId" = "taskSolution".id',
-    )
-    .where(`"taskSolution"."courseTaskId" = :courseTaskId`, { courseTaskId })
-    .andWhere('"taskSolutionChecker".id IS NULL')
+    .createQueryBuilder('ts')
+    .leftJoin('task_solution_checker', 'tsc', 'tsc."taskSolutionId" = ts.id')
+    .where(`ts."courseTaskId" = :courseTaskId`, { courseTaskId })
+    .andWhere('tsc.id IS NULL')
     .getMany();
   return records;
 }
@@ -578,39 +574,35 @@ export async function getUsers(courseId: number) {
   }));
 }
 
-export async function getTaskSolutionCheckers(courseTaskId: number) {
+export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCount: number) {
   const records = await getRepository(TaskSolutionResult)
     .createQueryBuilder('tsr')
-    .select('"tsr"."studentId", ROUND(AVG("tsr".score)) as "score"')
+    .select('tsr."studentId", ROUND(AVG(tsr.score)) as "score"')
     .where(qb => {
       // query students with 3 checked tasks
+
       const query = qb
         .subQuery()
-        .select('"taskSolutionResult"."checkerId"')
-        .from(TaskSolutionChecker, 'taskSolutionChecker')
+        .select('r."checkerId"')
+        .from(TaskSolutionChecker, 'c')
         .leftJoin(
           'task_solution_result',
-          'taskSolutionResult',
-          [
-            '"taskSolutionResult"."checkerId" = "taskSolutionChecker"."checkerId"',
-            '"taskSolutionResult"."studentId" = "taskSolutionChecker"."studentId"',
-          ].join(' AND '),
+          'r',
+          ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
         )
-        .where(`"taskSolutionChecker"."courseTaskId" = :courseTaskId`, { courseTaskId })
-        .andWhere('"taskSolutionResult".id IS NOT NULL')
-        .groupBy('"taskSolutionResult"."checkerId"')
-        .having(`COUNT("taskSolutionChecker".id) >= 3`)
+        .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
+        .andWhere('r.id IS NOT NULL')
+        .groupBy('r."checkerId"')
+        .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
         .getQuery();
       return `"studentId" IN ${query}`;
     })
-    .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .groupBy('"tsr"."studentId"')
-    .having(`COUNT("tsr".id) >= 2`)
+    .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
+    .groupBy('tsr."studentId"')
+    .having(`COUNT(tsr.id) >= :count`, { count: minCheckedCount })
     .getRawMany();
-  return records.map<{ studentId: number; score: number }>(record => ({
-    studentId: record.studentId,
-    score: Number(record.score),
-  }));
+
+  return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
 }
 
 export async function getInterviewStudentsByMentorId(courseTaskId: number, mentorId: number) {
