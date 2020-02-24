@@ -8,6 +8,7 @@ import { courseService, taskResultsService, taskService } from '../../services';
 import { setErrorResponse, setResponse } from '../utils';
 
 type Input = { url: string };
+const defaultPairsCount = 4;
 
 export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
@@ -45,7 +46,6 @@ export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext
 
 export const createCrossCheckDistribution = (__: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseTaskId } = ctx.params;
-  const defaultPairsCount = 4;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
   if (courseTask == null) {
@@ -188,7 +188,8 @@ export const createCrossCheckCompletion = (__: ILogger) => async (ctx: Router.Ro
     setResponse(ctx, BAD_REQUEST);
     return;
   }
-  const studentScores = await courseService.getTaskSolutionCheckers(courseTaskId, courseTask.pairsCount ?? 3);
+  const pairsCount = (courseTask.pairsCount ?? defaultPairsCount) - 1;
+  const studentScores = await courseService.getTaskSolutionCheckers(courseTaskId, pairsCount);
 
   for (const studentScore of studentScores) {
     const data = { authorId: -1, comment: 'Cross-Check score', score: studentScore.score };
