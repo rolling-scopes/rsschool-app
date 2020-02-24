@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import { NextRouter } from 'next/router';
 import { Session } from 'components/withSession';
-import { ProfilePage } from '../index';
+import { ProfilePage } from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
 jest.mock('services/user', () => ({
