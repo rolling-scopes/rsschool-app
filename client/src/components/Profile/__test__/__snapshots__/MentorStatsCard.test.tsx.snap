@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`] = `
+<Fragment>
+  <MentorStatsModal
+    isVisible={false}
+    onHide={[Function]}
+    stats={
+      Object {
+        "courseFullName": "Rolling Scopes School 2020-Q1",
+        "courseName": "rs-2020-q1",
+        "locationName": "Minsk",
+      }
+    }
+  />
+  <CommonCard
+    content={
+      <React.Fragment>
+        <div>
+          <p>
+            Mentored Students:
+             
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 18,
+                }
+              }
+            >
+              3
+            </Text>
+          </p>
+          <p>
+            Courses as Mentor:
+             
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 18,
+                }
+              }
+            >
+              2
+            </Text>
+          </p>
+        </div>
+        <List
+          bordered={false}
+          dataSource={
+            Array [
+              Object {
+                "courseFullName": "Rolling Scopes School 2020-Q1",
+                "courseName": "rs-2020-q1",
+                "locationName": "Minsk",
+              },
+              Object {
+                "courseFullName": "Rolling Scopes School 2018-Q1",
+                "courseName": "rs-2018-q1",
+                "locationName": "Minsk",
+                "students": Array [
+                  Object {
+                    "githubId": "alex",
+                    "isExpelled": false,
+                    "name": "Alex Petrov",
+                    "totalScore": 3453,
+                  },
+                  Object {
+                    "githubId": "vasya",
+                    "isExpelled": true,
+                    "name": "Vasiliy Alexandrov",
+                    "totalScore": 120,
+                  },
+                ],
+              },
+            ]
+          }
+          itemLayout="horizontal"
+          loading={false}
+          pagination={false}
+          renderItem={[Function]}
+          split={true}
+        />
+      </React.Fragment>
+    }
+    icon={<ForwardRef(TeamOutlined) />}
+    isEditingModeEnabled={false}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Mentor Statistics"
+  />
+</Fragment>
+`;
+
+exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] = `
+<Fragment>
+  <MentorStatsModal
+    isVisible={false}
+    onHide={[Function]}
+    stats={
+      Object {
+        "courseFullName": "Rolling Scopes School 2020-Q1",
+        "courseName": "rs-2020-q1",
+        "locationName": "Minsk",
+      }
+    }
+  />
+  <CommonCard
+    content={
+      <React.Fragment>
+        <div>
+          <p>
+            Mentored Students:
+             
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 18,
+                }
+              }
+            >
+              3
+            </Text>
+          </p>
+          <p>
+            Courses as Mentor:
+             
+            <Text
+              strong={true}
+              style={
+                Object {
+                  "fontSize": 18,
+                }
+              }
+            >
+              2
+            </Text>
+          </p>
+        </div>
+        <List
+          bordered={false}
+          dataSource={
+            Array [
+              Object {
+                "courseFullName": "Rolling Scopes School 2020-Q1",
+                "courseName": "rs-2020-q1",
+                "locationName": "Minsk",
+              },
+              Object {
+                "courseFullName": "Rolling Scopes School 2018-Q1",
+                "courseName": "rs-2018-q1",
+                "locationName": "Minsk",
+                "students": Array [
+                  Object {
+                    "githubId": "alex",
+                    "isExpelled": false,
+                    "name": "Alex Petrov",
+                    "totalScore": 3453,
+                  },
+                  Object {
+                    "githubId": "vasya",
+                    "isExpelled": true,
+                    "name": "Vasiliy Alexandrov",
+                    "totalScore": 120,
+                  },
+                ],
+              },
+            ]
+          }
+          itemLayout="horizontal"
+          loading={false}
+          pagination={false}
+          renderItem={[Function]}
+          split={true}
+        />
+      </React.Fragment>
+    }
+    icon={<ForwardRef(TeamOutlined) />}
+    isEditingModeEnabled={true}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Mentor Statistics"
+  />
+</Fragment>
+`;

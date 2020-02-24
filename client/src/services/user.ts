@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
+import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
 import { Course } from './models';
 
 export interface UserBasic {
@@ -55,15 +56,25 @@ export class UserService {
     });
   }
 
-  async getProfile(githubId?: string) {
-    const response = await this.axios.get<{ data: ProfileResponse }>(`/api/profile${githubId ? '' : '/me'}`, {
+  async getMyProfile() {
+    const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
+    return response.data.data;
+  }
+
+  async updateMyProfile(data: Partial<UserFull>) {
+    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
+    return response.data.data;
+  }
+
+  async getProfileInfo(githubId?: string) {
+    const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
     });
     return response.data.data;
   }
 
-  async updateUser(data: Partial<UserFull>) {
-    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
+  async saveProfileInfo(profile: SaveProfileInfo) {
+    const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
     return response.data.data;
   }
 }

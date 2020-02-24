@@ -1,17 +1,9 @@
 module.exports = {
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-      diagnostics: true,
-    },
-    NODE_ENV: 'test',
-  },
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  moduleDirectories: ['node_modules', 'src'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+  setupFiles: ['<rootDir>/__mocks__/setupJest.ts'],
+  moduleNameMapper: {
+    '^components(.*)$': '<rootDir>/components/$1',
+    '^services(.*)$': '<rootDir>/services/$1',
+    '^utils(.*)$': '<rootDir>/utils/$1',
   },
   verbose: true,
 };

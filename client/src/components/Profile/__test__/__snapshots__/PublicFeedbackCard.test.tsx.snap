@@ -1,0 +1,363 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 1`] = `
+<Fragment>
+  <PublicFeedbackModal
+    data={
+      Array [
+        Object {
+          "badgeId": "Congratulations",
+          "comment": "Test",
+          "feedbackDate": "2018-12-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "apetr",
+            "name": "Anton Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-11-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-09-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-10-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Thank_you",
+          "comment": "Test",
+          "feedbackDate": "2018-11-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "vasssa",
+            "name": "Anton Vasilyev",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Thank_you",
+          "comment": "Test",
+          "feedbackDate": "2019-12-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "demaa",
+            "name": "Dima Alexandrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+      ]
+    }
+    isVisible={false}
+    onHide={[Function]}
+  />
+  <CommonCard
+    actions={
+      Array [
+        <ForwardRef(FullscreenOutlined)
+          onClick={[Function]}
+        />,
+      ]
+    }
+    content={
+      <React.Fragment>
+        <div
+          style={
+            Object {
+              "marginBottom": 20,
+            }
+          }
+        >
+          <Text
+            strong={true}
+          >
+            Total badges:
+          </Text>
+           
+          6
+        </div>
+        <div
+          style={
+            Object {
+              "marginBottom": 30,
+            }
+          }
+        />
+        <div
+          style={
+            Object {
+              "marginBottom": 0,
+            }
+          }
+        >
+          <Text
+            strong={true}
+          >
+            Last feedback:
+          </Text>
+        </div>
+        <Comment
+          author={
+            <a
+              href="/profile?githubId=apetr"
+            >
+              Anton Petrov
+            </a>
+          }
+          avatar={
+            <Avatar
+              alt="apetr avatar"
+              shape="circle"
+              size="default"
+              src="https://github.com/apetr.png?size=48"
+            />
+          }
+          content={
+            <React.Fragment>
+              <Text
+                strong={true}
+                style={
+                  Object {
+                    "fontSize": 12,
+                  }
+                }
+              >
+                Congratulations
+              </Text>
+              <Paragraph
+                ellipsis={
+                  Object {
+                    "expandable": true,
+                    "rows": 3,
+                  }
+                }
+              >
+                Test
+              </Paragraph>
+            </React.Fragment>
+          }
+          datetime={
+            <Tooltip
+              arrowPointAtCenter={false}
+              autoAdjustOverflow={true}
+              mouseEnterDelay={0.1}
+              mouseLeaveDelay={0.1}
+              placement="top"
+              title="2018-12-01T12:12:01.000Z"
+              transitionName="zoom-big-fast"
+            >
+              <span>
+                fromNow
+              </span>
+            </Tooltip>
+          }
+        />
+      </React.Fragment>
+    }
+    icon={<ForwardRef(MessageOutlined) />}
+    isEditingModeEnabled={false}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Public Feedback"
+  />
+</Fragment>
+`;
+
+exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1`] = `
+<Fragment>
+  <PublicFeedbackModal
+    data={
+      Array [
+        Object {
+          "badgeId": "Congratulations",
+          "comment": "Test",
+          "feedbackDate": "2018-12-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "apetr",
+            "name": "Anton Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-11-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-09-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Great_speaker",
+          "comment": "Test",
+          "feedbackDate": "2018-10-01T11:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "temap",
+            "name": "Artem Petrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Thank_you",
+          "comment": "Test",
+          "feedbackDate": "2018-11-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "vasssa",
+            "name": "Anton Vasilyev",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+        Object {
+          "badgeId": "Thank_you",
+          "comment": "Test",
+          "feedbackDate": "2019-12-01T12:12:01.000Z",
+          "fromUser": Object {
+            "githubId": "demaa",
+            "name": "Dima Alexandrov",
+          },
+          "heroesUri": "https://heroes.by/",
+        },
+      ]
+    }
+    isVisible={false}
+    onHide={[Function]}
+  />
+  <CommonCard
+    actions={
+      Array [
+        <ForwardRef(FullscreenOutlined)
+          onClick={[Function]}
+        />,
+      ]
+    }
+    content={
+      <React.Fragment>
+        <div
+          style={
+            Object {
+              "marginBottom": 20,
+            }
+          }
+        >
+          <Text
+            strong={true}
+          >
+            Total badges:
+          </Text>
+           
+          6
+        </div>
+        <div
+          style={
+            Object {
+              "marginBottom": 30,
+            }
+          }
+        />
+        <div
+          style={
+            Object {
+              "marginBottom": 0,
+            }
+          }
+        >
+          <Text
+            strong={true}
+          >
+            Last feedback:
+          </Text>
+        </div>
+        <Comment
+          author={
+            <a
+              href="/profile?githubId=apetr"
+            >
+              Anton Petrov
+            </a>
+          }
+          avatar={
+            <Avatar
+              alt="apetr avatar"
+              shape="circle"
+              size="default"
+              src="https://github.com/apetr.png?size=48"
+            />
+          }
+          content={
+            <React.Fragment>
+              <Text
+                strong={true}
+                style={
+                  Object {
+                    "fontSize": 12,
+                  }
+                }
+              >
+                Congratulations
+              </Text>
+              <Paragraph
+                ellipsis={
+                  Object {
+                    "expandable": true,
+                    "rows": 3,
+                  }
+                }
+              >
+                Test
+              </Paragraph>
+            </React.Fragment>
+          }
+          datetime={
+            <Tooltip
+              arrowPointAtCenter={false}
+              autoAdjustOverflow={true}
+              mouseEnterDelay={0.1}
+              mouseLeaveDelay={0.1}
+              placement="top"
+              title="2018-12-01T12:12:01.000Z"
+              transitionName="zoom-big-fast"
+            >
+              <span>
+                fromNow
+              </span>
+            </Tooltip>
+          }
+        />
+      </React.Fragment>
+    }
+    icon={<ForwardRef(MessageOutlined) />}
+    isEditingModeEnabled={true}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Public Feedback"
+  />
+</Fragment>
+`;

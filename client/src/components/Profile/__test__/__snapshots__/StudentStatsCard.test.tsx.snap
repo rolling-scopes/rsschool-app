@@ -1,0 +1,3495 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` Should render correctly if is editing mode disabled 1`] = `
+<StudentStatsCard
+  data={
+    Array [
+      Object {
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseId": 1,
+        "courseName": "rs-2018-q1",
+        "expellingReason": "",
+        "isCourseCompleted": true,
+        "isExpelled": false,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "andrew123",
+          "name": "Andrey Andreev",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 130,
+            "name": "Task 1",
+            "score": 120,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 110,
+            "name": "Task 3",
+            "score": 90,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 1201,
+      },
+      Object {
+        "courseFullName": "Rolling Scopes School 2019 Q1",
+        "courseId": 1,
+        "courseName": "rs-2019-q1",
+        "expellingReason": "test",
+        "isCourseCompleted": false,
+        "isExpelled": true,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "dimon12",
+          "name": "Dima Testovich",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 1",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": null,
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": null,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 3",
+            "score": 10,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": null,
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 4",
+            "score": null,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 101,
+      },
+    ]
+  }
+  isEditingModeEnabled={false}
+  onPermissionsSettingsChange={[MockFunction]}
+>
+  <StudentStatsModal
+    courseProgress={100}
+    isVisible={false}
+    onHide={[Function]}
+    scoredTasks={3}
+    stats={
+      Object {
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseId": 1,
+        "courseName": "rs-2018-q1",
+        "expellingReason": "",
+        "isCourseCompleted": true,
+        "isExpelled": false,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "andrew123",
+          "name": "Andrey Andreev",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 130,
+            "name": "Task 1",
+            "score": 120,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 110,
+            "name": "Task 3",
+            "score": 90,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 1201,
+      }
+    }
+  >
+    <Modal
+      confirmLoading={false}
+      footer={null}
+      maskTransitionName="fade"
+      okType="primary"
+      onCancel={[Function]}
+      title="Rolling Scopes School 2018 Q1 statistics"
+      transitionName="zoom"
+      visible={false}
+      width="80%"
+    >
+      <Component
+        closeIcon={
+          <span
+            className="ant-modal-close-x"
+          >
+            <ForwardRef(CloseOutlined)
+              className="ant-modal-close-icon"
+            />
+          </span>
+        }
+        confirmLoading={false}
+        footer={null}
+        maskTransitionName="fade"
+        okType="primary"
+        onCancel={[Function]}
+        onClose={[Function]}
+        prefixCls="ant-modal"
+        title="Rolling Scopes School 2018 Q1 statistics"
+        transitionName="zoom"
+        visible={false}
+        width="80%"
+        wrapClassName=""
+      >
+        <PortalWrapper
+          visible={false}
+        />
+      </Component>
+    </Modal>
+  </StudentStatsModal>
+  <CommonCard
+    content={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "courseFullName": "Rolling Scopes School 2018 Q1",
+              "courseId": 1,
+              "courseName": "rs-2018-q1",
+              "expellingReason": "",
+              "isCourseCompleted": true,
+              "isExpelled": false,
+              "locationName": "Minsk",
+              "mentor": Object {
+                "githubId": "andrew123",
+                "name": "Andrey Andreev",
+              },
+              "position": 32,
+              "tasks": Array [
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 130,
+                  "name": "Task 1",
+                  "score": 120,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 2",
+                  "score": 20,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 110,
+                  "name": "Task 3",
+                  "score": 90,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+              ],
+              "totalScore": 1201,
+            },
+            Object {
+              "courseFullName": "Rolling Scopes School 2019 Q1",
+              "courseId": 1,
+              "courseName": "rs-2019-q1",
+              "expellingReason": "test",
+              "isCourseCompleted": false,
+              "isExpelled": true,
+              "locationName": "Minsk",
+              "mentor": Object {
+                "githubId": "dimon12",
+                "name": "Dima Testovich",
+              },
+              "position": 32,
+              "tasks": Array [
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 1",
+                  "score": 20,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": null,
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 2",
+                  "score": null,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 3",
+                  "score": 10,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": null,
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 4",
+                  "score": null,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+              ],
+              "totalScore": 101,
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    icon={<ForwardRef(BookOutlined) />}
+    isEditingModeEnabled={false}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Student Statistics"
+  >
+    <Card
+      title={
+        <Title
+          ellipsis={true}
+          level={2}
+          style={
+            Object {
+              "fontSize": 16,
+              "marginBottom": 0,
+            }
+          }
+        >
+          <ForwardRef(BookOutlined) />
+           
+          Student Statistics
+        </Title>
+      }
+    >
+      <div
+        className="ant-card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <Title
+                ellipsis={true}
+                level={2}
+                style={
+                  Object {
+                    "fontSize": 16,
+                    "marginBottom": 0,
+                  }
+                }
+              >
+                <withConfigConsumer(Base)
+                  component="h2"
+                  ellipsis={true}
+                  style={
+                    Object {
+                      "fontSize": 16,
+                      "marginBottom": 0,
+                    }
+                  }
+                >
+                  <Base
+                    component="h2"
+                    ellipsis={true}
+                    getPrefixCls={[Function]}
+                    prefixCls="ant-typography"
+                    renderEmpty={[Function]}
+                    style={
+                      Object {
+                        "fontSize": 16,
+                        "marginBottom": 0,
+                      }
+                    }
+                  >
+                    <LocaleReceiver
+                      componentName="Text"
+                    >
+                      <ResizeObserver
+                        disabled={false}
+                        onResize={[Function]}
+                      >
+                        <Typography
+                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          component="h2"
+                          style={
+                            Object {
+                              "WebkitLineClamp": null,
+                              "fontSize": 16,
+                              "marginBottom": 0,
+                            }
+                          }
+                        >
+                          <h2
+                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                            style={
+                              Object {
+                                "WebkitLineClamp": null,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
+                            }
+                          >
+                            <ForwardRef(BookOutlined)>
+                              <ForwardRef(AntdIcon)
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "book",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <span
+                                  aria-label="book"
+                                  className="anticon anticon-book"
+                                  role="img"
+                                >
+                                  <IconReact
+                                    className=""
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "book",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className=""
+                                      data-icon="book"
+                                      fill="currentColor"
+                                      focusable="false"
+                                      height="1em"
+                                      key="svg-book"
+                                      viewBox="64 64 896 896"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                        key="svg-book-svg-0"
+                                      />
+                                    </svg>
+                                  </IconReact>
+                                </span>
+                              </ForwardRef(AntdIcon)>
+                            </ForwardRef(BookOutlined)>
+                             
+                            Student Statistics
+                          </h2>
+                        </Typography>
+                      </ResizeObserver>
+                    </LocaleReceiver>
+                  </Base>
+                </withConfigConsumer(Base)>
+              </Title>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <List
+            bordered={false}
+            dataSource={
+              Array [
+                Object {
+                  "courseFullName": "Rolling Scopes School 2018 Q1",
+                  "courseId": 1,
+                  "courseName": "rs-2018-q1",
+                  "expellingReason": "",
+                  "isCourseCompleted": true,
+                  "isExpelled": false,
+                  "locationName": "Minsk",
+                  "mentor": Object {
+                    "githubId": "andrew123",
+                    "name": "Andrey Andreev",
+                  },
+                  "position": 32,
+                  "tasks": Array [
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 130,
+                      "name": "Task 1",
+                      "score": 120,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 2",
+                      "score": 20,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 110,
+                      "name": "Task 3",
+                      "score": 90,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                  ],
+                  "totalScore": 1201,
+                },
+                Object {
+                  "courseFullName": "Rolling Scopes School 2019 Q1",
+                  "courseId": 1,
+                  "courseName": "rs-2019-q1",
+                  "expellingReason": "test",
+                  "isCourseCompleted": false,
+                  "isExpelled": true,
+                  "locationName": "Minsk",
+                  "mentor": Object {
+                    "githubId": "dimon12",
+                    "name": "Dima Testovich",
+                  },
+                  "position": 32,
+                  "tasks": Array [
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 1",
+                      "score": 20,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": null,
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 2",
+                      "score": null,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 3",
+                      "score": 10,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": null,
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 4",
+                      "score": null,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                  ],
+                  "totalScore": 101,
+                },
+              ]
+            }
+            itemLayout="horizontal"
+            loading={false}
+            pagination={false}
+            renderItem={[Function]}
+            split={true}
+          >
+            <div
+              className="ant-list ant-list-split"
+            >
+              <Spin
+                size="default"
+                spinning={false}
+                wrapperClassName=""
+              >
+                <div
+                  className="ant-spin-nested-loading"
+                >
+                  <div
+                    className="ant-spin-container"
+                    key="container"
+                  >
+                    <ul
+                      className="ant-list-items"
+                    >
+                      <Item
+                        key="list-item-0"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2018-q1
+                                               / Minsk
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <div
+                              style={
+                                Object {
+                                  "marginBottom": 5,
+                                  "width": "80%",
+                                }
+                              }
+                            >
+                              <Progress
+                                gapDegree={0}
+                                percent={100}
+                                showInfo={true}
+                                size="small"
+                                status="success"
+                                strokeLinecap="round"
+                                trailColor={null}
+                                type="line"
+                              >
+                                <div
+                                  className="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small"
+                                >
+                                  <Line
+                                    gapDegree={0}
+                                    percent={100}
+                                    prefixCls="ant-progress"
+                                    showInfo={true}
+                                    size="small"
+                                    status="success"
+                                    strokeLinecap="round"
+                                    trailColor={null}
+                                    type="line"
+                                  >
+                                    <div
+                                      className="ant-progress-outer"
+                                    >
+                                      <div
+                                        className="ant-progress-inner"
+                                      >
+                                        <div
+                                          className="ant-progress-bg"
+                                          style={
+                                            Object {
+                                              "background": undefined,
+                                              "borderRadius": "",
+                                              "height": 6,
+                                              "width": "100%",
+                                            }
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <span
+                                      className="ant-progress-text"
+                                    >
+                                      <ForwardRef(CheckCircleFilled)>
+                                        <ForwardRef(AntdIcon)
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "check-circle",
+                                              "theme": "filled",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            aria-label="check-circle"
+                                            className="anticon anticon-check-circle"
+                                            role="img"
+                                          >
+                                            <IconReact
+                                              className=""
+                                              icon={
+                                                Object {
+                                                  "icon": Object {
+                                                    "attrs": Object {
+                                                      "focusable": "false",
+                                                      "viewBox": "64 64 896 896",
+                                                    },
+                                                    "children": Array [
+                                                      Object {
+                                                        "attrs": Object {
+                                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z",
+                                                        },
+                                                        "tag": "path",
+                                                      },
+                                                    ],
+                                                    "tag": "svg",
+                                                  },
+                                                  "name": "check-circle",
+                                                  "theme": "filled",
+                                                }
+                                              }
+                                            >
+                                              <svg
+                                                aria-hidden="true"
+                                                className=""
+                                                data-icon="check-circle"
+                                                fill="currentColor"
+                                                focusable="false"
+                                                height="1em"
+                                                key="svg-check-circle"
+                                                viewBox="64 64 896 896"
+                                                width="1em"
+                                              >
+                                                <path
+                                                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
+                                                  key="svg-check-circle-svg-0"
+                                                />
+                                              </svg>
+                                            </IconReact>
+                                          </span>
+                                        </ForwardRef(AntdIcon)>
+                                      </ForwardRef(CheckCircleFilled)>
+                                    </span>
+                                  </Line>
+                                </div>
+                              </Progress>
+                            </div>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Mentor: 
+                              <a
+                                href="/profile?githubId=andrew123"
+                              >
+                                Andrey Andreev
+                              </a>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Position: 
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              32
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Score: 
+                              <Text
+                                mark={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  mark={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    mark={true}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <mark>
+                                              1201
+                                            </mark>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                      <Item
+                        key="list-item-1"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2019-q1
+                                               / Minsk
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <div
+                              style={
+                                Object {
+                                  "marginBottom": 5,
+                                  "width": "80%",
+                                }
+                              }
+                            >
+                              <Progress
+                                gapDegree={0}
+                                percent={50}
+                                showInfo={true}
+                                size="small"
+                                status="exception"
+                                strokeLinecap="round"
+                                trailColor={null}
+                                type="line"
+                              >
+                                <div
+                                  className="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small"
+                                >
+                                  <Line
+                                    gapDegree={0}
+                                    percent={50}
+                                    prefixCls="ant-progress"
+                                    showInfo={true}
+                                    size="small"
+                                    status="exception"
+                                    strokeLinecap="round"
+                                    trailColor={null}
+                                    type="line"
+                                  >
+                                    <div
+                                      className="ant-progress-outer"
+                                    >
+                                      <div
+                                        className="ant-progress-inner"
+                                      >
+                                        <div
+                                          className="ant-progress-bg"
+                                          style={
+                                            Object {
+                                              "background": undefined,
+                                              "borderRadius": "",
+                                              "height": 6,
+                                              "width": "50%",
+                                            }
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <span
+                                      className="ant-progress-text"
+                                    >
+                                      <ForwardRef(CloseCircleFilled)>
+                                        <ForwardRef(AntdIcon)
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close-circle",
+                                              "theme": "filled",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            aria-label="close-circle"
+                                            className="anticon anticon-close-circle"
+                                            role="img"
+                                          >
+                                            <IconReact
+                                              className=""
+                                              icon={
+                                                Object {
+                                                  "icon": Object {
+                                                    "attrs": Object {
+                                                      "focusable": "false",
+                                                      "viewBox": "64 64 896 896",
+                                                    },
+                                                    "children": Array [
+                                                      Object {
+                                                        "attrs": Object {
+                                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z",
+                                                        },
+                                                        "tag": "path",
+                                                      },
+                                                    ],
+                                                    "tag": "svg",
+                                                  },
+                                                  "name": "close-circle",
+                                                  "theme": "filled",
+                                                }
+                                              }
+                                            >
+                                              <svg
+                                                aria-hidden="true"
+                                                className=""
+                                                data-icon="close-circle"
+                                                fill="currentColor"
+                                                focusable="false"
+                                                height="1em"
+                                                key="svg-close-circle"
+                                                viewBox="64 64 896 896"
+                                                width="1em"
+                                              >
+                                                <path
+                                                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
+                                                  key="svg-close-circle-svg-0"
+                                                />
+                                              </svg>
+                                            </IconReact>
+                                          </span>
+                                        </ForwardRef(AntdIcon)>
+                                      </ForwardRef(CloseCircleFilled)>
+                                    </span>
+                                  </Line>
+                                </div>
+                              </Progress>
+                            </div>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Mentor: 
+                              <a
+                                href="/profile?githubId=dimon12"
+                              >
+                                Dima Testovich
+                              </a>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Position: 
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              32
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Score: 
+                              <Text
+                                mark={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  mark={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    mark={true}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <mark>
+                                              101
+                                            </mark>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                    </ul>
+                  </div>
+                </div>
+              </Spin>
+            </div>
+          </List>
+        </div>
+      </div>
+    </Card>
+  </CommonCard>
+</StudentStatsCard>
+`;
+
+exports[` Should render correctly if is editing mode enabled 1`] = `
+<StudentStatsCard
+  data={
+    Array [
+      Object {
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseId": 1,
+        "courseName": "rs-2018-q1",
+        "expellingReason": "",
+        "isCourseCompleted": true,
+        "isExpelled": false,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "andrew123",
+          "name": "Andrey Andreev",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 130,
+            "name": "Task 1",
+            "score": 120,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 110,
+            "name": "Task 3",
+            "score": 90,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 1201,
+      },
+      Object {
+        "courseFullName": "Rolling Scopes School 2019 Q1",
+        "courseId": 1,
+        "courseName": "rs-2019-q1",
+        "expellingReason": "test",
+        "isCourseCompleted": false,
+        "isExpelled": true,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "dimon12",
+          "name": "Dima Testovich",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 1",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": null,
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": null,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 3",
+            "score": 10,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": null,
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 4",
+            "score": null,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 101,
+      },
+    ]
+  }
+  isEditingModeEnabled={true}
+  onPermissionsSettingsChange={[MockFunction]}
+>
+  <StudentStatsModal
+    courseProgress={100}
+    isVisible={false}
+    onHide={[Function]}
+    scoredTasks={3}
+    stats={
+      Object {
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseId": 1,
+        "courseName": "rs-2018-q1",
+        "expellingReason": "",
+        "isCourseCompleted": true,
+        "isExpelled": false,
+        "locationName": "Minsk",
+        "mentor": Object {
+          "githubId": "andrew123",
+          "name": "Andrey Andreev",
+        },
+        "position": 32,
+        "tasks": Array [
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 130,
+            "name": "Task 1",
+            "score": 120,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 100,
+            "name": "Task 2",
+            "score": 20,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+          Object {
+            "comment": "test",
+            "descriptionUri": "https://description.com",
+            "maxScore": 110,
+            "name": "Task 3",
+            "score": 90,
+            "scoreWeight": 1,
+            "taskGithubPrUris": "https://description.com",
+          },
+        ],
+        "totalScore": 1201,
+      }
+    }
+  >
+    <Modal
+      confirmLoading={false}
+      footer={null}
+      maskTransitionName="fade"
+      okType="primary"
+      onCancel={[Function]}
+      title="Rolling Scopes School 2018 Q1 statistics"
+      transitionName="zoom"
+      visible={false}
+      width="80%"
+    >
+      <Component
+        closeIcon={
+          <span
+            className="ant-modal-close-x"
+          >
+            <ForwardRef(CloseOutlined)
+              className="ant-modal-close-icon"
+            />
+          </span>
+        }
+        confirmLoading={false}
+        footer={null}
+        maskTransitionName="fade"
+        okType="primary"
+        onCancel={[Function]}
+        onClose={[Function]}
+        prefixCls="ant-modal"
+        title="Rolling Scopes School 2018 Q1 statistics"
+        transitionName="zoom"
+        visible={false}
+        width="80%"
+        wrapClassName=""
+      >
+        <PortalWrapper
+          visible={false}
+        />
+      </Component>
+    </Modal>
+  </StudentStatsModal>
+  <CommonCard
+    content={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "courseFullName": "Rolling Scopes School 2018 Q1",
+              "courseId": 1,
+              "courseName": "rs-2018-q1",
+              "expellingReason": "",
+              "isCourseCompleted": true,
+              "isExpelled": false,
+              "locationName": "Minsk",
+              "mentor": Object {
+                "githubId": "andrew123",
+                "name": "Andrey Andreev",
+              },
+              "position": 32,
+              "tasks": Array [
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 130,
+                  "name": "Task 1",
+                  "score": 120,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 2",
+                  "score": 20,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 110,
+                  "name": "Task 3",
+                  "score": 90,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+              ],
+              "totalScore": 1201,
+            },
+            Object {
+              "courseFullName": "Rolling Scopes School 2019 Q1",
+              "courseId": 1,
+              "courseName": "rs-2019-q1",
+              "expellingReason": "test",
+              "isCourseCompleted": false,
+              "isExpelled": true,
+              "locationName": "Minsk",
+              "mentor": Object {
+                "githubId": "dimon12",
+                "name": "Dima Testovich",
+              },
+              "position": 32,
+              "tasks": Array [
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 1",
+                  "score": 20,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": null,
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 2",
+                  "score": null,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": "test",
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 3",
+                  "score": 10,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+                Object {
+                  "comment": null,
+                  "descriptionUri": "https://description.com",
+                  "maxScore": 100,
+                  "name": "Task 4",
+                  "score": null,
+                  "scoreWeight": 1,
+                  "taskGithubPrUris": "https://description.com",
+                },
+              ],
+              "totalScore": 101,
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    icon={<ForwardRef(BookOutlined) />}
+    isEditingModeEnabled={true}
+    onPermissionsSettingsChange={[MockFunction]}
+    title="Student Statistics"
+  >
+    <Card
+      actions={
+        Array [
+          <ForwardRef(SettingOutlined)
+            onClick={[Function]}
+          />,
+        ]
+      }
+      title={
+        <Title
+          ellipsis={true}
+          level={2}
+          style={
+            Object {
+              "fontSize": 16,
+              "marginBottom": 0,
+            }
+          }
+        >
+          <ForwardRef(BookOutlined) />
+           
+          Student Statistics
+        </Title>
+      }
+    >
+      <div
+        className="ant-card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <Title
+                ellipsis={true}
+                level={2}
+                style={
+                  Object {
+                    "fontSize": 16,
+                    "marginBottom": 0,
+                  }
+                }
+              >
+                <withConfigConsumer(Base)
+                  component="h2"
+                  ellipsis={true}
+                  style={
+                    Object {
+                      "fontSize": 16,
+                      "marginBottom": 0,
+                    }
+                  }
+                >
+                  <Base
+                    component="h2"
+                    ellipsis={true}
+                    getPrefixCls={[Function]}
+                    prefixCls="ant-typography"
+                    renderEmpty={[Function]}
+                    style={
+                      Object {
+                        "fontSize": 16,
+                        "marginBottom": 0,
+                      }
+                    }
+                  >
+                    <LocaleReceiver
+                      componentName="Text"
+                    >
+                      <ResizeObserver
+                        disabled={false}
+                        onResize={[Function]}
+                      >
+                        <Typography
+                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          component="h2"
+                          style={
+                            Object {
+                              "WebkitLineClamp": null,
+                              "fontSize": 16,
+                              "marginBottom": 0,
+                            }
+                          }
+                        >
+                          <h2
+                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                            style={
+                              Object {
+                                "WebkitLineClamp": null,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
+                            }
+                          >
+                            <ForwardRef(BookOutlined)>
+                              <ForwardRef(AntdIcon)
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "book",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <span
+                                  aria-label="book"
+                                  className="anticon anticon-book"
+                                  role="img"
+                                >
+                                  <IconReact
+                                    className=""
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "book",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className=""
+                                      data-icon="book"
+                                      fill="currentColor"
+                                      focusable="false"
+                                      height="1em"
+                                      key="svg-book"
+                                      viewBox="64 64 896 896"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                        key="svg-book-svg-0"
+                                      />
+                                    </svg>
+                                  </IconReact>
+                                </span>
+                              </ForwardRef(AntdIcon)>
+                            </ForwardRef(BookOutlined)>
+                             
+                            Student Statistics
+                          </h2>
+                        </Typography>
+                      </ResizeObserver>
+                    </LocaleReceiver>
+                  </Base>
+                </withConfigConsumer(Base)>
+              </Title>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <List
+            bordered={false}
+            dataSource={
+              Array [
+                Object {
+                  "courseFullName": "Rolling Scopes School 2018 Q1",
+                  "courseId": 1,
+                  "courseName": "rs-2018-q1",
+                  "expellingReason": "",
+                  "isCourseCompleted": true,
+                  "isExpelled": false,
+                  "locationName": "Minsk",
+                  "mentor": Object {
+                    "githubId": "andrew123",
+                    "name": "Andrey Andreev",
+                  },
+                  "position": 32,
+                  "tasks": Array [
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 130,
+                      "name": "Task 1",
+                      "score": 120,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 2",
+                      "score": 20,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 110,
+                      "name": "Task 3",
+                      "score": 90,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                  ],
+                  "totalScore": 1201,
+                },
+                Object {
+                  "courseFullName": "Rolling Scopes School 2019 Q1",
+                  "courseId": 1,
+                  "courseName": "rs-2019-q1",
+                  "expellingReason": "test",
+                  "isCourseCompleted": false,
+                  "isExpelled": true,
+                  "locationName": "Minsk",
+                  "mentor": Object {
+                    "githubId": "dimon12",
+                    "name": "Dima Testovich",
+                  },
+                  "position": 32,
+                  "tasks": Array [
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 1",
+                      "score": 20,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": null,
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 2",
+                      "score": null,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": "test",
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 3",
+                      "score": 10,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                    Object {
+                      "comment": null,
+                      "descriptionUri": "https://description.com",
+                      "maxScore": 100,
+                      "name": "Task 4",
+                      "score": null,
+                      "scoreWeight": 1,
+                      "taskGithubPrUris": "https://description.com",
+                    },
+                  ],
+                  "totalScore": 101,
+                },
+              ]
+            }
+            itemLayout="horizontal"
+            loading={false}
+            pagination={false}
+            renderItem={[Function]}
+            split={true}
+          >
+            <div
+              className="ant-list ant-list-split"
+            >
+              <Spin
+                size="default"
+                spinning={false}
+                wrapperClassName=""
+              >
+                <div
+                  className="ant-spin-nested-loading"
+                >
+                  <div
+                    className="ant-spin-container"
+                    key="container"
+                  >
+                    <ul
+                      className="ant-list-items"
+                    >
+                      <Item
+                        key="list-item-0"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2018-q1
+                                               / Minsk
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <div
+                              style={
+                                Object {
+                                  "marginBottom": 5,
+                                  "width": "80%",
+                                }
+                              }
+                            >
+                              <Progress
+                                gapDegree={0}
+                                percent={100}
+                                showInfo={true}
+                                size="small"
+                                status="success"
+                                strokeLinecap="round"
+                                trailColor={null}
+                                type="line"
+                              >
+                                <div
+                                  className="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small"
+                                >
+                                  <Line
+                                    gapDegree={0}
+                                    percent={100}
+                                    prefixCls="ant-progress"
+                                    showInfo={true}
+                                    size="small"
+                                    status="success"
+                                    strokeLinecap="round"
+                                    trailColor={null}
+                                    type="line"
+                                  >
+                                    <div
+                                      className="ant-progress-outer"
+                                    >
+                                      <div
+                                        className="ant-progress-inner"
+                                      >
+                                        <div
+                                          className="ant-progress-bg"
+                                          style={
+                                            Object {
+                                              "background": undefined,
+                                              "borderRadius": "",
+                                              "height": 6,
+                                              "width": "100%",
+                                            }
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <span
+                                      className="ant-progress-text"
+                                    >
+                                      <ForwardRef(CheckCircleFilled)>
+                                        <ForwardRef(AntdIcon)
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "check-circle",
+                                              "theme": "filled",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            aria-label="check-circle"
+                                            className="anticon anticon-check-circle"
+                                            role="img"
+                                          >
+                                            <IconReact
+                                              className=""
+                                              icon={
+                                                Object {
+                                                  "icon": Object {
+                                                    "attrs": Object {
+                                                      "focusable": "false",
+                                                      "viewBox": "64 64 896 896",
+                                                    },
+                                                    "children": Array [
+                                                      Object {
+                                                        "attrs": Object {
+                                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z",
+                                                        },
+                                                        "tag": "path",
+                                                      },
+                                                    ],
+                                                    "tag": "svg",
+                                                  },
+                                                  "name": "check-circle",
+                                                  "theme": "filled",
+                                                }
+                                              }
+                                            >
+                                              <svg
+                                                aria-hidden="true"
+                                                className=""
+                                                data-icon="check-circle"
+                                                fill="currentColor"
+                                                focusable="false"
+                                                height="1em"
+                                                key="svg-check-circle"
+                                                viewBox="64 64 896 896"
+                                                width="1em"
+                                              >
+                                                <path
+                                                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z"
+                                                  key="svg-check-circle-svg-0"
+                                                />
+                                              </svg>
+                                            </IconReact>
+                                          </span>
+                                        </ForwardRef(AntdIcon)>
+                                      </ForwardRef(CheckCircleFilled)>
+                                    </span>
+                                  </Line>
+                                </div>
+                              </Progress>
+                            </div>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Mentor: 
+                              <a
+                                href="/profile?githubId=andrew123"
+                              >
+                                Andrey Andreev
+                              </a>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Position: 
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              32
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Score: 
+                              <Text
+                                mark={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  mark={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    mark={true}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <mark>
+                                              1201
+                                            </mark>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                      <Item
+                        key="list-item-1"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2019-q1
+                                               / Minsk
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <div
+                              style={
+                                Object {
+                                  "marginBottom": 5,
+                                  "width": "80%",
+                                }
+                              }
+                            >
+                              <Progress
+                                gapDegree={0}
+                                percent={50}
+                                showInfo={true}
+                                size="small"
+                                status="exception"
+                                strokeLinecap="round"
+                                trailColor={null}
+                                type="line"
+                              >
+                                <div
+                                  className="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small"
+                                >
+                                  <Line
+                                    gapDegree={0}
+                                    percent={50}
+                                    prefixCls="ant-progress"
+                                    showInfo={true}
+                                    size="small"
+                                    status="exception"
+                                    strokeLinecap="round"
+                                    trailColor={null}
+                                    type="line"
+                                  >
+                                    <div
+                                      className="ant-progress-outer"
+                                    >
+                                      <div
+                                        className="ant-progress-inner"
+                                      >
+                                        <div
+                                          className="ant-progress-bg"
+                                          style={
+                                            Object {
+                                              "background": undefined,
+                                              "borderRadius": "",
+                                              "height": 6,
+                                              "width": "50%",
+                                            }
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <span
+                                      className="ant-progress-text"
+                                    >
+                                      <ForwardRef(CloseCircleFilled)>
+                                        <ForwardRef(AntdIcon)
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close-circle",
+                                              "theme": "filled",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            aria-label="close-circle"
+                                            className="anticon anticon-close-circle"
+                                            role="img"
+                                          >
+                                            <IconReact
+                                              className=""
+                                              icon={
+                                                Object {
+                                                  "icon": Object {
+                                                    "attrs": Object {
+                                                      "focusable": "false",
+                                                      "viewBox": "64 64 896 896",
+                                                    },
+                                                    "children": Array [
+                                                      Object {
+                                                        "attrs": Object {
+                                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z",
+                                                        },
+                                                        "tag": "path",
+                                                      },
+                                                    ],
+                                                    "tag": "svg",
+                                                  },
+                                                  "name": "close-circle",
+                                                  "theme": "filled",
+                                                }
+                                              }
+                                            >
+                                              <svg
+                                                aria-hidden="true"
+                                                className=""
+                                                data-icon="close-circle"
+                                                fill="currentColor"
+                                                focusable="false"
+                                                height="1em"
+                                                key="svg-close-circle"
+                                                viewBox="64 64 896 896"
+                                                width="1em"
+                                              >
+                                                <path
+                                                  d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
+                                                  key="svg-close-circle-svg-0"
+                                                />
+                                              </svg>
+                                            </IconReact>
+                                          </span>
+                                        </ForwardRef(AntdIcon)>
+                                      </ForwardRef(CloseCircleFilled)>
+                                    </span>
+                                  </Line>
+                                </div>
+                              </Progress>
+                            </div>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Mentor: 
+                              <a
+                                href="/profile?githubId=dimon12"
+                              >
+                                Dima Testovich
+                              </a>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Position: 
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              32
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Score: 
+                              <Text
+                                mark={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  mark={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    mark={true}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <mark>
+                                              101
+                                            </mark>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                    </ul>
+                  </div>
+                </div>
+              </Spin>
+            </div>
+          </List>
+          <PermissionsSettingsDrawer
+            hideSettings={[Function]}
+            isSettingsVisible={false}
+            onPermissionsSettingsChange={[MockFunction]}
+          >
+            <withConfigConsumer(Drawer)
+              className="jsx-2583821679"
+              closable={true}
+              getContainer={false}
+              onClose={[Function]}
+              placement="top"
+              style={
+                Object {
+                  "display": "none",
+                  "position": "absolute",
+                }
+              }
+              title="Visibility settings"
+              visible={false}
+            >
+              <Drawer
+                className="jsx-2583821679"
+                closable={true}
+                getContainer={false}
+                getPrefixCls={[Function]}
+                height={256}
+                keyboard={true}
+                level={null}
+                mask={true}
+                maskClosable={true}
+                onClose={[Function]}
+                placement="top"
+                prefixCls="ant-drawer"
+                renderEmpty={[Function]}
+                style={
+                  Object {
+                    "display": "none",
+                    "position": "absolute",
+                  }
+                }
+                title="Visibility settings"
+                visible={false}
+                width={256}
+              >
+                <DrawerWrapper
+                  afterVisibleChange={[Function]}
+                  className="jsx-2583821679"
+                  defaultOpen={false}
+                  duration=".3s"
+                  ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                  forceRender={false}
+                  getContainer={false}
+                  handler={false}
+                  height={256}
+                  keyboard={true}
+                  level={null}
+                  maskClosable={true}
+                  maskStyle={Object {}}
+                  onChange={[Function]}
+                  onClose={[Function]}
+                  open={false}
+                  placement="top"
+                  prefixCls="ant-drawer"
+                  showMask={true}
+                  style={
+                    Object {
+                      "display": "none",
+                      "position": "absolute",
+                      "transform": undefined,
+                      "zIndex": undefined,
+                    }
+                  }
+                  wrapperClassName=""
+                >
+                  <div
+                    className=""
+                  >
+                    <DrawerChild
+                      afterVisibleChange={[Function]}
+                      className="jsx-2583821679"
+                      duration=".3s"
+                      ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                      getContainer={[Function]}
+                      handler={false}
+                      height={256}
+                      keyboard={true}
+                      level={null}
+                      maskClosable={true}
+                      maskStyle={Object {}}
+                      onChange={[Function]}
+                      onClose={[Function]}
+                      onHandleClick={[Function]}
+                      open={false}
+                      placement="top"
+                      prefixCls="ant-drawer"
+                      showMask={true}
+                      style={
+                        Object {
+                          "display": "none",
+                          "position": "absolute",
+                          "transform": undefined,
+                          "zIndex": undefined,
+                        }
+                      }
+                      switchScrollingEffect={[Function]}
+                    >
+                      <div
+                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        onTransitionEnd={[Function]}
+                        style={
+                          Object {
+                            "display": "none",
+                            "position": "absolute",
+                            "transform": undefined,
+                            "zIndex": undefined,
+                          }
+                        }
+                        tabIndex={-1}
+                      >
+                        <div
+                          className="ant-drawer-mask"
+                          onClick={[Function]}
+                          style={Object {}}
+                        />
+                        <div
+                          className="ant-drawer-content-wrapper"
+                          style={
+                            Object {
+                              "height": "256px",
+                              "msTransform": "translateY(-100%)",
+                              "transform": "translateY(-100%)",
+                              "width": undefined,
+                            }
+                          }
+                        >
+                          <div
+                            className="ant-drawer-content"
+                          >
+                            <div
+                              className="ant-drawer-wrapper-body"
+                              onTransitionEnd={[Function]}
+                              style={Object {}}
+                            >
+                              <div
+                                className="ant-drawer-header"
+                              >
+                                <div
+                                  className="ant-drawer-title"
+                                >
+                                  Visibility settings
+                                </div>
+                                <button
+                                  aria-label="Close"
+                                  className="ant-drawer-close"
+                                  onClick={[Function]}
+                                >
+                                  <ForwardRef(CloseOutlined)>
+                                    <ForwardRef(AntdIcon)
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "close",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        aria-label="close"
+                                        className="anticon anticon-close"
+                                        role="img"
+                                      >
+                                        <IconReact
+                                          className=""
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close",
+                                              "theme": "outlined",
+                                            }
+                                          }
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            className=""
+                                            data-icon="close"
+                                            fill="currentColor"
+                                            focusable="false"
+                                            height="1em"
+                                            key="svg-close"
+                                            viewBox="64 64 896 896"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                              key="svg-close-svg-0"
+                                            />
+                                          </svg>
+                                        </IconReact>
+                                      </span>
+                                    </ForwardRef(AntdIcon)>
+                                  </ForwardRef(CloseOutlined)>
+                                </button>
+                              </div>
+                              <div
+                                className="ant-drawer-body"
+                              >
+                                <List
+                                  bordered={false}
+                                  dataSource={Array []}
+                                  itemLayout="horizontal"
+                                  loading={false}
+                                  pagination={false}
+                                  renderItem={[Function]}
+                                  split={true}
+                                >
+                                  <div
+                                    className="ant-list ant-list-split"
+                                  >
+                                    <Spin
+                                      size="default"
+                                      spinning={false}
+                                      wrapperClassName=""
+                                    >
+                                      <div
+                                        className="ant-spin-nested-loading"
+                                      >
+                                        <div
+                                          className="ant-spin-container"
+                                          key="container"
+                                        >
+                                          <div
+                                            className="ant-list-empty-text"
+                                          >
+                                            <Empty
+                                              image={<Simple />}
+                                            >
+                                              <LocaleReceiver
+                                                componentName="Empty"
+                                              >
+                                                <div
+                                                  className="ant-empty ant-empty-normal"
+                                                >
+                                                  <div
+                                                    className="ant-empty-image"
+                                                  >
+                                                    <Simple>
+                                                      <svg
+                                                        className="ant-empty-img-simple"
+                                                        height="41"
+                                                        viewBox="0 0 64 41"
+                                                        width="64"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                      >
+                                                        <g
+                                                          fill="none"
+                                                          fillRule="evenodd"
+                                                          transform="translate(0 1)"
+                                                        >
+                                                          <ellipse
+                                                            className="ant-empty-img-simple-ellipse"
+                                                            cx="32"
+                                                            cy="33"
+                                                            rx="32"
+                                                            ry="7"
+                                                          />
+                                                          <g
+                                                            className="ant-empty-img-simple-g"
+                                                            fillRule="nonzero"
+                                                          >
+                                                            <path
+                                                              d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                                            />
+                                                            <path
+                                                              className="ant-empty-img-simple-path"
+                                                              d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                                            />
+                                                          </g>
+                                                        </g>
+                                                      </svg>
+                                                    </Simple>
+                                                  </div>
+                                                  <p
+                                                    className="ant-empty-description"
+                                                  >
+                                                    No Data
+                                                  </p>
+                                                </div>
+                                              </LocaleReceiver>
+                                            </Empty>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Spin>
+                                  </div>
+                                </List>
+                                <JSXStyle
+                                  id="2583821679"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </DrawerChild>
+                  </div>
+                </DrawerWrapper>
+              </Drawer>
+            </withConfigConsumer(Drawer)>
+          </PermissionsSettingsDrawer>
+        </div>
+        <ul
+          className="ant-card-actions"
+        >
+          <li
+            key="action-0"
+            style={
+              Object {
+                "width": "100%",
+              }
+            }
+          >
+            <span>
+              <ForwardRef(SettingOutlined)
+                key="main-card-actions-settings"
+                onClick={[Function]}
+              >
+                <ForwardRef(AntdIcon)
+                  icon={
+                    Object {
+                      "icon": Object {
+                        "attrs": Object {
+                          "focusable": "false",
+                          "viewBox": "64 64 896 896",
+                        },
+                        "children": Array [
+                          Object {
+                            "attrs": Object {
+                              "d": "M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z",
+                            },
+                            "tag": "path",
+                          },
+                        ],
+                        "tag": "svg",
+                      },
+                      "name": "setting",
+                      "theme": "outlined",
+                    }
+                  }
+                  onClick={[Function]}
+                >
+                  <span
+                    aria-label="setting"
+                    className="anticon anticon-setting"
+                    onClick={[Function]}
+                    role="img"
+                    tabIndex={-1}
+                  >
+                    <IconReact
+                      className=""
+                      icon={
+                        Object {
+                          "icon": Object {
+                            "attrs": Object {
+                              "focusable": "false",
+                              "viewBox": "64 64 896 896",
+                            },
+                            "children": Array [
+                              Object {
+                                "attrs": Object {
+                                  "d": "M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z",
+                                },
+                                "tag": "path",
+                              },
+                            ],
+                            "tag": "svg",
+                          },
+                          "name": "setting",
+                          "theme": "outlined",
+                        }
+                      }
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className=""
+                        data-icon="setting"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        key="svg-setting"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z"
+                          key="svg-setting-svg-0"
+                        />
+                      </svg>
+                    </IconReact>
+                  </span>
+                </ForwardRef(AntdIcon)>
+              </ForwardRef(SettingOutlined)>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </Card>
+  </CommonCard>
+</StudentStatsCard>
+`;

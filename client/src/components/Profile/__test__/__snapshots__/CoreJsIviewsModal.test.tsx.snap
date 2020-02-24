@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CoreJsIviewsModal Should render correctly 1`] = `
+<Modal
+  confirmLoading={false}
+  footer={null}
+  maskTransitionName="fade"
+  okType="primary"
+  onCancel={[MockFunction]}
+  title="rs-2019 CoreJS Interview Feedback"
+  transitionName="zoom"
+  visible={true}
+  width="80%"
+>
+  <p
+    style={
+      Object {
+        "marginBottom": 5,
+      }
+    }
+  >
+    Score: 
+    <Text
+      mark={true}
+    >
+      4
+    </Text>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 20,
+      }
+    }
+  >
+    Interviewer: 
+    <a
+      href="/profile?githubId=dima"
+    >
+      Dzmitry Petrov
+    </a>
+  </p>
+  <p
+    style={
+      Object {
+        "marginBottom": 20,
+      }
+    }
+  >
+    <Text
+      strong={true}
+    >
+      Comment: 
+    </Text>
+    test
+  </p>
+  <Table
+    columns={
+      Array [
+        Object {
+          "dataIndex": "questionText",
+          "ellipsis": true,
+        },
+        Object {
+          "dataIndex": "answer",
+          "render": [Function],
+        },
+      ]
+    }
+    dataSource={
+      Array [
+        Object {
+          "answer": "true",
+          "questionId": "test",
+          "questionText": "test",
+        },
+        Object {
+          "answer": "false",
+          "questionId": "test",
+          "questionText": "test",
+        },
+      ]
+    }
+    pagination={false}
+    rowKey="questionId"
+    size="small"
+  />
+</Modal>
+`;

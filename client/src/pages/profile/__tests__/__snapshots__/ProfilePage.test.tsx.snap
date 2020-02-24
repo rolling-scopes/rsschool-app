@@ -1,0 +1,772 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
+<Fragment>
+  <LoadingScreen
+    show={true}
+  >
+    <Header
+      isProfileEditingModeEnabled={false}
+      isProfilePage={false}
+      isSaveButtonVisible={false}
+      onChangeProfilePageMode={[Function]}
+      onSaveClick={[Function]}
+      username="mikhama"
+    />
+    <Spin
+      delay={200}
+      size="default"
+      spinning={false}
+      wrapperClassName=""
+    >
+      <div
+        style={
+          Object {
+            "padding": 10,
+          }
+        }
+      >
+        <Masonry
+          breakpointCols={
+            Object {
+              "1100": 3,
+              "500": 1,
+              "700": 2,
+              "default": 4,
+            }
+          }
+          className="jsx-3803498300"
+          columnClassName="jsx-110195169"
+        >
+          <div
+            key="card-0"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <MainCard
+              data={
+                Object {
+                  "aboutMyself": "Test",
+                  "educationHistory": Array [
+                    Object {
+                      "faculty": "TT",
+                      "graduationYear": "2019",
+                      "university": "Test",
+                    },
+                  ],
+                  "englishLevel": "a2+",
+                  "locationId": 456,
+                  "locationName": "Brest",
+                }
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-1"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <AboutCard
+              data={
+                Object {
+                  "aboutMyself": "Test",
+                  "educationHistory": Array [
+                    Object {
+                      "faculty": "TT",
+                      "graduationYear": "2019",
+                      "university": "Test",
+                    },
+                  ],
+                  "englishLevel": "a2+",
+                  "locationId": 456,
+                  "locationName": "Brest",
+                }
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-2"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <EnglishCard
+              data={
+                Object {
+                  "aboutMyself": "Test",
+                  "educationHistory": Array [
+                    Object {
+                      "faculty": "TT",
+                      "graduationYear": "2019",
+                      "university": "Test",
+                    },
+                  ],
+                  "englishLevel": "a2+",
+                  "locationId": 456,
+                  "locationName": "Brest",
+                }
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-3"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <EducationCard
+              data={
+                Object {
+                  "aboutMyself": "Test",
+                  "educationHistory": Array [
+                    Object {
+                      "faculty": "TT",
+                      "graduationYear": "2019",
+                      "university": "Test",
+                    },
+                  ],
+                  "englishLevel": "a2+",
+                  "locationId": 456,
+                  "locationName": "Brest",
+                }
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-4"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <ContactsCard
+              data={Object {}}
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-5"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <PublicFeedbackCard
+              data={
+                Array [
+                  Object {},
+                ]
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-6"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <StudentStatsCard
+              data={
+                Array [
+                  Object {
+                    "courseFullName": "test",
+                    "courseName": "test",
+                    "locationName": "Minsk",
+                    "tasks": Array [
+                      Object {
+                        "interviewFormAnswers": Object {},
+                      },
+                    ],
+                  },
+                ]
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-7"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <MentorStatsCard
+              data={
+                Array [
+                  Object {},
+                ]
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-8"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <CoreJSIviewsCard
+              data={
+                Array [
+                  Object {
+                    "courseFullName": "test",
+                    "courseName": "test",
+                    "interview": Object {
+                      "answers": Object {},
+                      "comment": undefined,
+                      "interviewer": undefined,
+                      "score": undefined,
+                    },
+                    "locationName": "Minsk",
+                  },
+                ]
+              }
+            />
+          </div>
+          <div
+            key="card-9"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
+            <PreScreeningIviewsCard
+              data={
+                Array [
+                  Object {},
+                ]
+              }
+            />
+          </div>
+        </Masonry>
+        <JSXStyle
+          id="3803498300"
+        >
+          div.jsx-3803498300{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;margin-left:-16px;width:auto;}
+        </JSXStyle>
+        <JSXStyle
+          id="110195169"
+        >
+          div.jsx-110195169{padding-left:16px;background-clip:padding-box;}
+        </JSXStyle>
+      </div>
+    </Spin>
+  </LoadingScreen>
+</Fragment>
+`;

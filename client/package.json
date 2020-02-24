@@ -14,8 +14,9 @@
     "build": "next build src",
     "build:tsc": "tsc -p ./src/tsconfig.json",
     "prod": "next start -p 8080",
-    "test": "jest",
-    "test-watch": "jest --watch"
+    "test": "jest --config=./src/jest.config.js",
+    "test-watch": "jest --config=./src/jest.config.js --watch",
+    "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
     "antd": "~4.0.0-rc.4",
@@ -27,12 +28,15 @@
     "next": "~9.2.1",
     "react": "~16.12.0",
     "react-dom": "~16.12.0",
+    "react-masonry-css": "^1.0.14",
     "react-use": "^13.26.0",
     "styled-jsx": "~3.2.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@types/csvtojson": "~1.1.5",
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
     "@types/moment-timezone": "^0.5.12",
@@ -40,10 +44,13 @@
     "@types/react": "~16.9.13",
     "@types/react-dom": "~16.9.4",
     "@types/styled-jsx": "~2.2.8",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
     "express": "~4.17.1",
     "http-proxy-middleware": "~0.19.1",
     "jest": "~25.1.0",
     "ts-jest": "~25.0.0",
-    "typescript": "~3.7.5"
+    "typescript": "^3.7.5"
   }
 }

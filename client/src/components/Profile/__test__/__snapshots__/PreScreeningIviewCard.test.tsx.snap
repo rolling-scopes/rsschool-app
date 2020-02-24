@@ -1,0 +1,3019 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PreScreeningIviewCard Should render correctly 1`] = `
+<PreScreeningIviewsCard
+  data={
+    Array [
+      Object {
+        "comment": "Not bad",
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseName": "rs-2018-q1",
+        "date": "2018-12-01",
+        "decision": "yes",
+        "english": "a2",
+        "interviewer": Object {
+          "githubId": "dva",
+          "name": "Dima Vasilyev",
+        },
+        "isGoodCandidate": true,
+        "programmingTask": Object {
+          "codeWritingLevel": 3,
+          "comment": "Not bad coder",
+          "resolved": 2,
+          "task": "aaa === 3a",
+        },
+        "rating": 3.43,
+        "skills": Object {
+          "common": 2,
+          "dataStructures": 4,
+          "htmlCss": 3,
+        },
+      },
+      Object {
+        "comment": "Not bad",
+        "courseFullName": "Rolling Scopes School 2019 Q1",
+        "courseName": "rs-2019-q1",
+        "date": "2019-12-01",
+        "decision": "yes",
+        "english": "a2+",
+        "interviewer": Object {
+          "githubId": "alexs",
+          "name": "Alex Smirnov",
+        },
+        "isGoodCandidate": true,
+        "programmingTask": Object {
+          "codeWritingLevel": 4,
+          "comment": "Not bad coder",
+          "resolved": 1,
+          "task": "aaa === 3a",
+        },
+        "rating": 4.23,
+        "skills": Object {
+          "common": 4,
+          "dataStructures": 3,
+          "htmlCss": 3,
+        },
+      },
+    ]
+  }
+>
+  <PreScreeningIviewModal
+    feedback={
+      Object {
+        "comment": "Not bad",
+        "courseFullName": "Rolling Scopes School 2018 Q1",
+        "courseName": "rs-2018-q1",
+        "date": "2018-12-01",
+        "decision": "yes",
+        "english": "a2",
+        "interviewer": Object {
+          "githubId": "dva",
+          "name": "Dima Vasilyev",
+        },
+        "isGoodCandidate": true,
+        "programmingTask": Object {
+          "codeWritingLevel": 3,
+          "comment": "Not bad coder",
+          "resolved": 2,
+          "task": "aaa === 3a",
+        },
+        "rating": 3.43,
+        "skills": Object {
+          "common": 2,
+          "dataStructures": 4,
+          "htmlCss": 3,
+        },
+      }
+    }
+    isVisible={false}
+    onHide={[Function]}
+  >
+    <Modal
+      confirmLoading={false}
+      footer={null}
+      maskTransitionName="fade"
+      okType="primary"
+      onCancel={[Function]}
+      title="Rolling Scopes School 2018 Q1 Pre-Screening Interview Feedback"
+      transitionName="zoom"
+      visible={false}
+      width="80%"
+    >
+      <Component
+        closeIcon={
+          <span
+            className="ant-modal-close-x"
+          >
+            <ForwardRef(CloseOutlined)
+              className="ant-modal-close-icon"
+            />
+          </span>
+        }
+        confirmLoading={false}
+        footer={null}
+        maskTransitionName="fade"
+        okType="primary"
+        onCancel={[Function]}
+        onClose={[Function]}
+        prefixCls="ant-modal"
+        title="Rolling Scopes School 2018 Q1 Pre-Screening Interview Feedback"
+        transitionName="zoom"
+        visible={false}
+        width="80%"
+        wrapClassName=""
+      >
+        <PortalWrapper
+          visible={false}
+        />
+      </Component>
+    </Modal>
+  </PreScreeningIviewModal>
+  <CommonCard
+    content={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "comment": "Not bad",
+              "courseFullName": "Rolling Scopes School 2018 Q1",
+              "courseName": "rs-2018-q1",
+              "date": "2018-12-01",
+              "decision": "yes",
+              "english": "a2",
+              "interviewer": Object {
+                "githubId": "dva",
+                "name": "Dima Vasilyev",
+              },
+              "isGoodCandidate": true,
+              "programmingTask": Object {
+                "codeWritingLevel": 3,
+                "comment": "Not bad coder",
+                "resolved": 2,
+                "task": "aaa === 3a",
+              },
+              "rating": 3.43,
+              "skills": Object {
+                "common": 2,
+                "dataStructures": 4,
+                "htmlCss": 3,
+              },
+            },
+            Object {
+              "comment": "Not bad",
+              "courseFullName": "Rolling Scopes School 2019 Q1",
+              "courseName": "rs-2019-q1",
+              "date": "2019-12-01",
+              "decision": "yes",
+              "english": "a2+",
+              "interviewer": Object {
+                "githubId": "alexs",
+                "name": "Alex Smirnov",
+              },
+              "isGoodCandidate": true,
+              "programmingTask": Object {
+                "codeWritingLevel": 4,
+                "comment": "Not bad coder",
+                "resolved": 1,
+                "task": "aaa === 3a",
+              },
+              "rating": 4.23,
+              "skills": Object {
+                "common": 4,
+                "dataStructures": 3,
+                "htmlCss": 3,
+              },
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    icon={<ForwardRef(QuestionCircleOutlined) />}
+    title="Pre-Screening Interviews"
+  >
+    <Card
+      title={
+        <Title
+          ellipsis={true}
+          level={2}
+          style={
+            Object {
+              "fontSize": 16,
+              "marginBottom": 0,
+            }
+          }
+        >
+          <ForwardRef(QuestionCircleOutlined) />
+           
+          Pre-Screening Interviews
+        </Title>
+      }
+    >
+      <div
+        className="ant-card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <Title
+                ellipsis={true}
+                level={2}
+                style={
+                  Object {
+                    "fontSize": 16,
+                    "marginBottom": 0,
+                  }
+                }
+              >
+                <withConfigConsumer(Base)
+                  component="h2"
+                  ellipsis={true}
+                  style={
+                    Object {
+                      "fontSize": 16,
+                      "marginBottom": 0,
+                    }
+                  }
+                >
+                  <Base
+                    component="h2"
+                    ellipsis={true}
+                    getPrefixCls={[Function]}
+                    prefixCls="ant-typography"
+                    renderEmpty={[Function]}
+                    style={
+                      Object {
+                        "fontSize": 16,
+                        "marginBottom": 0,
+                      }
+                    }
+                  >
+                    <LocaleReceiver
+                      componentName="Text"
+                    >
+                      <ResizeObserver
+                        disabled={false}
+                        onResize={[Function]}
+                      >
+                        <Typography
+                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          component="h2"
+                          style={
+                            Object {
+                              "WebkitLineClamp": null,
+                              "fontSize": 16,
+                              "marginBottom": 0,
+                            }
+                          }
+                        >
+                          <h2
+                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                            style={
+                              Object {
+                                "WebkitLineClamp": null,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
+                            }
+                          >
+                            <ForwardRef(QuestionCircleOutlined)>
+                              <ForwardRef(AntdIcon)
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "question-circle",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <span
+                                  aria-label="question-circle"
+                                  className="anticon anticon-question-circle"
+                                  role="img"
+                                >
+                                  <IconReact
+                                    className=""
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "question-circle",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className=""
+                                      data-icon="question-circle"
+                                      fill="currentColor"
+                                      focusable="false"
+                                      height="1em"
+                                      key="svg-question-circle"
+                                      viewBox="64 64 896 896"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                                        key="svg-question-circle-svg-0"
+                                      />
+                                      <path
+                                        d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z"
+                                        key="svg-question-circle-svg-1"
+                                      />
+                                    </svg>
+                                  </IconReact>
+                                </span>
+                              </ForwardRef(AntdIcon)>
+                            </ForwardRef(QuestionCircleOutlined)>
+                             
+                            Pre-Screening Interviews
+                          </h2>
+                        </Typography>
+                      </ResizeObserver>
+                    </LocaleReceiver>
+                  </Base>
+                </withConfigConsumer(Base)>
+              </Title>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <List
+            bordered={false}
+            dataSource={
+              Array [
+                Object {
+                  "comment": "Not bad",
+                  "courseFullName": "Rolling Scopes School 2018 Q1",
+                  "courseName": "rs-2018-q1",
+                  "date": "2018-12-01",
+                  "decision": "yes",
+                  "english": "a2",
+                  "interviewer": Object {
+                    "githubId": "dva",
+                    "name": "Dima Vasilyev",
+                  },
+                  "isGoodCandidate": true,
+                  "programmingTask": Object {
+                    "codeWritingLevel": 3,
+                    "comment": "Not bad coder",
+                    "resolved": 2,
+                    "task": "aaa === 3a",
+                  },
+                  "rating": 3.43,
+                  "skills": Object {
+                    "common": 2,
+                    "dataStructures": 4,
+                    "htmlCss": 3,
+                  },
+                },
+                Object {
+                  "comment": "Not bad",
+                  "courseFullName": "Rolling Scopes School 2019 Q1",
+                  "courseName": "rs-2019-q1",
+                  "date": "2019-12-01",
+                  "decision": "yes",
+                  "english": "a2+",
+                  "interviewer": Object {
+                    "githubId": "alexs",
+                    "name": "Alex Smirnov",
+                  },
+                  "isGoodCandidate": true,
+                  "programmingTask": Object {
+                    "codeWritingLevel": 4,
+                    "comment": "Not bad coder",
+                    "resolved": 1,
+                    "task": "aaa === 3a",
+                  },
+                  "rating": 4.23,
+                  "skills": Object {
+                    "common": 4,
+                    "dataStructures": 3,
+                    "htmlCss": 3,
+                  },
+                },
+              ]
+            }
+            itemLayout="horizontal"
+            loading={false}
+            pagination={false}
+            renderItem={[Function]}
+            split={true}
+          >
+            <div
+              className="ant-list ant-list-split"
+            >
+              <Spin
+                size="default"
+                spinning={false}
+                wrapperClassName=""
+              >
+                <div
+                  className="ant-spin-nested-loading"
+                >
+                  <div
+                    className="ant-spin-container"
+                    key="container"
+                  >
+                    <ul
+                      className="ant-list-items"
+                    >
+                      <Item
+                        key="list-item-0"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2018-q1
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <Rating
+                              rating={3.43}
+                            >
+                              <Rate
+                                allowHalf={true}
+                                character={<ForwardRef(StarFilled) />}
+                                disabled={true}
+                                style={
+                                  Object {
+                                    "marginBottom": "5px",
+                                  }
+                                }
+                                value={3.5}
+                              >
+                                <Rate
+                                  allowClear={true}
+                                  allowHalf={true}
+                                  character={<ForwardRef(StarFilled) />}
+                                  characterRender={[Function]}
+                                  className=""
+                                  count={5}
+                                  defaultValue={0}
+                                  disabled={true}
+                                  onChange={[Function]}
+                                  onHoverChange={[Function]}
+                                  prefixCls="ant-rate"
+                                  style={
+                                    Object {
+                                      "marginBottom": "5px",
+                                    }
+                                  }
+                                  tabIndex={0}
+                                  value={3.5}
+                                >
+                                  <ul
+                                    className="ant-rate ant-rate-disabled"
+                                    onBlur={null}
+                                    onFocus={null}
+                                    onKeyDown={null}
+                                    onMouseLeave={null}
+                                    role="radiogroup"
+                                    style={
+                                      Object {
+                                        "marginBottom": "5px",
+                                      }
+                                    }
+                                    tabIndex={-1}
+                                  >
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={0}
+                                      key="0"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={3.5}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={1}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={1}
+                                      key="1"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={3.5}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={2}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={2}
+                                      key="2"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={3.5}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={3}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={3}
+                                      key="3"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={3.5}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-half ant-rate-star-active"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={4}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={4}
+                                      key="4"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={3.5}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-zero"
+                                      >
+                                        <div
+                                          aria-checked="false"
+                                          aria-posinset={5}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                  </ul>
+                                </Rate>
+                              </Rate>
+                              <Text
+                                className="ant-rate-text"
+                                style={
+                                  Object {
+                                    "fontWeight": "bold",
+                                  }
+                                }
+                              >
+                                <withConfigConsumer(Base)
+                                  className="ant-rate-text"
+                                  component="span"
+                                  ellipsis={false}
+                                  style={
+                                    Object {
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    className="ant-rate-text"
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    style={
+                                      Object {
+                                        "fontWeight": "bold",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className="ant-rate-text"
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontWeight": "bold",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography ant-rate-text"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontWeight": "bold",
+                                              }
+                                            }
+                                          >
+                                            3.43
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </Rating>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Date: 
+                              2018-12-01
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Good candidate: 
+                              <Tag
+                                closable={false}
+                                color="green"
+                              >
+                                <span
+                                  className="ant-tag ant-tag-green"
+                                  style={
+                                    Object {
+                                      "backgroundColor": undefined,
+                                    }
+                                  }
+                                >
+                                  Yes
+                                </span>
+                              </Tag>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Interviewer: 
+                              <a
+                                href="/profile?githubId=dva"
+                              >
+                                Dima Vasilyev
+                              </a>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                      <Item
+                        key="list-item-1"
+                        style={
+                          Object {
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                          }
+                        }
+                      >
+                        <li
+                          className="ant-list-item"
+                          style={
+                            Object {
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                            }
+                          }
+                        >
+                          <div
+                            style={
+                              Object {
+                                "flexGrow": 2,
+                              }
+                            }
+                          >
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 0,
+                                }
+                              }
+                            >
+                              <Text
+                                strong={true}
+                              >
+                                <withConfigConsumer(Base)
+                                  component="span"
+                                  ellipsis={false}
+                                  strong={true}
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    strong={true}
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              rs-2019-q1
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </p>
+                            <Rating
+                              rating={4.23}
+                            >
+                              <Rate
+                                allowHalf={true}
+                                character={<ForwardRef(StarFilled) />}
+                                disabled={true}
+                                style={
+                                  Object {
+                                    "marginBottom": "5px",
+                                  }
+                                }
+                                value={4}
+                              >
+                                <Rate
+                                  allowClear={true}
+                                  allowHalf={true}
+                                  character={<ForwardRef(StarFilled) />}
+                                  characterRender={[Function]}
+                                  className=""
+                                  count={5}
+                                  defaultValue={0}
+                                  disabled={true}
+                                  onChange={[Function]}
+                                  onHoverChange={[Function]}
+                                  prefixCls="ant-rate"
+                                  style={
+                                    Object {
+                                      "marginBottom": "5px",
+                                    }
+                                  }
+                                  tabIndex={0}
+                                  value={4}
+                                >
+                                  <ul
+                                    className="ant-rate ant-rate-disabled"
+                                    onBlur={null}
+                                    onFocus={null}
+                                    onKeyDown={null}
+                                    onMouseLeave={null}
+                                    role="radiogroup"
+                                    style={
+                                      Object {
+                                        "marginBottom": "5px",
+                                      }
+                                    }
+                                    tabIndex={-1}
+                                  >
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={0}
+                                      key="0"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={4}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={1}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={1}
+                                      key="1"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={4}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={2}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={2}
+                                      key="2"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={4}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={3}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={3}
+                                      key="3"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={4}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-full"
+                                      >
+                                        <div
+                                          aria-checked="true"
+                                          aria-posinset={4}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                    <Star
+                                      allowHalf={true}
+                                      character={<ForwardRef(StarFilled) />}
+                                      characterRender={[Function]}
+                                      count={5}
+                                      disabled={true}
+                                      focused={false}
+                                      index={4}
+                                      key="4"
+                                      onClick={[Function]}
+                                      onHover={[Function]}
+                                      prefixCls="ant-rate-star"
+                                      value={4}
+                                    >
+                                      <li
+                                        className="ant-rate-star ant-rate-star-zero"
+                                      >
+                                        <div
+                                          aria-checked="false"
+                                          aria-posinset={5}
+                                          aria-setsize={5}
+                                          onClick={null}
+                                          onKeyDown={null}
+                                          onMouseMove={null}
+                                          role="radio"
+                                          tabIndex={0}
+                                        >
+                                          <div
+                                            className="ant-rate-star-first"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                          <div
+                                            className="ant-rate-star-second"
+                                          >
+                                            <ForwardRef(StarFilled)>
+                                              <ForwardRef(AntdIcon)
+                                                icon={
+                                                  Object {
+                                                    "icon": Object {
+                                                      "attrs": Object {
+                                                        "focusable": "false",
+                                                        "viewBox": "64 64 896 896",
+                                                      },
+                                                      "children": Array [
+                                                        Object {
+                                                          "attrs": Object {
+                                                            "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                          },
+                                                          "tag": "path",
+                                                        },
+                                                      ],
+                                                      "tag": "svg",
+                                                    },
+                                                    "name": "star",
+                                                    "theme": "filled",
+                                                  }
+                                                }
+                                              >
+                                                <span
+                                                  aria-label="star"
+                                                  className="anticon anticon-star"
+                                                  role="img"
+                                                >
+                                                  <IconReact
+                                                    className=""
+                                                    icon={
+                                                      Object {
+                                                        "icon": Object {
+                                                          "attrs": Object {
+                                                            "focusable": "false",
+                                                            "viewBox": "64 64 896 896",
+                                                          },
+                                                          "children": Array [
+                                                            Object {
+                                                              "attrs": Object {
+                                                                "d": "M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z",
+                                                              },
+                                                              "tag": "path",
+                                                            },
+                                                          ],
+                                                          "tag": "svg",
+                                                        },
+                                                        "name": "star",
+                                                        "theme": "filled",
+                                                      }
+                                                    }
+                                                  >
+                                                    <svg
+                                                      aria-hidden="true"
+                                                      className=""
+                                                      data-icon="star"
+                                                      fill="currentColor"
+                                                      focusable="false"
+                                                      height="1em"
+                                                      key="svg-star"
+                                                      viewBox="64 64 896 896"
+                                                      width="1em"
+                                                    >
+                                                      <path
+                                                        d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"
+                                                        key="svg-star-svg-0"
+                                                      />
+                                                    </svg>
+                                                  </IconReact>
+                                                </span>
+                                              </ForwardRef(AntdIcon)>
+                                            </ForwardRef(StarFilled)>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </Star>
+                                  </ul>
+                                </Rate>
+                              </Rate>
+                              <Text
+                                className="ant-rate-text"
+                                style={
+                                  Object {
+                                    "fontWeight": "bold",
+                                  }
+                                }
+                              >
+                                <withConfigConsumer(Base)
+                                  className="ant-rate-text"
+                                  component="span"
+                                  ellipsis={false}
+                                  style={
+                                    Object {
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    className="ant-rate-text"
+                                    component="span"
+                                    ellipsis={false}
+                                    getPrefixCls={[Function]}
+                                    prefixCls="ant-typography"
+                                    renderEmpty={[Function]}
+                                    style={
+                                      Object {
+                                        "fontWeight": "bold",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className="ant-rate-text"
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontWeight": "bold",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography ant-rate-text"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontWeight": "bold",
+                                              }
+                                            }
+                                          >
+                                            4.23
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </withConfigConsumer(Base)>
+                              </Text>
+                            </Rating>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Date: 
+                              2019-12-01
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Good candidate: 
+                              <Tag
+                                closable={false}
+                                color="green"
+                              >
+                                <span
+                                  className="ant-tag ant-tag-green"
+                                  style={
+                                    Object {
+                                      "backgroundColor": undefined,
+                                    }
+                                  }
+                                >
+                                  Yes
+                                </span>
+                              </Tag>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "fontSize": 12,
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              Interviewer: 
+                              <a
+                                href="/profile?githubId=alexs"
+                              >
+                                Alex Smirnov
+                              </a>
+                            </p>
+                          </div>
+                          <Button
+                            block={false}
+                            ghost={false}
+                            htmlType="button"
+                            loading={false}
+                            onClick={[Function]}
+                            type="dashed"
+                          >
+                            <Wave>
+                              <button
+                                className="ant-btn ant-btn-dashed"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <ForwardRef(FullscreenOutlined)
+                                  key=".0"
+                                >
+                                  <ForwardRef(AntdIcon)
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "fullscreen",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="fullscreen"
+                                      className="anticon anticon-fullscreen"
+                                      role="img"
+                                    >
+                                      <IconReact
+                                        className=""
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "fullscreen",
+                                            "theme": "outlined",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden="true"
+                                          className=""
+                                          data-icon="fullscreen"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-fullscreen"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M290 236.4l43.9-43.9a8.01 8.01 0 00-4.7-13.6L169 160c-5.1-.6-9.5 3.7-8.9 8.9L179 329.1c.8 6.6 8.9 9.4 13.6 4.7l43.7-43.7L370 423.7c3.1 3.1 8.2 3.1 11.3 0l42.4-42.3c3.1-3.1 3.1-8.2 0-11.3L290 236.4zm352.7 187.3c3.1 3.1 8.2 3.1 11.3 0l133.7-133.6 43.7 43.7a8.01 8.01 0 0013.6-4.7L863.9 169c.6-5.1-3.7-9.5-8.9-8.9L694.8 179c-6.6.8-9.4 8.9-4.7 13.6l43.9 43.9L600.3 370a8.03 8.03 0 000 11.3l42.4 42.4zM845 694.9c-.8-6.6-8.9-9.4-13.6-4.7l-43.7 43.7L654 600.3a8.03 8.03 0 00-11.3 0l-42.4 42.3a8.03 8.03 0 000 11.3L734 787.6l-43.9 43.9a8.01 8.01 0 004.7 13.6L855 864c5.1.6 9.5-3.7 8.9-8.9L845 694.9zm-463.7-94.6a8.03 8.03 0 00-11.3 0L236.3 733.9l-43.7-43.7a8.01 8.01 0 00-13.6 4.7L160.1 855c-.6 5.1 3.7 9.5 8.9 8.9L329.2 845c6.6-.8 9.4-8.9 4.7-13.6L290 787.6 423.7 654c3.1-3.1 3.1-8.2 0-11.3l-42.4-42.4z"
+                                            key="svg-fullscreen-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </ForwardRef(AntdIcon)>
+                                </ForwardRef(FullscreenOutlined)>
+                              </button>
+                            </Wave>
+                          </Button>
+                        </li>
+                      </Item>
+                    </ul>
+                  </div>
+                </div>
+              </Spin>
+            </div>
+          </List>
+        </div>
+      </div>
+    </Card>
+  </CommonCard>
+</PreScreeningIviewsCard>
+`;

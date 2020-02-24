@@ -1,0 +1,2935 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
+<ContactsCard
+  data={
+    Object {
+      "email": "vasya@tut.by",
+      "linkedIn": "http://linkedin_test.com/vasya",
+      "notes": "vasya",
+      "phone": "1232422",
+      "skype": "skype_vasya",
+      "telegram": "televasya",
+    }
+  }
+  isEditingModeEnabled={false}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
+>
+  <CommonCard
+    content={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "key": "email",
+              "name": "E-mail",
+              "value": "vasya@tut.by",
+            },
+            Object {
+              "key": "telegram",
+              "name": "Telegram",
+              "value": "televasya",
+            },
+            Object {
+              "key": "phone",
+              "name": "Phone",
+              "value": "1232422",
+            },
+            Object {
+              "key": "skype",
+              "name": "Skype",
+              "value": "skype_vasya",
+            },
+            Object {
+              "key": "notes",
+              "name": "Notes",
+              "value": "vasya",
+            },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
+              "value": "http://linkedin_test.com/vasya",
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    icon={<ForwardRef(ContactsOutlined) />}
+    isEditingModeEnabled={false}
+    noDataDescrption="Contacts aren't filled in"
+    onPermissionsSettingsChange={[MockFunction]}
+    profileSettingsContent={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "key": "email",
+              "name": "E-mail",
+              "value": "vasya@tut.by",
+            },
+            Object {
+              "key": "telegram",
+              "name": "Telegram",
+              "value": "televasya",
+            },
+            Object {
+              "key": "phone",
+              "name": "Phone",
+              "value": "1232422",
+            },
+            Object {
+              "key": "skype",
+              "name": "Skype",
+              "value": "skype_vasya",
+            },
+            Object {
+              "key": "notes",
+              "name": "Notes",
+              "value": "vasya",
+            },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
+              "value": "http://linkedin_test.com/vasya",
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    title="Contacts"
+  >
+    <Card
+      title={
+        <Title
+          ellipsis={true}
+          level={2}
+          style={
+            Object {
+              "fontSize": 16,
+              "marginBottom": 0,
+            }
+          }
+        >
+          <ForwardRef(ContactsOutlined) />
+           
+          Contacts
+        </Title>
+      }
+    >
+      <div
+        className="ant-card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <Title
+                ellipsis={true}
+                level={2}
+                style={
+                  Object {
+                    "fontSize": 16,
+                    "marginBottom": 0,
+                  }
+                }
+              >
+                <withConfigConsumer(Base)
+                  component="h2"
+                  ellipsis={true}
+                  style={
+                    Object {
+                      "fontSize": 16,
+                      "marginBottom": 0,
+                    }
+                  }
+                >
+                  <Base
+                    component="h2"
+                    ellipsis={true}
+                    getPrefixCls={[Function]}
+                    prefixCls="ant-typography"
+                    renderEmpty={[Function]}
+                    style={
+                      Object {
+                        "fontSize": 16,
+                        "marginBottom": 0,
+                      }
+                    }
+                  >
+                    <LocaleReceiver
+                      componentName="Text"
+                    >
+                      <ResizeObserver
+                        disabled={false}
+                        onResize={[Function]}
+                      >
+                        <Typography
+                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          component="h2"
+                          style={
+                            Object {
+                              "WebkitLineClamp": null,
+                              "fontSize": 16,
+                              "marginBottom": 0,
+                            }
+                          }
+                        >
+                          <h2
+                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                            style={
+                              Object {
+                                "WebkitLineClamp": null,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
+                            }
+                          >
+                            <ForwardRef(ContactsOutlined)>
+                              <ForwardRef(AntdIcon)
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "contacts",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <span
+                                  aria-label="contacts"
+                                  className="anticon anticon-contacts"
+                                  role="img"
+                                >
+                                  <IconReact
+                                    className=""
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "contacts",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className=""
+                                      data-icon="contacts"
+                                      fill="currentColor"
+                                      focusable="false"
+                                      height="1em"
+                                      key="svg-contacts"
+                                      viewBox="64 64 896 896"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                        key="svg-contacts-svg-0"
+                                      />
+                                    </svg>
+                                  </IconReact>
+                                </span>
+                              </ForwardRef(AntdIcon)>
+                            </ForwardRef(ContactsOutlined)>
+                             
+                            Contacts
+                          </h2>
+                        </Typography>
+                      </ResizeObserver>
+                    </LocaleReceiver>
+                  </Base>
+                </withConfigConsumer(Base)>
+              </Title>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <List
+            bordered={false}
+            dataSource={
+              Array [
+                Object {
+                  "key": "email",
+                  "name": "E-mail",
+                  "value": "vasya@tut.by",
+                },
+                Object {
+                  "key": "telegram",
+                  "name": "Telegram",
+                  "value": "televasya",
+                },
+                Object {
+                  "key": "phone",
+                  "name": "Phone",
+                  "value": "1232422",
+                },
+                Object {
+                  "key": "skype",
+                  "name": "Skype",
+                  "value": "skype_vasya",
+                },
+                Object {
+                  "key": "notes",
+                  "name": "Notes",
+                  "value": "vasya",
+                },
+                Object {
+                  "key": "linkedIn",
+                  "name": "LinkedIn",
+                  "value": "http://linkedin_test.com/vasya",
+                },
+              ]
+            }
+            itemLayout="horizontal"
+            loading={false}
+            pagination={false}
+            renderItem={[Function]}
+            split={true}
+          >
+            <div
+              className="ant-list ant-list-split"
+            >
+              <Spin
+                size="default"
+                spinning={false}
+                wrapperClassName=""
+              >
+                <div
+                  className="ant-spin-nested-loading"
+                >
+                  <div
+                    className="ant-spin-container"
+                    key="container"
+                  >
+                    <ul
+                      className="ant-list-items"
+                    >
+                      <Item
+                        key="email"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          E-mail
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          vasya@tut.by
+                        </li>
+                      </Item>
+                      <Item
+                        key="telegram"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Telegram
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          televasya
+                        </li>
+                      </Item>
+                      <Item
+                        key="phone"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Phone
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          1232422
+                        </li>
+                      </Item>
+                      <Item
+                        key="skype"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Skype
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          skype_vasya
+                        </li>
+                      </Item>
+                      <Item
+                        key="notes"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Notes
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          vasya
+                        </li>
+                      </Item>
+                      <Item
+                        key="linkedIn"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          LinkedIn
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          <a
+                            href="http://linkedin_test.com/vasya"
+                            target="__blank"
+                          >
+                            http://linkedin_test.com/vasya
+                          </a>
+                        </li>
+                      </Item>
+                    </ul>
+                  </div>
+                </div>
+              </Spin>
+            </div>
+          </List>
+        </div>
+      </div>
+    </Card>
+  </CommonCard>
+</ContactsCard>
+`;
+
+exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
+<ContactsCard
+  data={
+    Object {
+      "email": "vasya@tut.by",
+      "linkedIn": null,
+      "notes": null,
+      "phone": "1232422",
+      "skype": "skype_vasya",
+      "telegram": null,
+    }
+  }
+  isEditingModeEnabled={true}
+  onPermissionsSettingsChange={[MockFunction]}
+  onProfileSettingsChange={[MockFunction]}
+>
+  <CommonCard
+    content={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "key": "email",
+              "name": "E-mail",
+              "value": "vasya@tut.by",
+            },
+            Object {
+              "key": "phone",
+              "name": "Phone",
+              "value": "1232422",
+            },
+            Object {
+              "key": "skype",
+              "name": "Skype",
+              "value": "skype_vasya",
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    icon={<ForwardRef(ContactsOutlined) />}
+    isEditingModeEnabled={true}
+    noDataDescrption="Contacts aren't filled in"
+    onPermissionsSettingsChange={[MockFunction]}
+    profileSettingsContent={
+      <List
+        bordered={false}
+        dataSource={
+          Array [
+            Object {
+              "key": "email",
+              "name": "E-mail",
+              "value": "vasya@tut.by",
+            },
+            Object {
+              "key": "telegram",
+              "name": "Telegram",
+              "value": null,
+            },
+            Object {
+              "key": "phone",
+              "name": "Phone",
+              "value": "1232422",
+            },
+            Object {
+              "key": "skype",
+              "name": "Skype",
+              "value": "skype_vasya",
+            },
+            Object {
+              "key": "notes",
+              "name": "Notes",
+              "value": null,
+            },
+            Object {
+              "key": "linkedIn",
+              "name": "LinkedIn",
+              "value": null,
+            },
+          ]
+        }
+        itemLayout="horizontal"
+        loading={false}
+        pagination={false}
+        renderItem={[Function]}
+        split={true}
+      />
+    }
+    title="Contacts"
+  >
+    <Card
+      actions={
+        Array [
+          <ForwardRef(EditOutlined)
+            onClick={[Function]}
+          />,
+          <ForwardRef(SettingOutlined)
+            onClick={[Function]}
+          />,
+        ]
+      }
+      title={
+        <Title
+          ellipsis={true}
+          level={2}
+          style={
+            Object {
+              "fontSize": 16,
+              "marginBottom": 0,
+            }
+          }
+        >
+          <ForwardRef(ContactsOutlined) />
+           
+          Contacts
+        </Title>
+      }
+    >
+      <div
+        className="ant-card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <Title
+                ellipsis={true}
+                level={2}
+                style={
+                  Object {
+                    "fontSize": 16,
+                    "marginBottom": 0,
+                  }
+                }
+              >
+                <withConfigConsumer(Base)
+                  component="h2"
+                  ellipsis={true}
+                  style={
+                    Object {
+                      "fontSize": 16,
+                      "marginBottom": 0,
+                    }
+                  }
+                >
+                  <Base
+                    component="h2"
+                    ellipsis={true}
+                    getPrefixCls={[Function]}
+                    prefixCls="ant-typography"
+                    renderEmpty={[Function]}
+                    style={
+                      Object {
+                        "fontSize": 16,
+                        "marginBottom": 0,
+                      }
+                    }
+                  >
+                    <LocaleReceiver
+                      componentName="Text"
+                    >
+                      <ResizeObserver
+                        disabled={false}
+                        onResize={[Function]}
+                      >
+                        <Typography
+                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          component="h2"
+                          style={
+                            Object {
+                              "WebkitLineClamp": null,
+                              "fontSize": 16,
+                              "marginBottom": 0,
+                            }
+                          }
+                        >
+                          <h2
+                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                            style={
+                              Object {
+                                "WebkitLineClamp": null,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
+                            }
+                          >
+                            <ForwardRef(ContactsOutlined)>
+                              <ForwardRef(AntdIcon)
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "contacts",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <span
+                                  aria-label="contacts"
+                                  className="anticon anticon-contacts"
+                                  role="img"
+                                >
+                                  <IconReact
+                                    className=""
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
+                                          },
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                              },
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "contacts",
+                                        "theme": "outlined",
+                                      }
+                                    }
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className=""
+                                      data-icon="contacts"
+                                      fill="currentColor"
+                                      focusable="false"
+                                      height="1em"
+                                      key="svg-contacts"
+                                      viewBox="64 64 896 896"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                        key="svg-contacts-svg-0"
+                                      />
+                                    </svg>
+                                  </IconReact>
+                                </span>
+                              </ForwardRef(AntdIcon)>
+                            </ForwardRef(ContactsOutlined)>
+                             
+                            Contacts
+                          </h2>
+                        </Typography>
+                      </ResizeObserver>
+                    </LocaleReceiver>
+                  </Base>
+                </withConfigConsumer(Base)>
+              </Title>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <List
+            bordered={false}
+            dataSource={
+              Array [
+                Object {
+                  "key": "email",
+                  "name": "E-mail",
+                  "value": "vasya@tut.by",
+                },
+                Object {
+                  "key": "phone",
+                  "name": "Phone",
+                  "value": "1232422",
+                },
+                Object {
+                  "key": "skype",
+                  "name": "Skype",
+                  "value": "skype_vasya",
+                },
+              ]
+            }
+            itemLayout="horizontal"
+            loading={false}
+            pagination={false}
+            renderItem={[Function]}
+            split={true}
+          >
+            <div
+              className="ant-list ant-list-split"
+            >
+              <Spin
+                size="default"
+                spinning={false}
+                wrapperClassName=""
+              >
+                <div
+                  className="ant-spin-nested-loading"
+                >
+                  <div
+                    className="ant-spin-container"
+                    key="container"
+                  >
+                    <ul
+                      className="ant-list-items"
+                    >
+                      <Item
+                        key="email"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          E-mail
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          vasya@tut.by
+                        </li>
+                      </Item>
+                      <Item
+                        key="phone"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Phone
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          1232422
+                        </li>
+                      </Item>
+                      <Item
+                        key="skype"
+                      >
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <withConfigConsumer(Base)
+                              component="span"
+                              ellipsis={false}
+                              strong={true}
+                            >
+                              <Base
+                                component="span"
+                                ellipsis={false}
+                                getPrefixCls={[Function]}
+                                prefixCls="ant-typography"
+                                renderEmpty={[Function]}
+                                strong={true}
+                              >
+                                <LocaleReceiver
+                                  componentName="Text"
+                                >
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
+                                  >
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        className="ant-typography"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
+                                      >
+                                        <strong>
+                                          Skype
+                                          :
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
+                            </withConfigConsumer(Base)>
+                          </Text>
+                           
+                          skype_vasya
+                        </li>
+                      </Item>
+                    </ul>
+                  </div>
+                </div>
+              </Spin>
+            </div>
+          </List>
+          <PermissionsSettingsDrawer
+            hideSettings={[Function]}
+            isSettingsVisible={false}
+            onPermissionsSettingsChange={[MockFunction]}
+          >
+            <withConfigConsumer(Drawer)
+              className="jsx-2583821679"
+              closable={true}
+              getContainer={false}
+              onClose={[Function]}
+              placement="top"
+              style={
+                Object {
+                  "display": "none",
+                  "position": "absolute",
+                }
+              }
+              title="Visibility settings"
+              visible={false}
+            >
+              <Drawer
+                className="jsx-2583821679"
+                closable={true}
+                getContainer={false}
+                getPrefixCls={[Function]}
+                height={256}
+                keyboard={true}
+                level={null}
+                mask={true}
+                maskClosable={true}
+                onClose={[Function]}
+                placement="top"
+                prefixCls="ant-drawer"
+                renderEmpty={[Function]}
+                style={
+                  Object {
+                    "display": "none",
+                    "position": "absolute",
+                  }
+                }
+                title="Visibility settings"
+                visible={false}
+                width={256}
+              >
+                <DrawerWrapper
+                  afterVisibleChange={[Function]}
+                  className="jsx-2583821679"
+                  defaultOpen={false}
+                  duration=".3s"
+                  ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                  forceRender={false}
+                  getContainer={false}
+                  handler={false}
+                  height={256}
+                  keyboard={true}
+                  level={null}
+                  maskClosable={true}
+                  maskStyle={Object {}}
+                  onChange={[Function]}
+                  onClose={[Function]}
+                  open={false}
+                  placement="top"
+                  prefixCls="ant-drawer"
+                  showMask={true}
+                  style={
+                    Object {
+                      "display": "none",
+                      "position": "absolute",
+                      "transform": undefined,
+                      "zIndex": undefined,
+                    }
+                  }
+                  wrapperClassName=""
+                >
+                  <div
+                    className=""
+                  >
+                    <DrawerChild
+                      afterVisibleChange={[Function]}
+                      className="jsx-2583821679"
+                      duration=".3s"
+                      ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                      getContainer={[Function]}
+                      handler={false}
+                      height={256}
+                      keyboard={true}
+                      level={null}
+                      maskClosable={true}
+                      maskStyle={Object {}}
+                      onChange={[Function]}
+                      onClose={[Function]}
+                      onHandleClick={[Function]}
+                      open={false}
+                      placement="top"
+                      prefixCls="ant-drawer"
+                      showMask={true}
+                      style={
+                        Object {
+                          "display": "none",
+                          "position": "absolute",
+                          "transform": undefined,
+                          "zIndex": undefined,
+                        }
+                      }
+                      switchScrollingEffect={[Function]}
+                    >
+                      <div
+                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        onTransitionEnd={[Function]}
+                        style={
+                          Object {
+                            "display": "none",
+                            "position": "absolute",
+                            "transform": undefined,
+                            "zIndex": undefined,
+                          }
+                        }
+                        tabIndex={-1}
+                      >
+                        <div
+                          className="ant-drawer-mask"
+                          onClick={[Function]}
+                          style={Object {}}
+                        />
+                        <div
+                          className="ant-drawer-content-wrapper"
+                          style={
+                            Object {
+                              "height": "256px",
+                              "msTransform": "translateY(-100%)",
+                              "transform": "translateY(-100%)",
+                              "width": undefined,
+                            }
+                          }
+                        >
+                          <div
+                            className="ant-drawer-content"
+                          >
+                            <div
+                              className="ant-drawer-wrapper-body"
+                              onTransitionEnd={[Function]}
+                              style={Object {}}
+                            >
+                              <div
+                                className="ant-drawer-header"
+                              >
+                                <div
+                                  className="ant-drawer-title"
+                                >
+                                  Visibility settings
+                                </div>
+                                <button
+                                  aria-label="Close"
+                                  className="ant-drawer-close"
+                                  onClick={[Function]}
+                                >
+                                  <ForwardRef(CloseOutlined)>
+                                    <ForwardRef(AntdIcon)
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "close",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        aria-label="close"
+                                        className="anticon anticon-close"
+                                        role="img"
+                                      >
+                                        <IconReact
+                                          className=""
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close",
+                                              "theme": "outlined",
+                                            }
+                                          }
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            className=""
+                                            data-icon="close"
+                                            fill="currentColor"
+                                            focusable="false"
+                                            height="1em"
+                                            key="svg-close"
+                                            viewBox="64 64 896 896"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                              key="svg-close-svg-0"
+                                            />
+                                          </svg>
+                                        </IconReact>
+                                      </span>
+                                    </ForwardRef(AntdIcon)>
+                                  </ForwardRef(CloseOutlined)>
+                                </button>
+                              </div>
+                              <div
+                                className="ant-drawer-body"
+                              >
+                                <List
+                                  bordered={false}
+                                  dataSource={Array []}
+                                  itemLayout="horizontal"
+                                  loading={false}
+                                  pagination={false}
+                                  renderItem={[Function]}
+                                  split={true}
+                                >
+                                  <div
+                                    className="ant-list ant-list-split"
+                                  >
+                                    <Spin
+                                      size="default"
+                                      spinning={false}
+                                      wrapperClassName=""
+                                    >
+                                      <div
+                                        className="ant-spin-nested-loading"
+                                      >
+                                        <div
+                                          className="ant-spin-container"
+                                          key="container"
+                                        >
+                                          <div
+                                            className="ant-list-empty-text"
+                                          >
+                                            <Empty
+                                              image={<Simple />}
+                                            >
+                                              <LocaleReceiver
+                                                componentName="Empty"
+                                              >
+                                                <div
+                                                  className="ant-empty ant-empty-normal"
+                                                >
+                                                  <div
+                                                    className="ant-empty-image"
+                                                  >
+                                                    <Simple>
+                                                      <svg
+                                                        className="ant-empty-img-simple"
+                                                        height="41"
+                                                        viewBox="0 0 64 41"
+                                                        width="64"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                      >
+                                                        <g
+                                                          fill="none"
+                                                          fillRule="evenodd"
+                                                          transform="translate(0 1)"
+                                                        >
+                                                          <ellipse
+                                                            className="ant-empty-img-simple-ellipse"
+                                                            cx="32"
+                                                            cy="33"
+                                                            rx="32"
+                                                            ry="7"
+                                                          />
+                                                          <g
+                                                            className="ant-empty-img-simple-g"
+                                                            fillRule="nonzero"
+                                                          >
+                                                            <path
+                                                              d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
+                                                            />
+                                                            <path
+                                                              className="ant-empty-img-simple-path"
+                                                              d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                                            />
+                                                          </g>
+                                                        </g>
+                                                      </svg>
+                                                    </Simple>
+                                                  </div>
+                                                  <p
+                                                    className="ant-empty-description"
+                                                  >
+                                                    No Data
+                                                  </p>
+                                                </div>
+                                              </LocaleReceiver>
+                                            </Empty>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Spin>
+                                  </div>
+                                </List>
+                                <JSXStyle
+                                  id="2583821679"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </DrawerChild>
+                  </div>
+                </DrawerWrapper>
+              </Drawer>
+            </withConfigConsumer(Drawer)>
+          </PermissionsSettingsDrawer>
+          <ProfileSettingsDrawer
+            content={
+              <List
+                bordered={false}
+                dataSource={
+                  Array [
+                    Object {
+                      "key": "email",
+                      "name": "E-mail",
+                      "value": "vasya@tut.by",
+                    },
+                    Object {
+                      "key": "telegram",
+                      "name": "Telegram",
+                      "value": null,
+                    },
+                    Object {
+                      "key": "phone",
+                      "name": "Phone",
+                      "value": "1232422",
+                    },
+                    Object {
+                      "key": "skype",
+                      "name": "Skype",
+                      "value": "skype_vasya",
+                    },
+                    Object {
+                      "key": "notes",
+                      "name": "Notes",
+                      "value": null,
+                    },
+                    Object {
+                      "key": "linkedIn",
+                      "name": "LinkedIn",
+                      "value": null,
+                    },
+                  ]
+                }
+                itemLayout="horizontal"
+                loading={false}
+                pagination={false}
+                renderItem={[Function]}
+                split={true}
+              />
+            }
+            hideSettings={[Function]}
+            isSettingsVisible={false}
+          >
+            <withConfigConsumer(Drawer)
+              className="jsx-2583821679"
+              closable={true}
+              getContainer={false}
+              onClose={[Function]}
+              placement="top"
+              style={
+                Object {
+                  "display": "none",
+                  "position": "absolute",
+                }
+              }
+              title="Profile settings"
+              visible={false}
+            >
+              <Drawer
+                className="jsx-2583821679"
+                closable={true}
+                getContainer={false}
+                getPrefixCls={[Function]}
+                height={256}
+                keyboard={true}
+                level={null}
+                mask={true}
+                maskClosable={true}
+                onClose={[Function]}
+                placement="top"
+                prefixCls="ant-drawer"
+                renderEmpty={[Function]}
+                style={
+                  Object {
+                    "display": "none",
+                    "position": "absolute",
+                  }
+                }
+                title="Profile settings"
+                visible={false}
+                width={256}
+              >
+                <DrawerWrapper
+                  afterVisibleChange={[Function]}
+                  className="jsx-2583821679"
+                  defaultOpen={false}
+                  duration=".3s"
+                  ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                  forceRender={false}
+                  getContainer={false}
+                  handler={false}
+                  height={256}
+                  keyboard={true}
+                  level={null}
+                  maskClosable={true}
+                  maskStyle={Object {}}
+                  onChange={[Function]}
+                  onClose={[Function]}
+                  open={false}
+                  placement="top"
+                  prefixCls="ant-drawer"
+                  showMask={true}
+                  style={
+                    Object {
+                      "display": "none",
+                      "position": "absolute",
+                      "transform": undefined,
+                      "zIndex": undefined,
+                    }
+                  }
+                  wrapperClassName=""
+                >
+                  <div
+                    className=""
+                  >
+                    <DrawerChild
+                      afterVisibleChange={[Function]}
+                      className="jsx-2583821679"
+                      duration=".3s"
+                      ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
+                      getContainer={[Function]}
+                      handler={false}
+                      height={256}
+                      keyboard={true}
+                      level={null}
+                      maskClosable={true}
+                      maskStyle={Object {}}
+                      onChange={[Function]}
+                      onClose={[Function]}
+                      onHandleClick={[Function]}
+                      open={false}
+                      placement="top"
+                      prefixCls="ant-drawer"
+                      showMask={true}
+                      style={
+                        Object {
+                          "display": "none",
+                          "position": "absolute",
+                          "transform": undefined,
+                          "zIndex": undefined,
+                        }
+                      }
+                      switchScrollingEffect={[Function]}
+                    >
+                      <div
+                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        onTransitionEnd={[Function]}
+                        style={
+                          Object {
+                            "display": "none",
+                            "position": "absolute",
+                            "transform": undefined,
+                            "zIndex": undefined,
+                          }
+                        }
+                        tabIndex={-1}
+                      >
+                        <div
+                          className="ant-drawer-mask"
+                          onClick={[Function]}
+                          style={Object {}}
+                        />
+                        <div
+                          className="ant-drawer-content-wrapper"
+                          style={
+                            Object {
+                              "height": "256px",
+                              "msTransform": "translateY(-100%)",
+                              "transform": "translateY(-100%)",
+                              "width": undefined,
+                            }
+                          }
+                        >
+                          <div
+                            className="ant-drawer-content"
+                          >
+                            <div
+                              className="ant-drawer-wrapper-body"
+                              onTransitionEnd={[Function]}
+                              style={Object {}}
+                            >
+                              <div
+                                className="ant-drawer-header"
+                              >
+                                <div
+                                  className="ant-drawer-title"
+                                >
+                                  Profile settings
+                                </div>
+                                <button
+                                  aria-label="Close"
+                                  className="ant-drawer-close"
+                                  onClick={[Function]}
+                                >
+                                  <ForwardRef(CloseOutlined)>
+                                    <ForwardRef(AntdIcon)
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "close",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        aria-label="close"
+                                        className="anticon anticon-close"
+                                        role="img"
+                                      >
+                                        <IconReact
+                                          className=""
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close",
+                                              "theme": "outlined",
+                                            }
+                                          }
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            className=""
+                                            data-icon="close"
+                                            fill="currentColor"
+                                            focusable="false"
+                                            height="1em"
+                                            key="svg-close"
+                                            viewBox="64 64 896 896"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                              key="svg-close-svg-0"
+                                            />
+                                          </svg>
+                                        </IconReact>
+                                      </span>
+                                    </ForwardRef(AntdIcon)>
+                                  </ForwardRef(CloseOutlined)>
+                                </button>
+                              </div>
+                              <div
+                                className="ant-drawer-body"
+                              >
+                                <List
+                                  bordered={false}
+                                  dataSource={
+                                    Array [
+                                      Object {
+                                        "key": "email",
+                                        "name": "E-mail",
+                                        "value": "vasya@tut.by",
+                                      },
+                                      Object {
+                                        "key": "telegram",
+                                        "name": "Telegram",
+                                        "value": null,
+                                      },
+                                      Object {
+                                        "key": "phone",
+                                        "name": "Phone",
+                                        "value": "1232422",
+                                      },
+                                      Object {
+                                        "key": "skype",
+                                        "name": "Skype",
+                                        "value": "skype_vasya",
+                                      },
+                                      Object {
+                                        "key": "notes",
+                                        "name": "Notes",
+                                        "value": null,
+                                      },
+                                      Object {
+                                        "key": "linkedIn",
+                                        "name": "LinkedIn",
+                                        "value": null,
+                                      },
+                                    ]
+                                  }
+                                  itemLayout="horizontal"
+                                  loading={false}
+                                  pagination={false}
+                                  renderItem={[Function]}
+                                  split={true}
+                                >
+                                  <div
+                                    className="ant-list ant-list-split"
+                                  >
+                                    <Spin
+                                      size="default"
+                                      spinning={false}
+                                      wrapperClassName=""
+                                    >
+                                      <div
+                                        className="ant-spin-nested-loading"
+                                      >
+                                        <div
+                                          className="ant-spin-container"
+                                          key="container"
+                                        >
+                                          <ul
+                                            className="ant-list-items"
+                                          >
+                                            <Item
+                                              key="email"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    E-mail
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value="vasya@tut.by"
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value="vasya@tut.by"
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value="vasya@tut.by"
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value="vasya@tut.by"
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="telegram"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    Telegram
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value=""
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value=""
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value=""
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value=""
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="phone"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    Phone
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value="1232422"
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value="1232422"
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value="1232422"
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value="1232422"
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="skype"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    Skype
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value="skype_vasya"
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value="skype_vasya"
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value="skype_vasya"
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value="skype_vasya"
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="notes"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    Notes
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value=""
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value=""
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value=""
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value=""
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                            <Item
+                                              key="linkedIn"
+                                            >
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <withConfigConsumer(Base)
+                                                        component="span"
+                                                        ellipsis={false}
+                                                        strong={true}
+                                                      >
+                                                        <Base
+                                                          component="span"
+                                                          ellipsis={false}
+                                                          getPrefixCls={[Function]}
+                                                          prefixCls="ant-typography"
+                                                          renderEmpty={[Function]}
+                                                          strong={true}
+                                                        >
+                                                          <LocaleReceiver
+                                                            componentName="Text"
+                                                          >
+                                                            <ResizeObserver
+                                                              disabled={true}
+                                                              onResize={[Function]}
+                                                            >
+                                                              <Typography
+                                                                className=""
+                                                                component="span"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": null,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <span
+                                                                  className="ant-typography"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": null,
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <strong>
+                                                                    LinkedIn
+                                                                    :
+                                                                  </strong>
+                                                                </span>
+                                                              </Typography>
+                                                            </ResizeObserver>
+                                                          </LocaleReceiver>
+                                                        </Base>
+                                                      </withConfigConsumer(Base)>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value=""
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value=""
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      type="text"
+                                                      value=""
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value=""
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </Spin>
+                                  </div>
+                                </List>
+                                <JSXStyle
+                                  id="2583821679"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </DrawerChild>
+                  </div>
+                </DrawerWrapper>
+              </Drawer>
+            </withConfigConsumer(Drawer)>
+          </ProfileSettingsDrawer>
+        </div>
+        <ul
+          className="ant-card-actions"
+        >
+          <li
+            key="action-0"
+            style={
+              Object {
+                "width": "50%",
+              }
+            }
+          >
+            <span>
+              <ForwardRef(EditOutlined)
+                key="main-card-actions-edit"
+                onClick={[Function]}
+              >
+                <ForwardRef(AntdIcon)
+                  icon={
+                    Object {
+                      "icon": Object {
+                        "attrs": Object {
+                          "focusable": "false",
+                          "viewBox": "64 64 896 896",
+                        },
+                        "children": Array [
+                          Object {
+                            "attrs": Object {
+                              "d": "M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z",
+                            },
+                            "tag": "path",
+                          },
+                        ],
+                        "tag": "svg",
+                      },
+                      "name": "edit",
+                      "theme": "outlined",
+                    }
+                  }
+                  onClick={[Function]}
+                >
+                  <span
+                    aria-label="edit"
+                    className="anticon anticon-edit"
+                    onClick={[Function]}
+                    role="img"
+                    tabIndex={-1}
+                  >
+                    <IconReact
+                      className=""
+                      icon={
+                        Object {
+                          "icon": Object {
+                            "attrs": Object {
+                              "focusable": "false",
+                              "viewBox": "64 64 896 896",
+                            },
+                            "children": Array [
+                              Object {
+                                "attrs": Object {
+                                  "d": "M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z",
+                                },
+                                "tag": "path",
+                              },
+                            ],
+                            "tag": "svg",
+                          },
+                          "name": "edit",
+                          "theme": "outlined",
+                        }
+                      }
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className=""
+                        data-icon="edit"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        key="svg-edit"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z"
+                          key="svg-edit-svg-0"
+                        />
+                      </svg>
+                    </IconReact>
+                  </span>
+                </ForwardRef(AntdIcon)>
+              </ForwardRef(EditOutlined)>
+            </span>
+          </li>
+          <li
+            key="action-1"
+            style={
+              Object {
+                "width": "50%",
+              }
+            }
+          >
+            <span>
+              <ForwardRef(SettingOutlined)
+                key="main-card-actions-settings"
+                onClick={[Function]}
+              >
+                <ForwardRef(AntdIcon)
+                  icon={
+                    Object {
+                      "icon": Object {
+                        "attrs": Object {
+                          "focusable": "false",
+                          "viewBox": "64 64 896 896",
+                        },
+                        "children": Array [
+                          Object {
+                            "attrs": Object {
+                              "d": "M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z",
+                            },
+                            "tag": "path",
+                          },
+                        ],
+                        "tag": "svg",
+                      },
+                      "name": "setting",
+                      "theme": "outlined",
+                    }
+                  }
+                  onClick={[Function]}
+                >
+                  <span
+                    aria-label="setting"
+                    className="anticon anticon-setting"
+                    onClick={[Function]}
+                    role="img"
+                    tabIndex={-1}
+                  >
+                    <IconReact
+                      className=""
+                      icon={
+                        Object {
+                          "icon": Object {
+                            "attrs": Object {
+                              "focusable": "false",
+                              "viewBox": "64 64 896 896",
+                            },
+                            "children": Array [
+                              Object {
+                                "attrs": Object {
+                                  "d": "M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z",
+                                },
+                                "tag": "path",
+                              },
+                            ],
+                            "tag": "svg",
+                          },
+                          "name": "setting",
+                          "theme": "outlined",
+                        }
+                      }
+                    >
+                      <svg
+                        aria-hidden="true"
+                        className=""
+                        data-icon="setting"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        key="svg-setting"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z"
+                          key="svg-setting-svg-0"
+                        />
+                      </svg>
+                    </IconReact>
+                  </span>
+                </ForwardRef(AntdIcon)>
+              </ForwardRef(SettingOutlined)>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </Card>
+  </CommonCard>
+</ContactsCard>
+`;

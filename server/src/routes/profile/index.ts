@@ -1,7 +1,8 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { guard } from '../guards';
-import { getProfile } from './user';
+import { getProfileInfo } from './info';
+import { updateProfile } from './save';
 import { getMyProfile, updateMyProfile } from './me';
 
 export function profileRoute(logger: ILogger) {
@@ -12,7 +13,7 @@ export function profileRoute(logger: ILogger) {
    *
    * /profile:
    *   get:
-   *      description: get student profile
+   *      description: get user profile
    *      security:
    *        - cookieAuth: []
    *      produces:
@@ -21,7 +22,23 @@ export function profileRoute(logger: ILogger) {
    *        200:
    *          description: profile
    */
-  router.get('/', guard, getProfile(logger));
+  router.get('/info', guard, getProfileInfo(logger));
+
+  /**
+   * @swagger
+   *
+   * /profile/info:
+   *   post:
+   *      description: save current user profile info
+   *      security:
+   *        - cookieAuth: []
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: profile
+   */
+  router.post('/info', guard, updateProfile(logger));
 
   /**
    * @swagger
@@ -44,7 +61,7 @@ export function profileRoute(logger: ILogger) {
    *
    * /profile/me:
    *   get:
-   *      description: get current user profile
+   *      description: update current user profile
    *      security:
    *        - cookieAuth: []
    *      produces:
@@ -54,8 +71,6 @@ export function profileRoute(logger: ILogger) {
    *          description: profile
    */
   router.post('/me', guard, updateMyProfile(logger));
-
-  router.post('/registry', guard, updateMyProfile(logger));
 
   return router;
 }

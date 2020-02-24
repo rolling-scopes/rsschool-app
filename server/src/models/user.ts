@@ -7,10 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
   Index,
+  JoinColumn,
 } from 'typeorm';
 import { Student } from './student';
 import { Mentor } from './mentor';
+import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { CourseManager } from './courseManager';
@@ -29,7 +32,7 @@ export interface EmploymentRecord {
   toPresent: boolean;
 }
 
-type EnglishLevel = 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
+type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
 
 type TshirtSize = 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl';
 
@@ -121,6 +124,9 @@ export class User {
   contactsSkype?: string;
 
   @Column({ nullable: true })
+  contactsLinkedIn?: string;
+
+  @Column({ nullable: true })
   aboutMyself?: string;
 
   @Column({
@@ -172,6 +178,13 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToOne(
+    () => ProfilePermissions,
+    profilePermissions => profilePermissions.user,
+  )
+  @JoinColumn()
+  profilePermissions: ProfilePermissions | null;
 
   @OneToMany(
     _ => CourseManager,

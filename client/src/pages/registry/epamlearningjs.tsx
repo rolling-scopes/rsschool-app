@@ -28,11 +28,11 @@ function Page(props: Props & { courseAlias?: string }) {
   useAsync(async () => {
     const userService = new UserService();
     const courseService = new CoursesService();
-    const [profile, courses] = await Promise.all([userService.getProfile(), courseService.getCourses()]);
+    const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
     const course = courses.find(course => course.alias === courseAlias) ?? null;
 
     setActiveCourse(course);
-    setInitialData(profile.user);
+    setInitialData(profile);
   }, []);
 
   const handleSubmit = async (model: any) => {

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileSettingsDrawer Should render correctly 1`] = `
+<withConfigConsumer(Drawer)
+  className="jsx-2583821679"
+  closable={true}
+  getContainer={false}
+  onClose={[MockFunction]}
+  placement="top"
+  style={
+    Object {
+      "display": "block",
+      "position": "absolute",
+    }
+  }
+  title="Profile settings"
+  visible={true}
+>
+  <div>
+    content
+  </div>
+  <JSXStyle
+    id="2583821679"
+  >
+    .ant-drawer-content-wrapper{height:inherit !important;}.ant-drawer-wrapper-body{overflow:hidden;}.ant-drawer-body{height:calc(100% - 55px);overflow:auto;}
+  </JSXStyle>
+</withConfigConsumer(Drawer)>
+`;
