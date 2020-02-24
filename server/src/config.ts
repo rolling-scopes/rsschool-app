@@ -63,7 +63,7 @@ export interface IConfig {
 
 export const config: IConfig = {
   app: {
-    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'davojta', 'shastel', 'sonejka'],
+    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'davojta', 'shastel', 'sonejka', 'forkollaider'],
   },
   auth: {
     callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3001/auth/github/callback',
