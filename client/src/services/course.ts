@@ -388,6 +388,7 @@ export interface StudentScore extends StudentBasic {
   rank: number;
   locationName: string;
   totalScore: number;
+  totalScoreChangeDate: string;
 }
 
 export interface StudentDetails extends StudentBasic {

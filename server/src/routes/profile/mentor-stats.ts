@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { MentorStats } from '../../../../common/models/profile';
-import { getFullName } from '../../lib/utils';
+import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course } from '../../models';
 
 export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =>

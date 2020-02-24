@@ -15,6 +15,7 @@ import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
 import { DEFAULT_TIMEZONE, TIMEZONES } from 'configs/timezones';
+import { times } from 'lodash';
 
 const Option = Select.Option;
 
@@ -132,7 +133,7 @@ function Page(props: CoursePageProps) {
   const handleCrossCheckDistribution = async (record: CourseTaskDetails) => {
     try {
       await service.createCrossCheckDistribution(record.id);
-      message.success('Cross-check Distrubtion has been created');
+      message.success('Cross-Check distrubtion has been created');
     } catch (e) {
       message.error('An error occurred.');
     }
@@ -156,6 +157,9 @@ function Page(props: CoursePageProps) {
       <ModalForm
         getInitialValues={getInitialValues}
         data={modalData}
+        onChange={values => {
+          setModalData({ ...modalData, checker: values.checker });
+        }}
         title="Course Task"
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}
@@ -176,6 +180,20 @@ function Page(props: CoursePageProps) {
                 {stage.name}
               </Option>
             ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="type" label="Task Type">
+          <Select>
+            <Select.Option value="jstask">JS task</Select.Option>
+            <Select.Option value="htmltask">HTML task</Select.Option>
+            <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
+            <Select.Option value="cv:markdown">CV Markdown</Select.Option>
+            <Select.Option value="cv:html">CV HTML</Select.Option>
+            <Select.Option value="codewars:stage1">Codewars stage 1</Select.Option>
+            <Select.Option value="codewars:stage2">Codewars stage 2</Select.Option>
+            <Select.Option value="test">Test</Select.Option>
+            <Select.Option value="codejam">Code Jam</Select.Option>
+            <Select.Option value="interview">Interview</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -221,13 +239,24 @@ function Page(props: CoursePageProps) {
         <Form.Item name="checker" required label="Checker">
           <Select placeholder="Please select who checks">
             <Option value="mentor">Mentor</Option>
-            <Option value="assigned">Assigned</Option>
+            <Option value="assigned">Cross-Mentor</Option>
             {modalData?.verification === 'auto' && <Option value="autoTest">Auto-Test</Option>}
             <Option value="taskOwner">Task Owner</Option>
             <Option value="crossCheck">Cross-Check</Option>
             <Option value="jury">Jury</Option>
           </Select>
         </Form.Item>
+        {modalData?.checker === 'crossCheck' ? (
+          <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
+            <Select placeholder="Cross-Check Pairs Count">
+              {times(10, num => (
+                <Option key={num} value={num + 1}>
+                  {num + 1}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        ) : null}
       </ModalForm>
     );
   };
@@ -274,12 +303,20 @@ function getColumns(
       dataIndex: 'stageId',
       render: idFromArrayRenderer(stages),
     },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+    },
     { title: 'Score Weight', dataIndex: 'scoreWeight' },
     { title: 'Who Checks', dataIndex: 'checker' },
     {
       title: 'Task Owner',
       dataIndex: ['taskOwner', 'githubId'],
       render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
+    },
+    {
+      title: 'Pairs',
+      dataIndex: 'pairsCount',
     },
     {
       dataIndex: 'actions',
@@ -303,6 +340,8 @@ function createRecord(values: any, courseId: number) {
     checker: values.checker,
     scoreWeight: values.scoreWeight,
     maxScore: values.maxScore,
+    type: values.type,
+    pairsCount: values.pairsCount,
   };
   return data;
 }

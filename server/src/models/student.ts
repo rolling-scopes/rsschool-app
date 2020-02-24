@@ -134,6 +134,9 @@ export class Student {
   @Column({ default: 0, type: 'float' })
   totalScore: number;
 
+  @Column({ nullable: true, type: 'timestamptz' })
+  totalScoreChangeDate: Date;
+
   @OneToMany(
     _ => StudentFeedback,
     (studentFeedback: StudentFeedback) => studentFeedback.student,

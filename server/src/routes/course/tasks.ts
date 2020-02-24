@@ -1,10 +1,10 @@
 import Router from '@koa/router';
 import { NOT_FOUND, OK } from 'http-status-codes';
-import { CourseTask, TaskChecker, TaskResult, Task } from '../../models';
+import { CourseTask, TaskChecker, TaskResult, Task, Mentor } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { shuffleService } from '../../services';
+import { createCrossMentorPairs } from '../../rules/distribution';
 
 export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
@@ -53,7 +53,8 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
       taskCheckers: [],
       githubRepoName: (item.task as Task).githubRepoName,
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
-      type: (item.task as Task).type,
+      type: item.type || (item.task as Task).type,
+      pairsCount: item.pairsCount,
     };
   });
 
@@ -86,48 +87,48 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       taskOwnerId: item.taskOwnerId,
       githubRepoName: (item.task as Task).githubRepoName,
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
-      type: (item.task as Task).type,
+      type: item.type || (item.task as Task).type,
+      pairsCount: item.pairsCount,
     };
   });
 
   setResponse(ctx, OK, data);
 };
 
-export const postCourseTaskDistribution = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const createCourseTaskDistribution = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseTaskId = Number(ctx.params.courseTaskId);
   const courseId = Number(ctx.params.courseId);
-  const courseTaskRepository = getRepository(CourseTask);
-  const checkerRepository = getRepository(TaskChecker);
 
-  const courseTask = await courseTaskRepository.findOne({ where: { id: courseTaskId } });
+  const courseTask = await getRepository(CourseTask).findOne({ where: { id: courseTaskId }, select: ['id'] });
 
   if (courseTask == null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  const studentsWithMentor = await shuffleService.shuffleCourseMentors(logger)(courseId);
+  const mentors = await getRepository(Mentor)
+    .createQueryBuilder('mentor')
+    .innerJoin('mentor.students', 'students')
+    .addSelect(['students.id', 'students.courseId'])
+    .where('mentor."courseId" = :courseId', { courseId })
+    .getMany();
 
-  const studentWithChecker = studentsWithMentor
-    .map((stm: any) =>
-      stm.students.map((s: any) => ({
-        courseTaskId,
-        mentorId: stm.id,
-        studentId: s.id,
-      })),
-    )
-    .reduce((acc: any, v: any) => acc.concat(v), []);
+  if (mentors.length === 0) {
+    setResponse(ctx, OK, {});
+    return;
+  }
 
-  const bad = studentWithChecker.filter((s: any) => !s.mentor);
-  logger.info(JSON.stringify(bad));
+  const { mentors: crossMentors } = createCrossMentorPairs(mentors);
 
+  const taskCheckPairs = crossMentors
+    .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
+    .reduce((acc, student) => acc.concat(student), []);
+
+  const checkerRepository = getRepository(TaskChecker);
   await checkerRepository.delete({ courseTaskId });
 
-  const result = await Promise.all(
-    studentWithChecker.map(async (checker: Partial<TaskChecker>) => {
-      return await checkerRepository.save({ ...checker });
-    }),
-  );
+  const result = await checkerRepository.insert(taskCheckPairs);
 
+  logger.info(`Created [${taskCheckPairs.length}] cross-mentor pairs`);
   setResponse(ctx, OK, result);
 };

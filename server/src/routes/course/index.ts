@@ -45,19 +45,19 @@ import {
 
 import { getStudentInterviews } from './interviews';
 
-import { getCourseTasksDetails, postCourseTaskDistribution, getCourseTasks } from './tasks';
+import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import { postStudentStatus, getStudentSummary, postStudentInterviewResult, getCrossMentorsTasks } from './student';
 import {
   postTaskSolution,
-  postTaskSolutionDistribution,
-  postTaskSolutionCompletion,
+  createCrossCheckDistribution,
+  createCrossCheckCompletion,
   getTaskSolutionAssignments,
-  postTaskSolutionResult,
-  getTaskSolutionResult,
-  getTaskSolutionFeedback,
-} from './taskSolution';
+  createCrossCheckResult,
+  getCrossCheckResult,
+  getCrossCheckFeedback,
+} from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
 
 const validateId = async (ctx: Router.RouterContext, next: any) => {
@@ -110,16 +110,16 @@ function addEventApi(router: Router, logger: ILogger) {
 }
 
 function addTaskApi(router: Router, logger: ILogger) {
-  router.post('/task', courseMentorGuard, createPostRoute(CourseTask, logger));
-  router.put('/task/:id', courseMentorGuard, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', courseMentorGuard, createDeleteRoute(CourseTask, logger));
+  router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
+  router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
+  router.delete('/task/:id', courseManagerGuard, createDeleteRoute(CourseTask, logger));
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
-  router.post('/task/:courseTaskId/distribution', courseMentorGuard, postCourseTaskDistribution(logger));
+  router.post('/task/:courseTaskId/distribution', courseManagerGuard, createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
-  router.post('/task/:courseTaskId/cross-check/distribution', courseMentorGuard, postTaskSolutionDistribution(logger));
-  router.post('/task/:courseTaskId/cross-check/completion', courseMentorGuard, postTaskSolutionCompletion(logger));
+  router.post('/task/:courseTaskId/cross-check/distribution', courseManagerGuard, createCrossCheckDistribution(logger));
+  router.post('/task/:courseTaskId/cross-check/completion', courseManagerGuard, createCrossCheckCompletion(logger));
 }
 
 function addStageInterviewApi(router: Router, logger: ILogger) {
@@ -193,9 +193,9 @@ function addStudentCrossCheckApi(router: Router, logger: ILogger) {
   const baseUrl = `/student/:githubId/task/:courseTaskId`;
 
   router.post(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, postTaskSolution(logger));
-  router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, postTaskSolutionResult(logger));
-  router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, getTaskSolutionResult(logger));
-  router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, getTaskSolutionFeedback(logger));
+  router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, createCrossCheckResult(logger));
+  router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, getCrossCheckResult(logger));
+  router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, getCrossCheckFeedback(logger));
   router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, getTaskSolutionAssignments(logger));
 }
 

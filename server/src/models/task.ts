@@ -1,6 +1,18 @@
 import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { CourseTask } from './courseTask';
 
+export type TaskType =
+  | 'jstask'
+  | 'htmltask'
+  | 'htmlcssacademy'
+  | 'codewars:stage1'
+  | 'codewars:stage2'
+  | 'test'
+  | 'codejam'
+  | 'interview'
+  | 'cv:html'
+  | 'cv:markdown';
+
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn() id: number;
@@ -40,17 +52,7 @@ export class Task {
   sourceGithubRepoUrl: string;
 
   @Column({ nullable: true })
-  type:
-    | 'jstask'
-    | 'htmltask'
-    | 'htmlcssacademy'
-    | 'codewars:stage1'
-    | 'codewars:stage2'
-    | 'test'
-    | 'codejam'
-    | 'interview'
-    | 'cv:html'
-    | 'cv:markdown';
+  type: TaskType;
 
   @Column({ default: false })
   useJury: boolean;
