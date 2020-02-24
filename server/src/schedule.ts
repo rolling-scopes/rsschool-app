@@ -20,14 +20,22 @@ export function startBackgroundJobs(logger: ILogger) {
       const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
       const scores = students
-        .map(({ id, taskResults, totalScore }) => {
+        .map(({ id, taskResults, totalScore, totalScoreChangeDate }) => {
           const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
           const newTotalScore = round(score, 1);
-          return { id, totalScore: totalScore !== newTotalScore ? newTotalScore : -1 };
+
+          const scoreChanged = totalScore !== newTotalScore;
+
+          return {
+            id,
+            totalScore: scoreChanged ? newTotalScore : -1,
+            totalScoreChangeDate: scoreChanged ? new Date() : totalScoreChangeDate,
+          };
         })
         .filter(it => it.totalScore >= 0);
 
       await updateScoreStudents(scores);
+
       logger.info({
         msg: 'Updated course score',
         course: course.name,

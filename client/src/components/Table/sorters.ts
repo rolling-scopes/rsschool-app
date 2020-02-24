@@ -55,3 +55,20 @@ export function boolSorter<T>(field: keyof T) {
     return Number(bValue) - Number(aValue);
   };
 }
+
+export function dateSorter<T>(field: keyof T) {
+  return (a: T, b: T) => {
+    if (a == null && b == null) {
+      return 0;
+    }
+    if (a == null) {
+      return 1;
+    }
+    if (b == null) {
+      return -1;
+    }
+    const aValue = get(a, field, 0);
+    const bValue = get(b, field, 0);
+    return new Date(bValue).getTime() - new Date(aValue).getTime();
+  };
+}

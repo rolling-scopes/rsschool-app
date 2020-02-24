@@ -64,6 +64,7 @@ export interface StudentWithResults {
   githubId: string;
   mentor?: { name: string; githubId: string };
   totalScore: number;
+  totalScoreChangeDate: Date;
   rank: number;
   locationName: string;
   isActive: boolean;
@@ -472,6 +473,7 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
       name: createName(user),
       githubId: user.githubId,
       totalScore: student.totalScore,
+      totalScoreChangeDate: student.totalScoreChangeDate,
       locationName: user.locationName ?? '',
       taskResults,
       isActive: !student.isExpelled && !student.isFailed,

@@ -1,7 +1,7 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
-import { dateRenderer, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import { dateRenderer, getColumnSearchProps, numberSorter, dateSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService, StudentScore, CourseTask } from 'services/course';
@@ -138,6 +138,13 @@ export function Page(props: CoursePageProps) {
                 render: value => <Text strong>{value}</Text>,
               },
               ...columns,
+              {
+                title: 'Change Date',
+                dataIndex: 'totalScoreChangeDate',
+                width: 80,
+                sorter: dateSorter('totalScoreChangeDate'),
+                render: dateRenderer,
+              },
               {
                 title: 'Mentor',
                 dataIndex: ['mentor', 'githubId'],
