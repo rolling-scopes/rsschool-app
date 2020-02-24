@@ -74,10 +74,7 @@ function Page(props: Props) {
       aboutMyself: model.aboutMyself,
     };
 
-    const requests = [
-      axios.post('/api/profile/registry', userModel),
-      axios.post('/api/registry/mentor', registryModel),
-    ];
+    const requests = [axios.post('/api/profile/me', userModel), axios.post('/api/registry/mentor', registryModel)];
 
     try {
       await Promise.all(requests);
@@ -233,7 +230,7 @@ function Page(props: Props) {
                   label="Location"
                   rules={[{ required: true, message: 'Please select city or "Other"' }]}
                 >
-                  <LocationSelect placeholder="Select city" />
+                  <LocationSelect labelInValue placeholder="Select city" />
                 </Form.Item>
               </Col>
               <Col {...defaultColumnSizes}>
@@ -280,7 +277,11 @@ function Page(props: Props) {
 
             <Row>
               <Typography.Title level={4}>Contacts</Typography.Title>
-              <Typography.Text type="warning">Your contacts will be shared with your students.</Typography.Text>
+            </Row>
+            <Row>
+              <Typography.Paragraph type="warning">
+                Your contacts will be shared with your students.
+              </Typography.Paragraph>
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
@@ -359,6 +360,10 @@ const SuccessComponent = () => {
 function getInitialValues(initialData: Partial<UserFull>) {
   return {
     ...initialData,
+    location: {
+      key: initialData.locationId,
+      label: initialData.locationName,
+    },
     preferedCourses: [],
     englishMentoring: false,
     technicalMentoring: [],

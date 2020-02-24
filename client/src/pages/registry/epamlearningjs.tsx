@@ -51,7 +51,7 @@ function Page(props: Props & { courseAlias?: string }) {
     };
 
     try {
-      const userResponse = await axios.post('/api/profile/registry', userModel);
+      const userResponse = await axios.post('/api/profile/me', userModel);
       const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
       if (githubId) {
         await axios.post('/api/registry', registryModel);
@@ -124,7 +124,7 @@ function Page(props: Props & { courseAlias?: string }) {
                 label="Location"
                 rules={[{ required: true, message: 'Please select city or "Other"' }]}
               >
-                <LocationSelect placeholder="Select city" />
+                <LocationSelect labelInValue placeholder="Select city" />
               </Form.Item>
             </Col>
             <Col {...defaultColumnSizes}>
