@@ -449,35 +449,34 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
     .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
     .leftJoin('mentor.user', 'mu')
     .addSelect(getPrimaryUserFields('mu'))
-    .where('student."courseId" = :courseId', { courseId })
+    .where('student."courseId" = :courseId', { courseId });
 
   if (activeOnly) {
     query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
   }
   const students = await query.orderBy('student."totalScore"', 'DESC').getMany();
 
-  return students
-    .map<StudentWithResults>((student, i) => {
-      const user = student.user as User;
-      const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
-        .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
-        .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
-      const taskResults =
-        student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
+  return students.map<StudentWithResults>((student, i) => {
+    const user = student.user as User;
+    const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
+      .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
+      .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
+    const taskResults =
+      student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
 
-      const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
-      return {
-        id: student.id,
-        rank: i + 1,
-        mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
-        name: createName(user),
-        githubId: user.githubId,
-        totalScore: student.totalScore,
-        locationName: user.locationName ?? '',
-        taskResults,
-        isActive: !student.isExpelled && !student.isFailed,
-      };
-    });
+    const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
+    return {
+      id: student.id,
+      rank: i + 1,
+      mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
+      name: createName(user),
+      githubId: user.githubId,
+      totalScore: student.totalScore,
+      locationName: user.locationName ?? '',
+      taskResults,
+      isActive: !student.isExpelled && !student.isFailed,
+    };
+  });
 }
 
 export async function getStudentScore(studentId: number) {

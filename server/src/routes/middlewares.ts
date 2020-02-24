@@ -43,7 +43,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) 
       .getRawMany(),
   ]);
 
-  let courseRoles: CourseRoles = items.reduce(
+  const courseRoles: CourseRoles = items.reduce(
     (acc, item) => ({
       ...acc,
       [item.courseId]: uniq(
