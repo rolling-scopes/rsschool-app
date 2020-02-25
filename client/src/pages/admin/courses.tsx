@@ -1,7 +1,7 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Layout, message, Radio, Row, Select, Table } from 'antd';
 import { AdminSider, Header, Session, withSession } from 'components';
 import { ModalForm } from 'components/Forms';
-import { boolRenderer, dateRenderer, stringSorter, stringTrimRenderer } from 'components/Table';
+import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -228,17 +228,17 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Completed',
       dataIndex: 'completed',
-      render: boolRenderer,
+      render: boolIconRenderer,
     },
     {
       title: 'Planned',
       dataIndex: 'planned',
-      render: boolRenderer,
+      render: boolIconRenderer,
     },
     {
       title: 'Invite Only',
       dataIndex: 'inviteOnly',
-      render: boolRenderer,
+      render: boolIconRenderer,
     },
     {
       title: 'Actions',

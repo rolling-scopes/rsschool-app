@@ -1,7 +1,6 @@
 import {
   BellOutlined,
   GlobalOutlined,
-  IdcardOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   OrderedListOutlined,
@@ -70,15 +69,6 @@ export function AdminSider(props: Props) {
             <a href="/admin/users">
               <TeamOutlined />
               <span>Users</span>
-            </a>
-          </Menu.Item>
-        ) : null}
-
-        {props.isAdmin ? (
-          <Menu.Item key="6">
-            <a href="/admin/registrations">
-              <IdcardOutlined />
-              <span>Registrations</span>
             </a>
           </Menu.Item>
         ) : null}
