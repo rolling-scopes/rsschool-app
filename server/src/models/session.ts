@@ -3,10 +3,12 @@ export interface IUserSession {
   isAdmin: boolean;
   isHirer: boolean;
   githubId: string;
-  roles: { [key: string]: 'student' | 'mentor' | 'coursemanager' };
+  roles: StundetMentorRoles;
   coursesRoles?: CourseRoles;
   isGuest?: boolean;
 }
+
+export type StundetMentorRoles = { [key: string]: 'student' | 'mentor' };
 
 export interface CourseRoles {
   [key: string]: CourseRole[] | undefined;

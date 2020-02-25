@@ -3,6 +3,8 @@ import { CourseTask } from './courseTask';
 
 export type TaskType =
   | 'jstask'
+  | 'kotlintask'
+  | 'objctask'
   | 'htmltask'
   | 'htmlcssacademy'
   | 'codewars:stage1'
