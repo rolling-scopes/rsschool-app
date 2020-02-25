@@ -63,6 +63,7 @@ function Page(props: Props) {
   const renderModal = useCallback(() => {
     const isAutoTask = (modalValues.verification || modalData?.verification) === 'auto';
     const type = modalValues.type || modalData?.type;
+    const isCodingTask = type === 'jstask' || type === 'kotlintask' || type === 'objctask';
     const allTags = union(...data.map(d => d.tags || []));
     return (
       <ModalForm
@@ -148,12 +149,12 @@ function Page(props: Props) {
           name="sourceGithubRepoUrl"
           label="Source Github Repo Url"
           rules={
-            isAutoTask && (type === 'jstask' || type === 'kotlintask' || type === 'objctask')
+            isAutoTask && isCodingTask
               ? [{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }]
               : []
           }
         >
-          <Input disabled={!(isAutoTask && type === 'jstask')} />
+          <Input disabled={!(isAutoTask && isCodingTask)} />
         </Form.Item>
       </ModalForm>
     );
