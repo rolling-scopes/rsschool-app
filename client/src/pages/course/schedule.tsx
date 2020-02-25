@@ -47,6 +47,8 @@ const EventTypeToName: Record<string, string> = {
   lecture_self_study: 'self study',
   warmup: 'warm-up',
   jstask: 'js task',
+  kotlintask: 'kotlin task',
+  objctask: 'objc task',
   htmltask: 'html task',
   codejam: 'code jam',
   externaltask: 'external task',

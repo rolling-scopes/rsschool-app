@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export type TaskType =
   | 'jstask'
+  | 'kotlintask'
+  | 'objctask'
   | 'htmltask'
   | 'htmlcssacademy'
   | 'cv:markdown'

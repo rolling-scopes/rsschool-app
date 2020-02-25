@@ -84,6 +84,8 @@ function Page(props: Props) {
             <Form.Item name="type" label="Task Type" rules={[{ required: true, message: 'Please select a type' }]}>
               <Select>
                 <Select.Option value="jstask">JS task</Select.Option>
+                <Select.Option value="kotlintask">Kotlin task</Select.Option>
+                <Select.Option value="objctask">ObjC task</Select.Option>
                 <Select.Option value="htmltask">HTML task</Select.Option>
                 <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
                 <Select.Option value="cv:markdown">CV Markdown</Select.Option>
