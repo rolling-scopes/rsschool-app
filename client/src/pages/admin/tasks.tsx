@@ -148,7 +148,7 @@ function Page(props: Props) {
           name="sourceGithubRepoUrl"
           label="Source Github Repo Url"
           rules={
-            isAutoTask && type === 'jstask'
+            isAutoTask && (type === 'jstask' || type === 'kotlintask' || type === 'objctask')
               ? [{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }]
               : []
           }

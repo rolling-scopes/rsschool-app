@@ -33,9 +33,9 @@ export const createGetAllRoute = <T = any>(
 };
 
 export const createPostRoute = <T = any>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
-  const data = ctx.request.body;
+  const { id, createdDate, ...data } = ctx.request.body;
   try {
-    const result = await getManager().save(entity as any, data);
+    const result = await getRepository(entity as any).insert(data);
     setResponse(ctx, OK, result);
   } catch (e) {
     if (logger) {
@@ -46,10 +46,10 @@ export const createPostRoute = <T = any>(entity: T, logger?: ILogger) => async (
 };
 
 export const createPutRoute = <T = any>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
-  const data = ctx.request.body;
+  const { id: _id, createdDate, ...data } = ctx.request.body;
   const id: number = Number(ctx.params.id);
   try {
-    const result = await getRepository(entity as any).save({ ...data, id });
+    const result = await getRepository(entity as any).update(id, data);
     setResponse(ctx, OK, result);
   } catch (e) {
     if (logger) {

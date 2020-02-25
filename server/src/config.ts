@@ -2,6 +2,12 @@ export interface IConfig {
   app: {
     admins: string[];
   };
+  users: {
+    verification: {
+      username: string;
+      password: string;
+    };
+  };
   auth: {
     callback: string;
     github_client_id: string;
@@ -64,6 +70,12 @@ export interface IConfig {
 export const config: IConfig = {
   app: {
     admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'davojta', 'shastel', 'sonejka', 'forkollaider'],
+  },
+  users: {
+    verification: {
+      username: process.env.RSSHCOOL_API_VERIFICATION_USERNAME || '',
+      password: process.env.RSSHCOOL_API_VERIFICATION_PASSWORD || '',
+    },
   },
   auth: {
     callback: process.env.RSSHCOOL_API_AUTH_CALLBACK || 'http://localhost:3001/auth/github/callback',

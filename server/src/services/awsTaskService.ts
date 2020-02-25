@@ -12,6 +12,9 @@ type TaskVerificationEvent = {
 
 export async function postTaskVerification(data: TaskVerificationEvent[]) {
   try {
+    if (config.isDevMode) {
+      return;
+    }
     return axios.post(`${config.aws.restApiUrl}/task`, data, {
       headers: { 'x-api-key': config.aws.restApiKey },
     });

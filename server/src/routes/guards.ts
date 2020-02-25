@@ -4,6 +4,10 @@ import { IUserSession } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
+export const basicAuthVerification = auth({
+  name: config.users.verification.username,
+  pass: config.users.verification.password,
+});
 
 const userGuards = (user: IUserSession) => {
   const guards = {
@@ -40,6 +44,7 @@ export const guard = async (ctx: Router.RouterContext<any, any>, next: () => Pro
 export const courseGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
+  ctx.params.courseId = Number(ctx.params.courseId);
   const { courseId } = ctx.params;
 
   if (guards.isLoggedIn(ctx) && (guards.hasRole(courseId) || guards.isPowerUser(courseId))) {
@@ -52,6 +57,7 @@ export const courseGuard = async (ctx: Router.RouterContext<any, any>, next: () 
 export const courseMentorGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
+  ctx.params.courseId = Number(ctx.params.courseId);
   const { courseId } = ctx.params;
 
   if (guards.isLoggedIn(ctx) && (guards.isMentor(courseId) || guards.isPowerUser(courseId))) {
@@ -75,6 +81,7 @@ export const adminGuard = async (ctx: Router.RouterContext, next: () => Promise<
 export const taskOwnerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
+  ctx.params.courseId = Number(ctx.params.courseId);
   const { courseId } = ctx.params;
   if (
     guards.isLoggedIn(ctx) &&
@@ -89,6 +96,7 @@ export const taskOwnerGuard = async (ctx: Router.RouterContext<any, any>, next: 
 export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
+  ctx.params.courseId = Number(ctx.params.courseId);
   const { courseId } = ctx.params;
   if (guards.isLoggedIn(ctx) && guards.isPowerUser(courseId)) {
     await next();
@@ -100,6 +108,7 @@ export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, ne
 export const anyCourseManagerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
+  ctx.params.courseId = Number(ctx.params.courseId);
   if (guards.isLoggedIn(ctx) && (guards.isAnyManager() || guards.isAdmin())) {
     await next();
     return;
