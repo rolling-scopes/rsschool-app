@@ -34,9 +34,7 @@ function Page(props: Props & { courseAlias?: string }) {
     const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
-      : courses
-          .filter((course: Course) => course.planned && !course.inviteOnly)
-          .sort((a, b) => a.startDate.localeCompare(b.startDate));
+      : courses.filter(isCourseOpenForRegistry).sort(sortByStartDate);
 
     setCourses(activeCourses);
     setInitialData(profile);
@@ -201,6 +199,24 @@ function Page(props: Props & { courseAlias?: string }) {
       {content}
     </PageLayout>
   );
+}
+
+function sortByStartDate(a: Course, b: Course) {
+  return a.startDate.localeCompare(b.startDate);
+}
+
+function isCourseOpenForRegistry(course: Course) {
+  // invite only courses do not open for public registration
+  if (course.inviteOnly || course.completed) {
+    return false;
+  }
+  if (course.planned) {
+    return true;
+  }
+  if (course.registrationEndDate) {
+    return new Date(course.registrationEndDate).getTime() > Date.now();
+  }
+  return false;
 }
 
 function getInitialValues(initialData: Partial<UserFull>, courses: Course[]) {
