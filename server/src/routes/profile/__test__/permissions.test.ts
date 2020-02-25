@@ -152,6 +152,46 @@ describe('getPermissions', () => {
           isCoreJsFeedbackVisible: false,
         });
       });
+      it('"role" is "coursemanager" and some "permissions" set with "coursemanager" = "true"', () => {
+        expect(
+          getPermissions({
+            isProfileOwner: false,
+            isAdmin: false,
+            role: 'coursemanager',
+            permissions: {
+              isProfileVisible: { all: true },
+              isAboutVisible: { all: false, mentor: true, student: true },
+              isEducationVisible: { all: false, mentor: false, student: false },
+              isEnglishVisible: { all: false, student: false },
+              isEmailVisible: { all: false, student: false },
+              isTelegramVisible: { all: false, student: true },
+              isSkypeVisible: { all: false, student: true },
+              isPhoneVisible: { all: false, student: false },
+              isContactsNotesVisible: { all: true, student: true },
+              isLinkedInVisible: { all: false, mentor: false, student: false },
+              isPublicFeedbackVisible: { all: false, mentor: true, student: true },
+              isMentorStatsVisible: { all: false, mentor: true, student: true },
+              isStudentStatsVisible: { all: false, student: true },
+            },
+          }),
+        ).toEqual({
+          isProfileVisible: true,
+          isAboutVisible: true,
+          isEducationVisible: true,
+          isEnglishVisible: true,
+          isEmailVisible: true,
+          isTelegramVisible: true,
+          isSkypeVisible: true,
+          isPhoneVisible: true,
+          isContactsNotesVisible: true,
+          isLinkedInVisible: true,
+          isPublicFeedbackVisible: true,
+          isMentorStatsVisible: true,
+          isStudentStatsVisible: true,
+          isStageInterviewFeedbackVisible: true,
+          isCoreJsFeedbackVisible: true,
+        });
+      });
     });
     describe('if "isProfileOwner" is "true"', () => {
       it('"role" is "all" and all "permissions" set with "all" = "false"', () => {

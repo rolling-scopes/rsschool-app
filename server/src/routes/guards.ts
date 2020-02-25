@@ -14,8 +14,7 @@ const userGuards = (user: IUserSession) => {
       Object.keys(user.coursesRoles ?? {}).some((courseId: string) =>
         user.coursesRoles?.[courseId]?.includes('manager'),
       ),
-    isManager: (courseId: number) =>
-      user.roles[courseId] === 'coursemanager' || (user.coursesRoles?.[courseId]?.includes('manager') ?? false),
+    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes('manager') ?? false,
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
     isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false,

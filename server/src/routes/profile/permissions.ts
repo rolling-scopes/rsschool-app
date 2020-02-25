@@ -11,6 +11,8 @@ import {
   TaskChecker,
   TaskInterviewResult,
   StageInterview,
+  CourseRoles,
+  StundetMentorRoles as StudentMentorRoles,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -23,7 +25,7 @@ interface Relations {
   checkers: string[];
 }
 
-export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'all';
+export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursemanager' | 'all';
 
 interface PermissionsSetup {
   isProfileOwner: boolean;
@@ -120,14 +122,20 @@ export const defineRole = ({
   relationsRoles,
   studentCourses,
   roles,
+  coursesRoles,
   userGithubId,
 }: {
   relationsRoles: Relations | null;
   studentCourses: { courseId: number }[] | null;
-  roles: { [courseId: string]: 'student' | 'mentor' | 'coursemanager' };
+  coursesRoles?: CourseRoles;
+  roles: StudentMentorRoles;
   userGithubId: string;
 }): RelationRole => {
-  if (relationsRoles) {
+  if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes('manager'))) {
+    return 'coursemanager';
+  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes('supervisor'))) {
+    return 'coursemanager';
+  } else if (relationsRoles) {
     const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;
 
     if (student === userGithubId) {
@@ -161,32 +169,55 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isCoreJsFeedbackVisible: false,
   };
 
-  return mapValues(defaultPermissions, (_, permission) =>
-    role &&
-    (([
-      'isStageInterviewFeedbackVisible',
-      'isStudentStatsVisible',
-      'isCoreJsFeedbackVisible',
-      'isProfileVisible',
-    ].includes(permission) &&
-      ['mentor', 'coursementor'].includes(role)) ||
-      ([
+  const accessToContacts = (permission: string, role: string = '') => {
+    return (
+      [
         'isEmailVisible',
         'isTelegramVisible',
         'isSkypeVisible',
         'isPhoneVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
-      ].includes(permission) &&
-        ['mentor'].includes(role)) ||
-      (['isProfileVisible'].includes(permission) && ['student'].includes(role)))
-      ? true
-      : (isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission)) ||
-        get(permissions, `${permission}.all`) ||
-        get(permissions, `${permission}.${role}`) ||
-        isAdmin ||
-        false,
-  );
+      ].includes(permission) && ['mentor', 'coursemanager'].includes(role)
+    );
+  };
+
+  const accessToFeedbacks = (permission: string, role: string = '') => {
+    return (
+      [
+        'isStageInterviewFeedbackVisible',
+        'isStudentStatsVisible',
+        'isCoreJsFeedbackVisible',
+        'isProfileVisible',
+      ].includes(permission) && ['mentor', 'coursementor', 'coursemanager'].includes(role)
+    );
+  };
+
+  const accessToProfile = (permission: string, role: string = '') =>
+    ['isProfileVisible'].includes(permission) && ['student'].includes(role);
+
+  return mapValues(defaultPermissions, (_, permission) => {
+    if (isAdmin || role === 'coursemanager') {
+      return true;
+    }
+    if (accessToFeedbacks(permission, role)) {
+      return true;
+    }
+    if (accessToContacts(permission, role)) {
+      return true;
+    }
+    if (accessToProfile(permission, role)) {
+      return true;
+    }
+    // do not show own feedbacks
+    if (isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission)) {
+      return true;
+    }
+    if (get(permissions, `${permission}.all`) || get(permissions, `${permission}.${role}`)) {
+      return true;
+    }
+    return false;
+  });
 };
 
 export const getProfilePermissionsSettings = (permissions: ConfigurableProfilePermissions) => {
