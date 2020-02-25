@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Input, message, Result, Row, Select, Tag, Typography } from 'antd';
+import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select, Tag, Typography } from 'antd';
 import axios from 'axios';
 import { LocationSelect, PageLayout } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
@@ -94,20 +94,27 @@ function Page(props: Props) {
   } else if (initialData) {
     const location = form.getFieldValue('location');
     content = (
-      <Row style={{ margin: 16 }} gutter={defaultRowGutter}>
+      <Row gutter={defaultRowGutter}>
         <Col xs={24} sm={20} md={18} lg={16} xl={16}>
-          <Form
-            style={{ margin: 16 }}
-            layout="vertical"
-            form={form}
-            initialValues={getInitialValues(initialData)}
-            onChange={update}
-            onFinish={handleSubmit}
-            onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
-          >
-            <Row style={{ marginBottom: 8 }}>
-              <Typography.Paragraph>
-                <Typography.Title level={4}>О менторинге</Typography.Title>
+          <Row style={{ marginBottom: 8 }}>
+            <Tabs defaultActiveKey="english">
+              <Tabs.TabPane key="english" tab="About mentorship">
+                <ul>
+                  <li>Topics: html/css/javascript + tools and ecosystem with React or Angular</li>
+                  <li>Fully prepared materials and home tasks for you, infrastructure.</li>
+                  <li>From 2 to 6 students per a mentor.</li>
+                  <li>Partially or fully remote.</li>
+                </ul>
+                <ul>
+                  <b>Responsibilities:</b>
+                  <li>Weekly meeting with your students group in any messenger remotely</li>
+                  <li>Answer questions</li>
+                  <li>Give advises (code style, tasks decomposition)</li>
+                  <li>Check and mark home tasks (~7 in total)</li>
+                  <li>Hold education interviews (2 per each student)</li>
+                </ul>
+              </Tabs.TabPane>
+              <Tabs.TabPane key="russian" tab="О менторинге">
                 <ul>
                   <li>Темы менторинга: html/css/vanillajs.</li>
                   <li>
@@ -128,9 +135,19 @@ function Page(props: Props) {
                   <li>Проводить учебные интервью (по 2 для каждого студента)</li>
                   <li>Проводить дополнительные лекции (по желанию)</li>
                 </ul>
-              </Typography.Paragraph>
-            </Row>
-
+              </Tabs.TabPane>
+            </Tabs>
+            <Typography.Title level={4}>О менторинге</Typography.Title>
+          </Row>
+          <Form
+            style={{ margin: 16 }}
+            layout="vertical"
+            form={form}
+            initialValues={getInitialValues(initialData)}
+            onChange={update}
+            onFinish={handleSubmit}
+            onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+          >
             <Row>
               <Typography.Title level={4}>General</Typography.Title>
             </Row>

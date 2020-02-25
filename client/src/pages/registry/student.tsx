@@ -106,12 +106,12 @@ function Page(props: Props & { courseAlias?: string }) {
         onChange={update}
         onFinish={handleSubmit}
       >
-        <Col style={{ margin: '0 20px' }}>
+        <Col>
           <Row>
             <Typography.Title level={4}>Course</Typography.Title>
           </Row>
           <Row gutter={defaultRowGutter}>
-            <Col span={10}>
+            <Col xs={24} sm={20} md={16} lg={12} xl={10}>
               <Form.Item name="courseId">
                 <Select placeholder="Select course...">
                   {courses.map(course => (
