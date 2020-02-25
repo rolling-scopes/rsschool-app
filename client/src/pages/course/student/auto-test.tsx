@@ -1,4 +1,4 @@
-import { Button, Col, Table, Form, Input, message, Row, Typography } from 'antd';
+import { Button, Col, Table, Form, Input, message, Row, Typography, notification } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
@@ -8,7 +8,8 @@ import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { notUrlPattern, udemyCertificateId } from 'services/validators';
-import { dateTimeRenderer } from 'components/Table';
+import { shortDateTimeRenderer } from 'components/Table';
+import { AxiosError } from 'axios';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -23,6 +24,7 @@ function Page(props: CoursePageProps) {
   useAsync(async () => {
     try {
       setLoading(true);
+      loadVerifications();
       const tasks = await courseService.getCourseTasks();
       const courseTasks = filterAutoTestTasks(tasks);
       setCourseTasks(courseTasks);
@@ -50,6 +52,13 @@ function Page(props: CoursePageProps) {
       message.success('The task has been submitted for verification and it will be checked soon.');
       form.resetFields();
     } catch (e) {
+      const error = e as AxiosError;
+      if (error.response?.status === 429) {
+        notification.warn({
+          message: <>Too many requests. There is another verification for this task is in progress.</>,
+        });
+        return;
+      }
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
@@ -72,32 +81,14 @@ function Page(props: CoursePageProps) {
     loadVerifications();
   };
 
-  const { type, descriptionUrl, githubRepoName } = courseTasks.find(t => t.id === courseTaskId) ?? {};
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
   return (
     <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
       <Row gutter={24}>
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect onChange={handleCourseTaskChange} data={courseTasks} />
-            {type === 'htmlcssacademy' && (
-              <>
-                {renderDescription(descriptionUrl)}
-                {renderHtmlCssAcademyFields()}
-              </>
-            )}
-            {(type === 'codewars:stage1' || type === 'codewars:stage2') && (
-              <>
-                {renderDescription(descriptionUrl)}
-                <Form.Item
-                  name="codewars"
-                  label="Codewars Account"
-                  rules={[{ pattern: notUrlPattern, message: 'Enter valid Codewars account' }]}
-                >
-                  <Input style={{ maxWidth: 250 }} placeholder="username" />
-                </Form.Item>
-              </>
-            )}
-            {type === 'jstask' && renderJsTaskFields(props.session.githubId, githubRepoName)}
+            {renderTaskFields(props.session.githubId, courseTask)}
             <Row>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -106,45 +97,45 @@ function Page(props: CoursePageProps) {
           </Form>
         </Col>
         <Col xs={24} sm={20} md={18} lg={14}>
-          {courseTaskId ? (
-            <>
-              <Row justify="space-between">
-                <Typography.Title type="secondary" level={4}>
-                  Verification Results
-                </Typography.Title>
-                <Button type="dashed" onClick={loadVerifications} icon={<ReloadOutlined />}>
-                  Refresh
-                </Button>
-              </Row>
-              <Table
-                size="small"
-                rowKey="id"
-                pagination={false}
-                columns={[
-                  {
-                    title: 'Date/Time',
-                    dataIndex: 'createdDate',
-                    render: dateTimeRenderer,
-                  },
-                  {
-                    title: 'Task Name',
-                    dataIndex: ['courseTask', 'task', 'name'],
-                    ellipsis: true,
-                  },
-                  {
-                    title: 'Score',
-                    dataIndex: 'score',
-                    width: 60,
-                  },
-                  {
-                    title: 'Details',
-                    dataIndex: 'details',
-                  },
-                ]}
-                dataSource={verifications}
-              />
-            </>
-          ) : null}
+          <Row justify="space-between">
+            <Typography.Title type="secondary" level={4}>
+              Verification Results
+            </Typography.Title>
+            <Button type="dashed" onClick={loadVerifications} icon={<ReloadOutlined />}>
+              Refresh
+            </Button>
+          </Row>
+          <Table
+            size="small"
+            rowKey="id"
+            pagination={false}
+            columns={[
+              {
+                title: 'Date/Time',
+                dataIndex: 'createdDate',
+                render: shortDateTimeRenderer,
+              },
+              {
+                title: 'Status',
+                dataIndex: 'status',
+              },
+              {
+                title: 'Task Name',
+                dataIndex: ['courseTask', 'task', 'name'],
+                ellipsis: true,
+              },
+              {
+                title: 'Score',
+                dataIndex: 'score',
+                width: 60,
+              },
+              {
+                title: 'Details',
+                dataIndex: 'details',
+              },
+            ]}
+            dataSource={verifications}
+          />
         </Col>
       </Row>
     </PageLayout>
@@ -153,8 +144,42 @@ function Page(props: CoursePageProps) {
 
 export default withCourseData(withSession(Page));
 
-function renderJsTaskFields(githubId: string, githubRepoName: string | undefined) {
-  const repoUrl = `https://github.com/${githubId}/${githubRepoName}`;
+function renderTaskFields(githubId: string, courseTask?: CourseTask) {
+  const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
+  switch (courseTask?.type) {
+    case 'jstask':
+      return renderJsTaskFields(repoUrl);
+    case 'kotlintask':
+    case 'objctask':
+      return renderKotlinTaskFields(repoUrl);
+    case 'htmlcssacademy':
+      return (
+        <>
+          {renderDescription(courseTask?.descriptionUrl)}
+          {renderHtmlCssAcademyFields()}
+        </>
+      );
+    case 'codewars:stage1':
+    case 'codewars:stage2': {
+      return (
+        <>
+          {renderDescription(courseTask.descriptionUrl)}
+          <Form.Item
+            name="codewars"
+            label="Codewars Account"
+            rules={[{ pattern: notUrlPattern, message: 'Enter valid Codewars account' }]}
+          >
+            <Input style={{ maxWidth: 250 }} placeholder="username" />
+          </Form.Item>
+        </>
+      );
+    }
+    default:
+      return null;
+  }
+}
+
+function renderJsTaskFields(repoUrl: string) {
   return (
     <Row>
       <Typography.Paragraph>
@@ -167,6 +192,21 @@ function renderJsTaskFields(githubId: string, githubRepoName: string | undefined
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
         IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
+      </Typography.Paragraph>
+    </Row>
+  );
+}
+
+function renderKotlinTaskFields(repoUrl: string) {
+  return (
+    <Row>
+      <Typography.Paragraph>
+        The system will run tests in the following repository and will update the score based on the result:
+      </Typography.Paragraph>
+      <Typography.Paragraph>
+        <a href={repoUrl} target="_blank">
+          {repoUrl}
+        </a>
       </Typography.Paragraph>
     </Row>
   );

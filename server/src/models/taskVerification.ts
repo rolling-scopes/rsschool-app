@@ -19,7 +19,7 @@ export class TaskVerification {
   studentId: number;
 
   @ManyToOne(_ => CourseTask)
-  courseTask: Student;
+  courseTask: CourseTask;
 
   @Column()
   courseTaskId: number;
@@ -27,8 +27,8 @@ export class TaskVerification {
   @Column({ nullable: true })
   details: string;
 
-  @Column()
-  status: 'success' | 'error';
+  @Column({ default: 'pending' })
+  status: 'completed' | 'error' | 'pending';
 
   @Column()
   score: number;
