@@ -311,6 +311,8 @@ function getSubmitData(task: CourseTask, values: any) {
       break;
 
     case 'jstask':
+    case 'kotlintask':
+    case 'objctask':
       data = {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
