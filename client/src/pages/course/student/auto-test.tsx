@@ -55,7 +55,9 @@ function Page(props: CoursePageProps) {
       const error = e as AxiosError;
       if (error.response?.status === 429) {
         notification.warn({
-          message: <>Too many requests. There is another verification for this task is in progress.</>,
+          message: (
+            <>Please wait. You will be able to submit your task again when the current verification is completed.</>
+          ),
         });
         return;
       }
