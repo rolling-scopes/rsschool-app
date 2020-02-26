@@ -106,7 +106,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const session = ctx.state.user as IUserSession;
 
   const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes('taskOwner');
-  if (mentor == null && !session.isAdmin && session.coursesRoles?.[courseId]?.includes('manager') && isNotTaskOwner) {
+  if (mentor == null && !session.isAdmin && !session.coursesRoles?.[courseId]?.includes('manager') && isNotTaskOwner) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
