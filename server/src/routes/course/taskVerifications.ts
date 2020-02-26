@@ -34,7 +34,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
 
   const verifications = await getRepository(TaskVerification)
     .createQueryBuilder('v')
-    .select(['v.id', 'v.status'])
+    .select(['v.id', 'v.status', 'v.courseTaskId'])
     .innerJoin('v.courseTask', 'courseTask')
     .innerJoin('courseTask.task', 'task')
     .innerJoin('v.student', 'student')
@@ -61,5 +61,6 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
     sourceGithubRepoUrl: verification.courseTask.task.sourceGithubRepoUrl,
     githubRepoName: verification.courseTask.task.githubRepoName,
   }));
+
   setResponse(ctx, OK, result);
 };
