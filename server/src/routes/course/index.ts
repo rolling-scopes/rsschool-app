@@ -11,6 +11,7 @@ import {
   courseSupervisorGuard,
   taskOwnerGuard,
   courseManagerGuard,
+  basicAuthVerification,
 } from '../guards';
 import { setResponse } from '../utils';
 import { getExternalAccounts } from './externalAccounts';
@@ -116,7 +117,7 @@ function addTaskApi(router: Router, logger: ILogger) {
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
-  router.get('/tasks/verifications', courseManagerGuard, getCourseTasksVerifications(logger));
+  router.get('/tasks/verifications', basicAuthVerification, getCourseTasksVerifications(logger));
   router.post('/task/:courseTaskId/distribution', courseManagerGuard, createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', courseManagerGuard, createCrossCheckDistribution(logger));
