@@ -53,7 +53,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
     .getMany();
 
   const result = verifications.map(verification => ({
-    courseId,
+    courseId: Number(courseId),
     id: verification.id,
     githubId: verification.student.user.githubId,
     courseTaskId: verification.courseTaskId,
