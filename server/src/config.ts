@@ -73,8 +73,8 @@ export const config: IConfig = {
   },
   users: {
     verification: {
-      username: process.env.RSSHCOOL_API_VERIFICATION_USERNAME || '',
-      password: process.env.RSSHCOOL_API_VERIFICATION_PASSWORD || '',
+      username: process.env.RSSHCOOL_API_VERIFICATION_USERNAME || 'test',
+      password: process.env.RSSHCOOL_API_VERIFICATION_PASSWORD || 'test',
     },
   },
   auth: {
