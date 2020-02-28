@@ -24,6 +24,7 @@ function Page(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [location, setLocation] = useState('');
   const [courses, setCourses] = useState([] as Course[]);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
@@ -47,11 +48,10 @@ function Page(props: Props & { courseAlias?: string }) {
         return;
       }
       setLoading(true);
-      const { comment, location, courseId } = values;
+      const { comment, courseId, location } = values;
       const registryModel = { type: TYPES.STUDENT, courseId, comment };
       const userModel = {
-        locationId: location.key ? location.key : undefined,
-        locationName: !location.key ? values.otherLocationName : location.label,
+        location,
         primaryEmail: values.primaryEmail,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -76,7 +76,6 @@ function Page(props: Props & { courseAlias?: string }) {
   );
 
   let content: React.ReactNode;
-  const location = form.getFieldValue('location');
   if (loading) {
     content = undefined;
   } else if (!courses.length) {
@@ -102,7 +101,7 @@ function Page(props: Props & { courseAlias?: string }) {
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        onFinish={handleSubmit}
+        onFinish={(values: any) => handleSubmit({...values, location})}
       >
         <Col>
           <Row>
@@ -147,23 +146,7 @@ function Page(props: Props & { courseAlias?: string }) {
           </Row>
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
-              <Form.Item
-                help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
-                name="location"
-                label="Location"
-                rules={[{ required: true, message: 'Please select city or "Other"' }]}
-              >
-                <LocationSelect labelInValue placeholder="Select city" />
-              </Form.Item>
-            </Col>
-            <Col {...defaultColumnSizes}>
-              <Form.Item
-                name="otherLocationName"
-                label="Other Location"
-                rules={[{ required: location && !location.key, message: 'Location name is required' }]}
-              >
-                <Input />
-              </Form.Item>
+                <LocationSelect onChange={setLocation} />
             </Col>
           </Row>
           <Row gutter={defaultRowGutter}>

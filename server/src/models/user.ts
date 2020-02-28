@@ -121,6 +121,9 @@ export class User {
   contactsNotes?: string;
 
   @Column({ nullable: true })
+  location?: string;
+
+  @Column({ nullable: true })
   contactsSkype?: string;
 
   @Column({ nullable: true })
