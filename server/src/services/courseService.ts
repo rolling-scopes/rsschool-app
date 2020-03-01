@@ -111,7 +111,10 @@ export function convertToStudentDetails(student: Student): StudentDetails {
   const studentBasic = convertToStudentBasic(student);
   const user = (student.user as User)!;
   const checks =
-    student.taskChecker?.map(({ courseTask }) => ({ id: courseTask.id, name: courseTask.task.name })) ?? [];
+    student.taskChecker?.map(({ courseTask }) => ({
+      id: courseTask.id,
+      name: courseTask.task.name,
+    })) ?? [];
   return {
     ...studentBasic,
     locationName: user.locationName || null,

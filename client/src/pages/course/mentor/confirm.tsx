@@ -18,7 +18,7 @@ function Page(props: { session: Session }) {
   const [loading, setLoading] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [mentorData, setMentorData] = useState({} as any);
+  const [mentorData, setMentorData] = useState(null as object | null);
   const [course, setCourse] = useState(null as Course | null);
 
   const courseService = useMemo(() => {
@@ -29,18 +29,26 @@ function Page(props: { session: Session }) {
   }, [course]);
 
   useAsync(async () => {
-    const courseAlias = router.query['course'];
-    const [mentor, courses] = await Promise.all([
-      mentorRegistry.getMentor(),
-      new CoursesService().getCourses(),
-    ] as const);
-    const course = courses.find(c => c.alias === courseAlias) ?? null;
-    if (!mentor.preselectedCourses?.includes(course?.id)) {
+    try {
+      setLoading(true);
+      const courseAlias = router.query['course'];
+      const courses = await new CoursesService().getCourses();
+      const course = courses.find(c => c.alias === courseAlias) ?? null;
+      setCourse(course);
+      const mentor = await mentorRegistry.getMentor();
+
+      if (!mentor.preselectedCourses?.includes(course?.id)) {
+        setNoAccess(true);
+        return;
+      }
+
+      setMentorData(mentor);
+      form.setFieldsValue(mentor);
+    } catch {
       setNoAccess(true);
+    } finally {
+      setLoading(false);
     }
-    setMentorData(mentor);
-    setCourse(course);
-    form.getFieldsValue(mentorData);
   }, []);
 
   const handleSubmit = async (values: any) => {
@@ -63,7 +71,7 @@ function Page(props: { session: Session }) {
     }
   };
 
-  if (course == null) {
+  if (course == null || (mentorData == null && loading)) {
     return null;
   }
 
@@ -73,10 +81,11 @@ function Page(props: { session: Session }) {
     githubId: props.session.githubId,
     courseName: course.name,
   };
+
   if (noAccess) {
     return (
       <PageLayout {...pageProps}>
-        <Result status="403" title="You are not preselected to the course" />
+        <Result status={'403' as any} title="You are not preselected to the course" />
       </PageLayout>
     );
   }
