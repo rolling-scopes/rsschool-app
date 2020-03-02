@@ -1,6 +1,13 @@
-import { Col, Layout, Select, Spin, Table, Form, message } from 'antd';
+import { Col, Row, Layout, Select, Spin, Table, Form, message, Checkbox, Button } from 'antd';
 import { AdminSider, GithubUserLink, Header } from 'components';
-import { stringSorter, boolIconRenderer, tagsRenderer, getColumnSearchProps, dateRenderer } from 'components/Table';
+import {
+  stringSorter,
+  boolIconRenderer,
+  tagsRenderer,
+  colorTagRenderer,
+  getColumnSearchProps,
+  dateRenderer,
+} from 'components/Table';
 import withSession, { Session } from 'components/withSession';
 import { useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
@@ -19,8 +26,11 @@ const coursesService = new CoursesService();
 function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
+  const [allData, setAllData] = useState<any[]>([]);
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState(null as Partial<any> | null);
 
@@ -30,10 +40,12 @@ function Page(props: Props) {
     const data = await mentorRegistryService.getMentors();
     const courses = await coursesService.getCourses();
 
-    setData(data);
+    setAllData(data);
+    setData(filterData(data, showAll));
+
     setCourses(courses);
     setLoading(false);
-  }, []);
+  }, [showAll]);
 
   useAsync(loadData, []);
 
@@ -90,6 +102,23 @@ function Page(props: Props) {
         <Content style={{ margin: 8 }}>
           <Spin spinning={loading}>
             <Col>
+              <Row justify="space-between">
+                <Form.Item>
+                  <Checkbox
+                    onChange={e => {
+                      const value = e.target.checked;
+                      setShowAll(value);
+                      setData(filterData(allData, value));
+                    }}
+                  >
+                    Show All
+                  </Checkbox>
+                </Form.Item>
+                <Button onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>Export CSV</Button>
+              </Row>
+            </Col>
+            <Col style={{ marginBottom: 8 }}> Total mentors: {data.length} </Col>
+            <Col>
               <Table<MentorRegistry>
                 bordered
                 pagination={{ pageSize: PAGINATION }}
@@ -116,6 +145,8 @@ function Page(props: Props) {
                     title: 'City',
                     dataIndex: 'locationName',
                     width: 80,
+                    sorter: stringSorter('locationName'),
+                    ...getColumnSearchProps('locationName'),
                   },
                   {
                     title: 'Updated',
@@ -131,8 +162,18 @@ function Page(props: Props) {
                   {
                     title: 'Pre-Selected',
                     dataIndex: 'preselectedCourses',
-                    render: (values: number[]) =>
-                      tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
+                    render: (values: number[], record: any) => {
+                      return (
+                        <>
+                          {values
+                            .map(v => ({
+                              value: courses.find(c => c.id === v)?.name ?? v.toString(),
+                              color: record.courses.includes(v) ? '#87d068' : undefined,
+                            }))
+                            .map(v => colorTagRenderer(v.value, v.color))}{' '}
+                        </>
+                      );
+                    },
                   },
                   {
                     title: 'Max students',
@@ -175,6 +216,13 @@ function Page(props: Props) {
       </Layout>
     </Layout>
   );
+}
+
+function filterData(data: { preselectedCourses: number[]; courses: number[] }[], showAll: boolean) {
+  if (showAll) {
+    return data;
+  }
+  return data.filter(it => it.courses.length === 0 || !it.preselectedCourses.every(c => it.courses.includes(c)));
 }
 
 export default withSession(Page);
