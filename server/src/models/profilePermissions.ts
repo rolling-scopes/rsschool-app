@@ -17,7 +17,6 @@ export const defaultPartialStudentVisibilitySettings = {
 
 export const defaultContactsVisibilitySettings = {
   student: true,
-  mentor: true,
   all: false,
 };
 

@@ -184,13 +184,9 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
 
   const defaultAccessToContacts = (permission: string, role: string = '') => {
     return (
-      [
-        'isEmailVisible',
-        'isTelegramVisible',
-        'isSkypeVisible',
-        'isPhoneVisible',
-        'isContactsNodesVisible',
-      ].includes(permission) && ['student'].includes(role)
+      ['isEmailVisible', 'isTelegramVisible', 'isSkypeVisible', 'isPhoneVisible', 'isContactsNodesVisible'].includes(
+        permission,
+      ) && ['student'].includes(role)
     );
   };
 
@@ -229,7 +225,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
       return true;
     }
     // show mentor contacts to students by default
-    if(!get(permissions, `${permission}.student`) && defaultAccessToContacts(permission, role)) {
+    if (get(permissions, `${permission}.student`) === undefined && defaultAccessToContacts(permission, role)) {
       return true;
     }
     return false;

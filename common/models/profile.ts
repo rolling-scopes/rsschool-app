@@ -11,7 +11,6 @@ export interface PartialStudentVisibilitySettings extends PublicVisibilitySettin
 
 export interface ContactsVisibilitySettings extends PublicVisibilitySettings {
   student: boolean;
-  mentor: boolean;
 }
 
 export interface VisibilitySettings extends PublicVisibilitySettings {
