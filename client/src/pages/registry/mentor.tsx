@@ -48,7 +48,7 @@ function Page(props: Props) {
       preferedStudentsLocation,
       maxStudentsLimit,
       englishMentoring,
-      location
+      location,
     } = model;
 
     const registryModel = {
@@ -243,13 +243,13 @@ function Page(props: Props) {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item
-                    help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
-                    name="location"
-                    label="Location"
-                    rules={[{ required: true, message: 'Please select city' }]}
-                    valuePropName={'location'}
-                  >
-                    <LocationSelect onChange={setLocation} location={location}/>
+                  help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                  name="location"
+                  label="Location"
+                  rules={[{ required: true, message: 'Please select city' }]}
+                  valuePropName={'location'}
+                >
+                  <LocationSelect onChange={setLocation} location={location} />
                 </Form.Item>
               </Col>
             </Row>
@@ -367,7 +367,7 @@ const SuccessComponent = () => {
   return <Result status="info" title={titleCmp} />;
 };
 
-function getInitialValues({countryName, cityName, ...initialData}: Partial<UserFull>) {
+function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>) {
   return {
     ...initialData,
     location: {
