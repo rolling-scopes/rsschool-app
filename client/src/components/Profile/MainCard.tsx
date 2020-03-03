@@ -122,9 +122,12 @@ class MainCard extends React.Component<Props, State> {
                       <Text strong>Location:</Text>
                     </p>
                     <div style={{ marginBottom: 5 }}>
-                      <LocationSelect onChange={(location: Location) => {
-                        onProfileSettingsChange(location, 'generalInfo.location');
-                      }} location={location}/>
+                      <LocationSelect
+                        onChange={(location: Location) => {
+                          onProfileSettingsChange(location, 'generalInfo.location');
+                        }}
+                        location={location}
+                      />
                     </div>
                   </div>
                 }

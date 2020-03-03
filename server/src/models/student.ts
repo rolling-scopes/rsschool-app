@@ -25,7 +25,7 @@ import { StageInterview } from './stageInterview';
 @Index(['courseId'])
 @Index(['userId'])
 @Index(['mentorId'])
-@Unique(['courseId', 'userId'])
+// @Unique(['courseId', 'userId'])
 export class Student {
   @PrimaryGeneratedColumn() id: number;
 

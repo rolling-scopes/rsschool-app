@@ -48,14 +48,7 @@ function Page(props: Props & { courseAlias?: string }) {
         return;
       }
       setLoading(true);
-      const {
-        comment,
-        courseId,
-        location,
-        primaryEmail,
-        firstName,
-        lastName
-      } = values;
+      const { comment, courseId, location, primaryEmail, firstName, lastName } = values;
       const registryModel = { type: TYPES.STUDENT, courseId, comment };
       const userModel = {
         cityName: location.cityName,
@@ -109,7 +102,7 @@ function Page(props: Props & { courseAlias?: string }) {
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        onFinish={(values: any) => handleSubmit({...values, location})}
+        onFinish={(values: any) => handleSubmit({ ...values, location })}
       >
         <Col>
           <Row>
@@ -155,13 +148,13 @@ function Page(props: Props & { courseAlias?: string }) {
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
               <Form.Item
-                  help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
-                  name="location"
-                  label="Location"
-                  rules={[{ required: true, message: 'Please select city' }]}
-                  valuePropName={'location'}
-                >
-                  <LocationSelect onChange={setLocation} location={location}/>
+                help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                name="location"
+                label="Location"
+                rules={[{ required: true, message: 'Please select city' }]}
+                valuePropName={'location'}
+              >
+                <LocationSelect onChange={setLocation} location={location} />
               </Form.Item>
             </Col>
           </Row>
@@ -218,10 +211,10 @@ function isCourseOpenForRegistry(course: Course) {
   return false;
 }
 
-function getInitialValues({countryName, cityName, ...initialData}: Partial<UserFull>, courses: Course[]) {
+function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
   const location = {
     countryName,
-    cityName
+    cityName,
   } as Location;
   return {
     ...initialData,
