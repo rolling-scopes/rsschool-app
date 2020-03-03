@@ -30,15 +30,23 @@ export function boolIconRenderer(value: any) {
   );
 }
 
+export function colorTagRenderer(value: number | string, color?: string) {
+  return <span>{renderTag(value, color)}</span>;
+}
+
 export function tagsRenderer(values: (number | string)[]) {
   if (!Array.isArray(values)) {
     return '';
   }
-  return <span>{values.map(renderTag)}</span>;
+  return <span>{values.map(v => renderTag(v))}</span>;
 }
 
-function renderTag(value: number | string) {
-  return <Tag key={value}>{value}</Tag>;
+function renderTag(value: number | string, color?: string) {
+  return (
+    <Tag color={color} key={value}>
+      {value}
+    </Tag>
+  );
 }
 
 export function stringTrimRenderer(value: string) {

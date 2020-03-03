@@ -323,7 +323,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   async componentDidMount() {
     const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
 
-    const plannedCourses = (this.props.courses || []).filter(course => course.planned);
+    const plannedCourses = (this.props.courses || []).filter(course => course.planned && !course.inviteOnly);
     const hasRegistryBanner =
       wasMentor &&
       plannedCourses.length > 0 &&
