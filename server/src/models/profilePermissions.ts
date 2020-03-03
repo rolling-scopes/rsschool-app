@@ -15,6 +15,11 @@ export const defaultPartialStudentVisibilitySettings = {
   all: false,
 };
 
+export const defaultContactsVisibilitySettings = {
+  student: true,
+  all: false,
+};
+
 export const defaultVisibilitySettings = {
   mentor: false,
   student: false,
@@ -26,11 +31,11 @@ export const defaultProfilePermissionsSettings: ConfigurableProfilePermissions =
   isAboutVisible: defaultVisibilitySettings,
   isEducationVisible: defaultVisibilitySettings,
   isEnglishVisible: defaultPartialStudentVisibilitySettings,
-  isEmailVisible: defaultPartialStudentVisibilitySettings,
-  isTelegramVisible: defaultPartialStudentVisibilitySettings,
-  isSkypeVisible: defaultPartialStudentVisibilitySettings,
-  isPhoneVisible: defaultPartialStudentVisibilitySettings,
-  isContactsNotesVisible: defaultPartialStudentVisibilitySettings,
+  isEmailVisible: defaultContactsVisibilitySettings,
+  isTelegramVisible: defaultContactsVisibilitySettings,
+  isSkypeVisible: defaultContactsVisibilitySettings,
+  isPhoneVisible: defaultContactsVisibilitySettings,
+  isContactsNotesVisible: defaultContactsVisibilitySettings,
   isLinkedInVisible: defaultVisibilitySettings,
   isPublicFeedbackVisible: defaultVisibilitySettings,
   isMentorStatsVisible: defaultVisibilitySettings,
@@ -68,19 +73,19 @@ export class ProfilePermissions {
   @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
   isEnglishVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
+  @Column({ type: 'json', default: defaultContactsVisibilitySettings })
   isEmailVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
+  @Column({ type: 'json', default: defaultContactsVisibilitySettings })
   isTelegramVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
+  @Column({ type: 'json', default: defaultContactsVisibilitySettings })
   isSkypeVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
+  @Column({ type: 'json', default: defaultContactsVisibilitySettings })
   isPhoneVisible: VisibilitySettings;
 
-  @Column({ type: 'json', default: defaultPartialStudentVisibilitySettings })
+  @Column({ type: 'json', default: defaultContactsVisibilitySettings })
   isContactsNotesVisible: VisibilitySettings;
 
   @Column({ type: 'json', default: defaultVisibilitySettings })
