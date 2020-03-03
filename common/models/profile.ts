@@ -1,5 +1,5 @@
+import { Location } from 'components/LocationSelect';
 import { EnglishLevel } from './';
-
 
 export interface PublicVisibilitySettings {
   all: boolean;
@@ -34,8 +34,7 @@ export interface GeneralInfo {
   name: string;
   githubId: string;
   aboutMyself?: string | null;
-  locationName: string;
-  locationId: string;
+  location: Location;
   educationHistory?: any | null;
   englishLevel?: EnglishLevel | null;
 }

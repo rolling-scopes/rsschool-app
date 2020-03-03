@@ -13,6 +13,7 @@ import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
 import { NextPageContext } from 'next';
+import { Location } from 'components/LocationSelect';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -20,12 +21,11 @@ const defaultRowGutter = 24;
 
 function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
-
   const update = useUpdate();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [location, setLocation] = useState('');
   const [courses, setCourses] = useState([] as Course[]);
+  const [location, setLocation] = useState({} as Location);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
   useAsync(async () => {
@@ -48,13 +48,21 @@ function Page(props: Props & { courseAlias?: string }) {
         return;
       }
       setLoading(true);
-      const { comment, courseId, location } = values;
+      const {
+        comment,
+        courseId,
+        location,
+        primaryEmail,
+        firstName,
+        lastName
+      } = values;
       const registryModel = { type: TYPES.STUDENT, courseId, comment };
       const userModel = {
-        location,
-        primaryEmail: values.primaryEmail,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        cityName: location.cityName,
+        countryName: location.countryName,
+        primaryEmail,
+        firstName,
+        lastName,
       };
 
       try {
@@ -146,7 +154,15 @@ function Page(props: Props & { courseAlias?: string }) {
           </Row>
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
-                <LocationSelect onChange={setLocation} />
+              <Form.Item
+                  help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                  name="location"
+                  label="Location"
+                  rules={[{ required: true, message: 'Please select city' }]}
+                  valuePropName={'location'}
+                >
+                  <LocationSelect onChange={setLocation} location={location}/>
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={defaultRowGutter}>
@@ -202,11 +218,15 @@ function isCourseOpenForRegistry(course: Course) {
   return false;
 }
 
-function getInitialValues(initialData: Partial<UserFull>, courses: Course[]) {
+function getInitialValues({countryName, cityName, ...initialData}: Partial<UserFull>, courses: Course[]) {
+  const location = {
+    countryName,
+    cityName
+  } as Location;
   return {
     ...initialData,
     courseId: courses[0].id,
-    location: initialData.locationId ? { key: initialData.locationId } : undefined,
+    location,
   };
 }
 

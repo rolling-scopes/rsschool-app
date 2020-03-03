@@ -11,6 +11,7 @@ import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
 import { Course } from '../../../../common/models';
 import { Props } from '../../configs/registry';
+import { Location } from 'components/LocationSelect';
 
 const defaultColumnSizes = { xs: 20, sm: 16, md: 12, lg: 10 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -20,7 +21,7 @@ function Page(props: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  const [location, setLocation] = useState({} as Location);
   const [courses, setCourses] = useState([] as Course[]);
   const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
   const update = useUpdate();
@@ -42,12 +43,12 @@ function Page(props: Props) {
     setLoading(true);
     const {
       comment,
-      location,
       technicalMentoring,
       preferedCourses,
       preferedStudentsLocation,
       maxStudentsLimit,
       englishMentoring,
+      location
     } = model;
 
     const registryModel = {
@@ -60,8 +61,8 @@ function Page(props: Props) {
     };
 
     const userModel = {
-      locationId: location.key ? location.key : undefined,
-      locationName: !location.key ? model.otherLocationName : location.label,
+      cityName: location.cityName,
+      countryName: location.countryName,
       firstName: model.firstName,
       lastName: model.lastName,
 
@@ -92,7 +93,6 @@ function Page(props: Props) {
   } else if (submitted) {
     content = <SuccessComponent />;
   } else if (initialData) {
-    const location = form.getFieldValue('location');
     content = (
       <Row gutter={defaultRowGutter}>
         <Col xs={24} sm={20} md={18} lg={16} xl={16}>
@@ -243,20 +243,13 @@ function Page(props: Props) {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item
-                  name="location"
-                  label="Location"
-                  rules={[{ required: true, message: 'Please select city or "Other"' }]}
-                >
-                  <LocationSelect labelInValue placeholder="Select city" />
-                </Form.Item>
-              </Col>
-              <Col {...defaultColumnSizes}>
-                <Form.Item
-                  name="otherLocationName"
-                  label="Other Location"
-                  rules={[{ required: location && !location.key, message: 'Location name is required' }]}
-                >
-                  <Input />
+                    help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                    name="location"
+                    label="Location"
+                    rules={[{ required: true, message: 'Please select city' }]}
+                    valuePropName={'location'}
+                  >
+                    <LocationSelect onChange={setLocation} location={location}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -374,12 +367,12 @@ const SuccessComponent = () => {
   return <Result status="info" title={titleCmp} />;
 };
 
-function getInitialValues(initialData: Partial<UserFull>) {
+function getInitialValues({countryName, cityName, ...initialData}: Partial<UserFull>) {
   return {
     ...initialData,
     location: {
-      key: initialData.locationId,
-      label: initialData.locationName,
+      countryName,
+      cityName,
     },
     preferedCourses: [],
     englishMentoring: false,
