@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LocationSelect, PageLayout } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
 import withSession from 'components/withSession';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { formatMonthFriendly } from 'services/formatter';
@@ -21,7 +21,7 @@ function Page(props: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [location, setLocation] = useState({} as Location);
+  const [location, setLocation] = useState(null as Location | null);
   const [courses, setCourses] = useState([] as Course[]);
   const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
   const update = useUpdate();
@@ -38,6 +38,13 @@ function Page(props: Props) {
     setInitialData(profile);
     setCourses(activeCourses);
   }, []);
+
+  useEffect(() => {
+    setLocation({
+      countryName: initialData?.countryName,
+      cityName: initialData?.cityName,
+    } as Location);
+  }, [initialData]);
 
   const handleSubmit = useCallback(async (model: any) => {
     setLoading(true);
@@ -243,7 +250,7 @@ function Page(props: Props) {
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
                 <Form.Item
-                  help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                  help="We need your location for understanding audience and use it for students distribution."
                   name="location"
                   label="Location"
                   rules={[{ required: true, message: 'Please select city' }]}
@@ -368,12 +375,16 @@ const SuccessComponent = () => {
 };
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>) {
-  return {
-    ...initialData,
-    location: {
+  const location =
+    countryName &&
+    cityName &&
+    ({
       countryName,
       cityName,
-    },
+    } as Location | null);
+  return {
+    ...initialData,
+    location,
     preferedCourses: [],
     englishMentoring: false,
     technicalMentoring: [],

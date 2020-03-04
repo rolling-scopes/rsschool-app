@@ -1,5 +1,6 @@
 import React from 'react';
 import AlgoliaPlaces from 'algolia-places-react';
+import { config } from '../config';
 
 export type Location = {
   cityName: string;
@@ -8,11 +9,13 @@ export type Location = {
 
 type Props = {
   onChange: Function;
-  location: Location;
+  location: Location | null;
 };
 
-const getDefaultValue = (location: Location): string =>
-  location && location.countryName !== null ? `${location.countryName}, ${location.cityName}` : '';
+const { algoliaPlacesApiKey, algoliaPlacesAppId } = config;
+
+const getDefaultValue = (location: Location | null): string =>
+  location?.countryName ? `${location.countryName}, ${location.cityName}` : '';
 
 export function LocationSelect(props: Props) {
   const discardLocation = () => {
@@ -22,8 +25,8 @@ export function LocationSelect(props: Props) {
   return (
     <AlgoliaPlaces
       options={{
-        appId: 'plYRMXVHA4VI',
-        apiKey: 'c3457dc71fd196231949ed98db03f119',
+        appId: algoliaPlacesAppId,
+        apiKey: algoliaPlacesApiKey,
         language: 'en',
         type: 'city',
       }}
@@ -37,7 +40,7 @@ export function LocationSelect(props: Props) {
         } as Location;
         props.onChange(location);
       }}
-      placeholder="Write an address here"
+      placeholder="Please enter your city"
     />
   );
 }
