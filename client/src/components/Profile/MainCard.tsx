@@ -92,7 +92,7 @@ class MainCard extends React.Component<Props, State> {
           </Paragraph>
           <Paragraph style={{ textAlign: 'center', margin: 0 }}>
             <span style={{ marginLeft: '-14px' }}>
-              <EnvironmentFilled /> {location.cityName}
+              <EnvironmentFilled /> {`${location.cityName}, ${location.countryName}`}
             </span>
           </Paragraph>
           {isEditingModeEnabled && (
