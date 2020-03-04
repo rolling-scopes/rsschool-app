@@ -1197,7 +1197,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
                                                       >
@@ -1322,7 +1321,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
                                                       >
@@ -1447,7 +1445,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
                                                       >
@@ -3498,7 +3495,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value="MIT"
                                                       >
@@ -3623,7 +3619,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value="POIT"
                                                       >
@@ -3748,7 +3743,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
-                                                        triggerFocus={[Function]}
                                                         type="text"
                                                         value={2002}
                                                       >

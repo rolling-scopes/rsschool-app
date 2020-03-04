@@ -2041,7 +2041,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value="vasya@tut.by"
                                                     >
@@ -2174,7 +2173,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value=""
                                                     >
@@ -2307,7 +2305,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value="1232422"
                                                     >
@@ -2440,7 +2437,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value="skype_vasya"
                                                     >
@@ -2573,7 +2569,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value=""
                                                     >
@@ -2706,7 +2701,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      triggerFocus={[Function]}
                                                       type="text"
                                                       value=""
                                                     >
