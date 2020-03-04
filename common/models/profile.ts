@@ -9,6 +9,10 @@ export interface PartialStudentVisibilitySettings extends PublicVisibilitySettin
   student: boolean;
 }
 
+export interface ContactsVisibilitySettings extends PublicVisibilitySettings {
+  student: boolean;
+}
+
 export interface VisibilitySettings extends PublicVisibilitySettings {
   mentor: boolean;
   student: boolean;
@@ -19,11 +23,11 @@ export interface ConfigurableProfilePermissions {
   isAboutVisible?: VisibilitySettings;
   isEducationVisible?: VisibilitySettings;
   isEnglishVisible?: PartialStudentVisibilitySettings;
-  isEmailVisible?: PartialStudentVisibilitySettings;
-  isTelegramVisible?: PartialStudentVisibilitySettings;
-  isSkypeVisible?: PartialStudentVisibilitySettings;
-  isPhoneVisible?: PartialStudentVisibilitySettings;
-  isContactsNotesVisible?: PartialStudentVisibilitySettings;
+  isEmailVisible?: ContactsVisibilitySettings;
+  isTelegramVisible?: ContactsVisibilitySettings;
+  isSkypeVisible?: ContactsVisibilitySettings;
+  isPhoneVisible?: ContactsVisibilitySettings;
+  isContactsNotesVisible?: ContactsVisibilitySettings;
   isLinkedInVisible?: VisibilitySettings;
   isPublicFeedbackVisible?: VisibilitySettings;
   isMentorStatsVisible?: VisibilitySettings;

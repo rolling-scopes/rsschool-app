@@ -20,11 +20,10 @@ export function createCrossCheckPairs(students: number[], minPairsPerPerson = 3,
       const isInvalidPair =
         randomStudentId === checkerId || pairs.find(p => p.studentId === randomStudentId && p.checkerId === checkerId);
       if (isInvalidPair) {
-        if (randomStudents.some(s => s !== checkerId)) {
+        if (randomStudents.length > 0 && randomStudents.some(s => s !== checkerId)) {
           randomStudents.push(randomStudentId!);
           return createPair(pairs, checkerId);
         }
-        randomStudents.push(randomStudentId!);
         return pairs;
       }
       if (randomStudentId) {
@@ -43,7 +42,8 @@ export function createCrossCheckPairs(students: number[], minPairsPerPerson = 3,
       pairs = createPair(pairs, studentId);
     });
   }
-  if (randomStudents.length != 0) {
+
+  if (pairs.length < students.length * minPairsPerPerson) {
     // not able to distribute all students. try again (3 attempts total);
     if (tryNum < 3) {
       return createCrossCheckPairs(students, minPairsPerPerson, tryNum + 1);

@@ -371,7 +371,7 @@ export class ProfilePage extends React.Component<Props, State> {
               </div>
             ) : (
               <>
-                <Result status="403" title="No access or user does not exist" />
+                <Result status={'403' as any} title="No access or user does not exist" />
               </>
             )}
           </Spin>

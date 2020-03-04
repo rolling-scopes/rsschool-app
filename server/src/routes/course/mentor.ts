@@ -66,7 +66,7 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
 
-  const input: { maxStudentsLimit: number; studentsPreference: any; students: number[] } = ctx.request.body;
+  const input: { maxStudentsLimit: number; preferedStudentsLocation: any; students: number[] } = ctx.request.body;
   const user = await getUserByGithubId(githubId);
 
   if (user == null) {
@@ -74,23 +74,31 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const { maxStudentsLimit, studentsPreference } = input;
-  const mentor = await getRepository(Mentor).save({
-    courseId,
-    userId: user.id,
+  const { maxStudentsLimit, preferedStudentsLocation } = input;
+  const data = {
     ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
-    ...(studentsPreference ? { studentsPreference } : {}),
-  });
-
-  if (input.students.length > 0) {
-    await getRepository(Student).update(input.students, { mentorId: mentor.id });
+    ...(preferedStudentsLocation ? { studentsPreference: preferedStudentsLocation } : {}),
+  };
+  const exist = await getRepository(Mentor).findOne({ where: { courseId, userId: user.id } });
+  let mentorId = exist?.id;
+  if (mentorId == null) {
+    const {
+      identifiers: [identifier],
+    } = await getRepository(Mentor).insert({
+      courseId,
+      userId: user.id,
+      ...data,
+    });
+    mentorId = identifier['id'];
+  } else {
+    await getRepository(Mentor).update(mentorId, data);
   }
 
-  updateSession(ctx, {
-    roles: {
-      [courseId]: 'mentor',
-    },
-  });
+  if (input.students.length > 0) {
+    await getRepository(Student).update(input.students, { mentorId });
+  }
+
+  updateSession(ctx, { roles: { [courseId]: 'mentor' } });
 
   setResponse(ctx, OK);
 };
