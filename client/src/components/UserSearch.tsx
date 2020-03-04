@@ -33,6 +33,7 @@ export function UserSearch(props: Props) {
     <Select
       {...otherProps}
       showSearch
+      allowClear={true}
       defaultValue={undefined}
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}

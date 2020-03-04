@@ -252,7 +252,7 @@ function createRecord(values: any, courseId: number) {
     comment: values.comment,
 
     coordinator: values.coordinator,
-    organizerId: values.organizerId,
+    organizerId: values.organizerId || null,
     broadcastUrl: values.broadcastUrl,
   };
   return data;
