@@ -7,7 +7,7 @@ export const TIMEZONES = [
   'Europe/Volgograd',
   'Europe/Yekaterinburg',
   'Asia/Tashkent',
-  'Asia/Tbilisi'
+  'Asia/Tbilisi',
 ];
 
 export const DEFAULT_TIMEZONE = 'Europe/Minsk';
