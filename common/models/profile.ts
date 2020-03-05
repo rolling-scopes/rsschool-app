@@ -1,4 +1,4 @@
-import { Location } from 'components/LocationSelect';
+import { Location } from '../../client/src/components/LocationSelect';
 import { EnglishLevel } from './';
 
 export interface PublicVisibilitySettings {
