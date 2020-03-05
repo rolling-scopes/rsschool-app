@@ -21,13 +21,13 @@ const postPrivateFeedback = (_: ILogger) => {
   return async (ctx: Router.RouterContext) => {
     const courseId: number = ctx.params.courseId;
     const data: FeedbackInput = ctx.request.body;
+    const id = ctx.state.user.id;
 
     if (isNaN(data.toUserId) || data.toUserId === id) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
 
-    const id = ctx.state.user.id;
     const feedback: Partial<PrivateFeedback> = {
       comment: data.comment,
       course: courseId,
