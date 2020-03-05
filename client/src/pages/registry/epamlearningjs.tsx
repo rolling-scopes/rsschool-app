@@ -3,13 +3,14 @@ import axios from 'axios';
 import { LocationSelect, PageLayout } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
 import withSession from 'components/withSession';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
+import { Location } from '../../components/LocationSelect';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -23,6 +24,7 @@ function Page(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
   const [submitted, setSubmitted] = useState(false);
   const [activeCourse, setActiveCourse] = useState(null as Course | null);
+  const [location, setLocation] = useState(null as Location | null);
   const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
 
   useAsync(async () => {
@@ -30,10 +32,16 @@ function Page(props: Props & { courseAlias?: string }) {
     const courseService = new CoursesService();
     const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
     const course = courses.find(course => course.alias === courseAlias) ?? null;
-
     setActiveCourse(course);
     setInitialData(profile);
   }, []);
+
+  useEffect(() => {
+    setLocation({
+      countryName: initialData?.countryName,
+      cityName: initialData?.cityName,
+    } as Location);
+  }, [initialData]);
 
   const handleSubmit = async (model: any) => {
     const { comment, location } = model;
@@ -43,8 +51,8 @@ function Page(props: Props & { courseAlias?: string }) {
       comment,
     };
     const userModel = {
-      locationId: location.key ? location.key : undefined,
-      locationName: !location.key ? model.otherLocationName : location.label,
+      cityName: location.cityName,
+      countryName: location.countryName,
       primaryEmail: model.primaryEmail,
       firstName: model.firstName,
       lastName: model.lastName,
@@ -65,7 +73,6 @@ function Page(props: Props & { courseAlias?: string }) {
   };
 
   let content: React.ReactNode;
-  const location = form.getFieldValue('location');
   if (activeCourse == null) {
     return null;
   }
@@ -89,7 +96,7 @@ function Page(props: Props & { courseAlias?: string }) {
         initialValues={getInitialValues(initialData)}
         onChange={update}
         className="m-2"
-        onFinish={handleSubmit}
+        onFinish={(values: any) => handleSubmit({ ...values, location })}
       >
         <Col style={{ margin: '0 20px' }}>
           <Row>
@@ -118,22 +125,13 @@ function Page(props: Props & { courseAlias?: string }) {
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
               <Form.Item
-                help="We need your location for understanding audience and use it for mentor distribution. If you live close
-                to any city from the list, please choose it."
+                help="We need your location for understanding audience and use it for mentor distribution."
                 name="location"
                 label="Location"
-                rules={[{ required: true, message: 'Please select city or "Other"' }]}
+                rules={[{ required: true, message: 'Please select city' }]}
+                valuePropName={'location'}
               >
-                <LocationSelect labelInValue placeholder="Select city" />
-              </Form.Item>
-            </Col>
-            <Col {...defaultColumnSizes}>
-              <Form.Item
-                name="otherLocationName"
-                label="Other Location"
-                rules={[{ required: location && !location.key, message: 'Location name is required' }]}
-              >
-                <Input />
+                <LocationSelect onChange={setLocation} location={location} />
               </Form.Item>
             </Col>
           </Row>
@@ -172,10 +170,17 @@ function Page(props: Props & { courseAlias?: string }) {
   );
 }
 
-function getInitialValues(initialData: Partial<UserFull>) {
+function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>) {
+  const location =
+    countryName &&
+    cityName &&
+    ({
+      countryName,
+      cityName,
+    } as Location | null);
   return {
     ...initialData,
-    location: initialData.locationId ? { key: initialData.locationId } : undefined,
+    location,
   };
 }
 
