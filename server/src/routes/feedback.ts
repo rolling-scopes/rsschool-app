@@ -22,7 +22,7 @@ const postPrivateFeedback = (_: ILogger) => {
     const courseId: number = ctx.params.courseId;
     const data: FeedbackInput = ctx.request.body;
 
-    if (isNaN(data.toUserId)) {
+    if (isNaN(data.toUserId) || data.toUserId === id) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
@@ -100,13 +100,13 @@ const postGratitudeFeedback = (logger: ILogger) => {
   return async (ctx: Router.RouterContext) => {
     const courseId: number = ctx.params.courseId;
     const data: GratitudeInput = ctx.request.body;
+    const id = ctx.state.user.id;
 
-    if (isNaN(data.toUserId) || (data.badgeId && !SUPPORTED_BADGE_IDS.includes(data.badgeId))) {
+    if (isNaN(data.toUserId) || (data.badgeId && !SUPPORTED_BADGE_IDS.includes(data.badgeId)) || data.toUserId === id) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
 
-    const id = ctx.state.user.id;
     const userRepository = getRepository(User);
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
