@@ -111,7 +111,12 @@ function Page(props: Props) {
         cancel={() => setModalData(null)}
       >
         <Form.Item name="eventId" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
-          <Select placeholder="Please select an event">
+          <Select
+            showSearch
+            placeholder="Please select an event"
+            optionFilterProp={'children'}
+            filterOption={(input, option) => option && option.children.toLowerCase().includes(input.toLowerCase())}
+          >
             {events.map(event => (
               <Select.Option key={event.id} value={event.id}>
                 {event.name}
