@@ -1,11 +1,7 @@
 import React from 'react';
 import AlgoliaPlaces from 'algolia-places-react';
 import { config } from '../config';
-
-export type Location = {
-  cityName: string;
-  countryName: string;
-};
+import { Location } from '../../../common/models/profile';
 
 type Props = {
   onChange: Function;

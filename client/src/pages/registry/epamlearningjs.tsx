@@ -10,7 +10,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
-import { Location } from '../../components/LocationSelect';
+import { Location } from '../../../../common/models/profile';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };

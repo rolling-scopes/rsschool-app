@@ -9,9 +9,8 @@ import { CoursesService } from 'services/courses';
 import { formatMonthFriendly } from 'services/formatter';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
-import { Course } from '../../../../common/models';
+import { Course, Location } from '../../../../common/models';
 import { Props } from '../../configs/registry';
-import { Location } from 'components/LocationSelect';
 
 const defaultColumnSizes = { xs: 20, sm: 16, md: 12, lg: 10 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };

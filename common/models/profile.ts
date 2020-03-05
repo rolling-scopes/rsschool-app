@@ -1,5 +1,9 @@
-import { Location } from '../../client/src/components/LocationSelect';
 import { EnglishLevel } from './';
+
+export interface Location {
+  cityName: string;
+  countryName: string;
+}
 
 export interface PublicVisibilitySettings {
   all: boolean;
