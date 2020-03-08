@@ -256,7 +256,9 @@ async function getMentorRegistries() {
       'user.contactsEpamEmail',
     ])
     .leftJoin('user.mentors', 'mentor')
-    .addSelect(['mentor.id', 'mentor.courseId'])
+    .leftJoin('user.students', 'student')
+    .leftJoin('student.certificate', 'certificate')
+    .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
     .orderBy('"mentorRegistry"."updatedDate"', 'DESC')
     .getMany();
 }
@@ -279,5 +281,6 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     technicalMentoring: mentorRegistry.technicalMentoring,
     updatedDate: mentorRegistry.updatedDate,
     courses: mentorRegistry.user.mentors?.map(m => m.courseId),
+    hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
   };
 }

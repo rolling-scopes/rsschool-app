@@ -3,7 +3,7 @@ import { Button, Input } from 'antd';
 import { get } from 'lodash';
 
 let searchInput: any;
-export function getColumnSearchProps(dataIndex: string, label?: string) {
+export function getColumnSearchProps(dataIndex: string | string[], label?: string) {
   return {
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
       <div style={{ padding: 8 }}>
@@ -31,10 +31,13 @@ export function getColumnSearchProps(dataIndex: string, label?: string) {
     ),
     filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
-      return (get(record as any, dataIndex) || '')
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase());
+      const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
+      return fields.some(field =>
+        (get(record as any, field) || '')
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase()),
+      );
     },
     onFilterDropdownVisibleChange: (visible: boolean) => {
       if (visible && searchInput) {
