@@ -123,7 +123,8 @@ function Page(props: CoursePageProps) {
             target="_blank"
             href="https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md"
           >
-            Sample interview questions (https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md)
+            Sample interview questions
+            (https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md)
           </a>
         </div>
         <div>1) Ask a question </div>
