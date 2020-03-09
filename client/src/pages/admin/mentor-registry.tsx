@@ -1,13 +1,6 @@
 import { Col, Row, Layout, Select, Spin, Table, Form, message, Checkbox, Button } from 'antd';
 import { AdminSider, GithubUserLink, Header } from 'components';
-import {
-  stringSorter,
-  boolIconRenderer,
-  tagsRenderer,
-  colorTagRenderer,
-  getColumnSearchProps,
-  dateRenderer,
-} from 'components/Table';
+import { stringSorter, tagsRenderer, colorTagRenderer, getColumnSearchProps } from 'components/Table';
 import withSession, { Session } from 'components/withSession';
 import { useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
@@ -15,6 +8,8 @@ import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { CoursesService } from 'services/courses';
 import { ModalForm } from 'components/Forms';
+import css from 'styled-jsx/css';
+import { SafetyCertificateTwoTone } from '@ant-design/icons';
 
 const { Content } = Layout;
 const PAGINATION = 200;
@@ -69,7 +64,7 @@ function Page(props: Props) {
     return (
       <ModalForm
         data={modalData}
-        title="Task"
+        title="Record"
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}
         getInitialValues={getInitialValues}
@@ -127,19 +122,19 @@ function Page(props: Props) {
                 dataSource={data}
                 columns={[
                   {
-                    title: 'Name',
-                    dataIndex: 'name',
-                    width: 130,
-                    sorter: stringSorter('name'),
-                    ...getColumnSearchProps('name'),
-                  },
-                  {
                     title: 'Github',
                     dataIndex: 'githubId',
-                    width: 110,
+                    width: 120,
                     sorter: stringSorter('githubId'),
-                    render: (value: string) => <GithubUserLink value={value} />,
-                    ...getColumnSearchProps('githubId'),
+                    render: (value: string, { name }) => {
+                      return (
+                        <>
+                          <GithubUserLink value={value} />
+                          <div>{name}</div>
+                        </>
+                      );
+                    },
+                    ...getColumnSearchProps(['githubId', 'name']),
                   },
                   {
                     title: 'City',
@@ -147,11 +142,6 @@ function Page(props: Props) {
                     width: 80,
                     sorter: stringSorter('locationName'),
                     ...getColumnSearchProps('locationName'),
-                  },
-                  {
-                    title: 'Updated',
-                    dataIndex: 'updatedDate',
-                    render: dateRenderer,
                   },
                   {
                     title: 'Preferred',
@@ -162,18 +152,7 @@ function Page(props: Props) {
                   {
                     title: 'Pre-Selected',
                     dataIndex: 'preselectedCourses',
-                    render: (values: number[], record: any) => {
-                      return (
-                        <>
-                          {values
-                            .map(v => ({
-                              value: courses.find(c => c.id === v)?.name ?? v.toString(),
-                              color: record.courses.includes(v) ? '#87d068' : undefined,
-                            }))
-                            .map(v => colorTagRenderer(v.value, v.color))}{' '}
-                        </>
-                      );
-                    },
+                    render: renderPreselectedCourses(courses),
                   },
                   {
                     title: 'Max students',
@@ -183,14 +162,8 @@ function Page(props: Props) {
                   {
                     title: 'Students Location',
                     dataIndex: 'preferedStudentsLocation',
-                    width: 120,
+                    width: 90,
                     sorter: stringSorter('githubId'),
-                  },
-                  {
-                    title: 'English',
-                    dataIndex: 'englishMentoring',
-                    render: boolIconRenderer,
-                    width: 40,
                   },
                   {
                     title: 'Technical Mentoring',
@@ -198,9 +171,15 @@ function Page(props: Props) {
                     render: tagsRenderer,
                   },
                   {
+                    title: 'Info',
+                    dataIndex: 'info',
+                    width: 90,
+                    render: renderInfo,
+                  },
+                  {
                     title: 'Comment',
                     dataIndex: 'comment',
-                    width: 150,
+                    width: 120,
                   },
                   {
                     title: 'Actions',
@@ -218,6 +197,24 @@ function Page(props: Props) {
   );
 }
 
+function renderInfo(_: any, record: any) {
+  const isMentor = record.courses.some((id: string) => !record.preselectedCourses.includes(id));
+  return (
+    <div className="info-icons">
+      {record.englishMentoring ? <div title="Ready to mentor in English" className="icon-flag-uk" /> : null}
+      {isMentor ? <div title="Mentor in the past" className="icon-mentor" /> : null}
+      {record.hasCertificate ? (
+        <SafetyCertificateTwoTone
+          title="Completed with certificate"
+          className="icon-certificate"
+          twoToneColor="#52c41a"
+        />
+      ) : null}
+      <style jsx>{styles}</style>
+    </div>
+  );
+}
+
 function filterData(data: { preselectedCourses: number[]; courses: number[] }[], showAll: boolean) {
   if (showAll) {
     return data;
@@ -225,4 +222,50 @@ function filterData(data: { preselectedCourses: number[]; courses: number[] }[],
   return data.filter(it => it.courses.length === 0 || !it.preselectedCourses.every(c => it.courses.includes(c)));
 }
 
+function renderPreselectedCourses(courses: Course[]) {
+  return (values: number[], record: any) => {
+    return (
+      <>
+        {values
+          .map(v => ({
+            value: courses.find(c => c.id === v)?.name ?? v.toString(),
+            color: record.courses.includes(v) ? '#87d068' : undefined,
+          }))
+          .map(v => colorTagRenderer(v.value, v.color))}
+      </>
+    );
+  };
+}
+
 export default withSession(Page);
+
+const styles = css`
+  .info-icons {
+    display: flex;
+  }
+
+  .info-icons > div {
+    margin-right: 8px;
+  }
+
+  :global(.icon-certificate svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .icon-flag-uk {
+    background-image: url(/static/images/united-kingdom.png);
+    background-position: center;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+  }
+
+  .icon-mentor {
+    background-image: url(/static/svg/master-yoda.svg);
+    background-position: center;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+  }
+`;

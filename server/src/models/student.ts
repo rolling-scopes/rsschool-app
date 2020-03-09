@@ -154,5 +154,5 @@ export class Student {
     () => Certificate,
     certificate => certificate.student,
   )
-  certificate: Certificate;
+  certificate: Certificate | null;
 }
