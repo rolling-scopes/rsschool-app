@@ -209,6 +209,12 @@ export class CourseService {
     });
   }
 
+  async getTaskSolution(githubId: string, courseTaskId: number) {
+    const apiUrl = `/student/${githubId}/task/${courseTaskId}/cross-check/solution`;
+    const result = await this.axios.get(apiUrl);
+    return result.data.data as TaskSolution;
+  }
+
   async postTaskSolutionResult(githubId: string, courseTaskId: number, data: { score: number; comment: string }) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
@@ -425,4 +431,10 @@ export interface StudentSummary {
         contactsNotes?: string;
       })
     | null;
+}
+
+export interface TaskSolution {
+  url: string;
+  updatedDate: string;
+  id: string;
 }
