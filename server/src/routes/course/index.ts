@@ -51,7 +51,8 @@ import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import { postStudentStatus, getStudentSummary, postStudentInterviewResult, getCrossMentorsTasks } from './student';
 import {
-  postTaskSolution,
+  createTaskSolution,
+  getTaskSolution,
   createCrossCheckDistribution,
   createCrossCheckCompletion,
   getTaskSolutionAssignments,
@@ -194,7 +195,8 @@ function addStudentCrossCheckApi(router: Router, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const baseUrl = `/student/:githubId/task/:courseTaskId`;
 
-  router.post(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, postTaskSolution(logger));
+  router.post(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, createTaskSolution(logger));
+  router.get(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, getTaskSolution(logger));
   router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, createCrossCheckResult(logger));
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, getCrossCheckResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, getCrossCheckFeedback(logger));

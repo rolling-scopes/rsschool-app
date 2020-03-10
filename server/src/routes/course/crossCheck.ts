@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK, NOT_FOUND } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
@@ -10,7 +10,7 @@ import { setErrorResponse, setResponse } from '../utils';
 type Input = { url: string };
 const defaultPairsCount = 4;
 
-export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
 
   const [student, courseTask] = await Promise.all([
@@ -42,6 +42,30 @@ export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext
 
   await getRepository(TaskSolution).save({ studentId: student.id, courseTaskId: courseTask.id, url: data.url });
   setResponse(ctx, OK, {});
+};
+
+export const getTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId, courseTaskId } = ctx.params;
+
+  const [student, courseTask] = await Promise.all([
+    courseService.queryStudentByGithubId(courseId, githubId),
+    taskService.getCourseTask(courseTaskId),
+  ]);
+
+  if (student == null || courseTask == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student or course task' });
+    return;
+  }
+
+  const result = await taskResultsService.getTaskSolution(student.id, courseTask.id);
+
+  if (result == null) {
+    setResponse(ctx, NOT_FOUND, { message: 'solution is not found ' });
+    return;
+  }
+
+  const { updatedDate, id, url } = result;
+  setResponse(ctx, OK, { updatedDate, id, url });
 };
 
 export const createCrossCheckDistribution = (__: ILogger) => async (ctx: Router.RouterContext) => {
