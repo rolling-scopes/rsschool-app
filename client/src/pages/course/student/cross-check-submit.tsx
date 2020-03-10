@@ -1,14 +1,15 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Col, Comment, Alert, Divider, Form, Input, message, Row, Select, Typography } from 'antd';
+import { Button, Col, Comment, Alert, Divider, Form, Input, message, Row, Typography } from 'antd';
 import { PageLayout } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { CourseService, CourseTask, TaskSolution } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { urlPattern } from 'services/validators';
+import { notGithubPattern, urlWithIpPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { formatDate } from 'services/formatter';
+import { CourseTaskSelect } from 'components/Forms';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -27,6 +28,7 @@ function Page(props: CoursePageProps) {
   }, [props.course.id]);
 
   const handleSubmit = async (values: any) => {
+    console.log(values);
     if (!courseTaskId) {
       return;
     }
@@ -59,7 +61,7 @@ function Page(props: CoursePageProps) {
   const task = courseTasks.find(task => task.id === courseTaskId);
   const studentEndDate = task?.studentEndDate ?? 0;
   const isSubmitDisabled = studentEndDate ? new Date(studentEndDate).getTime() < Date.now() : false;
-
+  const submitAllowed = !isSubmitDisabled && task;
   return (
     <PageLayout
       loading={false}
@@ -70,33 +72,29 @@ function Page(props: CoursePageProps) {
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <Form.Item label="Select a task">
-              <Select value={courseTaskId!} onChange={handleTaskChange}>
-                {courseTasks.map(t => (
-                  <Select.Option value={t.id} key={t.id}>
-                    {t.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-
+            <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
             {renderDeadlineInfo(isSubmitDisabled)}
             {renderTaskSolutionStatus(submittedSolution)}
-            {!isSubmitDisabled && task && (
-              <>
-                <Form.Item
-                  help="NOT link to Github repository or pull request"
-                  name="url"
-                  label="Solution URL"
-                  rules={[{ required: true, pattern: urlPattern, message: 'Please enter a valid url' }]}
-                >
-                  <Input disabled={isSubmitDisabled} />
-                </Form.Item>
-
-                <Button size="large" style={{ marginTop: 16 }} type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </>
+            {submitAllowed && (
+              <Form.Item
+                name="url"
+                label="Solution URL"
+                rules={[
+                  {
+                    required: true,
+                    pattern: notGithubPattern,
+                    message: 'Please provide a link to your deployed solution',
+                  },
+                  { required: true, pattern: urlWithIpPattern, message: 'Please provide a valid link' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            )}
+            {submitAllowed && (
+              <Button style={{ marginTop: 16 }} type="primary" htmlType="submit">
+                Submit
+              </Button>
             )}
           </Form>
         </Col>
@@ -151,8 +149,11 @@ function renderTaskSolutionStatus(submittedSolution: TaskSolution | null) {
     <Alert
       message={
         <>
-          Submitted <a href={submittedSolution.url}>{submittedSolution.url}</a> on{' '}
-          {formatDate(submittedSolution.updatedDate)}
+          Submitted{' '}
+          <a target="_blank" href={submittedSolution.url}>
+            {submittedSolution.url}
+          </a>{' '}
+          on {formatDate(submittedSolution.updatedDate)}.
         </>
       }
       type="success"
