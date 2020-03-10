@@ -11,7 +11,7 @@ type Props = {
 const { algoliaPlacesApiKey, algoliaPlacesAppId } = config;
 
 const getDefaultValue = (location: Location | null): string =>
-  location?.countryName ? `${location.countryName}, ${location.cityName}` : '';
+  location?.countryName ? `${location.cityName}, ${location.countryName}` : '';
 
 export function LocationSelect(props: Props) {
   const discardLocation = () => {
