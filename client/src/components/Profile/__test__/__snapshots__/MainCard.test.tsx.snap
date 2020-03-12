@@ -65,7 +65,7 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
       >
         <ForwardRef(EnvironmentFilled) />
          
-        SPB
+        Minsk, Belarus
       </span>
     </Paragraph>
   </Card>
@@ -148,7 +148,7 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
       >
         <ForwardRef(EnvironmentFilled) />
          
-        SPB
+        Minsk, Belarus
       </span>
     </Paragraph>
     <PermissionsSettingsDrawer
@@ -209,13 +209,13 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
             }
           >
             <LocationSelect
-              defaultValue="1"
-              onChange={[Function]}
-              style={
+              location={
                 Object {
-                  "width": "100%",
+                  "cityName": "Minsk",
+                  "countryName": "Belarus",
                 }
               }
+              onChange={[Function]}
             />
           </div>
         </div>

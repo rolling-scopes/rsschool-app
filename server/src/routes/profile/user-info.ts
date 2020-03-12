@@ -21,8 +21,8 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     .createQueryBuilder('user')
     .select('"user"."firstName" AS "firstName", "user"."lastName" AS "lastName"')
     .addSelect('"user"."githubId" AS "githubId"')
-    .addSelect('"user"."locationName" AS "locationName"')
-    .addSelect('"user"."locationId" AS "locationId"');
+    .addSelect('"user"."countryName" AS "countryName"')
+    .addSelect('"user"."cityName" AS "cityName"');
 
   if (isEducationVisible) {
     query.addSelect('"user"."educationHistory" AS "educationHistory"');
@@ -68,8 +68,8 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
   const {
     firstName,
     lastName,
-    locationName,
-    locationId,
+    countryName,
+    cityName,
     educationHistory = null,
     englishLevel = null,
     contactsPhone = null,
@@ -84,8 +84,10 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
   return {
     generalInfo: {
       githubId,
-      locationName,
-      locationId,
+      location: {
+        countryName,
+        cityName,
+      },
       aboutMyself: isAboutVisible ? aboutMyself : undefined,
       educationHistory: isEducationVisible ? educationHistory : undefined,
       englishLevel: isEnglishVisible ? englishLevel : undefined,

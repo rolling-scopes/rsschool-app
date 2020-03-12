@@ -58,8 +58,10 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                     },
                   ],
                   "englishLevel": "a2+",
-                  "locationId": 456,
-                  "locationName": "Brest",
+                  "location": Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  },
                 }
               }
               isEditingModeEnabled={false}
@@ -147,8 +149,10 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                     },
                   ],
                   "englishLevel": "a2+",
-                  "locationId": 456,
-                  "locationName": "Brest",
+                  "location": Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  },
                 }
               }
               isEditingModeEnabled={false}
@@ -236,8 +240,10 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                     },
                   ],
                   "englishLevel": "a2+",
-                  "locationId": 456,
-                  "locationName": "Brest",
+                  "location": Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  },
                 }
               }
               isEditingModeEnabled={false}
@@ -325,8 +331,10 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                     },
                   ],
                   "englishLevel": "a2+",
-                  "locationId": 456,
-                  "locationName": "Brest",
+                  "location": Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  },
                 }
               }
               isEditingModeEnabled={false}

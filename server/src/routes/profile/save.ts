@@ -37,16 +37,17 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
 
   if (isProfileSettingsChanged) {
     const [firstName, lastName = ''] = generalInfo.name.split(' ');
-    const { locationId, aboutMyself, locationName, educationHistory, englishLevel } = generalInfo;
+    const { location, aboutMyself, educationHistory, englishLevel } = generalInfo;
     const { skype, phone, email, telegram, notes, linkedIn } = contacts;
+    const { countryName, cityName } = location;
     await getRepository(User)
       .createQueryBuilder()
       .update(User)
       .set({
         firstName,
         lastName,
-        locationName,
-        locationId,
+        countryName,
+        cityName,
         educationHistory,
         englishLevel: englishLevel || 'a0',
         aboutMyself: aboutMyself || '',

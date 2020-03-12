@@ -109,9 +109,13 @@ export class ProfilePage extends React.Component<Props, State> {
       let isInitialProfileSettingsChanged;
       switch (path) {
         case 'generalInfo.location': {
-          set(newProfile, `${path}Id`, event.id);
-          set(newProfile, `${path}Name`, event.name);
-          isInitialProfileSettingsChanged = initialProfileSettings?.generalInfo?.locationId !== event.id;
+          const countryName = (event && event.countryName) || profile?.generalInfo?.location.countryName;
+          const cityName = (event && event.cityName) || profile?.generalInfo?.location.cityName;
+          set(newProfile, `${path}.countryName`, countryName);
+          set(newProfile, `${path}.cityName`, cityName);
+          isInitialProfileSettingsChanged =
+            initialProfileSettings?.generalInfo?.location?.cityName !== cityName ||
+            initialProfileSettings?.generalInfo?.location?.countryName !== countryName;
           break;
         }
         case 'generalInfo.englishLevel': {

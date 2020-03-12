@@ -13,8 +13,10 @@ describe('MainCard', () => {
           data={{
             name: 'Petr Pervyi',
             githubId: 'piter',
-            locationName: 'SPB',
-            locationId: '1',
+            location: {
+              countryName: 'Belarus',
+              cityName: 'Minsk',
+            },
           }}
           isEditingModeEnabled={false}
           onPermissionsSettingsChange={jest.fn()}
@@ -29,8 +31,10 @@ describe('MainCard', () => {
           data={{
             name: 'Petr Pervyi',
             githubId: 'piter',
-            locationName: 'SPB',
-            locationId: '1',
+            location: {
+              countryName: 'Belarus',
+              cityName: 'Minsk',
+            },
           }}
           isEditingModeEnabled={true}
           onPermissionsSettingsChange={jest.fn()}
@@ -46,8 +50,10 @@ describe('MainCard', () => {
       data={{
         name: 'Petr Pervyi',
         githubId: 'piter',
-        locationName: 'SPB',
-        locationId: '1',
+        location: {
+          countryName: 'Belarus',
+          cityName: 'Minsk',
+        },
       }}
       isEditingModeEnabled={false}
       onPermissionsSettingsChange={jest.fn()}

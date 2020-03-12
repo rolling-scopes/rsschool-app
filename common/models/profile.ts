@@ -1,5 +1,9 @@
 import { EnglishLevel } from './';
 
+export interface Location {
+  cityName: string;
+  countryName: string;
+}
 
 export interface PublicVisibilitySettings {
   all: boolean;
@@ -38,8 +42,7 @@ export interface GeneralInfo {
   name: string;
   githubId: string;
   aboutMyself?: string | null;
-  locationName: string;
-  locationId: string;
+  location: Location;
   educationHistory?: any | null;
   englishLevel?: EnglishLevel | null;
 }

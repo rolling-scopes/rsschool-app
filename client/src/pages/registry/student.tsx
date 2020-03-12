@@ -4,7 +4,7 @@ import { PageLayout, LocationSelect } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import withSession from 'components/withSession';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { formatMonthFriendly } from 'services/formatter';
@@ -13,6 +13,7 @@ import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
 import { NextPageContext } from 'next';
+import { Location } from '../../../../common/models';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -20,11 +21,11 @@ const defaultRowGutter = 24;
 
 function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
-
   const update = useUpdate();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [courses, setCourses] = useState([] as Course[]);
+  const [location, setLocation] = useState(null as Location | null);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
   useAsync(async () => {
@@ -41,20 +42,27 @@ function Page(props: Props & { courseAlias?: string }) {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    setLocation({
+      countryName: initialData.countryName,
+      cityName: initialData.cityName,
+    } as Location);
+  }, [initialData]);
+
   const handleSubmit = useCallback(
     async (values: any) => {
       if (loading) {
         return;
       }
       setLoading(true);
-      const { comment, location, courseId } = values;
+      const { comment, courseId, location, primaryEmail, firstName, lastName } = values;
       const registryModel = { type: TYPES.STUDENT, courseId, comment };
       const userModel = {
-        locationId: location.key ? location.key : undefined,
-        locationName: !location.key ? values.otherLocationName : location.label,
-        primaryEmail: values.primaryEmail,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        cityName: location.cityName,
+        countryName: location.countryName,
+        primaryEmail,
+        firstName,
+        lastName,
       };
 
       try {
@@ -76,7 +84,6 @@ function Page(props: Props & { courseAlias?: string }) {
   );
 
   let content: React.ReactNode;
-  const location = form.getFieldValue('location');
   if (loading) {
     content = undefined;
   } else if (!courses.length) {
@@ -102,7 +109,7 @@ function Page(props: Props & { courseAlias?: string }) {
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        onFinish={handleSubmit}
+        onFinish={(values: any) => handleSubmit({ ...values, location })}
       >
         <Col>
           <Row>
@@ -148,21 +155,13 @@ function Page(props: Props & { courseAlias?: string }) {
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
               <Form.Item
-                help="We need your location for understanding audience and use it for mentor distribution. If you live close to any city from the list, please choose it."
+                help="We need your location for understanding audience and use it for mentor distribution."
                 name="location"
                 label="Location"
-                rules={[{ required: true, message: 'Please select city or "Other"' }]}
+                rules={[{ required: true, message: 'Please select city' }]}
+                valuePropName={'location'}
               >
-                <LocationSelect labelInValue placeholder="Select city" />
-              </Form.Item>
-            </Col>
-            <Col {...defaultColumnSizes}>
-              <Form.Item
-                name="otherLocationName"
-                label="Other Location"
-                rules={[{ required: location && !location.key, message: 'Location name is required' }]}
-              >
-                <Input />
+                <LocationSelect onChange={setLocation} location={location} />
               </Form.Item>
             </Col>
           </Row>
@@ -219,11 +218,18 @@ function isCourseOpenForRegistry(course: Course) {
   return false;
 }
 
-function getInitialValues(initialData: Partial<UserFull>, courses: Course[]) {
+function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
+  const location =
+    countryName &&
+    cityName &&
+    ({
+      countryName,
+      cityName,
+    } as Location | null);
   return {
     ...initialData,
     courseId: courses[0].id,
-    location: initialData.locationId ? { key: initialData.locationId } : undefined,
+    location,
   };
 }
 

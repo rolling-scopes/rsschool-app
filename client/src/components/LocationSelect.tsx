@@ -1,25 +1,42 @@
-import * as React from 'react';
-import { Select } from 'antd';
-import { CITIES } from 'services/reference-data';
+import React from 'react';
+import AlgoliaPlaces from 'algolia-places-react';
+import { config } from '../config';
+import { Location } from '../../../common/models/profile';
 
 type Props = {
-  [key: string]: any;
+  onChange: Function;
+  location: Location | null;
 };
 
-type LocationOption = { id?: string; name: string };
-const defaultOption: LocationOption = { id: undefined, name: 'Other' };
-const options: LocationOption[] = [defaultOption].concat(CITIES);
+const { algoliaPlacesApiKey, algoliaPlacesAppId } = config;
 
-export class LocationSelect extends React.Component<Props> {
-  render() {
-    return (
-      <Select showSearch optionFilterProp="children" placeholder="Select..." {...this.props}>
-        {options.map((location, i) => (
-          <Select.Option key={location.id || i} value={location.id!}>
-            {location.name}
-          </Select.Option>
-        ))}
-      </Select>
-    );
-  }
+const getDefaultValue = (location: Location | null): string =>
+  location?.countryName ? `${location.cityName}, ${location.countryName}` : '';
+
+export function LocationSelect(props: Props) {
+  const discardLocation = () => {
+    props.onChange(null);
+  };
+
+  return (
+    <AlgoliaPlaces
+      options={{
+        appId: algoliaPlacesAppId,
+        apiKey: algoliaPlacesApiKey,
+        language: 'en',
+        type: 'city',
+      }}
+      defaultValue={getDefaultValue(props.location)}
+      onSuggestions={discardLocation}
+      onClear={discardLocation}
+      onChange={({ suggestion }: any) => {
+        const location = {
+          countryName: suggestion.country,
+          cityName: suggestion.name,
+        } as Location;
+        props.onChange(location);
+      }}
+      placeholder="Please enter your city"
+    />
+  );
 }
