@@ -25,6 +25,7 @@ export function LocationSelect(props: Props) {
         apiKey: algoliaPlacesApiKey,
         language: 'en',
         type: 'city',
+        aroundLatLngViaIP: false,
       }}
       defaultValue={getDefaultValue(props.location)}
       onSuggestions={discardLocation}
