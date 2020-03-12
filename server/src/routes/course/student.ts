@@ -72,6 +72,28 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
   );
 };
 
+export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  const data: { mentorId?: number } = ctx.request.body;
+  const result = await getRepository(Student).update(student.id, { mentorId: Number(data.mentorId) });
+  setResponse(ctx, OK, result);
+};
+
+export const getStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  setResponse(ctx, OK, student);
+};
+
 type Input = {
   score: number | string;
   comment: string;

@@ -371,6 +371,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async updateStudent(githubId: string, data: { mentorId: number }) {
+    const result = await this.axios.put(`/student/${githubId}`, data);
+    return result.data.data;
+  }
+
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
