@@ -49,7 +49,14 @@ import { getStudentInterviews } from './interviews';
 import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } from './tasks';
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
-import { postStudentStatus, getStudentSummary, postStudentInterviewResult, getCrossMentorsTasks } from './student';
+import {
+  postStudentStatus,
+  getStudentSummary,
+  postStudentInterviewResult,
+  getCrossMentorsTasks,
+  getStudent,
+  updateStudent,
+} from './student';
 import {
   createTaskSolution,
   getTaskSolution,
@@ -158,6 +165,9 @@ function addMentorApi(router: Router, logger: ILogger) {
 function addStudentApi(router: Router, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const mentorValidators = [courseMentorGuard, validateGithubId];
+
+  router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
+  router.put('/student/:githubId', courseSupervisorGuard, updateStudent(logger));
 
   router.get('/student/:githubId/summary', courseGuard, ...validators, getStudentSummary(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentorsTasks(logger));
