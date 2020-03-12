@@ -120,7 +120,7 @@ export const config: IConfig = {
   },
   integrations: {
     heroes: {
-      url: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_URL,
+      url: '', // turn off.
       username: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_USERNAME || '',
       password: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_PASSWORD || '',
     },
