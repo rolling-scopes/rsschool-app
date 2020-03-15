@@ -28,7 +28,7 @@ export const getStudentsCsv = (_: ILogger) => async (ctx: Router.RouterContext) 
       mentorName: (student.mentor as MentorBasic)?.name,
       mentorGithubId: (student.mentor as MentorBasic)?.githubId,
       totalScore: student.totalScore,
-      city: student.locationName,
+      city: student.cityName,
       country: student.countryName,
       repository: student.repository,
     })),
