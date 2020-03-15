@@ -6,7 +6,7 @@ import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { CourseService, CourseTask, TaskSolution } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { notGithubPattern, urlWithIpPattern } from 'services/validators';
+import { urlWithIpPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { formatDate } from 'services/formatter';
 import { CourseTaskSelect } from 'components/Forms';
@@ -79,14 +79,7 @@ function Page(props: CoursePageProps) {
               <Form.Item
                 name="url"
                 label="Solution URL"
-                rules={[
-                  {
-                    required: true,
-                    pattern: notGithubPattern,
-                    message: 'Please provide a link to your deployed solution',
-                  },
-                  { required: true, pattern: urlWithIpPattern, message: 'Please provide a valid link' },
-                ]}
+                rules={[{ required: true, pattern: urlWithIpPattern, message: 'Please provide a valid link' }]}
               >
                 <Input />
               </Form.Item>
