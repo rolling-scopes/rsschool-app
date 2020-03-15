@@ -9,10 +9,12 @@ import { Feedback } from './feedback';
 import { Mentor } from './mentor';
 import { MentorRegistry } from './mentorRegistry';
 import { PrivateFeedback } from './privateFeedback';
+import { ProfilePermissions } from './profilePermissions';
 import { Registry } from './registry';
 import { Stage } from './stage';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
+import { StageInterviewStudent } from './stageInterviewStudent';
 import { Student } from './student';
 import { StudentFeedback } from './studentFeedback';
 import { Task } from './task';
@@ -24,11 +26,9 @@ import { TaskSolution } from './taskSolution';
 import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
-import { User, ExternalAccount } from './user';
-import { ProfilePermissions } from './profilePermissions';
+import { ExternalAccount, User } from './user';
 
 export * from './session';
-
 export {
   Certificate,
   Course,
@@ -42,10 +42,12 @@ export {
   Mentor,
   MentorRegistry,
   PrivateFeedback,
+  ProfilePermissions,
   Registry,
   Stage,
   StageInterview,
   StageInterviewFeedback,
+  StageInterviewStudent,
   Student,
   StudentFeedback,
   Task,
@@ -58,7 +60,6 @@ export {
   TaskSolutionResult,
   TaskVerification,
   User,
-  ProfilePermissions,
 };
 
 export const models = [
@@ -73,10 +74,12 @@ export const models = [
   Mentor,
   MentorRegistry,
   PrivateFeedback,
+  ProfilePermissions,
   Registry,
   Stage,
   StageInterview,
   StageInterviewFeedback,
+  StageInterviewStudent,
   Student,
   StudentFeedback,
   Task,
@@ -89,7 +92,6 @@ export const models = [
   TaskSolutionResult,
   TaskVerification,
   User,
-  ProfilePermissions,
 ];
 
 export interface IApiResponse<T> {

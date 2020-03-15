@@ -29,4 +29,7 @@ export class Event {
     { nullable: true },
   )
   courseEvents: CourseEvent[] | null;
+
+  @Column({ nullable: true })
+  discipline: string;
 }

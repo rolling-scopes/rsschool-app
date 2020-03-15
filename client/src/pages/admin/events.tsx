@@ -7,11 +7,14 @@ import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
+import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
 
 const { Content } = Layout;
 
 type Props = { session: Session };
 const service = new EventService();
+
+const disciplines = PRIMARY_SKILLS;
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Event[]);
@@ -75,16 +78,6 @@ function Page(props: Props) {
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          name="descriptionUrl"
-          label="Description URL"
-          rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item name="description" label="Description">
-          <Input.TextArea />
-        </Form.Item>
         <Form.Item name="type" label="Event Type" rules={[{ required: true, message: 'Please select a type' }]}>
           <Select>
             <Select.Option value="lecture_online">Online Lecture</Select.Option>
@@ -96,6 +89,26 @@ function Page(props: Props) {
             <Select.Option value="workshop">Workshop</Select.Option>
             <Select.Option value="meetup">Meetup</Select.Option>
           </Select>
+        </Form.Item>
+        <Form.Item name="discipline" label="Discipline">
+          <Select>
+            {disciplines.map(({ id, name }) => (
+              <Select.Option key={id} value={id}>
+                {name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="descriptionUrl"
+          label="Description URL"
+          rules={[{ message: 'Please enter valid URL', pattern: urlPattern }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item name="description" label="Description">
+          <Input.TextArea />
         </Form.Item>
       </ModalForm>
     );
@@ -131,6 +144,7 @@ function createRecord(values: any) {
     description: values.description,
     descriptionUrl: values.descriptionUrl,
     type: values.type,
+    discipline: values.discipline,
   };
   return data;
 }
@@ -145,6 +159,10 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Name',
       dataIndex: 'name',
       sorter: stringSorter<Event>('name'),
+    },
+    {
+      title: 'Discipline',
+      dataIndex: 'discipline',
     },
     {
       title: 'Description URL',

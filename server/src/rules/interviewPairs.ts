@@ -4,7 +4,7 @@ type Mentor = {
   id: number;
   githubId: string;
   capacity: number;
-  locationName: string | null;
+  cityName: string | null;
   countryName: string | null;
   studentsPreference: 'sameCity' | 'sameCountry' | null;
 };
@@ -13,7 +13,7 @@ type Student = {
   id: number;
   githubId: string;
   totalScore: number;
-  locationName: string | null;
+  cityName: string | null;
   countryName: string | null;
 };
 
@@ -31,7 +31,7 @@ export function createInterviewPairs(allMentors: Mentor[], allStudents: Student[
     if (availableStudents.length < 1 || mentor.capacity === 0) {
       return;
     }
-    const students = availableStudents.filter(s => s.locationName === mentor.locationName);
+    const students = availableStudents.filter(s => s.cityName === mentor.cityName);
     if (students.length < mentor.capacity) {
       noSameLocationMentors.push(mentor);
       return;
@@ -65,7 +65,7 @@ export function createInterviewPairs(allMentors: Mentor[], allStudents: Student[
     const sameCountryMentors = allMentors.filter(m => m.studentsPreference === 'sameCountry');
     const countryGroups = _.groupBy(sameCountryMentors, 'countryName');
     for (const locationName of _.keys(countryGroups)) {
-      const students = availableStudents.filter(s => s.locationName === locationName);
+      const students = availableStudents.filter(s => s.countryName === locationName);
       const mentors = countryGroups[locationName];
       const pairs = distributeStudentsRandomly(mentors, students);
       availableStudents = availableStudents.filter(s => !pairs.some(p => p.studentId === s.id));
@@ -75,9 +75,9 @@ export function createInterviewPairs(allMentors: Mentor[], allStudents: Student[
 
   function assignSameCityStudents() {
     const sameCityMentors = allMentors.filter(m => m.studentsPreference === 'sameCity');
-    const groups = _.groupBy(sameCityMentors, 'locationName');
+    const groups = _.groupBy(sameCityMentors, 'cityName');
     for (const locationName of _.keys(groups)) {
-      const students = availableStudents.filter(s => s.locationName === locationName);
+      const students = availableStudents.filter(s => s.cityName === locationName);
       const mentors = groups[locationName];
       const pairs = distributeStudentsRandomly(mentors, students);
       availableStudents = availableStudents.filter(s => !pairs.some(p => p.studentId === s.id));

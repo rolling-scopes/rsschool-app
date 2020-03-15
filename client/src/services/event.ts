@@ -8,6 +8,7 @@ export interface Event {
   descriptionUrl: string;
   description: string;
   type: string;
+  discipline: string;
 }
 
 export class EventService {

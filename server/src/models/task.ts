@@ -12,6 +12,7 @@ export type TaskType =
   | 'test'
   | 'codejam'
   | 'interview'
+  | 'stage-interview'
   | 'cv:html'
   | 'cv:markdown';
 
@@ -44,7 +45,7 @@ export class Task {
   )
   courseTasks: CourseTask[] | null;
 
-  @Column()
+  @Column({ nullable: true })
   verification: 'auto' | 'manual';
 
   @Column({ nullable: true })
@@ -64,4 +65,7 @@ export class Task {
 
   @Column({ type: 'simple-array', default: '' })
   tags: string[];
+
+  @Column({ nullable: true })
+  discipline: string;
 }

@@ -19,7 +19,7 @@ export interface CourseTask {
   studentStartDate: string | null;
   studentEndDate: string | null;
   useJury: boolean;
-  checker: 'autoTest' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwnerId: number | null;
 }
 
@@ -376,9 +376,33 @@ export class CourseService {
     return result.data.data;
   }
 
+  async createInterviewStudent(githubId: string) {
+    const result = await this.axios.post(`/student/${githubId}/interview/stage`);
+    return result.data.data;
+  }
+
+  async getInterviewStudent(githubId: string) {
+    const result = await this.axios.get(`/student/${githubId}/interview/stage`);
+    return result.data.data as { id: number } | null;
+  }
+
+  async getInterviews() {
+    const result = await this.axios.get(`/interviews`);
+    return result.data.data as Interview[];
+  }
+
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
+}
+
+export interface Interview {
+  startDate: string;
+  endDate: string;
+  name: string;
+  id: string;
+  descriptionUrl: string;
+  type: string;
 }
 
 export interface StudentProfile {
@@ -397,14 +421,14 @@ export interface StudentScore extends StudentBasic {
     score: number;
   }[];
   rank: number;
-  locationName: string;
+  cityName: string;
   totalScore: number;
   totalScoreChangeDate: string;
 }
 
 export interface StudentDetails extends StudentBasic {
   countryName: string;
-  locationName: string;
+  cityName: string;
   totalScore: number;
   repository: string;
   interviews: { id: number; isCompleted: boolean }[];
@@ -412,7 +436,7 @@ export interface StudentDetails extends StudentBasic {
 
 export interface MentorDetails extends MentorBasic {
   countryName: string;
-  locationName: string;
+  cityName: string;
   maxStudentsLimit: number;
   interviewsCount: number;
 }

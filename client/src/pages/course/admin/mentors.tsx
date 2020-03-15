@@ -104,11 +104,11 @@ function Page(props: CoursePageProps) {
           },
           {
             title: 'Location',
-            dataIndex: 'locationName',
-            key: 'locationName',
+            dataIndex: 'cityName',
+            key: 'cityName',
             width: 100,
-            sorter: stringSorter('locationName'),
-            ...getColumnSearchProps('locationName'),
+            sorter: stringSorter('cityName'),
+            ...getColumnSearchProps('cityName'),
           },
           {
             title: 'Country',

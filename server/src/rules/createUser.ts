@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { flatMap, union } from 'lodash';
 import { config } from '../config';
-import { Course, IUserSession, CourseRoles, User, CourseTask, Stage, CourseUser } from '../models';
+import { Course, IUserSession, CourseRoles, User, CourseTask, CourseUser } from '../models';
 import { userService } from '../services';
 
 const hirers: string[] = config.roles.hirers;
@@ -71,8 +71,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     getRepository(CourseTask)
       .createQueryBuilder('courseTask')
       .select('"courseTask"."id" AS "courseTaskId", "course"."id" AS "courseId"')
-      .leftJoin(Stage, 'stage', '"stage"."id" = "courseTask"."stageId"')
-      .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
+      .leftJoin(Course, 'course', '"course"."id" = "courseTask"."courseId"')
       .leftJoin(User, 'user', '"user"."id" = "courseTask"."taskOwnerId"')
       .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${id}'`)
       .getRawMany(),

@@ -125,10 +125,10 @@ export function Page(props: CoursePageProps) {
               },
               {
                 title: 'Location',
-                dataIndex: 'locationName',
+                dataIndex: 'cityName',
                 width: 150,
-                sorter: stringSorter('locationName'),
-                ...getColumnSearchProps('locationName'),
+                sorter: stringSorter('cityName'),
+                ...getColumnSearchProps('cityName'),
               },
               {
                 title: 'Total',
