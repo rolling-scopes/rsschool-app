@@ -11,4 +11,12 @@ export const PRIMARY_SKILLS = [
     id: 'android-kotlin',
     name: 'Android Kotlin',
   },
+  {
+    id: 'nodejs',
+    name: 'Node.js',
+  },
+  {
+    id: 'business-intelligence',
+    name: 'Business intelligence',
+  },
 ];
