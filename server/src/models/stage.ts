@@ -8,7 +8,6 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Course } from './course';
-import { Student } from './student';
 import { CourseTask } from './courseTask';
 
 type STAGE_STATUS = 'OPEN' | 'CLOSED';
@@ -37,13 +36,6 @@ export class Stage {
 
   @Column()
   courseId: number;
-
-  @OneToMany(
-    _ => Student,
-    student => student.stage,
-    { nullable: true },
-  )
-  students: Student[] | null;
 
   @OneToMany(
     _ => CourseTask,

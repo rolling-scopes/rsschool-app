@@ -11,7 +11,6 @@ import { useAsync } from 'react-use';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { Stage, StageService } from 'services/stage';
 import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
 import { DEFAULT_TIMEZONE, TIMEZONES } from 'configs/timezones';
@@ -25,20 +24,14 @@ function Page(props: CoursePageProps) {
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseTaskDetails[]);
-  const [stages, setStages] = useState([] as Stage[]);
   const [tasks, setTasks] = useState([] as Task[]);
   const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
   const [modalAction, setModalAction] = useState('update');
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [data, stages, tasks] = await Promise.all([
-      service.getCourseTasksDetails(),
-      new StageService().getCourseStages(courseId),
-      new TaskService().getTasks(),
-    ]);
+    const [data, tasks] = await Promise.all([service.getCourseTasksDetails(), new TaskService().getTasks()]);
     setData(data);
-    setStages(stages);
     setTasks(tasks);
     setLoading(false);
   }, [courseId]);
@@ -173,15 +166,6 @@ function Page(props: CoursePageProps) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="stageId" label="Stage" rules={[{ required: true, message: 'Please select a stage' }]}>
-          <Select placeholder="Please select a stage">
-            {stages.map((stage: Stage) => (
-              <Option key={stage.id} value={stage.id}>
-                {stage.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
         <Form.Item name="type" label="Task Type">
           <Select>
             <Select.Option value="jstask">JS task</Select.Option>
@@ -196,6 +180,17 @@ function Page(props: CoursePageProps) {
             <Select.Option value="test">Test</Select.Option>
             <Select.Option value="codejam">Code Jam</Select.Option>
             <Select.Option value="interview">Interview</Select.Option>
+            <Select.Option value="stage-interview">Stage Interview</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="checker" required label="Checker">
+          <Select placeholder="Please select who checks">
+            <Option value="auto-test">Auto-Test</Option>
+            <Option value="mentor">Mentor</Option>
+            <Option value="assigned">Cross-Mentor</Option>
+            <Option value="taskOwner">Task Owner</Option>
+            <Option value="crossCheck">Cross-Check</Option>
+            <Option value="jury">Jury</Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -238,16 +233,6 @@ function Page(props: CoursePageProps) {
           </Col>
         </Row>
 
-        <Form.Item name="checker" required label="Checker">
-          <Select placeholder="Please select who checks">
-            <Option value="mentor">Mentor</Option>
-            <Option value="assigned">Cross-Mentor</Option>
-            {modalData?.verification === 'auto' && <Option value="autoTest">Auto-Test</Option>}
-            <Option value="taskOwner">Task Owner</Option>
-            <Option value="crossCheck">Cross-Check</Option>
-            <Option value="jury">Jury</Option>
-          </Select>
-        </Form.Item>
         {modalData?.checker === 'crossCheck' ? (
           <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
             <Select placeholder="Cross-Check Pairs Count">
@@ -273,17 +258,14 @@ function Page(props: CoursePageProps) {
         pagination={false}
         size="small"
         dataSource={data}
-        columns={getColumns(getDropdownMenu, { tasks, stages })}
+        columns={getColumns(getDropdownMenu, { tasks })}
       />
       {renderModal(modalData)}
     </PageLayout>
   );
 }
 
-function getColumns(
-  getDropdownMenu: (record: CourseTaskDetails) => any,
-  { tasks, stages }: { tasks: any[]; stages: any[] },
-) {
+function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks }: { tasks: any[] }) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -300,11 +282,6 @@ function getColumns(
     },
     { title: 'End Date', dataIndex: 'studentEndDate', render: dateRenderer, sorter: stringSorter('studentEndDate') },
     { title: 'Max Score', dataIndex: 'maxScore' },
-    {
-      title: 'Stage',
-      dataIndex: 'stageId',
-      render: idFromArrayRenderer(stages),
-    },
     {
       title: 'Type',
       dataIndex: 'type',

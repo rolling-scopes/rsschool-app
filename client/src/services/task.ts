@@ -12,6 +12,7 @@ export type TaskType =
   | 'codewars:stage2'
   | 'test'
   | 'interview'
+  | 'stage-interview'
   | 'codejam';
 
 export interface Task {
@@ -27,12 +28,13 @@ export interface Task {
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   tags: string[];
+  discipline: string;
 }
 
 export class TaskService {
   async getTasks() {
     const result = await axios.get<{ data: Task[] }>(`/api/tasks`);
-    return result.data.data.sort((a, b) => b.id - a.id);
+    return result.data.data;
   }
 
   async updateTask(id: number, data: Partial<Task>) {

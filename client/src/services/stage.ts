@@ -28,9 +28,4 @@ export class StageService {
     const result = await axios.put<{ data: Stage }>(`${this.host}/api/stage/${id}`, data);
     return result.data.data;
   }
-
-  async getCourseStages(courseId: number) {
-    const result = await axios.get<{ data: Stage[] }>(`${this.host}/api/course/${courseId}/stages`);
-    return result.data.data;
-  }
 }

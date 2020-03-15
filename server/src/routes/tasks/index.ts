@@ -43,6 +43,7 @@ const postTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
 const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const tasks = await getRepository(Task)
     .createQueryBuilder()
+    .orderBy('"updatedDate"', 'DESC')
     .getMany();
 
   setResponse(ctx, OK, tasks);
@@ -51,36 +52,7 @@ const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export function tasksRoute(logger: ILogger) {
   const router = new Router({ prefix: '/tasks' });
 
-  /**
-   * @swagger
-   *
-   * /tasks:
-   *   post:
-   *      description: Add/Update tasks
-   *      security:
-   *        - cookieAuth: []
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: operation status
-   */
   router.post('/', adminGuard, postTasks(logger));
-
-  /**
-   * @swagger
-   *
-   * /tasks:
-   *   get:
-   *      description: Gets tasks
-   *      security:
-   *        - cookieAuth: []
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: List of tasks
-   */
   router.get('/', getTasks(logger));
 
   return router;

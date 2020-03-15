@@ -13,7 +13,6 @@ import {
 import { User } from './user';
 import { Course } from './course';
 import { Mentor } from './mentor';
-import { Stage } from './stage';
 import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
@@ -60,13 +59,6 @@ export class Student {
 
   @Column({ nullable: true })
   mentorId: number;
-
-  @ManyToOne(
-    _ => Stage,
-    (stage: Stage) => stage.students,
-    { nullable: true },
-  )
-  stage: Stage;
 
   @OneToMany(
     _ => TaskResult,

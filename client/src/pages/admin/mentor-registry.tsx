@@ -138,10 +138,10 @@ function Page(props: Props) {
                   },
                   {
                     title: 'City',
-                    dataIndex: 'locationName',
+                    dataIndex: 'cityName',
                     width: 80,
-                    sorter: stringSorter('locationName'),
-                    ...getColumnSearchProps('locationName'),
+                    sorter: stringSorter('cityName'),
+                    ...getColumnSearchProps('cityName'),
                   },
                   {
                     title: 'Preferred',

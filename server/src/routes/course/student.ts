@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, Student, TaskInterviewResult } from '../../models';
 import { courseService, taskService } from '../../services';
-import { getInterviewsByStudent } from '../../services/stageInterviews';
+import { stageInterviewService } from '../../services';
 import { setResponse } from '../utils';
 
 export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -24,7 +24,7 @@ export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContex
 
   if (!courseService.isPowerUser(courseId, user)) {
     const [interviews, mentor] = await Promise.all([
-      getInterviewsByStudent(courseId, student.id),
+      stageInterviewService.getInterviewsByStudentId(courseId, student.id),
       courseService.getCourseMentor(courseId, user.id),
     ] as const);
     if (mentor == null) {

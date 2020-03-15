@@ -1,5 +1,5 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
+import { Button, Layout, Popover, Row, Spin, Switch, Alert, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
 import { dateRenderer, getColumnSearchProps, numberSorter, dateSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CourseService, StudentScore, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
+import { HealthMask } from 'components/Icons/HealthMask';
 
 const { Text } = Typography;
 
@@ -62,6 +63,15 @@ export function Page(props: CoursePageProps) {
       <Header title="Score" username={props.session.githubId} courseName={props.course.name} />
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
+          <Alert
+            style={{ marginBottom: 16 }}
+            banner
+            closable
+            type="warning"
+            showIcon
+            icon={<HealthMask />}
+            message=" Stay home and do tasks!"
+          ></Alert>
           <Row style={{ margin: '8px 0' }} justify="space-between">
             <div>
               <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
@@ -125,10 +135,10 @@ export function Page(props: CoursePageProps) {
               },
               {
                 title: 'Location',
-                dataIndex: 'locationName',
+                dataIndex: 'cityName',
                 width: 150,
-                sorter: stringSorter('locationName'),
-                ...getColumnSearchProps('locationName'),
+                sorter: stringSorter('cityName'),
+                ...getColumnSearchProps('cityName'),
               },
               {
                 title: 'Total',

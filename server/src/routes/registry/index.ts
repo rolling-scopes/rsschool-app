@@ -252,7 +252,7 @@ async function getMentorRegistries() {
       'user.lastName',
       'user.githubId',
       'user.primaryEmail',
-      'user.locationName',
+      'user.cityName',
       'user.contactsEpamEmail',
     ])
     .leftJoin('user.mentors', 'mentor')
@@ -272,7 +272,7 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     githubId: user.githubId,
     primaryEmail: user.primaryEmail,
     contactsEpamEmail: user.contactsEpamEmail,
-    locationName: user.locationName,
+    cityName: user.cityName,
     maxStudentsLimit: mentorRegistry.maxStudentsLimit,
     name: `${user.firstName} ${user.lastName}`,
     preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),

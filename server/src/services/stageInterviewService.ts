@@ -1,9 +1,9 @@
 import { getRepository } from 'typeorm';
-import { StageInterview, StageInterviewFeedback, Student } from '../models';
+import { StageInterview, StageInterviewFeedback, Student, StageInterviewStudent } from '../models';
 import { StageInterviewFeedbackJson } from '../../../common/models';
 import { StudentInterview } from './courseService';
 
-export async function getStageInterviewsPairs(stageId: number) {
+export async function getPairs(stageId: number) {
   const stageInterviews = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
     .innerJoin('stageInterview.stage', 'stage')
@@ -51,7 +51,7 @@ export async function getStageInterviewsPairs(stageId: number) {
   return result;
 }
 
-export async function getStageInterviewStudentFeedback(stageId: number, userId: number, studentId: number) {
+export async function getFeedback(stageId: number, userId: number, studentId: number) {
   return getRepository(StageInterviewFeedback)
     .createQueryBuilder('stageInterviewFeedback')
     .innerJoin('stageInterviewFeedback.stageInterview', 'stageInterview')
@@ -63,7 +63,7 @@ export async function getStageInterviewStudentFeedback(stageId: number, userId: 
     .getOne();
 }
 
-export async function getStageInterviewsByMentorId(stageId: number, githubId: string) {
+export async function getInterviewsByMentor(stageId: number, githubId: string) {
   const stageInterviews = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
     .innerJoin('stageInterview.stage', 'stage')
@@ -92,52 +92,45 @@ export async function getStageInterviewsByMentorId(stageId: number, githubId: st
 export async function getStageInterviewsByStudent(courseId: number, githubId: string): Promise<StudentInterview[]> {
   const stageInterviews = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
-    .innerJoin('stageInterview.stage', 'stage')
-    .innerJoin('stage.course', 'course')
+    .innerJoin('stageInterview.courseTask', 'courseTask')
+    .innerJoin('courseTask.task', 'task')
     .innerJoin('stageInterview.mentor', 'mentor')
     .innerJoin('stageInterview.student', 'student')
     .innerJoin('mentor.user', 'mentorUser')
     .innerJoin('student.user', 'studentUser')
     .addSelect([
-      'mentor.id',
+      'courseTask.id',
+      'task.id',
+      'task.descriptionUrl',
+      'courseTask.studentStartDate',
+      'courseTask.studentEndDate',
       'student.id',
       'student.totalScore',
       'mentorUser.id',
       'mentorUser.githubId',
-      'mentorUser.locationName',
-      'mentorUser.contactsNotes',
-      'mentorUser.contactsSkype',
-      'mentorUser.contactsTelegram',
-      'mentorUser.contactsPhone',
-      'mentorUser.primaryEmail',
       'studentUser.id',
       'studentUser.githubId',
-      'studentUser.locationName',
     ])
-    .where('course.id = :courseId AND studentUser.githubId = :githubId', { courseId, githubId })
+    .where('stageInterview.courseId = :courseId AND studentUser.githubId = :githubId', { courseId, githubId })
     .getMany();
 
   const result = stageInterviews.map(it => {
     return {
+      id: it.courseTask.id,
       name: 'Stage Interview',
       completed: it.isCompleted,
-      endDate: null,
+      descriptionUrl: '',
+      startDate: it.courseTask.studentStartDate,
+      endDate: it.courseTask.studentEndDate,
       interviewer: {
-        id: it.mentor.id,
         githubId: it.mentor.user.githubId,
-        locationName: it.mentor.user.locationName,
-        contactsPhone: it.mentor.user.contactsPhone,
-        contactsTelegram: it.mentor.user.contactsTelegram,
-        contactsSkype: it.mentor.user.contactsSkype,
-        contactsNotes: it.mentor.user.contactsNotes,
-        contactsEmail: it.mentor.user.primaryEmail,
       },
     };
   });
   return result;
 }
 
-export async function getInterviewsByStudent(courseId: number, studentId: number) {
+export async function getInterviewsByStudentId(courseId: number, studentId: number) {
   const stageInterviews = await getRepository(StageInterview)
     .createQueryBuilder('stageInterview')
     .innerJoin('stageInterview.stage', 'stage')
@@ -173,7 +166,7 @@ export async function getInterviewsByStudent(courseId: number, studentId: number
   return result;
 }
 
-export function getStudentInterviewRatings({ skills, programmingTask }: StageInterviewFeedbackJson) {
+export function getInterviewRatings({ skills, programmingTask }: StageInterviewFeedbackJson) {
   const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
   const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
 
@@ -197,7 +190,7 @@ const getLastRating = (stageInterviews: StageInterview[]) => {
     .map(({ stageInterviewFeedbacks }: StageInterview) =>
       stageInterviewFeedbacks.map((feedback: StageInterviewFeedback) => ({
         date: feedback.updatedDate,
-        rating: getStudentInterviewRatings(JSON.parse(feedback.json)).rating,
+        rating: getInterviewRatings(JSON.parse(feedback.json)).rating,
       })),
     )
     .reduce((acc, cur) => acc.concat(cur), [])
@@ -206,7 +199,7 @@ const getLastRating = (stageInterviews: StageInterview[]) => {
   return lastInterview && lastInterview.rating !== undefined ? lastInterview.rating : null;
 };
 
-export async function getAvailableStudentsForStageInterview(courseId: number, _: number) {
+export async function getAvailableStudents(courseId: number, _: number) {
   const students = await getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
@@ -256,4 +249,19 @@ export async function getAvailableStudentsForStageInterview(courseId: number, _:
       };
     });
   return result;
+}
+
+export async function createInterviewStudent(courseId: number, studentId: number) {
+  const repository = await getRepository(StageInterviewStudent);
+  let record = await repository.findOne({ where: { courseId, studentId } });
+  if (record == null) {
+    record = await repository.save({ courseId, studentId });
+  }
+  return { id: record.id };
+}
+
+export async function getInterviewStudent(courseId: number, studentId: number) {
+  const repository = await getRepository(StageInterviewStudent);
+  const record = await repository.findOne({ where: { courseId, studentId } });
+  return record ? { id: record.id } : null;
 }

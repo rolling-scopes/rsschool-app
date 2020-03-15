@@ -122,7 +122,7 @@ export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   const inputData: { score: number; comment: string } = ctx.request.body;
-  const data = { score: Number(inputData.score), comment: inputData.comment || '' };
+  const data = { score: Math.round(Number(inputData.score)), comment: inputData.comment || '' };
 
   if (isNaN(data.score) || data.score < 0) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
@@ -130,18 +130,19 @@ export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   const historicalResult = { ...data, authorId: user.id, dateTime: Date.now() };
-  const existingResult = await taskResultsService.getTaskSolutionResult(student.id, checker.id, courseTask.id);
-  if (existingResult != null) {
-    existingResult.historicalScores.push(historicalResult);
-    await getRepository(TaskSolutionResult).update(existingResult.id, {
-      ...data,
-      historicalScores: existingResult.historicalScores,
-    });
+
+  const repository = getRepository(TaskSolutionResult);
+  const existing = await taskResultsService.getTaskSolutionResult(student.id, checker.id, courseTask.id);
+
+  if (existing != null) {
+    const { historicalScores } = existing;
+    historicalScores.push(historicalResult);
+    await repository.update(existing.id, { ...data, historicalScores });
     setResponse(ctx, OK);
     return;
   }
 
-  await getRepository(TaskSolutionResult).insert({
+  await repository.insert({
     studentId: taskChecker.studentId,
     checkerId: taskChecker.checkerId,
     courseTaskId: taskChecker.courseTaskId,

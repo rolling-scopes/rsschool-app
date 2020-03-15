@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course, Stage, StageInterview, StageInterviewFeedback } from '../../models';
-import { getStudentInterviewRatings } from '../../services/stageInterviews';
+import { stageInterviewService } from '../../services';
 
 export const getStageInterviewFeedback = async (githubId: string): Promise<StageInterviewDetailedFeedback[]> =>
   (
@@ -46,7 +46,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
     }: any) => {
       const interviewResult = JSON.parse(interviewResultJson);
       const { english, programmingTask, resume } = interviewResult;
-      const { rating, htmlCss, common, dataStructures } = getStudentInterviewRatings(interviewResult);
+      const { rating, htmlCss, common, dataStructures } = stageInterviewService.getInterviewRatings(interviewResult);
       return {
         decision,
         isGoodCandidate,

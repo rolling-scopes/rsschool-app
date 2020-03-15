@@ -28,7 +28,6 @@ function Page(props: CoursePageProps) {
   }, [props.course.id]);
 
   const handleSubmit = async (values: any) => {
-    console.log(values);
     if (!courseTaskId) {
       return;
     }

@@ -4,7 +4,7 @@ export interface MentorRegistry {
   maxStudentsLimit: number;
   name: string;
   githubId: string;
-  locationName: string;
+  cityName: string;
 }
 
 export class MentorRegistryService {
