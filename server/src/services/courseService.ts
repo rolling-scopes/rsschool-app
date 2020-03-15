@@ -497,7 +497,6 @@ export async function getStudentScore(studentId: number) {
 }
 
 export async function getCourseTasks(courseId: number) {
-  console.log(typeof courseId);
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
