@@ -44,7 +44,7 @@ function Page(props: CoursePageProps) {
             <li>Contact assigned interviewer in time</li>
             <li>Participate in the interview</li>
           </ul>
-          NOTE: We DO NOT GUARANTEE you will get a interviewer. It depends on your score and how many mentors will be
+          NOTE: We DO NOT GUARANTEE you will get an interviewer. It depends on your score and how many mentors will be
           available.
         </>
       ),
