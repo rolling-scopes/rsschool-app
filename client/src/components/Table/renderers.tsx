@@ -31,7 +31,7 @@ export function boolIconRenderer(value: any) {
 }
 
 export function colorTagRenderer(value: number | string, color?: string) {
-  return <span>{renderTag(value, color)}</span>;
+  return <span key={value}>{renderTag(value, color)}</span>;
 }
 
 export function tagsRenderer(values: (number | string)[]) {
