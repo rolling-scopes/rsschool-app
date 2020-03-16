@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getRepository } from 'typeorm';
+import { getRepository, getManager } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
 import {
   Course,
@@ -12,9 +12,9 @@ import {
   TaskSolution,
   CourseUser,
   TaskSolutionChecker,
-  TaskSolutionResult,
   TaskChecker,
   TaskInterviewResult,
+  TaskSolutionResult,
 } from '../models';
 import { IUserSession } from '../models/session';
 
@@ -559,31 +559,45 @@ export async function getUsers(courseId: number) {
 }
 
 export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCount: number) {
-  const records = await getRepository(TaskSolutionResult)
-    .createQueryBuilder('tsr')
-    .select('tsr."studentId", ROUND(AVG(tsr.score)) as "score"')
-    .where(qb => {
-      // query students who checked enough tasks
+  const query = getManager()
+    .createQueryBuilder()
+    .select(['ROUND(AVG("score")) as "score"', '"studentId" '])
+    .from(qb => {
+      // do sub query to select only top X scores
       const query = qb
-        .subQuery()
-        .select('r."checkerId"')
-        .from(TaskSolutionChecker, 'c')
-        .leftJoin(
-          'task_solution_result',
-          'r',
-          ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
-        )
-        .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
-        .andWhere('r.id IS NOT NULL')
-        .groupBy('r."checkerId"')
-        .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
-        .getQuery();
-      return `"studentId" IN ${query}`;
-    })
-    .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
-    .groupBy('tsr."studentId"')
-    .having(`COUNT(tsr.id) >= :count`, { count: minCheckedCount - 1 })
-    .getRawMany();
+        .from(TaskSolutionResult, 'tsr')
+        .select([
+          'tsr.studentId as "studentId"',
+          'tsr.score as "score"',
+          'row_number() OVER (PARTITION by tsr.studentId ORDER BY tsr.score desc) as "rownum"',
+        ])
+        .where(qb => {
+          // query students who checked enough tasks
+          const query = qb
+            .subQuery()
+            .select('r."checkerId"')
+            .from(TaskSolutionChecker, 'c')
+            .leftJoin(
+              'task_solution_result',
+              'r',
+              ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
+            )
+            .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
+            .andWhere('r.id IS NOT NULL')
+            .groupBy('r."checkerId"')
+            .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
+            .getQuery();
+          return `"studentId" IN ${query}`;
+        })
+        .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
+        .orderBy('tsr.studentId')
+        .orderBy('tsr.score', 'DESC');
+      return query;
+    }, 's')
+    .where('rownum <= :count', { count: minCheckedCount })
+    .groupBy('"studentId"');
+
+  const records = await query.getRawMany();
 
   return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
 }
