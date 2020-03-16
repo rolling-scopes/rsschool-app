@@ -25,18 +25,26 @@ function Page(props: Props) {
 
   const [data, setData] = useState<any[]>([]);
   const [allData, setAllData] = useState<any[]>([]);
+  const [maxStudents, setMaxStudents] = useState(0);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState(null as Partial<any> | null);
 
+  const updateData = (showAll: boolean, allData: any[]) => {
+    setShowAll(showAll);
+    const data = filterData(allData, showAll);
+    setData(data);
+    setMaxStudents(data.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
+  };
+
   const loadData = useCallback(async () => {
     setLoading(true);
 
-    const data = await mentorRegistryService.getMentors();
+    const allData = await mentorRegistryService.getMentors();
     const courses = await coursesService.getCourses();
 
-    setAllData(data);
-    setData(filterData(data, showAll));
+    setAllData(allData);
+    updateData(showAll, allData);
 
     setCourses(courses);
     setLoading(false);
@@ -102,8 +110,7 @@ function Page(props: Props) {
                   <Checkbox
                     onChange={e => {
                       const value = e.target.checked;
-                      setShowAll(value);
-                      setData(filterData(allData, value));
+                      updateData(value, allData);
                     }}
                   >
                     Show All
@@ -113,18 +120,21 @@ function Page(props: Props) {
               </Row>
             </Col>
             <Col style={{ marginBottom: 8 }}> Total mentors: {data.length} </Col>
+            <Col style={{ marginBottom: 8 }}> Total max students: {maxStudents} </Col>
             <Col>
               <Table<MentorRegistry>
                 bordered
                 pagination={{ pageSize: PAGINATION }}
                 size="small"
-                rowKey="githubId"
+                rowKey="id"
                 dataSource={data}
+                scroll={{ x: 1600 }}
                 columns={[
                   {
+                    fixed: 'left',
+                    width: 200,
                     title: 'Github',
                     dataIndex: 'githubId',
-                    width: 120,
                     sorter: stringSorter('githubId'),
                     render: (value: string, { name }) => {
                       return (
@@ -139,7 +149,7 @@ function Page(props: Props) {
                   {
                     title: 'City',
                     dataIndex: 'cityName',
-                    width: 80,
+                    width: 120,
                     sorter: stringSorter('cityName'),
                     ...getColumnSearchProps('cityName'),
                   },
@@ -156,13 +166,13 @@ function Page(props: Props) {
                   },
                   {
                     title: 'Max students',
-                    dataIndex: 'maxStudentsLimit',
                     width: 80,
+                    dataIndex: 'maxStudentsLimit',
                   },
                   {
                     title: 'Students Location',
+                    width: 100,
                     dataIndex: 'preferedStudentsLocation',
-                    width: 90,
                     sorter: stringSorter('githubId'),
                   },
                   {
@@ -173,15 +183,16 @@ function Page(props: Props) {
                   {
                     title: 'Info',
                     dataIndex: 'info',
-                    width: 90,
                     render: renderInfo,
+                    width: 120,
                   },
                   {
                     title: 'Comment',
                     dataIndex: 'comment',
-                    width: 120,
                   },
                   {
+                    fixed: 'right',
+                    width: 80,
                     title: 'Actions',
                     dataIndex: 'actions',
                     render: (_: any, record: any) => <a onClick={() => setModalData(record)}>Edit</a>,
@@ -215,7 +226,10 @@ function renderInfo(_: any, record: any) {
   );
 }
 
-function filterData(data: { preselectedCourses: number[]; courses: number[] }[], showAll: boolean) {
+function filterData(
+  data: { maxStudentsLimit: number; preselectedCourses: number[]; courses: number[] }[],
+  showAll: boolean,
+) {
   if (showAll) {
     return data;
   }
