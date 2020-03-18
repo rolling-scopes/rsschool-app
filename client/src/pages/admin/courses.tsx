@@ -17,6 +17,7 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
+  const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
 
   useAsync(async () => {
@@ -42,12 +43,20 @@ function Page(props: Props) {
         }
         setModalLoading(true);
         const record = createRecord(values);
-        const item =
-          modalAction === 'update'
-            ? await courseService.updateCourse(modalData!.id!, record)
-            : await courseService.createCourse(record);
-        const updatedData =
-          modalAction === 'update' ? data.map(d => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
+        let item: Course;
+        let updatedData;
+        if (modalAction === 'update') {
+          item = await courseService.updateCourse(modalData!.id!, record);
+          updatedData = data.map(d => (d.id === item.id ? { ...d, ...item } : d));
+        } else {
+          if (values.courseId) {
+            item = await courseService.createCourseCopy(record, values.courseId);
+            setIsCopy(false);
+          } else {
+            item = await courseService.createCourse(record);
+          }
+          updatedData = data.concat([item]);
+        }
         setModalData(null);
         setData(updatedData);
       } catch (e) {
@@ -60,6 +69,7 @@ function Page(props: Props) {
   );
 
   const renderModal = useCallback(() => {
+    const isUpdate = modalAction === 'update';
     return (
       <ModalForm
         data={modalData}
@@ -70,6 +80,28 @@ function Page(props: Props) {
         loading={modalLoading}
       >
         <Row gutter={24}>
+          <Col span={24}>
+            {!isUpdate ? (
+              <Checkbox checked={isCopy} value={isCopy} onChange={e => setIsCopy(e.target.checked)}>
+                I want to copy stages and events from other course
+              </Checkbox>
+            ) : (
+              ''
+            )}
+            {isCopy && !isUpdate ? (
+              <Form.Item name="courseId" label="Choose course">
+                <Select placeholder="Please select course template">
+                  {data.map(course => (
+                    <Select.Option key={course.id} value={course.id}>
+                      {course.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            ) : (
+              ''
+            )}
+          </Col>
           <Col span={12}>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter name' }]}>
               <Input />
@@ -138,7 +170,7 @@ function Page(props: Props) {
         </Form.Item>
       </ModalForm>
     );
-  }, [modalData, handleModalSubmit]);
+  }, [modalData, handleModalSubmit, isCopy, setIsCopy]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import { getRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
 import {
@@ -15,6 +16,7 @@ import {
   TaskSolutionResult,
   TaskChecker,
   TaskInterviewResult,
+  Stage,
 } from '../models';
 import { IUserSession } from '../models/session';
 import cities from './reference-data/cities.json';
@@ -777,4 +779,75 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
     };
   });
   return students;
+}
+
+export async function getStages(courseId: number) {
+  return await getRepository(Stage)
+    .createQueryBuilder('stage')
+    .where('stage."courseId" = :courseId ', { courseId })
+    .getMany();
+}
+
+function shiftDate(date: string, shift: number, format: string): string {
+  return moment(date)
+    .add(shift, 'days')
+    .format(format);
+}
+
+function adjustStage(stage: any, startDateDaysDiff: number, courseId: number) {
+  stage.oldId = stage.id;
+  delete stage.id;
+  stage.startDate = shiftDate(stage.startDate, startDateDaysDiff, 'YYYY-MM-DD');
+  stage.endDate = shiftDate(stage.endDate, startDateDaysDiff, 'YYYY-MM-DD');
+  stage.courseId = courseId;
+}
+
+function adjustEvent(event: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+  delete event.id;
+  event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  event.courseId = courseId;
+  event.stageId = stages.find((s: any) => s.oldId === event.stageId);
+}
+
+function adjustTask(task: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+  delete task.id;
+  task.studentStartDate = shiftDate(task.studentStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  task.studentEndDate = shiftDate(task.studentEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  if (task.mentorStartDate) {
+    task.mentorStartDate = shiftDate(task.mentorStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  }
+  if (task.mentorEndDate) {
+    task.mentorEndDate = shiftDate(task.mentorEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
+  }
+  task.courseId = courseId;
+  task.stageId = stages.find((s: any) => s.oldId === task.stageId);
+}
+
+export async function createCourseFromCopy(courseId: number, details: any) {
+  const courseToCopy = await getRepository(Course).findOne(courseId);
+
+  if (courseToCopy && courseToCopy.id) {
+    const events: any = await getEvents(courseId);
+    const tasks: any = await getCourseTasks(courseId);
+    const stages: any = await getStages(courseId);
+    delete courseToCopy.id;
+    const courseCopy = { ...courseToCopy, ...details };
+    const courseData = await getRepository(Course).insert(courseCopy as Course);
+
+    const startDateDaysDiff = moment(details.startDate).diff(moment(courseToCopy.startDate), 'days');
+    courseCopy.id = courseData.identifiers[0].id;
+
+    stages.forEach((s: any) => adjustStage(s, startDateDaysDiff, courseCopy.id));
+    const savedStagesData = await getRepository(Stage).insert(stages);
+
+    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id, stages));
+    const savedEventsData = await getRepository(CourseEvent).insert(events);
+
+    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id, stages));
+    const savedTasksData = await getRepository(CourseTask).insert(tasks);
+
+    return { savedStagesData, courseCopy, savedEventsData, savedTasksData };
+  }
+
+  throw new Error(`not valid course to copy id: ${courseId}`);
 }
