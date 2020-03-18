@@ -233,7 +233,11 @@ function filterData(
   if (showAll) {
     return data;
   }
-  return data.filter(it => it.courses.length === 0 || !it.preselectedCourses.every(c => it.courses.includes(c)));
+  return data.filter(
+    it =>
+      it.courses.length === 0 ||
+      (it.preselectedCourses.length && !it.preselectedCourses.every(c => it.courses.includes(c))),
+  );
 }
 
 function renderPreselectedCourses(courses: Course[]) {
