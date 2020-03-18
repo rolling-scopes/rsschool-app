@@ -236,7 +236,8 @@ function filterData(
   return data.filter(
     it =>
       it.courses.length === 0 ||
-      (it.preselectedCourses.length && !it.preselectedCourses.every(c => it.courses.includes(c))),
+      !it.preselectedCourses.length ||
+      !it.preselectedCourses.every(c => it.courses.includes(c)),
   );
 }
 
