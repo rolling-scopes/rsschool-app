@@ -1,13 +1,13 @@
 import { Button, Modal, Row, Typography, message } from 'antd';
 import * as React from 'react';
-import axios from 'axios';
 import { StudentSearch } from 'components';
+import { CourseService } from 'services/course';
 
 const { Text } = Typography;
 
 type State = {
   isModalOpened: boolean;
-  selectedStudent: number;
+  studentGithubId: string | null;
 };
 
 type Props = {
@@ -16,10 +16,10 @@ type Props = {
   courseId: number;
 };
 
-class StudentsAddModal extends React.PureComponent<Props, State> {
+class AssignStudentModal extends React.PureComponent<Props, State> {
   state: State = {
     isModalOpened: false,
-    selectedStudent: 0,
+    studentGithubId: null,
   };
 
   openModal = () => {
@@ -32,16 +32,16 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
 
   addStudent = async () => {
     const { mentorId } = this.props;
-    const { selectedStudent } = this.state;
+    const { studentGithubId } = this.state;
+
+    if (!studentGithubId) {
+      return;
+    }
 
     this.reset();
 
     try {
-      const url = `/api/student/${selectedStudent}`;
-      const {
-        data: { data: mentee },
-      } = await axios.get(url);
-      await axios.put(url, { ...mentee, mentorId });
+      await new CourseService(this.props.courseId).updateStudent(studentGithubId, { mentorId });
       message.success('Success');
     } catch (e) {
       message.error(`${e}`);
@@ -49,11 +49,11 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
   };
 
   reset = () => {
-    this.setState({ isModalOpened: false, selectedStudent: 0 });
+    this.setState({ isModalOpened: false, studentGithubId: null });
   };
 
-  handleStudentSelect = (id: number) => {
-    this.setState({ selectedStudent: id ? id : 0 });
+  handleStudentSelect = (githubId: string) => {
+    this.setState({ studentGithubId: githubId ?? null });
   };
 
   render() {
@@ -76,7 +76,7 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
           onCancel={this.reset}
         >
           <Row>
-            <StudentSearch onChange={this.handleStudentSelect} courseId={courseId} />
+            <StudentSearch keyField="githubId" onChange={this.handleStudentSelect} courseId={courseId} />
           </Row>
         </Modal>
       </>
@@ -84,4 +84,4 @@ class StudentsAddModal extends React.PureComponent<Props, State> {
   }
 }
 
-export default StudentsAddModal;
+export default AssignStudentModal;

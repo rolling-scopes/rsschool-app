@@ -8,7 +8,6 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
 import { LocationSelect } from '../LocationSelect';
-import { CITIES } from 'services/reference-data';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -34,7 +33,8 @@ class MainCard extends React.Component<Props, State> {
   };
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
-    !isEqual(nextProps.data.locationId, this.props.data.locationId) ||
+    !isEqual(nextProps.data.location.cityName, this.props.data.location.cityName) ||
+    !isEqual(nextProps.data.location.countryName, this.props.data.location.countryName) ||
     !isEqual(nextProps.data.name, this.props.data.name) ||
     !isEqual(nextProps.permissionsSettings?.isProfileVisible, this.props.permissionsSettings?.isProfileVisible) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
@@ -66,7 +66,7 @@ class MainCard extends React.Component<Props, State> {
       onPermissionsSettingsChange,
       onProfileSettingsChange,
     } = this.props;
-    const { githubId, name, locationName, locationId } = this.props.data;
+    const { githubId, name, location } = this.props.data;
     const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
 
     return (
@@ -92,7 +92,7 @@ class MainCard extends React.Component<Props, State> {
           </Paragraph>
           <Paragraph style={{ textAlign: 'center', margin: 0 }}>
             <span style={{ marginLeft: '-14px' }}>
-              <EnvironmentFilled /> {locationName}
+              <EnvironmentFilled /> {`${location.cityName}, ${location.countryName}`}
             </span>
           </Paragraph>
           {isEditingModeEnabled && (
@@ -123,14 +123,10 @@ class MainCard extends React.Component<Props, State> {
                     </p>
                     <div style={{ marginBottom: 5 }}>
                       <LocationSelect
-                        style={{ width: '100%' }}
-                        defaultValue={locationId}
-                        onChange={(locationId: string) =>
-                          onProfileSettingsChange(
-                            CITIES.find(location => location.id === locationId),
-                            'generalInfo.location',
-                          )
-                        }
+                        onChange={(location: Location) => {
+                          onProfileSettingsChange(location, 'generalInfo.location');
+                        }}
+                        location={location}
                       />
                     </div>
                   </div>

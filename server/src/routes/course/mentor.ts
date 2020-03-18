@@ -79,23 +79,28 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
     ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
     ...(preferedStudentsLocation ? { studentsPreference: preferedStudentsLocation } : {}),
   };
-  const exist = await getRepository(Mentor).findOne({ where: { courseId, userId: user.id } });
+  const mentorRepository = getRepository(Mentor);
+  const exist = await mentorRepository.findOne({ where: { courseId, userId: user.id } });
   let mentorId = exist?.id;
   if (mentorId == null) {
     const {
       identifiers: [identifier],
-    } = await getRepository(Mentor).insert({
+    } = await mentorRepository.insert({
       courseId,
       userId: user.id,
       ...data,
     });
     mentorId = identifier['id'];
   } else {
-    await getRepository(Mentor).update(mentorId, data);
+    await mentorRepository.update(mentorId, data);
   }
 
+  const studentRepository = getRepository(Student);
   if (input.students.length > 0) {
-    await getRepository(Student).update(input.students, { mentorId });
+    if (exist) {
+      await studentRepository.update({ mentorId }, { mentorId: null });
+    }
+    await studentRepository.update(input.students, { mentorId });
   }
 
   updateSession(ctx, { roles: { [courseId]: 'mentor' } });

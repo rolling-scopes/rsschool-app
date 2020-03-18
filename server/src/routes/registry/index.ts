@@ -252,11 +252,13 @@ async function getMentorRegistries() {
       'user.lastName',
       'user.githubId',
       'user.primaryEmail',
-      'user.locationName',
+      'user.cityName',
       'user.contactsEpamEmail',
     ])
     .leftJoin('user.mentors', 'mentor')
-    .addSelect(['mentor.id', 'mentor.courseId'])
+    .leftJoin('user.students', 'student')
+    .leftJoin('student.certificate', 'certificate')
+    .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
     .orderBy('"mentorRegistry"."updatedDate"', 'DESC')
     .getMany();
 }
@@ -270,7 +272,7 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     githubId: user.githubId,
     primaryEmail: user.primaryEmail,
     contactsEpamEmail: user.contactsEpamEmail,
-    locationName: user.locationName,
+    cityName: user.cityName,
     maxStudentsLimit: mentorRegistry.maxStudentsLimit,
     name: `${user.firstName} ${user.lastName}`,
     preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
@@ -279,5 +281,6 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     technicalMentoring: mentorRegistry.technicalMentoring,
     updatedDate: mentorRegistry.updatedDate,
     courses: mentorRegistry.user.mentors?.map(m => m.courseId),
+    hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
   };
 }

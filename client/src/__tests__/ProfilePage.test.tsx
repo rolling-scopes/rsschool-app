@@ -43,8 +43,10 @@ const profile = {
       },
     ],
     englishLevel: 'a2+',
-    locationId: 456,
-    locationName: 'Brest',
+    location: {
+      countryName: 'Belarus',
+      cityName: 'Minsk',
+    },
   },
   contacts: {},
   mentorStats: [{}],
@@ -165,14 +167,14 @@ describe('ProfilePage', () => {
     describe('Should set state correctly', () => {
       it('if "profile.generalInfo.location" was changed', async () => {
         const event = {
-          id: 123,
-          name: 'Minsk',
+          countryName: 'USA',
+          cityName: '51 zone',
         };
         const path = 'generalInfo.location';
         wrapper.setState(state);
         await instance.onProfileSettingsChange(event, path);
-        expect((wrapper.state() as any).profile.generalInfo.locationId).toBe(123);
-        expect((wrapper.state() as any).profile.generalInfo.locationName).toBe('Minsk');
+        expect((wrapper.state() as any).profile.generalInfo.location.countryName).toBe('USA');
+        expect((wrapper.state() as any).profile.generalInfo.location.cityName).toBe('51 zone');
         expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(true);
       });
       it('if "profile.generalInfo.englishLevel" was changed', async () => {

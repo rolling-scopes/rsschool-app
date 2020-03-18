@@ -4,6 +4,15 @@ import * as courseService from './courseService';
 import * as taskResultsService from './taskResultsService';
 import * as taskService from './tasksService';
 import * as awsTaskService from './awsTaskService';
+import * as stageInterviewService from './stageInterviewService';
 
 export * from './operationResult';
-export { userService, taskService, studentsService, courseService, taskResultsService, awsTaskService };
+export {
+  userService,
+  taskService,
+  studentsService,
+  courseService,
+  taskResultsService,
+  awsTaskService,
+  stageInterviewService,
+};

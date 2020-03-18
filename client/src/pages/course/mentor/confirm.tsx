@@ -37,7 +37,7 @@ function Page(props: { session: Session }) {
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
 
-      if (!mentor.preselectedCourses?.includes(course?.id)) {
+      if (!mentor.preselectedCourses?.includes(course?.id ?? 0)) {
         setNoAccess(true);
         return;
       }

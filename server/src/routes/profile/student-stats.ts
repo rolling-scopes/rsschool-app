@@ -6,7 +6,6 @@ import {
   Mentor,
   Student,
   Course,
-  Stage,
   Task,
   CourseTask,
   TaskResult,
@@ -75,8 +74,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
     .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"')
     .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
     .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
-    .leftJoin(Stage, 'stage', '"stage"."courseId" = "student"."courseId"')
-    .leftJoin(CourseTask, 'courseTask', '"courseTask"."stageId" = "stage"."id"')
+    .leftJoin(CourseTask, 'courseTask', '"courseTask"."courseId" = "student"."courseId"')
     .leftJoin(Task, 'task', '"courseTask"."taskId" = "task"."id"')
     .leftJoin(
       TaskResult,

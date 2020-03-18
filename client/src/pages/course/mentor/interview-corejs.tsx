@@ -18,9 +18,9 @@ interface Record {
 
 const questions: { questionId: string; questionText: string }[] = [
   { questionId: 'let-const', questionText: 'let vs const vs var' },
-  { questionId: 'hoisting', questionText: 'Понимание hoisting' },
-  { questionId: 'closure', questionText: 'Понимание closure' },
-  { questionId: 'scope', questionText: 'Понимание scope' },
+  { questionId: 'hoisting', questionText: 'Understanding of hoisting' },
+  { questionId: 'closure', questionText: 'Understanding of closure' },
+  { questionId: 'scope', questionText: 'Understanding of scope' },
 
   { questionId: 'capturing', questionText: 'Capturing' },
   { questionId: 'bubbling', questionText: 'Bubbling' },
@@ -32,8 +32,8 @@ const questions: { questionId: string; questionText: string }[] = [
   { questionId: 'set-timeout', questionText: 'setTimeout(()=>alert("hello",0));' },
   { questionId: 'promises-microtask', questionText: 'Promises & Microtasks' },
 
-  { questionId: 'call-bind-apply', questionText: 'Знание this/apply/call/bind' },
-  { questionId: 'inheritance', questionText: 'Знание наследования и классов' },
+  { questionId: 'call-bind-apply', questionText: 'Knowledge of this/apply/call/bind' },
+  { questionId: 'inheritance', questionText: 'Knowledge of inheritance and classes' },
 ];
 
 const section1 = ['let-const', 'hoisting', 'closure', 'scope'];
@@ -117,19 +117,20 @@ function Page(props: CoursePageProps) {
       githubId={props.session.githubId}
     >
       <Typography style={{ marginBottom: 24 }}>
-        <h4>Процесс</h4>
+        <h4>Process</h4>
         <div>
           <a
             target="_blank"
             href="https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md"
           >
-            Темы для интервью (https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md)
+            Sample interview questions
+            (https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md)
           </a>
         </div>
-        <div>1) Задаете вопрос </div>
-        <div>2) Слушаете ответ </div>
-        <div>3) Если необходимо, дополняете или исправляете</div>
-        <div>4) Задаете следующий вопрос</div>
+        <div>1) Ask a question </div>
+        <div>2) Listen for the answer </div>
+        <div>3) Complete or correct the answer if needed</div>
+        <div>4) Ask the next question</div>
       </Typography>
 
       <Form
@@ -152,11 +153,11 @@ function Page(props: CoursePageProps) {
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>
           ))}
-        <Typography.Title level={4}>Знание this/apply/call/bind</Typography.Title>
+        <Typography.Title level={4}>Knowledge of this/apply/call/bind</Typography.Title>
         <Form.Item name="call-bind-apply">
           <Input.TextArea rows={4} />
         </Form.Item>
-        <Typography.Title level={3}>Знание Dom Events</Typography.Title>
+        <Typography.Title level={3}>Knowledge of the Dom Events</Typography.Title>
         {questions
           .filter(question => section2.includes(question.questionId))
           .map(question => (
@@ -164,7 +165,7 @@ function Page(props: CoursePageProps) {
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>
           ))}
-        <Typography.Title level={4}>Знание Event Loop</Typography.Title>
+        <Typography.Title level={4}>Knowledge of the Event Loop</Typography.Title>
         {questions
           .filter(question => section3.includes(question.questionId))
           .map(question => (
@@ -172,11 +173,11 @@ function Page(props: CoursePageProps) {
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>
           ))}
-        <Typography.Title level={4}>Знание наследования и классов</Typography.Title>
+        <Typography.Title level={4}>Knowledge of inheritance and classes</Typography.Title>
         <Form.Item name="inheritance">
           <Input.TextArea rows={4} />
         </Form.Item>
-        <Typography.Title level={4}>Общая оценка</Typography.Title>
+        <Typography.Title level={4}>Total score</Typography.Title>
         <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please set Score' }]}>
           <Rate
             count={11}
@@ -184,7 +185,7 @@ function Page(props: CoursePageProps) {
             style={{ marginBottom: '5px' }}
           />
         </Form.Item>
-        <Typography.Title level={4}>Комментарий</Typography.Title>
+        <Typography.Title level={4}>Comment</Typography.Title>
         <CommentInput />
         <Button size="large" type="primary" htmlType="submit">
           Submit

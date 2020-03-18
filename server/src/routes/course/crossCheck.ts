@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK, NOT_FOUND } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
@@ -10,7 +10,7 @@ import { setErrorResponse, setResponse } from '../utils';
 type Input = { url: string };
 const defaultPairsCount = 4;
 
-export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
 
   const [student, courseTask] = await Promise.all([
@@ -42,6 +42,30 @@ export const postTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext
 
   await getRepository(TaskSolution).save({ studentId: student.id, courseTaskId: courseTask.id, url: data.url });
   setResponse(ctx, OK, {});
+};
+
+export const getTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId, courseTaskId } = ctx.params;
+
+  const [student, courseTask] = await Promise.all([
+    courseService.queryStudentByGithubId(courseId, githubId),
+    taskService.getCourseTask(courseTaskId),
+  ]);
+
+  if (student == null || courseTask == null) {
+    setResponse(ctx, BAD_REQUEST, { message: 'not valid student or course task' });
+    return;
+  }
+
+  const result = await taskResultsService.getTaskSolution(student.id, courseTask.id);
+
+  if (result == null) {
+    setResponse(ctx, NOT_FOUND, { message: 'solution is not found ' });
+    return;
+  }
+
+  const { updatedDate, id, url } = result;
+  setResponse(ctx, OK, { updatedDate, id, url });
 };
 
 export const createCrossCheckDistribution = (__: ILogger) => async (ctx: Router.RouterContext) => {
@@ -98,7 +122,7 @@ export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   const inputData: { score: number; comment: string } = ctx.request.body;
-  const data = { score: Number(inputData.score), comment: inputData.comment || '' };
+  const data = { score: Math.round(Number(inputData.score)), comment: inputData.comment || '' };
 
   if (isNaN(data.score) || data.score < 0) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
@@ -106,18 +130,19 @@ export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterC
   }
 
   const historicalResult = { ...data, authorId: user.id, dateTime: Date.now() };
-  const existingResult = await taskResultsService.getTaskSolutionResult(student.id, checker.id, courseTask.id);
-  if (existingResult != null) {
-    existingResult.historicalScores.push(historicalResult);
-    await getRepository(TaskSolutionResult).update(existingResult.id, {
-      ...data,
-      historicalScores: existingResult.historicalScores,
-    });
+
+  const repository = getRepository(TaskSolutionResult);
+  const existing = await taskResultsService.getTaskSolutionResult(student.id, checker.id, courseTask.id);
+
+  if (existing != null) {
+    const { historicalScores } = existing;
+    historicalScores.push(historicalResult);
+    await repository.update(existing.id, { ...data, historicalScores });
     setResponse(ctx, OK);
     return;
   }
 
-  await getRepository(TaskSolutionResult).insert({
+  await repository.insert({
     studentId: taskChecker.studentId,
     checkerId: taskChecker.checkerId,
     courseTaskId: taskChecker.courseTaskId,

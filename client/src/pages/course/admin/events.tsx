@@ -10,7 +10,6 @@ import { CourseEvent, CourseService } from 'services/course';
 import { Event, EventService } from 'services/event';
 import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { Stage, StageService } from 'services/stage';
 import { UserService } from 'services/user';
 import { urlPattern } from 'services/validators';
 import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
@@ -32,7 +31,6 @@ function Page(props: Props) {
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([] as CourseEvent[]);
-  const [stages, setStages] = useState([] as Stage[]);
   const [events, setEvents] = useState([] as Event[]);
   const [modalData, setModalData] = useState(null as Partial<CourseEvent> | null);
   const [modalAction, setModalAction] = useState('update');
@@ -40,13 +38,8 @@ function Page(props: Props) {
 
   useAsync(async () => {
     setLoading(true);
-    const [data, stages, events] = await Promise.all([
-      service.getCourseEvents(),
-      new StageService().getCourseStages(courseId),
-      new EventService().getEvents(),
-    ]);
+    const [data, events] = await Promise.all([service.getCourseEvents(), new EventService().getEvents()]);
     setData(data);
-    setStages(stages);
     setEvents(events);
     setLoading(false);
   }, [courseId]);
@@ -124,15 +117,6 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="stageId" label="Stage" rules={[{ required: true, message: 'Please select a stage' }]}>
-          <Select placeholder="Please select a stage">
-            {stages.map((stage: Stage) => (
-              <Select.Option key={stage.id} value={stage.id}>
-                {stage.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
             {TIMEZONES.map(tz => (
@@ -191,7 +175,7 @@ function Page(props: Props) {
         pagination={false}
         size="small"
         dataSource={data}
-        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events, stages })}
+        columns={getColumns(handleEditItem, handleDeleteItem, { timeZone, events })}
       />
       {renderModal(modalData!)}
     </PageLayout>
@@ -200,7 +184,7 @@ function Page(props: Props) {
 
 export default withCourseData(withSession(Page));
 
-function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events, stages }: any) {
+function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, events }: any) {
   return [
     { title: 'Id', dataIndex: 'id' },
     {
@@ -218,12 +202,6 @@ function getColumns(handleEditItem: any, handleDeleteItem: any, { timeZone, even
       render: (value: string) => (value ? <GithubUserLink value={value} /> : ''),
     },
     { title: 'Comment', dataIndex: 'comment' },
-    {
-      title: 'Stage',
-      dataIndex: 'stageId',
-      width: 70,
-      render: idFromArrayRenderer(stages),
-    },
     {
       title: 'Actions',
       dataIndex: 'actions',

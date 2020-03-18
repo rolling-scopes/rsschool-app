@@ -8,8 +8,6 @@ import { ILogger } from '../../logger';
 import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
 import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/courseService';
-import countries from '../../services/reference-data/countries.json';
-import cities from '../../services/reference-data/cities.json';
 
 import { setCsvResponse, setResponse } from '../utils';
 
@@ -28,8 +26,6 @@ type ScoresInput = {
   mentorGithubId?: string;
 };
 
-const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
-const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
 
 export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -232,8 +228,8 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
     return {
       githubId: student.githubId,
       name: student.name,
-      locationName: student.locationName,
-      countryName: countriesMap[citiesMap[student.locationName]] || 'Other',
+      locationName: student.cityName,
+      countryName: student.countryName || 'Other',
       mentorGithubId: student.mentor ? (student.mentor as any).githubId : '',
       totalScore: student.totalScore,
       isActive: student.isActive,

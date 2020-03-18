@@ -56,7 +56,7 @@ export class CourseTask {
   )
   stage: Stage | number;
 
-  @Column()
+  @Column({ nullable: true })
   @Index()
   stageId: number;
 

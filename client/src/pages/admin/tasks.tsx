@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Row, Col, Input, Layout, message, Radio, Select, Table } from 'antd';
+import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Radio, Select, Table } from 'antd';
 import { AdminSider, Header, Session, withSession } from 'components';
 import { boolIconRenderer, stringSorter, tagsRenderer } from 'components/Table';
 import { union } from 'lodash';
@@ -7,10 +7,12 @@ import { useAsync } from 'react-use';
 import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
+import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
 
 const { Content } = Layout;
 type Props = { session: Session };
 const service = new TaskService();
+const disciplines = PRIMARY_SKILLS;
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
@@ -22,7 +24,7 @@ function Page(props: Props) {
   useAsync(async () => {
     const tasks = await service.getTasks();
     setData(tasks);
-  }, []);
+  }, [modalData]);
 
   const handleAddItem = () => {
     setModalData({});
@@ -42,14 +44,11 @@ function Page(props: Props) {
         }
         setModalLoading(true);
         const record = createRecord(values);
-        const item =
-          modalAction === 'update'
-            ? await service.updateTask(modalData!.id!, record)
-            : await service.createTask(record);
-        const updatedData =
-          modalAction === 'update' ? data.map(d => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
-
-        setData(updatedData);
+        if (modalAction === 'update') {
+          await service.updateTask(modalData!.id!, record);
+        } else {
+          await service.createTask(record);
+        }
         setModalData(null);
       } catch (e) {
         message.error('An error occurred. Please try again later.');
@@ -61,9 +60,6 @@ function Page(props: Props) {
   );
 
   const renderModal = useCallback(() => {
-    const isAutoTask = (modalValues.verification || modalData?.verification) === 'auto';
-    const type = modalValues.type || modalData?.type;
-    const isCodingTask = type === 'jstask' || type === 'kotlintask' || type === 'objctask';
     const allTags = union(...data.map(d => d.tags || []));
     return (
       <ModalForm
@@ -96,19 +92,36 @@ function Page(props: Props) {
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
+                <Select.Option value="stage-interview">Stage Interview</Select.Option>
               </Select>
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item name="tags" label="Tags">
-          <Select mode="tags">
-            {allTags.map(tag => (
-              <Select.Option key={tag} value={tag}>
-                {tag}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item name="discipline" label="Discipline">
+              <Select>
+                {disciplines.map(({ id, name }) => (
+                  <Select.Option key={id} value={id}>
+                    {name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="tags" label="Tags">
+              <Select mode="tags">
+                {allTags.map(tag => (
+                  <Select.Option key={tag} value={tag}>
+                    {tag}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Form.Item
           name="descriptionUrl"
           label="Description URL"
@@ -128,34 +141,27 @@ function Page(props: Props) {
 
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="verification" label="Verification">
+            <Form.Item name="verification" label="Verification (deprecated)">
               <Radio.Group>
                 <Radio value="manual">Manual</Radio>
                 <Radio value="auto">Auto</Radio>
               </Radio.Group>
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item name="githubPrRequired" label="Github" valuePropName="checked">
-              <Checkbox>Github Pull Request required</Checkbox>
-            </Form.Item>
-          </Col>
         </Row>
-
-        <Form.Item name="githubRepoName" label="Expected Github Repo Name">
-          <Input disabled={!isAutoTask} />
-        </Form.Item>
-        <Form.Item
-          name="sourceGithubRepoUrl"
-          label="Source Github Repo Url"
-          rules={
-            isAutoTask && isCodingTask
-              ? [{ required: true, message: 'Please enter Github Repo Url', pattern: githubRepoUrl }]
-              : []
-          }
-        >
-          <Input disabled={!(isAutoTask && isCodingTask)} />
-        </Form.Item>
+        <Collapse>
+          <Collapse.Panel header="Github" key="1">
+            <Form.Item name="githubPrRequired" label="" valuePropName="checked">
+              <Checkbox>Pull Request required</Checkbox>
+            </Form.Item>
+            <Form.Item name="sourceGithubRepoUrl" label="Source Repo Url" rules={[{ pattern: githubRepoUrl }]}>
+              <Input placeholder="https://github.com/rolling-scopes-school/task1" />
+            </Form.Item>
+            <Form.Item name="githubRepoName" label="Expected Repo Name">
+              <Input placeholder="task1" />
+            </Form.Item>
+          </Collapse.Panel>
+        </Collapse>
       </ModalForm>
     );
   }, [modalData, modalValues, modalLoading, handleModalSubmit]);
@@ -194,6 +200,7 @@ function createRecord(values: any) {
     githubRepoName: values.githubRepoName,
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
+    discipline: values.discipline,
   };
   return data;
 }
@@ -208,6 +215,11 @@ function getColumns(handleEditItem: any) {
       title: 'Name',
       dataIndex: 'name',
       sorter: stringSorter<Task>('name'),
+    },
+    {
+      title: 'Discipline',
+      dataIndex: 'discipline',
+      sorter: stringSorter<Task>('discipline'),
     },
     {
       title: 'Tags',

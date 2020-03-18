@@ -1,14 +1,22 @@
 export const PRIMARY_SKILLS = [
   {
-    id: '4060741400007923323',
+    id: 'javascript',
     name: 'JavaScript',
   },
   {
-    id: '4060741400009046534',
+    id: 'ios-obj-c',
     name: 'iOS Objective-C',
   },
   {
-    id: '4060741400370108870',
+    id: 'android-kotlin',
     name: 'Android Kotlin',
+  },
+  {
+    id: 'nodejs',
+    name: 'Node.js',
+  },
+  {
+    id: 'business-intelligence',
+    name: 'Business intelligence',
   },
 ];

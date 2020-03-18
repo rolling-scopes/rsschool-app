@@ -1,6 +1,6 @@
 import { Button, Divider, message, Statistic, Table } from 'antd';
 import { GithubUserLink, PageLayout, withSession } from 'components';
-import StudentsAddModal from 'components/StudentsAddModal';
+import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
@@ -104,11 +104,11 @@ function Page(props: CoursePageProps) {
           },
           {
             title: 'Location',
-            dataIndex: 'locationName',
-            key: 'locationName',
+            dataIndex: 'cityName',
+            key: 'cityName',
             width: 100,
-            sorter: stringSorter('locationName'),
-            ...getColumnSearchProps('locationName'),
+            sorter: stringSorter('cityName'),
+            ...getColumnSearchProps('cityName'),
           },
           {
             title: 'Country',
@@ -154,7 +154,7 @@ function Page(props: CoursePageProps) {
             width: 80,
             render: (_: string, mentor: MentorDetails) => (
               <>
-                <StudentsAddModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
+                <AssignStudentModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
               </>
             ),
           },

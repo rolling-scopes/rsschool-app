@@ -276,7 +276,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
       (new Date(task.studentEndDate).getTime() > Date.now() ||
         task.type === 'codewars:stage1' ||
         task.type === 'codewars:stage2') &&
-      task.verification === 'auto' &&
+      (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
       task.type !== 'test',
   );

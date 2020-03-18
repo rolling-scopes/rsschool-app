@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Layout, message, Select, Table } from 'antd';
+import { Button, DatePicker, Form, Input, Layout, message, Select, Table, Alert } from 'antd';
 import { AdminSider, Header } from 'components';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer, stringSorter } from 'components/Table';
@@ -94,6 +94,7 @@ function Page(props: Props) {
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Stages" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>
+          <Alert style={{ marginBottom: 16 }} message="Stages are deprecated" type="error" />
           <Button type="primary" onClick={handleAddItem}>
             Add Stage
           </Button>

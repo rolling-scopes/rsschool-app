@@ -60,7 +60,10 @@ export const courseMentorGuard = async (ctx: Router.RouterContext<any, any>, nex
   ctx.params.courseId = Number(ctx.params.courseId);
   const { courseId } = ctx.params;
 
-  if (guards.isLoggedIn(ctx) && (guards.isMentor(courseId) || guards.isPowerUser(courseId))) {
+  if (
+    guards.isLoggedIn(ctx) &&
+    (guards.isMentor(courseId) || guards.isSupervisor(courseId) || guards.isPowerUser(courseId))
+  ) {
     await next();
     return;
   }

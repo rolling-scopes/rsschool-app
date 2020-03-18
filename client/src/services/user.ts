@@ -171,6 +171,8 @@ export interface UserFull extends UserBasic {
   locationName: string;
   aboutMyself: string;
   tshirtSize: string;
+  countryName: string;
+  cityName: string;
 }
 
 export interface ProfileResponse {

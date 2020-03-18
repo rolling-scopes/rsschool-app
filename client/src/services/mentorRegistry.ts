@@ -4,7 +4,7 @@ export interface MentorRegistry {
   maxStudentsLimit: number;
   name: string;
   githubId: string;
-  locationName: string;
+  cityName: string;
 }
 
 export class MentorRegistryService {
@@ -26,6 +26,10 @@ export class MentorRegistryService {
 
   public async getMentor() {
     const response = await this.axios.get(`/mentor`);
-    return response.data.data;
+    return response.data.data as {
+      preselectedCourses: number[];
+      maxStudentsLimit: number;
+      preferedStudentsLocation: string;
+    };
   }
 }

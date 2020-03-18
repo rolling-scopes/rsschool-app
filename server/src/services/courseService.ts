@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { getRepository } from 'typeorm';
+import { getRepository, getManager } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
 import {
   Course,
@@ -13,25 +13,20 @@ import {
   TaskSolution,
   CourseUser,
   TaskSolutionChecker,
-  TaskSolutionResult,
   TaskChecker,
   TaskInterviewResult,
   Stage,
+  TaskSolutionResult,
 } from '../models';
 import { IUserSession } from '../models/session';
-import cities from './reference-data/cities.json';
-import countries from './reference-data/countries.json';
 
 const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
   `${modelName}.firstName`,
   `${modelName}.lastName`,
   `${modelName}.githubId`,
-  `${modelName}.locationName`,
+  `${modelName}.cityName`,
 ];
-
-const citiesMap = _.mapValues(_.keyBy(cities, 'name'), 'parentId');
-const countriesMap = _.mapValues(_.keyBy(countries, 'id'), 'name');
 
 function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
   return `${firstName} ${lastName}`.trim();
@@ -53,7 +48,7 @@ export interface AssignedStudent extends StudentBasic {
 }
 
 export interface StudentDetails extends StudentBasic {
-  locationName: string | null;
+  cityName: string | null;
   countryName: string;
   interviews: { id: number; isCompleted: boolean; interviewer?: { githubId: string } }[];
   repository: string;
@@ -68,13 +63,14 @@ export interface StudentWithResults {
   totalScore: number;
   totalScoreChangeDate: Date;
   rank: number;
-  locationName: string;
+  cityName: string;
+  countryName: string;
   isActive: boolean;
   taskResults: { courseTaskId: number; score: number }[];
 }
 
 export interface MentorDetails extends MentorBasic {
-  locationName: string | null;
+  cityName: string | null;
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'sameCity' | 'sameCountry' | null;
@@ -112,15 +108,12 @@ export function convertToStudentBasic(student: Student): StudentBasic {
 export function convertToStudentDetails(student: Student): StudentDetails {
   const studentBasic = convertToStudentBasic(student);
   const user = (student.user as User)!;
-  const checks =
-    student.taskChecker?.map(({ courseTask }) => ({
-      id: courseTask.id,
-      name: courseTask.task.name,
-    })) ?? [];
+  const checkers: TaskChecker[] = student.taskChecker ?? [];
+  const checks = checkers.map(({ courseTask: { id, task } }) => ({ id, name: task.name })) ?? [];
   return {
     ...studentBasic,
-    locationName: user.locationName || null,
-    countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
+    cityName: user.cityName || null,
+    countryName: user.countryName || 'Other',
     interviews: _.isEmpty(student.stageInterviews) ? [] : student.stageInterviews!,
     repository: student.repository,
     assignedChecks: checks,
@@ -133,8 +126,8 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
   return {
     ...mentorBasic,
     students: mentor.students ?? [],
-    locationName: user.locationName || null,
-    countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
+    cityName: user.cityName || null,
+    countryName: user.countryName || 'Other',
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference,
     studentsCount: mentor.students ? mentor.students.length : 0,
@@ -291,13 +284,8 @@ export async function getAssignedStudentsByMentorId(mentorId: number) {
     .map<AssignedStudent[]>(record => {
       const student = convertToStudentBasic(record);
       student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
-
-      return (
-        record.taskChecker?.map(taskChecker => ({
-          ...student,
-          courseTaskId: taskChecker ? taskChecker.courseTaskId : null,
-        })) ?? []
-      );
+      const checkers: TaskChecker[] = record.taskChecker ?? [];
+      return checkers.map(checker => ({ ...student, courseTaskId: checker?.courseTaskId })) ?? [];
     })
     .flat();
 
@@ -357,8 +345,8 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     );
     return {
       ...mentorBasic,
-      locationName: user.locationName || null,
-      countryName: countriesMap[citiesMap[user.locationName!]] || 'Other',
+      cityName: user.cityName || null,
+      countryName: user.countryName || 'Other',
       maxStudentsLimit: mentor.maxStudentsLimit,
       studentsPreference: mentor.studentsPreference,
       studentsCount: activeStudents.length,
@@ -446,7 +434,7 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
   let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
-    .addSelect(getPrimaryUserFields().concat(['user.locationName']))
+    .addSelect(getPrimaryUserFields().concat(['user.countryName']))
     .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
     .addSelect(['mentor.id', 'mentor.userId'])
     .leftJoin('student.taskResults', 'tr')
@@ -479,7 +467,8 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
       githubId: user.githubId,
       totalScore: student.totalScore,
       totalScoreChangeDate: student.totalScoreChangeDate,
-      locationName: user.locationName ?? '',
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? 'Other',
       taskResults,
       isActive: !student.isExpelled && !student.isFailed,
     };
@@ -513,8 +502,7 @@ export async function getCourseTasks(courseId: number) {
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
-    .innerJoin('courseTask.stage', 'stage')
-    .where('stage.courseId = :courseId', { courseId })
+    .where('courseTask.courseId = :courseId', { courseId })
     .getMany();
   return courseTasks;
 }
@@ -536,16 +524,8 @@ export async function getEvents(courseId: number) {
   return getRepository(CourseEvent)
     .createQueryBuilder('courseEvent')
     .innerJoinAndSelect('courseEvent.event', 'event')
-    .innerJoin('courseEvent.stage', 'stage')
     .leftJoin('courseEvent.organizer', 'organizer')
-    .addSelect([
-      'stage.id',
-      'stage.name',
-      'organizer.id',
-      'organizer.firstName',
-      'organizer.lastName',
-      'organizer.githubId',
-    ])
+    .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
     .where('courseEvent.courseId = :courseId', { courseId })
     .orderBy('courseEvent.dateTime')
     .getMany();
@@ -581,31 +561,45 @@ export async function getUsers(courseId: number) {
 }
 
 export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCount: number) {
-  const records = await getRepository(TaskSolutionResult)
-    .createQueryBuilder('tsr')
-    .select('tsr."studentId", ROUND(AVG(tsr.score)) as "score"')
-    .where(qb => {
-      // query students who checked enough tasks
+  const query = getManager()
+    .createQueryBuilder()
+    .select(['ROUND(AVG("score")) as "score"', '"studentId" '])
+    .from(qb => {
+      // do sub query to select only top X scores
       const query = qb
-        .subQuery()
-        .select('r."checkerId"')
-        .from(TaskSolutionChecker, 'c')
-        .leftJoin(
-          'task_solution_result',
-          'r',
-          ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
-        )
-        .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
-        .andWhere('r.id IS NOT NULL')
-        .groupBy('r."checkerId"')
-        .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
-        .getQuery();
-      return `"studentId" IN ${query}`;
-    })
-    .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
-    .groupBy('tsr."studentId"')
-    .having(`COUNT(tsr.id) >= :count`, { count: minCheckedCount - 1 })
-    .getRawMany();
+        .from(TaskSolutionResult, 'tsr')
+        .select([
+          'tsr.studentId as "studentId"',
+          'tsr.score as "score"',
+          'row_number() OVER (PARTITION by tsr.studentId ORDER BY tsr.score desc) as "rownum"',
+        ])
+        .where(qb => {
+          // query students who checked enough tasks
+          const query = qb
+            .subQuery()
+            .select('r."checkerId"')
+            .from(TaskSolutionChecker, 'c')
+            .leftJoin(
+              'task_solution_result',
+              'r',
+              ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
+            )
+            .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
+            .andWhere('r.id IS NOT NULL')
+            .groupBy('r."checkerId"')
+            .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
+            .getQuery();
+          return `"studentId" IN ${query}`;
+        })
+        .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
+        .orderBy('tsr.studentId')
+        .orderBy('tsr.score', 'DESC');
+      return query;
+    }, 's')
+    .where('rownum <= :count', { count: minCheckedCount })
+    .groupBy('"studentId"');
+
+  const records = await query.getRawMany();
 
   return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
 }
@@ -625,17 +619,14 @@ export async function getInterviewStudentsByMentorId(courseTaskId: number, mento
 }
 
 export type StudentInterview = {
+  id: number;
   name: string;
-  endDate: string | null;
+  descriptionUrl: string;
+  startDate: string;
+  endDate: string;
   completed: boolean;
   interviewer: {
     githubId: string;
-    locationName?: string;
-    contactsPhone?: string;
-    contactsTelegram?: string;
-    contactsSkype?: string;
-    contactsNotes?: string;
-    contactsEmail?: string;
   };
 };
 
@@ -643,7 +634,7 @@ export type StudentCrossMentor = {
   name: string;
   mentor: {
     githubId: string;
-    locationName?: string;
+    cityName?: string;
     contactsPhone?: string;
     contactsTelegram?: string;
     contactsSkype?: string;
@@ -677,7 +668,7 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
       'user.contactsTelegram',
       'user.githubId',
       'user.id',
-      'user.locationName',
+      'user.cityName',
     ])
     .where('"taskChecker"."studentId" = :studentId', { studentId: student.id })
     .andWhere('task.type = :type', { type: 'interview' })
@@ -693,27 +684,16 @@ export async function getInterviewsByStudent(courseId: number, githubId: string)
     .getMany();
 
   const students = interviews.map(record => {
-    const {
-      githubId,
-      primaryEmail,
-      contactsNotes,
-      contactsPhone,
-      contactsSkype,
-      contactsTelegram,
-      locationName,
-    } = record.mentor.user;
+    const { githubId } = record.mentor.user;
     return {
+      id: record.courseTask.id,
       name: record.courseTask.task.name,
+      descriptionUrl: record.courseTask.task.descriptionUrl,
+      startDate: record.courseTask.studentStartDate,
       endDate: record.courseTask.studentEndDate,
       completed: taskResults.some(taskResult => taskResult.courseTaskId === record.courseTaskId),
       interviewer: {
         githubId,
-        primaryEmail,
-        contactsNotes,
-        contactsPhone,
-        contactsSkype,
-        contactsTelegram,
-        locationName,
       },
     };
   });
@@ -745,7 +725,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
       'user.contactsTelegram',
       'user.githubId',
       'user.id',
-      'user.locationName',
+      'user.cityName',
     ])
     .where('"taskChecker"."studentId" = :studentId', { studentId: student.id })
     .andWhere('task.type <> :type', { type: 'interview' })
@@ -763,7 +743,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
       contactsPhone,
       contactsSkype,
       contactsTelegram,
-      locationName,
+      cityName,
     } = record.mentor.user;
     return {
       name: record.courseTask.task.name,
@@ -774,7 +754,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
         contactsPhone,
         contactsSkype,
         contactsTelegram,
-        locationName,
+        cityName,
       },
     };
   });

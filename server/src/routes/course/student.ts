@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, Student, TaskInterviewResult } from '../../models';
 import { courseService, taskService } from '../../services';
-import { getInterviewsByStudent } from '../../services/stageInterviews';
+import { stageInterviewService } from '../../services';
 import { setResponse } from '../utils';
 
 export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -24,7 +24,7 @@ export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContex
 
   if (!courseService.isPowerUser(courseId, user)) {
     const [interviews, mentor] = await Promise.all([
-      getInterviewsByStudent(courseId, student.id),
+      stageInterviewService.getInterviewsByStudentId(courseId, student.id),
       courseService.getCourseMentor(courseId, user.id),
     ] as const);
     if (mentor == null) {
@@ -70,6 +70,28 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
     },
     60,
   );
+};
+
+export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  const data: { mentorId?: number } = ctx.request.body;
+  const result = await getRepository(Student).update(student.id, { mentorId: Number(data.mentorId) });
+  setResponse(ctx, OK, result);
+};
+
+export const getStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  if (student == null) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  setResponse(ctx, OK, student);
 };
 
 type Input = {
