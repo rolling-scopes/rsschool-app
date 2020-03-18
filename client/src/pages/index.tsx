@@ -14,6 +14,7 @@ import {
   UserOutlined,
   StarOutlined,
   QuestionCircleTwoTone,
+  CheckSquareOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography } from 'antd';
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
@@ -24,6 +25,7 @@ import * as React from 'react';
 import { CourseService, StudentSummary } from 'services/course';
 import { Course } from 'services/models';
 import { CoursesService } from 'services/courses';
+import { MentorRegistryService } from 'services/mentorRegistry';
 
 const { Content } = Layout;
 
@@ -40,6 +42,7 @@ type State = {
   studentSummary: StudentSummary | null;
   courseTasks: { id: number }[];
   allCourses: Course[];
+  preselectedCourses: Course[];
 };
 
 const anyAccess = () => true;
@@ -240,6 +243,8 @@ const courseManagementRoutes = [
   },
 ];
 
+const mentorRegistryService = new MentorRegistryService();
+
 class IndexPage extends React.PureComponent<Props, State> {
   state: State = {
     dropdownOpen: false,
@@ -249,6 +254,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     studentSummary: null,
     courseTasks: [],
     allCourses: [],
+    preselectedCourses: [],
   };
 
   toggle = () => {
@@ -332,6 +338,11 @@ class IndexPage extends React.PureComponent<Props, State> {
     const activeCourse = this.getActiveCourse();
     const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
     this.setState({ allCourses });
+    if (!activeCourse) {
+      const mentor = await mentorRegistryService.getMentor();
+      const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
+      this.setState({ preselectedCourses });
+    }
   }
 
   renderNoCourse() {
@@ -354,14 +365,37 @@ class IndexPage extends React.PureComponent<Props, State> {
         }
         extra={
           <>
-            <Button size="large" icon={<StarOutlined />} type="primary" href="/registry/mentor">
-              Register as Mentor
-            </Button>
-            {hasPlanned && (
-              <Button size="large" icon={<UserOutlined />} href="/registry/student" type="danger">
-                Register as Student
+            <Row justify="center">
+              <Button size="large" icon={<StarOutlined />} type="default" href="/registry/mentor">
+                Register as Mentor
               </Button>
-            )}
+              {hasPlanned && (
+                <Button
+                  style={{ marginLeft: 16 }}
+                  size="large"
+                  icon={<UserOutlined />}
+                  href="/registry/student"
+                  type="default"
+                >
+                  Register as Student
+                </Button>
+              )}
+            </Row>
+            <Row justify="center" style={{ marginTop: 16 }}>
+              {this.state.preselectedCourses.map(c => {
+                return (
+                  <Button
+                    key={c.id}
+                    size="large"
+                    icon={<CheckSquareOutlined />}
+                    type="primary"
+                    href={`/course/mentor/confirm?course=${c.alias}`}
+                  >
+                    Confirm {c.name}
+                  </Button>
+                );
+              })}
+            </Row>
           </>
         }
       />

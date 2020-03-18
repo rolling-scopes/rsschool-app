@@ -58,7 +58,7 @@ export class Student {
   mentor: Mentor;
 
   @Column({ nullable: true })
-  mentorId: number;
+  mentorId: number | null;
 
   @OneToMany(
     _ => TaskResult,
