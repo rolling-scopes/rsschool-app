@@ -1,5 +1,6 @@
 import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
 import { getRepository } from 'typeorm';
+import { ILogger } from '../logger';
 
 const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -146,6 +147,7 @@ export async function saveScore(
     comment: string;
     githubPrUrl?: string;
   },
+  logger?: ILogger
 ) {
   const { authorId, githubPrUrl = null, comment = '', score } = data;
   const existingResult = await getTaskResult(studentId, courseTaskId);
@@ -182,6 +184,8 @@ export async function saveScore(
     existingResult.score = score;
   }
 
+  logger?.info(existingResult);
+  
   return getRepository(TaskResult).update(existingResult.id, {
     score: existingResult.score,
     comment: existingResult.comment,

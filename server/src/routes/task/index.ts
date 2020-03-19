@@ -24,12 +24,11 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
   const id: number = Number(ctx.params.id);
   try {
     const result: TaskVerification = await getRepository(TaskVerification).save({ ...data, id });
-    logger?.info(result);
     await taskResultsService.saveScore(result.studentId, result.courseTaskId, {
       authorId: 0,
       comment: result.details,
       score: result.score,
-    });
+    }, logger);
     setResponse(ctx, OK, result);
   } catch (e) {
     if (logger) {
