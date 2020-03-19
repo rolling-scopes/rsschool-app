@@ -147,7 +147,7 @@ export async function saveScore(
     comment: string;
     githubPrUrl?: string;
   },
-  logger?: ILogger
+  logger?: ILogger,
 ) {
   const { authorId, githubPrUrl = null, comment = '', score } = data;
   const existingResult = await getTaskResult(studentId, courseTaskId);
@@ -157,6 +157,7 @@ export async function saveScore(
       studentId,
       courseTaskId,
     });
+    logger?.info('new', taskResult);
     return getRepository(TaskResult).insert(taskResult);
   }
 
@@ -184,8 +185,8 @@ export async function saveScore(
     existingResult.score = score;
   }
 
-  logger?.info(existingResult);
-  
+  logger?.info('existing', existingResult);
+
   return getRepository(TaskResult).update(existingResult.id, {
     score: existingResult.score,
     comment: existingResult.comment,
