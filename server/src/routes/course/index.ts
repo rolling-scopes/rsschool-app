@@ -59,6 +59,7 @@ import {
   getCrossCheckFeedback,
 } from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
+import { postCopyCourse } from './template';
 
 const validateId = async (ctx: Router.RouterContext, next: any) => {
   const id = Number(ctx.params.id);
@@ -77,6 +78,7 @@ export function courseRoute(logger: ILogger) {
   router.post('/studentsFeedbacks', adminGuard, postStudentsFeedbacks(logger));
   router.post('/certificates', adminGuard, postCertificates(logger));
   router.post('/repositories', adminGuard, postRepositories(logger));
+  router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);
   addInterviewsApi(router, logger);
