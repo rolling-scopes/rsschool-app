@@ -24,9 +24,4 @@ export class CoursesService {
     const result = await axios.get<CoursesResponse>(`/api/courses`);
     return result.data.data;
   }
-
-  async deleteCourse(id: number) {
-    const result = await axios.delete(`/api/course/${id}`);
-    return result.data.data;
-  }
 }
