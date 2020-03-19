@@ -19,13 +19,18 @@ const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
 };
 
 const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContext) => {
-  const { createdDate, ...data } = ctx.request.body;
-  
+  const { createdDate, ...data } = ctx.request.body as {
+    createdDate: string;
+    score: number;
+    details: string;
+    status: any;
+  };
+
   const id: number = Number(ctx.params.id);
   try {
     const result: TaskVerification = await getRepository(TaskVerification).save({ ...data, id });
-    
-    logger?.info(data);
+
+    logger?.info(data, result);
 
     await taskResultsService.saveScore(
       result.studentId,
@@ -37,7 +42,7 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
       },
       logger,
     );
-    
+
     setResponse(ctx, OK, result);
   } catch (e) {
     if (logger) {

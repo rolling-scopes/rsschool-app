@@ -150,6 +150,7 @@ export async function saveScore(
   logger?: ILogger,
 ) {
   const { authorId, githubPrUrl = null, comment = '', score } = data;
+  logger?.info('input', data, studentId, courseTaskId);
   const existingResult = await getTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
     const taskResult = createTaskResult(authorId, {
