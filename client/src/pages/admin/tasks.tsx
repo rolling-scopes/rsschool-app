@@ -11,13 +11,14 @@ import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
 
 const { Content } = Layout;
 type Props = { session: Session };
+type ModalData = (Partial<Omit<Task, 'attributes'>> & { attributes?: string }) | null;
 const service = new TaskService();
 const disciplines = PRIMARY_SKILLS;
 
 function Page(props: Props) {
   const [data, setData] = useState([] as Task[]);
   const [modalLoading, setModalLoading] = useState(false);
-  const [modalData, setModalData] = useState(null as Partial<Task> | null);
+  const [modalData, setModalData] = useState(null as ModalData);
   const [modalAction, setModalAction] = useState('update');
   const [modalValues, setModalValues] = useState<any>({});
 
@@ -32,7 +33,7 @@ function Page(props: Props) {
   };
 
   const handleEditItem = (record: Task) => {
-    setModalData(record);
+    setModalData(prepareValues(record));
     setModalAction('update');
   };
 
@@ -161,6 +162,14 @@ function Page(props: Props) {
               <Input placeholder="task1" />
             </Form.Item>
           </Collapse.Panel>
+          <Collapse.Panel header="JSON Attributes" key="2">
+            <Form.Item
+              name="attributes"
+              rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
+            >
+              <Input.TextArea rows={6} />
+            </Form.Item>
+          </Collapse.Panel>
         </Collapse>
       </ModalForm>
     );
@@ -201,8 +210,19 @@ function createRecord(values: any) {
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
     discipline: values.discipline,
+    attributes: JSON.parse(values.attributes),
   };
   return data;
+}
+
+function prepareValues(modalData: Task) {
+  if (!modalData) {
+    return modalData;
+  }
+  return {
+    ...modalData,
+    attributes: JSON.stringify(modalData.attributes),
+  };
 }
 
 function getColumns(handleEditItem: any) {

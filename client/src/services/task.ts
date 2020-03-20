@@ -29,6 +29,7 @@ export interface Task {
   sourceGithubRepoUrl: string;
   tags: string[];
   discipline: string;
+  attributes: Record<string, any>;
 }
 
 export class TaskService {

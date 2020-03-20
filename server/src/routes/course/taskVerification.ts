@@ -53,6 +53,7 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
       ...inputData,
       id: courseTask.id,
       type: courseTask.type || courseTask.task.type,
+      attributes: courseTask.task.attributes ?? {},
     },
   };
 

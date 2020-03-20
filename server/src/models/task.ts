@@ -68,4 +68,7 @@ export class Task {
 
   @Column({ nullable: true })
   discipline: string;
+
+  @Column({ type: 'json', default: {} })
+  attributes: Record<string, any>;
 }
