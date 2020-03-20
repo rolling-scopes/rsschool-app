@@ -120,7 +120,12 @@ export function registryRouter(logger?: ILogger) {
     const mentorRegistries = await getMentorRegistries();
     const data = mentorRegistries
       .map(transformMentorRegistry)
-      .filter(mentorRegistry => !mentorRegistry.preselectedCourses.every(c => mentorRegistry.courses?.includes(c)));
+      .filter(
+        it =>
+          it.courses?.length === 0 ||
+          !it.preselectedCourses.length ||
+          !it.preselectedCourses.every(c => it.courses?.includes(c)),
+      );
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
 
     const csv = await parseAsync(
