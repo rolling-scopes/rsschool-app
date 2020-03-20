@@ -190,8 +190,8 @@ function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): C
       title: 'City',
       dataIndex: 'locationName',
       width: 80,
-      sorter: stringSorter('locationName'),
-      ...getColumnSearchProps('locationName'),
+      sorter: stringSorter('cityName'),
+      ...getColumnSearchProps('cityName'),
     },
     {
       title: 'Country',

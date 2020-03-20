@@ -26,6 +26,7 @@ const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.lastName`,
   `${modelName}.githubId`,
   `${modelName}.cityName`,
+  `${modelName}.countryName`,
 ];
 
 function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
@@ -434,7 +435,7 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
   let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
-    .addSelect(getPrimaryUserFields().concat(['user.countryName']))
+    .addSelect(getPrimaryUserFields())
     .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
     .addSelect(['mentor.id', 'mentor.userId'])
     .leftJoin('student.taskResults', 'tr')
