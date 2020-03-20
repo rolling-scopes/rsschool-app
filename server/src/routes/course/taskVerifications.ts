@@ -45,6 +45,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
       'task.name',
       'task.githubRepoName',
       'task.sourceGithubRepoUrl',
+      'task.attributes',
       'courseTask.id',
     ])
     .where('courseTask.courseId = :courseId', { courseId })
@@ -60,6 +61,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
     taskName: verification.courseTask.task.name,
     sourceGithubRepoUrl: verification.courseTask.task.sourceGithubRepoUrl,
     githubRepoName: verification.courseTask.task.githubRepoName,
+    attributes: verification.courseTask.task.attributes,
   }));
 
   setResponse(ctx, OK, result);
