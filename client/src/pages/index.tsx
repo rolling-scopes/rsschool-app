@@ -181,10 +181,10 @@ const routes = [
   // {
   //   name: () => (
   //     <>
-  //       <HighlightTwoTone twoToneColor="#7f00ff" /> Stage Interview Feedback
+  //       <HighlightTwoTone twoToneColor="#7f00ff" /> Interview: Pre-Screening
   //     </>
   //   ),
-  //   getLink: (course: Course) => `/course/mentor/stage-interview-feedback?course=${course.alias}`,
+  //   getLink: (course: Course) => `/course/mentor/pre-screening-interview-feedback?course=${course.alias}`,
   //   access: combineAnd(isCourseNotCompleted, isMentor),
   //   newTab: false,
   // },
