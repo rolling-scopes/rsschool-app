@@ -26,6 +26,9 @@ export function LocationSelect(props: Props) {
         language: 'en',
         type: 'city',
         aroundLatLngViaIP: false,
+        templates: {
+          value: (suggestion: any) => `${suggestion.name}, ${suggestion.country}`,
+        },
       }}
       defaultValue={getDefaultValue(props.location)}
       onSuggestions={discardLocation}
