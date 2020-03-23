@@ -13,7 +13,7 @@ type Props = {
   keyField?: 'id' | 'githubId';
 };
 
-export function StudentSearch(props: Props) {
+export function MentorSearch(props: Props) {
   const [data, setData] = useState<Person[]>([]);
 
   useEffect(() => setData(props.defaultValues ?? []), [props.defaultValues]);
@@ -22,7 +22,7 @@ export function StudentSearch(props: Props) {
   const handleSearch = useCallback(
     async (value: string) => {
       if (value) {
-        const data = await courseService.searchStudents(value);
+        const data = await courseService.searchMentors(value);
         setData(data);
       } else {
         setData(props.defaultValues ?? []);
@@ -46,7 +46,7 @@ export function StudentSearch(props: Props) {
       style={{ width: '100%' }}
     >
       {data.map(person => (
-        <Select.Option key={person.id} value={keyField ? get(person, keyField) : person.id}>
+        <Select.Option key={person.id} value={keyField ? get(person, keyField) : person.githubId}>
           <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
         </Select.Option>
       ))}

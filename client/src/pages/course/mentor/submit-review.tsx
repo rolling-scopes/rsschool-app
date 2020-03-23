@@ -41,7 +41,7 @@ function Page({ session, course }: CoursePageProps) {
   const loadStudents = async (searchText: string) => {
     const task = courseTasks.find(t => t.id === courseTaskId);
     return isPowerMentor(session, courseId) || isTaskOwner(userId)(task)
-      ? courseService.searchCourseStudent(searchText)
+      ? courseService.searchStudents(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
           `${githubId} ${firstName} ${lastName}`.match(searchText),
         );

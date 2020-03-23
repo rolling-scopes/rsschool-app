@@ -63,7 +63,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
     return (
       <>
         <Button type="link" shape="circle" onClick={this.openModal}>
-          Add
+          Add Student
         </Button>
         <Modal
           title={

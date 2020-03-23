@@ -1,18 +1,9 @@
-import * as userService from './userService';
-import * as studentsService from './studentsService';
-import * as courseService from './courseService';
-import * as taskResultsService from './taskResultsService';
-import * as taskService from './tasksService';
-import * as awsTaskService from './awsTaskService';
-import * as stageInterviewService from './stageInterviewService';
+import * as userService from './user.service';
+import * as courseService from './course.service';
+import * as taskResultsService from './taskResults.service';
+import * as taskService from './tasks.service';
+import * as awsTaskService from './aws.service';
+import * as stageInterviewService from './stageInterview.service';
 
 export * from './operationResult';
-export {
-  userService,
-  taskService,
-  studentsService,
-  courseService,
-  taskResultsService,
-  awsTaskService,
-  stageInterviewService,
-};
+export { userService, taskService, courseService, taskResultsService, awsTaskService, stageInterviewService };

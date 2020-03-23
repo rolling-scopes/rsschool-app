@@ -5,7 +5,7 @@ import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models/session';
-import { getUserByGithubId } from '../../services/userService';
+import { getUserByGithubId } from '../../services/user.service';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard } from '../guards';

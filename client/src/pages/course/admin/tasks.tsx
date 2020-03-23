@@ -180,7 +180,7 @@ function Page(props: CoursePageProps) {
             <Select.Option value="test">Test</Select.Option>
             <Select.Option value="codejam">Code Jam</Select.Option>
             <Select.Option value="interview">Interview</Select.Option>
-            <Select.Option value="stage-interview">Stage Interview</Select.Option>
+            <Select.Option value="stage-interview">Technical Screening</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="checker" required label="Checker">

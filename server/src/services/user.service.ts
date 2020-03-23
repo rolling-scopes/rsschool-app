@@ -29,3 +29,7 @@ export function getUserById(id: number) {
 export function saveUser(user: User) {
   return getRepository(User).save(user);
 }
+
+export function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
+  return `${firstName} ${lastName}`.trim();
+}

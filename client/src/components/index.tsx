@@ -14,6 +14,7 @@ export * from './Rating';
 export * from './RegistryBanner';
 export * from './SocialNetworks';
 export * from './StudentExpelModal';
+export * from './StudentMentorModal';
 export * from './StudentsAutocomplete';
 export * from './StudentSearch';
 export * from './UserSearch';

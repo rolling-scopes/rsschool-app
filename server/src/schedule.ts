@@ -1,6 +1,6 @@
 import { scheduleJob } from 'node-schedule';
 import { ILogger } from './logger';
-import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } from './services/courseService';
+import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } from './services/course.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {

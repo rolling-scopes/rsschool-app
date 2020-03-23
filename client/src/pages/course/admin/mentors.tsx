@@ -1,7 +1,7 @@
 import { Button, Divider, message, Statistic, Table } from 'antd';
-import { GithubUserLink, PageLayout, withSession } from 'components';
+import { PageLayout, withSession } from 'components';
 import { AssignStudentModal } from 'components/Student';
-import { getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -79,8 +79,6 @@ function Page(props: CoursePageProps) {
       />
       <Divider dashed />
       <Table<MentorDetails>
-        bordered
-        className="m-3"
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         pagination={{ pageSize: 100 }}
@@ -88,22 +86,15 @@ function Page(props: CoursePageProps) {
         dataSource={mentors}
         columns={[
           {
-            title: 'Github',
+            title: 'Mentor',
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
             width: 100,
-            render: (value: string) => <GithubUserLink value={value} />,
+            render: (_, record: any) => <PersonCell value={record} />,
             ...getColumnSearchProps('githubId'),
           },
           {
-            title: 'Name',
-            dataIndex: 'name',
-            width: 120,
-            sorter: stringSorter('name'),
-            ...getColumnSearchProps('name'),
-          },
-          {
-            title: 'Location',
+            title: 'City',
             dataIndex: 'cityName',
             key: 'cityName',
             width: 100,
@@ -119,19 +110,25 @@ function Page(props: CoursePageProps) {
             ...getColumnSearchProps('countryName'),
           },
           {
-            title: 'Max Student',
+            title: 'Preference',
+            dataIndex: 'studentsPreference',
+            sorter: stringSorter('studentsPreference'),
+            width: 80,
+          },
+          {
+            title: 'Max Students',
             dataIndex: 'maxStudentsLimit',
             sorter: numberSorter('maxStudentsLimit'),
             width: 80,
           },
           {
-            title: 'Interviews Count',
+            title: 'Interviews',
             dataIndex: 'interviewsCount',
             sorter: numberSorter('interviewsCount'),
             width: 80,
           },
           {
-            title: 'Students Count',
+            title: 'Students',
             dataIndex: 'studentsCount',
             sorter: numberSorter('studentsCount' as any),
             width: 80,
@@ -149,22 +146,15 @@ function Page(props: CoursePageProps) {
             render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
           },
           {
-            title: 'Students',
-            dataIndex: 'students',
-            width: 80,
-            render: (_: string, mentor: MentorDetails) => (
-              <>
-                <AssignStudentModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
-              </>
-            ),
-          },
-          {
             title: 'Actions',
             dataIndex: 'actions',
             render: (_: string, mentor: MentorDetails) => (
-              <Button type="link" onClick={() => handleExpell(mentor)}>
-                Expel
-              </Button>
+              <>
+                <Button type="link" onClick={() => handleExpell(mentor)}>
+                  Expel
+                </Button>
+                <AssignStudentModal courseId={courseId} mentorsGithub={mentor.githubId} mentorId={mentor.id} />
+              </>
             ),
           },
         ]}
