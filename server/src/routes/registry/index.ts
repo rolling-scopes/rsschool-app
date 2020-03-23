@@ -118,14 +118,7 @@ export function registryRouter(logger?: ILogger) {
 
   router.get('/mentors/csv', adminGuard, async (ctx: Router.RouterContext) => {
     const mentorRegistries = await getMentorRegistries();
-    const data = mentorRegistries
-      .map(transformMentorRegistry)
-      .filter(
-        it =>
-          it.courses?.length === 0 ||
-          !it.preselectedCourses.length ||
-          !it.preselectedCourses.every(c => it.courses?.includes(c)),
-      );
+    const data = mentorRegistries.map(transformMentorRegistry);
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
 
     const csv = await parseAsync(
