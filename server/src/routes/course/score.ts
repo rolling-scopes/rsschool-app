@@ -147,9 +147,11 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
       }
 
       const existingResult = await taskResultsService.getTaskResult(student.id, data.courseTaskId);
-
+      const user = ctx.state.user as IUserSession | null;
+      const authorId = user?.id ?? 0;
+      
       if (existingResult == null) {
-        const taskResult = taskResultsService.createTaskResult(0, {
+        const taskResult = taskResultsService.createTaskResult(authorId, {
           ...data,
           studentId: Number(student.id),
         });
@@ -165,9 +167,8 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         existingResult.comment = item.comment;
       }
       if (data.score !== existingResult.score) {
-        const user = ctx.state.user as IUserSession | null;
         existingResult.historicalScores.push({
-          authorId: user?.id ?? 0,
+          authorId,
           score: data.score,
           dateTime: Date.now(),
           comment: item.comment,
