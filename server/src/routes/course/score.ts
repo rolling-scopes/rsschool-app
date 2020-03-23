@@ -158,13 +158,6 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         continue;
       }
 
-      const user = ctx.state!.user as IUserSession;
-      if (user && existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
-        const message = `${existingResult.id}. Possible user data override`;
-        result.push({ status: 'skipped', value: message });
-        continue;
-      }
-
       if (data.githubPrUrl) {
         existingResult.githubPrUrl = item.githubPrUrl || '';
       }
@@ -172,8 +165,9 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
         existingResult.comment = item.comment;
       }
       if (data.score !== existingResult.score) {
+        const user = ctx.state.user as IUserSession | null;
         existingResult.historicalScores.push({
-          authorId: 0,
+          authorId: user?.id ?? 0,
           score: data.score,
           dateTime: Date.now(),
           comment: item.comment,
