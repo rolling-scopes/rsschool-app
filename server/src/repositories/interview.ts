@@ -1,6 +1,6 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
-import { TaskChecker, TaskInterviewResult } from 'models';
-import { courseService, userService } from 'services';
+import { TaskChecker, TaskInterviewResult } from '../models';
+import { courseService, userService } from '../services';
 
 @EntityRepository(TaskChecker)
 export class InterviewRepository extends AbstractRepository<TaskChecker> {

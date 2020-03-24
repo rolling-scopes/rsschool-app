@@ -1,5 +1,5 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
-import { StageInterview, StageInterviewFeedback } from 'models';
+import { StageInterview, StageInterviewFeedback } from '../models';
 
 @EntityRepository(StageInterviewFeedback)
 export class StageInterviewFeedbackRepository extends AbstractRepository<StageInterviewFeedback> {

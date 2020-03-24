@@ -1,8 +1,8 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
-import { StageInterview, CourseTask, StageInterviewStudent } from 'models';
-import { courseService, userService } from 'services';
+import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
+import { courseService, userService } from '../services';
 import { InterviewInfo, InterviewDetails } from './interview';
-import { createInterviews } from 'rules/interviews';
+import { createInterviews } from '../rules/interviews';
 
 @EntityRepository(StageInterview)
 export class StageInterviewRepository extends AbstractRepository<StageInterview> {

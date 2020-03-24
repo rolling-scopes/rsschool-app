@@ -1,12 +1,12 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { ILogger } from 'logger';
-import { IUserSession, StageInterview, Student } from 'models';
-import { setResponse } from 'routes/utils';
-import { courseService, stageInterviewService } from 'services';
+import { IUserSession, StageInterview, Student } from '../../models';
+import { setResponse } from '../utils';
+import { courseService, stageInterviewService } from '../../services';
 import { getRepository, getCustomRepository } from 'typeorm';
-import { StageInterviewRepository } from 'repositories/stageInterview';
-import { StageInterviewFeedbackRepository } from 'repositories/stageInterviewFeedback';
+import { StageInterviewRepository } from '../../repositories/stageInterview';
+import { StageInterviewFeedbackRepository } from '../../repositories/stageInterviewFeedback';
 
 export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId } = ctx.params;
