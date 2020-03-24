@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK } from 'http-status-codes';
-import { ILogger } from 'logger';
+import { ILogger } from '../../logger';
 import { IUserSession, StageInterview, Student } from '../../models';
 import { setResponse } from '../utils';
 import { courseService, stageInterviewService } from '../../services';

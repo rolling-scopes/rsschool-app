@@ -1,11 +1,11 @@
 import { OK } from 'http-status-codes';
 import Router from '@koa/router';
 import { getCustomRepository } from 'typeorm';
-import { ILogger } from 'logger';
-import { courseService } from 'services';
-import { setResponse } from 'routes/utils';
-import { InterviewRepository } from 'repositories/interview';
-import { StageInterviewRepository } from 'repositories/stageInterview';
+import { ILogger } from '../../logger';
+import { courseService } from '../../services';
+import { setResponse } from '../utils';
+import { InterviewRepository } from '../../repositories/interview';
+import { StageInterviewRepository } from '../../repositories/stageInterview';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 

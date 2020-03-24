@@ -1,6 +1,6 @@
 import { groupBy, sumBy, shuffle, sum, pick, random, filter, sortBy, drop, entries } from 'lodash';
-import { MentorDetails } from 'services/course.service';
-import { InterviewInfo } from 'repositories/interview';
+import { MentorDetails } from '../services/course.service';
+import { InterviewInfo } from '../repositories/interview';
 
 type Mentor = {
   id: number;

@@ -16,7 +16,7 @@ import {
   Stage,
   TaskSolutionResult,
   IUserSession,
-} from 'models';
+} from '../models';
 import { createName } from './user.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [

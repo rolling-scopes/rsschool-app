@@ -5,7 +5,7 @@ import { ILogger } from '../../logger';
 import { IUserSession, Student, TaskInterviewResult } from '../../models';
 import { courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
-import { StageInterviewRepository } from 'repositories/stageInterview';
+import { StageInterviewRepository } from '../../repositories/stageInterview';
 
 export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
