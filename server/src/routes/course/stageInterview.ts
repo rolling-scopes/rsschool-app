@@ -39,12 +39,26 @@ export const deleteInterview = (_: ILogger) => async (ctx: Router.RouterContext)
   }
 };
 
+export const updateInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  try {
+    const { interviewId } = ctx.params;
+    const { githubId } = ctx.request.body;
+
+    const repository = getCustomRepository(StageInterviewRepository);
+    await repository.updateInterviewer(Number(interviewId), githubId);
+    setResponse(ctx, OK, {});
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
 export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   try {
-    const { useReserve = false } = ctx.request.body as { useReserve: boolean };
+    const { keepReserve = true } = ctx.request.body as { keepReserve: boolean };
     const repository = getCustomRepository(StageInterviewRepository);
-    const result = await repository.createAutomatically(courseId, useReserve);
+    console.log(keepReserve);
+    const result = await repository.createAutomatically(courseId, keepReserve);
     setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
@@ -58,7 +72,7 @@ export const getAvailableStudents = (_: ILogger) => async (ctx: Router.RouterCon
 };
 
 type InterviewFeedbackPostInput = {
-  studentId: number;
+  githubId: string;
   json: string;
   isCompleted: boolean;
   decision: string | null;
@@ -67,44 +81,46 @@ type InterviewFeedbackPostInput = {
 
 export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data: InterviewFeedbackPostInput = ctx.request.body;
+  const { courseId } = ctx.params;
 
-  const stageId: number = Number(ctx.params.id);
-  const userId: number = (ctx.state!.user as IUserSession).id;
-  const studentId = data.studentId;
+  const user = ctx.state!.user as IUserSession;
+  const githubId = data.githubId;
 
   try {
-    const stageInterview: any = await getRepository(StageInterview)
-      .createQueryBuilder('stageInterview')
-      .innerJoin('stageInterview.mentor', 'mentor')
-      .innerJoin('mentor.user', 'user')
-      .where('stageInterview.stageId = :stageId', { stageId })
-      .andWhere('stageInterview.studentId = :studentId', { studentId })
-      .andWhere('user.id = :userId', { userId })
-      .getOne();
+    const repository = getCustomRepository(StageInterviewRepository);
+    const interviews = await repository.findByStudent(courseId, githubId);
+    const interview = interviews.find(it => it.interviewer.githubId === user.githubId);
 
-    if (!stageInterview) {
-      throw new Error(
-        `Stage interview for userId='${userId}' and studentId='${studentId}' not found at stage='${stageId}'`,
-      );
+    if (interview == null) {
+      throw new Error(`Stage Interview for interviewer='${user.githubId}' and student='${githubId}' is not found'`);
     }
-    const repository = getCustomRepository(StageInterviewFeedbackRepository);
-    await repository.create(stageInterview.id, data);
-    if (data.decision === 'yes') {
-      await getRepository(Student).update(studentId, { mentorId: stageInterview.mentorId });
+
+    const feedbackRepository = getCustomRepository(StageInterviewFeedbackRepository);
+    await feedbackRepository.create(interview.id, data);
+
+    const [student, mentor] = await Promise.all([
+      courseService.queryStudentByGithubId(courseId, githubId),
+      courseService.queryMentorByGithubId(courseId, user.githubId),
+    ]);
+
+    if (data.decision === 'yes' && student && mentor) {
+      await getRepository(Student).update(student?.id, { mentorId: mentor.id });
     }
-    setResponse(ctx, OK, { stageInterviewId: stageInterview.id, ...data });
+
+    setResponse(ctx, OK, { stageInterviewId: interview.id, ...data });
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
 };
 
 export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params;
+  const { interviewId } = ctx.params;
   const mentorGithubId = (ctx.state!.user as IUserSession).githubId;
   try {
     const repository = getCustomRepository(StageInterviewFeedbackRepository);
-    const feedback = await repository.findByStudent(courseId, githubId, mentorGithubId);
-    setResponse(ctx, OK, feedback?.json ?? '{}');
+    const feedback = await repository.find(Number(interviewId), mentorGithubId);
+    console.log(feedback);
+    setResponse(ctx, OK, JSON.parse(feedback?.json ?? '{}'));
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }

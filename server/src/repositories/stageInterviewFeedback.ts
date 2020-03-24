@@ -3,6 +3,17 @@ import { StageInterview, StageInterviewFeedback } from '../models';
 
 @EntityRepository(StageInterviewFeedback)
 export class StageInterviewFeedbackRepository extends AbstractRepository<StageInterviewFeedback> {
+  public find(interviewId: number, interviewerGithubId: string) {
+    return getRepository(StageInterviewFeedback)
+      .createQueryBuilder('sif')
+      .innerJoin('sif.stageInterview', 'stageInterview')
+      .innerJoin('stageInterview.mentor', 'mentor')
+      .innerJoin('mentor.user', 'user')
+      .where('sif.stageInterviewId = :id', { id: interviewId })
+      .andWhere('user.githubId = :userId', { userId: interviewerGithubId })
+      .getOne();
+  }
+
   public findByStudent(courseId: number, githubId: string, mentorGithubId: string) {
     return getRepository(StageInterviewFeedback)
       .createQueryBuilder('sif')

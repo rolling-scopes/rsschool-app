@@ -149,15 +149,15 @@ const routes = [
     getLink: (course: Course) => `/course/student/interviews?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
   },
-  // {
-  //   name: () => (
-  //     <>
-  //       <AudioTwoTone twoToneColor="#f56161" /> Interviews
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  // },
+  {
+    name: () => (
+      <>
+        <AudioTwoTone twoToneColor="orange" /> Interviews
+      </>
+    ),
+    getLink: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+  },
   {
     name: () => (
       <>

@@ -25,15 +25,15 @@ function Page(props: CoursePageProps) {
   const createInterviews = () => {
     Modal.confirm({
       title: 'Keep some mentors free from interviews?',
-      content: 'Algorithm will automatically reserve some mentors and you could assign interviews to them manually',
+      content: 'Algorithm could automatically reserve some mentors and you could assign interviews to them manually',
       okText: 'Keep',
       cancelText: 'Assign',
       onOk: withLoading(async () => {
-        await courseService.createStageInterviews(false);
+        await courseService.createStageInterviews(true);
         await loadInterviews();
       }),
       onCancel: withLoading(async () => {
-        await courseService.createStageInterviews(true);
+        await courseService.createStageInterviews(false);
         await loadInterviews();
       }),
     });

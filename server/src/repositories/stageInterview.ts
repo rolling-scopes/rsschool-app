@@ -85,6 +85,16 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     return interview;
   }
 
+  public async updateInterviewer(id: number, githubId: string) {
+    const interview = await getRepository(StageInterview).findOne(id);
+    if (interview) {
+      const mentor = await courseService.queryMentorByGithubId(interview?.courseId, githubId);
+      if (mentor) {
+        getRepository(StageInterview).update(id, { mentorId: mentor.id });
+      }
+    }
+  }
+
   public async addStudent(courseId: number, studentId: number) {
     const repository = await getRepository(StageInterviewStudent);
     let record = await repository.findOne({ where: { courseId, studentId } });
@@ -126,7 +136,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     }));
   }
 
-  public async createAutomatically(courseId: number, useReserve = true) {
+  public async createAutomatically(courseId: number, keepReserve = true) {
     const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: 'stage-interview' } })!;
     if (courseTask == null) {
       return [];
@@ -135,7 +145,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     const mentors = await courseService.getMentorsWithStudents(courseId);
     const students = await this.findStudents(courseId);
     const interviews = await this.findMany(courseId);
-    const result = createInterviews(mentors, students, interviews, useReserve);
+    const result = createInterviews(mentors, students, interviews, keepReserve);
 
     return getRepository(StageInterview).save(
       result.map(r => ({ courseTaskId: courseTask?.id, courseId, mentorId: r.mentor.id, studentId: r.student.id })),
@@ -166,6 +176,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         ...courseService.getPrimaryUserFields('sUser'),
       ])
       .where(`stageInterview.courseId = :courseId AND ${userKey}.githubId = :githubId`, { courseId, githubId })
+      .andWhere(`${userType}.isExpelled = false`)
       .getMany();
 
     const result = stageInterviews.map(it => {

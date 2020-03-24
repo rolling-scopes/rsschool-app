@@ -26,7 +26,7 @@ export function createInterviews(
   allMentors: MentorDetails[],
   allStudents: Student[],
   interviews: InterviewInfo[],
-  useReserve: boolean = true,
+  keepReserve: boolean = true,
 ) {
   // filter students who has interview already
   const availableStudents = allStudents.filter(s => !interviews.find(i => i.student.githubId === s.githubId));
@@ -47,7 +47,7 @@ export function createInterviews(
   let anyMentors = sortBy(filterMentors(filter(allMentors, { studentsPreference: 'any' }), interviews), ['id']);
 
   // reserver 20% mentors
-  const reserveCount = useReserve ? Math.max(6, Math.round(anyMentors.length * 0.2)) : 0;
+  const reserveCount = keepReserve ? Math.max(6, Math.round(anyMentors.length * 0.2)) : 0;
   anyMentors = drop(anyMentors, reserveCount);
 
   let students: typeof freeStudents = [];

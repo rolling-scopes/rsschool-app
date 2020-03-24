@@ -42,11 +42,14 @@ export function UserSearch(props: Props) {
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
-      {data.map(person => (
-        <Select.Option key={person.id} value={keyField ? get(person, keyField) : person.id}>
-          <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
-        </Select.Option>
-      ))}
+      {data.map(person => {
+        const key = keyField ? get(person, keyField) : person.id;
+        return (
+          <Select.Option key={key} value={key}>
+            <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
+          </Select.Option>
+        );
+      })}
     </Select>
   );
 }

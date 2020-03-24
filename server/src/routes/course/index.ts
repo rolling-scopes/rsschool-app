@@ -134,6 +134,8 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
 
   router.get('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.getFeedback(logger));
   router.post('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.createFeedback(logger));
+
+  router.put('/interview/stage/:interviewId', courseMentorGuard, stageInterview.updateInterview(logger));
   router.delete('/interview/stage/:interviewId', courseMentorGuard, stageInterview.deleteInterview(logger));
 
   router.get('/interviews/stage/students/available', courseMentorGuard, stageInterview.getAvailableStudents(logger));
