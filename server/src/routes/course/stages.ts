@@ -4,7 +4,7 @@ import { Stage } from '../../models';
 import { ILogger } from '../../logger';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { getStages } from '../../services/courseService';
+import { getStages } from '../../services/course.service';
 
 export const getCourseStages = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;

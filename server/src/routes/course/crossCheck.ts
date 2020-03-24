@@ -10,7 +10,7 @@ import { setErrorResponse, setResponse } from '../utils';
 type Input = { url: string };
 const defaultPairsCount = 4;
 
-export const createTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
 
   const [student, courseTask] = await Promise.all([
@@ -44,7 +44,7 @@ export const createTaskSolution = (_: ILogger) => async (ctx: Router.RouterConte
   setResponse(ctx, OK, {});
 };
 
-export const getTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getSolution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
 
   const [student, courseTask] = await Promise.all([
@@ -68,7 +68,7 @@ export const getTaskSolution = (_: ILogger) => async (ctx: Router.RouterContext)
   setResponse(ctx, OK, { updatedDate, id, url });
 };
 
-export const createCrossCheckDistribution = (__: ILogger) => async (ctx: Router.RouterContext) => {
+export const createDistribution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseTaskId } = ctx.params;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
@@ -98,7 +98,7 @@ export const createCrossCheckDistribution = (__: ILogger) => async (ctx: Router.
   setResponse(ctx, OK, { crossCheckPairs });
 };
 
-export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
   const { user } = ctx.state as { user: IUserSession };
   const [student, checker, courseTask] = await Promise.all([
@@ -152,7 +152,7 @@ export const createCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterC
   setResponse(ctx, OK);
 };
 
-export const getCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
   const { user } = ctx.state as { user: IUserSession };
   const [student, checker, courseTask] = await Promise.all([
@@ -182,7 +182,7 @@ export const getCrossCheckResult = (_: ILogger) => async (ctx: Router.RouterCont
   setResponse(ctx, OK, existingResult);
 };
 
-export const getTaskSolutionAssignments = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getAssignments = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
   const [student, courseTask] = await Promise.all([
     courseService.queryStudentByGithubId(courseId, githubId),
@@ -205,7 +205,7 @@ export const getTaskSolutionAssignments = (_: ILogger) => async (ctx: Router.Rou
   setResponse(ctx, OK, result);
 };
 
-export const createCrossCheckCompletion = (__: ILogger) => async (ctx: Router.RouterContext) => {
+export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseTaskId } = ctx.params;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
@@ -223,7 +223,7 @@ export const createCrossCheckCompletion = (__: ILogger) => async (ctx: Router.Ro
   setResponse(ctx, OK);
 };
 
-export const getCrossCheckFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
   const [student, courseTask] = await Promise.all([
     courseService.queryStudentByGithubId(courseId, githubId),

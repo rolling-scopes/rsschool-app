@@ -1,62 +1,32 @@
-import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
-import { getRepository } from 'typeorm';
-import { ILogger } from '../../logger';
-import { StageInterview, Mentor, Student, IUserSession } from '../../models';
-import { setResponse } from '../utils';
-import { createInterviewPairs } from '../../rules/interviewPairs';
-import { courseService, stageInterviewService } from '../../services';
-import _ from 'lodash';
-import { StageInterviewFeedback } from './../../models/stageInterviewFeedback';
+import { BAD_REQUEST, OK } from 'http-status-codes';
+import { ILogger } from 'logger';
+import { IUserSession, StageInterview, Student } from 'models';
+import { setResponse } from 'routes/utils';
+import { courseService, stageInterviewService } from 'services';
+import { getRepository, getCustomRepository } from 'typeorm';
+import { StageInterviewRepository } from 'repositories/stageInterview';
+import { StageInterviewFeedbackRepository } from 'repositories/stageInterviewFeedback';
 
 export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const stageId = Number(ctx.params.id);
-  const result = await stageInterviewService.getPairs(stageId);
+  const { courseId } = ctx.params;
+  const repository = getCustomRepository(StageInterviewRepository);
+  const result = await repository.findMany(courseId);
   setResponse(ctx, OK, result);
 };
 
-export const getInterviewStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const githubId = ctx.state!.user.githubId;
-  const stageId = Number(ctx.params.id);
-  const result = await stageInterviewService.getInterviewsByMentor(stageId, githubId);
+export const getInterviewerStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const repository = getCustomRepository(StageInterviewRepository);
+  const result = await repository.findByInterviewer(courseId, githubId);
   setResponse(ctx, OK, result);
 };
-
-type PostInput = { mentorGithubId?: string; studentGithubId?: string; githubId?: string };
 
 export const createInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const inputData: PostInput[] = Array.isArray(ctx.request.body) ? ctx.request.body : [ctx.request.body];
-  const courseId = Number(ctx.params.courseId);
-  const stageId = Number(ctx.params.id);
-
-  try {
-    const result = [];
-    const data = prepareInputData(inputData, ctx.state!.user);
-
-    for await (const item of data) {
-      const [mentor, student] = await getStundentAndMentor(courseId, item.mentorGithubId, item.studentGithubId);
-      if (mentor == null || student == null) {
-        continue;
-      }
-
-      const repository = getRepository(StageInterview);
-      const existingInterview = await repository.findOne({
-        where: { studentId: student.id, stageId, isCompleted: false },
-      });
-
-      if (existingInterview && !existingInterview.isCompleted) {
-        existingInterview.mentorId = mentor.id;
-        const interview = await repository.save(existingInterview);
-        result.push(interview);
-      } else {
-        const interview = await repository.save({ mentorId: mentor.id, studentId: student.id, courseId, stageId });
-        result.push(interview);
-      }
-    }
-    setResponse(ctx, OK, result);
-  } catch (e) {
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
-  }
+  const { courseId, studentGithubId, githubId: mentorGithubId } = ctx.params;
+  const repository = getCustomRepository(StageInterviewRepository);
+  const result = await repository.create(courseId, studentGithubId, mentorGithubId);
+  setResponse(ctx, OK, { id: result?.id });
 };
 
 export const deleteInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -69,77 +39,13 @@ export const deleteInterview = (_: ILogger) => async (ctx: Router.RouterContext)
   }
 };
 
-async function getStundentAndMentor(courseId: number, mentorGithubId: string, studentGithubId: string) {
-  return Promise.all([
-    getRepository(Mentor)
-      .createQueryBuilder('mentor')
-      .innerJoin('mentor.user', 'user')
-      .where('user.githubId = :githubId AND mentor.courseId = :courseId', {
-        githubId: mentorGithubId,
-        courseId,
-      })
-      .getOne(),
-    getRepository(Student)
-      .createQueryBuilder('student')
-      .innerJoin('student.user', 'user')
-      .where('user.githubId = :githubId AND student.courseId = :courseId', {
-        githubId: studentGithubId,
-        courseId,
-      })
-      .getOne(),
-  ]);
-}
-
-const shortTrackStudents: string[] = [];
-
 export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
-  const stageId: number = Number(ctx.params.id);
-
   try {
-    const [mentors, students, interviewPairs] = await Promise.all([
-      courseService.getMentorsWithStudents(courseId),
-      courseService.getStudents(courseId, true),
-      stageInterviewService.getPairs(stageId),
-    ]);
-
-    let mentorsWithCapacity = mentors
-      .map(m => {
-        const scheduledInterviewsCount = interviewPairs.filter(pair => pair.mentor.githubId === m.githubId).length;
-        const capacity = m.maxStudentsLimit - m.students.length - scheduledInterviewsCount;
-        return {
-          ...m,
-          studentsPreference: m.studentsPreference,
-          countryName: m.countryName || 'Other',
-          capacity: capacity > 1 ? capacity + 2 : capacity === 1 ? capacity + 1 : 0,
-          students: [],
-        };
-      })
-      .filter(m => m.capacity > 0);
-
-    const reservedMentors = getReservedMentors(mentorsWithCapacity, 'Minsk');
-    mentorsWithCapacity = mentorsWithCapacity.filter(m => !reservedMentors.includes(m.githubId));
-    const alreadyHasInterview = interviewPairs.map(pair => pair.student.githubId);
-    const freeStudents = students.filter(
-      st => !shortTrackStudents.includes(st.githubId) && !st.mentor && !alreadyHasInterview.includes(st.githubId),
-    );
-
-    const result = createInterviewPairs(mentorsWithCapacity, freeStudents, 10);
-    const items = result
-      .map(pair => ({ mentorId: pair.mentorId, studentId: pair.studentId, courseId, stageId }))
-      .concat(
-        mentors
-          .filter(m => m.students.length > 0)
-          .reduce(
-            (acc, m) =>
-              acc.concat(
-                (m.students as any[]).map((s: any) => ({ mentorId: m.id, studentId: s.id, courseId, stageId })),
-              ),
-            [] as any[],
-          ),
-      );
-    await getRepository(StageInterview).save(items);
-    setResponse(ctx, OK, items);
+    const { useReserve = false } = ctx.request.body as { useReserve: boolean };
+    const repository = getCustomRepository(StageInterviewRepository);
+    const result = await repository.createAutomatically(courseId, useReserve);
+    setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
@@ -147,25 +53,9 @@ export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext
 
 export const getAvailableStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
-  const stageId: number = Number(ctx.params.id);
-  let result = await stageInterviewService.getAvailableStudents(courseId, stageId);
-  result = result.filter(r => !shortTrackStudents.includes(r.githubId));
+  const result = await stageInterviewService.getAvailableStudents(courseId);
   setResponse(ctx, OK, result);
 };
-
-function getReservedMentors(mentors: any[], locationName: string) {
-  const minskMentors = mentors.filter(m => m.locationName === locationName).reverse();
-  let reservedCapacity = 0;
-  const reservedMentors: string[] = [];
-  for (const mentor of minskMentors) {
-    reservedCapacity = reservedCapacity + mentor.capacity;
-    reservedMentors.push(mentor.githubId);
-    if (reservedCapacity >= 20) {
-      break;
-    }
-  }
-  return reservedMentors;
-}
 
 type InterviewFeedbackPostInput = {
   studentId: number;
@@ -197,64 +87,24 @@ export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) 
         `Stage interview for userId='${userId}' and studentId='${studentId}' not found at stage='${stageId}'`,
       );
     }
-
-    const stageInterviewId = stageInterview.id;
-
-    const feedback = await getRepository(StageInterviewFeedback)
-      .createQueryBuilder('stageInterviewFeedback')
-      .where('stageInterviewFeedback.stageInterviewId = :stageInterviewId', { stageInterviewId })
-      .getOne();
-
-    const feedbackRequest = {
-      stageInterviewId,
-      json: data.json,
-    };
-
-    if (feedback) {
-      await getRepository(StageInterviewFeedback).save({ id: feedback.id, ...feedbackRequest });
-    } else {
-      await getRepository(StageInterviewFeedback).save(feedbackRequest);
-    }
-
-    const stageInterviewRequest: any = {
-      isCompleted: data.isCompleted,
-    };
-
-    if (data.decision) {
-      stageInterviewRequest.decision = data.decision;
-    }
-
-    if (data.isGoodCandidate) {
-      stageInterviewRequest.isGoodCandidate = data.isGoodCandidate;
-    }
-
-    await getRepository(StageInterview).update(stageInterviewId, stageInterviewRequest);
-
+    const repository = getCustomRepository(StageInterviewFeedbackRepository);
+    await repository.create(stageInterview.id, data);
     if (data.decision === 'yes') {
       await getRepository(Student).update(studentId, { mentorId: stageInterview.mentorId });
-    } else if (data.decision === 'no' && !data.isGoodCandidate && data.isGoodCandidate !== null) {
-      await getRepository(Student).update(studentId, {
-        isExpelled: true,
-        expellingReason: '',
-        endDate: new Date(),
-      });
     }
-
-    setResponse(ctx, OK, feedbackRequest);
+    setResponse(ctx, OK, { stageInterviewId: stageInterview.id, ...data });
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
 };
 
 export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const stageId: number = Number(ctx.params.id);
-  const userId: number = (ctx.state!.user as IUserSession).id;
-  const studentId: number = Number(ctx.params.studentId);
-
+  const { courseId, githubId } = ctx.params;
+  const mentorGithubId = (ctx.state!.user as IUserSession).githubId;
   try {
-    const stageInterviewFeedback = await stageInterviewService.getFeedback(stageId, userId, studentId);
-
-    setResponse(ctx, OK, stageInterviewFeedback ? stageInterviewFeedback.json : '{}');
+    const repository = getCustomRepository(StageInterviewFeedbackRepository);
+    const feedback = await repository.findByStudent(courseId, githubId, mentorGithubId);
+    setResponse(ctx, OK, feedback?.json ?? '{}');
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
@@ -262,14 +112,14 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
 
 export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
-
   try {
-    const student = await courseService.getStudentByGithubId(courseId, githubId);
+    const student = await courseService.queryStudentByGithubId(courseId, githubId);
     if (student == null) {
       setResponse(ctx, BAD_REQUEST, null);
       return;
     }
-    const result = await stageInterviewService.createInterviewStudent(courseId, student.id);
+    const repository = getCustomRepository(StageInterviewRepository);
+    const result = await repository.addStudent(courseId, student.id);
     setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
@@ -278,38 +128,16 @@ export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterC
 
 export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
-
   try {
-    const student = await courseService.getStudentByGithubId(courseId, githubId);
+    const student = await courseService.queryStudentByGithubId(courseId, githubId);
     if (student == null) {
       setResponse(ctx, BAD_REQUEST, null);
       return;
     }
-    const result = await stageInterviewService.getInterviewStudent(courseId, student.id);
+    const repository = getCustomRepository(StageInterviewRepository);
+    const result = await repository.findStudent(courseId, student.id);
     setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
 };
-
-function prepareInputData(
-  input: {
-    githubId?: string;
-    mentorGithubId?: string;
-    studentGithubId?: string;
-  }[],
-  user?: IUserSession,
-) {
-  const hasUser = user && !!user.githubId;
-  return input.map(d =>
-    hasUser
-      ? {
-          studentGithubId: d.githubId!,
-          mentorGithubId: user!.githubId,
-        }
-      : {
-          studentGithubId: d.studentGithubId!,
-          mentorGithubId: d.mentorGithubId!,
-        },
-  );
-}

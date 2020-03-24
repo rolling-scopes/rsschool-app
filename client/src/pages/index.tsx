@@ -7,7 +7,6 @@ import {
   AudioTwoTone,
   CompassTwoTone,
   // HighlightTwoTone,
-  // InteractionTwoTone,
   PlayCircleTwoTone,
   StopTwoTone,
   ToolTwoTone,
@@ -116,7 +115,7 @@ const routes = [
   // {
   //   name: () => (
   //     <>
-  //       <InteractionTwoTone /> Stage Interview
+  //       <InteractionTwoTone /> Technical Screening
   //     </>
   //   ),
   //   getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
@@ -150,6 +149,15 @@ const routes = [
     getLink: (course: Course) => `/course/student/interviews?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
   },
+  // {
+  //   name: () => (
+  //     <>
+  //       <AudioTwoTone twoToneColor="#f56161" /> Interviews
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  // },
   {
     name: () => (
       <>
@@ -159,15 +167,15 @@ const routes = [
     getLink: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
   },
-  {
-    name: () => (
-      <>
-        <AudioTwoTone /> Interview: CoreJS
-      </>
-    ),
-    getLink: (course: Course) => `/course/mentor/interview-corejs?course=${course.alias}`,
-    access: combineAnd(isCourseNotCompleted, isMentor),
-  },
+  // {
+  //   name: () => (
+  //     <>
+  //       <AudioTwoTone /> Interview: CoreJS
+  //     </>
+  //   ),
+  //   getLink: (course: Course) => `/course/mentor/interview-corejs?course=${course.alias}`,
+  //   access: combineAnd(isCourseNotCompleted, isMentor),
+  // },
   // {
   //   name: () => (
   //     <>
@@ -184,7 +192,7 @@ const routes = [
   //       <HighlightTwoTone twoToneColor="#7f00ff" /> Interview: Pre-Screening
   //     </>
   //   ),
-  //   getLink: (course: Course) => `/course/mentor/pre-screening-interview-feedback?course=${course.alias}`,
+  //   getLink: (course: Course) => `/course/mentor/interview-technical-screening?course=${course.alias}`,
   //   access: combineAnd(isCourseNotCompleted, isMentor),
   //   newTab: false,
   // },
@@ -240,6 +248,12 @@ const courseManagementRoutes = [
     name: () => `Course Users`,
     getLink: (course: Course) => `/course/admin/users?course=${course.alias}`,
     access: isAdminRole,
+  },
+
+  {
+    name: () => `Technical Screening`,
+    getLink: (course: Course) => `/course/admin/stage-interviews?course=${course.alias}`,
+    access: combineOr(isAdminRole, isCourseManager, isCourseSupervisor),
   },
 ];
 

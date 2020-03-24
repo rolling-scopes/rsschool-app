@@ -36,7 +36,7 @@ function Page(props: CoursePageProps) {
 
   const handleRegister = async () => {
     Modal.confirm({
-      title: 'Are you ready to participate in Stage Interview?',
+      title: 'Are you ready to participate in Technical Screening?',
       content: (
         <>
           You are committing to do the following:

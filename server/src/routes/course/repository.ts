@@ -7,7 +7,7 @@ import { getRepository } from 'typeorm';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
 import { Course, Mentor, Student } from '../../models';
-import { queryStudentByGithubId } from '../../services/courseService';
+import { courseService } from '../../services';
 import { setResponse } from '../utils';
 
 const teamsCache: Record<string, number | undefined> = {};
@@ -20,8 +20,10 @@ export const postRepositories = (logger: ILogger) => async (ctx: Router.RouterCo
   const course = (await getRepository(Course).findOne(courseId))!;
   const githubIds = await queryStudentGithubIds(courseId);
   for await (const githubId of githubIds) {
-    const { repository } = await createRepository(course, githubId, logger);
-    result.push({ repository });
+    const record = await createRepository(course, githubId, logger);
+    if (record?.repository) {
+      result.push({ repository: record.repository });
+    }
   }
   setResponse(ctx, OK, result);
 };
@@ -31,7 +33,7 @@ export const postRepository = (logger: ILogger) => async (ctx: Router.RouterCont
 
   const course = (await getRepository(Course).findOne(courseId))!;
   const student = await createRepository(course, githubId, logger);
-  setResponse(ctx, OK, { repository: student.repository });
+  setResponse(ctx, OK, { repository: student?.repository });
 };
 
 async function createRepository(course: Course, githubId: string, logger: ILogger) {
@@ -60,7 +62,10 @@ async function createRepository(course: Course, githubId: string, logger: ILogge
     github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
     github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
   ]);
-  const student = await queryStudentByGithubId(course.id, githubId);
+  const student = await courseService.getStudentByGithubId(course.id, githubId);
+  if (student == null) {
+    return null;
+  }
   student.repository = response.data.html_url;
   logger.info({ repository: student.repository });
   await getRepository(Student).save(student);

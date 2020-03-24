@@ -64,7 +64,7 @@ export class Mentor {
   maxStudentsLimit: number;
 
   @Column({ nullable: true, type: 'varchar' })
-  studentsPreference: 'sameCity' | 'sameCountry' | null;
+  studentsPreference: 'any' | 'city' | 'country';
 
   @OneToMany(
     _ => StageInterview,

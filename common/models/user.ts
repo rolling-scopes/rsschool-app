@@ -6,7 +6,7 @@ export interface UserBasic {
 
 export interface MentorBasic extends UserBasic {
   isActive: boolean;
-  students: StudentBasic[] | ({ id: number })[];
+  students: (StudentBasic | { id: number })[];
 }
 
 export interface StudentBasic extends UserBasic {

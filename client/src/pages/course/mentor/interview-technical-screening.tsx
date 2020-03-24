@@ -7,8 +7,6 @@ import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
 
-const STAGE_ID = 17;
-
 const SKILLS_LEVELS = [
   `Doesn't know`,
   `Poor knowledge (almost doesn't know)`,
@@ -254,7 +252,7 @@ function Page(props: CoursePageProps) {
   useAsync(async () => {
     setLoading(true);
 
-    const students = await courseService.getStageInterviewStudents(STAGE_ID);
+    const students = await courseService.getStageInterviewStudents(props.session.githubId);
 
     setStudents(students);
     setLoading(false);
@@ -287,7 +285,7 @@ function Page(props: CoursePageProps) {
   return (
     <PageLayoutSimple
       loading={loading}
-      title="Pre-Screening: Interview Feedback"
+      title="Technical Screening Feedback"
       courseName={props.course.name}
       githubId={props.session.githubId}
     >

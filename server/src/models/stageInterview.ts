@@ -47,7 +47,7 @@ export class StageInterview {
   @ManyToOne(_ => Stage, { nullable: true })
   stage: Stage;
 
-  @Column()
+  @Column({ nullable: true })
   stageId: number;
 
   @ManyToOne(_ => CourseTask, { nullable: true })

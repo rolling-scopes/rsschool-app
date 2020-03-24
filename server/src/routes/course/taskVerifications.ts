@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { TaskVerification } from '../../models';
 import { setResponse } from '../utils';
-import { getStudentByGithubId } from '../../services/courseService';
+import { getStudentByGithubId } from '../../services/course.service';
 
 type Params = { courseId: number; githubId: string };
 
