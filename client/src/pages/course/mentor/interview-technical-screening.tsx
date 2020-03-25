@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, message } from 'antd';
+import { Form, Typography, Rate, Input, Radio, Button, message, Divider } from 'antd';
 import withCourseData from 'components/withCourseData';
 import { withSession, UserSearch, PageLayoutSimple } from 'components';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
+import _ from 'lodash';
+import { useLoading } from 'components/useLoading';
 
 const SKILLS_LEVELS = [
   `Doesn't know`,
@@ -25,7 +27,7 @@ const CODING_LEVELS = [
 
 const ENGLISH_LEVELS = ['A0', 'A1', 'A1+', 'A2', 'A2+', 'B1', 'B1+', 'B2', 'B2+', 'C1', 'C1+', 'C2'];
 
-const initialValues = {
+const defaultInitialValues = {
   githubId: null,
   'skills-htmlCss-level': 0,
   'skills-dataStructures-array': 0,
@@ -124,11 +126,7 @@ const SKILLS = [
   },
 ];
 
-const radioStyle = {
-  display: 'block',
-  height: '30px',
-  lineHeight: '30px',
-};
+const radioStyle = { display: 'block', height: '30px', lineHeight: '30px' };
 
 const renderSkills = () => (
   <>
@@ -146,7 +144,7 @@ const renderSkills = () => (
         ))}
       </div>
     ))}
-    <Form.Item label="Comment" name="skills-comment" style={{ marginBottom: '80px' }}>
+    <Form.Item label="Comment" name="skills-comment" style={{ marginBottom: 40 }}>
       <Input.TextArea placeholder="Comments about student's skills" autoSize={{ minRows: 3, maxRows: 5 }} />
     </Form.Item>
   </>
@@ -174,7 +172,7 @@ const renderProgrammingTask = () => (
     <Form.Item label="Code writing confidence" name="programmingTask-codeWritingLevel">
       <Rate tooltips={CODING_LEVELS} />
     </Form.Item>
-    <Form.Item label="Comment" name="programmingTask-comment" style={{ marginBottom: '80px' }}>
+    <Form.Item label="Comment" name="programmingTask-comment" style={{ marginBottom: 40 }}>
       <Input.TextArea placeholder="Comments about student's code writing level" autoSize={{ minRows: 3, maxRows: 5 }} />
     </Form.Item>
   </>
@@ -202,7 +200,7 @@ const renderEnglishLevel = () => (
     <Form.Item label="English level by mentor's opinion" name="english-levelMentorOpinion">
       <Rate tooltips={ENGLISH_LEVELS} count={12} />
     </Form.Item>
-    <Form.Item label="Comment" name="english-comment" style={{ marginBottom: '80px' }}>
+    <Form.Item label="Comment" name="english-comment" style={{ marginBottom: 40 }}>
       <Input.TextArea
         placeholder="Comments / impressions about student's english level"
         autoSize={{ minRows: 3, maxRows: 5 }}
@@ -214,7 +212,7 @@ const renderEnglishLevel = () => (
 const renderResume = () => (
   <>
     <Typography.Title level={3}>Resume</Typography.Title>
-    <Form.Item label="Do you take the student in your group?" name="resume-verdict">
+    <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict">
       <Radio.Group>
         <Radio style={radioStyle} value={'yes'}>
           Yes, I do.
@@ -233,7 +231,7 @@ const renderResume = () => (
     <Form.Item
       label="Comment"
       name="resume-comment"
-      rules={[{ required: true, message: 'Please chose your verdict!' }]}
+      rules={[{ required: true, message: 'Please choose your verdict' }]}
       style={{ marginBottom: '20px' }}
     >
       <Input.TextArea placeholder="Resume" autoSize={{ minRows: 3, maxRows: 5 }} />
@@ -243,44 +241,71 @@ const renderResume = () => (
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
+  const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const [loading, setLoading] = useState(false);
+  const [loading, withLoading] = useLoading(false);
   const [students, setStudents] = useState([] as StudentBasic[]);
+  const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
 
-  useAsync(async () => {
-    setLoading(true);
+  const loadData = async () => {
+    const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
+    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
+    setInterviews(interviews);
+  };
 
-    const students = await courseService.getStageInterviewStudents(props.session.githubId);
+  useAsync(withLoading(loadData), []);
 
-    setStudents(students);
-    setLoading(false);
-  });
+  useEffect(() => {
+    form.setFieldsValue({ githubId });
+  }, [githubId]);
 
-  const loadStudents = async (searchText: string) => {
+  useEffect(() => {
+    if (interviews?.length && githubId) {
+      handleStudentSelect(githubId);
+    }
+  }, [interviews, githubId]);
+
+  const filterStudents = async (searchText: string) => {
     return students.filter(({ githubId, name }) => `${githubId} ${name}`.match(searchText));
   };
 
-  const handleSubmit = async (values: any) => {
-    console.log(values['resume-verdict']);
-    if (!(values.githubId && values['resume-verdict']) || loading) {
+  const handleStudentSelect = async (githubId: string) => {
+    const interview = interviews.find(i => i.student.githubId === githubId);
+    if (interview != null) {
+      const feedback = await courseService.getStageInterviewFeedback(interview.id);
+      form.setFieldsValue(deserializeFromJson(feedback));
+    }
+  };
+
+  const handleSubmit = withLoading(async (values: any) => {
+    if (!values.githubId || !values['resume-verdict'] || loading) {
       return;
     }
+
+    const interview = interviews.find(i => i.student.githubId === values.githubId);
+    if (interview == null) {
+      return;
+    }
+
     try {
-      setLoading(true);
-      // TODO: Write request to submit feedback
+      const json = serializeToJson(values);
+      await courseService.postStageInterviewFeedback(interview?.id, {
+        json,
+        githubId: values.githubId,
+        isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
+        isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
+        decision: values['resume-verdict'],
+      });
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
       const error = e as AxiosError;
-      const response = error.response;
-      const errorMessage = response?.data?.data?.message ?? 'An error occurred. Please try later.';
+      const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);
-    } finally {
-      setLoading(false);
     }
-  };
+  });
 
   return (
     <PageLayoutSimple
@@ -291,7 +316,7 @@ function Page(props: CoursePageProps) {
     >
       <Form
         form={form}
-        initialValues={initialValues}
+        initialValues={defaultInitialValues}
         layout="vertical"
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
@@ -303,11 +328,19 @@ function Page(props: CoursePageProps) {
           rules={[{ required: true, message: 'Please select a student' }]}
           style={{ marginBottom: '40px' }}
         >
-          <UserSearch keyField="githubId" defaultValues={students} searchFn={loadStudents} />
+          <UserSearch
+            onChange={handleStudentSelect}
+            keyField="githubId"
+            defaultValues={students}
+            searchFn={filterStudents}
+          />
         </Form.Item>
         {renderSkills()}
+        <Divider dashed />
         {renderProgrammingTask()}
+        <Divider dashed style={{ height: 2 }} />
         {renderEnglishLevel()}
+        <Divider dashed />
         {renderResume()}
         <Button type="primary" htmlType="submit">
           Submit
@@ -315,6 +348,23 @@ function Page(props: CoursePageProps) {
       </Form>
     </PageLayoutSimple>
   );
+}
+
+function serializeToJson(values: any) {
+  return _.keys(values)
+    .filter(v => v !== 'githubId')
+    .reduce((acc, key) => {
+      return _.set(acc, key.split('-').join('.'), values[key]);
+    }, {});
+}
+
+function deserializeFromJson(json: any) {
+  return _.keys(defaultInitialValues)
+    .filter(key => key !== 'githubId')
+    .reduce((acc, key) => {
+      acc[key] = _.get(json, key.split('-'));
+      return acc;
+    }, {} as any);
 }
 
 export default withCourseData(withSession(Page, 'mentor'));

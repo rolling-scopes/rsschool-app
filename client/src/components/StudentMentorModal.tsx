@@ -12,7 +12,6 @@ type Props = {
 
 export function StudentMentorModal(props: Props) {
   const handleSubmit = async (values: any) => {
-    console.log(values);
     props.onOk(values.studentGithubId, values.mentorGithubId);
   };
 

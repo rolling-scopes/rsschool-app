@@ -254,8 +254,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createStageInterviews(useReserve = false) {
-    const result = await this.axios.post(`/interviews/stage`, { useReserve });
+  async createStageInterviews(keepReserve = false) {
+    const result = await this.axios.post(`/interviews/stage`, { keepReserve });
     return result.data.data;
   }
 
@@ -274,9 +274,14 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getStageInterviewStudents(githubId: string) {
+  async updateStageInterview(interviewId: number, data: { githubId: string }) {
+    const result = await this.axios.put(`/interview/stage/${interviewId}`, data);
+    return result.data.data;
+  }
+
+  async getInterviewerStageInterviews(githubId: string) {
     const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
-    return result.data.data.map((d: any) => d.student) as StudentBasic[];
+    return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
   async postStageInterviews(stageId: number) {
@@ -284,13 +289,16 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postStageInterviewFeedback(stageId: number, data: any) {
-    const result = await this.axios.post(`/stage/${stageId}/interviews/feedback`, data);
+  async postStageInterviewFeedback(
+    interviewId: number,
+    data: { json: any; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
+  ) {
+    const result = await this.axios.post(`/interview/stage/${interviewId}/feedback`, data);
     return result.data.data;
   }
 
-  async getStageInterviewFeedback(stageId: number, studentId: number) {
-    const result = await this.axios.get(`/stage/${stageId}/interviews/student/${studentId}`);
+  async getStageInterviewFeedback(interviewId: number) {
+    const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
     return result.data.data;
   }
 
@@ -385,6 +393,7 @@ export class CourseService {
   }
 
   async getMentorInterviews(githubId: string) {
+    console.log({ githubId });
     const result = await this.axios.get(`/mentor/${githubId}/interviews`);
     return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }
