@@ -16,13 +16,18 @@ function Page(props: CoursePageProps) {
   const [students, setStudents] = useState([] as StudentBasic[]);
 
   useAsync(async () => {
-    const students = await courseService.getMentorStudents();
+    const mentorStudents = await courseService.getMentorStudents();
     const stageInterviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
 
-    const activeStudents = students
-      .filter(student => student.isActive)
-      .concat(stageInterviews.filter(i => !i.completed).map(i => i.student));
-    setStudents(activeStudents);
+    const activeStudents = mentorStudents.filter(student => student.isActive);
+    const activeInterviews = stageInterviews
+      .filter(i => !i.completed)
+      .map(i => i.student)
+      .filter(s => !activeStudents.some(it => it.githubId === s.githubId));
+
+    const students = activeStudents.concat(activeInterviews);
+
+    setStudents(students);
   }, [courseId]);
 
   const handleSubmit = async (values: any) => {
