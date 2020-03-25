@@ -76,7 +76,7 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
       <Row gutter={24}>
         {interviews.map(interview => {
-          const studentInterview = data.find(d => d.id === interview.id);
+          const studentInterview = data.find(d => d.name === interview.name);
           return (
             <Col key={interview.id} xs={20} sm={16} md={12} lg={8} xl={8}>
               <Card size="small" title={interview.name} extra={renderRegisterButton(interview)}>
