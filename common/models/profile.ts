@@ -120,7 +120,7 @@ export interface StageInterviewDetailedFeedback {
   courseFullName: string;
   rating: number;
   comment: string;
-  english: EnglishLevel;
+  english: EnglishLevel | number;
   date: string;
   programmingTask: {
     task: string;

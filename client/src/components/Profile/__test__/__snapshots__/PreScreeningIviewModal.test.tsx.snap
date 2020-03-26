@@ -76,6 +76,8 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
     }
   >
     Programming task(s): 
+    <br />
+     
     <Text
       code={true}
     >
