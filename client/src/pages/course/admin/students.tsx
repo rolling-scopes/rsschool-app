@@ -4,11 +4,21 @@ import {
   MoreOutlined,
   SolutionOutlined,
   CloseCircleTwoTone,
+  ClockCircleTwoTone,
+  MinusCircleOutlined,
+  PlusCircleTwoTone,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { GithubUserLink, PageLayout, StudentExpelModal, withSession, Session } from 'components';
-import { boolIconRenderer, boolSorter, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import { PageLayout, StudentExpelModal, withSession, Session } from 'components';
+import {
+  boolIconRenderer,
+  boolSorter,
+  getColumnSearchProps,
+  numberSorter,
+  stringSorter,
+  PersonCell,
+} from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
 import { useCallback, useMemo, useState, ReactElement } from 'react';
@@ -166,25 +176,19 @@ function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): C
       sorter: boolSorter('isActive'),
     },
     {
-      title: 'Github',
+      title: 'Student',
       dataIndex: 'githubId',
       sorter: stringSorter('githubId'),
       key: 'githubId',
-      render: (value: string) => <GithubUserLink value={value} />,
-      ...getColumnSearchProps('githubId'),
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: stringSorter('name'),
-      ...getColumnSearchProps('name'),
+      render: (_, record: any) => <PersonCell value={record} />,
+      ...getColumnSearchProps(['githubId', 'name']),
     },
     {
       title: 'Mentor',
-      dataIndex: ['mentor', 'githubId'],
+      dataIndex: 'mentor',
       sorter: stringSorter<any>('mentor.githubId'),
-      render: (value: string) => (value ? <GithubUserLink value={value} /> : null),
-      ...getColumnSearchProps('mentor.githubId'),
+      render: (value: any) => (value ? <PersonCell value={value} /> : null),
+      ...getColumnSearchProps(['mentor.githubId', 'mentor.name']),
     },
     {
       title: 'City',
@@ -202,17 +206,20 @@ function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): C
       ...getColumnSearchProps('countryName'),
     },
     {
-      title: 'Interview',
+      title: 'Screening',
       dataIndex: 'interviews',
       width: 60,
-      render: (value: any[]) => boolIconRenderer(!_.isEmpty(value) && _.every(value, 'isCompleted')),
+      render: (value: any[]) => {
+        if (value.length === 0) {
+          return <MinusCircleOutlined />;
+        }
+        if (value.every(e => e.isCompleted)) {
+          return <PlusCircleTwoTone twoToneColor="#52c41a" />;
+        } else {
+          return <ClockCircleTwoTone />;
+        }
+      },
     },
-    // {
-    //   title: 'Assigned',
-    //   dataIndex: 'assignedChecks',
-    //   width: 50,
-    //   render: (value: any[]) => value.map(v => v.name).join(', '),
-    // },
     {
       title: <BranchesOutlined />,
       dataIndex: 'repository',
