@@ -211,12 +211,12 @@ function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): C
       width: 60,
       render: (value: any[]) => {
         if (value.length === 0) {
-          return <MinusCircleOutlined />;
+          return <MinusCircleOutlined title="No Interview" />;
         }
         if (value.every(e => e.isCompleted)) {
-          return <PlusCircleTwoTone twoToneColor="#52c41a" />;
+          return <PlusCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
         } else {
-          return <ClockCircleTwoTone />;
+          return <ClockCircleTwoTone title="Assigned" />;
         }
       },
     },
