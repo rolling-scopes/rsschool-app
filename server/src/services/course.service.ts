@@ -110,7 +110,12 @@ export function convertToStudentDetails(student: Student): StudentDetails {
     ...studentBasic,
     cityName: user.cityName || 'Other',
     countryName: user.countryName || 'Other',
-    interviews: _.isEmpty(student.stageInterviews) ? [] : student.stageInterviews!,
+    interviews: _.isEmpty(student.stageInterviews)
+      ? []
+      : student.stageInterviews!.map(i => ({
+          id: i.id,
+          isCompleted: i.isCompleted,
+        })),
     repository: student.repository,
     assignedChecks: checks,
   };

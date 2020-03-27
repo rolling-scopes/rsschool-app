@@ -1,7 +1,7 @@
 import { Layout, Button, Checkbox, Spin, Col, Form, Row, Table } from 'antd';
-import { GithubUserLink, Header, withSession } from 'components';
+import { Header, withSession } from 'components';
 import { ModalForm } from 'components/Forms';
-import { boolIconRenderer } from 'components/Table';
+import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import { useCallback, useMemo, useState } from 'react';
@@ -112,12 +112,13 @@ function Page(props: Props) {
 function getColumns(handleEditItem: any) {
   return [
     { title: 'User Id', dataIndex: 'id' },
-    { title: 'Name', dataIndex: 'name' },
     {
-      title: 'Github',
-      dataIndex: 'githubId',
-      render: (value: string) => <GithubUserLink value={value} />,
+      title: 'User',
+      dataIndex: 'name',
+      render: (_: any, record: any) => <PersonCell value={record} />,
+      ...getColumnSearchProps(['githubId', 'name']),
     },
+
     {
       title: 'Manager',
       dataIndex: 'isManager',
