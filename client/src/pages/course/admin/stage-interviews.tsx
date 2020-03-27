@@ -1,4 +1,4 @@
-import { Button, Row, Table, Modal } from 'antd';
+import { Button, Row, Table, Modal, Checkbox } from 'antd';
 import { PageLayout, StudentMentorModal, withSession } from 'components';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import { useLoading } from 'components/useLoading';
@@ -15,6 +15,7 @@ function Page(props: CoursePageProps) {
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState([] as any[]);
   const [modal, setModal] = useState(false);
+  const [noRegistration, setNoRegistration] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   const loadInterviews = async () => {
@@ -29,11 +30,11 @@ function Page(props: CoursePageProps) {
       okText: 'Keep',
       cancelText: 'Assign',
       onOk: withLoading(async () => {
-        await courseService.createStageInterviews(true);
+        await courseService.createStageInterviews({ keepReserve: true, noRegistration });
         await loadInterviews();
       }),
       onCancel: withLoading(async () => {
-        await courseService.createStageInterviews(false);
+        await courseService.createStageInterviews({ keepReserve: false, noRegistration });
         await loadInterviews();
       }),
     });
@@ -58,7 +59,12 @@ function Page(props: CoursePageProps) {
           Create
         </Button>
         {isCourseManager(props.session, props.course.id) ? (
-          <Button onClick={createInterviews}>Create Interviews</Button>
+          <div>
+            <Checkbox checked={noRegistration} onChange={e => setNoRegistration(e.target.checked)}>
+              No Registration
+            </Checkbox>
+            <Button onClick={createInterviews}>Create Interviews</Button>
+          </div>
         ) : null}
       </Row>
 

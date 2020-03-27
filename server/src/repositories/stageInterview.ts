@@ -136,14 +136,16 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     }));
   }
 
-  public async createAutomatically(courseId: number, keepReserve = true) {
+  public async createAutomatically(courseId: number, keepReserve = true, noRegistration: boolean = false) {
     const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: 'stage-interview' } })!;
     if (courseTask == null) {
       return [];
     }
 
     const mentors = await courseService.getMentorsWithStudents(courseId);
-    const students = await this.findStudents(courseId);
+    const students = noRegistration
+      ? await courseService.getStudents(courseId, true)
+      : await this.findStudents(courseId);
     const interviews = await this.findMany(courseId);
     const result = createInterviews(mentors, students, interviews, keepReserve);
 

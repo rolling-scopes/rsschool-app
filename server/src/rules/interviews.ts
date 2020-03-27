@@ -47,7 +47,7 @@ export function createInterviews(
   let anyMentors = sortBy(filterMentors(filter(allMentors, { studentsPreference: 'any' }), interviews), ['id']);
 
   // reserver 20% mentors
-  const reserveCount = keepReserve ? Math.max(6, Math.round(anyMentors.length * 0.2)) : 0;
+  const reserveCount = keepReserve ? Math.max(1, Math.round(anyMentors.length * 0.2)) : 0;
   anyMentors = drop(anyMentors, reserveCount);
 
   let students: typeof freeStudents = [];

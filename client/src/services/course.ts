@@ -254,8 +254,8 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createStageInterviews(keepReserve = false) {
-    const result = await this.axios.post(`/interviews/stage`, { keepReserve });
+  async createStageInterviews(params: { keepReserve: boolean; noRegistration: boolean }) {
+    const result = await this.axios.post(`/interviews/stage`, params);
     return result.data.data;
   }
 

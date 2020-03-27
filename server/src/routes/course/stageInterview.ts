@@ -55,10 +55,13 @@ export const updateInterview = (_: ILogger) => async (ctx: Router.RouterContext)
 export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   try {
-    const { keepReserve = true } = ctx.request.body as { keepReserve: boolean };
+    const { keepReserve = true, noRegistration = false } = ctx.request.body as {
+      keepReserve: boolean;
+      noRegistration: boolean;
+    };
     const repository = getCustomRepository(StageInterviewRepository);
     console.log(keepReserve);
-    const result = await repository.createAutomatically(courseId, keepReserve);
+    const result = await repository.createAutomatically(courseId, keepReserve, noRegistration);
     setResponse(ctx, OK, result);
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
