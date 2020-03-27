@@ -54,9 +54,11 @@ class PreScreeningIviewModal extends React.PureComponent<Props> {
       >
         <Rating rating={rating} />
         <p style={{ marginBottom: 5 }}>Date: {formatDate(date)}</p>
-        <p style={{ marginBottom: 5 }}>
-          Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
-        </p>
+        {isGoodCandidate != null ? (
+          <p style={{ marginBottom: 5 }}>
+            Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
+          </p>
+        ) : null}
         <p style={{ marginBottom: 20 }}>
           Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
         </p>
