@@ -8,7 +8,7 @@ import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
-import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
+import { TIMEZONES } from '../../configs/timezones';
 import { useAsync } from 'react-use';
 
 enum EventTypeColor {
@@ -60,7 +60,7 @@ const EventTypeToName: Record<string, string> = {
 export function SchedulePage(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<CourseEvent[]>([]);
-  const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
+  const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const startOfToday = moment().startOf('day');
 
