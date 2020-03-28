@@ -27,6 +27,7 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { ExternalAccount, User } from './user';
+import { Consent } from './consent';
 
 export * from './session';
 export {
@@ -60,6 +61,7 @@ export {
   TaskSolutionResult,
   TaskVerification,
   User,
+  Consent,
 };
 
 export const models = [
@@ -92,6 +94,7 @@ export const models = [
   TaskSolutionResult,
   TaskVerification,
   User,
+  Consent,
 ];
 
 export interface IApiResponse<T> {
