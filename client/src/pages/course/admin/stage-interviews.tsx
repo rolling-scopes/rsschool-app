@@ -114,7 +114,7 @@ function Page(props: CoursePageProps) {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (record.interviewer.githubId === props.session.githubId || props.session.isAdmin) {
+              if (isCourseManager(props.session, props.course.id)) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel
