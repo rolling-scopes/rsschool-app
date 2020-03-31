@@ -1,5 +1,5 @@
 import { User } from '../models';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
 export function getUserByGithubId(id: string) {
   const githubId = id.toLowerCase();
@@ -28,4 +28,10 @@ export function getUserById(id: number) {
 
 export function saveUser(user: User) {
   return getRepository(User).save(user);
+}
+
+export function getUsersByIds(ids: number[]) {
+  return getRepository(User).find({
+    where: { id: In(ids) },
+  });
 }

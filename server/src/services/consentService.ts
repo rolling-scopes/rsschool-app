@@ -1,5 +1,5 @@
 import { Consent } from '../models/consent';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
 export async function captureConsent({ chatId, username, tg, email }: Consent) {
   const consentRepository = getRepository(Consent);
@@ -20,4 +20,10 @@ export async function captureConsent({ chatId, username, tg, email }: Consent) {
       email: email === false || email ? email : existingConsent!.email,
     });
   }
+}
+
+export async function getConsentsByTgUsernames(usernames: string[]) {
+  return getRepository(Consent).find({
+    where: { username: In(usernames) },
+  });
 }

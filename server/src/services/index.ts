@@ -6,6 +6,7 @@ import * as taskService from './tasksService';
 import * as awsTaskService from './awsTaskService';
 import * as stageInterviewService from './stageInterviewService';
 import * as consentService from './consentService';
+import * as notificationService from './notificationService';
 
 export * from './operationResult';
 export {
@@ -17,4 +18,5 @@ export {
   awsTaskService,
   stageInterviewService,
   consentService,
+  notificationService,
 };
