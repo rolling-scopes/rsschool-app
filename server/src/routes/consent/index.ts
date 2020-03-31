@@ -1,19 +1,14 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { config } from '../../config';
 import { Consent } from '../../models';
-import { OK, INTERNAL_SERVER_ERROR, UNAUTHORIZED, BAD_REQUEST } from 'http-status-codes';
+import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 import { setResponse, setErrorResponse } from '../utils';
 import { consentService } from '../../services';
+import { basicAuthVerification } from '../guards';
 
 export function consentRoute(_: ILogger) {
   const router = new Router({ prefix: '/consent' });
-  router.post('/capture', async (ctx: Router.RouterContext) => {
-    const key = ctx.headers['consent-secret'];
-    if (key !== config.auth.consentSecret) {
-      setErrorResponse(ctx, UNAUTHORIZED, 'Invalid access token');
-      return;
-    }
+  router.post('/capture', basicAuthVerification, async (ctx: Router.RouterContext) => {
     const consent: Consent = ctx.request.body;
     const { chatId, username, tg, email }: Consent = consent;
     if (!chatId || !username || !(typeof tg === 'boolean' || typeof email === 'boolean')) {
