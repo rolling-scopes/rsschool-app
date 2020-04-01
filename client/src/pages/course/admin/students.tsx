@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { PageLayout, StudentExpelModal, withSession, Session } from 'components';
+import { PageLayout, StudentExpelModal, withSession } from 'components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -26,6 +26,7 @@ import { useAsync } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
+import { isCourseManager } from 'rules/user';
 
 const { Text } = Typography;
 
@@ -97,7 +98,7 @@ function Page(props: Props) {
           Create Repository
         </Menu.Item>
         <Menu.Item
-          hidden={!checkIfManager(props.course.id, props.session)}
+          hidden={!isCourseManager(props.session, props.course.id)}
           onClick={() => actions.issueCertificate(record)}
         >
           <SolutionOutlined />
@@ -108,7 +109,7 @@ function Page(props: Props) {
   }
 
   const getToolbarActions = useCallback(() => {
-    const isManager = checkIfManager(props.course.id, props.session);
+    const isManager = isCourseManager(props.session, props.course.id);
     return (
       <>
         {isManager ? (
@@ -300,10 +301,6 @@ function createActions(courseService: CourseService, setLoading: (value: boolean
       }
     },
   };
-}
-
-function checkIfManager(courseId: number, session: Session) {
-  return session.coursesRoles?.[courseId]?.includes('manager') || session.isAdmin;
 }
 
 const styles = css`

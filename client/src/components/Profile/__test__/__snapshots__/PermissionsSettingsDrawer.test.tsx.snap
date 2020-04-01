@@ -219,9 +219,14 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                         aria-label="Close"
                         className="ant-drawer-close"
                         onClick={[MockFunction]}
+                        style={
+                          Object {
+                            "--scroll-bar": "0px",
+                          }
+                        }
                       >
                         <ForwardRef(CloseOutlined)>
-                          <ForwardRef(AntdIcon)
+                          <AntdIcon
                             icon={
                               Object {
                                 "icon": Object {
@@ -291,7 +296,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                 </svg>
                               </IconReact>
                             </span>
-                          </ForwardRef(AntdIcon)>
+                          </AntdIcon>
                         </ForwardRef(CloseOutlined)>
                       </button>
                     </div>

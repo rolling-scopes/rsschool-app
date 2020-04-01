@@ -183,7 +183,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                             }
                           >
                             <ForwardRef(ReadOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -253,7 +253,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(ReadOutlined)>
                              
                             Education
@@ -478,9 +478,14 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -550,7 +555,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -851,9 +856,14 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -923,7 +933,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -1012,7 +1022,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
                                                           >
-                                                            <ForwardRef(AntdIcon)
+                                                            <AntdIcon
                                                               icon={
                                                                 Object {
                                                                   "icon": Object {
@@ -1082,7 +1092,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                   </svg>
                                                                 </IconReact>
                                                               </span>
-                                                            </ForwardRef(AntdIcon)>
+                                                            </AntdIcon>
                                                           </ForwardRef(DeleteOutlined)>
                                                           <span
                                                             key=".1"
@@ -1504,7 +1514,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"
                                       >
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -1574,7 +1584,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(FileAddOutlined)>
                                       <span
                                         key=".1"
@@ -1615,7 +1625,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 key="main-card-actions-edit"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -1688,7 +1698,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(EditOutlined)>
             </span>
           </li>
@@ -1705,7 +1715,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 key="main-card-actions-settings"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -1778,7 +1788,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(SettingOutlined)>
             </span>
           </li>
@@ -2001,7 +2011,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                             }
                           >
                             <ForwardRef(ReadOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -2071,7 +2081,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(ReadOutlined)>
                              
                             Education
@@ -2382,7 +2392,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                             }
                           >
                             <ForwardRef(ReadOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -2452,7 +2462,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(ReadOutlined)>
                              
                             Education
@@ -2728,9 +2738,14 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -2800,7 +2815,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -3101,9 +3116,14 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -3173,7 +3193,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -3313,7 +3333,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
                                                           >
-                                                            <ForwardRef(AntdIcon)
+                                                            <AntdIcon
                                                               icon={
                                                                 Object {
                                                                   "icon": Object {
@@ -3383,7 +3403,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                   </svg>
                                                                 </IconReact>
                                                               </span>
-                                                            </ForwardRef(AntdIcon)>
+                                                            </AntdIcon>
                                                           </ForwardRef(DeleteOutlined)>
                                                           <span
                                                             key=".1"
@@ -3805,7 +3825,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"
                                       >
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -3875,7 +3895,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(FileAddOutlined)>
                                       <span
                                         key=".1"
@@ -3916,7 +3936,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 key="main-card-actions-edit"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -3989,7 +4009,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(EditOutlined)>
             </span>
           </li>
@@ -4006,7 +4026,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 key="main-card-actions-settings"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -4079,7 +4099,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(SettingOutlined)>
             </span>
           </li>

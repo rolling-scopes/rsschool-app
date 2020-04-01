@@ -239,7 +239,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                             }
                           >
                             <ForwardRef(QuestionCircleOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -325,7 +325,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(QuestionCircleOutlined)>
                              
                             CoreJS Interviews
@@ -575,7 +575,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -645,7 +645,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
