@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { getRepository, getManager } from 'typeorm';
+import { getRepository, getManager, getCustomRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
 import {
   Course,
@@ -18,6 +18,7 @@ import {
   IUserSession,
 } from '../models';
 import { createName } from './user.service';
+import { StageInterviewRepository } from '../repositories/stageInterview';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -140,10 +141,6 @@ function mentorQuery() {
   return getRepository(Mentor).createQueryBuilder('mentor');
 }
 
-function userQuery() {
-  return getRepository(User).createQueryBuilder('user');
-}
-
 function studentQuery() {
   return getRepository(Student).createQueryBuilder('student');
 }
@@ -165,17 +162,12 @@ export async function getMentorByUserId(courseId: number, userId: number): Promi
 }
 
 export async function expelMentor(courseId: number, githubId: string) {
-  const githubIdQuery = userQuery()
-    .select('id')
-    .where('user.githubId = :githubId', { githubId })
-    .getQuery();
-
-  return mentorQuery()
-    .update(Mentor)
-    .set({ isExpelled: true })
-    .where(`userId IN (${githubIdQuery})`, { githubId })
-    .andWhere('mentor."courseId" = :courseId', { courseId })
-    .execute();
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
+    await getRepository(Mentor).update(mentor.id, { isExpelled: true });
+    await getCustomRepository(StageInterviewRepository).removeByMentor(courseId, githubId);
+  }
 }
 
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {
@@ -357,6 +349,7 @@ export async function getMentorsWithStudents(courseId: number): Promise<MentorDe
     .addSelect(getPrimaryUserFields())
     .leftJoinAndSelect('mentor.students', 'students')
     .where(`mentor.courseId = :courseId`, { courseId })
+    .andWhere('mentor.isExpelled = false')
     .orderBy('mentor.createdDate')
     .getMany();
 

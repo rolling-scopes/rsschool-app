@@ -3,6 +3,7 @@ import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
 import { InterviewInfo, InterviewDetails } from './interview';
 import { createInterviews } from '../rules/interviews';
+import { queryMentorByGithubId } from '../services/course.service';
 
 @EntityRepository(StageInterview)
 export class StageInterviewRepository extends AbstractRepository<StageInterview> {
@@ -152,6 +153,23 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     return getRepository(StageInterview).save(
       result.map(r => ({ courseTaskId: courseTask?.id, courseId, mentorId: r.mentor.id, studentId: r.student.id })),
     );
+  }
+
+  public async removeByMentor(courseId: number, githubId: string) {
+    const mentor = await queryMentorByGithubId(courseId, githubId);
+    if (mentor) {
+      const interviews = await getRepository(StageInterview)
+        .createQueryBuilder('s')
+        .select(['s.id'])
+        .leftJoin('s.stageInterviewFeedbacks', 'f')
+        .addSelect(['f.id'])
+        .where('f.id IS NULL')
+        .andWhere('s.mentorId = :mentorId', { mentorId: mentor.id })
+        .getMany();
+      if (interviews.length > 0) {
+        await getRepository(StageInterview).delete(interviews.map(i => i.id));
+      }
+    }
   }
 
   private async find(courseId: number, githubId: string, userType: 'student' | 'mentor') {
