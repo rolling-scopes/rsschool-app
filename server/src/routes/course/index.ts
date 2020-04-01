@@ -62,8 +62,8 @@ const validateId = async (ctx: Router.RouterContext, next: any) => {
 export function courseRoute(logger: ILogger) {
   const router = new Router({ prefix: '/course/:courseId' });
 
-  router.post('/certificates', adminGuard, postCertificates(logger));
-  router.post('/repositories', adminGuard, postRepositories(logger));
+  router.post('/certificates', courseManagerGuard, postCertificates(logger));
+  router.post('/repositories', courseManagerGuard, postRepositories(logger));
   router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);

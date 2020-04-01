@@ -1,6 +1,6 @@
 import { App } from '@octokit/app';
 import { Octokit } from '@octokit/rest';
-import { OK } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { camelCase, toUpper } from 'lodash';
 import { getRepository } from 'typeorm';
@@ -17,9 +17,13 @@ const app = new App({ id: Number(appId), privateKey });
 export const postRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId } = ctx.params as { courseId: number };
   const result: { repository: string }[] = [];
-  const course = (await getRepository(Course).findOne(courseId))!;
+  const course = (await getRepository(Course).findOne(courseId));
+  if (course == null) {
+    setResponse(ctx, BAD_REQUEST, result);
+    return;
+  }
   const githubIds = await queryStudentGithubIds(courseId);
-  for await (const githubId of githubIds) {
+  for (const githubId of githubIds) {
     const record = await createRepository(course, githubId, logger);
     if (record?.repository) {
       result.push({ repository: record.repository });
