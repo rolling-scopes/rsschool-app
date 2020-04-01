@@ -24,7 +24,6 @@ exports[`StudentStatsModal Should render correctly 1`] = `
       }
     >
       <Progress
-        gapDegree={0}
         percent={71}
         showInfo={true}
         size="default"

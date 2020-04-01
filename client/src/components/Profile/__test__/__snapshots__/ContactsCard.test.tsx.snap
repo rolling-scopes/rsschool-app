@@ -204,7 +204,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                             }
                           >
                             <ForwardRef(ContactsOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -274,7 +274,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(ContactsOutlined)>
                              
                             Contacts
@@ -935,7 +935,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                             }
                           >
                             <ForwardRef(ContactsOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -1005,7 +1005,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(ContactsOutlined)>
                              
                             Contacts
@@ -1412,9 +1412,14 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -1484,7 +1489,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -1792,9 +1797,14 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -1864,7 +1874,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -2766,7 +2776,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 key="main-card-actions-edit"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -2839,7 +2849,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(EditOutlined)>
             </span>
           </li>
@@ -2856,7 +2866,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 key="main-card-actions-settings"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -2929,7 +2939,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(SettingOutlined)>
             </span>
           </li>

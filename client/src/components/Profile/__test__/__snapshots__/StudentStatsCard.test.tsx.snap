@@ -408,7 +408,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             }
                           >
                             <ForwardRef(BookOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -478,7 +478,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(BookOutlined)>
                              
                             Student Statistics
@@ -716,7 +716,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               <Progress
-                                gapDegree={0}
                                 percent={100}
                                 showInfo={true}
                                 size="small"
@@ -729,7 +728,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                   className="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small"
                                 >
                                   <Line
-                                    gapDegree={0}
                                     percent={100}
                                     prefixCls="ant-progress"
                                     showInfo={true}
@@ -762,7 +760,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       className="ant-progress-text"
                                     >
                                       <ForwardRef(CheckCircleFilled)>
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -832,7 +830,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(CheckCircleFilled)>
                                     </span>
                                   </Line>
@@ -992,7 +990,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -1062,7 +1060,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
@@ -1162,7 +1160,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               }
                             >
                               <Progress
-                                gapDegree={0}
                                 percent={50}
                                 showInfo={true}
                                 size="small"
@@ -1175,7 +1172,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                   className="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small"
                                 >
                                   <Line
-                                    gapDegree={0}
                                     percent={50}
                                     prefixCls="ant-progress"
                                     showInfo={true}
@@ -1208,7 +1204,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       className="ant-progress-text"
                                     >
                                       <ForwardRef(CloseCircleFilled)>
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -1278,7 +1274,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(CloseCircleFilled)>
                                     </span>
                                   </Line>
@@ -1438,7 +1434,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -1508,7 +1504,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
@@ -1943,7 +1939,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             }
                           >
                             <ForwardRef(BookOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -2013,7 +2009,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(BookOutlined)>
                              
                             Student Statistics
@@ -2251,7 +2247,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               <Progress
-                                gapDegree={0}
                                 percent={100}
                                 showInfo={true}
                                 size="small"
@@ -2264,7 +2259,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                   className="ant-progress ant-progress-line ant-progress-status-success ant-progress-show-info ant-progress-small"
                                 >
                                   <Line
-                                    gapDegree={0}
                                     percent={100}
                                     prefixCls="ant-progress"
                                     showInfo={true}
@@ -2297,7 +2291,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       className="ant-progress-text"
                                     >
                                       <ForwardRef(CheckCircleFilled)>
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -2367,7 +2361,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(CheckCircleFilled)>
                                     </span>
                                   </Line>
@@ -2527,7 +2521,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -2597,7 +2591,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
@@ -2697,7 +2691,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               }
                             >
                               <Progress
-                                gapDegree={0}
                                 percent={50}
                                 showInfo={true}
                                 size="small"
@@ -2710,7 +2703,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                   className="ant-progress ant-progress-line ant-progress-status-exception ant-progress-show-info ant-progress-small"
                                 >
                                   <Line
-                                    gapDegree={0}
                                     percent={50}
                                     prefixCls="ant-progress"
                                     showInfo={true}
@@ -2743,7 +2735,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       className="ant-progress-text"
                                     >
                                       <ForwardRef(CloseCircleFilled)>
-                                        <ForwardRef(AntdIcon)
+                                        <AntdIcon
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -2813,7 +2805,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                               </svg>
                                             </IconReact>
                                           </span>
-                                        </ForwardRef(AntdIcon)>
+                                        </AntdIcon>
                                       </ForwardRef(CloseCircleFilled)>
                                     </span>
                                   </Line>
@@ -2973,7 +2965,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -3043,7 +3035,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
@@ -3211,9 +3203,14 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                   aria-label="Close"
                                   className="ant-drawer-close"
                                   onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
                                 >
                                   <ForwardRef(CloseOutlined)>
-                                    <ForwardRef(AntdIcon)
+                                    <AntdIcon
                                       icon={
                                         Object {
                                           "icon": Object {
@@ -3283,7 +3280,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           </svg>
                                         </IconReact>
                                       </span>
-                                    </ForwardRef(AntdIcon)>
+                                    </AntdIcon>
                                   </ForwardRef(CloseOutlined)>
                                 </button>
                               </div>
@@ -3410,7 +3407,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 key="main-card-actions-settings"
                 onClick={[Function]}
               >
-                <ForwardRef(AntdIcon)
+                <AntdIcon
                   icon={
                     Object {
                       "icon": Object {
@@ -3483,7 +3480,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                       </svg>
                     </IconReact>
                   </span>
-                </ForwardRef(AntdIcon)>
+                </AntdIcon>
               </ForwardRef(SettingOutlined)>
             </span>
           </li>
