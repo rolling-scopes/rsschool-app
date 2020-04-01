@@ -1,6 +1,13 @@
 import { Table } from 'antd';
-import { GithubUserLink, PageLayout, withSession } from 'components';
-import { getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import { PageLayout, withSession, Rating } from 'components';
+import {
+  getColumnSearchProps,
+  numberSorter,
+  stringSorter,
+  boolSorter,
+  boolIconRenderer,
+  PersonCell,
+} from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
@@ -45,20 +52,22 @@ function Page(props: CoursePageProps) {
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
             width: 180,
-            render: (value: string) => <GithubUserLink value={value} />,
-            ...getColumnSearchProps('githubId'),
+            render: (_: string, record: any) => <PersonCell value={record} />,
+            ...getColumnSearchProps(['githubId', 'name']),
+          },
+          {
+            title: 'Good Candidate',
+            dataIndex: 'isGoodCandidate',
+            width: 180,
+            sorter: boolSorter('isGoodCandidate'),
+            render: value => (value ? boolIconRenderer(value) : null),
           },
           {
             title: 'Interview Rating',
             dataIndex: 'rating',
             sorter: numberSorter('rating'),
             width: 210,
-          },
-          {
-            title: 'Name',
-            dataIndex: 'name',
-            width: 180,
-            ...getColumnSearchProps('name'),
+            render: value => (value != null ? <Rating rating={value} /> : null),
           },
           {
             title: 'City',

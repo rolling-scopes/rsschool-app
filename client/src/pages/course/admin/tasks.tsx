@@ -254,6 +254,7 @@ function Page(props: CoursePageProps) {
         Add Task
       </Button>
       <Table
+        style={{ marginTop: 16 }}
         rowKey="id"
         pagination={false}
         size="small"
