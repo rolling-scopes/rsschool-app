@@ -67,7 +67,7 @@ export function getInterviewRatings({ skills, programmingTask }: StageInterviewF
   return { rating, htmlCss, common, dataStructures };
 }
 
-const isGoodCandidate = (stageInterviews: StageInterview[]) => stageInterviews.some(i => i.isCompleted);
+const isGoodCandidate = (stageInterviews: StageInterview[]) => stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
 
 const getLastRating = (stageInterviews: StageInterview[]) => {
   const [lastInterview] = stageInterviews
