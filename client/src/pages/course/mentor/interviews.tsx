@@ -101,11 +101,6 @@ function renderItem(course: Course, showMentorModal: (id: number) => void) {
           Transfer
         </Button>
       )}
-      {!item.completed && (
-        <Button href={`/course/mentor/expel-student?course=${course.alias}`} type="link" size="small">
-          Expel
-        </Button>
-      )}
     </List.Item>
   );
 }
