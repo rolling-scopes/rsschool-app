@@ -27,7 +27,7 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { ExternalAccount, User } from './user';
-import { Consent } from './consent';
+import { Consent, ChannelType } from './consent';
 
 export * from './session';
 export {
@@ -62,6 +62,7 @@ export {
   TaskVerification,
   User,
   Consent,
+  ChannelType,
 };
 
 export const models = [

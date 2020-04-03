@@ -1,7 +1,9 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
+export type ChannelType = 'tg' | 'email';
+
 @Entity()
-@Unique(['chatId'])
+@Unique(['channelValue', 'username'])
 export class Consent {
   @PrimaryGeneratedColumn() id: number;
 
@@ -12,14 +14,14 @@ export class Consent {
   updatedDate: number;
 
   @Column()
-  chatId: number;
+  channelValue: string;
 
   @Column()
-  username: string;
+  channelType: ChannelType;
 
   @Column()
-  tg: boolean;
+  optIn: boolean;
 
-  @Column()
-  email: boolean;
+  @Column({nullable: true})
+  username?: string;
 }

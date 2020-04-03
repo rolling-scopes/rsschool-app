@@ -10,8 +10,8 @@ export function consentRoute(_: ILogger) {
   const router = new Router({ prefix: '/consent' });
   router.post('/capture', basicAuthVerification, async (ctx: Router.RouterContext) => {
     const consent: Consent = ctx.request.body;
-    const { chatId, username, tg, email }: Consent = consent;
-    if (!chatId || !username || !(typeof tg === 'boolean' || typeof email === 'boolean')) {
+    const { channelType, channelValue, optIn }: Consent = consent;
+    if (!channelType || !channelValue || typeof optIn !== 'boolean') {
       setErrorResponse(ctx, BAD_REQUEST, 'Missed required params');
       return;
     }
