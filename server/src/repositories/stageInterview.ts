@@ -123,7 +123,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         'student.mentorId',
         ...courseService.getPrimaryUserFields('user'),
       ])
-      .where('sis.courseId = :courseId', { courseId })
+      .where('sis.courseId = :courseId AND student.isExpelled = false', { courseId })
       .getMany();
 
     return records.map(record => ({
@@ -196,7 +196,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         ...courseService.getPrimaryUserFields('sUser'),
       ])
       .where(`stageInterview.courseId = :courseId AND ${userKey}.githubId = :githubId`, { courseId, githubId })
-      .andWhere(`${userType}.isExpelled = false`)
+      .andWhere(`${userType === 'student' ? 'mentor' : 'student'}.isExpelled = false`)
       .getMany();
 
     const result = stageInterviews.map(it => {
