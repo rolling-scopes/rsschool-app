@@ -5,12 +5,14 @@ import { config } from '../config';
 import { Consent, ChannelType } from '../models';
 import { courseService } from '../services';
 
-export async function renderMentorConfirmationText(preselectedCourseIds: number[]){
+export async function renderMentorConfirmationText(preselectedCourseIds: number[]) {
   const preselectedCourseIdsSet = new Set(preselectedCourseIds);
   const courses = await courseService.getCourses();
-  const preselectedCourses = courses.filter( course => preselectedCourseIdsSet.has(course.id) );
-  const names = preselectedCourses.map( course => course.name ).join(', ');
-  const confirmLinks = preselectedCourses.map( ({ alias }) => `https://app.rs.school/course/mentor/confirm?course=${alias}` ).join('\n');
+  const preselectedCourses = courses.filter(course => preselectedCourseIdsSet.has(course.id));
+  const names = preselectedCourses.map(course => course.name).join(', ');
+  const confirmLinks = preselectedCourses
+    .map(({ alias }) => `https://app.rs.school/course/mentor/confirm?course=${alias}`)
+    .join('\n');
   return `Your partisipation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s): ${confirmLinks}`;
 }
 
@@ -33,7 +35,6 @@ function postNotification(notification: Notification) {
 
 function sendTgNotification(chatIds: string[], text: string) {
   if (chatIds.length) {
-    console.log('sending tg notification')
     postNotification({
       text,
       to: chatIds,
@@ -53,40 +54,40 @@ function sendEmailNotification(emails: string[], text: string) {
 }
 
 function getConsonantsChValues(consents: Consent[]) {
-  return consents
-    .filter( consent => consent.optIn )
-    .map( consent => consent.channelValue );
+  return consents.filter(consent => consent.optIn).map(consent => consent.channelValue);
 }
 
 type UsersContacts = {
   emails: string[];
   tgUsernames: string[];
-}
+};
 
 export async function sendNotification(userIds: number[], text: string, isIgnoreConsents: boolean = false) {
   try {
-    if (!config.isDevMode) {
+    if (config.isDevMode) {
       return;
     }
     const users = (await userService.getUsersByIds(userIds)) || [];
-    const { emails, tgUsernames } = users.reduce( (chValues: UsersContacts, user) => {
-      const { contactsEmail, contactsTelegram } = user;
-      if (contactsEmail) {
-        chValues.emails.push(contactsEmail)
-      }
-      if (contactsTelegram) {
-        chValues.tgUsernames.push(contactsTelegram);
-      }
-      return chValues;
-    },
-    {
-      emails: [],
-      tgUsernames: []
-    });
+    const { emails, tgUsernames } = users.reduce(
+      (chValues: UsersContacts, user) => {
+        const { contactsEmail, contactsTelegram } = user;
+        if (contactsEmail) {
+          chValues.emails.push(contactsEmail);
+        }
+        if (contactsTelegram) {
+          chValues.tgUsernames.push(contactsTelegram);
+        }
+        return chValues;
+      },
+      {
+        emails: [],
+        tgUsernames: [],
+      },
+    );
     const tgConsents = await consentService.getConsentsByUsernames(tgUsernames);
     if (isIgnoreConsents) {
       sendEmailNotification(emails, text);
-      const chatIds = tgConsents.map( consent => consent.channelValue );
+      const chatIds = tgConsents.map(consent => consent.channelValue);
       sendTgNotification(chatIds, text);
     } else {
       const emailConsents = await consentService.getConsentsByChannelValues(emails);

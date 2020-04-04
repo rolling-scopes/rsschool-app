@@ -3,7 +3,7 @@ import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedCol
 export type ChannelType = 'tg' | 'email';
 
 @Entity()
-@Unique(['channelValue', 'username'])
+@Unique(['channelValue'])
 export class Consent {
   @PrimaryGeneratedColumn() id: number;
 
@@ -22,6 +22,6 @@ export class Consent {
   @Column()
   optIn: boolean;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   username?: string;
 }
