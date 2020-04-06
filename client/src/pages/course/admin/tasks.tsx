@@ -13,7 +13,7 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
-import { DEFAULT_TIMEZONE, TIMEZONES } from 'configs/timezones';
+import { TIMEZONES } from 'configs/timezones';
 import { times } from 'lodash';
 
 const Option = Select.Option;
@@ -327,17 +327,18 @@ function createRecord(values: any, courseId: number) {
 }
 
 function getInitialValues(modalData: Partial<CourseTaskDetails>) {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return {
     ...modalData,
+    timeZone,
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
-    timeZone: DEFAULT_TIMEZONE,
     maxScore: modalData.maxScore || 100,
     scoreWeight: modalData.scoreWeight || 1,
     range:
       modalData.studentStartDate && modalData.studentEndDate
         ? [
-            modalData.studentStartDate ? moment.tz(modalData.studentStartDate, DEFAULT_TIMEZONE) : null,
-            modalData.studentEndDate ? moment.tz(modalData.studentEndDate, DEFAULT_TIMEZONE) : null,
+            modalData.studentStartDate ? moment.tz(modalData.studentStartDate, timeZone) : null,
+            modalData.studentEndDate ? moment.tz(modalData.studentEndDate, timeZone) : null,
           ]
         : null,
     checker: modalData.checker || 'mentor',

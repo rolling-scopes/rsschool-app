@@ -12,7 +12,7 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { urlPattern } from 'services/validators';
-import { DEFAULT_TIMEZONE, TIMEZONES } from '../../../configs/timezones';
+import { TIMEZONES } from '../../../configs/timezones';
 
 type Props = CoursePageProps;
 
@@ -26,7 +26,7 @@ const timeZoneRenderer = (timeZone: string) => (value: string) => {
 
 function Page(props: Props) {
   const courseId = props.course.id;
-  const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
+  const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const userService = new UserService();
   const service = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -242,9 +242,10 @@ function createRecord(values: any, courseId: number) {
 }
 
 function getInitialValues(modalData: Partial<CourseEvent>) {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return {
     ...modalData,
-    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, DEFAULT_TIMEZONE) : null,
-    timeZone: DEFAULT_TIMEZONE,
+    timeZone,
+    dateTime: modalData.dateTime ? moment.tz(modalData.dateTime, timeZone) : null,
   };
 }
