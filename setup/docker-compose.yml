@@ -1,0 +1,15 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:10.6
+    container_name: db
+    restart: always
+    #volumes:
+    # - /tmp/postgresql:/var/lib/postgresql
+    environment:
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_USER: rs_master
+      POSTGRES_DB: rs_school
+      PGDATA: /tmp
+    ports:
+      - 5432:5432
