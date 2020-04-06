@@ -20,10 +20,12 @@ function Page(props: Props) {
   const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
 
-  useAsync(async () => {
+  const loadData = async () => {
     const data = await courseService.getCourses();
     setData(data);
-  }, []);
+  };
+
+  useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -43,22 +45,18 @@ function Page(props: Props) {
         }
         setModalLoading(true);
         const record = createRecord(values);
-        let item: Course;
-        let updatedData;
         if (modalAction === 'update') {
-          item = await courseService.updateCourse(modalData!.id!, record);
-          updatedData = data.map(d => (d.id === item.id ? { ...d, ...item } : d));
+          await courseService.updateCourse(modalData!.id!, record);
         } else {
           if (values.courseId) {
-            item = await courseService.createCourseCopy(record, values.courseId);
+            await courseService.createCourseCopy(record, values.courseId);
             setIsCopy(false);
           } else {
-            item = await courseService.createCourse(record);
+            await courseService.createCourse(record);
           }
-          updatedData = data.concat([item]);
         }
+        await loadData();
         setModalData(null);
-        setData(updatedData);
       } catch (e) {
         message.error('An error occurred. Can not save the task.');
       } finally {
