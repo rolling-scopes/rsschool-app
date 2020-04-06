@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
-import { User, Mentor, Student, Course, Stage, StageInterview, StageInterviewFeedback } from '../../models';
+import { User, Mentor, Student, Course, StageInterview, StageInterviewFeedback } from '../../models';
 import { stageInterviewService } from '../../services';
 
 export const getStageInterviewFeedback = async (githubId: string): Promise<StageInterviewDetailedFeedback[]> =>
@@ -19,8 +19,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
       .addSelect('"userMentor"."githubId" AS "interviewerGithubId"')
       .leftJoin(Student, 'student', '"student"."id" = "stageInterview"."studentId"')
       .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
-      .leftJoin(Stage, 'stage', '"stage"."id" = "stageInterview"."stageId"')
-      .leftJoin(Course, 'course', '"course"."id" = "stage"."courseId"')
+      .leftJoin(Course, 'course', '"course"."id" = "stageInterview"."courseId"')
       .leftJoin(
         StageInterviewFeedback,
         'stageInterviewFeedback',
