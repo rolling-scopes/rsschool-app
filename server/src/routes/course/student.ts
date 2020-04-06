@@ -2,49 +2,35 @@ import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { IUserSession, Student, TaskInterviewResult } from '../../models';
-import { courseService, taskService } from '../../services';
+import { TaskInterviewResult } from '../../models';
+import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
-import { StageInterviewRepository } from '../../repositories/stageInterview';
+import { StudentRepository } from '../../repositories/student';
 
-export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
   const data: { comment?: string; status: 'expelled' | 'active' } = ctx.request.body;
+  const { allow, message = 'no access' } = await studentService.canChangeStatus(ctx.state.user, courseId, githubId);
 
-  if (data.status !== 'expelled') {
-    throw new Error('Not Supported');
-  }
-
-  const { user } = ctx.state as { user: IUserSession };
-  const student = await courseService.getStudentByGithubId(courseId, githubId);
-  if (student == null) {
-    setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
+  if (!allow) {
+    setResponse(ctx, BAD_REQUEST, { message });
     return;
   }
 
-  if (!courseService.isPowerUser(courseId, user)) {
-    const repository = getCustomRepository(StageInterviewRepository);
-    const [interviews, mentor] = await Promise.all([
-      repository.findByStudent(courseId, githubId),
-      courseService.getCourseMentor(courseId, user.id),
-    ] as const);
-    if (mentor == null) {
-      setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
-      return;
-    }
-    if (!interviews.some(it => it.interviewer.githubId === user.githubId) && student.mentorId !== mentor.id) {
-      setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
-      return;
-    }
+  const studentRepository = getCustomRepository(StudentRepository);
+  switch (data.status) {
+    case 'active':
+      await studentRepository.restore(courseId, githubId);
+      setResponse(ctx, OK);
+      break;
+    case 'expelled':
+      await studentRepository.expel(courseId, githubId, data.comment);
+      setResponse(ctx, OK);
+      break;
+    default:
+      setResponse(ctx, BAD_REQUEST, { message: 'not supported status' });
+      break;
   }
-
-  await getRepository(Student).update(student.id, {
-    isExpelled: true,
-    expellingReason: data.comment || '',
-    endDate: new Date(),
-  });
-  setResponse(ctx, OK);
-  return;
 };
 
 export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -76,13 +62,16 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
 export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
   const student = await courseService.queryStudentByGithubId(courseId, githubId);
-  if (student == null) {
+  const data: { mentorGithuId: string | null } = ctx.request.body;
+  if (student == null || data.mentorGithuId === undefined) {
     setResponse(ctx, BAD_REQUEST, null);
     return;
   }
-  const data: { mentorId?: number } = ctx.request.body;
-  const result = await getRepository(Student).update(student.id, { mentorId: Number(data.mentorId) });
-  setResponse(ctx, OK, result);
+  const studentRepository = getCustomRepository(StudentRepository);
+  await studentRepository.setMentor(courseId, githubId, data.mentorGithuId);
+  const updatedStudent = await studentRepository.findWithMentor(courseId, githubId);
+
+  setResponse(ctx, OK, updatedStudent);
 };
 
 export const getStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {

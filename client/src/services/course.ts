@@ -219,6 +219,10 @@ export class CourseService {
     await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
   }
 
+  async restoreStudent(githubId: string) {
+    await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
+  }
+
   async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
       url,
@@ -406,9 +410,9 @@ export class CourseService {
     return result.data.data;
   }
 
-  async updateStudent(githubId: string, data: { mentorId: number }) {
+  async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {
     const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data;
+    return result.data.data as StudentBasic;
   }
 
   async createInterviewStudent(githubId: string) {

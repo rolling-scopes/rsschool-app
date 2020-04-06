@@ -140,7 +140,7 @@ export class Student {
   startDate: Date;
 
   @Column({ type: 'timestamptz', nullable: true })
-  endDate: Date;
+  endDate: Date | null;
 
   @OneToOne(
     () => Certificate,
