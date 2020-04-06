@@ -1,4 +1,4 @@
-import { Card, message, Row, Col, Button, Modal } from 'antd';
+import { Card, message, Row, Col, Button, Modal, Tag } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -87,6 +87,16 @@ function Page(props: CoursePageProps) {
                 {studentInterview && (
                   <div>
                     Interviewer: <GithubUserLink value={studentInterview.interviewer.githubId} />
+                  </div>
+                )}
+                {studentInterview && (
+                  <div>
+                    Status:{' '}
+                    {studentInterview.completed ? (
+                      <Tag color="green">Completed</Tag>
+                    ) : (
+                      <Tag color="red">Not Completed</Tag>
+                    )}
                   </div>
                 )}
               </Card>
