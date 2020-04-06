@@ -9,9 +9,9 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 ---
 
 ## Technology stack
- - Typescript, 
- - Next.js, 
- - React 
+ - Typescript
+ - Next.js
+ - React
  - Node.js
  - Koa.js
  - Docker
@@ -21,11 +21,22 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 
 ## Getting Started
 
-Run the following commands in the root folder:
+  ### Prerequisites
 
-- `npm install` - installs dependencies in the root folder and `client` / `server` folders.
+  - [Git](https://git-scm.com/downloads) 2.10+
+  - [NodeJS LTS](https://nodejs.org/en/)
+  - [Docker](https://docs.docker.com/install/)
+  - [Docker Compose](https://docs.docker.com/compose/install/)
+  
 
-- `npm start` - starts application (runs Next.js and REST API server)
+  ### Steps
+  - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
+  - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
+  - Run `npm run db:up` (starts local database)
+  - Run `npm run db:restore`  (restore a test DB snapshot)
+  - Make a copy of `server/.env.example` and rename it to `server/.env`
+  - Run `npm start` (starts application by running Next.js and REST API server)
+  - Open `https://localhost:3000` in a browser
 
 ## Contributors
 
