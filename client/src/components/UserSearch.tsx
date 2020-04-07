@@ -34,7 +34,7 @@ export function UserSearch(props: UserProps) {
     <Select
       {...otherProps}
       showSearch
-      allowClear={true}
+      allowClear
       defaultValue={undefined}
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
