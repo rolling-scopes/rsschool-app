@@ -38,7 +38,7 @@ import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } f
 import { postRepository, postRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import {
-  postStudentStatus,
+  updateStudentStatus,
   getStudentSummary,
   postStudentInterviewResult,
   getCrossMentorsTasks,
@@ -168,18 +168,8 @@ function addStudentApi(router: Router, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
-  router.get(
-    '/student/:githubId',
-    courseSupervisorGuard,
-    getStudent(logger),
-    stageInterview.createInterviewStudent(logger),
-  );
-  router.put(
-    '/student/:githubId',
-    courseSupervisorGuard,
-    updateStudent(logger),
-    stageInterview.getInterviewStudent(logger),
-  );
+  router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
+  router.put('/student/:githubId', courseSupervisorGuard, updateStudent(logger));
 
   router.get(
     '/student/:githubId/interview/stage',
@@ -212,7 +202,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   );
 
   router.post('/student/:githubId/repository', courseManagerGuard, ...validators, postRepository(logger));
-  router.post('/student/:githubId/status', ...mentorValidators, postStudentStatus(logger));
+  router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, ...validators, postStudentCertificate(logger));
 

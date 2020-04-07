@@ -13,7 +13,7 @@ export * from './PersonSelect';
 export * from './Rating';
 export * from './RegistryBanner';
 export * from './SocialNetworks';
-export * from './StudentExpelModal';
+export * from './CommentModal';
 export * from './StudentMentorModal';
 export * from './StudentsAutocomplete';
 export * from './StudentSearch';

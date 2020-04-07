@@ -1,32 +1,35 @@
 import {
   BranchesOutlined,
-  FileExcelOutlined,
-  MoreOutlined,
-  SolutionOutlined,
-  CloseCircleTwoTone,
   ClockCircleTwoTone,
+  CloseCircleTwoTone,
+  FileExcelOutlined,
   MinusCircleOutlined,
   PlusCircleTwoTone,
+  SolutionOutlined,
+  UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Dropdown, Menu, message, Row, Statistic, Switch, Table, Typography } from 'antd';
+import { Button, Drawer, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { PageLayout, StudentExpelModal, withSession } from 'components';
+import { PageLayout, CommentModal, withSession } from 'components';
+import { MentorSearch } from 'components/MentorSearch';
 import {
   boolIconRenderer,
   boolSorter,
   getColumnSearchProps,
   numberSorter,
-  stringSorter,
   PersonCell,
+  stringSorter,
 } from 'components/Table';
+import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
-import { useCallback, useMemo, useState, ReactElement } from 'react';
+import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
+import { isCourseManager } from 'rules/user';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import { isCourseManager } from 'rules/user';
+import { MentorBasic } from '../../../../../common/models';
 
 const { Text } = Typography;
 
@@ -36,138 +39,168 @@ type Props = CoursePageProps;
 function Page(props: Props) {
   const courseId = props.course.id;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, withLoading] = useLoading(false);
+  const [expelMode, setExpelMode] = useState(false);
+  const [isManager] = useState(isCourseManager(props.session, props.course.id));
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
-  const [expelledStudent, setExpelledStudent] = useState(null as Partial<StudentDetails> | null);
   const [activeOnly, setActiveOnly] = useState(true);
+  const [details, setDetails] = useState<StudentDetails | null>(null);
 
-  const loadStudents = useCallback(
-    async (activeOnly: boolean) => {
-      const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
-      setStudents(courseStudents);
-      setStats(calculateStats(courseStudents));
-    },
-    [courseService],
-  );
+  useAsync(withLoading(loadStudents), [activeOnly]);
 
-  const actions = useMemo(() => createActions(courseService, setLoading), [courseService, setLoading]);
+  const createRepositories = withLoading(async () => {
+    await courseService.createRepositories();
+    message.info('The job for creating repositories has been submitted');
+  });
 
-  useAsync(async () => {
-    setLoading(true);
-    await loadStudents(activeOnly);
-    setLoading(false);
-  }, [courseService]);
+  const issueCertificate = withLoading(async () => {
+    const githubId = details?.githubId;
+    if (githubId != null) {
+      await courseService.createCertificate(githubId);
+      message.info('The certificate has been requested.');
+    }
+  });
 
-  const handleExpel = (record: StudentDetails) => setExpelledStudent(record);
+  const createRepository = withLoading(async () => {
+    const githubId = details?.githubId;
+    if (githubId != null) {
+      const { repository } = await courseService.createRepository(githubId);
+      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+      setStudents(newStudents);
+    }
+  });
 
-  const handleCreateRepo = useCallback(
-    async ({ githubId }: { githubId: string }) => {
-      try {
-        setLoading(true);
-        const { repository } = await courseService.createRepository(githubId);
-        const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-        setStudents(newStudents);
-      } catch (e) {
-        message.error('An error occured. Please try later.');
-      } finally {
-        setLoading(false);
-      }
-    },
-    [courseService],
-  );
+  const expelStudent = withLoading(async (text: string) => {
+    const githubId = details?.githubId;
+    if (githubId != null) {
+      await courseService.expelStudent(githubId, text);
+      message.info('Student has been expelled');
+    }
+    setExpelMode(false);
+  });
 
-  const handleActiveOnlyChange = async () => {
-    setLoading(true);
-    const value = !activeOnly;
-    setActiveOnly(value);
-    await loadStudents(value);
-    setLoading(false);
-  };
+  const restoreStudent = withLoading(async () => {
+    const githubId = details?.githubId;
+    if (githubId != null) {
+      await courseService.restoreStudent(githubId);
+      message.info('Student has been restored');
+    }
+  });
 
-  function getActionsMenu(record: StudentDetails) {
+  const updateMentor = withLoading(async (mentorGithuId: string | null = null) => {
+    const githubId = details?.githubId;
+    if (details != null && githubId != null) {
+      const student = await courseService.updateStudent(githubId, { mentorGithuId });
+      setDetails({ ...details, mentor: student.mentor });
+    }
+  });
+
+  return render();
+
+  function render() {
     return (
-      <Menu>
-        <Menu.Item onClick={() => handleExpel(record)}>
-          <CloseCircleTwoTone twoToneColor="red" />
-          Expel Student
-        </Menu.Item>
-        <Menu.Item disabled={!!record.repository} onClick={() => handleCreateRepo(record)}>
-          <BranchesOutlined />
-          Create Repository
-        </Menu.Item>
-        <Menu.Item
-          hidden={!isCourseManager(props.session, props.course.id)}
-          onClick={() => actions.issueCertificate(record)}
+      <PageLayout loading={loading} githubId={props.session.githubId}>
+        <Statistic
+          title="Active Students"
+          value={stats?.activeStudentsCount ?? 0}
+          suffix={`/ ${stats?.studentsCount ?? 0}`}
+        />
+        <Row justify="space-between" style={{ marginBottom: 16, marginTop: 16 }}>
+          <div>
+            <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
+            <Switch checked={activeOnly} onChange={() => setActiveOnly(!activeOnly)} />
+          </div>
+          <div>{renderToolbar()}</div>
+        </Row>
+        <Table
+          rowKey="id"
+          pagination={{ pageSize: 100 }}
+          size="small"
+          onRow={record => ({ onClick: () => setDetails(record) })}
+          dataSource={students}
+          columns={getColumns()}
+        />
+        <Drawer
+          width={400}
+          title="Student"
+          placement="right"
+          closable={false}
+          onClose={() => {
+            setDetails(null);
+            loadStudents();
+          }}
+          visible={!!details}
         >
-          <SolutionOutlined />
-          Issue Certificate
-        </Menu.Item>
-      </Menu>
+          <div className="student-details-actions">
+            <Button disabled={!details?.isActive} icon={<BranchesOutlined />} onClick={createRepository}>
+              Create Repository
+            </Button>
+            <Button disabled={!details?.isActive} icon={<SolutionOutlined />} onClick={issueCertificate}>
+              Issue Certificate
+            </Button>
+            {details?.isActive ? (
+              <Button icon={<CloseCircleTwoTone twoToneColor="red" />} onClick={() => setExpelMode(true)}>
+                Expel
+              </Button>
+            ) : null}
+            {!details?.isActive ? (
+              <Button icon={<UndoOutlined />} onClick={restoreStudent}>
+                Restore
+              </Button>
+            ) : null}
+            <div>
+              Mentor
+              <MentorSearch
+                allowClear
+                onChange={updateMentor}
+                courseId={props.course.id}
+                keyField="githubId"
+                value={(details?.mentor as MentorBasic)?.githubId}
+                defaultValues={details?.mentor ? [details?.mentor as any] : []}
+              />
+            </div>
+          </div>
+        </Drawer>
+        <CommentModal
+          title="Expelling Reason"
+          visible={expelMode}
+          onCancel={() => setExpelMode(false)}
+          onOk={expelStudent}
+        />
+        <style jsx>{styles}</style>
+      </PageLayout>
     );
   }
 
-  const getToolbarActions = useCallback(() => {
-    const isManager = isCourseManager(props.session, props.course.id);
+  function renderToolbar() {
     return (
       <>
         {isManager ? (
-          <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={actions.createRepositories}>
+          <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
             Create Repos
           </Button>
         ) : null}
-        <Button
-          icon={<FileExcelOutlined />}
-          style={{ marginRight: 8 }}
-          onClick={() => courseService.exportStudentsCsv(activeOnly)}
-        >
+        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
           Export CSV
         </Button>
       </>
     );
-  }, [courseService, actions]);
+  }
 
-  return (
-    <PageLayout loading={loading} githubId={props.session.githubId}>
-      <Statistic
-        title="Active Students"
-        value={stats?.activeStudentsCount ?? 0}
-        suffix={`/ ${stats?.studentsCount ?? 0}`}
-      />
-      <Row justify="space-between" style={{ marginBottom: 16, marginTop: 16 }}>
-        <div>
-          <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
-          <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
-        </div>
-        <div>{getToolbarActions()}</div>
-      </Row>
-      <Table
-        rowKey="id"
-        pagination={{ pageSize: 100 }}
-        size="small"
-        dataSource={students}
-        columns={getColumns(getActionsMenu)}
-      />
-      <StudentExpelModal
-        onCancel={() => setExpelledStudent(null)}
-        onOk={() => {
-          const newStudents = students.map(s =>
-            expelledStudent && s.id === expelledStudent.id ? { ...s, isActive: false } : s,
-          );
-          setStudents(newStudents);
-          setExpelledStudent(null);
-        }}
-        githubId={expelledStudent?.githubId}
-        visible={!!expelledStudent}
-        courseId={courseId}
-      />
-      <style jsx>{styles}</style>
-    </PageLayout>
-  );
+  function exportStudents() {
+    courseService.exportStudentsCsv(activeOnly);
+  }
+
+  async function loadStudents() {
+    const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
+    setStudents(courseStudents);
+    setStats(calculateStats(courseStudents));
+  }
 }
 
-function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): ColumnProps<any>[] {
+function getColumns(): ColumnProps<any>[] {
   return [
     {
       title: 'Active',
@@ -236,17 +269,6 @@ function getColumns(getActionsMenu: (record: StudentDetails) => ReactElement): C
       sorter: numberSorter('totalScore'),
       render: (value: number) => <Text strong>{value.toFixed(1)}</Text>,
     },
-    {
-      dataIndex: 'actions',
-      render: (_, record: StudentDetails) => (
-        <Dropdown trigger={['click']} overlay={getActionsMenu(record)}>
-          <Button size="small" type="default">
-            More
-            <MoreOutlined />
-          </Button>
-        </Dropdown>
-      ),
-    },
   ];
 }
 
@@ -276,36 +298,13 @@ function calculateStats(students: StudentDetails[]) {
   };
 }
 
-function createActions(courseService: CourseService, setLoading: (value: boolean) => void) {
-  return {
-    issueCertificate: async ({ githubId }: { githubId: string }) => {
-      try {
-        setLoading(true);
-        await courseService.createCertificate(githubId);
-        message.info('The certificate has been requested.');
-      } catch (e) {
-        message.error('An error occured. Please try later.');
-      } finally {
-        setLoading(false);
-      }
-    },
-    createRepositories: async () => {
-      try {
-        setLoading(true);
-        await courseService.createRepositories();
-        message.info('The job for creating repositories has been submitted');
-      } catch (e) {
-        message.error('An error occured. Please try later.');
-      } finally {
-        setLoading(false);
-      }
-    },
-  };
-}
-
 const styles = css`
   :global(.rs-table-row-disabled) {
     opacity: 0.25;
+  }
+
+  .student-details-actions :global(.ant-btn) {
+    margin: 0 8px 8px 0;
   }
 `;
 
