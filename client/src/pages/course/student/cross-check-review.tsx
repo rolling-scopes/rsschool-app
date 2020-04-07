@@ -1,6 +1,6 @@
 import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
 import { Button, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
-import { PageLayout, PersonSelect } from 'components';
+import { PageLayout, UserSearch } from 'components';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
@@ -147,11 +147,11 @@ function Page(props: CoursePageProps) {
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-              <PersonSelect
+              <UserSearch
                 keyField="githubId"
                 onChange={handleStudentChange}
                 disabled={!courseTaskId}
-                data={assignments.map(({ student }) => student)}
+                defaultValues={assignments.map(({ student }) => student)}
               />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>

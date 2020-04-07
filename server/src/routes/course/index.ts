@@ -25,7 +25,7 @@ import { getMentors, createMentors, getMentorsDetails, searchMentors } from './m
 import { getScore, getScoreAsCsv, postScore, postMultipleScores, getScoreByStudent } from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates, postStudentCertificate } from './certificates';
-import { getStudents, postStudents, searchCourseStudent, getStudentsWithDetails, getStudentsCsv } from './students';
+import { getStudents, postStudents, searchStudent, getStudentsWithDetails, getStudentsCsv } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { createTaskVerification } from './taskVerification';
 import { getCourseEvents, getCourseEventsCalendar } from './events';
@@ -213,7 +213,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.get('/students/score', courseGuard, getScore(logger));
   router.get('/students/score/csv', courseSupervisorGuard, getScoreAsCsv(logger));
 
-  router.get('/students/search/:searchText', courseGuard, searchCourseStudent(logger));
+  router.get('/students/search/:searchText', courseGuard, searchStudent(logger));
 }
 
 function addStudentCrossCheckApi(router: Router, logger: ILogger) {

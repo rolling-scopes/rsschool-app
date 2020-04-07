@@ -14,7 +14,7 @@ const nextConfig = {
     config.resolve.alias['components'] = path.join(__dirname, 'components');
     config.resolve.alias['services'] = path.join(__dirname, 'services');
     config.resolve.alias['utils'] = path.join(__dirname, 'utils');
-    config.resolve.alias['rules'] = path.join(__dirname, 'rules');
+    config.resolve.alias['domain'] = path.join(__dirname, 'domain');
     config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
     return config;
   },

@@ -44,6 +44,34 @@ export class StudentRepository extends AbstractRepository<Student> {
     await getRepository(Student).update(student.id, { mentorId: mentor ? mentor.id : null });
   }
 
+  public async search(courseId: number, searchText: string) {
+    const searchQuery = `${searchText}%`;
+
+    const entities = await getRepository(Student)
+      .createQueryBuilder('student')
+      .select([
+        `student.id AS "id"`,
+        `user.githubId AS "githubId"`,
+        `user.firstName AS "firstName"`,
+        `user.lastName AS "lastName"`,
+      ])
+      .leftJoin('student.user', 'user')
+      .where('student.courseId = :courseId')
+      .andWhere('student.isExpelled = false')
+      .andWhere(
+        `(
+          user.githubId ILIKE :searchQuery OR 
+          user.firstName ILIKE :searchQuery OR
+          user.lastName ILIKE :searchQuery
+        )`,
+        { courseId, searchQuery },
+      )
+      .limit(20)
+      .getRawMany();
+
+    return entities.map(entity => ({ id: entity.id, githubId: entity.githubId, name: userService.createName(entity) }));
+  }
+
   public async findWithMentor(courseId: number, githubId: string) {
     const query = getRepository(Student)
       .createQueryBuilder('student')

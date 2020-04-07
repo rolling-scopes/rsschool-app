@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { get } from 'lodash';
+import { SelectProps } from 'antd/lib/select';
 
-type Props = {
-  [key: string]: any;
+type Props = SelectProps<string> & {
   data: { id: number; githubId: string; name?: string }[];
   keyField?: 'id' | 'githubId';
   defaultValue?: string | number;

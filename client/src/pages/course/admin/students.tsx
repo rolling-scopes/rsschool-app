@@ -1,17 +1,16 @@
 import {
   BranchesOutlined,
+  CheckCircleTwoTone,
   ClockCircleTwoTone,
   CloseCircleTwoTone,
   FileExcelOutlined,
   MinusCircleOutlined,
-  PlusCircleTwoTone,
   SolutionOutlined,
   UndoOutlined,
 } from '@ant-design/icons';
 import { Button, Drawer, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { PageLayout, CommentModal, withSession } from 'components';
-import { MentorSearch } from 'components/MentorSearch';
+import { CommentModal, PageLayout, withSession, MentorSearch } from 'components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -25,7 +24,7 @@ import withCourseData from 'components/withCourseData';
 import _ from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { isCourseManager } from 'rules/user';
+import { isCourseManager } from 'domain/user';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
@@ -45,7 +44,7 @@ function Page(props: Props) {
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
-  const [activeOnly, setActiveOnly] = useState(true);
+  const [activeOnly, setActiveOnly] = useState(false);
   const [details, setDetails] = useState<StudentDetails | null>(null);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
@@ -110,21 +109,14 @@ function Page(props: Props) {
         <Row justify="space-between" style={{ marginBottom: 16, marginTop: 16 }}>
           <div>
             <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
-            <Switch checked={activeOnly} onChange={() => setActiveOnly(!activeOnly)} />
+            <Switch checked={activeOnly} onChange={setActiveOnly} />
           </div>
           <div>{renderToolbar()}</div>
         </Row>
-        <Table
-          rowKey="id"
-          pagination={{ pageSize: 100 }}
-          size="small"
-          onRow={record => ({ onClick: () => setDetails(record) })}
-          dataSource={students}
-          columns={getColumns()}
-        />
+        <Table rowKey="id" pagination={{ pageSize: 100 }} size="small" dataSource={students} columns={getColumns()} />
         <Drawer
           width={400}
-          title="Student"
+          title={details ? `${details.name} , ${details.githubId}` : ''}
           placement="right"
           closable={false}
           onClose={() => {
@@ -134,22 +126,26 @@ function Page(props: Props) {
           visible={!!details}
         >
           <div className="student-details-actions">
-            <Button disabled={!details?.isActive} icon={<BranchesOutlined />} onClick={createRepository}>
+            <Button
+              disabled={!details?.isActive || !!details.repository}
+              icon={<BranchesOutlined />}
+              onClick={createRepository}
+            >
               Create Repository
             </Button>
             <Button disabled={!details?.isActive} icon={<SolutionOutlined />} onClick={issueCertificate}>
               Issue Certificate
             </Button>
-            {details?.isActive ? (
-              <Button icon={<CloseCircleTwoTone twoToneColor="red" />} onClick={() => setExpelMode(true)}>
-                Expel
-              </Button>
-            ) : null}
-            {!details?.isActive ? (
-              <Button icon={<UndoOutlined />} onClick={restoreStudent}>
-                Restore
-              </Button>
-            ) : null}
+            <Button
+              hidden={!details?.isActive}
+              icon={<CloseCircleTwoTone twoToneColor="red" />}
+              onClick={() => setExpelMode(true)}
+            >
+              Expel
+            </Button>
+            <Button hidden={details?.isActive} icon={<UndoOutlined />} onClick={restoreStudent}>
+              Restore
+            </Button>
             <div>
               Mentor
               <MentorSearch
@@ -198,78 +194,89 @@ function Page(props: Props) {
     setStudents(courseStudents);
     setStats(calculateStats(courseStudents));
   }
-}
 
-function getColumns(): ColumnProps<any>[] {
-  return [
-    {
-      title: 'Active',
-      dataIndex: 'isActive',
-      width: 50,
-      render: boolIconRenderer,
-      sorter: boolSorter('isActive'),
-    },
-    {
-      title: 'Student',
-      dataIndex: 'githubId',
-      sorter: stringSorter('githubId'),
-      key: 'githubId',
-      render: (_, record: any) => <PersonCell value={record} />,
-      ...getColumnSearchProps(['githubId', 'name']),
-    },
-    {
-      title: 'Mentor',
-      dataIndex: 'mentor',
-      sorter: stringSorter<any>('mentor.githubId'),
-      render: (value: any) => (value ? <PersonCell value={value} /> : null),
-      ...getColumnSearchProps(['mentor.githubId', 'mentor.name']),
-    },
-    {
-      title: 'City',
-      dataIndex: 'cityName',
-      width: 80,
-      sorter: stringSorter('cityName'),
-      ...getColumnSearchProps('cityName'),
-    },
-    {
-      title: 'Country',
-      dataIndex: 'countryName',
-      key: 'countryName',
-      width: 80,
-      sorter: stringSorter('countryName'),
-      ...getColumnSearchProps('countryName'),
-    },
-    {
-      title: 'Screening',
-      dataIndex: 'interviews',
-      width: 60,
-      render: (value: any[]) => {
-        if (value.length === 0) {
-          return <MinusCircleOutlined title="No Interview" />;
-        }
-        if (value.every(e => e.isCompleted)) {
-          return <PlusCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
-        } else {
-          return <ClockCircleTwoTone title="Assigned" />;
-        }
+  function getColumns(): ColumnProps<any>[] {
+    return [
+      {
+        title: 'Active',
+        dataIndex: 'isActive',
+        width: 50,
+        render: boolIconRenderer,
+        sorter: boolSorter('isActive'),
       },
-    },
-    {
-      title: <BranchesOutlined />,
-      dataIndex: 'repository',
-      width: 80,
-      render: (value: string) => (value ? <a href={value}>Link</a> : null),
-    },
-    {
-      title: 'Total',
-      dataIndex: 'totalScore',
-      key: 'totalScore',
-      width: 80,
-      align: 'right',
-      sorter: numberSorter('totalScore'),
-      render: (value: number) => <Text strong>{value.toFixed(1)}</Text>,
-    },
-  ];
+      {
+        title: 'Student',
+        dataIndex: 'githubId',
+        sorter: stringSorter('githubId'),
+        key: 'githubId',
+        render: (_, record: any) => <PersonCell value={record} />,
+        ...getColumnSearchProps(['githubId', 'name']),
+      },
+      {
+        title: 'Mentor',
+        dataIndex: 'mentor',
+        sorter: stringSorter<any>('mentor.githubId'),
+        render: (value: any) => (value ? <PersonCell value={value} /> : null),
+        ...getColumnSearchProps(['mentor.githubId', 'mentor.name']),
+      },
+      {
+        title: 'City',
+        dataIndex: 'cityName',
+        width: 80,
+        sorter: stringSorter('cityName'),
+        ...getColumnSearchProps('cityName'),
+      },
+      {
+        title: 'Country',
+        dataIndex: 'countryName',
+        key: 'countryName',
+        width: 80,
+        sorter: stringSorter('countryName'),
+        ...getColumnSearchProps('countryName'),
+      },
+      {
+        title: 'Screening',
+        dataIndex: 'interviews',
+        width: 60,
+        render: (value: any[]) => {
+          if (value.length === 0) {
+            return <MinusCircleOutlined title="No Interview" />;
+          }
+          if (value.every(e => !e.isCompleted)) {
+            return <CheckCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
+          } else {
+            return <ClockCircleTwoTone title="Assigned" />;
+          }
+        },
+      },
+      {
+        title: <BranchesOutlined />,
+        dataIndex: 'repository',
+        width: 80,
+        render: (value: string) => (value ? <a href={value}>Link</a> : null),
+      },
+      {
+        title: 'Total',
+        dataIndex: 'totalScore',
+        key: 'totalScore',
+        width: 80,
+        align: 'right',
+        sorter: numberSorter('totalScore'),
+        render: (value: number) => <Text strong>{value.toFixed(1)}</Text>,
+      },
+      {
+        title: '',
+        dataIndex: 'actions',
+        fixed: 'right',
+        width: 60,
+        render: (_: any, record: StudentDetails) => (
+          <Button type="default" onClick={() => setDetails(record)}>
+            More
+          </Button>
+        ),
+      },
+    ];
+  }
 }
 
 function calculateStats(students: StudentDetails[]) {

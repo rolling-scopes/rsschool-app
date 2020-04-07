@@ -1,12 +1,13 @@
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
 import { MentorBasic } from '../../../../common/models';
 import { ILogger } from '../../logger';
-import { Student, User } from '../../models';
+import { Student } from '../../models';
 import { courseService, OperationResult, userService } from '../../services';
 import { setCsvResponse, setResponse } from '../utils';
+import { StudentRepository } from '../../repositories/student';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
@@ -43,38 +44,13 @@ export const getStudentsWithDetails = (_: ILogger) => async (ctx: Router.RouterC
   setResponse(ctx, OK, students);
 };
 
-export const searchCourseStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = Number(ctx.params.courseId);
-  const searchText = `${String(ctx.params.searchText)}%`;
+export const searchStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, searchText } = ctx.params;
 
-  const entities = await getRepository(Student)
-    .createQueryBuilder('student')
-    .select(
-      `"student"."id" AS "id",
-      "user"."githubId" AS "githubId",
-      "user"."firstName" AS "firstName",
-      "user"."lastName" AS "lastName"`,
-    )
-    .leftJoin(User, 'user', '"student"."userId" = "user"."id"')
-    .where(
-      `"student"."courseId" = :courseId
-      AND "student"."isExpelled" = false
-      AND ("user"."githubId" ILIKE :searchText
-        OR "user"."firstName" ILIKE :searchText
-        OR "user"."lastName" ILIKE :searchText)
-    `,
-      { courseId, searchText },
-    )
-    .limit(20)
-    .getRawMany();
+  const repository = getCustomRepository(StudentRepository);
+  const result = await repository.search(courseId, searchText);
 
-  const result = entities.map(entity => ({
-    id: entity.id,
-    githubId: entity.githubId,
-    name: `${entity.firstName} ${entity.lastName}`,
-  }));
-
-  setResponse(ctx, OK, result, 60);
+  setResponse(ctx, OK, result);
 };
 
 type StudentInput = {

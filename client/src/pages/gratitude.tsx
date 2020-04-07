@@ -53,15 +53,7 @@ function Page(props: Props) {
 
   return (
     <PageLayoutSimple loading={loading} title="#gratitude" githubId={props.session.githubId}>
-      <Alert
-        message={
-          <span>
-            Your feedback will be posted to #gratitude channel and to <a href="https://heroes.by">heroes.by</a> (if
-            badge is selected)
-          </span>
-        }
-        style={{ marginBottom: 16 }}
-      />
+      <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>

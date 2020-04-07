@@ -1,4 +1,4 @@
-import { Card, message, Row, Col, Button, Modal, Tag } from 'antd';
+import { message, Card, Row, List, Col, Button, Modal, Tag, Descriptions } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -7,7 +7,8 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { formatDate } from 'services/formatter';
+import { formatShortDate } from 'services/formatter';
+import { friendlyStageInterviewVerdict } from 'domain/interview';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
@@ -56,12 +57,10 @@ function Page(props: CoursePageProps) {
     });
   };
 
-  const renderRegisterButton = (interview: Interview) => {
-    if (interview.type !== 'stage-interview') {
-      return null;
-    }
+  const renderExtra = (interview: Interview) => {
     return (
       <Button
+        hidden={interview.type !== 'stage-interview'}
         onClick={handleRegister}
         icon={hasStageInterview ? <CheckCircleOutlined /> : null}
         disabled={hasStageInterview}
@@ -76,29 +75,43 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
       <Row gutter={24}>
         {interviews.map(interview => {
-          const studentInterview = data.find(d => d.name === interview.name);
+          const items = data.filter(d => d.name === interview.name);
           return (
-            <Col key={interview.id} xs={20} sm={16} md={12} lg={8} xl={8}>
-              <Card size="small" title={interview.name} extra={renderRegisterButton(interview)}>
-                <div>Start Date: {formatDate(interview.startDate)}</div>
-                <div>
-                  Description: <a href={interview.descriptionUrl}>Link</a>
-                </div>
-                {studentInterview && (
-                  <div>
-                    Interviewer: <GithubUserLink value={studentInterview.interviewer.githubId} />
-                  </div>
-                )}
-                {studentInterview && (
-                  <div>
-                    Status:{' '}
-                    {studentInterview.completed ? (
-                      <Tag color="green">Completed</Tag>
-                    ) : (
-                      <Tag color="red">Not Completed</Tag>
-                    )}
-                  </div>
-                )}
+            <Col key={interview.id} xs={20} sm={16} md={14} lg={12} xl={10} xxl={10}>
+              <Card
+                size="small"
+                title={
+                  <>
+                    <Button target="_blank" href={interview.descriptionUrl} type="link">
+                      {interview.name}
+                    </Button>
+                    {formatShortDate(interview.startDate)} - {formatShortDate(interview.endDate)}
+                  </>
+                }
+                extra={renderExtra(interview)}
+              >
+                <List
+                  itemLayout="vertical"
+                  dataSource={items}
+                  size="small"
+                  renderItem={item => {
+                    return (
+                      <List.Item style={{ padding: '8px 0' }}>
+                        <Descriptions layout="vertical" size="small">
+                          <Descriptions.Item label="Interviewer">
+                            <GithubUserLink value={item.interviewer.githubId} />
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Status">
+                            {item.completed ? <Tag color="green">Completed</Tag> : <Tag color="red">Not Completed</Tag>}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Result">
+                            <b>{friendlyStageInterviewVerdict(item.result) ?? '-'}</b>
+                          </Descriptions.Item>
+                        </Descriptions>
+                      </List.Item>
+                    );
+                  }}
+                ></List>
               </Card>
             </Col>
           );
