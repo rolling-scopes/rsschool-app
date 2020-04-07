@@ -38,10 +38,12 @@ interface StageInterviewFeedback {
     comment: string | null;
   };
   resume: {
-    verdict: 'yes' | 'no' | 'noButGoodCandidate' | 'didNotDecideYet' | null;
+    verdict: StageInterviewFeedbackVerdict;
     comment: string | null;
   };
 }
+
+export type StageInterviewFeedbackVerdict = 'yes' | 'no' | 'noButGoodCandidate' | 'didNotDecideYet' | null;
 
 export type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
 

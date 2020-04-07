@@ -1,5 +1,5 @@
 import { Button, Form, Input, message, Typography } from 'antd';
-import { PageLayoutSimple, PersonSelect } from 'components';
+import { PageLayoutSimple, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
@@ -52,9 +52,9 @@ function Page(props: CoursePageProps) {
       <Typography.Paragraph type="warning">This page allows to expel a student from the course</Typography.Paragraph>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-          <PersonSelect
+          <UserSearch
             keyField="githubId"
-            data={students}
+            defaultValues={students}
             disabled={noData}
             placeholder={noData ? 'No Students' : undefined}
           />
