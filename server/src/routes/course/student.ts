@@ -69,18 +69,15 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
   }
   const studentRepository = getCustomRepository(StudentRepository);
   await studentRepository.setMentor(courseId, githubId, data.mentorGithuId);
-  const updatedStudent = await studentRepository.findWithMentor(courseId, githubId);
+  const updatedStudent = await studentRepository.findAndIncludeMentor(courseId, githubId);
 
   setResponse(ctx, OK, updatedStudent);
 };
 
 export const getStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
-  const student = await courseService.queryStudentByGithubId(courseId, githubId);
-  if (student == null) {
-    setResponse(ctx, BAD_REQUEST, null);
-    return;
-  }
+  const studentRepository = getCustomRepository(StudentRepository);
+  const student = await studentRepository.findAndIncludeDetails(courseId, githubId);
   setResponse(ctx, OK, student);
 };
 

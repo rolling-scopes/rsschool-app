@@ -72,7 +72,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     return entities.map(entity => ({ id: entity.id, githubId: entity.githubId, name: userService.createName(entity) }));
   }
 
-  public async findWithMentor(courseId: number, githubId: string) {
+  public async findAndIncludeMentor(courseId: number, githubId: string) {
     const query = getRepository(Student)
       .createQueryBuilder('student')
       .select(['student.id', 'student.isExpelled', 'student.mentorId', 'student.isFailed'])
@@ -113,6 +113,34 @@ export class StudentRepository extends AbstractRepository<Student> {
     };
   }
 
+  public async findAndIncludeDetails(courseId: number, githubId: string) {
+    const query = getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'sUser')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
+      .addSelect([
+        'mentor.id',
+        'mentor.isExpelled',
+        'mentor.userId',
+        ...this.getPrimaryUserFields('sUser'),
+        ...this.getPrimaryUserFields('mUser'),
+      ])
+      .where('sUser.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId });
+
+    const record = await query.getOne();
+    if (record == null) {
+      return null;
+    }
+
+    return {
+      ...transformStudent(record),
+      expellingReason: record.expellingReason,
+      totalScore: record.totalScore,
+    };
+  }
+
   private async findByGithubId(
     courseId: number,
     githubId: string,
@@ -144,4 +172,25 @@ export class StudentRepository extends AbstractRepository<Student> {
       `${modelName}.countryName`,
     ];
   }
+}
+
+function transformStudent(record: Student) {
+  return {
+    id: record.id,
+    name: userService.createName(record.user),
+    githubId: record.user.githubId,
+    cityName: record.user.cityName,
+    countryName: record.user.countryName,
+    isActive: !record.isExpelled && !record.isFailed,
+    mentor: record.mentor
+      ? {
+          id: record.mentor.id,
+          name: userService.createName(record.mentor.user),
+          githubId: record.mentor.user.githubId,
+          cityName: record.mentor.user.cityName,
+          countryName: record.mentor.user.countryName,
+          isActive: !record.mentor.isExpelled,
+        }
+      : null,
+  };
 }

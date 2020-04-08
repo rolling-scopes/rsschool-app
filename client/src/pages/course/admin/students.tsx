@@ -8,7 +8,7 @@ import {
   SolutionOutlined,
   UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Drawer, message, Row, Statistic, Switch, Table, Typography } from 'antd';
+import { Button, Drawer, message, Row, Statistic, Switch, Table, Typography, Descriptions } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { CommentModal, PageLayout, withSession, MentorSearch } from 'components';
 import {
@@ -146,17 +146,18 @@ function Page(props: Props) {
             <Button hidden={details?.isActive} icon={<UndoOutlined />} onClick={restoreStudent}>
               Restore
             </Button>
-            <div>
-              Mentor
-              <MentorSearch
-                allowClear
-                onChange={updateMentor}
-                courseId={props.course.id}
-                keyField="githubId"
-                value={(details?.mentor as MentorBasic)?.githubId}
-                defaultValues={details?.mentor ? [details?.mentor as any] : []}
-              />
-            </div>
+            <Descriptions bordered layout="vertical" size="small" column={1}>
+              <Descriptions.Item label="Mentor">
+                <MentorSearch
+                  style={{ width: '100%' }}
+                  onChange={updateMentor}
+                  courseId={props.course.id}
+                  keyField="githubId"
+                  value={(details?.mentor as MentorBasic)?.githubId}
+                  defaultValues={details?.mentor ? [details?.mentor as any] : []}
+                />
+              </Descriptions.Item>
+            </Descriptions>
           </div>
         </Drawer>
         <CommentModal
@@ -242,7 +243,7 @@ function Page(props: Props) {
           if (value.length === 0) {
             return <MinusCircleOutlined title="No Interview" />;
           }
-          if (value.every(e => !e.isCompleted)) {
+          if (value.every(e => e.isCompleted)) {
             return <CheckCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
           } else {
             return <ClockCircleTwoTone title="Assigned" />;
