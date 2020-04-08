@@ -140,13 +140,17 @@ export async function saveScore(
     githubPrUrl?: string;
   },
 ) {
-  const { authorId, githubPrUrl = null, comment = '', score } = data;
+  const { authorId, githubPrUrl = null, comment = '' } = data;
+  const score = Math.round(data.score);
+
   const existingResult = await getTaskResult(studentId, courseTaskId);
   if (existingResult == null) {
     const taskResult = createTaskResult(authorId, {
-      ...data,
+      comment,
+      score,
       studentId,
       courseTaskId,
+      githubPrUrl: githubPrUrl ?? undefined,
     });
     return getRepository(TaskResult).insert(taskResult);
   }
@@ -167,10 +171,10 @@ export async function saveScore(
   }
   if (score !== existingResult.score) {
     existingResult.historicalScores.push({
+      comment,
       authorId,
       score,
       dateTime: Date.now(),
-      comment: data.comment || '',
     });
     existingResult.score = score;
   }
