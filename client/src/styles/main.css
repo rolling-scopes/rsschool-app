@@ -21,6 +21,10 @@ body,
   display: none;
 }
 
+.ant-drawer-content-wrapper {
+  max-width: 85%;
+}
+
 .footer-dark.ant-layout-footer {
   background: #000;
   color: #fff;

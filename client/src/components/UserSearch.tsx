@@ -14,7 +14,7 @@ export type UserProps = SelectProps<string> & {
 
 export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
-  const { searchFn = defaultSearch, defaultValues } = props;
+  const { searchFn = defaultSearch, defaultValues, keyField, ...otherProps } = props;
 
   useEffect(() => {
     setData(defaultValues ?? []);
@@ -29,7 +29,6 @@ export function UserSearch(props: UserProps) {
     }
   };
 
-  const { keyField, ...otherProps } = props;
   return (
     <Select
       {...otherProps}
