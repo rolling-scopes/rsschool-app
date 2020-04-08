@@ -81,17 +81,7 @@ export const getStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, student);
 };
 
-type Input = {
-  score: number | string;
-  comment: string;
-  formAnswers: {
-    questionId: string;
-    questionText: string;
-    answer: string;
-  }[];
-};
-
-export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createInterviewResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params as {
     githubId: string;
     courseId: number;
@@ -99,7 +89,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
   };
   const userId = ctx.state.user.id;
 
-  const inputData: Input = ctx.request.body;
+  const inputData: InterviewResultInput = ctx.request.body;
 
   if (inputData.score == null) {
     setResponse(ctx, BAD_REQUEST, 'no score');
@@ -152,7 +142,7 @@ export const postStudentInterviewResult = (_: ILogger) => async (ctx: Router.Rou
   setResponse(ctx, OK, result);
 };
 
-export const getCrossMentorsTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCrossMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params as {
     githubId: string;
     courseId: number;
@@ -161,4 +151,14 @@ export const getCrossMentorsTasks = (_: ILogger) => async (ctx: Router.RouterCon
   const taskCheckers = await courseService.getCrossMentorsByStudent(courseId, githubId);
 
   setResponse(ctx, OK, taskCheckers);
+};
+
+type InterviewResultInput = {
+  score: number | string;
+  comment: string;
+  formAnswers: {
+    questionId: string;
+    questionText: string;
+    answer: string;
+  }[];
 };

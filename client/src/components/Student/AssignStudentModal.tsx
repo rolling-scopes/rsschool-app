@@ -75,7 +75,12 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
           onCancel={this.reset}
         >
           <Row>
-            <StudentSearch keyField="githubId" onChange={this.handleStudentSelect} courseId={courseId} />
+            <StudentSearch
+              style={{ width: '100%' }}
+              keyField="githubId"
+              onChange={this.handleStudentSelect}
+              courseId={courseId}
+            />
           </Row>
         </Modal>
       </>

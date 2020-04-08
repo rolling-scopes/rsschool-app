@@ -5,20 +5,23 @@ import { courseService } from '../../services';
 import { setResponse } from '../utils';
 import { getUserByGithubId } from '../../services/user.service';
 import { Mentor, Student } from '../../models';
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
 import { updateSession } from '../../session';
+import { StudentRepository } from '../../repositories/student';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 
 export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as Params;
-  const students = await courseService.getStudentsByMentor(courseId, githubId);
+  const repository = getCustomRepository(StudentRepository);
+  const students = await repository.findByMentor(courseId, githubId);
   setResponse(ctx, OK, students);
 };
 
 export const getAllMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as Params;
-  const students = await courseService.getStudentsByMentor(courseId, githubId);
+  const repository = getCustomRepository(StudentRepository);
+  const students = await repository.findByMentor(courseId, githubId);
   const assignedStudents = await courseService.getCrossStudentsByMentor(courseId, githubId);
   setResponse(ctx, OK, { students, assignedStudents });
 };
