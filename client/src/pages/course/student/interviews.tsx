@@ -1,4 +1,4 @@
-import { Card, message, Row, Col, Button, Modal } from 'antd';
+import { Card, message, Row, Col, Button, Modal, Tag } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -36,7 +36,7 @@ function Page(props: CoursePageProps) {
 
   const handleRegister = async () => {
     Modal.confirm({
-      title: 'Are you ready to participate in Stage Interview?',
+      title: 'Are you ready to participate in Technical Screening?',
       content: (
         <>
           You are committing to do the following:
@@ -76,7 +76,7 @@ function Page(props: CoursePageProps) {
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
       <Row gutter={24}>
         {interviews.map(interview => {
-          const studentInterview = data.find(d => d.id === interview.id);
+          const studentInterview = data.find(d => d.name === interview.name);
           return (
             <Col key={interview.id} xs={20} sm={16} md={12} lg={8} xl={8}>
               <Card size="small" title={interview.name} extra={renderRegisterButton(interview)}>
@@ -87,6 +87,16 @@ function Page(props: CoursePageProps) {
                 {studentInterview && (
                   <div>
                     Interviewer: <GithubUserLink value={studentInterview.interviewer.githubId} />
+                  </div>
+                )}
+                {studentInterview && (
+                  <div>
+                    Status:{' '}
+                    {studentInterview.completed ? (
+                      <Tag color="green">Completed</Tag>
+                    ) : (
+                      <Tag color="red">Not Completed</Tag>
+                    )}
                   </div>
                 )}
               </Card>

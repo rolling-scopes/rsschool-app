@@ -1,11 +1,11 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from '@koa/router';
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, Student, TaskInterviewResult } from '../../models';
 import { courseService, taskService } from '../../services';
-import { stageInterviewService } from '../../services';
 import { setResponse } from '../utils';
+import { StageInterviewRepository } from '../../repositories/stageInterview';
 
 export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
@@ -16,22 +16,23 @@ export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContex
   }
 
   const { user } = ctx.state as { user: IUserSession };
-  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  const student = await courseService.getStudentByGithubId(courseId, githubId);
   if (student == null) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid student' });
     return;
   }
 
   if (!courseService.isPowerUser(courseId, user)) {
+    const repository = getCustomRepository(StageInterviewRepository);
     const [interviews, mentor] = await Promise.all([
-      stageInterviewService.getInterviewsByStudentId(courseId, student.id),
+      repository.findByStudent(courseId, githubId),
       courseService.getCourseMentor(courseId, user.id),
     ] as const);
     if (mentor == null) {
       setResponse(ctx, BAD_REQUEST, { message: 'not valid mentor' });
       return;
     }
-    if (!interviews.some(it => it.mentor.id === mentor!.id) && student.mentorId !== mentor.id) {
+    if (!interviews.some(it => it.interviewer.githubId === user.githubId) && student.mentorId !== mentor.id) {
       setResponse(ctx, BAD_REQUEST, { message: 'incorrect mentor-student relation' });
       return;
     }
@@ -49,7 +50,7 @@ export const postStudentStatus = (_: ILogger) => async (ctx: Router.RouterContex
 export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
 
-  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  const student = await courseService.getStudentByGithubId(courseId, githubId);
   if (student == null) {
     setResponse(ctx, OK, null);
     return;

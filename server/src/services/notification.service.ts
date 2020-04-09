@@ -1,9 +1,9 @@
-import { consentService } from './';
-import { userService } from './';
+import { consentService } from '.';
+import { userService } from '.';
 import axios, { AxiosError } from 'axios';
 import { config } from '../config';
 import { Consent, ChannelType } from '../models';
-import { courseService } from '../services';
+import { courseService } from '.';
 
 export async function renderMentorConfirmationText(preselectedCourseIds: number[]) {
   const preselectedCourseIdsSet = new Set(preselectedCourseIds);
@@ -11,9 +11,9 @@ export async function renderMentorConfirmationText(preselectedCourseIds: number[
   const preselectedCourses = courses.filter(course => preselectedCourseIdsSet.has(course.id));
   const names = preselectedCourses.map(course => course.name).join(', ');
   const confirmLinks = preselectedCourses
-    .map(({ alias }) => `https://app.rs.school/course/mentor/confirm?course=${alias}`)
+    .map(({ alias, name }) => `${name}: https://app.rs.school/course/mentor/confirm?course=${alias}`)
     .join('\n');
-  return `Your partisipation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s): ${confirmLinks}`;
+  return `Your participation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s):\n${confirmLinks}`;
 }
 
 export type Notification = {
@@ -64,7 +64,7 @@ type UsersContacts = {
 
 export async function sendNotification(userIds: number[], text: string, isIgnoreConsents: boolean = false) {
   try {
-    if (config.isDevMode) {
+    if (!config.isDevMode) {
       return;
     }
     const users = (await userService.getUsersByIds(userIds)) || [];

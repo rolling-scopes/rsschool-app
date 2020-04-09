@@ -1,13 +1,13 @@
 import { App } from '@octokit/app';
 import { Octokit } from '@octokit/rest';
-import { OK } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { camelCase, toUpper } from 'lodash';
 import { getRepository } from 'typeorm';
 import { config } from '../../config';
 import { ILogger } from '../../logger';
 import { Course, Mentor, Student } from '../../models';
-import { queryStudentByGithubId } from '../../services/courseService';
+import { courseService } from '../../services';
 import { setResponse } from '../utils';
 
 const teamsCache: Record<string, number | undefined> = {};
@@ -16,12 +16,19 @@ const app = new App({ id: Number(appId), privateKey });
 
 export const postRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId } = ctx.params as { courseId: number };
+  const options = ctx.request.body as { includeAll: boolean };
   const result: { repository: string }[] = [];
-  const course = (await getRepository(Course).findOne(courseId))!;
-  const githubIds = await queryStudentGithubIds(courseId);
-  for await (const githubId of githubIds) {
-    const { repository } = await createRepository(course, githubId, logger);
-    result.push({ repository });
+  const course = await getRepository(Course).findOne(courseId);
+  if (course == null) {
+    setResponse(ctx, BAD_REQUEST, result);
+    return;
+  }
+  const githubIds = await queryStudentGithubIds(courseId, options.includeAll);
+  for (const githubId of githubIds) {
+    const record = await createRepository(course, githubId, logger);
+    if (record?.repository) {
+      result.push({ repository: record.repository });
+    }
   }
   setResponse(ctx, OK, result);
 };
@@ -31,7 +38,7 @@ export const postRepository = (logger: ILogger) => async (ctx: Router.RouterCont
 
   const course = (await getRepository(Course).findOne(courseId))!;
   const student = await createRepository(course, githubId, logger);
-  setResponse(ctx, OK, { repository: student.repository });
+  setResponse(ctx, OK, { repository: student?.repository });
 };
 
 async function createRepository(course: Course, githubId: string, logger: ILogger) {
@@ -60,7 +67,10 @@ async function createRepository(course: Course, githubId: string, logger: ILogge
     github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
     github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
   ]);
-  const student = await queryStudentByGithubId(course.id, githubId);
+  const student = await courseService.getStudentByGithubId(course.id, githubId);
+  if (student == null) {
+    return null;
+  }
   student.repository = response.data.html_url;
   logger.info({ repository: student.repository });
   await getRepository(Student).save(student);
@@ -108,17 +118,23 @@ async function queryMentorsGithubIds(courseId: number) {
   return mentors.map(m => m.user.githubId);
 }
 
-async function queryStudentGithubIds(courseId: number) {
-  const mentors = await getRepository(Student)
+async function queryStudentGithubIds(courseId: number, includeAll: boolean) {
+  let query = await getRepository(Student)
     .createQueryBuilder('student')
-    .innerJoin('student.user', 'studentUser')
-    .innerJoin('student.stageInterviews', 'stageInterview')
+    .innerJoin('student.user', 'studentUser');
+
+  if (!includeAll) {
+    query = query.innerJoin('student.stageInterviews', 'stageInterview');
+  }
+
+  query = query
     .addSelect(['student.id', 'studentUser.githubId'])
     .where('student.courseId = :courseId', { courseId })
     .andWhere('student.isExpelled = false AND student.isFailed = false')
-    .andWhere('student.mentorId IS NOT NULL')
-    .andWhere('student.repository IS NULL')
-    .andWhere('stageInterview.isCompleted = true')
-    .getMany();
+    .andWhere('student.repository IS NULL');
+  if (!includeAll) {
+    query = query.andWhere('stageInterview.isCompleted = true').andWhere('student.mentorId IS NOT NULL');
+  }
+  const mentors = await query.getMany();
   return mentors.map(m => m.user.githubId);
 }

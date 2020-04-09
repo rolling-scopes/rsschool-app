@@ -22,7 +22,7 @@ export function StudentSearch(props: Props) {
   const handleSearch = useCallback(
     async (value: string) => {
       if (value) {
-        const data = await courseService.searchCourseStudent(value);
+        const data = await courseService.searchStudents(value);
         setData(data);
       } else {
         setData(props.defaultValues ?? []);

@@ -1,15 +1,15 @@
 import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Table, Tag, Row, Tooltip, Select, message } from 'antd';
+import { Table, Tag, Row, Tooltip, Select } from 'antd';
 import { withSession, GithubUserLink, PageLayout } from 'components';
-import { dateRenderer } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
 import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
-import { DEFAULT_TIMEZONE, TIMEZONES } from '../../configs/timezones';
+import { TIMEZONES } from '../../configs/timezones';
 import { useAsync } from 'react-use';
+import { useLoading } from 'components/useLoading';
 
 enum EventTypeColor {
   deadline = 'red',
@@ -58,65 +58,27 @@ const EventTypeToName: Record<string, string> = {
 };
 
 export function SchedulePage(props: CoursePageProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, withLoading] = useLoading(false);
   const [data, setData] = useState<CourseEvent[]>([]);
-  const [timeZone, setTimeZone] = useState(DEFAULT_TIMEZONE);
+  const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const startOfToday = moment().startOf('day');
 
-  useAsync(async () => {
-    try {
-      setLoading(true);
+  useAsync(
+    withLoading(async () => {
       const [events, tasks] = await Promise.all([
         courseService.getCourseEvents(),
         courseService.getCourseTasksDetails(),
       ]);
-      const data = events
-        .concat(
-          tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
-            if (task.type !== TaskTypes.test) {
-              acc.push(createCourseEventFromTask(task, task.type));
-            }
-            acc.push(
-              createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline),
-            );
-            return acc;
-          }, []),
-        )
-        .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+      const data = events.concat(tasksToEvents(tasks)).sort((a, b) => a.dateTime.localeCompare(b.dateTime));
       setData(data);
-    } catch {
-      message.error('An error occured. Please try later.');
-    } finally {
-      setLoading(false);
-    }
-  }, [courseService]);
+    }),
+    [courseService],
+  );
 
   return (
     <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
-      {/* <Row
-        style={{
-          display: 'flex',
-          flexFlow: 'row',
-          justifyContent: 'center',
-          alignItems: 'baseline',
-          textAlign: 'center',
-        }}
-      >
-        <p>
-          <Text type="danger">This is a draft version! </Text> Please see the actual schedule here:
-        </p>
-        <Button
-          style={{ marginLeft: 8 }}
-          type="danger"
-          icon={<CalendarOutlined />}
-          target="_blank"
-          href="https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/edit#gid=1509181302"
-        >
-          See Schedule
-        </Button>
-      </Row> */}
-      <Row justify="space-between">
+      <Row justify="space-between" style={{ marginBottom: 16 }}>
         <Select
           style={{ width: 200 }}
           placeholder="Please select a timezone"
@@ -137,8 +99,8 @@ export function SchedulePage(props: CoursePageProps) {
         dataSource={data}
         rowClassName={record => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
         columns={[
-          { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer },
-          { title: 'Time', width: 60, dataIndex: 'dateTime', render: timeZoneRenderer(timeZone) },
+          { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer(timeZone) },
+          { title: 'Time', width: 60, dataIndex: 'dateTime', render: timeRenderer(timeZone) },
           {
             title: 'Type',
             width: 100,
@@ -215,12 +177,29 @@ export function SchedulePage(props: CoursePageProps) {
   );
 }
 
-const timeZoneRenderer = (timeZone: string) => (value: string) =>
+const dateRenderer = (timeZone: string) => (value: string) =>
+  value
+    ? moment(value, 'YYYY-MM-DD HH:mmZ')
+        .tz(timeZone)
+        .format('YYYY-MM-DD')
+    : '';
+
+const timeRenderer = (timeZone: string) => (value: string) =>
   value
     ? moment(value, 'YYYY-MM-DD HH:mmZ')
         .tz(timeZone)
         .format('HH:mm')
     : '';
+
+const tasksToEvents = (tasks: CourseTaskDetails[]) => {
+  return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {
+    if (task.type !== TaskTypes.test) {
+      acc.push(createCourseEventFromTask(task, task.type));
+    }
+    acc.push(createCourseEventFromTask(task, task.type === TaskTypes.test ? TaskTypes.test : TaskTypes.deadline));
+    return acc;
+  }, []);
+};
 
 const createCourseEventFromTask = (task: CourseTaskDetails, type: string): CourseEvent => {
   return {

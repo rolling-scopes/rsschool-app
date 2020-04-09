@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm';
 import { MentorBasic } from '../../../../common/models';
 import { ILogger } from '../../logger';
 import { Student, User } from '../../models';
-import { courseService, OperationResult, studentsService, userService } from '../../services';
+import { courseService, OperationResult, userService } from '../../services';
 import { setCsvResponse, setResponse } from '../utils';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -103,14 +103,14 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
       continue;
     }
 
-    const existingStudent = await studentsService.getCourseStudent(courseId, user.id);
+    const existingStudent = await courseService.queryStudentByGithubId(courseId, item.githubId);
     if (existingStudent) {
       result.push({ status: 'skipped', value: `exists already: ${item.githubId}` });
       continue;
     }
 
     const { githubId, ...restData } = item;
-    const student: Partial<Student> = { ...restData, user, courseId };
+    const student: Partial<Student> = { ...restData, userId: user.id, courseId };
     const savedStudent = await studentRepository.save(student);
     result.push({ status: 'created', value: savedStudent.id });
 

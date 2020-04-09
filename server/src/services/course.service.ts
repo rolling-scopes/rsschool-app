@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { getRepository, getManager } from 'typeorm';
+import { getRepository, getManager, getCustomRepository } from 'typeorm';
 import { MentorBasic, StudentBasic } from '../../../common/models';
 import {
   Course,
   CourseTask,
   Mentor,
-  StageInterview,
   Student,
   User,
   CourseEvent,
@@ -14,13 +13,14 @@ import {
   CourseUser,
   TaskSolutionChecker,
   TaskChecker,
-  TaskInterviewResult,
   Stage,
   TaskSolutionResult,
+  IUserSession,
 } from '../models';
-import { IUserSession } from '../models/session';
+import { createName } from './user.service';
+import { StageInterviewRepository } from '../repositories/stageInterview';
 
-const getPrimaryUserFields = (modelName = 'user') => [
+export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
   `${modelName}.firstName`,
   `${modelName}.lastName`,
@@ -28,10 +28,6 @@ const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.cityName`,
   `${modelName}.countryName`,
 ];
-
-function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
-  return `${firstName} ${lastName}`.trim();
-}
 
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
   return await getRepository(Mentor)
@@ -49,7 +45,7 @@ export interface AssignedStudent extends StudentBasic {
 }
 
 export interface StudentDetails extends StudentBasic {
-  cityName: string | null;
+  cityName: string;
   countryName: string;
   interviews: { id: number; isCompleted: boolean; interviewer?: { githubId: string } }[];
   repository: string;
@@ -74,7 +70,7 @@ export interface MentorDetails extends MentorBasic {
   cityName: string | null;
   countryName: string;
   maxStudentsLimit: number;
-  studentsPreference: 'sameCity' | 'sameCountry' | null;
+  studentsPreference: 'any' | 'city' | 'country';
   interviewsCount?: number;
   studentsCount?: number;
   taskResultsStats?: {
@@ -113,9 +109,14 @@ export function convertToStudentDetails(student: Student): StudentDetails {
   const checks = checkers.map(({ courseTask: { id, task } }) => ({ id, name: task.name })) ?? [];
   return {
     ...studentBasic,
-    cityName: user.cityName || null,
+    cityName: user.cityName || 'Other',
     countryName: user.countryName || 'Other',
-    interviews: _.isEmpty(student.stageInterviews) ? [] : student.stageInterviews!,
+    interviews: _.isEmpty(student.stageInterviews)
+      ? []
+      : student.stageInterviews!.map(i => ({
+          id: i.id,
+          isCompleted: i.isCompleted,
+        })),
     repository: student.repository,
     assignedChecks: checks,
   };
@@ -130,7 +131,7 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     cityName: user.cityName || null,
     countryName: user.countryName || 'Other',
     maxStudentsLimit: mentor.maxStudentsLimit,
-    studentsPreference: mentor.studentsPreference,
+    studentsPreference: mentor.studentsPreference ?? 'any',
     studentsCount: mentor.students ? mentor.students.length : 0,
     interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
   };
@@ -138,10 +139,6 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
 
 function mentorQuery() {
   return getRepository(Mentor).createQueryBuilder('mentor');
-}
-
-function userQuery() {
-  return getRepository(User).createQueryBuilder('user');
 }
 
 function studentQuery() {
@@ -165,17 +162,12 @@ export async function getMentorByUserId(courseId: number, userId: number): Promi
 }
 
 export async function expelMentor(courseId: number, githubId: string) {
-  const githubIdQuery = userQuery()
-    .select('id')
-    .where('user.githubId = :githubId', { githubId })
-    .getQuery();
-
-  return mentorQuery()
-    .update(Mentor)
-    .set({ isExpelled: true })
-    .where(`userId IN (${githubIdQuery})`, { githubId })
-    .andWhere('mentor."courseId" = :courseId', { courseId })
-    .execute();
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
+    await getRepository(Mentor).update(mentor.id, { isExpelled: true });
+    await getCustomRepository(StageInterviewRepository).removeByMentor(courseId, githubId);
+  }
 }
 
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {
@@ -191,60 +183,60 @@ export async function getMentorByGithubId(courseId: number, githubId: string): P
   return convertToMentorBasic(record);
 }
 
-export async function getStudentByGithubId(courseId: number, githubId: string): Promise<{ id: number } | null> {
-  const record = await queryStudentByGithubId(courseId, githubId);
-  return record;
-}
-
-export async function queryStudentByGithubId(courseId: number, githubId: string): Promise<Student> {
-  const record = (await studentQuery()
+export async function getStudentByGithubId(courseId: number, githubId: string): Promise<Student | null> {
+  const record = await studentQuery()
     .innerJoin('student.user', 'user')
     .where('user.githubId = :githubId', { githubId })
     .andWhere('student.courseId = :courseId', { courseId })
-    .getOne())!;
-  return record;
-}
-
-export async function getStudent(studentId: number): Promise<StudentBasic> {
-  const record = (await studentQuery()
-    .innerJoinAndSelect('student.user', 'user')
-    .leftJoinAndSelect('student.mentor', 'mentor')
-    .leftJoinAndSelect('mentor.user', 'mentorUser')
-    .where('"student".id = :studentId', { studentId })
-    .getOne())!;
-  const student = convertToStudentBasic(record);
-  student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
-  return student;
-}
-
-export async function getStudentByUserId(courseId: number, userId: number): Promise<StudentBasic | null> {
-  const record = await studentQuery()
-    .innerJoinAndSelect('student.course', 'course')
-    .innerJoinAndSelect('student.user', 'user')
-    .innerJoinAndSelect('student.mentor', 'mentor')
-    .innerJoinAndSelect('mentor.user', 'mentorUser')
-    .where('user.id = :userId AND course.id = :courseId', {
-      userId,
-      courseId,
-    })
     .getOne();
   if (record == null) {
     return null;
   }
-  const student = convertToStudentBasic(record);
-  student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
-  return student;
+  return record;
 }
 
-export async function getStudentsByMentorId(mentorId: number) {
+export async function queryStudentByGithubId(
+  courseId: number,
+  githubId: string,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await studentQuery()
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('user.githubId = :githubId', { githubId })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function queryMentorByGithubId(
+  courseId: number,
+  githubId: string,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('user.githubId = :githubId', { githubId })
+    .andWhere('mentor.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function getStudentsByMentor(courseId: number, githubId: string) {
   const records = await studentQuery()
     .innerJoin('student.user', 'user')
     .addSelect(getPrimaryUserFields())
     .innerJoinAndSelect('student.mentor', 'mentor')
     .innerJoin('mentor.user', 'mentorUser')
     .addSelect(getPrimaryUserFields('mentorUser'))
-    .where('"student"."mentorId" = :mentorId', { mentorId })
+    .where('mentorUser.githubId = :githubId', { githubId })
     .andWhere('"student"."isExpelled" = false')
+    .andWhere('student.courseId = :courseId ', { courseId })
     .getMany();
 
   const students = records.map(record => {
@@ -256,29 +248,17 @@ export async function getStudentsByMentorId(mentorId: number) {
   return students;
 }
 
-export async function getStageInterviewStudentsByMentorId(mentorId: number) {
-  const records = await getRepository(StageInterview)
-    .createQueryBuilder('stageInterview')
-    .innerJoinAndSelect('stageInterview.mentor', 'mentor')
-    .innerJoinAndSelect('stageInterview.student', 'student')
-    .innerJoinAndSelect('student.user', 'studentUser')
-    .where('stageInterview.mentorId = :mentorId', { mentorId })
-    .getMany();
-
-  const students = records.map(record => convertToStudentBasic(record.student));
-  return students;
-}
-
-export async function getAssignedStudentsByMentorId(mentorId: number) {
+export async function getCrossStudentsByMentor(courseId: number, githubId: string) {
   const records = await studentQuery()
     .innerJoin('student.user', 'user')
     .addSelect(getPrimaryUserFields())
     .innerJoinAndSelect('student.taskChecker', 'taskChecker')
-    .innerJoinAndSelect('student.mentor', 'mentor')
+    .innerJoinAndSelect('taskChecker.mentor', 'mentor')
     .innerJoin('mentor.user', 'mentorUser')
     .addSelect(getPrimaryUserFields('mentorUser'))
-    .where('"taskChecker"."mentorId" = :mentorId', { mentorId })
-    .andWhere('"student"."isExpelled" = false')
+    .where('mentorUser.githubId = :githubId', { githubId })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .andWhere('student.isExpelled = false')
     .getMany();
 
   const students = records
@@ -329,7 +309,8 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
       taskIds: courseTasks.length > 0 ? courseTasks.map(t => t.id) : [null],
     })
-    .addSelect(['taskResults.id', 'taskResults.score', 'taskResults.courseTaskId', 'taskResults.updatedDate'])
+    .leftJoin('mentor.stageInterviews', 'si')
+    .addSelect(['si.id', 'taskResults.id', 'taskResults.score', 'taskResults.courseTaskId', 'taskResults.updatedDate'])
     .where(`"mentor"."courseId" = :courseId`, { courseId })
     .orderBy('mentor.createdDate');
 
@@ -349,7 +330,7 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
       cityName: user.cityName || null,
       countryName: user.countryName || 'Other',
       maxStudentsLimit: mentor.maxStudentsLimit,
-      studentsPreference: mentor.studentsPreference,
+      studentsPreference: mentor.studentsPreference ?? 'any',
       studentsCount: activeStudents.length,
       interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
       taskResultsStats: {
@@ -366,9 +347,9 @@ export async function getMentorsWithStudents(courseId: number): Promise<MentorDe
   const records = await mentorQuery()
     .innerJoin('mentor.user', 'user')
     .addSelect(getPrimaryUserFields())
-    .innerJoin('mentor.course', 'course')
     .leftJoinAndSelect('mentor.students', 'students')
-    .where(`course.id = :courseId`, { courseId })
+    .where(`mentor.courseId = :courseId`, { courseId })
+    .andWhere('mentor.isExpelled = false')
     .orderBy('mentor.createdDate')
     .getMany();
 
@@ -619,18 +600,6 @@ export async function getInterviewStudentsByMentorId(courseTaskId: number, mento
   return students;
 }
 
-export type StudentInterview = {
-  id: number;
-  name: string;
-  descriptionUrl: string;
-  startDate: string;
-  endDate: string;
-  completed: boolean;
-  interviewer: {
-    githubId: string;
-  };
-};
-
 export type StudentCrossMentor = {
   name: string;
   mentor: {
@@ -643,63 +612,6 @@ export type StudentCrossMentor = {
     contactsEmail?: string;
   };
 };
-
-export async function getInterviewsByStudent(courseId: number, githubId: string): Promise<StudentInterview[]> {
-  const student = await getStudentByGithubId(courseId, githubId);
-
-  if (student == null) {
-    return [];
-  }
-  const interviews = await getRepository(TaskChecker)
-    .createQueryBuilder('taskChecker')
-    .innerJoin('taskChecker.courseTask', 'courseTask')
-    .innerJoin('courseTask.task', 'task')
-    .innerJoin('taskChecker.mentor', 'mentor')
-    .innerJoin('mentor.user', 'user')
-    .addSelect([
-      'courseTask.id',
-      'courseTask.studentEndDate',
-      'mentor.id',
-      'task.id',
-      'task.name',
-      'user.primaryEmail',
-      'user.contactsNotes',
-      'user.contactsPhone',
-      'user.contactsSkype',
-      'user.contactsTelegram',
-      'user.githubId',
-      'user.id',
-      'user.cityName',
-    ])
-    .where('"taskChecker"."studentId" = :studentId', { studentId: student.id })
-    .andWhere('task.type = :type', { type: 'interview' })
-    .getMany();
-
-  if (interviews.length === 0) {
-    return [];
-  }
-
-  const taskResults = await getRepository(TaskInterviewResult)
-    .createQueryBuilder('taskInterviewResult')
-    .where('"taskInterviewResult"."courseTaskId" IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
-    .getMany();
-
-  const students = interviews.map(record => {
-    const { githubId } = record.mentor.user;
-    return {
-      id: record.courseTask.id,
-      name: record.courseTask.task.name,
-      descriptionUrl: record.courseTask.task.descriptionUrl,
-      startDate: record.courseTask.studentStartDate,
-      endDate: record.courseTask.studentEndDate,
-      completed: taskResults.some(taskResult => taskResult.courseTaskId === record.courseTaskId),
-      interviewer: {
-        githubId,
-      },
-    };
-  });
-  return students;
-}
 
 export async function getCrossMentorsByStudent(courseId: number, githubId: string): Promise<StudentCrossMentor[]> {
   const student = await getStudentByGithubId(courseId, githubId);
@@ -724,9 +636,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
       'user.contactsPhone',
       'user.contactsSkype',
       'user.contactsTelegram',
-      'user.githubId',
-      'user.id',
-      'user.cityName',
+      ...getPrimaryUserFields('user'),
     ])
     .where('"taskChecker"."studentId" = :studentId', { studentId: student.id })
     .andWhere('task.type <> :type', { type: 'interview' })

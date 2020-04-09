@@ -16,9 +16,9 @@ function Page(props: CoursePageProps) {
   const [students, setStudents] = useState([] as StudentBasic[]);
 
   useAsync(async () => {
-    const students = await courseService.getMentorStudents();
-    const activeStudents = students.filter(student => student.isActive);
-    setStudents(activeStudents);
+    const mentorStudents = await courseService.getMentorStudents();
+    const students = mentorStudents.filter(student => student.isActive);
+    setStudents(students);
   }, [courseId]);
 
   const handleSubmit = async (values: any) => {

@@ -126,12 +126,28 @@ export class CourseService {
     return result.data.data;
   }
 
-  async searchCourseStudent(query: string | null) {
+  async searchStudents(query: string | null) {
     try {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: StudentDetails[] }>(`/students/search/${query}`);
+      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
+        `/students/search/${query}`,
+      );
+      return response.data.data;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async searchMentors(query: string | null) {
+    try {
+      if (!query) {
+        return [];
+      }
+      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
+        `/mentors/search/${query}`,
+      );
       return response.data.data;
     } catch (e) {
       return [];
@@ -233,29 +249,39 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getStageInterviews(stageId: number) {
-    const result = await this.axios.get(`/stage/${stageId}/interviews`);
+  async getStageInterviews() {
+    const result = await this.axios.get(`/interviews/stage`);
     return result.data.data;
   }
 
-  async getAvailableStudentsForStageInterviews(stageId: number) {
-    const result = await this.axios.get(`/stage/${stageId}/interviews/available-students`);
+  async createStageInterviews(params: { keepReserve: boolean; noRegistration: boolean }) {
+    const result = await this.axios.post(`/interviews/stage`, params);
     return result.data.data;
   }
 
-  async createInterview(stageId: number, students: { githubId: string }[]) {
-    const result = await this.axios.post(`/stage/${stageId}/interview`, students);
+  async getAvailableStudentsForStageInterviews() {
+    const result = await this.axios.get(`/interviews/stage/students/available`);
     return result.data.data;
   }
 
-  async deleteInterview(stageId: number, interviewId: number) {
-    const result = await this.axios.delete(`/stage/${stageId}/interview/${interviewId}`);
+  async createInterview(githubId: string, mentorGithubId: string) {
+    const result = await this.axios.post(`/interview/stage/interviewer/${mentorGithubId}/student/${githubId}`);
     return result.data.data;
   }
 
-  async getStageInterviewStudents(stageId: number) {
-    const result = await this.axios.get(`/stage/${stageId}/interviews/students`);
-    return result.data.data as StudentBasic[];
+  async deleteStageInterview(interviewId: number) {
+    const result = await this.axios.delete(`/interview/stage/${interviewId}`);
+    return result.data.data;
+  }
+
+  async updateStageInterview(interviewId: number, data: { githubId: string }) {
+    const result = await this.axios.put(`/interview/stage/${interviewId}`, data);
+    return result.data.data;
+  }
+
+  async getInterviewerStageInterviews(githubId: string) {
+    const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
+    return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
   async postStageInterviews(stageId: number) {
@@ -263,13 +289,16 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postStageInterviewFeedback(stageId: number, data: any) {
-    const result = await this.axios.post(`/stage/${stageId}/interviews/feedback`, data);
+  async postStageInterviewFeedback(
+    interviewId: number,
+    data: { json: any; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
+  ) {
+    const result = await this.axios.post(`/interview/stage/${interviewId}/feedback`, data);
     return result.data.data;
   }
 
-  async getStageInterviewFeedback(stageId: number, studentId: number) {
-    const result = await this.axios.get(`/stage/${stageId}/interviews/student/${studentId}`);
+  async getStageInterviewFeedback(interviewId: number) {
+    const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
     return result.data.data;
   }
 
@@ -363,6 +392,12 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getMentorInterviews(githubId: string) {
+    console.log({ githubId });
+    const result = await this.axios.get(`/mentor/${githubId}/interviews`);
+    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
+  }
+
   async createMentor(
     githubId: string,
     data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: string },
@@ -438,6 +473,7 @@ export interface MentorDetails extends MentorBasic {
   countryName: string;
   cityName: string;
   maxStudentsLimit: number;
+  studentsPreference: string;
   interviewsCount: number;
 }
 

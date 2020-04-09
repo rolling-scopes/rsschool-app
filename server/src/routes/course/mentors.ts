@@ -18,7 +18,7 @@ export const getMentorsDetails = (_: ILogger) => async (ctx: Router.RouterContex
   setResponse(ctx, OK, result);
 };
 
-export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const createMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const data: { githubId: string; maxStudentsLimit: number }[] = ctx.request.body;
   const mentorRepository = getRepository(Mentor);
@@ -35,10 +35,7 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
     const user = await userService.getUserByGithubId(item.githubId);
 
     if (user == null) {
-      result.push({
-        status: 'skipped',
-        value: githubId,
-      });
+      result.push({ status: 'skipped', value: githubId });
       continue;
     }
 
@@ -71,4 +68,36 @@ export const postMentors = (_: ILogger) => async (ctx: Router.RouterContext) => 
   }
 
   setResponse(ctx, OK, result);
+};
+
+export const searchMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const searchText = `${String(ctx.params.searchText)}%`;
+
+  const entities = await getRepository(Mentor)
+    .createQueryBuilder('mentor')
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId'])
+    .where('"mentor"."courseId" = :courseId', { courseId })
+    .andWhere('"mentor"."isExpelled" = false')
+    .andWhere(
+      `
+        (
+          "user"."githubId" ILIKE :searchText OR 
+          "user"."firstName" ILIKE :searchText OR 
+          "user"."lastName" ILIKE :searchText
+        )
+      `,
+      { courseId, searchText },
+    )
+    .limit(20)
+    .getMany();
+
+  const result = entities.map(entity => ({
+    id: entity.id,
+    githubId: entity.user.githubId,
+    name: userService.createName(entity.user),
+  }));
+
+  setResponse(ctx, OK, result, 60);
 };

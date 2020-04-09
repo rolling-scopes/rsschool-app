@@ -1,0 +1,1 @@
+pg_dump -h localhost --username rs_master rs_school --file backup-local.sql

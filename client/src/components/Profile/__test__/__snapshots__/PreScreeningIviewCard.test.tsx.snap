@@ -289,7 +289,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                             }
                           >
                             <ForwardRef(QuestionCircleOutlined)>
-                              <ForwardRef(AntdIcon)
+                              <AntdIcon
                                 icon={
                                   Object {
                                     "icon": Object {
@@ -375,7 +375,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                     </svg>
                                   </IconReact>
                                 </span>
-                              </ForwardRef(AntdIcon)>
+                              </AntdIcon>
                             </ForwardRef(QuestionCircleOutlined)>
                              
                             Pre-Screening Interviews
@@ -635,7 +635,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -705,14 +705,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -782,7 +782,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -819,7 +819,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -889,14 +889,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -966,7 +966,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -1003,7 +1003,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1073,14 +1073,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1150,7 +1150,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -1187,7 +1187,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1257,14 +1257,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1334,7 +1334,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -1371,7 +1371,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1441,14 +1441,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1518,7 +1518,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -1662,7 +1662,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -1732,7 +1732,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>
@@ -1901,7 +1901,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -1971,14 +1971,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2048,7 +2048,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -2085,7 +2085,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2155,14 +2155,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2232,7 +2232,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -2269,7 +2269,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2339,14 +2339,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2416,7 +2416,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -2453,7 +2453,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2523,14 +2523,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2600,7 +2600,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -2637,7 +2637,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                             className="ant-rate-star-first"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2707,14 +2707,14 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                           <div
                                             className="ant-rate-star-second"
                                           >
                                             <ForwardRef(StarFilled)>
-                                              <ForwardRef(AntdIcon)
+                                              <AntdIcon
                                                 icon={
                                                   Object {
                                                     "icon": Object {
@@ -2784,7 +2784,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                     </svg>
                                                   </IconReact>
                                                 </span>
-                                              </ForwardRef(AntdIcon)>
+                                              </AntdIcon>
                                             </ForwardRef(StarFilled)>
                                           </div>
                                         </div>
@@ -2928,7 +2928,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
-                                  <ForwardRef(AntdIcon)
+                                  <AntdIcon
                                     icon={
                                       Object {
                                         "icon": Object {
@@ -2998,7 +2998,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         </svg>
                                       </IconReact>
                                     </span>
-                                  </ForwardRef(AntdIcon)>
+                                  </AntdIcon>
                                 </ForwardRef(FullscreenOutlined)>
                               </button>
                             </Wave>

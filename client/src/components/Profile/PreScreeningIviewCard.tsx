@@ -59,9 +59,11 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
                     </p>
                     <Rating rating={rating} />
                     <p style={{ fontSize: 12, marginBottom: 5 }}>Date: {formatDate(date)}</p>
-                    <p style={{ fontSize: 12, marginBottom: 5 }}>
-                      Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
-                    </p>
+                    {isGoodCandidate != null ? (
+                      <p style={{ fontSize: 12, marginBottom: 5 }}>
+                        Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
+                      </p>
+                    ) : null}
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
                       Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
                     </p>

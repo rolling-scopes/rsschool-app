@@ -88,7 +88,7 @@ export const config: IConfig = {
   },
   dev: {
     username: process.env.RSSHCOOL_DEV_USERNAME || '',
-    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN || ''),
+    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN === 'true' || ''),
   },
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',

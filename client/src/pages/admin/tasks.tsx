@@ -52,6 +52,7 @@ function Page(props: Props) {
         }
         setModalData(null);
       } catch (e) {
+        console.log(e);
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);
@@ -93,7 +94,7 @@ function Page(props: Props) {
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
-                <Select.Option value="stage-interview">Stage Interview</Select.Option>
+                <Select.Option value="stage-interview">Technical Screening</Select.Option>
               </Select>
             </Form.Item>
           </Col>
@@ -210,7 +211,7 @@ function createRecord(values: any) {
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
     discipline: values.discipline,
-    attributes: JSON.parse(values.attributes),
+    attributes: JSON.parse(values.attributes ?? '{}'),
   };
   return data;
 }

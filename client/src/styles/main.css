@@ -53,3 +53,16 @@ body,
 .rs-table-row-disabled {
   opacity: 0.25;
 }
+
+div.ant-table-column-sorters {
+  padding: 0;
+}
+
+span.ant-table-filter-column-title {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+thead.ant-table-thead > tr > th {
+  font-size: 12px;
+}

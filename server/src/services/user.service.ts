@@ -35,3 +35,7 @@ export function getUsersByIds(ids: number[]) {
     where: { id: In(ids) },
   });
 }
+
+export function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
+  return `${firstName} ${lastName}`.trim();
+}

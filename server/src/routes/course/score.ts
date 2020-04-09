@@ -7,7 +7,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
-import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/courseService';
+import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
 
 import { setCsvResponse, setResponse } from '../utils';
 
@@ -147,21 +147,16 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
       }
 
       const existingResult = await taskResultsService.getTaskResult(student.id, data.courseTaskId);
+      const user = ctx.state.user as IUserSession | null;
+      const authorId = user?.id ?? 0;
 
       if (existingResult == null) {
-        const taskResult = taskResultsService.createTaskResult(0, {
+        const taskResult = taskResultsService.createTaskResult(authorId, {
           ...data,
           studentId: Number(student.id),
         });
         const addResult = await getRepository(TaskResult).save(taskResult);
         result.push({ status: 'created', value: addResult.id });
-        continue;
-      }
-
-      const user = ctx.state!.user as IUserSession;
-      if (user && existingResult.historicalScores.some(({ authorId }) => authorId !== 0)) {
-        const message = `${existingResult.id}. Possible user data override`;
-        result.push({ status: 'skipped', value: message });
         continue;
       }
 
@@ -173,7 +168,7 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
       }
       if (data.score !== existingResult.score) {
         existingResult.historicalScores.push({
-          authorId: 0,
+          authorId,
           score: data.score,
           dateTime: Date.now(),
           comment: item.comment,

@@ -7,7 +7,7 @@ type Props = {
   submit: (arg: any) => void;
   cancel: (arg: any) => void;
   onChange?: (values: any) => void;
-  getInitialValues: (arg: any) => any;
+  getInitialValues?: (arg: any) => any;
   children: any;
   loading?: boolean;
 };
@@ -17,7 +17,7 @@ export function ModalForm(props: Props) {
     return null;
   }
   const [form] = Form.useForm();
-  const initialValues = props.getInitialValues(props.data);
+  const initialValues = props.getInitialValues ? props.getInitialValues?.(props.data) : props.data;
   return (
     <Modal
       style={{ top: 20 }}

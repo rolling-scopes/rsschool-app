@@ -1,13 +1,6 @@
 import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
 import { getRepository } from 'typeorm';
-
-const getPrimaryUserFields = (modelName = 'user') => [
-  `${modelName}.id`,
-  `${modelName}.firstName`,
-  `${modelName}.lastName`,
-  `${modelName}.githubId`,
-  `${modelName}.locationName`,
-];
+import { getPrimaryUserFields } from './course.service';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
