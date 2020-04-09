@@ -1,7 +1,7 @@
 import { userService } from '.';
 import axios, { AxiosError } from 'axios';
 import { config } from '../config';
-import { Consent, ChannelType } from '../models';
+import { Consent, ChannelType, CourseTask } from '../models';
 import { courseService } from '.';
 import { ConsentRepository } from '../repositories/consent';
 import { getCustomRepository } from 'typeorm';
@@ -15,6 +15,11 @@ export async function renderMentorConfirmationText(preselectedCourseIds: number[
     .map(({ alias, name }) => `${name}: https://app.rs.school/course/mentor/confirm?course=${alias}`)
     .join('\n');
   return `Your participation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s):\n${confirmLinks}`;
+}
+
+export async function renderTaskResultText(courseTask: CourseTask, score: number) {
+  const { maxScore, scoreWeight, checker } = courseTask;
+  return `Your task has been reviewed by ${checker}.\nResult: ${score}/${maxScore}\nThe weight of this task = ${scoreWeight}.\nGood luck in further training!`;
 }
 
 export type Notification = {
@@ -65,7 +70,7 @@ type UsersContacts = {
 
 export async function sendNotification(userIds: number[], text: string, isIgnoreConsents: boolean = false) {
   try {
-    if (!config.isDevMode) {
+    if (config.isDevMode) {
       return;
     }
     const users = (await userService.getUsersByIds(userIds)) || [];
