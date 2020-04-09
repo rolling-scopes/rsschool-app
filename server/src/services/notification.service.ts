@@ -1,9 +1,10 @@
-import { consentService } from '.';
 import { userService } from '.';
 import axios, { AxiosError } from 'axios';
 import { config } from '../config';
 import { Consent, ChannelType } from '../models';
 import { courseService } from '.';
+import { ConsentRepository } from '../repositories/consent';
+import { getCustomRepository } from 'typeorm';
 
 export async function renderMentorConfirmationText(preselectedCourseIds: number[]) {
   const preselectedCourseIdsSet = new Set(preselectedCourseIds);
@@ -84,13 +85,14 @@ export async function sendNotification(userIds: number[], text: string, isIgnore
         tgUsernames: [],
       },
     );
-    const tgConsents = await consentService.getConsentsByUsernames(tgUsernames);
+    const consentService = getCustomRepository(ConsentRepository);
+    const tgConsents = await consentService.findConsentsByUsernames(tgUsernames);
     if (isIgnoreConsents) {
       sendEmailNotification(emails, text);
       const chatIds = tgConsents.map(consent => consent.channelValue);
       sendTgNotification(chatIds, text);
     } else {
-      const emailConsents = await consentService.getConsentsByChannelValues(emails);
+      const emailConsents = await consentService.findConsentsByChannelValues(emails);
       const consonantsEmails = getConsonantsChValues(emailConsents);
       const consonantsChatIds = getConsonantsChValues(tgConsents);
       sendEmailNotification(consonantsEmails, text);
