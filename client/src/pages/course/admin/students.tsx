@@ -2,15 +2,13 @@ import {
   BranchesOutlined,
   CheckCircleTwoTone,
   ClockCircleTwoTone,
-  CloseCircleTwoTone,
   FileExcelOutlined,
   MinusCircleOutlined,
-  SolutionOutlined,
-  UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Drawer, message, Row, Statistic, Switch, Table, Typography, Descriptions } from 'antd';
+import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { CommentModal, PageLayout, withSession, MentorSearch } from 'components';
+import { PageLayout, withSession } from 'components';
+import { DashboardDetails } from 'components/Student';
 import {
   boolIconRenderer,
   boolSorter,
@@ -21,14 +19,12 @@ import {
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
+import { isCourseManager } from 'domain/user';
 import _ from 'lodash';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { isCourseManager } from 'domain/user';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
-import { MentorBasic } from '../../../../../common/models';
 
 const { Text } = Typography;
 
@@ -39,7 +35,6 @@ function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [expelMode, setExpelMode] = useState(false);
   const [isManager] = useState(isCourseManager(props.session, props.course.id));
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
@@ -77,7 +72,6 @@ function Page(props: Props) {
       await courseService.expelStudent(githubId, text);
       message.info('Student has been expelled');
     }
-    setExpelMode(false);
   });
 
   const restoreStudent = withLoading(async () => {
@@ -114,59 +108,20 @@ function Page(props: Props) {
           <div>{renderToolbar()}</div>
         </Row>
         <Table rowKey="id" pagination={{ pageSize: 100 }} size="small" dataSource={students} columns={getColumns()} />
-        <Drawer
-          width={400}
-          title={details ? `${details.name} , ${details.githubId}` : ''}
-          placement="right"
-          closable={false}
+
+        <DashboardDetails
+          onUpdateMentor={updateMentor}
+          onRestoreStudent={restoreStudent}
+          onIssueCertificate={issueCertificate}
+          onExpelStudent={expelStudent}
+          onCreateRepository={createRepository}
           onClose={() => {
             setDetails(null);
             loadStudents();
           }}
-          visible={!!details}
-        >
-          <div className="student-details-actions">
-            <Button
-              disabled={!details?.isActive || !!details.repository}
-              icon={<BranchesOutlined />}
-              onClick={createRepository}
-            >
-              Create Repository
-            </Button>
-            <Button disabled={!details?.isActive} icon={<SolutionOutlined />} onClick={issueCertificate}>
-              Issue Certificate
-            </Button>
-            <Button
-              hidden={!details?.isActive}
-              icon={<CloseCircleTwoTone twoToneColor="red" />}
-              onClick={() => setExpelMode(true)}
-            >
-              Expel
-            </Button>
-            <Button hidden={details?.isActive} icon={<UndoOutlined />} onClick={restoreStudent}>
-              Restore
-            </Button>
-            <Descriptions bordered layout="vertical" size="small" column={1}>
-              <Descriptions.Item label="Mentor">
-                <MentorSearch
-                  style={{ width: '100%' }}
-                  onChange={updateMentor}
-                  courseId={props.course.id}
-                  keyField="githubId"
-                  value={(details?.mentor as MentorBasic)?.githubId}
-                  defaultValues={details?.mentor ? [details?.mentor as any] : []}
-                />
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
-        </Drawer>
-        <CommentModal
-          title="Expelling Reason"
-          visible={expelMode}
-          onCancel={() => setExpelMode(false)}
-          onOk={expelStudent}
+          details={details}
+          courseId={props.course.id}
         />
-        <style jsx>{styles}</style>
       </PageLayout>
     );
   }
@@ -305,15 +260,5 @@ function calculateStats(students: StudentDetails[]) {
     })),
   };
 }
-
-const styles = css`
-  :global(.rs-table-row-disabled) {
-    opacity: 0.25;
-  }
-
-  .student-details-actions :global(.ant-btn) {
-    margin: 0 8px 8px 0;
-  }
-`;
 
 export default withCourseData(withSession(Page));

@@ -7,8 +7,9 @@ type Props = UserProps & {
 };
 
 export function MentorSearch(props: Props) {
-  const courseService = useMemo(() => new CourseService(props.courseId), [props.courseId]);
+  const { courseId, ...otherProps } = props;
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const handleSearch = useCallback(async (value: string) => courseService.searchMentors(value), [courseService]);
 
-  return <UserSearch {...props} searchFn={handleSearch} />;
+  return <UserSearch {...otherProps} searchFn={handleSearch} />;
 }

@@ -1,6 +1,7 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
 import { Student } from '../models';
 import { userService, courseService } from '../services';
+import { StudentBasic, UserBasic } from '../../../common/models';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -44,7 +45,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     await getRepository(Student).update(student.id, { mentorId: mentor ? mentor.id : null });
   }
 
-  public async search(courseId: number, searchText: string) {
+  public async search(courseId: number, searchText: string): Promise<UserBasic[]> {
     const searchQuery = `${searchText}%`;
 
     const entities = await getRepository(Student)
@@ -72,24 +73,12 @@ export class StudentRepository extends AbstractRepository<Student> {
     return entities.map(entity => ({ id: entity.id, githubId: entity.githubId, name: userService.createName(entity) }));
   }
 
-  public async findAndIncludeMentor(courseId: number, githubId: string) {
-    const query = getRepository(Student)
-      .createQueryBuilder('student')
-      .select(['student.id', 'student.isExpelled', 'student.mentorId', 'student.isFailed'])
-      .innerJoin('student.user', 'sUser')
-      .leftJoin('student.mentor', 'mentor')
-      .leftJoin('mentor.user', 'mUser')
-      .addSelect([
-        'mentor.id',
-        'mentor.isExpelled',
-        'mentor.userId',
-        ...this.getPrimaryUserFields('sUser'),
-        ...this.getPrimaryUserFields('mUser'),
-      ])
+  public async findAndIncludeMentor(courseId: number, githubId: string): Promise<StudentBasic | null> {
+    const record = await this.getPreparedStudentQuery()
       .where('sUser.githubId = :githubId', { githubId })
-      .andWhere('student.courseId = :courseId', { courseId });
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
 
-    const record = await query.getOne();
     if (record == null) {
       return null;
     }
@@ -97,8 +86,8 @@ export class StudentRepository extends AbstractRepository<Student> {
       id: record.id,
       name: userService.createName(record.user),
       githubId: record.user.githubId,
-      cityName: record.user.cityName,
-      countryName: record.user.countryName,
+      cityName: record.user.cityName ?? '',
+      countryName: record.user.countryName ?? '',
       isActive: !record.isExpelled && !record.isFailed,
       mentor: record.mentor
         ? {
@@ -141,12 +130,21 @@ export class StudentRepository extends AbstractRepository<Student> {
     };
   }
 
-  private async findByGithubId(
-    courseId: number,
-    githubId: string,
-  ): Promise<{ id: number; name: string; githubId: string } | null> {
+  public async findByMentor(courseId: number, githubId: string): Promise<StudentBasic[]> {
+    const records = await this.getPreparedStudentQuery()
+      .where('mUser.githubId = :githubId', { githubId })
+      .andWhere('student.isExpelled = false')
+      .andWhere('student.courseId = :courseId ', { courseId })
+      .getMany();
+
+    const students = records.map(transformStudent);
+    return students;
+  }
+
+  private async findByGithubId(courseId: number, githubId: string): Promise<UserBasic | null> {
     const record = await getRepository(Student)
       .createQueryBuilder('student')
+      .select(['student.id'])
       .innerJoin('student.user', 'user')
       .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
       .where('user.githubId = :githubId', { githubId })
@@ -172,15 +170,31 @@ export class StudentRepository extends AbstractRepository<Student> {
       `${modelName}.countryName`,
     ];
   }
+
+  private getPreparedStudentQuery() {
+    return getRepository(Student)
+      .createQueryBuilder('student')
+      .select(['student.id', 'student.isExpelled', 'student.mentorId', 'student.isFailed'])
+      .innerJoin('student.user', 'sUser')
+      .innerJoin('student.mentor', 'mentor')
+      .innerJoin('mentor.user', 'mUser')
+      .addSelect([
+        'mentor.id',
+        'mentor.isExpelled',
+        'mentor.userId',
+        ...this.getPrimaryUserFields('sUser'),
+        ...this.getPrimaryUserFields('mUser'),
+      ]);
+  }
 }
 
-function transformStudent(record: Student) {
+function transformStudent(record: Student): StudentBasic {
   return {
     id: record.id,
     name: userService.createName(record.user),
     githubId: record.user.githubId,
-    cityName: record.user.cityName,
-    countryName: record.user.countryName,
+    cityName: record.user.cityName ?? 'Unknown',
+    countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled && !record.isFailed,
     mentor: record.mentor
       ? {
