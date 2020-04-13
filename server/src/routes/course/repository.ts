@@ -54,14 +54,22 @@ async function createRepository(course: Course, githubId: string, logger: ILogge
   }
   const repoName = getRepoName(githubId, course);
   logger.info(`creating ${repoName}`);
-  const response = await github.repos.createInOrg({
-    org,
-    name: repoName,
-    private: true,
-    auto_init: true,
-    gitignore_template: 'Node',
-    description: `Private repository for @${githubId}`,
-  });
+  const response = await github.repos
+    .createInOrg({
+      org,
+      name: repoName,
+      private: true,
+      auto_init: true,
+      gitignore_template: 'Node',
+      description: `Private repository for @${githubId}`,
+    })
+    .catch((e: Octokit.Response<any>) => {
+      if (e.status === 422) {
+        // already exists
+        return { data: { html_url: `https://github.com/rolling-scopes-school/${repoName}` } };
+      }
+      throw e;
+    });
   logger.info(`adding team ${teamId} and user ${githubId}`);
   await Promise.all([
     github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
@@ -97,7 +105,7 @@ async function createTeam(github: Octokit, teamName: string, courseId: number, l
     for await (const maintainer of maintainers) {
       logger.info(`Inviting ${maintainer}`);
       await github.teams.addOrUpdateMembership({ username: maintainer, team_id: courseTeam.id });
-      await timeout(1000);
+      await timeout(800);
     }
   }
   return courseTeam.id;
