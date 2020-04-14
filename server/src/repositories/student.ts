@@ -183,14 +183,17 @@ export class StudentRepository extends AbstractRepository<Student> {
       query = query.leftJoin(
         'student.taskResults',
         'tr',
-        'tr.studentId = student.id AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
+        'tr.studentId = student.id AND tr.score > 0 AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
         {
           requiredCourseTaskIds: courseTaskIds,
         },
       );
     }
 
-    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.mentorId IS NULL');
+    query = query
+      .where('student.courseId = :courseId', { courseId })
+      .andWhere('student.isExpelled = false')
+      .andWhere('student.mentorId IS NULL');
 
     if (minScore != null) {
       query = query.andWhere('student.totalScore < :minScore', { minScore });
@@ -199,8 +202,6 @@ export class StudentRepository extends AbstractRepository<Student> {
     if (courseTaskIds.length > 0) {
       query = query.andWhere('tr.id IS NULL');
     }
-
-    console.log(query.getSql());
 
     return query.getMany();
   }
