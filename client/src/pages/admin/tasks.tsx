@@ -52,7 +52,6 @@ function Page(props: Props) {
         }
         setModalData(null);
       } catch (e) {
-        console.log(e);
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);

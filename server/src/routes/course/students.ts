@@ -1,4 +1,4 @@
-import { NOT_FOUND, OK } from 'http-status-codes';
+import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
@@ -58,6 +58,31 @@ type StudentInput = {
   isExpelled: boolean;
   expellingReason: string;
   readyFullTime: boolean;
+};
+
+export const updateStatuses = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const data: {
+    courseTaskIds?: number[];
+    minScore?: number;
+    expellingReason: string;
+  } = ctx.request.body;
+  if (data == null || data.expellingReason == null) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+
+  const studentRepository = getCustomRepository(StudentRepository);
+  const students = await studentRepository.findForExpel(
+    courseId,
+    data.courseTaskIds ?? [],
+    data.minScore != null ? Number(data.minScore) : null,
+  );
+  await studentRepository.save(
+    students.map(({ id }) => ({ id, isExpelled: true, endDate: new Date(), expellingReason: data.expellingReason })),
+  );
+
+  setResponse(ctx, OK);
 };
 
 export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {

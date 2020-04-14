@@ -60,7 +60,6 @@ export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext
       noRegistration: boolean;
     };
     const repository = getCustomRepository(StageInterviewRepository);
-    console.log(keepReserve);
     const result = await repository.createAutomatically(courseId, keepReserve, noRegistration);
     setResponse(ctx, OK, result);
   } catch (e) {

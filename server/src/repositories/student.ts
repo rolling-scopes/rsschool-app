@@ -141,6 +141,74 @@ export class StudentRepository extends AbstractRepository<Student> {
     return students;
   }
 
+  public async findEliggibleForRepository(
+    courseId: number,
+    options: {
+      includeNoMentor?: boolean;
+      includeNoTechnicalScreening?: boolean;
+    } = {},
+  ) {
+    let query = await getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'sUser');
+
+    if (!options.includeNoTechnicalScreening) {
+      query.innerJoin('stage_interview_student', 'interviewStudent', 'interviewStudent.studentId = student.id');
+    }
+
+    query = query
+      .addSelect(['student.id', 'sUser.githubId'])
+      .where('student.courseId = :courseId', { courseId })
+      .andWhere('student.isExpelled = false AND student.isFailed = false')
+      .andWhere('student.repository IS NULL');
+
+    if (!options.includeNoMentor) {
+      query = query.andWhere('student.mentorId IS NOT NULL');
+    }
+
+    const mentors = await query.getMany();
+    return mentors.map(m => m.user.githubId);
+  }
+
+  public async findForExpel(
+    courseId: number,
+    courseTaskIds: number[],
+    minScore: number | null,
+  ): Promise<{ id: number }[]> {
+    let query = getRepository(Student)
+      .createQueryBuilder('student')
+      .select(['student.id']);
+
+    if (courseTaskIds.length > 0) {
+      query = query.leftJoin(
+        'student.taskResults',
+        'tr',
+        'tr.studentId = student.id AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
+        {
+          requiredCourseTaskIds: courseTaskIds,
+        },
+      );
+    }
+
+    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.mentorId IS NULL');
+
+    if (minScore != null) {
+      query = query.andWhere('student.totalScore < :minScore', { minScore });
+    }
+
+    if (courseTaskIds.length > 0) {
+      query = query.andWhere('tr.id IS NULL');
+    }
+
+    console.log(query.getSql());
+
+    return query.getMany();
+  }
+
+  public async save(students: Partial<Student>[]) {
+    await getRepository(Student).save(students);
+  }
+
   private async findByGithubId(courseId: number, githubId: string): Promise<UserBasic | null> {
     const record = await getRepository(Student)
       .createQueryBuilder('student')

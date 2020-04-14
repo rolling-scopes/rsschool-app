@@ -4,11 +4,12 @@ import {
   ClockCircleTwoTone,
   FileExcelOutlined,
   MinusCircleOutlined,
+  CloseCircleTwoTone,
 } from '@ant-design/icons';
 import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { PageLayout, withSession } from 'components';
-import { DashboardDetails } from 'components/Student';
+import { DashboardDetails, ExpelCriteria } from 'components/Student';
 import {
   boolIconRenderer,
   boolSorter,
@@ -22,7 +23,7 @@ import withCourseData from 'components/withCourseData';
 import { isCourseManager } from 'domain/user';
 import _ from 'lodash';
 import { useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
@@ -41,6 +42,7 @@ function Page(props: Props) {
   const [stats, setStats] = useState(null as Stats | null);
   const [activeOnly, setActiveOnly] = useState(false);
   const [details, setDetails] = useState<StudentDetails | null>(null);
+  const [expelModel, setExpelMode] = useToggle(false);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
 
@@ -90,6 +92,12 @@ function Page(props: Props) {
     }
   });
 
+  const expelStudents = withLoading(async (courseTaskIds: number[], minScore: number, expellingReason: string) => {
+    await courseService.expelStudents({ courseTaskIds, minScore, expellingReason });
+    setExpelMode();
+    loadStudents();
+  });
+
   return render();
 
   function render() {
@@ -122,6 +130,9 @@ function Page(props: Props) {
           details={details}
           courseId={props.course.id}
         />
+        {expelModel ? (
+          <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
+        ) : null}
       </PageLayout>
     );
   }
@@ -130,9 +141,14 @@ function Page(props: Props) {
     return (
       <>
         {isManager ? (
-          <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
-            Create Repos
-          </Button>
+          <>
+            <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
+              Create Repos
+            </Button>
+            <Button icon={<CloseCircleTwoTone twoToneColor="red" />} style={{ marginRight: 8 }} onClick={setExpelMode}>
+              Expel
+            </Button>
+          </>
         ) : null}
         <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportStudents}>
           Export CSV
