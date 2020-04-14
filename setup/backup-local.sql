@@ -1801,6 +1801,9 @@ COPY public.stage (id, "createdDate", "updatedDate", name, "courseId", status, "
 --
 
 COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "mentorId", "stageId", "isCompleted", decision, "isGoodCandidate", "courseId", "courseTaskId") FROM stdin;
+10687	2020-04-07 20:27:20.124459	2020-04-07 20:27:20.124459	14327	1266	\N	f	\N	\N	13	408
+10688	2020-04-07 20:27:41.249823	2020-04-07 20:27:41.249823	14329	1266	\N	f	\N	\N	13	408
+10689	2020-04-07 20:28:00.755084	2020-04-07 21:07:08.374015	14329	1266	\N	t	noButGoodCandidate	t	13	408
 \.
 
 
@@ -1809,6 +1812,7 @@ COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "men
 --
 
 COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageInterviewId", json) FROM stdin;
+1234	2020-04-07 21:07:08.363918	2020-04-07 21:07:08.363918	10689	{"skills":{"htmlCss":{"level":3},"dataStructures":{"array":3,"stack":4},"common":{"binaryNumber":4,"sortingAndSearchAlgorithms":3}},"programmingTask":{"resolved":1,"codeWritingLevel":3},"english":{"levelStudentOpinion":9,"levelMentorOpinion":8},"resume":{"verdict":"noButGoodCandidate","comment":"test"}}
 \.
 
 
@@ -1817,6 +1821,7 @@ COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageIn
 --
 
 COPY public.stage_interview_student (id, "createdDate", "updatedDate", "studentId", "courseId") FROM stdin;
+1091	2020-04-07 21:16:20.362338	2020-04-07 21:16:20.362338	14329	13
 \.
 
 
@@ -1825,16 +1830,16 @@ COPY public.stage_interview_student (id, "createdDate", "updatedDate", "studentI
 --
 
 COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingReason", "courseCompleted", "isTopPerformer", "preferedMentorGithubId", "readyFullTime", "courseId", "userId", "mentorId", "cvUrl", "hiredById", "hiredByName", "isFailed", "totalScore", "startDate", "endDate", repository, "totalScoreChangeDate") FROM stdin;
-14327	2020-04-06 15:15:02.77565	2020-04-06 15:15:02.77565	f	\N	f	f	\N	\N	13	11563	\N	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N
-14328	2020-04-06 15:30:27.104695	2020-04-06 15:30:27.104695	f	\N	f	f	\N	\N	13	677	\N	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	\N	\N	\N
 14329	2020-04-06 15:31:44.421341	2020-04-06 15:31:44.421341	f	\N	f	f	\N	\N	13	1090	\N	\N	\N	\N	f	0	2020-04-06 15:31:44.388+00	\N	\N	\N
-14330	2020-04-06 15:33:53.058912	2020-04-06 15:33:53.058912	f	\N	f	f	\N	\N	13	2089	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
 14331	2020-04-06 15:33:59.694437	2020-04-06 15:33:59.694437	f	\N	f	f	\N	\N	13	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
-14332	2020-04-06 15:34:04.8008	2020-04-06 15:34:04.8008	f	\N	f	f	\N	\N	13	2103	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
 14333	2020-04-06 15:34:09.064514	2020-04-06 15:34:09.064514	f	\N	f	f	\N	\N	13	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
 14334	2020-04-06 15:34:17.983101	2020-04-06 15:34:17.983101	f	\N	f	f	\N	\N	13	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
 14335	2020-04-06 15:34:19.221853	2020-04-06 15:34:19.221853	f	\N	f	f	\N	\N	13	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
-14336	2020-04-06 15:39:07.779618	2020-04-06 15:39:07.779618	f	\N	f	f	\N	\N	13	2549	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
+14327	2020-04-06 15:15:02.77565	2020-04-07 13:45:33.875491	f	\N	f	f	\N	\N	13	11563	1266	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N
+14336	2020-04-06 15:39:07.779618	2020-04-07 13:47:34.610412	f	\N	f	f	\N	\N	13	2549	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
+14332	2020-04-06 15:34:04.8008	2020-04-07 14:10:31.669064	f	\N	f	f	\N	\N	13	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
+14328	2020-04-06 15:30:27.104695	2020-04-07 22:23:34.842319	t	test	f	f	\N	\N	13	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N
+14330	2020-04-06 15:33:53.058912	2020-04-08 19:32:57.119702	f	\N	f	f	\N	\N	13	2089	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N
 \.
 
 
@@ -2224,21 +2229,21 @@ SELECT pg_catalog.setval('public.stage_id_seq', 30, true);
 -- Name: stage_interview_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.stage_interview_feedback_id_seq', 1233, true);
+SELECT pg_catalog.setval('public.stage_interview_feedback_id_seq', 1234, true);
 
 
 --
 -- Name: stage_interview_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.stage_interview_id_seq', 10686, true);
+SELECT pg_catalog.setval('public.stage_interview_id_seq', 10689, true);
 
 
 --
 -- Name: stage_interview_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.stage_interview_student_id_seq', 1090, true);
+SELECT pg_catalog.setval('public.stage_interview_student_id_seq', 1091, true);
 
 
 --
