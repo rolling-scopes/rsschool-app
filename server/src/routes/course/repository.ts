@@ -14,7 +14,7 @@ export const createRepositories = (logger: ILogger) => async (ctx: Router.Router
   const repositoryService = new RepositoryService(courseId, logger);
   const result = repositoryService.createMany({
     includeNoMentor: options.includeNoMentor,
-    includeNoTechnicalScreening: false,
+    includeNoTechnicalScreening: options.includeNoTechnicalScreening,
   });
   setResponse(ctx, OK, result);
 };
