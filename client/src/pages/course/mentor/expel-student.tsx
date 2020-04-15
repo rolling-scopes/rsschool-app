@@ -9,6 +9,7 @@ import { CoursePageProps, StudentBasic } from 'services/models';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
+  const roles = props.session.roles;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -16,9 +17,22 @@ function Page(props: CoursePageProps) {
   const [students, setStudents] = useState([] as StudentBasic[]);
 
   useAsync(async () => {
-    const mentorStudents = await courseService.getMentorStudents();
-    const students = mentorStudents.filter(student => student.isActive);
-    setStudents(students);
+    if (roles[courseId] === 'student') {
+      const student = await courseService.getStudentSummary(props.session.githubId);
+      if (student.isActive) {
+        setStudents([
+          Object.assign(student, {
+            id: props.session.id,
+            githubId: props.session.githubId,
+            name: props.session.githubId,
+          }),
+        ]);
+      }
+    } else {
+      const students = await courseService.getMentorStudents();
+      const activeStudents = students.filter(student => student.isActive);
+      setStudents(activeStudents);
+    }
   }, [courseId]);
 
   const handleSubmit = async (values: any) => {
