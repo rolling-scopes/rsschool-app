@@ -92,7 +92,7 @@ export function registryRouter(logger?: ILogger) {
     await getRepository(MentorRegistry).update({ userId: user.id }, mentorData);
     setResponse(ctx, OK);
     const confirmationText = await notificationService.renderMentorConfirmationText(preselectedCourses);
-    await notificationService.sendNotification([user.id!], confirmationText, true);
+    await notificationService.sendNotification([githubId], confirmationText, true);
   });
 
   router.get('/mentor', async (ctx: Router.RouterContext) => {

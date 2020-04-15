@@ -109,12 +109,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const result = taskResultsService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
-  const fullStudent = await courseService.getStudentByGithubId(courseId, githubId);
-  if (fullStudent === null) {
-    return;
-  }
-  const taskResultText =  await notificationService.renderTaskResultText(courseTask, data.score);
-  await notificationService.sendNotification([fullStudent.userId], taskResultText);
+  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score);
+  await notificationService.sendNotification([githubId], taskResultText);
 };
 
 export const postMultipleScores = (logger: ILogger) => async (ctx: Router.RouterContext) => {

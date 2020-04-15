@@ -1,32 +1,32 @@
 import { EntityRepository, AbstractRepository, getRepository, In } from 'typeorm';
 import { Consent } from '../models';
+import { userService } from '../services';
 
 @EntityRepository(Consent)
 export class ConsentRepository extends AbstractRepository<Consent> {
-  public findConsentsByChannelValues(channelValues: string[]): Promise<Consent[]> {
+  private findByChannelValues(channelValues: string[]): Promise<Consent[]> {
     return getRepository(Consent).find({
       where: { channelValue: In(channelValues) },
     });
   }
 
-  public findConsentsByUsernames(usernames: string[]): Promise<Consent[]> {
+  private findBytgUsernames(usernames: string[]): Promise<Consent[]> {
     return getRepository(Consent).find({
       where: { username: In(usernames) },
     });
   }
 
-  public async saveConsent(consent: Consent) {
+  public saveConsents(consents: Consent[]) {
     const repository = getRepository(Consent);
-    const existingConsent = await this.getConsent(consent.channelValue);
-    const consentId = existingConsent?.id;
-    if (!consentId) {
-      await repository.insert(consent);
-    } else {
-      await repository.update(consentId, consent);
-    }
+    return repository.save(consents);
   }
 
-  private getConsent(channelValue: string): Promise<Consent | undefined> {
-    return getRepository(Consent).findOne({ where: { channelValue } });
+  public async findByGithubIds(githubIds: string[]): Promise<Consent[]> {
+    const users = await userService.getUsersByGithubIds(githubIds);
+    const emails = users.filter(user => user.contactsEmail).map(user => user.contactsEmail!);
+    const tgUsernames = users.filter(user => user.contactsTelegram).map(user => user.contactsTelegram!);
+    const emailsConsents = await this.findByChannelValues(emails);
+    const tgConsents = await this.findBytgUsernames(tgUsernames);
+    return [...emailsConsents, ...tgConsents];
   }
 }

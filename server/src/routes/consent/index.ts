@@ -3,8 +3,9 @@ import { ILogger } from '../../logger';
 import { Consent } from '../../models';
 import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 import { setResponse, setErrorResponse } from '../utils';
-import { consentService } from '../../services';
 import { basicAuthVerification } from '../guards';
+import { ConsentRepository } from '../../repositories/consent';
+import { getCustomRepository } from 'typeorm';
 
 export function consentRoute(_: ILogger) {
   const router = new Router({ prefix: '/consent' });
@@ -16,7 +17,7 @@ export function consentRoute(_: ILogger) {
       return;
     }
     try {
-      consentService.captureConsent(consent);
+      await getCustomRepository(ConsentRepository).saveConsents([consent]);
       setResponse(ctx, OK, { message: 'Consents has been updated' });
     } catch (e) {
       setErrorResponse(ctx, INTERNAL_SERVER_ERROR, e.message);

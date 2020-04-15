@@ -30,9 +30,9 @@ export function saveUser(user: User) {
   return getRepository(User).save(user);
 }
 
-export function getUsersByIds(ids: number[]) {
+export function getUsersByGithubIds(githubIds: string[]) {
   return getRepository(User).find({
-    where: { id: In(ids) },
+    where: { githubId: In(githubIds) },
   });
 }
 

@@ -1,4 +1,3 @@
-import { userService } from '.';
 import axios, { AxiosError } from 'axios';
 import { config } from '../config';
 import { Consent, ChannelType, CourseTask } from '../models';
@@ -59,50 +58,43 @@ function sendEmailNotification(emails: string[], text: string) {
   }
 }
 
-function getConsonantsChValues(consents: Consent[]) {
-  return consents.filter(consent => consent.optIn).map(consent => consent.channelValue);
-}
-
-type UsersContacts = {
+type ChannelValues = {
   emails: string[];
-  tgUsernames: string[];
+  chatIds: string[];
 };
 
-export async function sendNotification(userIds: number[], text: string, isIgnoreConsents: boolean = false) {
+function getChValues(consents: Consent[], isIgnoreConsents: boolean) {
+  return consents.reduce(
+    (chValues: ChannelValues, consent) => {
+      const { channelType, channelValue, optIn } = consent;
+      if (isIgnoreConsents || optIn) {
+        switch (channelType) {
+          case 'tg':
+            chValues.chatIds.push(channelValue);
+            break;
+          default:
+            chValues.emails.push(channelValue);
+        }
+      }
+      return chValues;
+    },
+    {
+      emails: [],
+      chatIds: [],
+    },
+  );
+}
+
+export async function sendNotification(githubIds: string[], text: string, isIgnoreConsents: boolean = false) {
   try {
     if (config.isDevMode) {
       return;
     }
-    const users = (await userService.getUsersByIds(userIds)) || [];
-    const { emails, tgUsernames } = users.reduce(
-      (chValues: UsersContacts, user) => {
-        const { contactsEmail, contactsTelegram } = user;
-        if (contactsEmail) {
-          chValues.emails.push(contactsEmail);
-        }
-        if (contactsTelegram) {
-          chValues.tgUsernames.push(contactsTelegram);
-        }
-        return chValues;
-      },
-      {
-        emails: [],
-        tgUsernames: [],
-      },
-    );
-    const consentService = getCustomRepository(ConsentRepository);
-    const tgConsents = await consentService.findConsentsByUsernames(tgUsernames);
-    if (isIgnoreConsents) {
-      sendEmailNotification(emails, text);
-      const chatIds = tgConsents.map(consent => consent.channelValue);
-      sendTgNotification(chatIds, text);
-    } else {
-      const emailConsents = await consentService.findConsentsByChannelValues(emails);
-      const consonantsEmails = getConsonantsChValues(emailConsents);
-      const consonantsChatIds = getConsonantsChValues(tgConsents);
-      sendEmailNotification(consonantsEmails, text);
-      sendTgNotification(consonantsChatIds, text);
-    }
+    const consentRepository = getCustomRepository(ConsentRepository);
+    const consents = await consentRepository.findByGithubIds(githubIds);
+    const { emails, chatIds } = getChValues(consents, isIgnoreConsents);
+    sendEmailNotification(emails, text);
+    sendTgNotification(chatIds, text);
   } catch (err) {
     const error = err as AxiosError;
     throw error.response?.data ?? error.message;
