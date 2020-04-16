@@ -46,6 +46,7 @@ import { createRepository, createRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import {
   updateStudentStatus,
+  selfUpdateStudentStatus,
   getStudentSummary,
   createInterviewResult,
   getCrossMentors,
@@ -206,6 +207,7 @@ function addStudentApi(router: Router, logger: ILogger) {
 
   router.post('/student/:githubId/repository', courseManagerGuard, ...validators, createRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
+  router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, ...validators, postStudentCertificate(logger));
 
