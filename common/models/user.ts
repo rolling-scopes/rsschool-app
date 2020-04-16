@@ -13,7 +13,7 @@ export interface MentorBasic extends UserBasic {
 
 export interface StudentBasic extends UserBasic {
   isActive: boolean;
-  cityName: string;
-  countryName: string;
+  cityName?: string;
+  countryName?: string;
   mentor: MentorBasic | { id: number } | null;
 }
