@@ -20,6 +20,7 @@ import {
   ConfigurableProfilePermissions,
   Contacts,
   GeneralInfo,
+  Consent,
 } from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
@@ -27,6 +28,7 @@ import AboutCard from 'components/Profile/AboutCard';
 import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
+import ConsentsCard from 'components/Profile/ConsentsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
@@ -139,6 +141,33 @@ export class ProfilePage extends React.Component<Props, State> {
           );
           break;
         }
+        case 'consent': {
+          const { id, checked } = event;
+          const consents = profile?.consents!;
+          const [existingConsent] = consents.filter(consent => consent.channelType === id);
+          const otherConsents = consents.filter(consent => consent.channelType !== id);
+          const newConsents = [...otherConsents];
+          if (existingConsent) {
+            const newConsent = cloneDeep(existingConsent);
+            newConsent.optIn = checked;
+            newConsents.push(newConsent);
+          } else if (id === 'email' && initialProfileSettings?.contacts?.email) {
+            const newConsent = {
+              optIn: checked,
+              channelType: id,
+              channelValue: initialProfileSettings?.contacts?.email,
+            };
+            newConsents.push(newConsent);
+          }
+          newProfile.consents = newConsents;
+          const initialConsents = initialProfileSettings?.consents;
+          const getconsentParamsString = ({ optIn, channelType }: Consent) => `${optIn}${channelType}`;
+          const consentParamsStrings = new Set(initialConsents!.map(getconsentParamsString));
+          isInitialProfileSettingsChanged = !newConsents.every(consent =>
+            consentParamsStrings.has(getconsentParamsString(consent)),
+          );
+          break;
+        }
         default: {
           set(newProfile, path, event.target.value);
           isInitialProfileSettingsChanged = get(newProfile, path) !== get(initialProfileSettings, path);
@@ -219,11 +248,12 @@ export class ProfilePage extends React.Component<Props, State> {
 
     if (profile) {
       try {
-        const { permissionsSettings, generalInfo, contacts } = profile;
+        const { permissionsSettings, generalInfo, contacts, consents } = profile;
         await this.userService.saveProfileInfo({
           permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
           generalInfo: generalInfo as GeneralInfo,
           contacts: contacts as Contacts,
+          consents: consents as Consent[],
           isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
           isProfileSettingsChanged: isInitialProfileSettingsChanged,
         });
@@ -303,6 +333,13 @@ export class ProfilePage extends React.Component<Props, State> {
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+          onProfileSettingsChange={this.onProfileSettingsChange}
+        />
+      ),
+      profile?.consents && (
+        <ConsentsCard
+          data={profile.consents}
+          isEditingModeEnabled={isEditingModeVisible}
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),

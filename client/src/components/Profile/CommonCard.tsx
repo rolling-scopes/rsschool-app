@@ -75,7 +75,9 @@ class CommonCard extends React.Component<Props, State> {
                 profileSettingsContent && (
                   <EditOutlined key="main-card-actions-edit" onClick={this.showProfileSettings} />
                 ),
-                <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />,
+                permissionsSettings && (
+                  <SettingOutlined key="main-card-actions-settings" onClick={this.showVisibilitySettings} />
+                ),
               ].filter(Boolean)
             : actions
         }

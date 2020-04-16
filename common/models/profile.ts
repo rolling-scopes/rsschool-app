@@ -56,6 +56,16 @@ export interface Contacts {
   linkedIn: string | null;
 }
 
+export interface Consent {
+  id?: number;
+  createdDate?: number;
+  updatedDate?: number;
+  channelValue: string;
+  channelType: string;
+  optIn: boolean;
+  username?: string;
+}
+
 export interface MentorStats {
   courseName: string;
   locationName: string;
@@ -148,6 +158,7 @@ export interface ProfileInfo {
   permissionsSettings?: ConfigurableProfilePermissions;
   generalInfo?: GeneralInfo;
   contacts?: Contacts;
+  consents?: Consent[];
   mentorStats?: MentorStats[];
   studentStats?: StudentStats[];
   publicFeedback?: PublicFeedback[];
@@ -158,6 +169,7 @@ export interface SaveProfileInfo {
   permissionsSettings: ConfigurableProfilePermissions;
   generalInfo: GeneralInfo;
   contacts: Contacts;
+  consents: Consent[];
   isPermissionsSettingsChanged: boolean;
   isProfileSettingsChanged: boolean;
 }
