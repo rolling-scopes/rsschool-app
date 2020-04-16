@@ -10,6 +10,7 @@ import { CoursePageProps, StudentBasic } from 'services/models';
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
   const roles = props.session.roles;
+  const userGithubId = props.session.githubId;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -18,7 +19,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     if (roles[courseId] === 'student') {
-      const student = await courseService.getStudentSummary(props.session.githubId);
+      const student = await courseService.getStudentSummary(userGithubId);
       if (student.isActive) {
         setStudents([
           Object.assign(student, {
@@ -41,11 +42,15 @@ function Page(props: CoursePageProps) {
     }
     try {
       setLoading(true);
-      await courseService.expelStudent(values.githubId, values.comment);
+      if (values.githubId === userGithubId) {
+        await courseService.selfExpel(values.githubId, values.comment);
+      } else {
+        await courseService.expelStudent(values.githubId, values.comment);
+      }
+
       const activeStudents = students.filter(s => s.githubId !== values.githubId);
       setStudents(activeStudents);
       form.resetFields();
-
       message.success('The student has been expelled');
     } catch (e) {
       message.error('An error occured. Please try later.');

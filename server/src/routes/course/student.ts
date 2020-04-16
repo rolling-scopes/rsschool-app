@@ -33,6 +33,19 @@ export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterCont
   }
 };
 
+export const selfUpdateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId } = ctx.params;
+  const data: { comment?: string } = ctx.request.body;
+
+  if (ctx.state.user.githubId === githubId) {
+    const studentRepository = getCustomRepository(StudentRepository);
+    await studentRepository.expel(courseId, githubId, data.comment);
+    setResponse(ctx, OK);
+  } else {
+    setResponse(ctx, BAD_REQUEST, { message: 'access denied' });
+  }
+};
+
 export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
 
