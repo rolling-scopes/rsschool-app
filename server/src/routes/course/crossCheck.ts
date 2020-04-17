@@ -121,8 +121,12 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     return;
   }
 
-  const inputData: { score: number; comment: string } = ctx.request.body;
-  const data = { score: Math.round(Number(inputData.score)), comment: inputData.comment || '' };
+  const inputData: { score: number; comment: string; anonymous: boolean } = ctx.request.body;
+  const data = {
+    score: Math.round(Number(inputData.score)),
+    comment: inputData.comment || '',
+    anonymous: inputData.anonymous !== false,
+  };
 
   if (isNaN(data.score) || data.score < 0) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
@@ -240,6 +244,9 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
   }
 
   const feedback = await taskResultsService.getTaskSolutionFeedback(student.id, courseTaskId);
-  const response = { url: feedback.url, comments: feedback.comments.map(({ comment }) => ({ comment })) };
+  const response = {
+    url: feedback.url,
+    comments: feedback.comments,
+  };
   setResponse(ctx, OK, response);
 };

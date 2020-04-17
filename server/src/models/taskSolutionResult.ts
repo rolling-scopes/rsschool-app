@@ -58,4 +58,7 @@ export class TaskSolutionResult {
 
   @Column({ nullable: true })
   comment?: string;
+
+  @Column({ default: true, type: 'boolean' })
+  anonymous: boolean;
 }

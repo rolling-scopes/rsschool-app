@@ -242,7 +242,11 @@ export class CourseService {
     return result.data.data as TaskSolution;
   }
 
-  async postTaskSolutionResult(githubId: string, courseTaskId: number, data: { score: number; comment: string }) {
+  async postTaskSolutionResult(
+    githubId: string,
+    courseTaskId: number,
+    data: { score: number; comment: string; anonymous: boolean },
+  ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
 

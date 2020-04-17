@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Col, Comment, Alert, Divider, Form, Input, message, Row, Typography } from 'antd';
-import { PageLayout } from 'components';
+import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
@@ -100,19 +100,23 @@ function Page(props: CoursePageProps) {
 
 export default withCourseData(withSession(Page, 'student'));
 
-function CrossCheckComments({ comments }: { comments: { comment: string }[] }) {
+function CrossCheckComments({
+  comments,
+}: {
+  comments: { comment: string; author: { name: string; githubId: string } | null }[];
+}) {
   if (!comments || comments.length === 0) {
     return null;
   }
   const style = { margin: 16, fontStyle: 'italic' };
   return (
     <Col>
-      {comments.map(({ comment }, i) => (
+      {comments.map(({ comment, author }, i) => (
         <Row key={i}>
           <Divider />
           <Comment
             style={style}
-            author={`Student ${i + 1}`}
+            author={author ? <GithubUserLink value={author.githubId} /> : `Student ${i + 1}`}
             avatar={<UserOutlined />}
             content={comment.split('\n').map((text, k) => (
               <p key={k}>{text}</p>

@@ -1,6 +1,7 @@
 import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
+import { createName } from './user.service';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -57,12 +58,28 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
 }
 
 export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
-  const comments = (await getRepository(TaskSolutionResult)
-    .createQueryBuilder('tsr')
-    .select(['tsr.comment'])
-    .where('"tsr"."studentId" = :studentId', { studentId })
-    .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .getMany()) as { comment: string }[];
+  const comments = (
+    await getRepository(TaskSolutionResult)
+      .createQueryBuilder('tsr')
+      .select(['tsr.comment', 'tsr.anonymous'])
+      .innerJoin('tsr.checker', 'checker')
+      .innerJoin('checker.user', 'user')
+      .addSelect(['checker.id', ...getPrimaryUserFields('user')])
+      .where('"tsr"."studentId" = :studentId', { studentId })
+      .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getMany()
+  ).map(c => {
+    const author = !c.anonymous
+      ? {
+          name: createName(c.checker.user),
+          githubId: c.checker.user.githubId,
+        }
+      : null;
+    return {
+      author,
+      comment: c.comment,
+    };
+  });
   const taskSolution = await getRepository(TaskSolution)
     .createQueryBuilder('ts')
     .where('"ts"."studentId" = :studentId', { studentId })
