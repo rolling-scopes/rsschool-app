@@ -20,9 +20,20 @@ export class ConsentRepository extends AbstractRepository<Consent> {
       : new Promise(res => res([]));
   }
 
-  public saveConsents(consents: Consent[]) {
+  public async saveConsents(consents: Consent[]) {
+    const chValues = consents.map(consent => consent.channelValue);
+    const existingConsents = await this.findByChannelValues(chValues);
+    const consentsToSave = consents.map(consent => {
+      const [existingConsent] = existingConsents.filter(({ channelValue }) => channelValue === consent.channelValue);
+      return existingConsent
+        ? {
+            id: existingConsent.id,
+            ...consent,
+          }
+        : consent;
+    });
     const repository = getRepository(Consent);
-    return repository.save(consents);
+    return repository.save(consentsToSave);
   }
 
   public async findByGithubIds(githubIds: string[]): Promise<Consent[]> {
