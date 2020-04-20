@@ -6,7 +6,7 @@ import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
-import { courseService, OperationResult, taskResultsService, taskService } from '../../services';
+import { courseService, OperationResult, taskResultsService, taskService, notificationService } from '../../services';
 import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
 
 import { setCsvResponse, setResponse } from '../utils';
@@ -109,6 +109,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const result = taskResultsService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
+  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score);
+  await notificationService.sendNotification([githubId], taskResultText);
 };
 
 export const postMultipleScores = (logger: ILogger) => async (ctx: Router.RouterContext) => {
