@@ -5,15 +5,19 @@ import { userService } from '../services';
 @EntityRepository(Consent)
 export class ConsentRepository extends AbstractRepository<Consent> {
   private findByChannelValues(channelValues: string[]): Promise<Consent[]> {
-    return getRepository(Consent).find({
-      where: { channelValue: In(channelValues) },
-    });
+    return channelValues.length
+      ? getRepository(Consent).find({
+          where: { channelValue: In(channelValues) },
+        })
+      : new Promise(res => res([]));
   }
 
   private findBytgUsernames(usernames: string[]): Promise<Consent[]> {
-    return getRepository(Consent).find({
-      where: { username: In(usernames) },
-    });
+    return usernames.length
+      ? getRepository(Consent).find({
+          where: { username: In(usernames) },
+        })
+      : new Promise(res => res([]));
   }
 
   public saveConsents(consents: Consent[]) {
