@@ -108,7 +108,7 @@ function renderTable(loaded: boolean, students: StudentScore[], columns: any[]) 
     <Table<StudentScore>
       className="table-score"
       showHeader
-      scroll={{ x: tableWidth, y: 'calc(100vh - 240px)' as any }}
+      scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={{ pageSize: 100 }}
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}

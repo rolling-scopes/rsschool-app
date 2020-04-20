@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { message } from 'antd';
 
-export function useLoading(value = false, catchHandler = (_: Error) => message.error('An error occured')) {
+export function useLoading(
+  value = false,
+  catchHandler = (_: Error) => message.error('An unexpected error occured. Please try later.'),
+) {
   const [loading, setLoading] = useState(value);
   const wrapper = <T extends any[], K = any>(action: (...args: T) => Promise<K>) => async (
     ...args: Parameters<typeof action>

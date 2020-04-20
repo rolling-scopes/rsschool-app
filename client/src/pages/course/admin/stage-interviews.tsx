@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
-import { isCourseManager } from 'rules/user';
+import { isCourseManager } from 'domain/user';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;

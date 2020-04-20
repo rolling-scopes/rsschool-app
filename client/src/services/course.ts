@@ -218,6 +218,17 @@ export class CourseService {
   async expelStudent(githubId: string, comment: string = '') {
     await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
   }
+  async selfExpel(githubId: string, comment: string = '') {
+    await this.axios.post(`/student/${githubId}/status-self`, { comment, status: 'expelled' });
+  }
+
+  async expelStudents(data: { courseTaskIds?: number[]; minScore?: number; expellingReason: string }) {
+    await this.axios.post(`/students/status`, { ...data, status: 'expelled' });
+  }
+
+  async restoreStudent(githubId: string) {
+    await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
+  }
 
   async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
@@ -231,7 +242,11 @@ export class CourseService {
     return result.data.data as TaskSolution;
   }
 
-  async postTaskSolutionResult(githubId: string, courseTaskId: number, data: { score: number; comment: string }) {
+  async postTaskSolutionResult(
+    githubId: string,
+    courseTaskId: number,
+    data: { score: number; comment: string; anonymous: boolean },
+  ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
 
@@ -406,9 +421,9 @@ export class CourseService {
     return result.data.data;
   }
 
-  async updateStudent(githubId: string, data: { mentorId: number }) {
+  async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {
     const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data;
+    return result.data.data as StudentBasic;
   }
 
   async createInterviewStudent(githubId: string) {

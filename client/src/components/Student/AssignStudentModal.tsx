@@ -11,8 +11,7 @@ type State = {
 };
 
 type Props = {
-  mentorsGithub: string;
-  mentorId: number;
+  mentorGithuId: string;
   courseId: number;
 };
 
@@ -31,7 +30,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
   };
 
   addStudent = async () => {
-    const { mentorId } = this.props;
+    const { mentorGithuId } = this.props;
     const { studentGithubId } = this.state;
 
     if (!studentGithubId) {
@@ -41,7 +40,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
     this.reset();
 
     try {
-      await new CourseService(this.props.courseId).updateStudent(studentGithubId, { mentorId });
+      await new CourseService(this.props.courseId).updateStudent(studentGithubId, { mentorGithuId });
       message.success('Success');
     } catch (e) {
       message.error(`${e}`);
@@ -57,7 +56,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { mentorsGithub, courseId } = this.props;
+    const { mentorGithuId, courseId } = this.props;
     const { isModalOpened } = this.state;
 
     return (
@@ -68,7 +67,7 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
         <Modal
           title={
             <>
-              Assign Student to <Text underline>{mentorsGithub}</Text>
+              Assign Student to <Text underline>{mentorGithuId}</Text>
             </>
           }
           visible={isModalOpened}
@@ -76,7 +75,12 @@ class AssignStudentModal extends React.PureComponent<Props, State> {
           onCancel={this.reset}
         >
           <Row>
-            <StudentSearch keyField="githubId" onChange={this.handleStudentSelect} courseId={courseId} />
+            <StudentSearch
+              style={{ width: '100%' }}
+              keyField="githubId"
+              onChange={this.handleStudentSelect}
+              courseId={courseId}
+            />
           </Row>
         </Modal>
       </>

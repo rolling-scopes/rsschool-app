@@ -3,7 +3,6 @@ import {
   GlobalOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  OrderedListOutlined,
   QuestionOutlined,
   TeamOutlined,
   IdcardFilled,
@@ -37,15 +36,6 @@ export function AdminSider(props: Props) {
             <a href="/admin/courses">
               <GlobalOutlined />
               <span>Courses</span>
-            </a>
-          </Menu.Item>
-        ) : null}
-
-        {props.isAdmin ? (
-          <Menu.Item key="2">
-            <a href="/admin/stages">
-              <OrderedListOutlined />
-              <span>Stages</span>
             </a>
           </Menu.Item>
         ) : null}

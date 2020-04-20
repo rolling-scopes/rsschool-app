@@ -8,7 +8,7 @@ export function CommentInput(props: { [key: string]: any; notRequired?: boolean 
       {...otherProps}
       name="comment"
       label="Comment"
-      rules={notRequired ? [] : [{ required: true, message: 'Please leave a comment' }]}
+      rules={notRequired ? [] : [{ required: true, message: 'Please leave a detailed comment', min: 30 }]}
     >
       <Input.TextArea rows={5} />
     </Form.Item>

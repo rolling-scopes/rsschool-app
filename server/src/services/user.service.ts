@@ -37,5 +37,12 @@ export function getUsersByGithubIds(githubIds: string[]) {
 }
 
 export function createName({ firstName, lastName }: { firstName: string; lastName: string }) {
-  return `${firstName} ${lastName}`.trim();
+  const result = [];
+  if (firstName) {
+    result.push(firstName.trim());
+  }
+  if (lastName) {
+    result.push(lastName.trim());
+  }
+  return result.join(' ');
 }

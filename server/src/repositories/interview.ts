@@ -56,13 +56,14 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
 
     const students = interviews.map(record => {
       const { courseTask } = record;
+      const taskResult = taskResults.find(taskResult => taskResult.courseTaskId === record.courseTaskId);
       return {
         id: courseTask.id,
         name: courseTask.task.name,
         descriptionUrl: courseTask.task.descriptionUrl,
         startDate: courseTask.studentStartDate,
         endDate: courseTask.studentEndDate,
-        completed: taskResults.some(taskResult => taskResult.courseTaskId === record.courseTaskId),
+        completed: !!taskResult,
         interviewer: {
           githubId: record.mentor.user.githubId,
           name: userService.createName(record.mentor.user),
@@ -71,6 +72,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
           githubId: record.student.user.githubId,
           name: userService.createName(record.student.user),
         },
+        result: taskResult?.score?.toString() ?? null,
       };
     });
     return students as InterviewDetails[];
@@ -81,6 +83,7 @@ export interface InterviewDetails {
   id: number;
   name: string;
   completed: boolean;
+  result: string | null;
   descriptionUrl: string;
   startDate: string;
   endDate: string;

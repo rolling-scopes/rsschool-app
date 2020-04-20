@@ -1,6 +1,6 @@
 import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
-import { Button, Col, Form, message, Row, Spin, Timeline, Typography } from 'antd';
-import { PageLayout, PersonSelect } from 'components';
+import { Button, Col, Form, message, Row, Spin, Timeline, Typography, Checkbox } from 'antd';
+import { PageLayout, UserSearch } from 'components';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
@@ -109,9 +109,10 @@ function Page(props: CoursePageProps) {
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
         score: values.score,
         comment: values.comment,
+        anonymous: values.visibleName !== true,
       });
       message.success('The review has been submitted. Thanks!');
-      form.resetFields(['score', 'comment', 'githubId']);
+      form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
@@ -147,13 +148,16 @@ function Page(props: CoursePageProps) {
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-              <PersonSelect
+              <UserSearch
                 keyField="githubId"
                 onChange={handleStudentChange}
                 disabled={!courseTaskId}
-                data={assignments.map(({ student }) => student)}
+                defaultValues={assignments.map(({ student }) => student)}
               />
               <CrossCheckAssignmentLink assignment={assignment} />
+            </Form.Item>
+            <Form.Item valuePropName="checked" name="visibleName">
+              <Checkbox>Make my name visible in feedback</Checkbox>
             </Form.Item>
             <ScoreInput courseTask={courseTask} />
             <CommentInput />
