@@ -209,7 +209,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
-  router.post('/student/:githubId/certificate', courseManagerGuard, ...validators, postStudentCertificate(logger));
+  router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
