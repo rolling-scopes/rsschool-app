@@ -11,11 +11,15 @@
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:lint": "eslint . --ext .ts,.tsx",
-    "ci:build": "concurrently \"npm run build:tsc --prefix client\" \"npm run build --prefix server\""
+    "ci:build": "concurrently \"npm run build:tsc --prefix client\" \"npm run build --prefix server\"",
+    "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
+    "db:dump": "pg_dump -h localhost --username rs_master rs_school --file backup-local.sql",
+    "db:up": "docker-compose -f ./setup/docker-compose.yml up  -d",
+    "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.23.0",
-    "@typescript-eslint/parser": "^2.23.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "concurrently": "5.1.0",
     "eslint": "~6.8.0",
     "prettier": "^1.19.1",

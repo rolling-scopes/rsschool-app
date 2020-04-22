@@ -10,6 +10,7 @@ import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
+import { notificationService } from '../../services';
 
 interface LoggingError {
   logger?: ILogger;
@@ -90,6 +91,8 @@ export function registryRouter(logger?: ILogger) {
     }
     await getRepository(MentorRegistry).update({ userId: user.id }, mentorData);
     setResponse(ctx, OK);
+    const confirmationText = await notificationService.renderMentorConfirmationText(preselectedCourses);
+    await notificationService.sendNotification([githubId], confirmationText, true);
   });
 
   router.get('/mentor', async (ctx: Router.RouterContext) => {

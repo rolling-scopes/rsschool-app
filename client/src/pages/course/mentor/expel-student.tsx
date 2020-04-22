@@ -1,5 +1,5 @@
 import { Button, Form, Input, message, Typography } from 'antd';
-import { PageLayoutSimple, PersonSelect } from 'components';
+import { PageLayoutSimple, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
@@ -9,6 +9,8 @@ import { CoursePageProps, StudentBasic } from 'services/models';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
+  const roles = props.session.roles;
+  const userGithubId = props.session.githubId;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -16,9 +18,22 @@ function Page(props: CoursePageProps) {
   const [students, setStudents] = useState([] as StudentBasic[]);
 
   useAsync(async () => {
-    const mentorStudents = await courseService.getMentorStudents();
-    const students = mentorStudents.filter(student => student.isActive);
-    setStudents(students);
+    if (roles[courseId] === 'student') {
+      const student = await courseService.getStudentSummary(userGithubId);
+      if (student.isActive) {
+        setStudents([
+          Object.assign(student, {
+            id: props.session.id,
+            githubId: props.session.githubId,
+            name: props.session.githubId,
+          }),
+        ]);
+      }
+    } else {
+      const students = await courseService.getMentorStudents();
+      const activeStudents = students.filter(student => student.isActive);
+      setStudents(activeStudents);
+    }
   }, [courseId]);
 
   const handleSubmit = async (values: any) => {
@@ -27,11 +42,15 @@ function Page(props: CoursePageProps) {
     }
     try {
       setLoading(true);
-      await courseService.expelStudent(values.githubId, values.comment);
+      if (values.githubId === userGithubId) {
+        await courseService.selfExpel(values.githubId, values.comment);
+      } else {
+        await courseService.expelStudent(values.githubId, values.comment);
+      }
+
       const activeStudents = students.filter(s => s.githubId !== values.githubId);
       setStudents(activeStudents);
       form.resetFields();
-
       message.success('The student has been expelled');
     } catch (e) {
       message.error('An error occured. Please try later.');
@@ -52,9 +71,9 @@ function Page(props: CoursePageProps) {
       <Typography.Paragraph type="warning">This page allows to expel a student from the course</Typography.Paragraph>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
-          <PersonSelect
+          <UserSearch
             keyField="githubId"
-            data={students}
+            defaultValues={students}
             disabled={noData}
             placeholder={noData ? 'No Students' : undefined}
           />

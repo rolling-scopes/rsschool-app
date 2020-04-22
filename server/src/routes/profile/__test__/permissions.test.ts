@@ -27,6 +27,7 @@ describe('getPermissions', () => {
         isStudentStatsVisible: false,
         isStageInterviewFeedbackVisible: false,
         isCoreJsFeedbackVisible: false,
+        isConsentsVisible: false,
       });
     });
   });
@@ -70,6 +71,7 @@ describe('getPermissions', () => {
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
           isCoreJsFeedbackVisible: false,
+          isConsentsVisible: false,
         });
       });
       it('"role" is "mentor" and some "permissions" set with "mentor" = "true"', () => {
@@ -110,6 +112,7 @@ describe('getPermissions', () => {
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: true,
           isCoreJsFeedbackVisible: true,
+          isConsentsVisible: false,
         });
       });
       it('"role" is "student" and some "permissions" set with "student" = "true"', () => {
@@ -150,6 +153,7 @@ describe('getPermissions', () => {
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
           isCoreJsFeedbackVisible: false,
+          isConsentsVisible: false,
         });
       });
       it('"role" is "coursemanager" and some "permissions" set with "coursemanager" = "true"', () => {
@@ -190,6 +194,7 @@ describe('getPermissions', () => {
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: true,
           isCoreJsFeedbackVisible: true,
+          isConsentsVisible: true,
         });
       });
     });
@@ -232,6 +237,7 @@ describe('getPermissions', () => {
           isStudentStatsVisible: true,
           isStageInterviewFeedbackVisible: false,
           isCoreJsFeedbackVisible: false,
+          isConsentsVisible: true,
         });
       });
     });

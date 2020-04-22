@@ -14,6 +14,7 @@ export interface IConfig {
     github_client_secret: string;
     successRedirect: string;
     activityWebhookSecret: string;
+    consentSecret: string;
   };
   aws: {
     secretAccessKey: string;
@@ -83,10 +84,11 @@ export const config: IConfig = {
     github_client_secret: process.env.RSSHCOOL_API_AUTH_CLIENT_SECRET || 'client-secret',
     successRedirect: process.env.RSSHCOOL_API_AUTH_SUCCESS_REDIRECT || 'http://localhost:3000',
     activityWebhookSecret: process.env.ACTIVITY_WEBHOOK_SECRET || 'activity-webhook',
+    consentSecret: process.env.CONSENT_SECRET || 'consent-secret',
   },
   dev: {
     username: process.env.RSSHCOOL_DEV_USERNAME || '',
-    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN || ''),
+    adminEnabled: !!(process.env.RSSHCOOL_DEV_ADMIN === 'true' || ''),
   },
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',

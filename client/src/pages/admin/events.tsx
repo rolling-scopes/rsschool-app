@@ -21,10 +21,12 @@ function Page(props: Props) {
   const [modalData, setModalData] = useState(null as Partial<Event> | null);
   const [modalAction, setModalAction] = useState('update');
 
-  useAsync(async () => {
+  const loadData = async () => {
     const data = await service.getEvents();
     setData(data);
-  }, []);
+  };
+
+  useAsync(loadData, []);
 
   const handleAddItem = () => {
     setModalData({});
@@ -50,14 +52,13 @@ function Page(props: Props) {
     async (values: any) => {
       try {
         const record = createRecord(values);
-        const item =
-          modalAction === 'update'
-            ? await service.updateEvent(modalData!.id!, record)
-            : await service.createEvent(record);
-        const updatedData =
-          modalAction === 'update' ? data.map(d => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
+        if (modalAction === 'update') {
+          await service.updateEvent(modalData!.id!, record);
+        } else {
+          await service.createEvent(record);
+        }
         setModalData(null);
-        setData(updatedData);
+        await loadData();
       } catch (e) {
         console.error(e);
         message.error('An error occurred. Can not save the task.');

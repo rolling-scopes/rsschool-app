@@ -7,9 +7,6 @@ exports[`CommonCard Should render correctly if is editing mode enabled 1`] = `
       <ForwardRef(EditOutlined)
         onClick={[Function]}
       />,
-      <ForwardRef(SettingOutlined)
-        onClick={[Function]}
-      />,
     ]
   }
   title={

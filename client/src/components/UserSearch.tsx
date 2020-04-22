@@ -2,38 +2,38 @@ import { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components';
 import { get } from 'lodash';
+import { SelectProps } from 'antd/lib/select';
 
 type Person = { id: number; githubId: string; name: string };
 
-type Props = {
-  [key: string]: any;
-  searchFn: (value: string) => Promise<Person[]>;
+export type UserProps = SelectProps<string> & {
+  searchFn?: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
   keyField?: 'id' | 'githubId';
 };
 
-export function UserSearch(props: Props) {
+export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
+  const { searchFn = defaultSearch, defaultValues, keyField, ...otherProps } = props;
 
   useEffect(() => {
-    setData(props.defaultValues ?? []);
+    setData(defaultValues ?? []);
   }, [props.defaultValues]);
 
   const handleSearch = async (value: string) => {
     if (value) {
-      const data = await props.searchFn(value);
+      const data = await searchFn(value);
       setData(data);
     } else {
       setData(props.defaultValues ?? []);
     }
   };
 
-  const { keyField, searchFn, defaultValues, ...otherProps } = props;
   return (
     <Select
       {...otherProps}
       showSearch
-      allowClear={true}
+      allowClear
       defaultValue={undefined}
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
@@ -52,4 +52,8 @@ export function UserSearch(props: Props) {
       })}
     </Select>
   );
+
+  async function defaultSearch(value: string) {
+    return defaultValues?.filter(v => v.name.startsWith(value) || v.githubId.startsWith(value)) ?? [];
+  }
 }

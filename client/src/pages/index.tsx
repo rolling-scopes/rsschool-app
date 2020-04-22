@@ -8,7 +8,7 @@ import {
   CompassTwoTone,
   // HighlightTwoTone,
   PlayCircleTwoTone,
-  // StopTwoTone,
+  StopTwoTone,
   ToolTwoTone,
   UserOutlined,
   StarOutlined,
@@ -212,15 +212,15 @@ const routes = [
   //   access: combine(isCourseNotCompleted, isMentor),
   //   newTab: false,
   // },
-  // {
-  //   name: () => (
-  //     <>
-  //       <StopTwoTone twoToneColor="red" /> Expel Student
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  // },
+  {
+    name: () => (
+      <>
+        <StopTwoTone twoToneColor="red" /> Expel Student
+      </>
+    ),
+    getLink: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isMentor),
+  },
 ];
 
 const courseManagementRoutes = [

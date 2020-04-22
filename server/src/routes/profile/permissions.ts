@@ -50,6 +50,7 @@ export interface Permissions {
   isStudentStatsVisible: boolean;
   isStageInterviewFeedbackVisible: boolean;
   isCoreJsFeedbackVisible: boolean;
+  isConsentsVisible: boolean;
 }
 
 export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> =>
@@ -167,6 +168,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isStudentStatsVisible: false,
     isStageInterviewFeedbackVisible: false,
     isCoreJsFeedbackVisible: false,
+    isConsentsVisible: false,
   };
 
   const accessToContacts = (permission: string, role: string = '') => {

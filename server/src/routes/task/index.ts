@@ -28,7 +28,8 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
 
   const id: number = Number(ctx.params.id);
   try {
-    await getRepository(TaskVerification).save({ ...data, id });
+    const score = Math.round(Number(data.score));
+    await getRepository(TaskVerification).save({ ...data, score, id });
 
     const result = (await getRepository(TaskVerification).findOne(id))!;
 

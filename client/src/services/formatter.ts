@@ -4,6 +4,10 @@ export function formatDate(value: string) {
   return moment(value).format('YYYY-MM-DD');
 }
 
+export function formatShortDate(value: string) {
+  return moment(value).format('MMM DD');
+}
+
 export function relativeDays(value: string) {
   return moment().diff(moment(value), 'day');
 }

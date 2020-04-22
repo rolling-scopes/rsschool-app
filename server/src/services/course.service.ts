@@ -47,6 +47,7 @@ export interface AssignedStudent extends StudentBasic {
 export interface StudentDetails extends StudentBasic {
   cityName: string;
   countryName: string;
+  totalScore: number;
   interviews: { id: number; isCompleted: boolean; interviewer?: { githubId: string } }[];
   repository: string;
   assignedChecks: { name: string; id: number }[];
@@ -67,7 +68,7 @@ export interface StudentWithResults {
 }
 
 export interface MentorDetails extends MentorBasic {
-  cityName: string | null;
+  cityName: string;
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'any' | 'city' | 'country';
@@ -87,6 +88,8 @@ export function convertToMentorBasic(mentor: Mentor): MentorBasic {
     id: mentor.id,
     githubId: user.githubId,
     students: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
+    cityName: user.cityName ?? '',
+    countryName: user.countryName ?? '',
   };
 }
 
@@ -98,7 +101,8 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     id: student.id,
     githubId: user.githubId,
     mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
-    totalScore: student.totalScore,
+    cityName: user.cityName ?? '',
+    countryName: user.countryName ?? '',
   };
 }
 
@@ -109,6 +113,7 @@ export function convertToStudentDetails(student: Student): StudentDetails {
   const checks = checkers.map(({ courseTask: { id, task } }) => ({ id, name: task.name })) ?? [];
   return {
     ...studentBasic,
+    totalScore: student.totalScore,
     cityName: user.cityName || 'Other',
     countryName: user.countryName || 'Other',
     interviews: _.isEmpty(student.stageInterviews)
@@ -128,8 +133,8 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
   return {
     ...mentorBasic,
     students: mentor.students ?? [],
-    cityName: user.cityName || null,
-    countryName: user.countryName || 'Other',
+    cityName: user.cityName ?? '',
+    countryName: user.countryName ?? '',
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference ?? 'any',
     studentsCount: mentor.students ? mentor.students.length : 0,
@@ -227,27 +232,6 @@ export async function queryMentorByGithubId(
   return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
 }
 
-export async function getStudentsByMentor(courseId: number, githubId: string) {
-  const records = await studentQuery()
-    .innerJoin('student.user', 'user')
-    .addSelect(getPrimaryUserFields())
-    .innerJoinAndSelect('student.mentor', 'mentor')
-    .innerJoin('mentor.user', 'mentorUser')
-    .addSelect(getPrimaryUserFields('mentorUser'))
-    .where('mentorUser.githubId = :githubId', { githubId })
-    .andWhere('"student"."isExpelled" = false')
-    .andWhere('student.courseId = :courseId ', { courseId })
-    .getMany();
-
-  const students = records.map(record => {
-    const student = convertToStudentBasic(record);
-    student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
-    return student;
-  });
-
-  return students;
-}
-
 export async function getCrossStudentsByMentor(courseId: number, githubId: string) {
   const records = await studentQuery()
     .innerJoin('student.user', 'user')
@@ -327,8 +311,8 @@ export async function getMentorsDetails(courseId: number): Promise<MentorDetails
     );
     return {
       ...mentorBasic,
-      cityName: user.cityName || null,
-      countryName: user.countryName || 'Other',
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
       maxStudentsLimit: mentor.maxStudentsLimit,
       studentsPreference: mentor.studentsPreference ?? 'any',
       studentsCount: activeStudents.length,
