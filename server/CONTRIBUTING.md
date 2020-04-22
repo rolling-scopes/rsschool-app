@@ -19,7 +19,8 @@
 #### Prerequisites
 - NodeJS LTS
 - Python 2.7+
-- MongoDB 3.6+
+- [Docker](https://docs.docker.com/engine/install/) + [Docker-compose](https://docs.docker.com/compose/install/)
+- [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts)
 - Git 2.10+
 
 #### Steps
@@ -39,25 +40,26 @@ $ npm install
 ``` command-line
 $ git checkout -b feature-x master
 ```
-5. The application requires a connection to a MongoDB database. There are 2 options:
+5. The application requires a connection to a Postgres database. There are 2 steps:
 
-    * You may specify the following environment variables in order to connect to database:
+    * You should specify the following environment variables in order to connect to database in command line or rename .env.example to .env (point 9 below):
     ``` command-line
-        RSSHCOOL_API_MONGO_CONNECTION_STRING
-        RSSHCOOL_API_MONGO_USER
-        RSSHCOOL_API_MONGO_PASSWORD
+        RSSHCOOL_API_PG_HOST
+        RSSHCOOL_API_PG_USERNAME
+        RSSHCOOL_API_PG_PASSWORD
+        RSSHCOOL_API_PG_DATABASE
     ```
 
-    * You may run MongoDB locally with pre-imported test data using [Docker Compose file](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml) from [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts) repository.
-    Following commands will run MongoDB locally binded to 27107 port and will import test `Users` and `Courses` data.
+    * You should run Postgres locally with pre-imported test data using [Docker Compose file](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml) from [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts) repository.
+    Following commands will run Postgres locally binded to 5432 port and will import test `Users` and `Courses` data.
     ``` command-line
-    
         git clone git@github.com:rolling-scopes/rsschool-scripts.git
         cd rsschool-scripts/development
         docker-compose up
     ```
     For more information about Docker Compose, please check [Docker Compose documentation](https://docs.docker.com/compose/)
-    
+
+    * If you have some problems with connection to db, please check env variables password, user and db in [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml)
 
 6. Run the application in development mode with live reload:
 ``` command-line
@@ -96,7 +98,7 @@ $ git push origin feature-x
 
 * Check how to create a [pull request](https://help.github.com/articles/creating-a-pull-request/)
 * Send a pull request to `master` branch 
-* Write a meaninfull description
+* Write a meaningful description
 * Include screenshots and animated GIFs in your pull request whenever possible
 
 ## Styleguides

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "es2017",
     "outDir": "./dist",
+    "baseUrl": "./",
     "lib": ["es2017", "dom", "esnext.asynciterable", "ES2019.Array"]
   },
   "include": ["./**/*.ts", "./**/*.js"],
