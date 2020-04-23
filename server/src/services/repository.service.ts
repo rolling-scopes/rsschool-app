@@ -47,6 +47,9 @@ export class RepositoryService {
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     const github = await this.initGithub();
     for (const githubId of students) {
+      const owner = config.github.org;
+      const repo = this.getRepoName(githubId, course!);
+      this.logger?.info(`${owner}/${repo}`)
       await github.repos.enablePagesSite({
         repo: this.getRepoName(githubId, course!),
         owner: config.github.org,
