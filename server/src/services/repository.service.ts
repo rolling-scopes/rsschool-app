@@ -49,11 +49,11 @@ export class RepositoryService {
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = this.getRepoName(githubId, course!);
-      this.logger?.info(`${owner}/${repo}`)
+      this.logger?.info(`${owner}/${repo}`);
       await github.repos.enablePagesSite({
         repo: this.getRepoName(githubId, course!),
         owner: config.github.org,
-        source: { branch: 'gh-pages', path: '/' },
+        source: { branch: 'gh-pages' },
       });
     }
   }
@@ -97,7 +97,7 @@ export class RepositoryService {
     await github.repos.enablePagesSite({
       owner: org,
       repo: repoName,
-      source: { branch: 'gh-pages', path: '/' },
+      source: { branch: 'gh-pages' },
     });
     const student = await courseService.getStudentByGithubId(course.id, githubId);
     if (student == null) {
