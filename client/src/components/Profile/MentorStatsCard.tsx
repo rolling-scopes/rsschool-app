@@ -87,13 +87,13 @@ class MentorStatsCard extends React.Component<Props, State> {
               <List
                 itemLayout="horizontal"
                 dataSource={stats}
-                renderItem={({ courseName, locationName, students }, idx) => (
+                renderItem={({ courseName, courseLocationName, students }, idx) => (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ flexGrow: 2 }}>
                       <p style={{ fontSize: idx === 0 ? 20 : undefined, marginBottom: 5 }}>
                         <Text strong>
                           {courseName}
-                          {locationName && ` / ${locationName}`}
+                          {courseLocationName && ` / ${courseLocationName}`}
                         </Text>
                       </p>
                       {students ? (

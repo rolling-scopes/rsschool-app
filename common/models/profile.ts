@@ -67,14 +67,14 @@ export interface Consent {
 }
 
 export interface MentorStats {
+  courseLocationName: string;
   courseName: string;
-  locationName: string;
-  courseFullName: string;
   students?: {
     githubId: string;
     name: string;
     isExpelled: boolean;
     totalScore: number;
+    repoUrl?: string;
   }[];
 }
 

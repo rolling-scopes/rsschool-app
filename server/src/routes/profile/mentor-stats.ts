@@ -2,14 +2,16 @@ import { getRepository } from 'typeorm';
 import { MentorStats } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course } from '../../models';
+import { RepositoryService } from '../../services';
 
 export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =>
   (
     await getRepository(Mentor)
       .createQueryBuilder('mentor')
       .select('"course"."name" AS "courseName"')
-      .addSelect('"course"."locationName" AS "locationName"')
-      .addSelect('"course"."fullName" AS "courseFullName"')
+      .addSelect('"course"."alias" AS "courseAlias"')
+      .addSelect('"course"."id" AS "courseId"')
+      .addSelect('"course"."locationName" AS "courseLocationName"')
       .addSelect('ARRAY_AGG ("userStudent"."githubId") AS "studentGithubIds"')
       .addSelect('ARRAY_AGG ("userStudent"."firstName") AS "studentFirstNames"')
       .addSelect('ARRAY_AGG ("userStudent"."lastName") AS "studentLastNames"')
@@ -26,22 +28,27 @@ export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =
   ).map(
     ({
       courseName,
-      locationName,
-      courseFullName,
+      courseId,
+      courseAlias,
+      courseLocationName,
       studentGithubIds,
       studentFirstNames,
       studentLastNames,
       studentIsExpelledStatuses,
       studentTotalScores,
     }: any) => {
+      const repositoryService = new RepositoryService(Number(courseId));
       const students = studentGithubIds[0]
         ? studentGithubIds.map((githubId: string, idx: number) => ({
             githubId,
             name: getFullName(studentFirstNames[idx], studentLastNames[idx], githubId),
             isExpelled: studentIsExpelledStatuses[idx],
             totalScore: studentTotalScores[idx],
+            repoUrl: `https://github.com/rolling-scopes-school/${repositoryService.getRepoName(githubId, {
+              alias: courseAlias,
+            })}`,
           }))
         : undefined;
-      return { courseName, locationName, courseFullName, students };
+      return { courseLocationName, courseName, students };
     },
   );

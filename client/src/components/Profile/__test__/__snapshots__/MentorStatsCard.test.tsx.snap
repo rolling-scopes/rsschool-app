@@ -7,9 +7,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
     onHide={[Function]}
     stats={
       Object {
-        "courseFullName": "Rolling Scopes School 2020-Q1",
+        "courseLocationName": "Minsk",
         "courseName": "rs-2020-q1",
-        "locationName": "Minsk",
       }
     }
   />
@@ -51,25 +50,25 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
           dataSource={
             Array [
               Object {
-                "courseFullName": "Rolling Scopes School 2020-Q1",
+                "courseLocationName": "Minsk",
                 "courseName": "rs-2020-q1",
-                "locationName": "Minsk",
               },
               Object {
-                "courseFullName": "Rolling Scopes School 2018-Q1",
+                "courseLocationName": "Minsk",
                 "courseName": "rs-2018-q1",
-                "locationName": "Minsk",
                 "students": Array [
                   Object {
                     "githubId": "alex",
                     "isExpelled": false,
                     "name": "Alex Petrov",
+                    "repoUrl": "https://github.com/rolling-scopes-school/alex-RS2018Q1",
                     "totalScore": 3453,
                   },
                   Object {
                     "githubId": "vasya",
                     "isExpelled": true,
                     "name": "Vasiliy Alexandrov",
+                    "repoUrl": "https://github.com/rolling-scopes-school/vasya-RS2018Q1",
                     "totalScore": 120,
                   },
                 ],
@@ -99,9 +98,8 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
     onHide={[Function]}
     stats={
       Object {
-        "courseFullName": "Rolling Scopes School 2020-Q1",
+        "courseLocationName": "Minsk",
         "courseName": "rs-2020-q1",
-        "locationName": "Minsk",
       }
     }
   />
@@ -143,25 +141,25 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
           dataSource={
             Array [
               Object {
-                "courseFullName": "Rolling Scopes School 2020-Q1",
+                "courseLocationName": "Minsk",
                 "courseName": "rs-2020-q1",
-                "locationName": "Minsk",
               },
               Object {
-                "courseFullName": "Rolling Scopes School 2018-Q1",
+                "courseLocationName": "Minsk",
                 "courseName": "rs-2018-q1",
-                "locationName": "Minsk",
                 "students": Array [
                   Object {
                     "githubId": "alex",
                     "isExpelled": false,
                     "name": "Alex Petrov",
+                    "repoUrl": "https://github.com/rolling-scopes-school/alex-RS2018Q1",
                     "totalScore": 3453,
                   },
                   Object {
                     "githubId": "vasya",
                     "isExpelled": true,
                     "name": "Vasiliy Alexandrov",
+                    "repoUrl": "https://github.com/rolling-scopes-school/vasya-RS2018Q1",
                     "totalScore": 120,
                   },
                 ],
