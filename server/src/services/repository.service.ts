@@ -47,14 +47,7 @@ export class RepositoryService {
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     const github = await this.initGithub();
     for (const githubId of students) {
-      const owner = config.github.org;
-      const repo = this.getRepoName(githubId, course!);
-      this.logger?.info(`${owner}/${repo}`);
-      await github.repos.enablePagesSite({
-        repo: this.getRepoName(githubId, course!),
-        owner: config.github.org,
-        source: { branch: 'gh-pages' },
-      });
+      await this.enablePageSite(github, githubId, course!);
     }
   }
 
@@ -65,6 +58,31 @@ export class RepositoryService {
     });
     const github = new Octokit({ auth: `token ${installationAccessToken}` });
     return github;
+  }
+
+  private async enablePageSite(github: Octokit, githubId: string, course: Course) {
+    const owner = config.github.org;
+    const repo = this.getRepoName(githubId, course!);
+    const ownerRepo = `${owner}/${repo}`;
+    this.logger?.info(`Pages for [${ownerRepo}]`);
+    const pages = await github.repos.getPages({ owner, repo }).catch(() => null);
+    if (pages?.data.source.branch === 'gh-pages') {
+      this.logger?.info(`Pages already enabled for [${ownerRepo}]`);
+      return;
+    }
+    const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
+    if (ghPagesRef === null) {
+      const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
+      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
+    }
+    await github.repos
+      .enablePagesSite({ owner, repo: this.getRepoName(githubId, course!), source: { branch: 'gh-pages' } })
+      .catch(response => {
+        if (response.status !== 409 && response.status !== 500) {
+          throw response;
+        }
+      });
+    this.logger?.info(`Enabled Github Pages for [${ownerRepo}]`);
   }
 
   public getRepoName(githubId: string, course: { alias: string }) {
@@ -94,11 +112,7 @@ export class RepositoryService {
       github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
       github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
     ]);
-    await github.repos.enablePagesSite({
-      owner: org,
-      repo: repoName,
-      source: { branch: 'gh-pages' },
-    });
+    await this.enablePageSite(github, githubId, course!);
     const student = await courseService.getStudentByGithubId(course.id, githubId);
     if (student == null) {
       return null;
