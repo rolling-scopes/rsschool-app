@@ -19,6 +19,14 @@ export const createRepositories = (logger: ILogger) => async (ctx: Router.Router
   setResponse(ctx, OK, result);
 };
 
+export const updateRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId } = ctx.params as { courseId: number };
+
+  const repositoryService = new RepositoryService(courseId, logger);
+  const result = repositoryService.enableGhPages();
+  setResponse(ctx, OK, result);
+};
+
 export const createRepository = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params as { courseId: number; githubId: string };
   const repositoryService = new RepositoryService(courseId, logger);

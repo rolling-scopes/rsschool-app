@@ -14,7 +14,7 @@ const { appId, privateKey } = config.github;
 const app = new App({ id: Number(appId), privateKey });
 
 export class RepositoryService {
-  constructor(private courseId: number, private logger: ILogger) {}
+  constructor(private courseId: number, private logger?: ILogger) {}
 
   public async createMany(options: { includeNoMentor: boolean; includeNoTechnicalScreening: boolean }) {
     const result = [];
@@ -42,19 +42,42 @@ export class RepositoryService {
     return this.createRepositoryInternally(course, githubId);
   }
 
-  private async createRepositoryInternally(course: Course, githubId: string) {
-    const teamName = this.getTeamName(course);
-    let teamId = teamsCache[teamName];
-    const { org, installationId } = config.github;
+  public async enableGhPages() {
+    const course = await getRepository(Course).findOne(this.courseId);
+    const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
+    const github = await this.initGithub();
+    for (const githubId of students) {
+      await github.repos.enablePagesSite({
+        repo: this.getRepoName(githubId, course!),
+        owner: config.github.org,
+        source: { branch: 'gh-pages', path: '/' },
+      });
+    }
+  }
+
+  private async initGithub() {
+    const { installationId } = config.github;
     const installationAccessToken = await app.getInstallationAccessToken({
       installationId: Number(installationId),
     });
     const github = new Octokit({ auth: `token ${installationAccessToken}` });
+    return github;
+  }
+
+  public getRepoName(githubId: string, course: { alias: string }) {
+    return `${githubId}-${toUpper(camelCase(course.alias))}`;
+  }
+
+  private async createRepositoryInternally(course: Course, githubId: string) {
+    const teamName = this.getTeamName(course);
+    let teamId = teamsCache[teamName];
+    const { org } = config.github;
+    const github = await this.initGithub();
     if (!teamId) {
       teamId = await this.createTeam(github, teamName, course.id);
     }
     const repoName = this.getRepoName(githubId, course);
-    this.logger.info(`creating ${repoName}`);
+    this.logger?.info(`creating ${repoName}`);
     const response = await github.repos.createInOrg({
       org,
       name: repoName,
@@ -63,27 +86,28 @@ export class RepositoryService {
       gitignore_template: 'Node',
       description: `Private repository for @${githubId}`,
     });
-    this.logger.info(`adding team ${teamId} and user ${githubId}`);
+    this.logger?.info(`adding team ${teamId} and user ${githubId}`);
     await Promise.all([
       github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
       github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
     ]);
+    await github.repos.enablePagesSite({
+      owner: org,
+      repo: repoName,
+      source: { branch: 'gh-pages', path: '/' },
+    });
     const student = await courseService.getStudentByGithubId(course.id, githubId);
     if (student == null) {
       return null;
     }
     student.repository = response.data.html_url;
-    this.logger.info({ repository: student.repository });
+    this.logger?.info({ repository: student.repository });
     await getRepository(Student).save(student);
     return student;
   }
 
   getTeamName(course: Course) {
     return `mentors-${course.alias}`;
-  }
-
-  getRepoName(githubId: string, course: Course) {
-    return `${githubId}-${toUpper(camelCase(course.alias))}`;
   }
 
   async createTeam(github: Octokit, teamName: string, courseId: number) {
@@ -96,7 +120,7 @@ export class RepositoryService {
       courseTeam = response.data;
       teamsCache[teamName] = courseTeam.id;
       for (const maintainer of mentors) {
-        this.logger.info(`Inviting ${maintainer.githubId}`);
+        this.logger?.info(`Inviting ${maintainer.githubId}`);
         await github.teams.addOrUpdateMembership({ username: maintainer.githubId, team_id: courseTeam.id });
         await this.timeout(1000);
       }

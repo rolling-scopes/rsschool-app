@@ -8,15 +8,15 @@ describe('MentorStatsModal', () => {
     const output = shallow(
       <MentorStatsModal
         stats={{
-          courseName: 'rs-2018-q1',
-          locationName: 'Minsk',
-          courseFullName: 'Rolling Scopes School 2018-Q1',
+          courseLocationName: 'Minsk',
+          courseName: 'RS 2018 Q1',
           students: [
             {
               githubId: 'alex',
               name: 'Alex Petrov',
               isExpelled: false,
               totalScore: 3453,
+              repoUrl: 'https://github.com/rolling-scopes-school/alex-RS2018Q1',
             },
             {
               githubId: 'vasya',

@@ -15,16 +15,14 @@ type Props = {
 class MentorStatsModal extends React.Component<Props> {
   render() {
     const { stats, isVisible, onHide } = this.props;
-    const { courseFullName, students, courseName } = stats;
-    const courseYearPostfix = courseName;
+    const { courseName, students } = stats;
 
     return (
-      <Modal title={`${courseFullName} statistics`} visible={isVisible} onCancel={onHide} footer={null} width={'80%'}>
+      <Modal title={`${courseName} statistics`} visible={isVisible} onCancel={onHide} footer={null} width={'80%'}>
         <Row gutter={[16, 16]}>
-          {students?.map(({ name, githubId, isExpelled, totalScore }) => {
+          {students?.map(({ name, githubId, isExpelled, totalScore, repoUrl }) => {
             const profile = `/profile?githubId=${githubId}`;
             const guithubLink = `https://github.com/${githubId}`;
-            const privateRepoLink = `https://github.com/rolling-scopes-school/${githubId}-${courseYearPostfix}`;
 
             return (
               <Col
@@ -63,8 +61,8 @@ class MentorStatsModal extends React.Component<Props> {
                     </p>
                     <p style={{ marginBottom: 5 }}>
                       <LockFilled />{' '}
-                      <a href={privateRepoLink} target="_blank">
-                        {`${githubId}-${courseYearPostfix}`}
+                      <a href={repoUrl} target="_blank">
+                        {repoUrl?.split('/').pop()}
                       </a>
                     </p>
                   </Col>

@@ -7,7 +7,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
   maskTransitionName="fade"
   okType="primary"
   onCancel={[MockFunction]}
-  title="Rolling Scopes School 2018-Q1 statistics"
+  title="RS 2018 Q1 statistics"
   transitionName="zoom"
   visible={true}
   width="80%"
@@ -136,10 +136,10 @@ exports[`MentorStatsModal Should render correctly 1`] = `
             <ForwardRef(LockFilled) />
              
             <a
-              href="https://github.com/rolling-scopes-school/alex-rs-2018-q1"
+              href="https://github.com/rolling-scopes-school/alex-RS2018Q1"
               target="_blank"
             >
-              alex-rs-2018-q1
+              alex-RS2018Q1
             </a>
           </p>
         </Col>
@@ -261,11 +261,8 @@ exports[`MentorStatsModal Should render correctly 1`] = `
             <ForwardRef(LockFilled) />
              
             <a
-              href="https://github.com/rolling-scopes-school/vasya-rs-2018-q1"
               target="_blank"
-            >
-              vasya-rs-2018-q1
-            </a>
+            />
           </p>
         </Col>
       </Row>

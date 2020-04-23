@@ -42,7 +42,7 @@ import * as stageInterview from './stageInterview';
 import * as interviews from './interviews';
 
 import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } from './tasks';
-import { createRepository, createRepositories } from './repository';
+import { createRepository, createRepositories, updateRepositories } from './repository';
 import { validateGithubIdAndAccess, validateGithubId } from '../validators';
 import {
   updateStudentStatus,
@@ -72,6 +72,7 @@ export function courseRoute(logger: ILogger) {
 
   router.post('/certificates', courseManagerGuard, postCertificates(logger));
   router.post('/repositories', courseManagerGuard, createRepositories(logger));
+  router.put('/repositories', courseManagerGuard, updateRepositories(logger));
   router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);
