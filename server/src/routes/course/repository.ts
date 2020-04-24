@@ -12,11 +12,19 @@ export const createRepositories = (logger: ILogger) => async (ctx: Router.Router
   };
 
   const repositoryService = new RepositoryService(courseId, logger);
-  const result = repositoryService.createMany({
+  repositoryService.createMany({
     includeNoMentor: options.includeNoMentor,
     includeNoTechnicalScreening: options.includeNoTechnicalScreening,
   });
-  setResponse(ctx, OK, result);
+  setResponse(ctx, OK);
+};
+
+export const updateRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId } = ctx.params as { courseId: number };
+
+  const repositoryService = new RepositoryService(courseId, logger);
+  repositoryService.enableGhPages();
+  setResponse(ctx, OK);
 };
 
 export const createRepository = (logger: ILogger) => async (ctx: Router.RouterContext) => {

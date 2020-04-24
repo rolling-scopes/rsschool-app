@@ -141,6 +141,18 @@ export class StudentRepository extends AbstractRepository<Student> {
     return students;
   }
 
+  public async findWithRepository(courseId: number) {
+    const query = await getRepository(Student)
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'sUser')
+      .addSelect(['student.id', 'sUser.githubId'])
+      .where('student.courseId = :courseId', { courseId })
+      .andWhere('student.isExpelled = false AND student.isFailed = false')
+      .andWhere('student.repository IS NOT NULL');
+    const items = await query.getMany();
+    return items.map(m => m.user.githubId);
+  }
+
   public async findEliggibleForRepository(
     courseId: number,
     options: {
@@ -166,8 +178,8 @@ export class StudentRepository extends AbstractRepository<Student> {
       query = query.andWhere('student.mentorId IS NOT NULL');
     }
 
-    const mentors = await query.getMany();
-    return mentors.map(m => m.user.githubId);
+    const items = await query.getMany();
+    return items.map(m => m.user.githubId);
   }
 
   public async findForExpel(
