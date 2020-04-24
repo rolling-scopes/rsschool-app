@@ -36,7 +36,7 @@ $ git clone git@github.com:[username]/rsschool-api.git
 $ cd rsschool-api
 $ npm install
 ```
-4. Create a branch for your feature
+4. If you plan to change the server part, please create a branch for your feature
 ``` command-line
 $ git checkout -b feature-x master
 ```
@@ -73,7 +73,7 @@ $ npm start
 - [] // no team -> student
 ```
 
-9. You could specify any environment variable during development using `.env` file. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+9. You could specify any environment variable during development using `.env` file. Make a copy of `server/.env.example` and rename it to `server/.env`. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
 
 **IMPORTANT:** Never commit changes to `.env` file
 

@@ -32,11 +32,9 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
   ### Steps
   - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
   - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
-  - Run `npm run db:up` (starts local database)
-  - Run `npm run db:restore`  (restore a test DB snapshot)
-  - Make a copy of `server/.env.example` and rename it to `server/.env`
-  - Run `npm start` (starts application by running Next.js and REST API server)
-  - Open `https://localhost:3000` in a browser
+  - Read documentation about server `server/CONTRIBUTING.md` at least from 1 to 7 paragraphs
+  - Open terminal, navigate into the directory `client` and run `npm start` (starts application by running Next.js and REST API server)
+  - Open `http://localhost:3000` in a browser
 
 ## Contributors
 
