@@ -35,6 +35,7 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
   - Read documentation about server `server/CONTRIBUTING.md` at least from 1 to 7 paragraphs
   - Open terminal, navigate into the directory `client` and run `npm start` (starts application by running Next.js and REST API server)
   - Open `http://localhost:3000` in a browser
+  - If you want to look routes on the server, you can open `http://localhost:3001/swagger` in a browser
 
 ## Contributors
 
