@@ -103,7 +103,7 @@ export default withCourseData(withSession(Page, 'student'));
 function CrossCheckComments({
   comments,
 }: {
-  comments: { comment: string; author: { name: string; githubId: string } | null }[];
+  comments: { comment: string; score: number | null; author: { name: string; githubId: string } | null }[];
 }) {
   if (!comments || comments.length === 0) {
     return null;
@@ -111,16 +111,25 @@ function CrossCheckComments({
   const style = { margin: 16, fontStyle: 'italic' };
   return (
     <Col>
-      {comments.map(({ comment, author }, i) => (
+      {comments.map(({ comment, author, score }, i) => (
         <Row key={i}>
           <Divider />
           <Comment
             style={style}
             author={author ? <GithubUserLink value={author.githubId} /> : `Student ${i + 1}`}
             avatar={<UserOutlined />}
-            content={comment.split('\n').map((text, k) => (
-              <p key={k}>{text}</p>
-            ))}
+            content={
+              <>
+                {score ? (
+                  <p>
+                    <b>Score: {score}</b>
+                  </p>
+                ) : null}
+                {comment.split('\n').map((text, k) => (
+                  <p key={k}>{text}</p>
+                ))}
+              </>
+            }
           />
         </Row>
       ))}
