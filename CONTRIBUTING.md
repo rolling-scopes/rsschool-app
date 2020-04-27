@@ -17,65 +17,62 @@
 ### Local development
 
 #### Prerequisites
-- NodeJS LTS
-- Python 2.7+
-- MongoDB 3.6+
-- Git 2.10+
+- [Git 2.10+](https://git-scm.com/downloads)
+- [NodeJS LTS](https://nodejs.org/en/)
+- [Docker](https://docs.docker.com/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 #### Steps
 1. Fork the repository (https://help.github.com/articles/fork-a-repo/)
+
 2. Clone the repository to your local machine (https://help.github.com/articles/cloning-a-repository/)
 
 ``` command-line
-$ git clone git@github.com:[username]/rsschool-api.git
+$ git clone git@github.com:[username]/rsschool-app.git
 ```
 3. Navigate into the directory where you've cloned the source code and install NPM dependencies
 
 ``` command-line
-$ cd rsschool-api
+$ cd rsschool-app
 $ npm install
 ```
-4. Create a branch for your feature
+4. If you plan to change the server part, please create a branch for your feature
 ``` command-line
 $ git checkout -b feature-x master
 ```
-5. The application requires a connection to a MongoDB database. There are 2 options:
 
-    * You may specify the following environment variables in order to connect to database:
-    ``` command-line
-        RSSHCOOL_API_MONGO_CONNECTION_STRING
-        RSSHCOOL_API_MONGO_USER
-        RSSHCOOL_API_MONGO_PASSWORD
-    ```
+5. The application requires a connection to a Postgres database. Here is how to get test database running locally:
 
-    * You may run MongoDB locally with pre-imported test data using [Docker Compose file](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml) from [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts) repository.
-    Following commands will run MongoDB locally binded to 27107 port and will import test `Users` and `Courses` data.
-    ``` command-line
-    
-        git clone git@github.com:rolling-scopes/rsschool-scripts.git
-        cd rsschool-scripts/development
-        docker-compose up
-    ```
-    For more information about Docker Compose, please check [Docker Compose documentation](https://docs.docker.com/compose/)
-    
+Run a Postgres Database locally using Docker & Docker Compose
+``` command-line
+$ npm run db:up
+```
+
+Restore a test database snapshot
+``` command-line
+$ npm run db:restore
+```
+
+If you are done with development, stop the database;
+``` command-line
+$ npm run db:down
+```
 
 6. Run the application in development mode with live reload:
 ``` command-line
 $ npm start
 ```
-7. Do hacking 👩‍💻👨‍💻 
-8. By default locally, you will be logged in as a `mentor` with `admin` access. If you want to change it, need to update [devAuthMiddleware.ts:14](https://github.com/rolling-scopes/rsschool-api/blob/master/app/routes/auth/devAuthMiddleware.ts#L14) locally and specify what team you belong to:
-```
-- config.roles.adminTeams // admin team (default)
-- config.roles.mentorTeams // mentor team
-- [] // no team -> student
-```
 
-9. You could specify any environment variable during development using `.env` file. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+7. Do hacking 👩‍💻👨‍💻 
+
+8. You could specify any environment variable during development using `.env` file. Make a copy of `server/.env.example` and rename it to `server/.env`. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+
+9. By default locally, you will be logged with `admin` access. If you want to change it, need to set `RSSHCOOL_DEV_ADMIN` to `false` in `.env` file
 
 **IMPORTANT:** Never commit changes to `.env` file
 
 10. Do not forget to write [Jest](https://facebook.github.io/jest/) specs for your feature following [Specs Styleguide](#specs-styleguide)
+
 11. Make sure specs, lints pass and code formatted properly (they'll be run on a git pre-commit hook too)
 ``` command-line
 $ npm test
@@ -96,7 +93,7 @@ $ git push origin feature-x
 
 * Check how to create a [pull request](https://help.github.com/articles/creating-a-pull-request/)
 * Send a pull request to `master` branch 
-* Write a meaninfull description
+* Write a meaningful description
 * Include screenshots and animated GIFs in your pull request whenever possible
 
 ## Styleguides
