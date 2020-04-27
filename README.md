@@ -23,7 +23,7 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 
   ### Prerequisites
 
-  - [Git](https://git-scm.com/downloads) 2.10+
+  - [Git 2.10+](https://git-scm.com/downloads)
   - [NodeJS LTS](https://nodejs.org/en/)
   - [Docker](https://docs.docker.com/install/)
   - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -32,10 +32,16 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
   ### Steps
   - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
   - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
-  - Read documentation about server `server/CONTRIBUTING.md` at least from 1 to 7 paragraphs
-  - Open terminal, navigate into the directory `client` and run `npm start` (starts application by running Next.js and REST API server)
-  - Open `http://localhost:3000` in a browser
-  - If you want to look routes on the server, you can open `http://localhost:3001/swagger` in a browser
+  - Run `npm run db:up` (starts local database)
+  - Run `npm run db:restore`  (restore a test DB snapshot)
+  - Make a copy of `server/.env.example` and rename it to `server/.env`
+  - Run `npm start` (starts application by running Next.js and REST API server)
+  - Open `https://localhost:3000` in a browser
+
+## Contributing
+
+See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
+
 
 ## Contributors
 
