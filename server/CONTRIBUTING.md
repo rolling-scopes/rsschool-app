@@ -18,9 +18,7 @@
 
 #### Prerequisites
 - NodeJS LTS
-- Python 2.7+
 - [Docker](https://docs.docker.com/engine/install/) + [Docker-compose](https://docs.docker.com/compose/install/)
-- [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts)
 - Git 2.10+
 
 #### Steps
@@ -28,52 +26,34 @@
 2. Clone the repository to your local machine (https://help.github.com/articles/cloning-a-repository/)
 
 ``` command-line
-$ git clone git@github.com:[username]/rsschool-api.git
+$ git clone git@github.com:[username]/rsschool-app.git
 ```
 3. Navigate into the directory where you've cloned the source code and install NPM dependencies
 
 ``` command-line
-$ cd rsschool-api
+$ cd rsschool-app
 $ npm install
 ```
 4. If you plan to change the server part, please create a branch for your feature
 ``` command-line
 $ git checkout -b feature-x master
 ```
-5. The application requires a connection to a Postgres database. There are 2 steps:
+5. The application requires a connection to a Postgres database. There are 2 steps how to set up local database. Run the following commands in the root of the repository:
 
-    * You should specify the following environment variables in order to connect to database in command line or rename .env.example to .env (point 9 below):
-    ``` command-line
-        RSSHCOOL_API_PG_HOST
-        RSSHCOOL_API_PG_USERNAME
-        RSSHCOOL_API_PG_PASSWORD
-        RSSHCOOL_API_PG_DATABASE
-    ```
-
-    * You should run Postgres locally with pre-imported test data using [Docker Compose file](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml) from [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts) repository.
-    Following commands will run Postgres locally binded to 5432 port and will import test `Users` and `Courses` data.
-    ``` command-line
-        git clone git@github.com:rolling-scopes/rsschool-scripts.git
-        cd rsschool-scripts/development
-        docker-compose up
-    ```
-    For more information about Docker Compose, please check [Docker Compose documentation](https://docs.docker.com/compose/)
-
-    * If you have some problems with connection to db, please check env variables password, user and db in [rsschool-scripts](https://github.com/rolling-scopes/rsschool-scripts/blob/master/development/docker-compose.yml)
+``` command-line
+$ npm run db:up
+$ npm run db:restore
+```
 
 6. Run the application in development mode with live reload:
 ``` command-line
 $ npm start
 ```
 7. Do hacking 👩‍💻👨‍💻 
-8. By default locally, you will be logged in as a `mentor` with `admin` access. If you want to change it, need to update [devAuthMiddleware.ts:14](https://github.com/rolling-scopes/rsschool-api/blob/master/app/routes/auth/devAuthMiddleware.ts#L14) locally and specify what team you belong to:
-```
-- config.roles.adminTeams // admin team (default)
-- config.roles.mentorTeams // mentor team
-- [] // no team -> student
-```
 
-9. You could specify any environment variable during development using `.env` file. Make a copy of `server/.env.example` and rename it to `server/.env`. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+8. You could specify any environment variable during development using `.env` file. Make a copy of `server/.env.example` and rename it to `server/.env`. We support it via `dotenv` package. More information about usage here: https://github.com/motdotla/dotenv.
+
+9. By default locally, you will be logged with `admin` access. If you want to change it, need to set `RSSHCOOL_DEV_ADMIN` to `false` in `.env` file
 
 **IMPORTANT:** Never commit changes to `.env` file
 
