@@ -1,7 +1,14 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
-import { dateRenderer, getColumnSearchProps, numberSorter, dateSorter, stringSorter } from 'components/Table';
+import {
+  dateTimeRenderer,
+  dateRenderer,
+  getColumnSearchProps,
+  numberSorter,
+  dateSorter,
+  stringSorter,
+} from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { CourseService, StudentScore, CourseTask } from 'services/course';
@@ -192,7 +199,7 @@ function getColumns(courseTasks: CourseTask[]) {
           content={
             <ul>
               <li>Coefficient: {courseTask.scoreWeight}</li>
-              <li>Deadline: {dateRenderer(courseTask.studentEndDate)}</li>
+              <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
             </ul>
           }
           trigger="click"
