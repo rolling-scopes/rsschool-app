@@ -5,6 +5,7 @@ import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from '../../../../../common/models/profile';
 
 describe('', () => {
+  const githubId = 'test';
   const data = [
     {
       courseId: 1,
@@ -108,20 +109,35 @@ describe('', () => {
   describe('Should render correctly', () => {
     it('if is editing mode disabled', () => {
       const output = mount(
-        <StudentStatsCard data={data} isEditingModeEnabled={false} onPermissionsSettingsChange={jest.fn()} />,
+        <StudentStatsCard
+          data={data}
+          isEditingModeEnabled={false}
+          onPermissionsSettingsChange={jest.fn()}
+          username={githubId}
+        />,
       );
       expect(mountToJson(output)).toMatchSnapshot();
     });
     it('if is editing mode enabled', () => {
       const output = mount(
-        <StudentStatsCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
+        <StudentStatsCard
+          data={data}
+          isEditingModeEnabled={true}
+          onPermissionsSettingsChange={jest.fn()}
+          username={githubId}
+        />,
       );
       expect(mountToJson(output)).toMatchSnapshot();
     });
   });
 
   const wrapper = shallow(
-    <StudentStatsCard data={data} isEditingModeEnabled={true} onPermissionsSettingsChange={jest.fn()} />,
+    <StudentStatsCard
+      data={data}
+      isEditingModeEnabled={true}
+      onPermissionsSettingsChange={jest.fn()}
+      username={githubId}
+    />,
   );
   const instance: any = wrapper.instance();
   describe('showStudentStatsModal', () => {
