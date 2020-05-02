@@ -353,6 +353,7 @@ export class ProfilePage extends React.Component<Props, State> {
       ),
       profile?.studentStats?.length && (
         <StudentStatsCard
+          username={this.props.session.githubId}
           data={profile.studentStats}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
