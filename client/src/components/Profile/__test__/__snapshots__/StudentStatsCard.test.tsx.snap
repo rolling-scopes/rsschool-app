@@ -105,6 +105,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
   }
   isEditingModeEnabled={false}
   onPermissionsSettingsChange={[MockFunction]}
+  username="test"
 >
   <StudentStatsModal
     courseProgress={100}
@@ -1629,6 +1630,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
   }
   isEditingModeEnabled={true}
   onPermissionsSettingsChange={[MockFunction]}
+  username="test"
 >
   <StudentStatsModal
     courseProgress={100}

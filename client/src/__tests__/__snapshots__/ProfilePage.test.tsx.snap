@@ -640,6 +640,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                   },
                 }
               }
+              username="mikhama"
             />
           </div>
           <div
