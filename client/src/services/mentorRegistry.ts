@@ -10,8 +10,8 @@ export interface MentorRegistry {
 export class MentorRegistryService {
   private axios: AxiosInstance;
 
-  constructor() {
-    this.axios = axios.create({ baseURL: `/api/registry` });
+  constructor(private courseId: number) {
+    this.axios = axios.create({ baseURL: `/api/registry/${this.courseId}` });
   }
 
   public async getMentors() {

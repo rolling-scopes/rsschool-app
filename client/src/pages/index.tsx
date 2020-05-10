@@ -257,8 +257,6 @@ const courseManagementRoutes = [
   },
 ];
 
-const mentorRegistryService = new MentorRegistryService();
-
 class IndexPage extends React.PureComponent<Props, State> {
   state: State = {
     dropdownOpen: false,
@@ -353,6 +351,9 @@ class IndexPage extends React.PureComponent<Props, State> {
     const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
     this.setState({ allCourses });
     if (!activeCourse) {
+      const coursesRoles = this.props.session.coursesRoles;
+      const courseId = coursesRoles && Object.keys(coursesRoles)[0];
+      const mentorRegistryService = new MentorRegistryService(Number(courseId));
       const mentor = await mentorRegistryService.getMentor();
       const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
       this.setState({ preselectedCourses });
@@ -442,7 +443,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} />}
+          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} isCourseManager={isCourseManager} />}
 
           <Layout style={{ background: '#fff' }}>
             <Header username={this.props.session.githubId} />
