@@ -4,11 +4,11 @@ import { getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
-import { IUserSession } from '../../models/session';
+import { IUserSession } from '../../models';
 import { getUserByGithubId } from '../../services/user.service';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
-import { adminGuard } from '../guards';
+import { adminGuard, courseManagerGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { notificationService } from '../../services';
 
@@ -78,7 +78,7 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK);
   });
 
-  router.put('/mentor/:githubId', adminGuard, async (ctx: Router.RouterContext) => {
+  router.put('/:courseId/mentor/:githubId', courseManagerGuard, async (ctx: Router.RouterContext) => {
     const githubId = ctx.params.githubId;
 
     const { preselectedCourses } = ctx.request.body;
@@ -112,11 +112,31 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK, result);
   });
 
-  router.get('/mentors', adminGuard, async (ctx: Router.RouterContext) => {
+  router.get('/:courseId/mentors', courseManagerGuard, async (ctx: Router.RouterContext) => {
+    const state = ctx.state!.user as IUserSession;
     const mentorRegistries = await getMentorRegistries();
 
     const data = mentorRegistries.map(transformMentorRegistry);
-    setResponse(ctx, OK, data);
+    if (state.isAdmin) {
+      setResponse(ctx, OK, data);
+    } else {
+      const coursesRoles = state.coursesRoles;
+      if (coursesRoles) {
+        const coursesIds: Array<number> = [];
+        for (const [key, value] of Object.entries(coursesRoles)) {
+          value?.map(role => {
+            role === 'manager' && coursesIds.push(Number(key));
+          });
+        }
+        const mentors = data.reduce((result: Array<any>, mentor) => {
+          if (mentor.preferedCourses.some((course: number) => coursesIds.includes(course))) {
+            result.push(mentor);
+          }
+          return result;
+        }, []);
+        setResponse(ctx, OK, mentors);
+      }
+    }
   });
 
   router.get('/mentors/csv', adminGuard, async (ctx: Router.RouterContext) => {

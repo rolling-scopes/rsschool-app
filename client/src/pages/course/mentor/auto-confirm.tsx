@@ -2,21 +2,25 @@ import { Button, Col, Result, Row, Typography } from 'antd';
 import { PageLayout } from 'components';
 import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from '../../../../../common/models';
 
-const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session }) {
+  const coursesRoles = props.session.coursesRoles;
+  const courseId = coursesRoles && Object.keys(coursesRoles)[0];
+
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
   const [success, setSuccess] = useState(false);
   const [course, setCourse] = useState(null as Course | null);
+
+  const mentorRegistry = useMemo(() => new MentorRegistryService(Number(courseId)), [courseId]);
 
   useAsync(async () => {
     try {
