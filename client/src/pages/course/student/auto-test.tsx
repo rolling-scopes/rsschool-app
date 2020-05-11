@@ -279,7 +279,8 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 
 function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
-    task => task.studentEndDate &&
+    task =>
+      task.studentEndDate &&
       (new Date(task.studentEndDate).getTime() > Date.now() ||
         task.type === 'codewars:stage1' ||
         task.type === 'codewars:stage2') &&
