@@ -10,10 +10,8 @@ import { CoursesService } from 'services/courses';
 import { CourseService } from 'services/course';
 import { FormInstance } from 'antd/lib/form';
 
+const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session }) {
-  const coursesRoles = props.session.coursesRoles;
-  const courseId = coursesRoles && Object.keys(coursesRoles)[0];
-
   const router = useRouter();
 
   const [form] = Form.useForm();
@@ -22,8 +20,6 @@ function Page(props: { session: Session }) {
   const [success, setSuccess] = useState(false);
   const [mentorData, setMentorData] = useState(null as object | null);
   const [course, setCourse] = useState(null as Course | null);
-
-  const mentorRegistry = useMemo(() => new MentorRegistryService(Number(courseId)), [courseId]);
 
   const courseService = useMemo(() => {
     if (!course) {

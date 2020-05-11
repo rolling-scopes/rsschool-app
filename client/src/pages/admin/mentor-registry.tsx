@@ -1,8 +1,8 @@
 import { Col, Row, Layout, Select, Spin, Table, Form, message, Checkbox, Button } from 'antd';
-import { AdminSider, GithubUserLink, Header, Session } from 'components';
+import { AdminSider, GithubUserLink, Header } from 'components';
 import { stringSorter, tagsRenderer, colorTagRenderer, getColumnSearchProps } from 'components/Table';
-import withSession from 'components/withSession';
-import { useState, useCallback, useMemo } from 'react';
+import withSession, { Session } from 'components/withSession';
+import { useState, useCallback } from 'react';
 import { useAsync } from 'react-use';
 import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
@@ -16,11 +16,10 @@ const { Content } = Layout;
 const PAGINATION = 200;
 
 type Props = { courses: Course[]; session: Session };
+const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
 
 function Page(props: Props) {
-  const coursesRoles = props.session.coursesRoles;
-  const courseId = coursesRoles && Object.keys(coursesRoles)[0];
   const [loading, setLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -31,7 +30,6 @@ function Page(props: Props) {
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [modalData, setModalData] = useState(null as Partial<any> | null);
-  const mentorRegistryService = useMemo(() => new MentorRegistryService(Number(courseId)), [courseId]);
 
   const updateData = (showAll: boolean, allData: any[]) => {
     setShowAll(showAll);
