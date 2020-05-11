@@ -61,6 +61,14 @@ function Page(props: CoursePageProps) {
         });
         return;
       }
+      if (error.response?.status === 423) {
+        notification.error({
+          message: (
+            <>Please reload page. This task was expired for submit.</>
+          ),
+        });
+        return;
+      }
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
@@ -271,14 +279,25 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 
 function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
-    task =>
-      task.studentEndDate &&
+    task => {
+
+      console.log(task)
+      console.log(task.studentEndDate)
+      console.log(new Date(task.studentEndDate as any).getTime() > Date.now())
+      console.log('task.type === \'codewars:stage1\'', task.type === 'codewars:stage1')
+      console.log('task.type === \'codewars:stage2\'', task.type === 'codewars:stage2')
+      console.log('task.verification === \'auto\'', task.verification === 'auto')
+      console.log('task.checker === \'auto-test\'', task.checker === 'auto-test')
+      console.log('task.checker !== \'taskOwner\'', task.checker !== 'taskOwner')
+      console.log('task.type !== \'test\'', task.type !== 'test')
+      return task.studentEndDate &&
       (new Date(task.studentEndDate).getTime() > Date.now() ||
         task.type === 'codewars:stage1' ||
         task.type === 'codewars:stage2') &&
       (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
-      task.type !== 'test',
+      task.type !== 'test'
+    }
   );
 }
 
