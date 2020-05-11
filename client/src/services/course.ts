@@ -219,7 +219,8 @@ export class CourseService {
     await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
   }
   async selfExpel(githubId: string, comment: string = '') {
-    await this.axios.post(`/student/${githubId}/status-self`, { comment, status: 'expelled' });
+    const result = await this.axios.post(`/student/${githubId}/status-self`, { comment, status: 'expelled' });
+    return result;
   }
 
   async expelStudents(data: { courseTaskIds?: number[]; minScore?: number; expellingReason: string }) {

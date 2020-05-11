@@ -10,7 +10,7 @@ export function timeRenderer(value: string) {
   return value ? moment(value, 'HH:mm:ssZ').format('HH:mm') : '';
 }
 
-export function dateTimeRenderer(value: string) {
+export function dateTimeRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD HH:mm') : '';
 }
 

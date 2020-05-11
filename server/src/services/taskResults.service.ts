@@ -61,7 +61,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   const comments = (
     await getRepository(TaskSolutionResult)
       .createQueryBuilder('tsr')
-      .select(['tsr.comment', 'tsr.anonymous'])
+      .select(['tsr.comment', 'tsr.anonymous', 'tsr.score'])
       .innerJoin('tsr.checker', 'checker')
       .innerJoin('checker.user', 'user')
       .addSelect(['checker.id', ...getPrimaryUserFields('user')])
@@ -78,6 +78,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
     return {
       author,
       comment: c.comment,
+      score: !c.anonymous ? c.score : null,
     };
   });
   const taskSolution = await getRepository(TaskSolution)

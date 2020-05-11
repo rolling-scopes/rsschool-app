@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress } from 'antd';
+import { Typography, List, Button, Progress, Popconfirm } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
@@ -8,6 +8,7 @@ import { ConfigurableProfilePermissions } from '../../../../common/models/profil
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
+import { CourseService } from '../../services/course';
 
 const { Text } = Typography;
 
@@ -16,6 +17,7 @@ type Props = {
   isEditingModeEnabled: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
+  username: string;
 };
 
 type State = {
@@ -54,6 +56,14 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isStudentStatsModalVisible: false });
   };
 
+  private selfExpelStudent = async (gitHubId: string, courseId: number) => {
+    const courseService = new CourseService(courseId);
+    const result = await courseService.selfExpel(gitHubId, courseId.toString());
+    if (result.status === 200) {
+      window.location.reload();
+    }
+  };
+
   private countScoredTasks = (tasks: { score: number }[]) => tasks.filter(({ score }) => score !== null).length;
   private countCourseCompletionPercentage = (tasks: { score: number }[]) =>
     Number(((tasks.filter(({ score }) => score !== null).length / tasks.length) * 100).toFixed(1));
@@ -68,6 +78,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   render() {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
     const stats = this.props.data;
+    const gitHubId: string = this.props.username;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
     return (
       <>
@@ -95,6 +106,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                   position,
                   isCourseCompleted,
                   certificateId,
+                  courseId,
                 },
                 idx,
               ) => (
@@ -134,6 +146,16 @@ class StudentStatsCard extends React.Component<Props, State> {
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
                       Score: <Text mark>{totalScore}</Text>
                     </p>
+                    {!(isExpelled || isCourseCompleted) ? (
+                      <Popconfirm
+                        onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
+                        title="Are you sure you want to expel yourself from course?"
+                      >
+                        <a href="#">Self expel</a>
+                      </Popconfirm>
+                    ) : (
+                      ''
+                    )}
                   </div>
                   <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
                     <FullscreenOutlined />

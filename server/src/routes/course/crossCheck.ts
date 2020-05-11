@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
 import { createCrossCheckPairs } from '../../rules/distribution';
-import { courseService, taskResultsService, taskService } from '../../services';
+import { courseService, taskResultsService, taskService, notificationService } from '../../services';
 import { setErrorResponse, setResponse } from '../utils';
 
 type Input = { url: string };
@@ -143,17 +143,18 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     historicalScores.push(historicalResult);
     await repository.update(existing.id, { ...data, historicalScores });
     setResponse(ctx, OK);
-    return;
+  } else {
+    await repository.insert({
+      studentId: taskChecker.studentId,
+      checkerId: taskChecker.checkerId,
+      courseTaskId: taskChecker.courseTaskId,
+      historicalScores: [historicalResult],
+      ...data,
+    });
   }
-
-  await repository.insert({
-    studentId: taskChecker.studentId,
-    checkerId: taskChecker.checkerId,
-    courseTaskId: taskChecker.courseTaskId,
-    historicalScores: [historicalResult],
-    ...data,
-  });
   setResponse(ctx, OK);
+  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score);
+  await notificationService.sendNotification([githubId], taskResultText);
 };
 
 export const getResult = (_: ILogger) => async (ctx: Router.RouterContext) => {

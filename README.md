@@ -23,7 +23,7 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 
   ### Prerequisites
 
-  - [Git](https://git-scm.com/downloads) 2.10+
+  - [Git 2.10+](https://git-scm.com/downloads)
   - [NodeJS LTS](https://nodejs.org/en/)
   - [Docker](https://docs.docker.com/install/)
   - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -37,6 +37,11 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
   - Make a copy of `server/.env.example` and rename it to `server/.env`
   - Run `npm start` (starts application by running Next.js and REST API server)
   - Open `https://localhost:3000` in a browser
+
+## Contributing
+
+See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
+
 
 ## Contributors
 
