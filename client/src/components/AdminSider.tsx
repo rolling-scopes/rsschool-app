@@ -6,6 +6,7 @@ import {
   QuestionOutlined,
   TeamOutlined,
   IdcardFilled,
+  HomeOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
@@ -31,8 +32,15 @@ export function AdminSider(props: Props) {
       </h4>
 
       <Menu theme="dark" mode="inline">
+        <Menu.Item key="1">
+          <a href="/">
+            <HomeOutlined />
+            <span>Main</span>
+          </a>
+        </Menu.Item>
+
         {props.isAdmin ? (
-          <Menu.Item key="1">
+          <Menu.Item key="2">
             <a href="/admin/courses">
               <GlobalOutlined />
               <span>Courses</span>
