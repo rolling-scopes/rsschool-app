@@ -4,11 +4,11 @@ import { getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
-import { IUserSession } from '../../models/session';
+import { IUserSession } from '../../models';
 import { getUserByGithubId } from '../../services/user.service';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
-import { adminGuard } from '../guards';
+import { adminGuard, anyCourseManagerGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { notificationService } from '../../services';
 
@@ -78,7 +78,7 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK);
   });
 
-  router.put('/mentor/:githubId', adminGuard, async (ctx: Router.RouterContext) => {
+  router.put('/mentor/:githubId', anyCourseManagerGuard, async (ctx: Router.RouterContext) => {
     const githubId = ctx.params.githubId;
 
     const { preselectedCourses } = ctx.request.body;
@@ -112,14 +112,29 @@ export function registryRouter(logger?: ILogger) {
     setResponse(ctx, OK, result);
   });
 
-  router.get('/mentors', adminGuard, async (ctx: Router.RouterContext) => {
-    const mentorRegistries = await getMentorRegistries();
+  router.get('/mentors', anyCourseManagerGuard, async (ctx: Router.RouterContext) => {
+    const state = ctx.state!.user as IUserSession;
+    let mentorRegistries: Array<any> = [];
 
+    if (state.isAdmin) {
+      mentorRegistries = await getMentorRegistries();
+    } else {
+      const coursesRoles = state.coursesRoles;
+      if (coursesRoles) {
+        const coursesIds: Array<number> = [];
+        for (const [key, value] of Object.entries(coursesRoles)) {
+          value?.map(role => {
+            role === 'manager' && coursesIds.push(Number(key));
+          });
+        }
+        mentorRegistries = await getMentorRegistries(coursesIds);
+      }
+    }
     const data = mentorRegistries.map(transformMentorRegistry);
     setResponse(ctx, OK, data);
   });
 
-  router.get('/mentors/csv', adminGuard, async (ctx: Router.RouterContext) => {
+  router.get('/mentors/csv', anyCourseManagerGuard, async (ctx: Router.RouterContext) => {
     const mentorRegistries = await getMentorRegistries();
     const data = mentorRegistries.map(transformMentorRegistry);
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
@@ -243,8 +258,8 @@ export function registryRouter(logger?: ILogger) {
   return router;
 }
 
-async function getMentorRegistries() {
-  return await getRepository(MentorRegistry)
+async function getMentorRegistries(coursesIds?: Array<any>) {
+  const data = getRepository(MentorRegistry)
     .createQueryBuilder('mentorRegistry')
     .innerJoin('mentorRegistry.user', 'user')
     .addSelect([
@@ -260,8 +275,11 @@ async function getMentorRegistries() {
     .leftJoin('user.students', 'student')
     .leftJoin('student.certificate', 'certificate')
     .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
-    .orderBy('"mentorRegistry"."updatedDate"', 'DESC')
-    .getMany();
+    .orderBy('"mentorRegistry"."updatedDate"', 'DESC');
+  if (coursesIds) {
+    return await data.where('mentorRegistry.preferedCourses IN (:...ids)', { ids: coursesIds }).getMany();
+  }
+  return await data.getMany();
 }
 
 function transformMentorRegistry(mentorRegistry: MentorRegistry) {
