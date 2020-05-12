@@ -40,7 +40,7 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
     .createQueryBuilder('v')
     .select(['v.id'])
     .where('v.id = :courseTaskId', { courseTaskId: courseTask.id })
-    .andWhere("NOW() > v.studentEndDate")
+    .andWhere('NOW() > v.studentEndDate')
     .limit(1)
     .getOne();
 

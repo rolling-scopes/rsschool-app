@@ -63,9 +63,7 @@ function Page(props: CoursePageProps) {
       }
       if (error.response?.status === 423) {
         notification.error({
-          message: (
-            <>Please reload page. This task was expired for submit.</>
-          ),
+          message: <>Please reload page. This task was expired for submit.</>,
         });
         return;
       }

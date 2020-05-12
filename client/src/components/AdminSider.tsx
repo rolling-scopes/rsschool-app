@@ -32,7 +32,6 @@ export function AdminSider(props: Props) {
       </h4>
 
       <Menu theme="dark" mode="inline">
-
         <Menu.Item key="1">
           <a href="/">
             <HomeOutlined />
