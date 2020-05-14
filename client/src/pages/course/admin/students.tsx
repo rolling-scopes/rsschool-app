@@ -92,8 +92,8 @@ function Page(props: Props) {
     }
   });
 
-  const expelStudents = withLoading(async (courseTaskIds: number[], minScore: number, expellingReason: string) => {
-    await courseService.expelStudents({ courseTaskIds, minScore, expellingReason });
+  const expelStudents = withLoading(async (criteria: any, options: any, expellingReason: string) => {
+    await courseService.expelStudents(criteria, options, expellingReason);
     setExpelMode();
     loadStudents();
   });

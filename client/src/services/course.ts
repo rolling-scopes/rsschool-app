@@ -223,8 +223,12 @@ export class CourseService {
     return result;
   }
 
-  async expelStudents(data: { courseTaskIds?: number[]; minScore?: number; expellingReason: string }) {
-    await this.axios.post(`/students/status`, { ...data, status: 'expelled' });
+  async expelStudents(
+    criteria: { courseTaskIds?: number[]; minScore?: number },
+    options: { keepWithMentor?: boolean },
+    expellingReason: string,
+  ) {
+    await this.axios.post(`/students/status`, { criteria, options, expellingReason, status: 'expelled' });
   }
 
   async restoreStudent(githubId: string) {

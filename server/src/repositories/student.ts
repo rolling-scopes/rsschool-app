@@ -184,36 +184,44 @@ export class StudentRepository extends AbstractRepository<Student> {
 
   public async findForExpel(
     courseId: number,
-    courseTaskIds: number[],
-    minScore: number | null,
+    criteria: {
+      courseTaskIds: number[];
+      minScore: number | null;
+    },
+    options: { keepWithMentor?: boolean },
   ): Promise<{ id: number }[]> {
+    console.log({ criteria, options });
+
     let query = getRepository(Student)
       .createQueryBuilder('student')
       .select(['student.id']);
 
-    if (courseTaskIds.length > 0) {
+    if (criteria.courseTaskIds.length > 0) {
       query = query.leftJoin(
         'student.taskResults',
         'tr',
         'tr.studentId = student.id AND tr.score > 0 AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
         {
-          requiredCourseTaskIds: courseTaskIds,
+          requiredCourseTaskIds: criteria.courseTaskIds,
         },
       );
     }
 
-    query = query
-      .where('student.courseId = :courseId', { courseId })
-      .andWhere('student.isExpelled = false')
-      .andWhere('student.mentorId IS NULL');
+    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
 
-    if (minScore != null) {
-      query = query.andWhere('student.totalScore < :minScore', { minScore });
+    if (options.keepWithMentor) {
+      query = query.andWhere('student.mentorId IS NULL');
     }
 
-    if (courseTaskIds.length > 0) {
+    if (criteria.minScore != null) {
+      query = query.andWhere('student.totalScore < :minScore', { minScore: criteria.minScore });
+    }
+
+    if (criteria.courseTaskIds.length > 0) {
       query = query.andWhere('tr.id IS NULL');
     }
+
+    console.log(query.getSql());
 
     return query.getMany();
   }

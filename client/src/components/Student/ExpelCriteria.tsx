@@ -1,11 +1,15 @@
-import { Button, Drawer, Form, Input, InputNumber, Select, Alert } from 'antd';
+import { Button, Drawer, Form, Input, InputNumber, Select, Alert, Checkbox } from 'antd';
 import { CourseTask, CourseService } from 'services/course';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 
 type Props = {
   courseId: number;
-  onApply: (courseTaskIds: number[], minScore: number, expellingReason: string) => void;
+  onApply: (
+    criteria: { courseTaskIds: number[]; minScore: number },
+    options: { keepWithMentor: boolean },
+    expellingReason: string,
+  ) => void;
   onClose: () => void;
 };
 
@@ -31,17 +35,28 @@ export function ExpelCriteria(props: Props) {
         <Form
           layout="vertical"
           form={form}
-          onValuesChange={(changes, values: any) => {
-            if (changes.minScore === undefined && changes.tasks === undefined) {
+          onValuesChange={(changes: any, values: any) => {
+            const { minScore, courseTaskIds } = values as FormValues;
+            const formChanges = changes as FormValues;
+            if (formChanges.minScore === undefined && formChanges.courseTaskIds === undefined) {
               return;
             }
-            setApplyEnabled(!!values.minScore || (Array.isArray(values.tasks) && values.tasks.length > 0));
+            setApplyEnabled(!!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0));
           }}
-          onFinish={values => props.onApply(values.tasks, values.minScore, values.reason)}
+          onFinish={values => {
+            const { minScore, keepWithMentor, courseTaskIds } = values;
+            props.onApply({ courseTaskIds, minScore }, { keepWithMentor }, values.reason);
+          }}
         >
-          <Alert message="It will expell students who did not complete any tasks from selected and has score less than entered." />
-          <Alert style={{ marginTop: 8 }} type="warning" message="It won't exclude any students with assigned mentor" />
-          <Form.Item name="tasks" label="Tasks">
+          <Alert
+            style={{ marginBottom: 8 }}
+            message="It will expell students who did not complete any tasks from selected and has score less than entered."
+          />
+          <Form.Item name="keepWithMentor" valuePropName="checked">
+            <Checkbox>Do not exclude students with assigned mentor</Checkbox>
+          </Form.Item>
+
+          <Form.Item name="courseTaskIds" label="Tasks">
             <Select mode="multiple">
               {courseTasks.map(task => (
                 <Select.Option key={task.id} value={task.id}>
@@ -64,3 +79,9 @@ export function ExpelCriteria(props: Props) {
     </Drawer>
   );
 }
+
+type FormValues = {
+  courseTaskIds: string[];
+  minScore: number;
+  keepWithMentor: boolean;
+};
