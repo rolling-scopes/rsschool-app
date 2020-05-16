@@ -10,6 +10,7 @@ import { CoursesService } from 'services/courses';
 import { ModalForm } from 'components/Forms';
 import css from 'styled-jsx/css';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
+import { isAnyCourseManager } from '../../domain/user';
 
 const { Content } = Layout;
 const PAGINATION = 200;
@@ -99,7 +100,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
+      <AdminSider isAdmin={props.session.isAdmin} isCourseManager={isAnyCourseManager(props.session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Mentor Registry" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>

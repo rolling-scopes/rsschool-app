@@ -1,5 +1,6 @@
 {
   "name": "rsschool-app",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "postinstall": "concurrently \"npm install --prefix client\" \"npm install --prefix server\"",

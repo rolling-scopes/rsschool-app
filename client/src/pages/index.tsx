@@ -442,7 +442,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} />}
+          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} isCourseManager={isCourseManager} />}
 
           <Layout style={{ background: '#fff' }}>
             <Header username={this.props.session.githubId} />

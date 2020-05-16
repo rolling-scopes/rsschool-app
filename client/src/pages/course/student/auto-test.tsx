@@ -61,6 +61,12 @@ function Page(props: CoursePageProps) {
         });
         return;
       }
+      if (error.response?.status === 423) {
+        notification.error({
+          message: <>Please reload page. This task was expired for submit.</>,
+        });
+        return;
+      }
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);

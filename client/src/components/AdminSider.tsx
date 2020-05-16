@@ -6,13 +6,14 @@ import {
   QuestionOutlined,
   TeamOutlined,
   IdcardFilled,
+  HomeOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
 
 const { Sider } = Layout;
 
-type Props = { isAdmin?: boolean };
+type Props = { isAdmin?: boolean; isCourseManager?: boolean };
 
 export function AdminSider(props: Props) {
   const [collapsed, setCollapsed] = useState(true);
@@ -31,8 +32,15 @@ export function AdminSider(props: Props) {
       </h4>
 
       <Menu theme="dark" mode="inline">
+        <Menu.Item key="1">
+          <a href="/">
+            <HomeOutlined />
+            <span>Main</span>
+          </a>
+        </Menu.Item>
+
         {props.isAdmin ? (
-          <Menu.Item key="1">
+          <Menu.Item key="2">
             <a href="/admin/courses">
               <GlobalOutlined />
               <span>Courses</span>
@@ -62,8 +70,7 @@ export function AdminSider(props: Props) {
             </a>
           </Menu.Item>
         ) : null}
-
-        {props.isAdmin ? (
+        {props.isAdmin || props.isCourseManager ? (
           <Menu.Item key="7">
             <a href="/admin/mentor-registry">
               <IdcardFilled />

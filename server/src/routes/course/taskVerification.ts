@@ -1,10 +1,10 @@
-import { BAD_REQUEST, OK, TOO_MANY_REQUESTS } from 'http-status-codes';
+import { BAD_REQUEST, LOCKED, OK, TOO_MANY_REQUESTS } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { awsTaskService, courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
-import { TaskVerification } from '../../models';
+import { CourseTask, TaskVerification } from '../../models';
 
 export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
@@ -33,6 +33,19 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
 
   if (existing != null) {
     setResponse(ctx, TOO_MANY_REQUESTS, { id: existing });
+    return;
+  }
+
+  const idCourseTaskExpired = await getRepository(CourseTask)
+    .createQueryBuilder('v')
+    .select(['v.id'])
+    .where('v.id = :courseTaskId', { courseTaskId: courseTask.id })
+    .andWhere('NOW() > v.studentEndDate')
+    .limit(1)
+    .getOne();
+
+  if (idCourseTaskExpired != null) {
+    setResponse(ctx, LOCKED, { id: idCourseTaskExpired, error: 'expired' });
     return;
   }
 

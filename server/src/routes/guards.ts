@@ -111,7 +111,6 @@ export const courseManagerGuard = async (ctx: Router.RouterContext<any, any>, ne
 export const anyCourseManagerGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
-  ctx.params.courseId = Number(ctx.params.courseId);
   if (guards.isLoggedIn(ctx) && (guards.isAnyManager() || guards.isAdmin())) {
     await next();
     return;
