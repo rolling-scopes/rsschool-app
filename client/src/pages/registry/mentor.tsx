@@ -241,6 +241,8 @@ function Page(props: Props) {
                     <Select.Option value={'nodejs'}>Node.js</Select.Option>
                     <Select.Option value={'angular'}>React</Select.Option>
                     <Select.Option value={'react'}>Angular</Select.Option>
+                    <Select.Option value={'ios'}>iOS</Select.Option>
+                    <Select.Option value={'android'}>Android</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
