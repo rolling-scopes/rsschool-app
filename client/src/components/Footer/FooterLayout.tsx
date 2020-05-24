@@ -8,6 +8,11 @@ import { Donation } from './Donation';
 const { Footer } = Layout;
 
 class FooterLayout extends React.Component<any, any> {
+  getYear() {
+    const date = new Date();
+    return date.getFullYear();
+  }
+
   render() {
     return (
       <div>
@@ -26,7 +31,7 @@ class FooterLayout extends React.Component<any, any> {
               <SocialNetworks />
             </Col>
             <Col xs={24} sm={12} lg={8}>
-              <small>&copy; The Rolling Scopes 2020</small>
+              <small>&copy; The Rolling Scopes {this.getYear()}</small>
             </Col>
           </Row>
         </Footer>

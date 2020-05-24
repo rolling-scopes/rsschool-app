@@ -7,7 +7,7 @@ class Donation extends React.Component<any, any> {
     return (
       <>
         <h3>Thank you for your support!</h3>
-        <p>
+        <p style={{ overflow: 'hidden' }}>
           <object
             type="image/svg+xml"
             data="https://opencollective.com/rsschool/backers.svg?avatarHeight=36&button=false&width=300"
@@ -15,7 +15,8 @@ class Donation extends React.Component<any, any> {
         </p>
         <p>
           <Button href="https://opencollective.com/rsschool#section-contribute" target="_blank">
-            <HeartTwoTone twoToneColor="#eb2f96" />️Make a donation
+            <HeartTwoTone twoToneColor="#eb2f96" />
+            ️Make a donation
           </Button>
         </p>
       </>
