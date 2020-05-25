@@ -625,7 +625,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -988,6 +988,39 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
@@ -1069,7 +1102,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="list-item-1"
+                        key="list-item-1/.1"
                         style={
                           Object {
                             "display": "flex",
@@ -1432,6 +1465,39 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
@@ -2151,7 +2217,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -2514,6 +2580,39 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
@@ -2595,7 +2694,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="list-item-1"
+                        key="list-item-1/.1"
                         style={
                           Object {
                             "display": "flex",
@@ -2958,6 +3057,39 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >

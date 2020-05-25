@@ -68,7 +68,7 @@ export function Header(props: Props) {
       </div>
       <div className="profile">
         {isSaveButtonVisible && (
-          <Button type="danger" ghost size="large" style={{ marginRight: 16, height: 38 }} onClick={props.onSaveClick}>
+          <Button danger ghost size="large" style={{ marginRight: 16, height: 38 }} onClick={props.onSaveClick}>
             <SaveTwoTone twoToneColor={['#f5222d', '#fff1f0']} />
             <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
           </Button>

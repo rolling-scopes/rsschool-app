@@ -304,7 +304,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                       >
                         <li
                           className="ant-list-item"
@@ -973,7 +973,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                             className="ant-list-items"
                                           >
                                             <Item
-                                              key="list-item-0"
+                                              key="list-item-0/.0"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -1016,6 +1016,39 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                           onClick={[Function]}
                                                           type="button"
                                                         >
+                                                          <LoadingIcon
+                                                            existIcon={false}
+                                                            loading={false}
+                                                            prefixCls="ant-btn"
+                                                          >
+                                                            <ForwardRef
+                                                              motionName="ant-btn-loading-icon-motion"
+                                                              onAppearActive={[Function]}
+                                                              onAppearStart={[Function]}
+                                                              onEnterActive={[Function]}
+                                                              onEnterStart={[Function]}
+                                                              onLeaveActive={[Function]}
+                                                              onLeaveStart={[Function]}
+                                                              removeOnLeave={true}
+                                                              visible={false}
+                                                            >
+                                                              <CSSMotion
+                                                                internalRef={null}
+                                                                motionAppear={true}
+                                                                motionEnter={true}
+                                                                motionLeave={true}
+                                                                motionName="ant-btn-loading-icon-motion"
+                                                                onAppearActive={[Function]}
+                                                                onAppearStart={[Function]}
+                                                                onEnterActive={[Function]}
+                                                                onEnterStart={[Function]}
+                                                                onLeaveActive={[Function]}
+                                                                onLeaveStart={[Function]}
+                                                                removeOnLeave={true}
+                                                                visible={false}
+                                                              />
+                                                            </ForwardRef>
+                                                          </LoadingIcon>
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
                                                           >
@@ -1508,6 +1541,39 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                       }
                                       type="button"
                                     >
+                                      <LoadingIcon
+                                        existIcon={false}
+                                        loading={false}
+                                        prefixCls="ant-btn"
+                                      >
+                                        <ForwardRef
+                                          motionName="ant-btn-loading-icon-motion"
+                                          onAppearActive={[Function]}
+                                          onAppearStart={[Function]}
+                                          onEnterActive={[Function]}
+                                          onEnterStart={[Function]}
+                                          onLeaveActive={[Function]}
+                                          onLeaveStart={[Function]}
+                                          removeOnLeave={true}
+                                          visible={false}
+                                        >
+                                          <CSSMotion
+                                            internalRef={null}
+                                            motionAppear={true}
+                                            motionEnter={true}
+                                            motionLeave={true}
+                                            motionName="ant-btn-loading-icon-motion"
+                                            onAppearActive={[Function]}
+                                            onAppearStart={[Function]}
+                                            onEnterActive={[Function]}
+                                            onEnterStart={[Function]}
+                                            onLeaveActive={[Function]}
+                                            onLeaveStart={[Function]}
+                                            removeOnLeave={true}
+                                            visible={false}
+                                          />
+                                        </ForwardRef>
+                                      </LoadingIcon>
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"
                                       >
@@ -2042,7 +2108,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                       >
                         <li
                           className="ant-list-item"
@@ -2420,7 +2486,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                       >
                         <li
                           className="ant-list-item"
@@ -3140,7 +3206,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                             className="ant-list-items"
                                           >
                                             <Item
-                                              key="list-item-0"
+                                              key="list-item-0/.0"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -3234,6 +3300,39 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                           onClick={[Function]}
                                                           type="button"
                                                         >
+                                                          <LoadingIcon
+                                                            existIcon={false}
+                                                            loading={false}
+                                                            prefixCls="ant-btn"
+                                                          >
+                                                            <ForwardRef
+                                                              motionName="ant-btn-loading-icon-motion"
+                                                              onAppearActive={[Function]}
+                                                              onAppearStart={[Function]}
+                                                              onEnterActive={[Function]}
+                                                              onEnterStart={[Function]}
+                                                              onLeaveActive={[Function]}
+                                                              onLeaveStart={[Function]}
+                                                              removeOnLeave={true}
+                                                              visible={false}
+                                                            >
+                                                              <CSSMotion
+                                                                internalRef={null}
+                                                                motionAppear={true}
+                                                                motionEnter={true}
+                                                                motionLeave={true}
+                                                                motionName="ant-btn-loading-icon-motion"
+                                                                onAppearActive={[Function]}
+                                                                onAppearStart={[Function]}
+                                                                onEnterActive={[Function]}
+                                                                onEnterStart={[Function]}
+                                                                onLeaveActive={[Function]}
+                                                                onLeaveStart={[Function]}
+                                                                removeOnLeave={true}
+                                                                visible={false}
+                                                              />
+                                                            </ForwardRef>
+                                                          </LoadingIcon>
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
                                                           >
@@ -3726,6 +3825,39 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                       }
                                       type="button"
                                     >
+                                      <LoadingIcon
+                                        existIcon={false}
+                                        loading={false}
+                                        prefixCls="ant-btn"
+                                      >
+                                        <ForwardRef
+                                          motionName="ant-btn-loading-icon-motion"
+                                          onAppearActive={[Function]}
+                                          onAppearStart={[Function]}
+                                          onEnterActive={[Function]}
+                                          onEnterStart={[Function]}
+                                          onLeaveActive={[Function]}
+                                          onLeaveStart={[Function]}
+                                          removeOnLeave={true}
+                                          visible={false}
+                                        >
+                                          <CSSMotion
+                                            internalRef={null}
+                                            motionAppear={true}
+                                            motionEnter={true}
+                                            motionLeave={true}
+                                            motionName="ant-btn-loading-icon-motion"
+                                            onAppearActive={[Function]}
+                                            onAppearStart={[Function]}
+                                            onEnterActive={[Function]}
+                                            onEnterStart={[Function]}
+                                            onLeaveActive={[Function]}
+                                            onLeaveStart={[Function]}
+                                            removeOnLeave={true}
+                                            visible={false}
+                                          />
+                                        </ForwardRef>
+                                      </LoadingIcon>
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"
                                       >
