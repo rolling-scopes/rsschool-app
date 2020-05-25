@@ -20,8 +20,12 @@ class FooterLayout extends React.Component<any, any> {
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={12} lg={16}>
               <Row>
-                <Col xs={24} lg={12}><Help /></Col>
-                <Col xs={24} lg={12}><Feedback /></Col>
+                <Col xs={24} lg={12}>
+                  <Help />
+                </Col>
+                <Col xs={24} lg={12}>
+                  <Feedback />
+                </Col>
               </Row>
             </Col>
             <Col xs={24} sm={12} lg={8}>

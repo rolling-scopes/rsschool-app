@@ -1,12 +1,12 @@
 import React from 'react';
 import { List } from 'antd';
 
-type LinkInfo = { icon: React.ReactNode, name: string; link: string; newTab: boolean };
+type LinkInfo = { icon: React.ReactNode; name: string; link: string; newTab: boolean };
 
 class Menu extends React.Component<any, any> {
   render() {
     return (
-      <div style={{marginBottom: 16}}>
+      <div style={{ marginBottom: 16 }}>
         <h3>{this.props.title}</h3>
         <List
           size="small"
