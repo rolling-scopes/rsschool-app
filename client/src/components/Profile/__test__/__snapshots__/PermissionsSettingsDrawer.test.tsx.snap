@@ -429,7 +429,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                   className="ant-list-items"
                                 >
                                   <Item
-                                    key="list-item-0"
+                                    key="list-item-0/.0"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -558,7 +558,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-1"
+                                    key="list-item-1/.1"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -807,7 +807,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-2"
+                                    key="list-item-2/.2"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -1056,7 +1056,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-3"
+                                    key="list-item-3/.3"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -1245,7 +1245,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-4"
+                                    key="list-item-4/.4"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -1434,7 +1434,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-5"
+                                    key="list-item-5/.5"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -1623,7 +1623,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-6"
+                                    key="list-item-6/.6"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -1812,7 +1812,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-7"
+                                    key="list-item-7/.7"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -2001,7 +2001,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-8"
+                                    key="list-item-8/.8"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -2190,7 +2190,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-9"
+                                    key="list-item-9/.9"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -2439,7 +2439,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-10"
+                                    key="list-item-10/.a"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -2688,7 +2688,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-11"
+                                    key="list-item-11/.b"
                                   >
                                     <li
                                       className="ant-list-item"
@@ -2937,7 +2937,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     </li>
                                   </Item>
                                   <Item
-                                    key="list-item-12"
+                                    key="list-item-12/.c"
                                   >
                                     <li
                                       className="ant-list-item"

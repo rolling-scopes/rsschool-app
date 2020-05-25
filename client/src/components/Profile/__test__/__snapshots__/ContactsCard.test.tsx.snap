@@ -353,7 +353,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                       className="ant-list-items"
                     >
                       <Item
-                        key="email"
+                        key="email/.0"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -414,7 +414,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         </li>
                       </Item>
                       <Item
-                        key="telegram"
+                        key="telegram/.1"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -475,7 +475,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         </li>
                       </Item>
                       <Item
-                        key="phone"
+                        key="phone/.2"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -536,7 +536,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         </li>
                       </Item>
                       <Item
-                        key="skype"
+                        key="skype/.3"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -597,7 +597,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         </li>
                       </Item>
                       <Item
-                        key="notes"
+                        key="notes/.4"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -658,7 +658,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         </li>
                       </Item>
                       <Item
-                        key="linkedIn"
+                        key="linkedIn/.5"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -1066,7 +1066,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="email"
+                        key="email/.0"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -1127,7 +1127,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="phone"
+                        key="phone/.1"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -1188,7 +1188,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="skype"
+                        key="skype/.2"
                       >
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -1939,7 +1939,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                             className="ant-list-items"
                                           >
                                             <Item
-                                              key="email"
+                                              key="email/.0"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -2072,7 +2072,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                               </li>
                                             </Item>
                                             <Item
-                                              key="telegram"
+                                              key="telegram/.1"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -2205,7 +2205,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                               </li>
                                             </Item>
                                             <Item
-                                              key="phone"
+                                              key="phone/.2"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -2338,7 +2338,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                               </li>
                                             </Item>
                                             <Item
-                                              key="skype"
+                                              key="skype/.3"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -2471,7 +2471,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                               </li>
                                             </Item>
                                             <Item
-                                              key="notes"
+                                              key="notes/.4"
                                             >
                                               <li
                                                 className="ant-list-item"
@@ -2604,7 +2604,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                               </li>
                                             </Item>
                                             <Item
-                                              key="linkedIn"
+                                              key="linkedIn/.5"
                                             >
                                               <li
                                                 className="ant-list-item"
