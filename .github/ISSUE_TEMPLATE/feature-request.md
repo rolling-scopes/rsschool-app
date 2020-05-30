@@ -8,8 +8,8 @@ assignees: apalchys
 
 
 **Describe the feature**
-A clear and concise description of what the bug is.
+Please describe the requested feature in details.
 
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the feature here.
