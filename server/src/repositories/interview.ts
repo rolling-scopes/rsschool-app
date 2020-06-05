@@ -56,7 +56,9 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
 
     const students = interviews.map(record => {
       const { courseTask } = record;
-      const taskResult = taskResults.find(taskResult => taskResult.courseTaskId === record.courseTaskId);
+      const taskResult = taskResults.find(
+        taskResult => taskResult.courseTaskId === record.courseTaskId && record.student.id === taskResult.studentId,
+      );
       return {
         id: courseTask.id,
         name: courseTask.task.name,
