@@ -51,6 +51,7 @@ export interface IConfig {
     privateKey: string;
     appId: string;
     installationId: string;
+    hooksSecret: string;
   };
   port: number;
   name: string;
@@ -99,6 +100,7 @@ export const config: IConfig = {
     privateKey: process.env.RSSHCOOL_API_GITHUB_PRIVATE_KEY || '',
     appId: process.env.RSSHCOOL_API_GITHUB_APP_ID || '',
     installationId: process.env.RSSHCOOL_API_GITHUB_APP_INSTALL_ID || '',
+    hooksSecret: process.env.RSSHCOOL_API_GITHUB_HOOKS_SECRET || 'hooks_secret',
   },
   roles: {
     adminTeams: process.env.RSSCHOOL_ADMIN_TEAMS

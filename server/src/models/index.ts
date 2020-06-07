@@ -11,6 +11,7 @@ import { MentorRegistry } from './mentorRegistry';
 import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Registry } from './registry';
+import { RepositoryEvent } from './repositoryEvent';
 import { Stage } from './stage';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
@@ -45,6 +46,7 @@ export {
   PrivateFeedback,
   ProfilePermissions,
   Registry,
+  RepositoryEvent,
   Stage,
   StageInterview,
   StageInterviewFeedback,
@@ -79,6 +81,7 @@ export const models = [
   PrivateFeedback,
   ProfilePermissions,
   Registry,
+  RepositoryEvent,
   Stage,
   StageInterview,
   StageInterviewFeedback,
