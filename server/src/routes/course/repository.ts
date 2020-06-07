@@ -23,7 +23,7 @@ export const updateRepositories = (logger: ILogger) => async (ctx: Router.Router
   const { courseId } = ctx.params as { courseId: number };
 
   const repositoryService = new RepositoryService(courseId, logger);
-  repositoryService.enableGhPages();
+  repositoryService.updateRepositories();
   setResponse(ctx, OK);
 };
 
