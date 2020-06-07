@@ -3,13 +3,13 @@ import { ILogger } from '../../logger';
 import { Consent } from '../../models';
 import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 import { setResponse, setErrorResponse } from '../utils';
-import { basicAuthVerification } from '../guards';
+import { basicAuthAws } from '../guards';
 import { ConsentRepository } from '../../repositories/consent';
 import { getCustomRepository } from 'typeorm';
 
 export function consentRoute(_: ILogger) {
   const router = new Router({ prefix: '/consent' });
-  router.post('/capture', basicAuthVerification, async (ctx: Router.RouterContext) => {
+  router.post('/capture', basicAuthAws, async (ctx: Router.RouterContext) => {
     const consent: Consent = ctx.request.body;
     const { channelType, channelValue, optIn }: Consent = consent;
     if (!channelType || !channelValue || typeof optIn !== 'boolean') {

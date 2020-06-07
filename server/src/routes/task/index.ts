@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { Task, TaskVerification } from '../../models';
 import { createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { guard, anyCourseManagerGuard, adminGuard, basicAuthVerification } from '../guards';
+import { guard, anyCourseManagerGuard, adminGuard, basicAuthAws } from '../guards';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { taskResultsService } from '../../services';
@@ -52,7 +52,7 @@ export function taskRoute(logger: ILogger) {
   const router = new Router({ prefix: '/task' });
 
   router.post('/verification', adminGuard, createPostRoute(TaskVerification, logger));
-  router.put('/verification/:id', basicAuthVerification, validateTaskId, updateVerification(logger));
+  router.put('/verification/:id', basicAuthAws, validateTaskId, updateVerification(logger));
 
   router.get('/:id', guard, createGetRoute(Task, logger));
   router.post('/', anyCourseManagerGuard, createPostRoute(Task, logger));

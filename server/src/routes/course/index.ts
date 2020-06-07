@@ -11,7 +11,7 @@ import {
   courseSupervisorGuard,
   taskOwnerGuard,
   courseManagerGuard,
-  basicAuthVerification,
+  basicAuthAws,
 } from '../guards';
 import { setResponse } from '../utils';
 import {
@@ -118,7 +118,7 @@ function addTaskApi(router: Router, logger: ILogger) {
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
-  router.get('/tasks/verifications', basicAuthVerification, getCourseTasksVerifications(logger));
+  router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
   router.post('/task/:courseTaskId/distribution', courseManagerGuard, createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post(
