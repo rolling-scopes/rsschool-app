@@ -58,7 +58,7 @@ export class RepositoryService {
   }
 
   public async updateWebhook(github: Octokit, owner: string, repo: string) {
-    const hooks = await github.repos.listHooks();
+    const hooks = await github.repos.listHooks({ owner, repo });
     if (hooks.data.length > 0) {
       this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
       return;
