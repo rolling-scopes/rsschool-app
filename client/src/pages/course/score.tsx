@@ -178,6 +178,13 @@ function renderTable(loaded: boolean, students: StudentScore[], columns: any[]) 
           render: dateRenderer,
         },
         {
+          title: 'Last Commit Date',
+          dataIndex: 'repositoryLastActivityDate',
+          width: 80,
+          sorter: dateSorter('repositoryLastActivityDate'),
+          render: dateRenderer,
+        },
+        {
           title: 'Mentor',
           dataIndex: ['mentor', 'githubId'],
           width: 150,

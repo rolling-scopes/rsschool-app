@@ -479,6 +479,7 @@ export interface StudentScore extends StudentBasic {
   cityName: string;
   totalScore: number;
   totalScoreChangeDate: string;
+  repositoryLastActivityDate: string;
 }
 
 export interface StudentDetails extends StudentBasic {
