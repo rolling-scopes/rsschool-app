@@ -61,7 +61,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       .andWhere('student.isExpelled = false')
       .andWhere(
         `(
-          user.githubId ILIKE :searchQuery OR 
+          user.githubId ILIKE :searchQuery OR
           user.firstName ILIKE :searchQuery OR
           user.lastName ILIKE :searchQuery
         )`,
@@ -228,6 +228,17 @@ export class StudentRepository extends AbstractRepository<Student> {
 
   public async save(students: Partial<Student>[]) {
     await getRepository(Student).save(students);
+  }
+
+  public async updateRepositoryActivityDate(repositoryUrl: string) {
+    await getRepository(Student).update(
+      {
+        repository: repositoryUrl,
+      },
+      {
+        repositoryLastActivityDate: new Date(),
+      },
+    );
   }
 
   private async findByGithubId(courseId: number, githubId: string): Promise<UserBasic | null> {

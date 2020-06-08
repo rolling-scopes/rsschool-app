@@ -117,6 +117,9 @@ export class Student {
   @Column({ nullable: true })
   repository: string;
 
+  @Column({ nullable: true, type: 'timestamptz' })
+  repositoryLastActivityDate: Date;
+
   @Column({ nullable: true })
   hiredById: string;
 
