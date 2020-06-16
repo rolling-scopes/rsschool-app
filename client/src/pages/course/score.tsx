@@ -11,7 +11,7 @@ import {
 } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, StudentScore, CourseTask } from 'services/course';
+import { CourseService, StudentScore, CourseTask, IPaginationInfo } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
@@ -23,6 +23,7 @@ export function Page(props: CoursePageProps) {
   const [loading, setLoading] = useState(false);
   const [activeOnly, setActiveOnly] = useState(true);
   const [students, setStudents] = useState([] as StudentScore[]);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 100 } as IPaginationInfo);
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
 
@@ -30,13 +31,25 @@ export function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(activeOnly),
+        courseService.getCourseScore(activeOnly, pagination),
         courseService.getCourseTasks(),
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
-      setStudents(courseScore);
+      setStudents(courseScore.content);
+      setPagination(courseScore.pagination);
       setCourseTasks(sortedTasks);
       setLoaded(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const getCourseScore = useCallback(async (pagination: IPaginationInfo, filter) => {
+    setLoading(true);
+    try {
+      const courseScore = await courseService.getCourseScore(activeOnly, pagination, filter);
+      setStudents(courseScore.content);
+      setPagination(courseScore.pagination);
     } finally {
       setLoading(false);
     }
@@ -47,8 +60,9 @@ export function Page(props: CoursePageProps) {
     setActiveOnly(value);
     setLoading(true);
     try {
-      const courseScore = await courseService.getCourseScore(value);
-      setStudents(courseScore);
+      const courseScore = await courseService.getCourseScore(value, pagination);
+      setStudents(courseScore.content);
+      setPagination(courseScore.pagination);
     } finally {
       setLoading(false);
     }
@@ -73,7 +87,7 @@ export function Page(props: CoursePageProps) {
             <Text mark>Score is refreshed every 5 minutes</Text>
             {renderCsvExportButton(props)}
           </Row>
-          {renderTable(loaded, students, columns)}
+          {renderTable(loaded, students, columns, pagination, getCourseScore)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -104,7 +118,9 @@ function renderCsvExportButton(props: CoursePageProps) {
   );
 }
 
-function renderTable(loaded: boolean, students: StudentScore[], columns: any[]) {
+function renderTable(
+  loaded: boolean, students: StudentScore[], columns: any[], pagination: IPaginationInfo, handleChange: any
+) {
   if (!loaded) {
     return null;
   }
@@ -116,10 +132,11 @@ function renderTable(loaded: boolean, students: StudentScore[], columns: any[]) 
       className="table-score"
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
-      pagination={{ pageSize: 100 }}
+      pagination={pagination}
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
       dataSource={students}
+      onChange={handleChange}
       columns={[
         {
           title: '#',
@@ -204,7 +221,7 @@ function getColumns(courseTasks: CourseTask[]) {
           }
           trigger="click"
         >
-          <QuestionCircleOutlined title="Click for detatils" />
+          <QuestionCircleOutlined title="Click for details" />
         </Popover>
       );
       return courseTask.descriptionUrl ? (

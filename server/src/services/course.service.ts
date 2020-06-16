@@ -19,6 +19,7 @@ import {
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
+import { paginate, IPaginationOptions } from 'koa-ctx-pagination';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -396,7 +397,25 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
   return students;
 }
 
-export async function getStudentsScore(courseId: number, activeOnly = false) {
+export async function getStudentsScore(
+  courseId: number,
+  activeOnly = false,
+  paginateOptions: IPaginationOptions = {
+    current: 0,
+    pageSize: 1e9,
+  },
+  filter: {
+    githubId: string;
+    name: string;
+    'mentor.githubId': string;
+    cityName: string;
+  } = {
+    githubId: '',
+    name: '',
+    'mentor.githubId': '',
+    cityName: ''
+  },
+  ) {
   let query = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.user', 'user')
@@ -414,10 +433,39 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
   if (activeOnly) {
     query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
   }
-  const students = await query.orderBy('student."totalScore"', 'DESC').getMany();
 
-  return students.map<StudentWithResults>((student, i) => {
-    const user = student.user as User;
+  if (filter.name) {
+    query = query.andWhere(
+      '"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText',
+      { searchText: `%${filter.name}%` });
+  }
+
+  if (filter.cityName) {
+    query = query.andWhere(
+      '"user"."cityName" ILIKE :searchText',
+      { searchText: `%${filter.cityName}%` });
+  }
+
+  if (filter['mentor.githubId']) {
+    query = query.andWhere(
+      '"mu"."githubId" ILIKE :searchText',
+      { searchText: `%${filter['mentor.githubId']}%` });
+  }
+
+  if (filter.githubId) {
+    query = query.andWhere(
+      '("user"."githubId" ILIKE :searchText)',
+      { searchText: `%${filter.githubId}%` }
+    )
+  }
+
+  const pagination = await paginate(
+    query.orderBy('student.totalScore', 'DESC'),
+    paginateOptions
+  )
+
+  const students = pagination.content.map((student, i) => {
+    const user = student.user;
     const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
       .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
       .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
@@ -439,6 +487,11 @@ export async function getStudentsScore(courseId: number, activeOnly = false) {
       isActive: !student.isExpelled && !student.isFailed,
     };
   });
+
+  return {
+    ...pagination,
+    content: students,
+  }
 }
 
 export async function getStudentScore(studentId: number) {
