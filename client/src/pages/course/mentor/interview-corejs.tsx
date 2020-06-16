@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { UserSearch, PageLayoutSimple } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
@@ -62,11 +62,16 @@ export const initialValues: any = {
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
+  const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([] as StudentBasic[]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+
+  useEffect(() => {
+    form.setFieldsValue({ githubId });
+  }, [githubId]);
 
   useAsync(async () => {
     const courseTasks = await courseService.getCourseTasks();

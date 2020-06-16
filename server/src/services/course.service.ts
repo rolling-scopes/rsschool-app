@@ -481,6 +481,7 @@ export async function getStudentsScore(
       githubId: user.githubId,
       totalScore: student.totalScore,
       totalScoreChangeDate: student.totalScoreChangeDate,
+      repositoryLastActivityDate: student.repositoryLastActivityDate,
       cityName: user.cityName ?? '',
       countryName: user.countryName ?? 'Other',
       taskResults,

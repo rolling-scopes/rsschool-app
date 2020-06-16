@@ -154,26 +154,26 @@ function Page(props: Props & { courseAlias?: string }) {
           </Row>
           <Row gutter={defaultRowGutter}>
             <Col {...defaultColumnSizes}>
+              <span>We will use your email only for course purposes. No spam emails.</span>
               <Form.Item
-                help="We need your location for understanding audience and use it for mentor distribution."
+                name="primaryEmail"
+                label="Primary Email"
+                rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
+              >
+                <Input placeholder="user@example.com" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={defaultRowGutter}>
+            <Col {...defaultColumnSizes}>
+              <span>We need your location for understanding audience and use it for mentor distribution.</span>
+              <Form.Item
                 name="location"
                 label="Location"
                 rules={[{ required: true, message: 'Please select city' }]}
                 valuePropName={'location'}
               >
                 <LocationSelect onChange={setLocation} location={location} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={defaultRowGutter}>
-            <Col {...defaultColumnSizes}>
-              <Form.Item
-                help="We will use your email only for course purposes. No spam emails."
-                name="primaryEmail"
-                label="Primary Email"
-                rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
-              >
-                <Input placeholder="user@example.com" />
               </Form.Item>
             </Col>
           </Row>

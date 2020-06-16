@@ -474,7 +474,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0"
+                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -575,9 +575,9 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                   allowHalf={true}
                                   character={<ForwardRef(StarFilled) />}
                                   characterRender={[Function]}
-                                  className=""
                                   count={5}
                                   defaultValue={0}
+                                  direction="ltr"
                                   disabled={true}
                                   onChange={[Function]}
                                   onHoverChange={[Function]}
@@ -1659,6 +1659,39 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >
@@ -1740,7 +1773,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="list-item-1"
+                        key="list-item-1/.1"
                         style={
                           Object {
                             "display": "flex",
@@ -1841,9 +1874,9 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                   allowHalf={true}
                                   character={<ForwardRef(StarFilled) />}
                                   characterRender={[Function]}
-                                  className=""
                                   count={5}
                                   defaultValue={0}
+                                  direction="ltr"
                                   disabled={true}
                                   onChange={[Function]}
                                   onHoverChange={[Function]}
@@ -2925,6 +2958,39 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 onClick={[Function]}
                                 type="button"
                               >
+                                <LoadingIcon
+                                  existIcon={false}
+                                  loading={false}
+                                  prefixCls="ant-btn"
+                                >
+                                  <ForwardRef
+                                    motionName="ant-btn-loading-icon-motion"
+                                    onAppearActive={[Function]}
+                                    onAppearStart={[Function]}
+                                    onEnterActive={[Function]}
+                                    onEnterStart={[Function]}
+                                    onLeaveActive={[Function]}
+                                    onLeaveStart={[Function]}
+                                    removeOnLeave={true}
+                                    visible={false}
+                                  >
+                                    <CSSMotion
+                                      internalRef={null}
+                                      motionAppear={true}
+                                      motionEnter={true}
+                                      motionLeave={true}
+                                      motionName="ant-btn-loading-icon-motion"
+                                      onAppearActive={[Function]}
+                                      onAppearStart={[Function]}
+                                      onEnterActive={[Function]}
+                                      onEnterStart={[Function]}
+                                      onLeaveActive={[Function]}
+                                      onLeaveStart={[Function]}
+                                      removeOnLeave={true}
+                                      visible={false}
+                                    />
+                                  </ForwardRef>
+                                </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
                                 >

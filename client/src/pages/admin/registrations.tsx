@@ -152,7 +152,7 @@ function Page(props: Props) {
                       Approve
                     </Button>
                     <span>&nbsp;</span>
-                    <Button type="danger" onClick={handleReject}>
+                    <Button danger onClick={handleReject}>
                       Reject
                     </Button>
                   </Col>

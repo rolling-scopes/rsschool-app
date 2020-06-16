@@ -18,6 +18,7 @@ export class RepositoryService {
 
   public async createMany(options: { includeNoMentor: boolean; includeNoTechnicalScreening: boolean }) {
     const result = [];
+    const github = await this.initGithub();
     const course = await getRepository(Course).findOne(this.courseId);
     if (course == null) {
       return;
@@ -25,8 +26,10 @@ export class RepositoryService {
 
     const studentRepo = getCustomRepository(StudentRepository);
     const githubIds = await studentRepo.findEliggibleForRepository(this.courseId, options);
+
     for (const githubId of githubIds) {
-      const record = await this.createRepositoryInternally(course, githubId);
+      const record = await this.createRepositoryInternally(github, course, githubId);
+
       if (record?.repository) {
         result.push({ repository: record.repository });
       }
@@ -39,16 +42,43 @@ export class RepositoryService {
     if (course == null) {
       return null;
     }
-    return this.createRepositoryInternally(course, githubId);
+    const github = await this.initGithub();
+    return this.createRepositoryInternally(github, course, githubId);
   }
 
-  public async enableGhPages() {
+  public async updateRepositories() {
     const course = await getRepository(Course).findOne(this.courseId);
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     const github = await this.initGithub();
     for (const githubId of students) {
-      await this.enablePageSite(github, githubId, course!);
+      const owner = config.github.org;
+      const repo = this.getRepoName(githubId, course!);
+      await Promise.all([this.enablePageSite(github, owner, repo), this.updateWebhook(github, owner, repo)]);
     }
+  }
+
+  public async updateWebhook(github: Octokit, owner: string, repo: string) {
+    const hooks = await github.repos.listHooks({ owner, repo });
+    if (hooks.data.length > 0) {
+      this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
+      return;
+    }
+    await this.createWebhook(github, owner, repo);
+  }
+
+  public async createWebhook(github: Octokit, owner: string, repo: string) {
+    const ownerRepo = `${owner}/${repo}`;
+    this.logger?.info(`[${ownerRepo}] creating webhook`);
+    await github.repos.createHook({
+      owner,
+      repo,
+      config: {
+        url: `${config.aws.restApiUrl}/github/repository-event`,
+        secret: config.github.hooksSecret,
+        content_type: 'json',
+      },
+    });
+    this.logger?.info(`[${ownerRepo}] created webhook`);
   }
 
   private async initGithub() {
@@ -60,14 +90,12 @@ export class RepositoryService {
     return github;
   }
 
-  private async enablePageSite(github: Octokit, githubId: string, course: Course) {
-    const owner = config.github.org;
-    const repo = this.getRepoName(githubId, course!);
+  private async enablePageSite(github: Octokit, owner: string, repo: string) {
     const ownerRepo = `${owner}/${repo}`;
-    this.logger?.info(`Pages for [${ownerRepo}]`);
+    this.logger?.info(`[${ownerRepo}] enabling Github Pages`);
     const pages = await github.repos.getPages({ owner, repo }).catch(() => null);
     if (pages?.data.source.branch === 'gh-pages') {
-      this.logger?.info(`Pages already enabled for [${ownerRepo}]`);
+      this.logger?.info(`[${ownerRepo}] pages already enabled`);
       return;
     }
     const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
@@ -75,44 +103,46 @@ export class RepositoryService {
       const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
       await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
     }
-    await github.repos
-      .enablePagesSite({ owner, repo: this.getRepoName(githubId, course!), source: { branch: 'gh-pages' } })
-      .catch(response => {
-        if (response.status !== 409 && response.status !== 500) {
-          throw response;
-        }
-      });
-    this.logger?.info(`Enabled Github Pages for [${ownerRepo}]`);
+    await github.repos.enablePagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
+      if (response.status !== 409 && response.status !== 500) {
+        throw response;
+      }
+    });
+    this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
   }
 
   public getRepoName(githubId: string, course: { alias: string }) {
     return `${githubId}-${toUpper(camelCase(course.alias))}`;
   }
 
-  private async createRepositoryInternally(course: Course, githubId: string) {
+  private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {
     const teamName = this.getTeamName(course);
     let teamId = teamsCache[teamName];
-    const { org } = config.github;
-    const github = await this.initGithub();
     if (!teamId) {
       teamId = await this.createTeam(github, teamName, course.id);
     }
-    const repoName = this.getRepoName(githubId, course);
-    this.logger?.info(`creating ${repoName}`);
+    const owner = config.github.org;
+    const repo = this.getRepoName(githubId, course);
+    const ownerRepo = `${owner}/${repo}`;
+    this.logger?.info(`[${ownerRepo}] creating`);
     const response = await github.repos.createInOrg({
-      org,
-      name: repoName,
+      org: owner,
+      name: repo,
       private: true,
       auto_init: true,
       gitignore_template: 'Node',
       description: `Private repository for @${githubId}`,
     });
-    this.logger?.info(`adding team ${teamId} and user ${githubId}`);
+    this.logger?.info(`[${ownerRepo}] adding team ${teamId} and user ${githubId}`);
     await Promise.all([
-      github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner: org, repo: repoName }),
-      github.repos.addCollaborator({ permission: 'push', username: githubId, owner: org, repo: repoName }),
+      github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner, repo }),
+      github.repos.addCollaborator({ permission: 'push', username: githubId, owner, repo }),
     ]);
-    await this.enablePageSite(github, githubId, course!);
+
+    await this.createWebhook(github, owner, repo);
+
+    await this.enablePageSite(github, owner, repo);
+
     const student = await courseService.getStudentByGithubId(course.id, githubId);
     if (student == null) {
       return null;

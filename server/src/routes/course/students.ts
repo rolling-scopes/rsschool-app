@@ -63,10 +63,11 @@ type StudentInput = {
 export const updateStatuses = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const data: {
-    courseTaskIds?: number[];
-    minScore?: number;
+    criteria: { courseTaskIds?: number[]; minScore?: number };
+    options: { keepWithMentor?: boolean };
     expellingReason: string;
   } = ctx.request.body;
+
   if (data == null || data.expellingReason == null) {
     setResponse(ctx, BAD_REQUEST);
     return;
@@ -75,8 +76,11 @@ export const updateStatuses = (_: ILogger) => async (ctx: Router.RouterContext) 
   const studentRepository = getCustomRepository(StudentRepository);
   const students = await studentRepository.findForExpel(
     courseId,
-    data.courseTaskIds ?? [],
-    data.minScore != null ? Number(data.minScore) : null,
+    {
+      courseTaskIds: data.criteria.courseTaskIds ?? [],
+      minScore: data.criteria.minScore != null ? Number(data.criteria.minScore) : null,
+    },
+    data.options,
   );
   await studentRepository.save(
     students.map(({ id }) => ({ id, isExpelled: true, endDate: new Date(), expellingReason: data.expellingReason })),

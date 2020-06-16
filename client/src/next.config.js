@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const withTranspiledModules = require('next-transpile-modules');
 
 const nextConfig = {
   serverRuntimeConfig: {
@@ -16,8 +17,21 @@ const nextConfig = {
     config.resolve.alias['utils'] = path.join(__dirname, 'utils');
     config.resolve.alias['domain'] = path.join(__dirname, 'domain');
     config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
-    return config;
+    return withGaugeChartCss(config);
   },
 };
+module.exports = withTranspiledModules(['react-gauge-chart'])(nextConfig);
 
-module.exports = nextConfig;
+function withGaugeChartCss(config) {
+  const rule = config.module.rules
+    .find(rule => rule.oneOf)
+    .oneOf.find(
+      r =>
+        // Find the global CSS loader
+        r.issuer && r.issuer.include && r.issuer.include.includes('_app'),
+    );
+  if (rule) {
+    rule.issuer.include = [rule.issuer.include, /[\\/]node_modules[\\/]react-gauge-chart[\\/]/];
+  }
+  return config;
+}

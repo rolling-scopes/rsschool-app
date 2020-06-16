@@ -195,6 +195,13 @@ function renderTable(
           render: dateRenderer,
         },
         {
+          title: 'Last Commit Date',
+          dataIndex: 'repositoryLastActivityDate',
+          width: 80,
+          sorter: dateSorter('repositoryLastActivityDate'),
+          render: dateRenderer,
+        },
+        {
           title: 'Mentor',
           dataIndex: ['mentor', 'githubId'],
           width: 150,

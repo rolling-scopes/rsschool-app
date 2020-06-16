@@ -1,0 +1,1 @@
+export { FooterLayout } from './FooterLayout';

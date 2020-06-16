@@ -241,6 +241,8 @@ function Page(props: Props) {
                     <Select.Option value={'nodejs'}>Node.js</Select.Option>
                     <Select.Option value={'angular'}>React</Select.Option>
                     <Select.Option value={'react'}>Angular</Select.Option>
+                    <Select.Option value={'ios'}>iOS</Select.Option>
+                    <Select.Option value={'android'}>Android</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -248,8 +250,8 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
+                <span>We need your location for understanding audience and use it for students distribution.</span>
                 <Form.Item
-                  help="We need your location for understanding audience and use it for students distribution."
                   name="location"
                   label="Location"
                   rules={[{ required: true, message: 'Please select city' }]}
@@ -262,9 +264,9 @@ function Page(props: Props) {
 
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
+                <span>Preferable to use Gmail because we use Google Drive for sharing</span>
                 <Form.Item
                   name="primaryEmail"
-                  help="Preferable to use Gmail because we use Google Drive for sharing"
                   label="Primary Email"
                   rules={[{ required: true, pattern: emailPattern, message: 'Email is required' }]}
                 >
@@ -272,11 +274,11 @@ function Page(props: Props) {
                 </Form.Item>
               </Col>
               <Col {...defaultColumnSizes}>
+                <span>If you are EPAM employee, please specify your email to avoid some manual processes later</span>
                 <Form.Item
                   name="contactsEpamEmail"
                   label="EPAM Email (if applicable)"
                   rules={[{ message: 'Please enter a valid EPAM email', pattern: epamEmailPattern }]}
-                  help="If you are EPAM employee, please specify your email to avoid some manual processes later"
                 >
                   <Input placeholder="first_last@epam.com" />
                 </Form.Item>

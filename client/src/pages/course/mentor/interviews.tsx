@@ -75,38 +75,47 @@ function Page(props: CoursePageProps) {
 }
 
 function renderItem(course: Course, showMentorModal: (id: number) => void) {
-  return (item: any) => (
-    <List.Item>
-      <List.Item.Meta
-        title={<GithubUserLink value={item.student.githubId} />}
-        description={
-          item.completed ? (
-            <span>
-              <CheckCircleTwoTone twoToneColor="#52c41a" /> Completed
-            </span>
-          ) : null
-        }
-      />
-      {!item.completed && (
-        <Button
-          href={`/course/mentor/interview-technical-screening?course=${course.alias}&githubId=${item.student.githubId}`}
-          type="link"
-          size="small"
-        >
-          Provide Feedback
-        </Button>
-      )}
-      {!item.completed && (
-        <Button onClick={() => showMentorModal(item.id)} type="link" size="small">
-          Transfer
-        </Button>
-      )}
-    </List.Item>
-  );
+  return (item: any) => {
+    return (
+      <List.Item>
+        <List.Item.Meta
+          title={<GithubUserLink value={item.student.githubId} />}
+          description={
+            item.completed ? (
+              <span>
+                <CheckCircleTwoTone twoToneColor="#52c41a" /> Completed
+              </span>
+            ) : null
+          }
+        />
+        {!item.completed && (
+          <Button href={getURL(item, course)} type="link" size="small">
+            Provide Feedback
+          </Button>
+        )}
+        {!item.completed && isTechnicalScreening(item) && (
+          <Button onClick={() => showMentorModal(item.id)} type="link" size="small">
+            Transfer
+          </Button>
+        )}
+      </List.Item>
+    );
+  };
+}
+
+function getURL(item: any, course: Course) {
+  if (isTechnicalScreening(item)) {
+    return `/course/mentor/interview-technical-screening?course=${course.alias}&githubId=${item.student.githubId}`;
+  }
+  return `/course/mentor/interview-corejs?course=${course.alias}&githubId=${item.student.githubId}`;
+}
+
+function isTechnicalScreening(item: { name: string }) {
+  return item.name.includes('Technical Screening');
 }
 
 function renderFooter(key: string, courseAlias: string) {
-  return key === 'Technical Screening' ? (
+  return isTechnicalScreening({ name: key }) ? (
     <>
       <div>Do you want to interview more students?</div> Please check
       <Button size="small" type="link" href={`/course/mentor/interview-students?course=${courseAlias}`}>

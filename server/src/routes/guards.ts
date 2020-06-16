@@ -4,7 +4,7 @@ import { IUserSession } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
-export const basicAuthVerification = auth({
+export const basicAuthAws = auth({
   name: config.users.verification.username,
   pass: config.users.verification.password,
 });

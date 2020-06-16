@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
@@ -11,6 +11,7 @@ import { createGetRoute } from '../common';
 import { adminGuard, anyCourseManagerGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { notificationService } from '../../services';
+import { MentorRegistryRepository } from '../../repositories/mentorRegistry';
 
 interface LoggingError {
   logger?: ILogger;
@@ -115,9 +116,10 @@ export function registryRouter(logger?: ILogger) {
   router.get('/mentors', anyCourseManagerGuard, async (ctx: Router.RouterContext) => {
     const state = ctx.state!.user as IUserSession;
     let mentorRegistries: Array<any> = [];
+    const repository = getCustomRepository(MentorRegistryRepository);
 
     if (state.isAdmin) {
-      mentorRegistries = await getMentorRegistries();
+      mentorRegistries = await repository.findAllMentorRegistries();
     } else {
       const coursesRoles = state.coursesRoles;
       if (coursesRoles) {
@@ -127,16 +129,14 @@ export function registryRouter(logger?: ILogger) {
             role === 'manager' && coursesIds.push(Number(key));
           });
         }
-        mentorRegistries = await getMentorRegistries(coursesIds);
+        mentorRegistries = await repository.findMentorRegistriesByCoursesIds(coursesIds);
       }
     }
-    const data = mentorRegistries.map(transformMentorRegistry);
-    setResponse(ctx, OK, data);
+    setResponse(ctx, OK, mentorRegistries);
   });
 
   router.get('/mentors/csv', anyCourseManagerGuard, async (ctx: Router.RouterContext) => {
-    const mentorRegistries = await getMentorRegistries();
-    const data = mentorRegistries.map(transformMentorRegistry);
+    const data = await getCustomRepository(MentorRegistryRepository).findAllMentorRegistries();
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
 
     const csv = await parseAsync(
@@ -256,50 +256,4 @@ export function registryRouter(logger?: ILogger) {
   });
 
   return router;
-}
-
-async function getMentorRegistries(coursesIds?: Array<any>) {
-  const data = getRepository(MentorRegistry)
-    .createQueryBuilder('mentorRegistry')
-    .innerJoin('mentorRegistry.user', 'user')
-    .addSelect([
-      'user.id',
-      'user.firstName',
-      'user.lastName',
-      'user.githubId',
-      'user.primaryEmail',
-      'user.cityName',
-      'user.contactsEpamEmail',
-    ])
-    .leftJoin('user.mentors', 'mentor')
-    .leftJoin('user.students', 'student')
-    .leftJoin('student.certificate', 'certificate')
-    .addSelect(['mentor.id', 'mentor.courseId', 'student.id', 'certificate.id'])
-    .orderBy('"mentorRegistry"."updatedDate"', 'DESC');
-  if (coursesIds) {
-    return await data.where('mentorRegistry.preferedCourses IN (:...ids)', { ids: coursesIds }).getMany();
-  }
-  return await data.getMany();
-}
-
-function transformMentorRegistry(mentorRegistry: MentorRegistry) {
-  const user = mentorRegistry.user;
-  return {
-    id: mentorRegistry.id,
-    comment: mentorRegistry.comment,
-    englishMentoring: mentorRegistry.englishMentoring,
-    githubId: user.githubId,
-    primaryEmail: user.primaryEmail,
-    contactsEpamEmail: user.contactsEpamEmail,
-    cityName: user.cityName,
-    maxStudentsLimit: mentorRegistry.maxStudentsLimit,
-    name: `${user.firstName} ${user.lastName}`,
-    preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
-    preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
-    preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
-    technicalMentoring: mentorRegistry.technicalMentoring,
-    updatedDate: mentorRegistry.updatedDate,
-    courses: mentorRegistry.user.mentors?.map(m => m.courseId),
-    hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
-  };
 }
