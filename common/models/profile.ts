@@ -93,22 +93,24 @@ export interface StudentStats {
     githubId: string;
     name: string;
   };
-  tasks: {
-    maxScore: number;
-    scoreWeight: number;
+  tasks: StudentTasksDetail[];
+}
+
+export interface StudentTasksDetail {
+  maxScore: number;
+  scoreWeight: number;
+  name: string;
+  descriptionUri: string;
+  taskGithubPrUris: string;
+  score: number;
+  comment: string;
+  interviewer?: {
     name: string;
-    descriptionUri: string;
-    taskGithubPrUris: string;
-    score: number;
-    comment: string;
-    interviewer?: {
-      name: string;
-      githubId: string;
-    };
-    interviewFormAnswers?: {
-      questionText: string;
-      answer: string;
-    }[];
+    githubId: string;
+  };
+  interviewFormAnswers?: {
+    questionText: string;
+    answer: string;
   }[];
 }
 
