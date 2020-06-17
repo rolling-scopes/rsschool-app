@@ -33,3 +33,17 @@ export const createRepository = (logger: ILogger) => async (ctx: Router.RouterCo
   const result = await repositoryService.createSingle(githubId);
   setResponse(ctx, OK, { repository: result?.repository });
 };
+
+export const inviteMentorToTeam = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params as { courseId: number; githubId: string };
+  const repositoryService = new RepositoryService(courseId, logger);
+  await repositoryService.inviteMentor(githubId);
+  setResponse(ctx, OK);
+};
+
+export const inviteAllMentorsToTeam = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId } = ctx.params as { courseId: number };
+  const repositoryService = new RepositoryService(courseId, logger);
+  await repositoryService.inviteAllMentors();
+  setResponse(ctx, OK);
+};
