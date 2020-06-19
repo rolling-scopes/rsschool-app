@@ -119,7 +119,11 @@ function renderCsvExportButton(props: CoursePageProps) {
 }
 
 function renderTable(
-  loaded: boolean, students: StudentScore[], columns: any[], pagination: IPaginationInfo, handleChange: any
+  loaded: boolean,
+  students: StudentScore[],
+  columns: any[],
+  pagination: IPaginationInfo,
+  handleChange: any,
 ) {
   if (!loaded) {
     return null;

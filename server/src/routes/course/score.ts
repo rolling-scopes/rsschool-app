@@ -193,10 +193,10 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
   const pagination = {
     current: ctx.state.pageable.current,
     pageSize: ctx.state.pageable.pageSize,
-  }
+  };
   const filter = {
     ...ctx.query,
-  }
+  };
 
   const cacheKey = `${courseId}_score_${activeOnly}${JSON.stringify(pagination)}${JSON.stringify(filter)}`;
   const cachedData = memoryCache.get(cacheKey);

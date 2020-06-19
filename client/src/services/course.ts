@@ -79,12 +79,12 @@ export type IPaginationInfo = {
   totalPages: number;
   current: number;
   pageSize: number;
-}
+};
 
 export type Pagination<T> = {
   content: T[];
   pagination: IPaginationInfo;
-}
+};
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -189,8 +189,7 @@ export class CourseService {
   }
 
   async getCourseScore(activeOnly: boolean = false, pagination: IPaginationInfo, filter: {} = {}) {
-    const onlyDefined = (data: object) =>
-      pickBy(data, val => val !== undefined && val !== '' && val !== null)
+    const onlyDefined = (data: object) => pickBy(data, val => val !== undefined && val !== '' && val !== null);
 
     const params = new URLSearchParams({
       current: String(pagination.current),
