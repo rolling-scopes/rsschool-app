@@ -19,7 +19,7 @@ export function startBackgroundJobs(logger: ILogger) {
       logger.info({ msg: `Loaded course score`, course: course.name, duration: Date.now() - dataStart });
       const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
-      const scores = students
+      const scores = students.content
         .map(({ id, taskResults, totalScore, totalScoreChangeDate }) => {
           const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
           const newTotalScore = round(score, 1);
