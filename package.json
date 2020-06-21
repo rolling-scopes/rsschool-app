@@ -38,7 +38,7 @@
     "*.css": [
       "prettier --config .prettierrc --write"
     ],
-    "src/**/*.{ts,tsx}": [
+    "{client/**/*.ts?(x),common/**/*.ts?(x),server/**/*.ts?(x)}": [
       "eslint .",
       "prettier --config .prettierrc --parser typescript --write"
     ]
