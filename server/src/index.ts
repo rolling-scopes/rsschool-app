@@ -4,7 +4,7 @@ import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
 import serve from 'koa-static';
 import koaJwt from 'koa-jwt';
-import { paginateMiddleware } from 'koa-ctx-pagination';
+import { paginateMiddleware } from 'koa-typeorm-pagination';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';

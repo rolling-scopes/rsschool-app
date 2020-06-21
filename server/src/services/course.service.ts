@@ -19,7 +19,7 @@ import {
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
-import { paginate, IPaginationOptions } from 'koa-ctx-pagination';
+import { paginate, IPaginationOptions } from 'koa-typeorm-pagination';
 import { ScoreTableFilters } from '../../../common/types/score';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
