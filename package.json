@@ -23,14 +23,24 @@
     "@typescript-eslint/parser": "^2.26.0",
     "concurrently": "5.1.0",
     "eslint": "~6.8.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "prettier": "^1.19.1",
     "typescript": "^3.8.3"
   },
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "printWidth": 120
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
+  },
+  "lint-staged": {
+    "*.css": [
+      "prettier --config .prettierrc --write"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "eslint .",
+      "prettier --config .prettierrc --parser typescript --write"
+    ]
   }
 }
