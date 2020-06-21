@@ -11,9 +11,11 @@ import {
 } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, StudentScore, CourseTask, IPaginationInfo } from 'services/course';
+import { CourseService, StudentScore, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
+import { IPaginationInfo } from '../../../../common/types/pagination';
+import { ScoreTableFilters } from '../../../../common/types/score';
 
 const { Text } = Typography;
 
@@ -22,8 +24,13 @@ export function Page(props: CoursePageProps) {
 
   const [loading, setLoading] = useState(false);
   const [activeOnly, setActiveOnly] = useState(true);
-  const [students, setStudents] = useState([] as StudentScore[]);
-  const [pagination, setPagination] = useState({ current: 1, pageSize: 100 } as IPaginationInfo);
+  const [students, setStudents] = useState({
+    content: [] as StudentScore[],
+    pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
+    filter: {
+      activeOnly: true,
+    } as ScoreTableFilters,
+  });
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
 
@@ -31,12 +38,11 @@ export function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(activeOnly, pagination),
+        courseService.getCourseScore(students.pagination, { activeOnly }),
         courseService.getCourseTasks(),
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
-      setStudents(courseScore.content);
-      setPagination(courseScore.pagination);
+      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
       setLoaded(true);
     } finally {
@@ -47,9 +53,8 @@ export function Page(props: CoursePageProps) {
   const getCourseScore = useCallback(async (pagination: IPaginationInfo, filter) => {
     setLoading(true);
     try {
-      const courseScore = await courseService.getCourseScore(activeOnly, pagination, filter);
-      setStudents(courseScore.content);
-      setPagination(courseScore.pagination);
+      const courseScore = await courseService.getCourseScore(pagination, { ...filter, activeOnly });
+      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
     } finally {
       setLoading(false);
     }
@@ -60,9 +65,11 @@ export function Page(props: CoursePageProps) {
     setActiveOnly(value);
     setLoading(true);
     try {
-      const courseScore = await courseService.getCourseScore(value, pagination);
-      setStudents(courseScore.content);
-      setPagination(courseScore.pagination);
+      const courseScore = await courseService.getCourseScore(students.pagination, {
+        ...students.filter,
+        activeOnly: value,
+      });
+      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
     } finally {
       setLoading(false);
     }
@@ -87,7 +94,7 @@ export function Page(props: CoursePageProps) {
             <Text mark>Score is refreshed every 5 minutes</Text>
             {renderCsvExportButton(props)}
           </Row>
-          {renderTable(loaded, students, columns, pagination, getCourseScore)}
+          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>

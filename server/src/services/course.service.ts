@@ -20,6 +20,7 @@ import {
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
 import { paginate, IPaginationOptions } from 'koa-ctx-pagination';
+import { ScoreTableFilters } from '../../../common/types/score';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -399,17 +400,12 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
 
 export async function getStudentsScore(
   courseId: number,
-  activeOnly = false,
   paginateOptions: IPaginationOptions = {
     current: 0,
     pageSize: 1e9,
   },
-  filter: {
-    githubId: string;
-    name: string;
-    'mentor.githubId': string;
-    cityName: string;
-  } = {
+  filter: ScoreTableFilters = {
+    activeOnly: false,
     githubId: '',
     name: '',
     'mentor.githubId': '',
@@ -430,7 +426,7 @@ export async function getStudentsScore(
     .addSelect(getPrimaryUserFields('mu'))
     .where('student."courseId" = :courseId', { courseId });
 
-  if (activeOnly) {
+  if (filter.activeOnly) {
     query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
   }
 

@@ -9,6 +9,7 @@ import { courseService, OperationResult, taskResultsService, taskService, notifi
 import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
 
 import { setCsvResponse, setResponse } from '../utils';
+import { ScoreTableFilters } from '../../../../common/types/score';
 
 type ScoreInput = {
   score: number | string;
@@ -189,16 +190,16 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
 
 export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const activeOnly = ctx.query.activeOnly === 'true';
   const pagination = {
     current: ctx.state.pageable.current,
     pageSize: ctx.state.pageable.pageSize,
   };
   const filter = {
     ...ctx.query,
+    activeOnly: ctx.query.activeOnly === 'true',
   };
 
-  const cacheKey = `${courseId}_score_${activeOnly}${JSON.stringify(pagination)}${JSON.stringify(filter)}`;
+  const cacheKey = `${courseId}_score_${JSON.stringify({ pagination, filter })}`;
   const cachedData = memoryCache.get(cacheKey);
   if (cachedData) {
     logger.info(`[Cache]: Score for ${courseId}`);
@@ -206,7 +207,7 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const students = await getStudentsScore(courseId, activeOnly, pagination, filter);
+  const students = await getStudentsScore(courseId, pagination, filter);
   memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students, 120);
 };
@@ -228,7 +229,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
   const students = await getStudentsScore(courseId);
   const courseTasks = await getCourseTasks(courseId);
 
-  const result = students.content.map((student: any) => {
+  const result = students.content.map(student => {
     return {
       githubId: student.githubId,
       name: student.name,

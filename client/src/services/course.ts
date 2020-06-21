@@ -4,6 +4,8 @@ import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
 import { pickBy } from 'lodash';
+import { ScoreTableFilters } from '../../../common/types/score';
+import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
 
 export interface CourseTask {
   id: number;
@@ -73,18 +75,6 @@ export interface MentorWithContacts {
 }
 
 export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
-
-export type IPaginationInfo = {
-  total: number;
-  totalPages: number;
-  current: number;
-  pageSize: number;
-};
-
-export type Pagination<T> = {
-  content: T[];
-  pagination: IPaginationInfo;
-};
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -188,13 +178,12 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseScore(activeOnly: boolean = false, pagination: IPaginationInfo, filter: {} = {}) {
+  async getCourseScore(pagination: IPaginationInfo, filter: ScoreTableFilters = { activeOnly: false }) {
     const onlyDefined = (data: object) => pickBy(data, val => val !== undefined && val !== '' && val !== null);
 
     const params = new URLSearchParams({
       current: String(pagination.current),
       pageSize: String(pagination.pageSize),
-      activeOnly: String(activeOnly),
       ...onlyDefined(filter),
     });
     const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
