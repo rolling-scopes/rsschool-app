@@ -50,10 +50,10 @@ export function Page(props: CoursePageProps) {
     }
   }, []);
 
-  const getCourseScore = useCallback(async (pagination: IPaginationInfo, filter) => {
+  const getCourseScore = useCallback(async (pagination: IPaginationInfo, filters: ScoreTableFilters) => {
     setLoading(true);
     try {
-      const courseScore = await courseService.getCourseScore(pagination, { ...filter, activeOnly });
+      const courseScore = await courseService.getCourseScore(pagination, { ...filters, activeOnly });
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
     } finally {
       setLoading(false);
@@ -130,7 +130,7 @@ function renderTable(
   students: StudentScore[],
   columns: any[],
   pagination: IPaginationInfo,
-  handleChange: any,
+  handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters) => void,
 ) {
   if (!loaded) {
     return null;
@@ -147,7 +147,7 @@ function renderTable(
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
       dataSource={students}
-      onChange={handleChange}
+      onChange={handleChange as any}
       columns={[
         {
           title: '#',
