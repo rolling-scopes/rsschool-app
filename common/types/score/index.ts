@@ -4,4 +4,4 @@ export type ScoreTableFilters = {
   'mentor.githubId'?: string;
   cityName?: string;
   activeOnly: boolean;
-}
+};
