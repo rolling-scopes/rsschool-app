@@ -182,7 +182,7 @@ export class CourseService {
     const onlyDefined = (data: object) => pickBy(data, val => val !== undefined && val !== '' && val !== null);
 
     const params = new URLSearchParams({
-      current: String(pagination.current),
+            current: String(pagination.current),
       pageSize: String(pagination.pageSize),
       ...onlyDefined(filter),
     });
