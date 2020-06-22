@@ -208,7 +208,6 @@ export class RepositoryService {
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
-      // teamsCache[teamName] = courseTeam.login;
       for (const maintainer of mentors) {
         this.logger?.info(`Inviting ${maintainer.githubId}`);
         await github.teams.addOrUpdateMembershipForUserInOrg({
