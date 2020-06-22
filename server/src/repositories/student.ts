@@ -140,7 +140,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     return records.map(transformStudent);
   }
 
-  public async findByCourseId(courseId: number) {
+  public async findActiveByCourseId(courseId: number) {
     const records = await this.getPreparedStudentQuery()
       .where('student.courseId = :courseId ', { courseId })
       .andWhere('student.isExpelled = false')

@@ -42,7 +42,13 @@ import * as stageInterview from './stageInterview';
 import * as interviews from './interviews';
 
 import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } from './tasks';
-import { createRepository, createRepositories, updateRepositories } from './repository';
+import {
+  createRepository,
+  createRepositories,
+  updateRepositories,
+  inviteMentorToTeam,
+  inviteAllMentorsToTeam,
+} from './repository';
 import { validateGithubIdAndAccess, validateGithubId, validateCrossCheckExpirationDate } from '../validators';
 import {
   updateStudentStatus,
@@ -166,6 +172,8 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.get('/mentors/search/:searchText', courseGuard, searchMentors(logger));
 
   router.post('/mentor/:githubId', guard, ...validators, postMentor(logger));
+  router.post('/repositories/mentor/:githubId', courseManagerGuard, ...validators, inviteMentorToTeam(logger));
+  router.post('/repositories/mentors', courseManagerGuard, inviteAllMentorsToTeam(logger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(logger));
