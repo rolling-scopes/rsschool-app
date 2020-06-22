@@ -17,7 +17,7 @@ const app = new App({ id: Number(appId), privateKey });
 export class RepositoryService {
   constructor(private courseId: number, private logger?: ILogger) {}
 
-  public async createMany(options: { includeNoMentor: boolean; includeNoTechnicalScreening: boolean }) {
+  public async createMany() {
     const result = [];
     const github = await this.initGithub();
     const course = await getRepository(Course).findOne(this.courseId);
@@ -26,16 +26,16 @@ export class RepositoryService {
     }
 
     const studentRepo = getCustomRepository(StudentRepository);
-    const githubIds = await studentRepo.findEliggibleForRepository(this.courseId, options);
+    const students = await studentRepo.findByCourseId(this.courseId);
 
-    for (const githubId of githubIds) {
-      const studentWithMentor = await studentRepo.findAndIncludeMentor(this.courseId, githubId);
+    for (const student of students) {
+      const studentWithMentor = await studentRepo.findAndIncludeMentor(this.courseId, student.githubId);
       const { githubId: mentorGithubId } = studentWithMentor?.mentor as MentorBasic;
-      const record = await this.createRepositoryInternally(github, course, githubId);
+      const record = await this.createRepositoryInternally(github, course, student.githubId);
       if (mentorGithubId) {
         await this.inviteMentor(mentorGithubId, course);
       }
-      await this.addCollaboratorsForRepository(github, course, githubId);
+      await this.addCollaboratorsForRepository(github, course, student.githubId);
 
       if (record?.repository) {
         result.push({ repository: record.repository });
@@ -198,9 +198,9 @@ export class RepositoryService {
       }
     }
 
-    // await this.createWebhook(github, owner, repo);
-    //
-    // await this.enablePageSite(github, owner, repo);
+    await this.createWebhook(github, owner, repo);
+
+    await this.enablePageSite(github, owner, repo);
 
     const student = await courseService.getStudentByGithubId(course.id, githubId);
     if (student == null) {
@@ -224,7 +224,7 @@ export class RepositoryService {
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
-      teamsCache[teamName] = courseTeam.id;
+      teamsCache[teamName] = courseTeam.login;
       for (const maintainer of mentors) {
         this.logger?.info(`Inviting ${maintainer.githubId}`);
         await github.teams.addOrUpdateMembershipForUserInOrg({

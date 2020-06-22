@@ -137,8 +137,16 @@ export class StudentRepository extends AbstractRepository<Student> {
       .andWhere('student.courseId = :courseId ', { courseId })
       .getMany();
 
-    const students = records.map(transformStudent);
-    return students;
+    return records.map(transformStudent);
+  }
+
+  public async findByCourseId(courseId: number) {
+    const records = await this.getPreparedStudentQuery()
+      .where('student.courseId = :courseId ', { courseId })
+      .andWhere('student.isExpelled = false')
+      .getMany();
+
+    return records.map(transformStudent);
   }
 
   public async findWithRepository(courseId: number) {
@@ -149,35 +157,6 @@ export class StudentRepository extends AbstractRepository<Student> {
       .where('student.courseId = :courseId', { courseId })
       .andWhere('student.isExpelled = false AND student.isFailed = false')
       .andWhere('student.repository IS NOT NULL');
-    const items = await query.getMany();
-    return items.map(m => m.user.githubId);
-  }
-
-  public async findEliggibleForRepository(
-    courseId: number,
-    options: {
-      includeNoMentor?: boolean;
-      includeNoTechnicalScreening?: boolean;
-    } = {},
-  ) {
-    let query = await getRepository(Student)
-      .createQueryBuilder('student')
-      .innerJoin('student.user', 'sUser');
-
-    if (!options.includeNoTechnicalScreening) {
-      query.innerJoin('stage_interview_student', 'interviewStudent', 'interviewStudent.studentId = student.id');
-    }
-
-    query = query
-      .addSelect(['student.id', 'sUser.githubId'])
-      .where('student.courseId = :courseId', { courseId })
-      .andWhere('student.isExpelled = false AND student.isFailed = false')
-      .andWhere('student.repository IS NULL');
-
-    if (!options.includeNoMentor) {
-      query = query.andWhere('student.mentorId IS NOT NULL');
-    }
-
     const items = await query.getMany();
     return items.map(m => m.user.githubId);
   }
