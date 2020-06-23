@@ -23,32 +23,7 @@
     "@typescript-eslint/parser": "^2.26.0",
     "concurrently": "5.1.0",
     "eslint": "~6.8.0",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
     "prettier": "^1.19.1",
     "typescript": "^3.8.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "post-commit": "git update-index --again"
-    }
-  },
-  "lint-staged": {
-    "*.css": [
-      "prettier --config .prettierrc --write"
-    ],
-    "client/**/*.{ts,tsx,js}": [
-      "eslint .",
-      "prettier --config .prettierrc --parser typescript --write"
-    ],
-    "common/**/*.{ts,tsx}": [
-      "eslint .",
-      "prettier --config .prettierrc --parser typescript --write"
-    ],
-    "server/**/*.{ts,tsx}": [
-      "eslint .",
-      "prettier --config .prettierrc --parser typescript --write"
-    ]
   }
 }

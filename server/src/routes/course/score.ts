@@ -9,7 +9,6 @@ import { courseService, OperationResult, taskResultsService, taskService, notifi
 import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
 
 import { setCsvResponse, setResponse } from '../utils';
-import { ScoreTableFilters } from '../../../../common/types/score';
 
 type ScoreInput = {
   score: number | string;
