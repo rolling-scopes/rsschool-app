@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
 import serve from 'koa-static';
 import koaJwt from 'koa-jwt';
+import { paginateMiddleware } from 'koa-typeorm-pagination';
 import { Server } from 'net';
 
 import { setupPassport } from './auth';
@@ -26,6 +27,7 @@ export class App {
     this.appLogger = logger;
 
     this.koa.use(loggerMiddleware(this.appLogger));
+    this.koa.use(paginateMiddleware);
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());

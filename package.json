@@ -25,12 +25,5 @@
     "eslint": "~6.8.0",
     "prettier": "^1.19.1",
     "typescript": "^3.8.3"
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "printWidth": 120
   }
 }

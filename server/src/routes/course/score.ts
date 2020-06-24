@@ -1,7 +1,6 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
-import _ from 'lodash';
 import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
@@ -190,8 +189,16 @@ export const postMultipleScores = (logger: ILogger) => async (ctx: Router.Router
 
 export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const activeOnly = ctx.query.activeOnly === 'true';
-  const cacheKey = `${courseId}_score_${activeOnly}`;
+  const pagination = {
+    current: ctx.state.pageable.current,
+    pageSize: ctx.state.pageable.pageSize,
+  };
+  const filter = {
+    ...ctx.query,
+    activeOnly: ctx.query.activeOnly === 'true',
+  };
+
+  const cacheKey = `${courseId}_score_${JSON.stringify({ pagination, filter })}`;
   const cachedData = memoryCache.get(cacheKey);
   if (cachedData) {
     logger.info(`[Cache]: Score for ${courseId}`);
@@ -199,7 +206,7 @@ export const getScore = (logger: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
 
-  const students = await getStudentsScore(courseId, activeOnly);
+  const students = await getStudentsScore(courseId, pagination, filter);
   memoryCache.set(cacheKey, students);
   setResponse(ctx, OK, students, 120);
 };
@@ -221,7 +228,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
   const students = await getStudentsScore(courseId);
   const courseTasks = await getCourseTasks(courseId);
 
-  const result = students.map(student => {
+  const result = students.content.map(student => {
     return {
       githubId: student.githubId,
       name: student.name,

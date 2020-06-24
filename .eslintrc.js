@@ -7,6 +7,10 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
+  env: {
+    browser: true,
+    node: true
+  },
   rules: {
     '@typescript-eslint/explicit-function-return-type': 0,
     'no-useless-escape': 0,
