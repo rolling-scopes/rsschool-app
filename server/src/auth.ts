@@ -1,4 +1,3 @@
-import { Octokit } from '@octokit/rest';
 import passport from 'koa-passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
 import { config } from './config';
@@ -14,10 +13,7 @@ export function setupPassport(logger: ILogger) {
         clientSecret: config.auth.github_client_secret,
         scope: ['read:user', 'user:email'],
       },
-      (accessToken: string, _, profile, cb) => {
-        const github = new Octokit();
-        github.authenticate({ token: accessToken, type: 'oauth' });
-
+      (_1: string, _2, profile, cb) => {
         logger.info('request user');
         createUser(profile)
           .then(result => {
