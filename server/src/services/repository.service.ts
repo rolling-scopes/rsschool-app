@@ -1,34 +1,35 @@
-import { App } from '@octokit/app';
 import { Octokit } from '@octokit/rest';
 import { camelCase, toUpper } from 'lodash';
-import { getRepository, getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import { config } from '../config';
 import { ILogger } from '../logger';
 import { Course, Student } from '../models';
 import { courseService } from '../services';
 import { StudentRepository } from '../repositories/student';
 import { MentorRepository } from '../repositories/mentor';
-
-const teamsCache: Record<string, number | undefined> = {};
-const { appId, privateKey } = config.github;
-const app = new App({ id: Number(appId), privateKey });
+import { MentorBasic } from '../../../common/models';
 
 export class RepositoryService {
-  constructor(private courseId: number, private logger?: ILogger) {}
+  constructor(private courseId: number, private github: Octokit, private logger?: ILogger) {}
 
-  public async createMany(options: { includeNoMentor: boolean; includeNoTechnicalScreening: boolean }) {
+  public async createMany() {
     const result = [];
-    const github = await this.initGithub();
     const course = await getRepository(Course).findOne(this.courseId);
     if (course == null) {
       return;
     }
 
     const studentRepo = getCustomRepository(StudentRepository);
-    const githubIds = await studentRepo.findEliggibleForRepository(this.courseId, options);
+    const students = await studentRepo.findActiveByCourseId(this.courseId);
 
-    for (const githubId of githubIds) {
-      const record = await this.createRepositoryInternally(github, course, githubId);
+    for (const student of students) {
+      const studentWithMentor = await studentRepo.findAndIncludeMentor(this.courseId, student.githubId);
+      const { githubId: mentorGithubId } = studentWithMentor?.mentor as MentorBasic;
+      const record = await this.createRepositoryInternally(this.github, course, student.githubId);
+      if (mentorGithubId) {
+        await this.inviteMentor(mentorGithubId, course);
+      }
+      await this.addCollaboratorsForRepository(this.github, course, student.githubId);
 
       if (record?.repository) {
         result.push({ repository: record.repository });
@@ -42,23 +43,31 @@ export class RepositoryService {
     if (course == null) {
       return null;
     }
-    const github = await this.initGithub();
-    return this.createRepositoryInternally(github, course, githubId);
+    const studentWithMentor = await getCustomRepository(StudentRepository).findAndIncludeMentor(
+      this.courseId,
+      githubId,
+    );
+    const { githubId: mentorGithubId } = studentWithMentor?.mentor as MentorBasic;
+    const result = await this.createRepositoryInternally(this.github, course, githubId);
+    if (mentorGithubId) {
+      await this.inviteMentor(mentorGithubId, course);
+    }
+    await this.addCollaboratorsForRepository(this.github, course, githubId);
+    return result;
   }
 
   public async updateRepositories() {
     const course = await getRepository(Course).findOne(this.courseId);
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
-    const github = await this.initGithub();
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = this.getRepoName(githubId, course!);
-      await Promise.all([this.enablePageSite(github, owner, repo), this.updateWebhook(github, owner, repo)]);
+      await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
     }
   }
 
   public async updateWebhook(github: Octokit, owner: string, repo: string) {
-    const hooks = await github.repos.listHooks({ owner, repo });
+    const hooks = await github.repos.listWebhooks({ owner, repo });
     if (hooks.data.length > 0) {
       this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
       return;
@@ -69,7 +78,7 @@ export class RepositoryService {
   public async createWebhook(github: Octokit, owner: string, repo: string) {
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating webhook`);
-    await github.repos.createHook({
+    await github.repos.createWebhook({
       owner,
       repo,
       config: {
@@ -81,13 +90,25 @@ export class RepositoryService {
     this.logger?.info(`[${ownerRepo}] created webhook`);
   }
 
-  private async initGithub() {
-    const { installationId } = config.github;
-    const installationAccessToken = await app.getInstallationAccessToken({
-      installationId: Number(installationId),
-    });
-    const github = new Octokit({ auth: `token ${installationAccessToken}` });
-    return github;
+  public async inviteMentor(githubId: string, course?: Course) {
+    if (!course) {
+      course = await getRepository(Course).findOne(this.courseId);
+      if (course == null) {
+        return;
+      }
+    }
+    await this.addMentorToTeam(this.github, course, githubId);
+  }
+
+  public async inviteAllMentors() {
+    const mentors = await getCustomRepository(MentorRepository).findActive(this.courseId);
+    const course = await getRepository(Course).findOne(this.courseId);
+    if (course == null) {
+      return;
+    }
+    for (const mentor of mentors) {
+      await this.addMentorToTeam(this.github, course, mentor.githubId);
+    }
   }
 
   private async enablePageSite(github: Octokit, owner: string, repo: string) {
@@ -103,41 +124,63 @@ export class RepositoryService {
       const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
       await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
     }
-    await github.repos.enablePagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
+    await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
       if (response.status !== 409 && response.status !== 500) {
         throw response;
       }
     });
     this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
   }
-
   public getRepoName(githubId: string, course: { alias: string }) {
     return `${githubId}-${toUpper(camelCase(course.alias))}`;
   }
 
-  private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {
+  private async addMentorToTeam(github: Octokit, course: Course, githubId: string) {
+    const owner = config.github.org;
     const teamName = this.getTeamName(course);
-    let teamId = teamsCache[teamName];
-    if (!teamId) {
-      teamId = await this.createTeam(github, teamName, course.id);
+    const { data: teams } = await github.teams.list({ org: owner });
+    const team = teams.find(team => team.name === teamName);
+    if (!team) {
+      await this.createTeam(github, teamName, course.id);
     }
+
+    this.logger?.info(`adding user ${githubId} to the team ${teamName}`);
+    await github.teams.addOrUpdateMembershipForUserInOrg({ org: owner, team_slug: teamName, username: githubId });
+  }
+
+  private async addCollaboratorsForRepository(github: Octokit, course: Course, githubId: string) {
+    const { org } = config.github;
+    const owner = config.github.org;
+    const repo = this.getRepoName(githubId, course);
+    const ownerRepo = `${owner}/${repo}`;
+    const teamName = this.getTeamName(course);
+    this.logger?.info(`[${ownerRepo}] adding team ${teamName}`);
+    await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
+  }
+
+  private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {
     const owner = config.github.org;
     const repo = this.getRepoName(githubId, course);
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating`);
-    const response = await github.repos.createInOrg({
-      org: owner,
-      name: repo,
-      private: true,
-      auto_init: true,
-      gitignore_template: 'Node',
-      description: `Private repository for @${githubId}`,
-    });
-    this.logger?.info(`[${ownerRepo}] adding team ${teamId} and user ${githubId}`);
-    await Promise.all([
-      github.teams.addOrUpdateRepo({ team_id: teamId, permission: 'push', owner, repo }),
-      github.repos.addCollaborator({ permission: 'push', username: githubId, owner, repo }),
-    ]);
+    let response;
+    try {
+      response = await github.repos.createInOrg({
+        org: owner,
+        name: repo,
+        private: true,
+        auto_init: true,
+        gitignore_template: 'Node',
+        description: `Private repository for @${githubId}`,
+      });
+    } catch (e) {
+      if (e.status === 422) {
+        // if repository exists
+        this.logger?.info(e.errors[0].message);
+      } else {
+        throw e;
+      }
+    }
 
     await this.createWebhook(github, owner, repo);
 
@@ -147,7 +190,7 @@ export class RepositoryService {
     if (student == null) {
       return null;
     }
-    student.repository = response.data.html_url;
+    student.repository = response ? response.data.html_url : student.repository;
     this.logger?.info({ repository: student.repository });
     await getRepository(Student).save(student);
     return student;
@@ -165,14 +208,17 @@ export class RepositoryService {
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
-      teamsCache[teamName] = courseTeam.id;
       for (const maintainer of mentors) {
         this.logger?.info(`Inviting ${maintainer.githubId}`);
-        await github.teams.addOrUpdateMembership({ username: maintainer.githubId, team_id: courseTeam.id });
+        await github.teams.addOrUpdateMembershipForUserInOrg({
+          org,
+          team_slug: courseTeam.slug,
+          username: maintainer.githubId,
+        });
         await this.timeout(1000);
       }
     }
-    return courseTeam.id;
+    return courseTeam.slug;
   }
 
   private timeout = (num: number) => new Promise(resolve => setTimeout(resolve, num));
