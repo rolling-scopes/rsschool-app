@@ -401,7 +401,7 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
 export async function getStudentsScore(
   courseId: number,
   paginateOptions: IPaginationOptions = {
-    current: 0,
+    current: 1,
     pageSize: 1e9,
   },
   filter: ScoreTableFilters = {
