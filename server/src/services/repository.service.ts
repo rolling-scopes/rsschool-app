@@ -61,7 +61,7 @@ export class RepositoryService {
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     for (const githubId of students) {
       const owner = config.github.org;
-      const repo = this.getRepoName(githubId, course!);
+      const repo = RepositoryService.getRepoName(githubId, course!);
       await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
     }
   }
@@ -131,7 +131,8 @@ export class RepositoryService {
     });
     this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
   }
-  public getRepoName(githubId: string, course: { alias: string }) {
+
+  public static getRepoName(githubId: string, course: { alias: string }) {
     return `${githubId}-${toUpper(camelCase(course.alias))}`;
   }
 
@@ -151,7 +152,7 @@ export class RepositoryService {
   private async addCollaboratorsForRepository(github: Octokit, course: Course, githubId: string) {
     const { org } = config.github;
     const owner = config.github.org;
-    const repo = this.getRepoName(githubId, course);
+    const repo = RepositoryService.getRepoName(githubId, course);
     const ownerRepo = `${owner}/${repo}`;
     const teamName = this.getTeamName(course);
     this.logger?.info(`[${ownerRepo}] adding team ${teamName}`);
@@ -160,7 +161,7 @@ export class RepositoryService {
 
   private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {
     const owner = config.github.org;
-    const repo = this.getRepoName(githubId, course);
+    const repo = RepositoryService.getRepoName(githubId, course);
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating`);
     let response;
