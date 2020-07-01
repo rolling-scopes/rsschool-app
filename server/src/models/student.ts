@@ -129,6 +129,9 @@ export class Student {
   @Column({ default: 0, type: 'float' })
   totalScore: number;
 
+  @Column({ default: 0 })
+  rank: number;
+
   @Column({ nullable: true, type: 'timestamptz' })
   totalScoreChangeDate: Date;
 

@@ -450,7 +450,7 @@ export async function getStudentsScore(
 
   const pagination = await paginate(query.orderBy('student.totalScore', 'DESC'), paginateOptions);
 
-  const students = pagination.content.map((student, i) => {
+  const students = pagination.content.map(student => {
     const user = student.user;
     const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
       .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
@@ -461,7 +461,7 @@ export async function getStudentsScore(
     const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
     return {
       id: student.id,
-      rank: i + 1,
+      rank: student.rank,
       mentor: mentor ? { githubId: mentor.githubId, name: mentor.name } : undefined,
       name: createName(user),
       githubId: user.githubId,
