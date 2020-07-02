@@ -186,8 +186,8 @@ export class RepositoryService {
     await github.repos.addCollaborator({
       owner,
       repo,
-      username: githubId
-    })
+      username: githubId,
+    });
 
     await this.createWebhook(github, owner, repo);
 
