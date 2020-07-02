@@ -500,6 +500,7 @@ export async function getStudentScore(studentId: number) {
 
   return {
     totalScore: student?.totalScore ?? 0,
+    rank: student?.rank ?? 0,
     results,
   };
 }
