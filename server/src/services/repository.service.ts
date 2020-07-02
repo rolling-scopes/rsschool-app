@@ -29,7 +29,7 @@ export class RepositoryService {
       if (mentorGithubId) {
         await this.inviteMentor(mentorGithubId, course);
       }
-      await this.addCollaboratorsForRepository(this.github, course, student.githubId);
+      await this.addTeamToRepository(this.github, course, student.githubId);
 
       if (record?.repository) {
         result.push({ repository: record.repository });
@@ -52,7 +52,7 @@ export class RepositoryService {
     if (mentorGithubId) {
       await this.inviteMentor(mentorGithubId, course);
     }
-    await this.addCollaboratorsForRepository(this.github, course, githubId);
+    await this.addTeamToRepository(this.github, course, githubId);
     return result;
   }
 
@@ -149,7 +149,7 @@ export class RepositoryService {
     await github.teams.addOrUpdateMembershipForUserInOrg({ org: owner, team_slug: teamName, username: githubId });
   }
 
-  private async addCollaboratorsForRepository(github: Octokit, course: Course, githubId: string) {
+  private async addTeamToRepository(github: Octokit, course: Course, githubId: string) {
     const { org } = config.github;
     const owner = config.github.org;
     const repo = RepositoryService.getRepoName(githubId, course);
@@ -182,6 +182,12 @@ export class RepositoryService {
         throw e;
       }
     }
+
+    await github.repos.addCollaborator({
+      owner,
+      repo,
+      username: githubId,
+    });
 
     await this.createWebhook(github, owner, repo);
 
