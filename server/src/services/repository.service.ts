@@ -62,6 +62,7 @@ export class RepositoryService {
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = RepositoryService.getRepoName(githubId, course!);
+      await this.github.repos.addCollaborator({ owner, repo, username: githubId });
       await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
     }
   }
