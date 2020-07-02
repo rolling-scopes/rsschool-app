@@ -62,7 +62,7 @@ export class RepositoryService {
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = RepositoryService.getRepoName(githubId, course!);
-      await this.github.repos.addCollaborator({ owner, repo, username: githubId });
+      await this.inviteStudent(owner, repo, githubId);
       await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
     }
   }
@@ -109,6 +109,19 @@ export class RepositoryService {
     }
     for (const mentor of mentors) {
       await this.addMentorToTeam(this.github, course, mentor.githubId);
+    }
+  }
+
+  private async inviteStudent(owner: string, repo: string, githubId: string) {
+    try {
+      await this.github.repos.addCollaborator({ owner, repo, username: githubId });
+    } catch (e) {
+      if (e.status === 422) {
+        // ignore any action
+        this.logger?.info(e.errors[0].message);
+        return;
+      }
+      throw e;
     }
   }
 
@@ -184,11 +197,7 @@ export class RepositoryService {
       }
     }
 
-    await github.repos.addCollaborator({
-      owner,
-      repo,
-      username: githubId,
-    });
+    await this.inviteStudent(owner, repo, githubId);
 
     await this.createWebhook(github, owner, repo);
 
