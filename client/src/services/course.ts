@@ -527,6 +527,7 @@ export interface StudentSummary {
         contactsNotes?: string;
       })
     | null;
+  rank: number;
 }
 
 export interface TaskSolution {

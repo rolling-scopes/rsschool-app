@@ -117,7 +117,7 @@ export function NextEventCard(props: Props) {
                     </Text>
                   </p>
                 )}
-                {nextEvent?.organizer.githubId && (
+                {nextEvent?.organizer?.githubId && (
                   <div style={{ marginBottom: 7 }}>
                     Organizer: <Text strong>{<GithubUserLink value={nextEvent?.organizer.githubId} />}</Text>
                   </div>
