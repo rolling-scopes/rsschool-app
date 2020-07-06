@@ -4,12 +4,22 @@ const defaultStudentRestrictions = { maxStudents: 1 };
 
 export type CrossMentor = { id: number; students: { id: number }[] | null };
 
-export function createCrossMentorPairs(mentors: CrossMentor[]) {
-  const students = mentors.map(m => m.students).reduce((acc: any, v) => acc.concat(v ?? []), []);
+export function createCrossMentorPairs(
+  mentors: CrossMentor[],
+  existingPairs: { studentId: number; mentorId: number }[],
+) {
+  const students = mentors
+    .map(m => m.students ?? [])
+    .reduce((acc, v) => acc.concat(v), [] as { id: number }[])
+    .filter(v => !existingPairs.find(p => p.studentId === v.id));
 
   const randomStudents = shuffleRec(students);
 
-  const maxStudentsPerMentor = mentors.map(({ id, students }) => ({ id, maxStudents: students?.length ?? 0 }));
+  const maxStudentsPerMentor = mentors.map(({ id, students }) => {
+    const assignedCount = existingPairs.filter(p => p.mentorId === id).length;
+    const maxStudentsCount = Math.max((students?.length ?? 0) - assignedCount, 0);
+    return { id, maxStudents: maxStudentsCount };
+  });
 
   for (const mentor of mentors) {
     const { maxStudents } = maxStudentsPerMentor.find(str => str.id === mentor.id) ?? defaultStudentRestrictions;

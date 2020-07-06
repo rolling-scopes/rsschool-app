@@ -12,12 +12,12 @@ const mentors: CrossMentor[] = [
 
 describe('cross check distribution', () => {
   it('should return correct amount of mentors', () => {
-    const result = createCrossMentorPairs(mentors);
+    const result = createCrossMentorPairs(mentors, []);
     expect(result.mentors.length).toBe(mentors.length);
   });
 
   it('should return 0 unassigned students', () => {
-    const result = createCrossMentorPairs(mentors);
+    const result = createCrossMentorPairs(mentors, []);
     const combineStudents = (acc: any[], m: CrossMentor) => acc.concat(m.students ?? []);
     const studentsBefore = mentors.reduce(combineStudents, []);
     const studentsAfter = result.mentors.reduce(combineStudents, []);
@@ -26,7 +26,7 @@ describe('cross check distribution', () => {
   });
 
   it('should assigned students to mentor if it has active students', () => {
-    const result = createCrossMentorPairs(mentors);
+    const result = createCrossMentorPairs(mentors, []);
     const hasMentorsWithoutStudents = mentors
       .filter(m => m.students?.length ?? 0)
       .some(mentor => (result.mentors.find(m => m.id === mentor.id)?.students?.length ?? 0) > 0);
