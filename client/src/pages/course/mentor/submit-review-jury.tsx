@@ -47,7 +47,7 @@ function Page(props: CoursePageProps) {
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
-      <Form onFinish={handleSubmit} layout="vertical">
+      <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <CourseTaskSelect data={courseTasks} onChange={setCourseTaskId} />
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
           <StudentSearch keyField="githubId" disabled={!courseTaskId} courseId={props.course.id} />
