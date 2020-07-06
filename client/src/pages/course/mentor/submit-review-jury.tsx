@@ -22,6 +22,8 @@ function Page(props: CoursePageProps) {
     setCourseTasks(courseTasks);
   }, []);
 
+  const fieldsToClear: string[] = ['githubId', 'score', 'comment'];
+
   const handleSubmit = async (values: any) => {
     if (loading) {
       return;
@@ -31,7 +33,7 @@ function Page(props: CoursePageProps) {
       const { githubId, courseTaskId, ...data } = values;
       await courseService.postStudentScore(githubId, courseTaskId, data);
       message.success('Score has been submitted.');
-      form.resetFields();
+      form.resetFields(fieldsToClear);
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
