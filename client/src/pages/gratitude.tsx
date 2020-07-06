@@ -10,6 +10,10 @@ type Props = {
   session: Session;
 };
 
+interface IGratitude {
+  [name: string]: string | number[];
+}
+
 type Badge = { id: string; name: string };
 
 const heroBadges = [
@@ -34,14 +38,18 @@ function Page(props: Props) {
     return userService.searchUser(searchText);
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: IGratitude) => {
     try {
       setLoading(true);
-      await gratitudeService.postGratitude({
-        toUserId: values.userId,
-        comment: values.comment,
-        badgeId: values.badgeId,
-      });
+      await Promise.all(
+        (values.userId as number[]).map((id: number) =>
+          gratitudeService.postGratitude({
+            toUserId: id,
+            comment: values.comment as string,
+            badgeId: values.badgeId as string,
+          }),
+        ),
+      );
       form.resetFields();
       message.success('Your feedback has been submitted.');
     } catch (e) {
