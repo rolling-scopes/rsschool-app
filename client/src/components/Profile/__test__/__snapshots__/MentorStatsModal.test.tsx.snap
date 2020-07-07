@@ -45,6 +45,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
     >
       <Row
         gutter={0}
+        justify="space-between"
         style={
           Object {
             "marginBottom": 24,
@@ -52,26 +53,25 @@ exports[`MentorStatsModal Should render correctly 1`] = `
         }
       >
         <Col>
-          <Avatar
-            alt="alex avatar"
-            shape="circle"
-            size={64}
-            src="https://github.com/alex.png?size=128"
-            style={
-              Object {
-                "marginRight": 24,
-              }
-            }
-          />
-        </Col>
-        <Col>
-          <p
+          <div
             style={
               Object {
                 "fontSize": 16,
+                "marginBottom": 16,
               }
             }
           >
+            <Avatar
+              alt="alex avatar"
+              shape="circle"
+              size={48}
+              src="https://github.com/alex.png?size=128"
+              style={
+                Object {
+                  "marginRight": 24,
+                }
+              }
+            />
             <Text
               strong={true}
             >
@@ -81,7 +81,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
                 Alex Petrov
               </a>
             </Text>
-          </p>
+          </div>
           <p
             style={
               Object {
@@ -170,6 +170,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
     >
       <Row
         gutter={0}
+        justify="space-between"
         style={
           Object {
             "marginBottom": 24,
@@ -177,26 +178,25 @@ exports[`MentorStatsModal Should render correctly 1`] = `
         }
       >
         <Col>
-          <Avatar
-            alt="vasya avatar"
-            shape="circle"
-            size={64}
-            src="https://github.com/vasya.png?size=128"
-            style={
-              Object {
-                "marginRight": 24,
-              }
-            }
-          />
-        </Col>
-        <Col>
-          <p
+          <div
             style={
               Object {
                 "fontSize": 16,
+                "marginBottom": 16,
               }
             }
           >
+            <Avatar
+              alt="vasya avatar"
+              shape="circle"
+              size={48}
+              src="https://github.com/vasya.png?size=128"
+              style={
+                Object {
+                  "marginRight": 24,
+                }
+              }
+            />
             <Text
               strong={true}
             >
@@ -206,7 +206,7 @@ exports[`MentorStatsModal Should render correctly 1`] = `
                 Vasiliy Alexandrov
               </a>
             </Text>
-          </p>
+          </div>
           <p
             style={
               Object {

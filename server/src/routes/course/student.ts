@@ -67,6 +67,7 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
       ...score,
       isActive: !student.isExpelled && !student.isFailed,
       mentor,
+      repository: student.repository,
     },
     60,
   );
