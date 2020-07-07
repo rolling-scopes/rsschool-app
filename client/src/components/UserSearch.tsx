@@ -34,7 +34,6 @@ export function UserSearch(props: UserProps) {
       {...otherProps}
       showSearch
       allowClear
-      mode="multiple"
       defaultValue={undefined}
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}

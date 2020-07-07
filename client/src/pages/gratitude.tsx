@@ -65,7 +65,7 @@ function Page(props: Props) {
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
-          <UserSearch searchFn={loadUsers} />
+          <UserSearch mode="multiple" searchFn={loadUsers} />
         </Form.Item>
         <Form.Item name="badgeId" label="Badge">
           <Select placeholder="Select a badge">
