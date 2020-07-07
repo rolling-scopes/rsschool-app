@@ -99,7 +99,7 @@ function Page(props: CoursePageProps) {
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
     <NextEventCard nextEvent={nextEvent} />,
-  ];
+  ].filter(Boolean) as JSX.Element[];
 
   return (
     <PageLayout
