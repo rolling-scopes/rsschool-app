@@ -32,21 +32,19 @@ class MentorStatsModal extends React.Component<Props> {
                 md={{ span: 8 }}
                 lg={{ span: 6 }}
               >
-                <Row style={{ marginBottom: 24 }}>
+                <Row style={{ marginBottom: 24 }} justify="space-between">
                   <Col>
-                    <Avatar
-                      src={`${guithubLink}.png?size=${128}`}
-                      alt={`${githubId} avatar`}
-                      size={64}
-                      style={{ marginRight: 24 }}
-                    />
-                  </Col>
-                  <Col>
-                    <p style={{ fontSize: 16 }}>
+                    <div style={{ fontSize: 16, marginBottom: 16 }}>
+                      <Avatar
+                        src={`${guithubLink}.png?size=${128}`}
+                        alt={`${githubId} avatar`}
+                        size={48}
+                        style={{ marginRight: 24 }}
+                      />
                       <Text strong>
                         <a href={profile}>{name}</a>
                       </Text>
-                    </p>
+                    </div>
                     <p style={{ marginBottom: 5 }}>
                       {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
                     </p>
