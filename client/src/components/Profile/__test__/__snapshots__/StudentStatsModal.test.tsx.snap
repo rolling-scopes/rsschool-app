@@ -76,7 +76,7 @@ exports[`StudentStatsModal Should render correctly 1`] = `
         >
           1201
         </Text>
-         / 340
+         / 340.0
       </p>
       <p
         style={

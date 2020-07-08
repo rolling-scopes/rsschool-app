@@ -51,7 +51,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
             )}
             <p style={{ marginBottom: 5 }}>
               Total Score: <Text mark>{totalScore}</Text>
-              {maxCourseScore && ` / ${maxCourseScore}`}
+              {maxCourseScore && ` / ${maxCourseScore.toFixed(1)}`}
             </p>
             <p style={{ marginBottom: 30 }}>
               Course progress: {`${scoredTasks} / ${tasks.length} tasks were scored (${courseProgress}%)`}
