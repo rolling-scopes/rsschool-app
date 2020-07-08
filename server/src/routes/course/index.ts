@@ -82,11 +82,11 @@ export function courseRoute(logger: ILogger) {
   router.post('/copy', adminGuard, postCopyCourse(logger));
 
   addScoreApi(router, logger);
+  addStageInterviewApi(router, logger);
   addInterviewsApi(router, logger);
   addStageApi(router, logger);
   addEventApi(router, logger);
   addTaskApi(router, logger);
-  addStageInterviewApi(router, logger);
   addMentorApi(router, logger);
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
@@ -101,6 +101,7 @@ function addScoreApi(router: Router, logger: ILogger) {
 
 function addInterviewsApi(router: Router, logger: ILogger) {
   router.get('/interviews', courseGuard, interviews.getInterviews(logger));
+  router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
 }
 
 function addStageApi(router: Router, logger: ILogger) {
@@ -199,6 +200,20 @@ function addStudentApi(router: Router, logger: ILogger) {
     courseGuard,
     ...validators,
     stageInterview.createInterviewStudent(logger),
+  );
+
+  router.get(
+    '/student/:githubId/interview/:courseTaskId',
+    courseGuard,
+    ...validators,
+    interviews.getInterviewStudent(logger),
+  );
+
+  router.post(
+    '/student/:githubId/interview/:courseTaskId',
+    courseGuard,
+    ...validators,
+    interviews.createInterviewStudent(logger),
   );
 
   router.get('/student/:githubId/summary', courseGuard, ...validators, getStudentSummary(logger));

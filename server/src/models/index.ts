@@ -29,6 +29,7 @@ import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { ExternalAccount, User } from './user';
 import { Consent, ChannelType } from './consent';
+import { TaskInterviewStudent } from './taskInterviewStudent';
 
 export * from './session';
 export {
@@ -57,6 +58,7 @@ export {
   TaskArtefact,
   TaskChecker,
   TaskInterviewResult,
+  TaskInterviewStudent,
   TaskResult,
   TaskSolution,
   TaskSolutionChecker,
@@ -92,6 +94,7 @@ export const models = [
   TaskArtefact,
   TaskChecker,
   TaskInterviewResult,
+  TaskInterviewStudent,
   TaskResult,
   TaskSolution,
   TaskSolutionChecker,
