@@ -7,11 +7,13 @@ export type CrossMentor = { id: number; students: { id: number }[] | null };
 export function createCrossMentorPairs(
   mentors: CrossMentor[],
   existingPairs: { studentId: number; mentorId: number }[],
+  registeredStudentsIds?: number[],
 ) {
   const students = mentors
     .map(m => m.students ?? [])
     .reduce((acc, v) => acc.concat(v), [] as { id: number }[])
-    .filter(v => !existingPairs.find(p => p.studentId === v.id));
+    .filter(v => !existingPairs.find(p => p.studentId === v.id))
+    .filter(v => registeredStudentsIds?.includes(v.id) ?? true);
 
   const randomStudents = shuffleRec(students);
 

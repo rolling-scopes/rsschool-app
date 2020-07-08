@@ -1,5 +1,5 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
-import { TaskChecker, TaskInterviewResult } from '../models';
+import { TaskChecker, TaskInterviewResult, TaskInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
 
 @EntityRepository(TaskChecker)
@@ -10,6 +10,47 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
 
   public findByStudent(courseId: number, githubId: string): Promise<InterviewDetails[]> {
     return this.getInterviews(courseId, githubId, 'student');
+  }
+
+  public async addStudent(courseId: number, courseTaskId: number, studentId: number) {
+    const repository = await getRepository(TaskInterviewStudent);
+    let record = await repository.findOne({ where: { courseId, studentId, courseTaskId } });
+    if (record == null) {
+      record = await repository.save({ courseId, studentId, courseTaskId });
+    }
+    return { id: record.id };
+  }
+
+  public async findRegisteredStudent(courseId: number, courseTaskId: number, studentId: number) {
+    const repository = await getRepository(TaskInterviewStudent);
+    const record = await repository.findOne({ where: { courseId, studentId, courseTaskId } });
+    return record ? { id: record.id } : null;
+  }
+
+  public async findRegisteredStudents(courseId: number, courseTaskId: number) {
+    const repository = await getRepository(TaskInterviewStudent);
+    const records = await repository
+      .createQueryBuilder('is')
+      .innerJoin('is.student', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect([
+        'student.id',
+        'student.totalScore',
+        'student.mentorId',
+        ...courseService.getPrimaryUserFields('user'),
+      ])
+      .where('is.courseId = :courseId', { courseId })
+      .andWhere('is.courseTaskId = :courseTaskId', { courseTaskId })
+      .andWhere('student.isExpelled = false')
+      .getMany();
+
+    return records.map(record => ({
+      id: record.student.id,
+      name: userService.createName(record.student.user),
+      githubId: record.student.user.githubId,
+      mentor: record.student.mentorId ? { id: record.student.mentorId } : null,
+      totalScore: record.student.totalScore,
+    }));
   }
 
   private async getInterviews(courseId: number, githubId: string, type: 'mentor' | 'student') {

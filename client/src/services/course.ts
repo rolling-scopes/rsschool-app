@@ -373,6 +373,13 @@ export class CourseService {
   }
 
   async createInterviewDistribution(courseTaskId: number) {
+    const result = await this.axios.post(`/interviews/${courseTaskId}`, {
+      registrationEnabled: true,
+    });
+    return result.data;
+  }
+
+  async createTaskDistribution(courseTaskId: number) {
     const result = await this.axios.post(`/task/${courseTaskId}/distribution`);
     return result.data;
   }
@@ -505,7 +512,10 @@ export interface MentorDetails extends MentorBasic {
   cityName: string;
   maxStudentsLimit: number;
   studentsPreference: string;
-  interviewsCount: number;
+  interviews: {
+    techScreeningsCount?: number;
+    interviewsCount?: number;
+  };
 }
 
 export interface PostScore {

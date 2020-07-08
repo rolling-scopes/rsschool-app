@@ -122,9 +122,15 @@ function Page(props: CoursePageProps) {
             width: 80,
           },
           {
+            title: 'Tech Screenings',
+            dataIndex: ['interviews', 'techScreeningsCount'],
+            sorter: numberSorter('interviews.techScreeningsCount' as any),
+            width: 80,
+          },
+          {
             title: 'Interviews',
-            dataIndex: 'interviewsCount',
-            sorter: numberSorter('interviewsCount'),
+            dataIndex: ['interviews', 'interviewsCount'],
+            sorter: numberSorter('interviews.interviewsCount' as any),
             width: 80,
           },
           {

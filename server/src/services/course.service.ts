@@ -21,6 +21,7 @@ import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
 import { paginate, IPaginationOptions } from 'koa-typeorm-pagination';
 import { ScoreTableFilters } from '../../../common/types/score';
+import { MentorRepository } from '../repositories/mentor';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -74,7 +75,10 @@ export interface MentorDetails extends MentorBasic {
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'any' | 'city' | 'country';
-  interviewsCount?: number;
+  interviews: {
+    techScreeningsCount?: number;
+    interviewsCount?: number;
+  };
   studentsCount?: number;
   taskResultsStats?: {
     total: number;
@@ -140,7 +144,9 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference ?? 'any',
     studentsCount: mentor.students ? mentor.students.length : 0,
-    interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+    interviews: {
+      techScreeningsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+    },
   };
 }
 
@@ -276,56 +282,8 @@ export async function getMentors(courseId: number): Promise<MentorDetails[]> {
 }
 
 export async function getMentorsDetails(courseId: number): Promise<MentorDetails[]> {
-  const courseTaskQuery = getRepository(CourseTask)
-    .createQueryBuilder('courseTask')
-    .select(['courseTask.id'])
-    .leftJoin('courseTask.task', 'task')
-    .where('task.verification = :manual', { manual: 'manual' })
-    .andWhere('"courseTask".checker = :mentor', { mentor: 'mentor' })
-    .andWhere('"courseTask"."courseId" = :courseId', { courseId })
-    .andWhere('"courseTask"."studentEndDate" < NOW()');
-
-  const courseTasks = await courseTaskQuery.getMany();
-
-  const query = mentorQuery()
-    .innerJoin('mentor.user', 'user')
-    .addSelect(getPrimaryUserFields())
-    .leftJoin('mentor.students', 'students')
-    .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
-    .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
-      taskIds: courseTasks.length > 0 ? courseTasks.map(t => t.id) : [null],
-    })
-    .leftJoin('mentor.stageInterviews', 'si')
-    .addSelect(['si.id', 'taskResults.id', 'taskResults.score', 'taskResults.courseTaskId', 'taskResults.updatedDate'])
-    .where(`"mentor"."courseId" = :courseId`, { courseId })
-    .orderBy('mentor.createdDate');
-
-  const records = await query.getMany();
-
-  const count = courseTasks.length;
-  const mentors = records.map(mentor => {
-    const mentorBasic = convertToMentorBasic(mentor);
-    const user = (mentor.user as User)!;
-    const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
-    const totalToCheck = activeStudents.length * count;
-    const lastUpdatedDate = _.max(
-      _.flatMap(mentor.students ?? [], s => s.taskResults?.map(r => new Date(r.updatedDate).getTime()) ?? []),
-    );
-    return {
-      ...mentorBasic,
-      cityName: user.cityName ?? '',
-      countryName: user.countryName ?? '',
-      maxStudentsLimit: mentor.maxStudentsLimit,
-      studentsPreference: mentor.studentsPreference ?? 'any',
-      studentsCount: activeStudents.length,
-      interviewsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
-      taskResultsStats: {
-        lastUpdatedDate,
-        total: totalToCheck,
-        checked: activeStudents.reduce((acc, student) => acc + (student.taskResults?.length ?? 0), 0) ?? 0,
-      },
-    };
-  });
+  const mentorRepository = getCustomRepository(MentorRepository);
+  const mentors = mentorRepository.findExtended(courseId);
   return mentors;
 }
 
