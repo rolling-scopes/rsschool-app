@@ -373,9 +373,7 @@ export class CourseService {
   }
 
   async createInterviewDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/interviews/${courseTaskId}`, {
-      registrationEnabled: true,
-    });
+    const result = await this.axios.post(`/interviews/${courseTaskId}`);
     return result.data;
   }
 
