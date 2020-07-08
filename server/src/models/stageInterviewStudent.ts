@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, Index } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, Unique } from 'typeorm';
 import { Course } from '.';
 import { Student } from './student';
 
 @Entity()
+@Unique(['studentId', 'courseId'])
 export class StageInterviewStudent {
   @PrimaryGeneratedColumn() id: number;
 
@@ -16,7 +17,6 @@ export class StageInterviewStudent {
   student: Student;
 
   @Column()
-  @Index({ unique: true })
   studentId: number;
 
   @ManyToOne(_ => Course)
