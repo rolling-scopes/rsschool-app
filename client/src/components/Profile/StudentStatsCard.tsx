@@ -15,6 +15,7 @@ const { Text } = Typography;
 type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
+  isProfileOwner: boolean | null;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   username: string;
@@ -76,7 +77,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
     const stats = this.props.data;
     const gitHubId: string = this.props.username;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
@@ -146,7 +147,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
                       Score: <Text mark>{totalScore}</Text>
                     </p>
-                    {!(isExpelled || isCourseCompleted) ? (
+                    {!(isExpelled || isCourseCompleted || !isProfileOwner) ? (
                       <Popconfirm
                         onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
                         title="Are you sure you want to expel yourself from course?"
