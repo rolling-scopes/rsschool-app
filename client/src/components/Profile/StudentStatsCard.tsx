@@ -147,7 +147,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
                       Score: <Text mark>{totalScore}</Text>
                     </p>
-                    {!(isExpelled || isCourseCompleted || !isProfileOwner) ? (
+                    {!(isExpelled || isCourseCompleted) && isProfileOwner ? (
                       <Popconfirm
                         onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
                         title="Are you sure you want to expel yourself from course?"
