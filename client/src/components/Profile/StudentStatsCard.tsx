@@ -15,7 +15,7 @@ const { Text } = Typography;
 type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
-  isProfileOwner: boolean | null;
+  isProfileOwner?: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   username: string;

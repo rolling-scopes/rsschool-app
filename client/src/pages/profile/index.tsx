@@ -48,7 +48,7 @@ type State = {
   profile: ProfileInfo | null;
   initialPermissionsSettings: ConfigurableProfilePermissions | null;
   initialProfileSettings: ProfileInfo | null;
-  isProfileOwner: boolean | null;
+  isProfileOwner?: boolean;
   isLoading: boolean;
   isSaving: boolean;
   isEditingModeEnabled: boolean;
@@ -65,7 +65,6 @@ export class ProfilePage extends React.Component<Props, State> {
     profile: null,
     initialPermissionsSettings: null,
     initialProfileSettings: null,
-    isProfileOwner: null,
     isLoading: true,
     isSaving: false,
     isEditingModeEnabled: false,
@@ -211,7 +210,7 @@ export class ProfilePage extends React.Component<Props, State> {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const profile = await this.userService.getProfileInfo(githubId);
-      let isProfileOwner: boolean | null = null;
+      let isProfileOwner;
       if (profile) {
         const userId = this.props.session.githubId;
         const profileId = profile.generalInfo!.githubId;
