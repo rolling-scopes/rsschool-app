@@ -87,6 +87,18 @@ export class User {
   @Column({ nullable: true })
   locationId?: string;
 
+  @Column({ default: false })
+  opportunitiesConsent: boolean;
+
+  @Column({ nullable: true, type: 'text' })
+  selfIntroLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  militaryService?: string | null;
+
   @Column({ nullable: true })
   englishLevel?: EnglishLevel;
 
