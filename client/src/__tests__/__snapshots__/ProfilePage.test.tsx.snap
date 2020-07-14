@@ -579,6 +579,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                 ]
               }
               isEditingModeEnabled={false}
+              isProfileOwner={false}
               onPermissionsSettingsChange={[Function]}
               permissionsSettings={
                 Object {
