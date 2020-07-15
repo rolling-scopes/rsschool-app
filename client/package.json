@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "next build src",
-    "build:tsc": "tsc -p ./src/tsconfig.json",
+    "ci:build": "tsc -p ./src/tsconfig.json",
     "prod": "next start -p 8080",
     "test": "jest --config=./src/jest.config.js",
     "test-watch": "jest --config=./src/jest.config.js --watch",
