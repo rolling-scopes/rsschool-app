@@ -37,6 +37,7 @@ import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { checkIsProfileOwner } from 'utils/profile-check';
 
 type Props = {
   router: NextRouter;
@@ -47,6 +48,7 @@ type State = {
   profile: ProfileInfo | null;
   initialPermissionsSettings: ConfigurableProfilePermissions | null;
   initialProfileSettings: ProfileInfo | null;
+  isProfileOwner: boolean;
   isLoading: boolean;
   isSaving: boolean;
   isEditingModeEnabled: boolean;
@@ -63,6 +65,7 @@ export class ProfilePage extends React.Component<Props, State> {
     profile: null,
     initialPermissionsSettings: null,
     initialProfileSettings: null,
+    isProfileOwner: false,
     isLoading: true,
     isSaving: false,
     isEditingModeEnabled: false,
@@ -208,6 +211,12 @@ export class ProfilePage extends React.Component<Props, State> {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const profile = await this.userService.getProfileInfo(githubId);
+      let isProfileOwner = false;
+      if (profile) {
+        const userId = this.props.session.githubId;
+        const profileId = profile.generalInfo!.githubId;
+        isProfileOwner = checkIsProfileOwner(userId, profileId);
+      }
       const initialPermissionsSettings = profile.permissionsSettings ? cloneDeep(profile.permissionsSettings) : null;
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
@@ -215,6 +224,7 @@ export class ProfilePage extends React.Component<Props, State> {
       await this.setState({
         isLoading: false,
         profile,
+        isProfileOwner,
         initialPermissionsSettings,
         isEditingModeEnabled,
         initialProfileSettings,
@@ -286,6 +296,7 @@ export class ProfilePage extends React.Component<Props, State> {
       initialPermissionsSettings,
       isInitialPermissionsSettingsChanged,
       isInitialProfileSettingsChanged,
+      isProfileOwner,
     } = this.state;
     const isEditingModeVisible = initialPermissionsSettings && isEditingModeEnabled ? isEditingModeEnabled : false;
     const isSaveButtonVisible = isInitialPermissionsSettingsChanged || isInitialProfileSettingsChanged;
@@ -355,6 +366,7 @@ export class ProfilePage extends React.Component<Props, State> {
         <StudentStatsCard
           username={this.props.session.githubId}
           data={profile.studentStats}
+          isProfileOwner={isProfileOwner}
           isEditingModeEnabled={isEditingModeVisible}
           permissionsSettings={profile.permissionsSettings}
           onPermissionsSettingsChange={this.onPermissionsSettingsChange}

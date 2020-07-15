@@ -104,6 +104,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
     ]
   }
   isEditingModeEnabled={false}
+  isProfileOwner={false}
   onPermissionsSettingsChange={[MockFunction]}
   username="test"
 >
@@ -1695,6 +1696,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
     ]
   }
   isEditingModeEnabled={true}
+  isProfileOwner={false}
   onPermissionsSettingsChange={[MockFunction]}
   username="test"
 >
