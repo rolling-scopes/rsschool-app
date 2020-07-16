@@ -214,7 +214,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   );
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
-  router.post('/student/:githubId/repository', courseManagerGuard, ...validators, createRepository(logger));
+  router.post('/student/:githubId/repository', guard, ...validators, createRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
