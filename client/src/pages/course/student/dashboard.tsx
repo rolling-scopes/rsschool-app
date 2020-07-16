@@ -12,7 +12,7 @@ import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentTasksDetail } from '../../../../../common/models';
-import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard } from 'components/Dashboard';
+import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard, RepositoryCard } from 'components/Dashboard';
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
@@ -96,6 +96,11 @@ function Page(props: CoursePageProps) {
         maxCourseScore={maxCourseScore}
       />
     ),
+    <RepositoryCard
+      githubId={githubId}
+      url={studentSummary?.repository}
+      onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
+    />,
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
     <NextEventCard nextEvent={nextEvent} />,

@@ -461,6 +461,11 @@ export class CourseService {
     return result.data.data as Interview[];
   }
 
+  async sendInviteRepository(githubId: string) {
+    const result = await this.axios.post(`/student/${githubId}/repository`);
+    return result.data.data;
+  }
+
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
@@ -536,6 +541,7 @@ export interface StudentSummary {
       })
     | null;
   rank: number;
+  repository?: string | null;
 }
 
 export interface TaskSolution {
