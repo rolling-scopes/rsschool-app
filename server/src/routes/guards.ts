@@ -20,6 +20,7 @@ const userGuards = (user: IUserSession) => {
       ),
     isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes('manager') ?? false,
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
+    isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
     isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false,
     isLoggedIn: (ctx: Router.RouterContext<any, any>) => user != null && (ctx.isAuthenticated() || config.isDevMode),
@@ -64,6 +65,17 @@ export const courseMentorGuard = async (ctx: Router.RouterContext<any, any>, nex
     guards.isLoggedIn(ctx) &&
     (guards.isMentor(courseId) || guards.isSupervisor(courseId) || guards.isPowerUser(courseId))
   ) {
+    await next();
+    return;
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const anyCourseMentorGuard = async (ctx: Router.RouterContext, next: () => Promise<void>) => {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+
+  if (guards.isLoggedIn(ctx) && guards.isAnyMentor()) {
     await next();
     return;
   }

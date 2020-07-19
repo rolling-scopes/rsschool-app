@@ -12,6 +12,7 @@ import {
   taskOwnerGuard,
   courseManagerGuard,
   basicAuthAws,
+  anyCourseMentorGuard,
 } from '../guards';
 import { setResponse } from '../utils';
 import {
@@ -58,6 +59,7 @@ import {
   getCrossMentors,
   getStudent,
   updateStudent,
+  postFeedback,
 } from './student';
 import * as crossCheck from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
@@ -219,6 +221,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
+  router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
