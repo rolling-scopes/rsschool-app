@@ -103,7 +103,7 @@ export default withCourseData(withSession(Page, 'student'));
 function CrossCheckComments({
   comments,
 }: {
-  comments: { comment: string; score: number | null; author: { name: string; githubId: string } | null }[];
+  comments: { comment: string; score: number; author: { name: string; githubId: string } | null }[];
 }) {
   if (!comments || comments.length === 0) {
     return null;

@@ -78,7 +78,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
     return {
       author,
       comment: c.comment,
-      score: !c.anonymous ? c.score : null,
+      score: c.score,
     };
   });
   const taskSolution = await getRepository(TaskSolution)
