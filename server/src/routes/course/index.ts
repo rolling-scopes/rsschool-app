@@ -160,9 +160,9 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
 }
 
 function addCourseUserApi(router: Router, logger: ILogger) {
-  router.get('/users', adminGuard, getUsers(logger));
-  router.post('/user/:githubId', adminGuard, validateGithubId, postUser(logger));
-  router.put('/user/:githubId', adminGuard, validateGithubId, putUser(logger));
+  router.get('/users', courseManagerGuard, getUsers(logger));
+  router.post('/user/:githubId', courseManagerGuard, validateGithubId, postUser(logger));
+  router.put('/user/:githubId', courseManagerGuard, validateGithubId, putUser(logger));
 }
 
 function addMentorApi(router: Router, logger: ILogger) {
