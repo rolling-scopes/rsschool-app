@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Radio, Select, Table } from 'antd';
 import { AdminSider, Header, Session, withSession } from 'components';
-import { boolIconRenderer, stringSorter, tagsRenderer } from 'components/Table';
+import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -236,6 +236,7 @@ function getColumns(handleEditItem: any) {
       title: 'Name',
       dataIndex: 'name',
       sorter: stringSorter<Task>('name'),
+      ...getColumnSearchProps('name'),
     },
     {
       title: 'Discipline',
