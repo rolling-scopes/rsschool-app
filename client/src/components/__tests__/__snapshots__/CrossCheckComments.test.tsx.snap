@@ -1,0 +1,357 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CrossCheckComments Should render correctly if there are anonymous comments 1`] = `
+<Col>
+  <Row
+    gutter={0}
+    key="0"
+  >
+    <Divider />
+    <Comment
+      author="Student 1"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="1"
+  >
+    <Divider />
+    <Comment
+      author="Student 2"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="2"
+  >
+    <Divider />
+    <Comment
+      author="Student 3"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+</Col>
+`;
+
+exports[`CrossCheckComments Should render correctly if there are both types of comments 1`] = `
+<Col>
+  <Row
+    gutter={0}
+    key="0"
+  >
+    <Divider />
+    <Comment
+      author="Student 1"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="1"
+  >
+    <Divider />
+    <Comment
+      author="Student 2"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="2"
+  >
+    <Divider />
+    <Comment
+      author={
+        <GithubUserLink
+          value="torvalds"
+        />
+      }
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              100
+            </b>
+          </p>
+          <p>
+            Great job, you better quit cross stitching and start programming.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="3"
+  >
+    <Divider />
+    <Comment
+      author={
+        <GithubUserLink
+          value="torvalds"
+        />
+      }
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              100
+            </b>
+          </p>
+          <p>
+            Great job, you better quit cross stitching and start programming.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="4"
+  >
+    <Divider />
+    <Comment
+      author="Student 5"
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              5
+            </b>
+          </p>
+          <p>
+            Awful job, you better quit programming and learn to cross stitch.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+</Col>
+`;
+
+exports[`CrossCheckComments Should render correctly if there are signed comments 1`] = `
+<Col>
+  <Row
+    gutter={0}
+    key="0"
+  >
+    <Divider />
+    <Comment
+      author={
+        <GithubUserLink
+          value="torvalds"
+        />
+      }
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              100
+            </b>
+          </p>
+          <p>
+            Great job, you better quit cross stitching and start programming.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="1"
+  >
+    <Divider />
+    <Comment
+      author={
+        <GithubUserLink
+          value="torvalds"
+        />
+      }
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              100
+            </b>
+          </p>
+          <p>
+            Great job, you better quit cross stitching and start programming.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+  <Row
+    gutter={0}
+    key="2"
+  >
+    <Divider />
+    <Comment
+      author={
+        <GithubUserLink
+          value="torvalds"
+        />
+      }
+      avatar={<ForwardRef(UserOutlined) />}
+      content={
+        <React.Fragment>
+          <p>
+            <b>
+              Score: 
+              100
+            </b>
+          </p>
+          <p>
+            Great job, you better quit cross stitching and start programming.
+          </p>
+        </React.Fragment>
+      }
+      style={
+        Object {
+          "fontStyle": "italic",
+          "margin": 16,
+        }
+      }
+    />
+  </Row>
+</Col>
+`;
+
+exports[`CrossCheckComments Should render correctly if there's no comments 1`] = `""`;
