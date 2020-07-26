@@ -255,8 +255,8 @@ export class StudentRepository extends AbstractRepository<Student> {
       .createQueryBuilder('student')
       .select(['student.id', 'student.isExpelled', 'student.mentorId', 'student.isFailed'])
       .innerJoin('student.user', 'sUser')
-      .innerJoin('student.mentor', 'mentor')
-      .innerJoin('mentor.user', 'mUser')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
       .addSelect([
         'mentor.id',
         'mentor.isExpelled',

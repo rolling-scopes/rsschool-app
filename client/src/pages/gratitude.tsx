@@ -10,6 +10,10 @@ type Props = {
   session: Session;
 };
 
+interface IGratitude {
+  [name: string]: string | number[];
+}
+
 type Badge = { id: string; name: string };
 
 const heroBadges = [
@@ -34,16 +38,20 @@ function Page(props: Props) {
     return userService.searchUser(searchText);
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: IGratitude) => {
     try {
       setLoading(true);
       const savedActiveCourseId = Number(localStorage.getItem('activeCourseId'));
-      await gratitudeService.postGratitude({
-        toUserId: values.userId,
-        comment: values.comment,
-        badgeId: values.badgeId,
-        courseId: savedActiveCourseId,
-      });
+      await Promise.all(
+        (values.userId as number[]).map((id: number) =>
+          gratitudeService.postGratitude({
+            toUserId: id,
+            comment: values.comment as string,
+            badgeId: values.badgeId as string,
+            courseId: savedActiveCourseId,
+          }),
+        ),
+      );
       form.resetFields();
       message.success('Your feedback has been submitted.');
     } catch (e) {
@@ -59,7 +67,7 @@ function Page(props: Props) {
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
         <Form.Item name="userId" label="Person" rules={[{ required: true, message: 'Please select a person' }]}>
-          <UserSearch searchFn={loadUsers} />
+          <UserSearch mode="multiple" searchFn={loadUsers} />
         </Form.Item>
         <Form.Item name="badgeId" label="Badge">
           <Select placeholder="Select a badge">

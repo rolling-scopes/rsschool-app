@@ -78,7 +78,13 @@ function Page(props: CoursePageProps) {
     setModalData(null);
   };
 
-  const handleDistribute = async (record: CourseTaskDetails) => {
+  const handleTaskDistribute = async (record: CourseTaskDetails) => {
+    setLoading(true);
+    await service.createTaskDistribution(record.id);
+    setLoading(false);
+  };
+
+  const handleInterviewDistribute = async (record: CourseTaskDetails) => {
     setLoading(true);
     await service.createInterviewDistribution(record.id);
     setLoading(false);
@@ -96,7 +102,8 @@ function Page(props: CoursePageProps) {
   );
 
   const getDropdownMenu = (record: CourseTaskDetails) => {
-    const hasDistibute = record.type === 'interview' || record.checker === 'assigned';
+    const hasInterviewDistibute = record.type === 'interview';
+    const hasTaskDistibute = record.checker === 'assigned';
     const hasCrossCheck = record.checker === 'crossCheck';
     return (
       <Dropdown
@@ -105,7 +112,10 @@ function Page(props: CoursePageProps) {
           <Menu style={{ width: 200 }}>
             <Menu.Item onClick={() => handleEditItem(record)}>Edit</Menu.Item>
             <Menu.Item onClick={() => handleDeleteItem(record.id)}>Delete</Menu.Item>
-            {hasDistibute && <Menu.Item onClick={() => handleDistribute(record)}>Distribute</Menu.Item>}
+            {hasTaskDistibute && <Menu.Item onClick={() => handleTaskDistribute(record)}>Distribute</Menu.Item>}
+            {hasInterviewDistibute && (
+              <Menu.Item onClick={() => handleInterviewDistribute(record)}>Distribute</Menu.Item>
+            )}
             {hasCrossCheck && <Menu.Divider />}
             {hasCrossCheck && (
               <Menu.Item onClick={() => handleCrossCheckDistribution(record)}>Cross-Check: Distribute</Menu.Item>

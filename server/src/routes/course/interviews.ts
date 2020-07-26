@@ -1,8 +1,8 @@
-import { OK } from 'http-status-codes';
+import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { courseService } from '../../services';
+import { courseService, interviewService } from '../../services';
 import { setResponse } from '../utils';
 import { InterviewRepository } from '../../repositories/interview';
 import { StageInterviewRepository } from '../../repositories/stageInterview';
@@ -54,4 +54,58 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
       };
     });
   setResponse(ctx, OK, result);
+};
+
+export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId, courseTaskId } = ctx.params;
+  try {
+    const student = await courseService.queryStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      setResponse(ctx, BAD_REQUEST, null);
+      return;
+    }
+    const repository = getCustomRepository(InterviewRepository);
+    const result = await repository.addStudent(courseId, Number(courseTaskId), student.id);
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId, courseTaskId } = ctx.params;
+  try {
+    const student = await courseService.queryStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      setResponse(ctx, BAD_REQUEST, null);
+      return;
+    }
+    const repository = getCustomRepository(InterviewRepository);
+    const result = await repository.findRegisteredStudent(courseId, Number(courseTaskId), student.id);
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
+  const courseTaskId: number = Number(ctx.params.courseTaskId);
+  try {
+    const { clean = false, registrationEnabled = false } = ctx.request.body as {
+      clean: boolean;
+      registrationEnabled: boolean;
+    };
+    const result = await interviewService.createInterviewsAutomatically(courseId, courseTaskId, {
+      clean,
+      registrationEnabled,
+    });
+    if (result == null) {
+      setResponse(ctx, BAD_REQUEST);
+      return;
+    }
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
 };

@@ -5,3 +5,4 @@ export * from './TasksStatsCard';
 export * from './TasksStatsModal';
 export * from './NextEventCard';
 export * from './renderers';
+export * from './RepositoryCard';

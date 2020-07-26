@@ -2,10 +2,12 @@ import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { TaskInterviewResult } from '../../models';
+import { Feedback, TaskInterviewResult } from '../../models';
 import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student';
+
+type FeedbackInput = { toUserId: number; comment: string };
 
 export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId } = ctx.params;
@@ -46,6 +48,23 @@ export const selfUpdateStudentStatus = (_: ILogger) => async (ctx: Router.Router
   }
 };
 
+export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const data: FeedbackInput = ctx.request.body;
+  const id = ctx.state.user.id;
+
+  const feedback: Partial<Feedback> = {
+    comment: data.comment,
+    course: courseId,
+    fromUser: id,
+    toUser: data.toUserId,
+  };
+  const result = await getRepository(Feedback).save(feedback);
+
+  setResponse(ctx, OK, result);
+  return;
+};
+
 export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
 
@@ -67,6 +86,7 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
       ...score,
       isActive: !student.isExpelled && !student.isFailed,
       mentor,
+      repository: student.repository,
     },
     60,
   );

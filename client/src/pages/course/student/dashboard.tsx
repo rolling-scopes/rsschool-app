@@ -12,12 +12,11 @@ import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentTasksDetail } from '../../../../../common/models';
-import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard } from 'components/Dashboard';
+import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard, RepositoryCard } from 'components/Dashboard';
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
   const { fullName } = props.course;
-  const mockPosition = 356;
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
@@ -58,7 +57,9 @@ function Page(props: CoursePageProps) {
     }
   }, [props.course.id]);
 
-  const currentDate = moment([2020, 2, 26]);
+  const currentDate = moment().format('YYYY MM DD');
+
+  const studentPosition = studentSummary?.rank ?? 0;
 
   const maxCourseScore = courseTasks.reduce((score, task) => score + (task.maxScore ?? 0), 0);
 
@@ -91,14 +92,19 @@ function Page(props: CoursePageProps) {
       <MainStatsCard
         isActive={isActive}
         totalScore={totalScore}
-        position={mockPosition}
+        position={studentPosition}
         maxCourseScore={maxCourseScore}
       />
     ),
+    <RepositoryCard
+      githubId={githubId}
+      url={studentSummary?.repository}
+      onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
+    />,
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
     <NextEventCard nextEvent={nextEvent} />,
-  ];
+  ].filter(Boolean) as JSX.Element[];
 
   return (
     <PageLayout

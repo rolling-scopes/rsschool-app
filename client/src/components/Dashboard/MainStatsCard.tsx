@@ -47,11 +47,11 @@ export function MainStatsCard(props: Props) {
                   {isActive ? 'Active' : 'Inactive'}
                 </Text>
               </p>
-              {position && (
+              {
                 <p style={{ marginBottom: 7 }}>
                   Position: <Text strong>{position}</Text>
                 </p>
-              )}
+              }
               <p style={{ marginBottom: 7 }}>
                 Total Score: <Text mark>{totalScore}</Text>
                 {maxCourseScore && ` / ${maxCourseScore}`}

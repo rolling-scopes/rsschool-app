@@ -128,7 +128,11 @@ class MentorStatsCard extends React.Component<Props, State> {
                       )}
                     </div>
                     {students && (
-                      <Button type="dashed" onClick={this.showMentorStatsModal.bind(null, idx)}>
+                      <Button
+                        style={{ marginLeft: 16 }}
+                        type="dashed"
+                        onClick={this.showMentorStatsModal.bind(null, idx)}
+                      >
                         <FullscreenOutlined />
                       </Button>
                     )}

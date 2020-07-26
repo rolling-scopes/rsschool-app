@@ -46,6 +46,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       isActive: true,
       courseManagers: [],
       profilePermissions: null,
+      opportunitiesConsent: false,
     };
     const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;

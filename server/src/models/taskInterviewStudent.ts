@@ -1,10 +1,11 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, Unique } from 'typeorm';
-import { Course } from '.';
+import { Course } from './course';
 import { Student } from './student';
+import { CourseTask } from './courseTask';
 
 @Entity()
-@Unique(['studentId', 'courseId'])
-export class StageInterviewStudent {
+@Unique(['studentId', 'courseId', 'courseTaskId'])
+export class TaskInterviewStudent {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
@@ -24,4 +25,10 @@ export class StageInterviewStudent {
 
   @Column({ nullable: true })
   courseId: number;
+
+  @ManyToOne(_ => CourseTask)
+  courseTask: CourseTask;
+
+  @Column()
+  courseTaskId: number;
 }

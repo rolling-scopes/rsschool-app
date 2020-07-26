@@ -1,7 +1,7 @@
 import { scheduleJob } from 'node-schedule';
 import { ILogger } from './logger';
 import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } from './services/course.service';
-import { round, mapValues, keyBy, sum, orderBy } from 'lodash';
+import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {
   scheduleJob('*/3 * * * *', async () => {
@@ -19,8 +19,8 @@ export function startBackgroundJobs(logger: ILogger) {
       logger.info({ msg: `Loaded course score`, course: course.name, duration: Date.now() - dataStart });
       const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
 
-      const scores = orderBy(
-        students.content.map(({ id, rank, taskResults, totalScore, totalScoreChangeDate }) => {
+      const scores = students.content
+        .map(({ id, rank, taskResults, totalScore, totalScoreChangeDate }) => {
           const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] || 1)));
           const newTotalScore = round(score, 1);
           const scoreChanged = totalScore !== newTotalScore;
@@ -31,10 +31,8 @@ export function startBackgroundJobs(logger: ILogger) {
             totalScore: newTotalScore,
             totalScoreChangeDate: scoreChanged ? new Date() : totalScoreChangeDate,
           };
-        }),
-        'totalScore',
-        ['desc'],
-      )
+        })
+        .sort((a, b) => b.totalScore - a.totalScore) // ['desc'] by totalScore
         .map((it, i) => ({
           ...it,
           rank: i + 1,

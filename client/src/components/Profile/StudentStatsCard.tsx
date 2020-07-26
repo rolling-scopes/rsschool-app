@@ -15,6 +15,7 @@ const { Text } = Typography;
 type Props = {
   data: StudentStats[];
   isEditingModeEnabled: boolean;
+  isProfileOwner: boolean;
   permissionsSettings?: ConfigurableProfilePermissions;
   onPermissionsSettingsChange: (event: CheckboxChangeEvent, settings: ChangedPermissionsSettings) => void;
   username: string;
@@ -76,7 +77,7 @@ class StudentStatsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
     const stats = this.props.data;
     const gitHubId: string = this.props.username;
     const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
@@ -109,59 +110,62 @@ class StudentStatsCard extends React.Component<Props, State> {
                   courseId,
                 },
                 idx,
-              ) => (
-                <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div style={{ flexGrow: 2 }}>
-                    <p style={{ marginBottom: 0 }}>
-                      <Text strong>
-                        {courseName}
-                        {locationName && ` / ${locationName}`}
-                      </Text>
-                    </p>
-                    <div style={{ width: '80%', marginBottom: 5 }}>
-                      <Progress
-                        percent={coursesProgress.length ? coursesProgress[idx] : 0}
-                        status={isExpelled ? 'exception' : isCourseCompleted ? 'success' : undefined}
-                        size="small"
-                      />
+              ) => {
+                const isActive = !(isExpelled || isCourseCompleted);
+                return (
+                  <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ flexGrow: 2 }}>
+                      <p style={{ marginBottom: 0 }}>
+                        <Text strong>
+                          {courseName}
+                          {locationName && ` / ${locationName}`}
+                        </Text>
+                      </p>
+                      <div style={{ width: '80%', marginBottom: 5 }}>
+                        <Progress
+                          percent={coursesProgress.length ? coursesProgress[idx] : 0}
+                          status={isExpelled ? 'exception' : isCourseCompleted ? 'success' : undefined}
+                          size="small"
+                        />
+                      </div>
+                      {certificateId && (
+                        <p style={{ fontSize: 16, marginBottom: 5 }}>
+                          <SafetyCertificateTwoTone twoToneColor="#52c41a" />{' '}
+                          <a target="__blank" href={`/certificate/${certificateId}`}>
+                            Certificate
+                          </a>
+                        </p>
+                      )}
+                      {mentor.githubId && (
+                        <p style={{ fontSize: 12, marginBottom: 5 }}>
+                          Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
+                        </p>
+                      )}
+                      {position && (
+                        <p style={{ fontSize: 12, marginBottom: 5 }}>
+                          Position: <Text strong>{position}</Text>
+                        </p>
+                      )}
+                      <p style={{ fontSize: 12, marginBottom: 5 }}>
+                        Score: <Text mark>{totalScore}</Text>
+                      </p>
+                      {isActive && isProfileOwner ? (
+                        <Popconfirm
+                          onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
+                          title="Are you sure you want to expel yourself from course?"
+                        >
+                          <a href="#">Self expel</a>
+                        </Popconfirm>
+                      ) : (
+                        ''
+                      )}
                     </div>
-                    {certificateId && (
-                      <p style={{ fontSize: 16, marginBottom: 5 }}>
-                        <SafetyCertificateTwoTone twoToneColor="#52c41a" />{' '}
-                        <a target="__blank" href={`/certificate/${certificateId}`}>
-                          Certificate
-                        </a>
-                      </p>
-                    )}
-                    {mentor.githubId && (
-                      <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
-                      </p>
-                    )}
-                    {position && (
-                      <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Position: <Text strong>{position}</Text>
-                      </p>
-                    )}
-                    <p style={{ fontSize: 12, marginBottom: 5 }}>
-                      Score: <Text mark>{totalScore}</Text>
-                    </p>
-                    {!(isExpelled || isCourseCompleted) ? (
-                      <Popconfirm
-                        onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
-                        title="Are you sure you want to expel yourself from course?"
-                      >
-                        <a href="#">Self expel</a>
-                      </Popconfirm>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                  <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
-                    <FullscreenOutlined />
-                  </Button>
-                </List.Item>
-              )}
+                    <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
+                      <FullscreenOutlined />
+                    </Button>
+                  </List.Item>
+                );
+              }}
             />
           }
           permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}

@@ -110,6 +110,7 @@ describe('', () => {
     it('if is editing mode disabled', () => {
       const output = mount(
         <StudentStatsCard
+          isProfileOwner={false}
           data={data}
           isEditingModeEnabled={false}
           onPermissionsSettingsChange={jest.fn()}
@@ -121,6 +122,7 @@ describe('', () => {
     it('if is editing mode enabled', () => {
       const output = mount(
         <StudentStatsCard
+          isProfileOwner={false}
           data={data}
           isEditingModeEnabled={true}
           onPermissionsSettingsChange={jest.fn()}
@@ -133,6 +135,7 @@ describe('', () => {
 
   const wrapper = shallow(
     <StudentStatsCard
+      isProfileOwner={false}
       data={data}
       isEditingModeEnabled={true}
       onPermissionsSettingsChange={jest.fn()}
