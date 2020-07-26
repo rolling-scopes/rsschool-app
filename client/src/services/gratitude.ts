@@ -1,8 +1,14 @@
 import axios from 'axios';
+import { stringify } from 'qs';
+import { IGratitudeGet, IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 
 export class GratitudeService {
-  async postGratitude(data: { toUserId: number; badgeId?: string; comment: string }) {
+  async postGratitude(data: { toUserId: number; badgeId?: string; comment: string; courseId: number }) {
     const result = await axios.post<{ data: { heroesUrl?: string } }>(`/api/feedback/gratitude`, data);
+    return result.data.data;
+  }
+  async getGratitude(data?: IGratitudeGetRequest): Promise<IGratitudeGet[]> {
+    const result = await axios.get(`/api/feedback/gratitude?${stringify(data)}`);
     return result.data.data;
   }
 }

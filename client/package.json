@@ -19,6 +19,7 @@
     "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
+    "@types/qs": "^6.9.4",
     "@types/react-gauge-chart": "^0.2.0",
     "algolia-places-react": "^1.5.1",
     "antd": "^4.2.4",
@@ -30,6 +31,7 @@
     "moment-timezone": "~0.5.28",
     "next": "~9.3.4",
     "next-transpile-modules": "^3.3.0",
+    "qs": "^6.9.4",
     "react": "~16.13.1",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "~16.13.1",

@@ -37,10 +37,12 @@ function Page(props: Props) {
   const handleSubmit = async (values: any) => {
     try {
       setLoading(true);
+      const savedActiveCourseId = Number(localStorage.getItem('activeCourseId'));
       await gratitudeService.postGratitude({
         toUserId: values.userId,
         comment: values.comment,
         badgeId: values.badgeId,
+        courseId: savedActiveCourseId,
       });
       form.resetFields();
       message.success('Your feedback has been submitted.');
