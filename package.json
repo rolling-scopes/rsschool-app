@@ -9,7 +9,7 @@
     "test-watch": "npm run test-watch --prefix client && npm run test-watch --prefix server",
     "coverage": "npm run coverage --prefix client && npm run coverage --prefix server",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
+    "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"common/**/*.{ts,tsx,js}\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:lint": "eslint . --ext .ts,.tsx",
     "ci:build": "concurrently \"npm run build:tsc --prefix client\" \"npm run build --prefix server\"",

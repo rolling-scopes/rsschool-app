@@ -61,7 +61,7 @@ function Page(props: Props) {
         <Form.Item name="githubId" label="GithubId">
           <Input />
         </Form.Item>
-        <Form.Item name="courseId" label="Courses" style={{minWidth: 300}}>
+        <Form.Item name="courseId" label="Courses" style={{ minWidth: 300 }}>
           <Select>
             {courses.map(task => (
               <Select.Option key={task.id} value={task.id}>
@@ -73,7 +73,7 @@ function Page(props: Props) {
         <Button size="middle" type="primary" htmlType="submit">
           Submit
         </Button>
-        <Button size="middle" type="primary" onClick={onClear} style={{marginLeft: 20}}>
+        <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
           Clear
         </Button>
       </Form>
@@ -91,10 +91,7 @@ function Page(props: Props) {
               }
             >
               <div className="flex-column">
-                <Meta
-                  title={`${e.firstName} ${e.lastName}`}
-                  description={`Gratituded ${e.badges} times`}
-                />
+                <Meta title={`${e.firstName} ${e.lastName}`} description={`Gratituded ${e.badges} times`} />
                 {e.activist && (
                   <Tag style={{ margin: 10 }} color="gold">
                     Activist
