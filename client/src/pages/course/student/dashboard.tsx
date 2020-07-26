@@ -61,7 +61,9 @@ function Page(props: CoursePageProps) {
 
   const studentPosition = studentSummary?.rank ?? 0;
 
-  const maxCourseScore = courseTasks.reduce((score, task) => score + (task.maxScore ?? 0), 0);
+  const maxCourseScore = Math.round(
+    courseTasks.reduce((score, task) => score + (task.maxScore ?? 0) * task.scoreWeight, 0),
+  );
 
   const tasksCompleted = courseTasks
     .filter(task => !!checkTaskResults(studentSummary.results, task.id))
