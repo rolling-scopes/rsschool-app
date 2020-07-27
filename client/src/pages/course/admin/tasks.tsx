@@ -155,6 +155,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
+  // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   const renderModal = (modalData: Partial<CourseTaskDetails> | null) => {
     return (
       <ModalForm
@@ -185,6 +186,7 @@ function Page(props: CoursePageProps) {
             <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
             <Select.Option value="cv:markdown">CV Markdown</Select.Option>
             <Select.Option value="cv:html">CV HTML</Select.Option>
+            <Select.Option value="codewars">Codewars</Select.Option>
             <Select.Option value="codewars:stage1">Codewars stage 1</Select.Option>
             <Select.Option value="codewars:stage2">Codewars stage 2</Select.Option>
             <Select.Option value="test">Test</Select.Option>
