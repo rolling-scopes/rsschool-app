@@ -73,7 +73,7 @@ export function registryRouter(logger?: ILogger) {
     if (mentorRegistry == null) {
       await getRepository(MentorRegistry).insert({ userId, ...mentorData });
     } else {
-      await getRepository(MentorRegistry).update(mentorRegistry.id, mentorData);
+      await getRepository(MentorRegistry).update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
     }
 
     setResponse(ctx, OK);
