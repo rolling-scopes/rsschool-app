@@ -1,12 +1,14 @@
 import { Entity, Column, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { CourseTask } from './courseTask';
 
+// TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
 export type TaskType =
   | 'jstask'
   | 'kotlintask'
   | 'objctask'
   | 'htmltask'
   | 'htmlcssacademy'
+  | 'codewars'
   | 'codewars:stage1'
   | 'codewars:stage2'
   | 'test'

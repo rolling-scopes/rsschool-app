@@ -63,23 +63,19 @@ export function MentorCard(props: Props) {
       icon={<TeamOutlined />}
       content={
         props.mentor ? (
-          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <div>
+          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+            <div style={{ marginBottom: '10px' }}>
               <GithubAvatar size={48} githubId={githubId!} style={{ margin: '0 auto 10px', display: 'block' }} />
               <Title level={1} style={{ fontSize: 24, textAlign: 'center', margin: 0 }}>
                 {name}
               </Title>
               <Paragraph style={{ textAlign: 'center', marginBottom: 10 }}>
-                <a
-                  target="_blank"
-                  href={`https://github.com/${githubId}`}
-                  style={{ marginLeft: '-14px', fontSize: 16 }}
-                >
+                <a target="_blank" href={`https://github.com/${githubId}`} style={{ fontSize: 16 }}>
                   <GithubFilled /> {githubId}
                 </a>
               </Paragraph>
               <Paragraph style={{ textAlign: 'center', margin: 0 }}>
-                <span style={{ marginLeft: '-14px' }}>
+                <span>
                   <EnvironmentFilled /> {`${cityName}, ${countryName}`}
                 </span>
               </Paragraph>

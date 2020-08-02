@@ -53,6 +53,8 @@ const EventTypeToName: Record<string, string> = {
   codejam: 'code jam',
   externaltask: 'external task',
   htmlcssacademy: 'html/css academy',
+  codewars: 'codewars',
+  // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   'codewars:stage1': 'codewars',
   'codewars:stage2': 'codewars',
 };

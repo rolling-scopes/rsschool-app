@@ -239,8 +239,8 @@ function Page(props: Props) {
                 <Form.Item name="technicalMentoring" label="Please pick technologies which you want to mentor in">
                   <Select mode="multiple" placeholder="Select technologies...">
                     <Select.Option value={'nodejs'}>Node.js</Select.Option>
-                    <Select.Option value={'angular'}>React</Select.Option>
-                    <Select.Option value={'react'}>Angular</Select.Option>
+                    <Select.Option value={'react'}>React</Select.Option>
+                    <Select.Option value={'angular'}>Angular</Select.Option>
                     <Select.Option value={'ios'}>iOS</Select.Option>
                     <Select.Option value={'android'}>Android</Select.Option>
                   </Select>
