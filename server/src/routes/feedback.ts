@@ -1,19 +1,22 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import Router from '@koa/router';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import { DiscordService, HeroesService } from '../integrations';
 import { ILogger } from '../logger';
 import { Feedback, PrivateFeedback, User } from '../models';
 import { guard } from './guards';
 import { setResponse } from './utils';
+import { FeedbackRepository } from '../repositories/feedback';
+import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 
-type GratitudeInput = { toUserId: number; comment: string; badgeId?: string };
+type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; courseId: number };
 type FeedbackInput = { toUserId: number; comment: string };
 
 export function feedbackRoute(logger: ILogger) {
   const router = new Router({ prefix: '/feedback' });
   router.post('/private', guard, postPrivateFeedback(logger));
   router.post('/gratitude', guard, postGratitudeFeedback(logger));
+  router.get('/gratitude', guard, getGratitudeFeedback());
   return router;
 }
 
@@ -98,7 +101,6 @@ const postGratitudeFeedback = (logger: ILogger) => {
   };
 
   return async (ctx: Router.RouterContext) => {
-    const courseId: number = ctx.params.courseId;
     const data: GratitudeInput = ctx.request.body;
     const id = ctx.state.user.id;
 
@@ -115,13 +117,23 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
-      course: courseId,
+      course: data.courseId,
       fromUser: id,
       toUser: data.toUserId,
       heroesUrl,
     };
     const result = await getRepository(Feedback).save(feedback);
 
+    setResponse(ctx, OK, result);
+    return;
+  };
+};
+
+const getGratitudeFeedback = () => {
+  return async (ctx: Router.RouterContext) => {
+    const data: IGratitudeGetRequest = ctx.query;
+    const feedbackRepository = getCustomRepository(FeedbackRepository);
+    const result = await feedbackRepository.getGratitude(data);
     setResponse(ctx, OK, result);
     return;
   };
