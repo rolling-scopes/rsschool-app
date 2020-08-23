@@ -2,10 +2,11 @@ import Router from '@koa/router';
 import { BAD_REQUEST } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { uniq } from 'lodash';
+import { Next } from 'koa';
 import { setResponse } from './utils';
 import { IUserSession, CourseUser, CourseRoles, CourseRole, CourseTask } from '../models';
 
-export const courseMiddleware = async (ctx: Router.RouterContext, next: any) => {
+export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   if (!ctx.params.courseId) {
     await next();
     return;
@@ -23,7 +24,7 @@ export const courseMiddleware = async (ctx: Router.RouterContext, next: any) => 
   await next();
 };
 
-export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) => {
+export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   const user = ctx.state?.user as IUserSession;
   if (user == null) {
     await next();
@@ -48,9 +49,9 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) 
       ...acc,
       [item.courseId]: uniq(
         (user.coursesRoles?.[item.courseId] ?? ([] as CourseRole[]))
-          .concat(item.isJuryActivist ? ['juryActivist'] : [])
-          .concat(item.isManager ? ['manager'] : [])
-          .concat(item.isSupervisor ? ['supervisor'] : []),
+          .concat(item.isJuryActivist ? [CourseRole.juryActivist] : [])
+          .concat(item.isManager ? [CourseRole.manager] : [])
+          .concat(item.isSupervisor ? [CourseRole.supervisor] : []),
       ),
     }),
     {},
@@ -59,7 +60,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: any) 
     if (!courseRoles[courseId]) {
       courseRoles[courseId] = [];
     }
-    courseRoles[courseId]?.push('taskOwner');
+    courseRoles[courseId]?.push(CourseRole.taskOwner);
   });
   user.coursesRoles = courseRoles;
   await next();

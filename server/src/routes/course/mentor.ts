@@ -8,6 +8,7 @@ import { Mentor, Student } from '../../models';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { updateSession } from '../../session';
 import { StudentRepository } from '../../repositories/student';
+import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 
@@ -48,7 +49,7 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
 
-  const input: { maxStudentsLimit: number; preferedStudentsLocation: any; students: number[] } = ctx.request.body;
+  const input: { maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation; students: number[] } = ctx.request.body;
   const user = await getUserByGithubId(githubId);
 
   if (user == null) {

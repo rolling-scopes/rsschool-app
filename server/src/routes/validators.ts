@@ -1,11 +1,12 @@
 import Router from '@koa/router';
+import { Next } from 'koa';
 import { setResponse } from './utils';
 import { BAD_REQUEST, FORBIDDEN } from 'http-status-codes';
 import { getCourseTask } from '../services/tasks.service';
 import { DateTime } from 'luxon';
 const auth = require('basic-auth'); //tslint:disable-line
 
-export const validateGithubIdAndAccess = async (ctx: Router.RouterContext, next: any) => {
+export const validateGithubIdAndAccess = async (ctx: Router.RouterContext, next: Next) => {
   let githubId: string = ctx.params.githubId;
   if (!githubId) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [githubId]');
@@ -29,15 +30,15 @@ export const validateGithubIdAndAccess = async (ctx: Router.RouterContext, next:
   await next();
 };
 
-export const validateCrossCheckExpirationDate = async (ctx: Router.RouterContext, next: any) => {
+export const validateCrossCheckExpirationDate = async (ctx: Router.RouterContext, next: Next) => {
   const courseTaskId: string = ctx.params.courseTaskId;
   if (!courseTaskId) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [courseTaskId]');
     return;
   }
 
-  const task: any = await getCourseTask(Number(courseTaskId));
-  if (DateTime.local() > DateTime.fromJSDate(task.studentEndDate)) {
+  const task = await getCourseTask(Number(courseTaskId));
+  if (!task || DateTime.local() > DateTime.fromJSDate(new Date(task.studentEndDate))) {
     setResponse(ctx, BAD_REQUEST, 'Cross Check deadline has expired');
     return;
   }
@@ -45,7 +46,7 @@ export const validateCrossCheckExpirationDate = async (ctx: Router.RouterContext
   await next();
 };
 
-export const validateGithubId = async (ctx: Router.RouterContext, next: any) => {
+export const validateGithubId = async (ctx: Router.RouterContext, next: Next) => {
   let githubId: string = ctx.params.githubId;
   if (!githubId) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [githubId]');

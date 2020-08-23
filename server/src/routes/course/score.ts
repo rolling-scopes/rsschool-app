@@ -4,7 +4,7 @@ import Router from '@koa/router';
 import NodeCache from 'node-cache';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { CourseTask, Student, Task, TaskResult, IUserSession } from '../../models';
+import { CourseTask, Student, Task, TaskResult, IUserSession, CourseRole } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService, notificationService } from '../../services';
 import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
 
@@ -58,7 +58,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   }
 
   if (courseTask.checker === 'jury') {
-    if (!coursesRoles?.[courseId]?.includes('juryActivist')) {
+    if (!coursesRoles?.[courseId]?.includes(CourseRole.juryActivist)) {
       setResponse(ctx, BAD_REQUEST, { message: 'not jury activist' });
       return;
     }
@@ -100,8 +100,8 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
   const mentor = await courseService.getMentorByUserId(courseId, authorId);
   const session = ctx.state.user as IUserSession;
 
-  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes('taskOwner');
-  if (mentor == null && !session.isAdmin && !session.coursesRoles?.[courseId]?.includes('manager') && isNotTaskOwner) {
+  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner);
+  if (mentor == null && !session.isAdmin && !session.coursesRoles?.[courseId]?.includes(CourseRole.manager) && isNotTaskOwner) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
     return;
   }
@@ -234,7 +234,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
       name: student.name,
       locationName: student.cityName,
       countryName: student.countryName || 'Other',
-      mentorGithubId: student.mentor ? (student.mentor as any).githubId : '',
+      mentorGithubId: student.mentor ? student.mentor.githubId : '',
       totalScore: student.totalScore,
       isActive: student.isActive,
       ...getTasksResults(student.taskResults, courseTasks),
