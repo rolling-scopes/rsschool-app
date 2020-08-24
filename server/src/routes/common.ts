@@ -32,7 +32,9 @@ export const createGetAllRoute = <T extends ObjectType<T>>(
   setResponse(ctx, OK, data);
 };
 
-export const createPostRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
+export const createPostRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (
+  ctx: Router.RouterContext,
+) => {
   const { id, createdDate, ...data } = ctx.request.body;
   try {
     const result = await getRepository(entity).insert(data);
@@ -45,7 +47,9 @@ export const createPostRoute = <T extends ObjectType<T>>(entity: T, logger?: ILo
   }
 };
 
-export const createPutRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
+export const createPutRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (
+  ctx: Router.RouterContext,
+) => {
   const { id: _id, createdDate, ...data } = ctx.request.body;
   const id: number = Number(ctx.params.id);
   try {
@@ -59,7 +63,9 @@ export const createPutRoute = <T extends ObjectType<T>>(entity: T, logger?: ILog
   }
 };
 
-export const createDeleteRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (ctx: Router.RouterContext) => {
+export const createDeleteRoute = <T extends ObjectType<T>>(entity: T, logger?: ILogger) => async (
+  ctx: Router.RouterContext,
+) => {
   const id: number = ctx.params.id;
   try {
     const result = await getRepository(entity).delete(id);

@@ -49,7 +49,8 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
 
-  const input: { maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation; students: number[] } = ctx.request.body;
+  const input: { maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation; students: number[] } =
+    ctx.request.body;
   const user = await getUserByGithubId(githubId);
 
   if (user == null) {
