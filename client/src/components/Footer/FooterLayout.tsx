@@ -7,6 +7,8 @@ import { Donation } from './Donation';
 
 const { Footer } = Layout;
 
+const maxDonatorsShown = 21;
+
 class FooterLayout extends React.Component<any, any> {
   getYear() {
     const date = new Date();
@@ -29,7 +31,7 @@ class FooterLayout extends React.Component<any, any> {
               </Row>
             </Col>
             <Col xs={24} sm={12} lg={8}>
-              <Donation />
+              <Donation maxDonatorsShown={maxDonatorsShown} />
             </Col>
             <Col xs={24} sm={12} lg={16}>
               <SocialNetworks />
