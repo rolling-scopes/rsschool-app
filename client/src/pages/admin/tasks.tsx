@@ -8,7 +8,7 @@ import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
-import { isAnyCourseManager } from '../../domain/user';
+import { isAnyCoursePowerUserManager } from '../../domain/user';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -180,7 +180,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCourseManager={isAnyCourseManager(props.session)} />
+      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUserManager(props.session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Tasks" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>

@@ -100,7 +100,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCourseManager={isAnyCourseManager(props.session)} />
+      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCourseManager(props.session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Mentor Registry" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>

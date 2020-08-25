@@ -8,3 +8,11 @@ export function isCourseManager(session: Session, courseId: number) {
 export function isAnyCourseManager(session: Session) {
   return values(session.coursesRoles).some(item => item?.includes('manager'));
 }
+
+export function isAnyCourseSupervisor(session: Session) {
+  return values(session.coursesRoles).some(item => item?.includes('supervisor'));
+}
+
+export function isAnyCoursePowerUserManager(session: Session) {
+  return isAnyCourseManager(session) || isAnyCourseSupervisor(session);
+}
