@@ -1,5 +1,6 @@
 import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select, Tag, Typography } from 'antd';
 import axios from 'axios';
+import { NextPageContext } from 'next';
 import { LocationSelect, PageLayout } from 'components';
 import { CommentInput, GdprCheckbox } from 'components/Forms';
 import withSession from 'components/withSession';
@@ -16,7 +17,7 @@ const defaultColumnSizes = { xs: 20, sm: 16, md: 12, lg: 10 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
-function Page(props: Props) {
+function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -29,9 +30,11 @@ function Page(props: Props) {
     setLoading(true);
     const [profile, courses] = await Promise.all([new UserService().getMyProfile(), new CoursesService().getCourses()]);
 
-    const activeCourses = courses
-      .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
-      .sort((a, b) => a.startDate.localeCompare(b.startDate));
+    const activeCourses = props.courseAlias
+      ? courses.filter((course: Course) => course.alias === props.courseAlias)
+      : courses
+          .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
+          .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     setLoading(false);
     setInitialData(profile);
@@ -392,4 +395,15 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   };
 }
 
-export default withSession(Page);
+const RegistryPage: any = withSession(Page);
+RegistryPage.getInitialProps = async (context: NextPageContext) => {
+  try {
+    const courseAlias = context.query.course;
+    return { courseAlias };
+  } catch (e) {
+    console.error(e.message);
+    return { courseAlias: undefined };
+  }
+};
+
+export default RegistryPage;
