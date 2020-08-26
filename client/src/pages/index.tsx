@@ -20,12 +20,13 @@ import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, T
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
-import { isEmpty, values } from 'lodash';
+import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { CourseService, StudentSummary } from 'services/course';
 import { Course } from 'services/models';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
+import { isAnyCoursePowerUserManager } from 'domain/user';
 
 const { Content } = Layout;
 
@@ -445,14 +446,14 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { isAdmin, coursesRoles } = this.props.session;
-    const isCourseManager = values(coursesRoles).some(item => item?.includes('manager'));
+    const { isAdmin } = this.props.session;
+    const isCoursePowerUser = isAnyCoursePowerUserManager(this.props.session);
     const activeCourse = this.getActiveCourse();
     const courses = this.getCourses();
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          {(isAdmin || isCourseManager) && <AdminSider isAdmin={isAdmin} isCourseManager={isCourseManager} />}
+          {(isAdmin || isCoursePowerUser) && <AdminSider isAdmin={isAdmin} isCoursePowerUser={isCoursePowerUser} />}
 
           <Layout style={{ background: '#fff' }}>
             <Header username={this.props.session.githubId} />

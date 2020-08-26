@@ -10,14 +10,13 @@ export const basicAuthAws = auth({
 });
 
 const userGuards = (user: IUserSession) => {
+  const courses = Object.keys(user.coursesRoles ?? {});
   const guards = {
     isAdmin: () => user.isAdmin,
     isHirer: () => user.isHirer,
     hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
-    isAnyManager: () =>
-      Object.keys(user.coursesRoles ?? {}).some((courseId: string) =>
-        user.coursesRoles?.[courseId]?.includes('manager'),
-      ),
+    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes('manager')),
+    isAnySupervisor: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes('supervisor')),
     isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes('manager') ?? false,
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
     isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
@@ -124,6 +123,16 @@ export const anyCourseManagerGuard = async (ctx: Router.RouterContext<any, any>,
   const user = ctx.state.user as IUserSession;
   const guards = userGuards(user);
   if (guards.isLoggedIn(ctx) && (guards.isAnyManager() || guards.isAdmin())) {
+    await next();
+    return;
+  }
+  await basicAuthAdmin(ctx, next);
+};
+
+export const anyCoursePowerUserGuard = async (ctx: Router.RouterContext<any, any>, next: () => Promise<void>) => {
+  const user = ctx.state.user as IUserSession;
+  const guards = userGuards(user);
+  if (guards.isLoggedIn(ctx) && (guards.isAnyManager() || guards.isAnySupervisor() || guards.isAdmin())) {
     await next();
     return;
   }
