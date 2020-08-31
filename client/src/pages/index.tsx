@@ -16,7 +16,7 @@ import {
   CheckSquareOutlined,
   // DashboardTwoTone,
 } from '@ant-design/icons';
-import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography } from 'antd';
+import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography, Alert } from 'antd';
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
 import withCourses from 'components/withCourses';
 import withSession, { Role, Session } from 'components/withSession';
@@ -363,14 +363,46 @@ class IndexPage extends React.PureComponent<Props, State> {
     const activeCourse = this.getActiveCourse();
     const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
     this.setState({ allCourses });
-    if (!activeCourse) {
-      const mentor = await mentorRegistryService.getMentor();
-      const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
-      this.setState({ preselectedCourses });
-    }
+
+    const mentor = await mentorRegistryService.getMentor();
+    const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
+    this.setState({ preselectedCourses });
   }
 
-  renderNoCourse() {
+  render() {
+    const { isAdmin } = this.props.session;
+    const isCoursePowerUser = isAnyCoursePowerUserManager(this.props.session);
+    const activeCourse = this.getActiveCourse();
+    const courses = this.getCourses();
+    return (
+      <div>
+        <Layout style={{ minHeight: '100vh' }}>
+          {(isAdmin || isCoursePowerUser) && <AdminSider isAdmin={isAdmin} isCoursePowerUser={isCoursePowerUser} />}
+
+          <Layout style={{ background: '#fff' }}>
+            <Header username={this.props.session.githubId} />
+            <Content style={{ margin: 16, marginBottom: 32 }}>
+              {!activeCourse && this.renderNoCourse()}
+              {this.renderMentorApprovedBanner(activeCourse)}
+              {this.renderRegistryBanner(activeCourse)}
+              {this.renderCourseSelect(activeCourse, courses)}
+              <Row gutter={24}>
+                <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
+                  {this.renderCourseLinks(activeCourse)}
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={16}>
+                  {this.renderSummmary(this.state.studentSummary)}
+                </Col>
+              </Row>
+            </Content>
+            <FooterLayout />
+          </Layout>
+        </Layout>
+      </div>
+    );
+  }
+
+  private renderNoCourse() {
     const hasPlanned = this.state.allCourses?.some(course => course.planned && !course.completed);
     return (
       <Result
@@ -427,56 +459,6 @@ class IndexPage extends React.PureComponent<Props, State> {
     );
   }
 
-  private handleChange = async (courseId: number) => {
-    localStorage.setItem('activeCourseId', courseId as any);
-    this.setState({ activeCourseId: courseId });
-    await this.loadCourseData(courseId);
-  };
-
-  private async loadCourseData(courseId?: number) {
-    this.setState({ studentSummary: null });
-    if (courseId && this.props.session.roles[courseId] === 'student') {
-      const courseService = new CourseService(courseId);
-      const [studentSummary, courseTasks] = await Promise.all([
-        courseService.getStudentSummary('me'),
-        courseService.getCourseTasks(),
-      ]);
-      this.setState({ studentSummary, courseTasks: courseTasks.map(t => ({ id: t.id })) });
-    }
-  }
-
-  render() {
-    const { isAdmin } = this.props.session;
-    const isCoursePowerUser = isAnyCoursePowerUserManager(this.props.session);
-    const activeCourse = this.getActiveCourse();
-    const courses = this.getCourses();
-    return (
-      <div>
-        <Layout style={{ minHeight: '100vh' }}>
-          {(isAdmin || isCoursePowerUser) && <AdminSider isAdmin={isAdmin} isCoursePowerUser={isCoursePowerUser} />}
-
-          <Layout style={{ background: '#fff' }}>
-            <Header username={this.props.session.githubId} />
-            <Content style={{ margin: 16, marginBottom: 32 }}>
-              {!activeCourse && this.renderNoCourse()}
-              {this.renderRegistryBanner(activeCourse)}
-              {this.renderCourseSelect(activeCourse, courses)}
-              <Row gutter={24}>
-                <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
-                  {this.renderCourseLinks(activeCourse)}
-                </Col>
-                <Col xs={24} sm={12} md={12} lg={16}>
-                  {this.renderSummmary(this.state.studentSummary)}
-                </Col>
-              </Row>
-            </Content>
-            <FooterLayout />
-          </Layout>
-        </Layout>
-      </div>
-    );
-  }
-
   private renderRegistryBanner(course: Course | null) {
     if (!course || !this.state.hasRegistryBanner) {
       return null;
@@ -484,6 +466,31 @@ class IndexPage extends React.PureComponent<Props, State> {
     return (
       <div style={{ margin: '16px 0' }}>
         <RegistryBanner />
+      </div>
+    );
+  }
+
+  private renderMentorApprovedBanner(course: Course | null) {
+    const { preselectedCourses } = this.state;
+    if (!course || !preselectedCourses) {
+      return null;
+    }
+    const [active] = preselectedCourses.filter(course => !this.props.session.roles?.[course.id]);
+    if (!active) {
+      return null;
+    }
+    return (
+      <div style={{ margin: '16px 0' }}>
+        <Alert
+          type="success"
+          showIcon
+          message={`You are approved as a mentor to "${active.name}" course`}
+          description={
+            <Button type="primary" href={`/course/mentor/confirm?course=${active.alias}`}>
+              Confirm Participation
+            </Button>
+          }
+        />
       </div>
     );
   }
@@ -609,6 +616,24 @@ class IndexPage extends React.PureComponent<Props, State> {
         <Typography.Text type="secondary">{label}:</Typography.Text> {value}
       </p>
     );
+  }
+
+  private handleChange = async (courseId: number) => {
+    localStorage.setItem('activeCourseId', courseId as any);
+    this.setState({ activeCourseId: courseId });
+    await this.loadCourseData(courseId);
+  };
+
+  private async loadCourseData(courseId?: number) {
+    this.setState({ studentSummary: null });
+    if (courseId && this.props.session.roles[courseId] === 'student') {
+      const courseService = new CourseService(courseId);
+      const [studentSummary, courseTasks] = await Promise.all([
+        courseService.getStudentSummary('me'),
+        courseService.getCourseTasks(),
+      ]);
+      this.setState({ studentSummary, courseTasks: courseTasks.map(t => ({ id: t.id })) });
+    }
   }
 }
 
