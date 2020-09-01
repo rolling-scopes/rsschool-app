@@ -15,8 +15,8 @@ const EventTypeColor: Record<string, string> = {
   test: '#63ab91',
   jstask: 'green',
   htmltask: 'green',
-  htmlcssacademy: 'green',
   externaltask: 'green',
+  selfeducation: 'green',
   codewars: 'green',
   codejam: 'green',
   newtask: 'green',
@@ -44,7 +44,7 @@ const EventTypeToName: Record<string, string> = {
   htmltask: 'html task',
   codejam: 'code jam',
   externaltask: 'external task',
-  htmlcssacademy: 'html/css academy',
+  selfeducation: 'self education',
   codewars: 'codewars',
   // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   'codewars:stage1': 'codewars',

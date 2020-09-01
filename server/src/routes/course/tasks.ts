@@ -90,6 +90,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
       type: item.type || (item.task as Task).type,
       pairsCount: item.pairsCount,
+      publicAttributes: (item.task as Task).attributes?.public,
     };
   });
 

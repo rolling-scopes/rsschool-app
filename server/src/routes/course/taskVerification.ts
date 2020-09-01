@@ -1,7 +1,7 @@
-import { BAD_REQUEST, LOCKED, OK, TOO_MANY_REQUESTS } from 'http-status-codes';
+import { BAD_REQUEST, LOCKED, OK, TOO_MANY_REQUESTS, FORBIDDEN } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { awsTaskService, courseService, taskService } from '../../services';
+import { awsTaskService, courseService, taskService, taskResultsService } from '../../services';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { CourseTask, TaskVerification } from '../../models';
@@ -49,29 +49,95 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
     return;
   }
 
+  if (courseTask.type === 'selfeducation') {
+    await createSelfeducationVerification({
+      ctx,
+      courseTask,
+      student: {
+        id: student.id,
+        answers: inputData,
+      },
+    });
+  } else {
+    const {
+      identifiers: [identifier],
+    } = await getRepository(TaskVerification).insert({
+      studentId: student.id,
+      courseTaskId: courseTask.id,
+      score: 0,
+      status: 'pending',
+    });
+
+    const result: VerificationEvent = {
+      id: identifier.id,
+      githubId,
+      studentId: student.id,
+      courseTask: {
+        ...inputData,
+        id: courseTask.id,
+        type: courseTask.type || courseTask.task.type,
+        attributes: courseTask.task.attributes ?? {},
+      },
+    };
+
+    await awsTaskService.postTaskVerification([result]);
+
+    setResponse(ctx, OK, result);
+  }
+};
+
+const createSelfeducationVerification = async ({
+  ctx,
+  courseTask,
+  student: { id: studentId, answers: studentAnswers },
+}: SelfEducationVerificationParams) => {
+  const {
+    answers,
+    public: { tresholdPercentage, maxAttemptsNumber, numberOfQuestions },
+  } = courseTask.task.attributes as SelfEducationAttributes;
+  const { id: courseTaskId, type: courseTaskType, maxScore } = courseTask;
+
+  const verificationsNumber = (
+    await getRepository(TaskVerification)
+      .createQueryBuilder('v')
+      .select(['v.id'])
+      .andWhere('v.studentId = :studentId', { studentId })
+      .andWhere('v.courseTaskId = :courseTaskId', { courseTaskId })
+      .getMany()
+  ).length;
+
+  if (verificationsNumber >= maxAttemptsNumber) {
+    setResponse(ctx, FORBIDDEN);
+    return;
+  }
+
+  const rightAnswersCount = studentAnswers
+    .map(({ index, value }) => Number(answers[index].toString() === value.toString()))
+    .reduce((sum, value) => sum + value, 0);
+
+  const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
+  const score = rightAnswersPercent < tresholdPercentage ? 0 : maxScore;
+  const details = `Accuracy: ${rightAnswersPercent}%`;
+
   const {
     identifiers: [identifier],
   } = await getRepository(TaskVerification).insert({
-    studentId: student.id,
-    courseTaskId: courseTask.id,
-    score: 0,
-    status: 'pending',
+    studentId,
+    courseTaskId,
+    score,
+    details,
+    status: 'completed',
   });
 
-  const result: VerificationEvent = {
-    id: identifier.id,
-    githubId,
-    studentId: student.id,
-    courseTask: {
-      ...inputData,
-      id: courseTask.id,
-      type: courseTask.type || courseTask.task.type,
-      attributes: courseTask.task.attributes ?? {},
-    },
-  };
+  const result = (await getRepository(TaskVerification).findOne(identifier.id))!;
 
-  await awsTaskService.postTaskVerification([result]);
-  setResponse(ctx, OK, result);
+  await taskResultsService.saveScore(result.studentId, result.courseTaskId, {
+    authorId: 0,
+    comment: result.details,
+    score: result.score,
+  });
+
+  setResponse(ctx, OK, { ...result, courseTask: { type: courseTaskType } });
 };
 
 type VerificationEvent = {
@@ -83,4 +149,30 @@ type VerificationEvent = {
   };
   studentId: number;
   githubId: string;
+};
+
+type SelfEducationVerificationParams = {
+  ctx: Router.RouterContext;
+  courseTask: CourseTask;
+  student: {
+    id: number;
+    answers: {
+      index: number;
+      value: (number | number[])[];
+    }[];
+  };
+};
+
+type SelfEducationAttributes = {
+  public: {
+    maxAttemptsNumber: number;
+    numberOfQuestions: number;
+    tresholdPercentage: number;
+    questions: {
+      question: string;
+      answers: string[];
+      multiple: boolean;
+    }[];
+  };
+  answers: (number | number[])[];
 };
