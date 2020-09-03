@@ -183,9 +183,9 @@ function Page(props: CoursePageProps) {
             <Select.Option value="kotlintask">Kotlin task</Select.Option>
             <Select.Option value="objctask">ObjC task</Select.Option>
             <Select.Option value="htmltask">HTML task</Select.Option>
-            <Select.Option value="htmlcssacademy">HTML/CSS Academy</Select.Option>
             <Select.Option value="cv:markdown">CV Markdown</Select.Option>
             <Select.Option value="cv:html">CV HTML</Select.Option>
+            <Select.Option value="selfeducation">Self Education</Select.Option>
             <Select.Option value="codewars">Codewars</Select.Option>
             <Select.Option value="codewars:stage1">Codewars stage 1</Select.Option>
             <Select.Option value="codewars:stage2">Codewars stage 2</Select.Option>

@@ -25,6 +25,24 @@ export interface CourseTask {
   useJury: boolean;
   checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwnerId: number | null;
+  publicAttributes?: SelfEducationPublicAttributes;
+}
+
+export interface SelfEducationPublicAttributes {
+  maxAttemptsNumber: number;
+  numberOfQuestions: number;
+  tresholdPercentage: number;
+  questions: SelfEducationQuestion[];
+}
+
+export interface SelfEducationQuestion {
+  question: string;
+  answers: string[];
+  multiple: boolean;
+}
+
+export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
+  index: number;
 }
 
 export interface CourseTaskDetails extends CourseTask {
@@ -270,7 +288,8 @@ export class CourseService {
   }
 
   async postTaskVerification(courseTaskId: number, data: any) {
-    await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
+    const result = await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
+    return result.data.data;
   }
 
   async getTaskVerifications() {
