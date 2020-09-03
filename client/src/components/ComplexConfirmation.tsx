@@ -11,11 +11,13 @@ type Props = {
   onOk: AnyFunc;
   keyLength: number;
   message: string;
+  isConfirmationVisible: boolean;
+  hideConfirmation: AnyFunc;
 };
 
 export function ComplexConfirmation(props: Props) {
-  const { onOk, keyLength, message } = props;
-  const [isVisible, setVisibility] = useState(true);
+  const { onOk, keyLength, message, isConfirmationVisible, hideConfirmation } = props;
+
   const [isKeyMatch, setKeyMatch] = useState(false);
   let key = '';
 
@@ -33,9 +35,9 @@ export function ComplexConfirmation(props: Props) {
     <Modal
       title="Confirm action"
       onOk={onOk}
-      visible={isVisible}
+      visible={isConfirmationVisible}
       onCancel={() => {
-        setVisibility(false);
+        hideConfirmation();
       }}
       okButtonProps={{ disabled: !isKeyMatch }}
     >
