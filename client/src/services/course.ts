@@ -6,6 +6,7 @@ import { TaskType } from './task';
 import { ScoreTableFilters } from '../../../common/types/score';
 import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
+import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 
 export interface CourseTask {
   id: number;
@@ -452,7 +453,7 @@ export class CourseService {
 
   async createMentor(
     githubId: string,
-    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: string },
+    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation },
   ) {
     const result = await this.axios.post(`/mentor/${githubId}`, data);
     return result.data.data;

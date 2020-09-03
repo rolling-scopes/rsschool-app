@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 
 export interface MentorRegistry {
   maxStudentsLimit: number;
@@ -29,7 +30,7 @@ export class MentorRegistryService {
     return response.data.data as {
       preselectedCourses: number[];
       maxStudentsLimit: number;
-      preferedStudentsLocation: string;
+      preferedStudentsLocation: PreferredStudentsLocation;
     };
   }
 }

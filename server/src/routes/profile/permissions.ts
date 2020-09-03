@@ -13,6 +13,7 @@ import {
   StageInterview,
   CourseRoles,
   StundetMentorRoles as StudentMentorRoles,
+  CourseRole,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -132,9 +133,9 @@ export const defineRole = ({
   roles: StudentMentorRoles;
   userGithubId: string;
 }): RelationRole => {
-  if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes('manager'))) {
+  if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
-  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes('supervisor'))) {
+  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
     return 'coursemanager';
   } else if (relationsRoles) {
     const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;

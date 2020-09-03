@@ -1,5 +1,6 @@
 import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user';
+import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 
 @Entity()
 export class MentorRegistry {
@@ -27,8 +28,8 @@ export class MentorRegistry {
   @Column()
   englishMentoring: boolean;
 
-  @Column()
-  preferedStudentsLocation: 'any' | 'country' | 'city';
+  @Column('varchar')
+  preferedStudentsLocation: PreferredStudentsLocation;
 
   @CreateDateColumn()
   createdDate: number;

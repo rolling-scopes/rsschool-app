@@ -1,4 +1,4 @@
-import * as passport from 'koa-passport';
+import passport from 'koa-passport';
 import Router from '@koa/router';
 import { IUserSession } from './models';
 
