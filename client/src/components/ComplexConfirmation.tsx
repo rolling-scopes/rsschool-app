@@ -1,4 +1,4 @@
-import { Modal, Input, Typography } from 'antd';
+import { Modal, Input, Typography, Divider } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import random from 'lodash/random';
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function ComplexConfirmation(props: Props) {
-  const { onOk, keyLength, message, isConfirmationVisible, hideConfirmation } = props;
+  const { onOk, keyLength, message, hideConfirmation, isConfirmationVisible } = props;
 
   const [isKeyMatch, setKeyMatch] = useState(false);
   let key = '';
@@ -31,27 +31,31 @@ export function ComplexConfirmation(props: Props) {
     }
   };
 
+  const title = (
+    <>
+      <ExclamationCircleOutlined /> Are you sure?
+    </>
+  );
+
   return (
     <Modal
-      title="Confirm action"
+      title={title}
+      centered={true}
       onOk={onOk}
       visible={isConfirmationVisible}
       onCancel={() => {
         hideConfirmation();
       }}
+      closable={false}
       okButtonProps={{ disabled: !isKeyMatch }}
     >
-      <p>
-        <ExclamationCircleOutlined />
-        Are you sure?
-      </p>
-      <br />
-      <p>{message}</p>
-      <br />
-      <p>Enter following number to confirm action:</p>
-      <br />
-      <Text strong>{key}</Text>
-      <Input placeholder="Enter" type="text" onChange={checkKeyMatch} />
+      <Text underline strong>
+        {message}
+      </Text>
+      <Divider plain>
+        Enter following number to confirm action: <Text strong>{key}</Text>
+      </Divider>
+      <Input placeholder="Enter the number" type="text" onChange={checkKeyMatch} />
     </Modal>
   );
 }
