@@ -28,7 +28,7 @@ export class MentorRegistry {
   @Column()
   englishMentoring: boolean;
 
-  @Column('text')
+  @Column('varchar')
   preferedStudentsLocation: PreferredStudentsLocation;
 
   @CreateDateColumn()
