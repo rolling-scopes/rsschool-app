@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress, Popconfirm } from 'antd';
+import { Typography, List, Button, Progress } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
@@ -9,6 +9,7 @@ import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CourseService } from '../../services/course';
+import { ComplexConfirmation } from '../ComplexConfirmation';
 
 const { Text } = Typography;
 
@@ -26,6 +27,7 @@ type State = {
   coursesProgress: number[];
   scoredTasks: number[];
   isStudentStatsModalVisible: boolean;
+  isExpelConfirmationModalVisible: boolean;
 };
 
 class StudentStatsCard extends React.Component<Props, State> {
@@ -34,6 +36,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     coursesProgress: [],
     scoredTasks: [],
     isStudentStatsModalVisible: false,
+    isExpelConfirmationModalVisible: false,
   };
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
@@ -43,7 +46,8 @@ class StudentStatsCard extends React.Component<Props, State> {
     ) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
-    !isEqual(nextState.coursesProgress, this.state.coursesProgress);
+    !isEqual(nextState.coursesProgress, this.state.coursesProgress) ||
+    !isEqual(nextState.isExpelConfirmationModalVisible, this.state.isExpelConfirmationModalVisible);
 
   private filterPermissions = ({ isStudentStatsVisible }: Partial<ConfigurableProfilePermissions>) => ({
     isStudentStatsVisible,
@@ -53,8 +57,16 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
   };
 
+  private showExpelConfirmationModal = () => {
+    this.setState({ isExpelConfirmationModalVisible: true });
+  };
+
   private hideStudentStatsModal = () => {
     this.setState({ isStudentStatsModalVisible: false });
+  };
+
+  private hideExpelConfirmationModal = () => {
+    this.setState({ isExpelConfirmationModalVisible: false });
   };
 
   private selfExpelStudent = async (gitHubId: string, courseId: number) => {
@@ -80,7 +92,13 @@ class StudentStatsCard extends React.Component<Props, State> {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, isProfileOwner } = this.props;
     const stats = this.props.data;
     const gitHubId: string = this.props.username;
-    const { isStudentStatsModalVisible, courseIndex, coursesProgress, scoredTasks } = this.state;
+    const {
+      isStudentStatsModalVisible,
+      courseIndex,
+      coursesProgress,
+      scoredTasks,
+      isExpelConfirmationModalVisible,
+    } = this.state;
     return (
       <>
         <StudentStatsModal
@@ -150,12 +168,18 @@ class StudentStatsCard extends React.Component<Props, State> {
                         Score: <Text mark>{totalScore}</Text>
                       </p>
                       {isActive && isProfileOwner ? (
-                        <Popconfirm
-                          onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
-                          title="Are you sure you want to expel yourself from course?"
-                        >
-                          <a href="#">Self expel</a>
-                        </Popconfirm>
+                        <>
+                          <ComplexConfirmation
+                            onOk={() => this.selfExpelStudent(gitHubId, courseId)}
+                            keyLength={8}
+                            message="Are you sure you want to expel yourself from course?"
+                            isConfirmationVisible={isExpelConfirmationModalVisible}
+                            hideConfirmation={() => this.hideExpelConfirmationModal()}
+                          />
+                          <Button size="small" onClick={() => this.showExpelConfirmationModal()}>
+                            Self expel
+                          </Button>
+                        </>
                       ) : (
                         ''
                       )}
