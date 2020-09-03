@@ -332,7 +332,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     if (courses.length === 0) {
       return null;
     }
-    const savedActiveCourseId = localStorage.getItem('activeCourseId');
+    const savedActiveCourseId = this.loadActiveCourseId();
     const activeCourseId = this.state.activeCourseId || Number(savedActiveCourseId);
     const course = courses.find(course => course.id === activeCourseId);
     if (course) {
@@ -361,6 +361,9 @@ class IndexPage extends React.PureComponent<Props, State> {
       plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
     const activeCourse = this.getActiveCourse();
+    if (activeCourse) {
+      this.saveActiveCouseId(activeCourse.id);
+    }
     const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
     this.setState({ allCourses });
 
@@ -619,7 +622,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   private handleChange = async (courseId: number) => {
-    localStorage.setItem('activeCourseId', courseId as any);
+    this.saveActiveCouseId(courseId);
     this.setState({ activeCourseId: courseId });
     await this.loadCourseData(courseId);
   };
@@ -634,6 +637,14 @@ class IndexPage extends React.PureComponent<Props, State> {
       ]);
       this.setState({ studentSummary, courseTasks: courseTasks.map(t => ({ id: t.id })) });
     }
+  }
+
+  private saveActiveCouseId(courseId: number) {
+    localStorage.setItem('activeCourseId', courseId as any);
+  }
+
+  private loadActiveCourseId() {
+    return localStorage.getItem('activeCourseId');
   }
 }
 

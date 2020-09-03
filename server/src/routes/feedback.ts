@@ -117,7 +117,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
-      course: data.courseId,
+      course: data.courseId ? data.courseId : undefined,
       fromUser: id,
       toUser: data.toUserId,
       heroesUrl,
