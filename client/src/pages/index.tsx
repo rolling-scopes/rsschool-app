@@ -14,7 +14,7 @@ import {
   StarOutlined,
   QuestionCircleTwoTone,
   CheckSquareOutlined,
-  // DashboardTwoTone,
+  DashboardTwoTone,
 } from '@ant-design/icons';
 import { Button, Card, Col, Layout, List, Result, Row, Select, Statistic, Tag, Typography, Alert } from 'antd';
 import { AdminSider, FooterLayout, GithubUserLink, Header, RegistryBanner } from 'components';
@@ -69,15 +69,15 @@ const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Se
   checks.some(check => check(course, role, session));
 
 const routes = [
-  // {
-  //   name: () => (
-  //     <>
-  //       <DashboardTwoTone /> Dashboard
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/student/dashboard?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isStudent),
-  // },
+  {
+    name: () => (
+      <>
+        <DashboardTwoTone /> Dashboard
+      </>
+    ),
+    getLink: (course: Course) => `/course/student/dashboard?course=${course.alias}`,
+    access: combineAnd(isCourseNotCompleted, isStudent),
+  },
   {
     name: () => (
       <>
