@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 0,
     'no-useless-escape': 0,
     'no-control-regex': 0,
+    'no-console': ["error", { allow: ["warn", "error"] }],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/no-use-before-define': 0,

@@ -446,7 +446,6 @@ export class CourseService {
   }
 
   async getMentorInterviews(githubId: string) {
-    console.log({ githubId });
     const result = await this.axios.get(`/mentor/${githubId}/interviews`);
     return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }

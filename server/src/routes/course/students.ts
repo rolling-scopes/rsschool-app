@@ -118,8 +118,6 @@ export const postStudents = (_: ILogger) => async (ctx: Router.RouterContext) =>
     const student: Partial<Student> = { ...restData, userId: user.id, courseId };
     const savedStudent = await studentRepository.save(student);
     result.push({ status: 'created', value: savedStudent.id });
-
-    console.timeEnd(item.githubId);
   }
 
   setResponse(ctx, OK, result);
