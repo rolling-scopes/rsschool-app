@@ -6,7 +6,7 @@ import {
   FireTwoTone,
   AudioTwoTone,
   CompassTwoTone,
-  // HighlightTwoTone,
+  LikeOutlined,
   PlayCircleTwoTone,
   StopTwoTone,
   ToolTwoTone,
@@ -123,16 +123,16 @@ const routes = [
     getLink: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isTaskOwner, isAdminRole, isCourseManager)),
   },
-  // {
-  //   name: () => (
-  //     <>
-  //       <InteractionTwoTone /> Technical Screening
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/student/stage-interview?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isStudent),
-  //   newTab: false,
-  // },
+  {
+    name: () => (
+      <>
+        <LikeOutlined /> Feedback on student
+      </>
+    ),
+    getLink: () => `/feedback`,
+    access: isMentor,
+    newTab: false,
+  },
   {
     name: () => (
       <>
