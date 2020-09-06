@@ -1,5 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+
+export type MentorResponse = {
+  preselectedCourses: number[];
+  maxStudentsLimit: number;
+  preferedStudentsLocation: PreferredStudentsLocation;
+}
 
 export interface MentorRegistry {
   maxStudentsLimit: number;
@@ -26,11 +32,7 @@ export class MentorRegistryService {
   }
 
   public async getMentor() {
-    const response = await this.axios.get(`/mentor`);
-    return response.data.data as {
-      preselectedCourses: number[];
-      maxStudentsLimit: number;
-      preferedStudentsLocation: PreferredStudentsLocation;
-    };
+    const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
+    return response.data.data;
   }
 }

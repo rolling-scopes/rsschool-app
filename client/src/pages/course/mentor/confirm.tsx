@@ -3,7 +3,7 @@ import { PageLayoutSimple, StudentSearch, PageLayout } from 'components';
 import withSession, { Session } from 'components/withSession';
 import { useState, useMemo } from 'react';
 import { useAsync } from 'react-use';
-import { MentorRegistryService } from 'services/mentorRegistry';
+import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { useRouter } from 'next/router';
 import { Course } from '../../../../../common/models';
 import { CoursesService } from 'services/courses';
@@ -18,7 +18,7 @@ function Page(props: { session: Session }) {
   const [loading, setLoading] = useState(false);
   const [noAccess, setNoAccess] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [mentorData, setMentorData] = useState(null as object | null);
+  const [mentorData, setMentorData] = useState<MentorResponse | null>(null);
   const [course, setCourse] = useState(null as Course | null);
 
   const courseService = useMemo(() => {

@@ -225,7 +225,7 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
 
 function renderSelfEducation(courseTask: CourseTask) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
-  const { maxAttemptsNumber, tresholdPercentage } = courseTask?.publicAttributes!;
+  const { maxAttemptsNumber, tresholdPercentage } = courseTask.publicAttributes!;
 
   return (
     <>
@@ -336,7 +336,7 @@ function getRandomQuestions(questions: SelfEducationQuestion[]) {
 }
 
 function getSubmitData(task: CourseTask, values: any) {
-  let data: object = {};
+  let data: any = {}; // todo: fix it
   switch (task.type) {
     case 'selfeducation':
       data = Object.entries(values)
