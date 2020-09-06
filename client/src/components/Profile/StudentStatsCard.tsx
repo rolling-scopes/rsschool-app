@@ -91,7 +91,7 @@ class StudentStatsCard extends React.Component<Props, State> {
         <Text underline strong>
           {message}
         </Text>
-        <Divider plain>
+        <Divider plain style={{whiteSpace: 'normal'}}>
           Enter following number to confirm action: <Text strong>{key}</Text>
         </Divider>
         <Input placeholder="Enter the number" type="text" onChange={checkKeyMatch} />
