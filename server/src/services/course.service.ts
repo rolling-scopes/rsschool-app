@@ -16,6 +16,7 @@ import {
   Stage,
   TaskSolutionResult,
   IUserSession,
+  CourseRole,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
@@ -480,8 +481,8 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 export function isPowerUser(courseId: number, session: IUserSession) {
   return (
     session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes('manager') ||
-    session.coursesRoles?.[courseId]?.includes('supervisor')
+    session.coursesRoles?.[courseId]?.includes(CourseRole.manager) ||
+    session.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)
   );
 }
 
@@ -704,9 +705,9 @@ export async function createCourseFromCopy(courseId: number, details: any) {
     const events: any = await getEvents(courseId);
     const tasks: any = await getCourseTasks(courseId);
     const stages: any = await getStages(courseId);
-    delete courseToCopy.id;
-    const courseCopy = { ...courseToCopy, ...details };
-    const courseData = await getRepository(Course).insert(courseCopy as Course);
+    const { id, ...couseWithoutId } = courseToCopy;
+    const courseCopy: Course = { ...couseWithoutId, ...details };
+    const courseData = await getRepository(Course).insert(courseCopy);
 
     const startDateDaysDiff = moment(details.startDate).diff(moment(courseToCopy.startDate), 'days');
     courseCopy.id = courseData.identifiers[0].id;

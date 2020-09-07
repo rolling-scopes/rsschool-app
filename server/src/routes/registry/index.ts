@@ -4,7 +4,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
-import { IUserSession } from '../../models';
+import { IUserSession, CourseRole } from '../../models';
 import { getUserByGithubId } from '../../services/user.service';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
@@ -123,7 +123,7 @@ export function registryRouter(logger?: ILogger) {
     } else {
       const coursesRoles = state.coursesRoles ?? {};
       const coursesIds = Object.entries(coursesRoles)
-        .filter(([_, value = []]) => value.includes('manager') || value.includes('supervisor'))
+        .filter(([_, value = []]) => value.includes(CourseRole.manager) || value.includes(CourseRole.supervisor))
         .map(([key]) => Number(key));
       mentorRegistries = await repository.findMentorRegistriesByCoursesIds(coursesIds);
     }

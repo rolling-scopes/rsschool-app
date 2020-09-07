@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { config } from '../config';
-import { IUserSession } from '../models';
+import { IUserSession, CourseRole } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
@@ -15,15 +15,16 @@ const userGuards = (user: IUserSession) => {
     isAdmin: () => user.isAdmin,
     isHirer: () => user.isHirer,
     hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
-    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes('manager')),
-    isAnySupervisor: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes('supervisor')),
-    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes('manager') ?? false,
+    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.manager)),
+    isAnySupervisor: () =>
+      courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)),
+    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.manager) ?? false,
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
     isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
-    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes('taskOwner') ?? false,
+    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner) ?? false,
     isLoggedIn: (ctx: Router.RouterContext<any, any>) => user != null && (ctx.isAuthenticated() || config.isDevMode),
-    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes('supervisor') ?? false,
+    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.supervisor) ?? false,
   };
   return {
     ...guards,
