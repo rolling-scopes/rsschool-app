@@ -1,6 +1,7 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress, Popconfirm } from 'antd';
+import random from 'lodash/random';
+import { Typography, List, Button, Progress, Modal, Input, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '../../../../common/models/profile';
@@ -9,6 +10,7 @@ import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CourseService } from '../../services/course';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -26,6 +28,7 @@ type State = {
   coursesProgress: number[];
   scoredTasks: number[];
   isStudentStatsModalVisible: boolean;
+  isExpelConfirmationModalVisible: boolean;
 };
 
 class StudentStatsCard extends React.Component<Props, State> {
@@ -34,6 +37,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     coursesProgress: [],
     scoredTasks: [],
     isStudentStatsModalVisible: false,
+    isExpelConfirmationModalVisible: false,
   };
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
@@ -53,8 +57,65 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ courseIndex, isStudentStatsModalVisible: true });
   };
 
+  private showExpelConfirmationModal = (gitHubId: string, courseId: number) => {
+    const { isExpelConfirmationModalVisible } = this.state;
+
+    const keyLength = 8;
+
+    let key = '';
+
+    for (let i = 0; i < keyLength; i++) key += random(0, 9);
+
+    const title = (
+      <Typography.Title level={3}>
+        <ExclamationCircleOutlined /> <Text strong>Are you sure?</Text>
+      </Typography.Title>
+    );
+
+    const checkKeyMatch = (e: any) => {
+      if (e.target.value === key) {
+        modal.update({
+          okButtonProps: { disabled: false },
+        });
+      } else {
+        modal.update({
+          okButtonProps: { disabled: true },
+        });
+      }
+    };
+
+    const message = 'Are you sure you want to expel yourself from course?';
+
+    const content = (
+      <>
+        <Text underline strong>
+          {message}
+        </Text>
+        <Divider plain style={{ whiteSpace: 'normal' }}>
+          Enter following number to confirm action: <Text strong>{key}</Text>
+        </Divider>
+        <Input placeholder="Enter the number" type="text" onChange={checkKeyMatch} />
+      </>
+    );
+
+    const modal = Modal.confirm({
+      title: title,
+      content: content,
+      centered: true,
+      onOk: () => this.selfExpelStudent(gitHubId, courseId),
+      visible: isExpelConfirmationModalVisible,
+      onCancel: () => this.hideExpelConfirmationModal(),
+      okButtonProps: { disabled: true },
+      maskClosable: true,
+    });
+  };
+
   private hideStudentStatsModal = () => {
     this.setState({ isStudentStatsModalVisible: false });
+  };
+
+  private hideExpelConfirmationModal = () => {
+    this.setState({ isExpelConfirmationModalVisible: false });
   };
 
   private selfExpelStudent = async (gitHubId: string, courseId: number) => {
@@ -149,13 +210,11 @@ class StudentStatsCard extends React.Component<Props, State> {
                       <p style={{ fontSize: 12, marginBottom: 5 }}>
                         Score: <Text mark>{totalScore}</Text>
                       </p>
+
                       {isActive && isProfileOwner ? (
-                        <Popconfirm
-                          onConfirm={() => this.selfExpelStudent(gitHubId, courseId)}
-                          title="Are you sure you want to expel yourself from course?"
-                        >
-                          <a href="#">Self expel</a>
-                        </Popconfirm>
+                        <Button size="small" onClick={() => this.showExpelConfirmationModal(gitHubId, courseId)}>
+                          Self expel
+                        </Button>
                       ) : (
                         ''
                       )}
