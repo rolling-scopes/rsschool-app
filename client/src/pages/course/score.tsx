@@ -1,21 +1,14 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
-import {
-  dateTimeRenderer,
-  dateRenderer,
-  getColumnSearchProps,
-  numberSorter,
-  dateSorter,
-  stringSorter,
-} from 'components/Table';
+import { dateTimeRenderer, dateRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { CourseService, StudentScore, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
-import { ScoreTableFilters } from '../../../../common/types/score';
+import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
 
 const { Text } = Typography;
 
@@ -30,6 +23,7 @@ export function Page(props: CoursePageProps) {
     filter: {
       activeOnly: true,
     } as ScoreTableFilters,
+    orderBy: { field: 'totalScore', direction: 'desc' },
   });
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
@@ -38,7 +32,7 @@ export function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(students.pagination, { activeOnly }),
+        courseService.getCourseScore(students.pagination, { activeOnly }, students.orderBy),
         courseService.getCourseTasks(),
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
@@ -50,25 +44,36 @@ export function Page(props: CoursePageProps) {
     }
   }, []);
 
-  const getCourseScore = useCallback(async (pagination: IPaginationInfo, filters: ScoreTableFilters) => {
-    setLoading(true);
-    try {
-      const courseScore = await courseService.getCourseScore(pagination, { ...filters, activeOnly });
-      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const getCourseScore = useCallback(
+    async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
+      setLoading(true);
+      try {
+        const courseScore = await courseService.getCourseScore(
+          pagination,
+          { ...filters, activeOnly },
+          { field: order.column?.sorter || 'totalScore', direction: order.order === 'ascend' ? 'asc' : 'desc' },
+        );
+        setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [students],
+  );
 
   const handleActiveOnlyChange = useCallback(async () => {
     const value = !activeOnly;
     setActiveOnly(value);
     setLoading(true);
     try {
-      const courseScore = await courseService.getCourseScore(students.pagination, {
-        ...students.filter,
-        activeOnly: value,
-      });
+      const courseScore = await courseService.getCourseScore(
+        students.pagination,
+        {
+          ...students.filter,
+          activeOnly: value,
+        },
+        students.orderBy,
+      );
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
     } finally {
       setLoading(false);
@@ -130,7 +135,7 @@ function renderTable(
   students: StudentScore[],
   columns: any[],
   pagination: IPaginationInfo,
-  handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters) => void,
+  handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
 ) {
   if (!loaded) {
     return null;
@@ -155,14 +160,14 @@ function renderTable(
           dataIndex: 'rank',
           key: 'rank',
           width: 50,
-          sorter: numberSorter('rank'),
+          sorter: 'rank',
         },
         {
           title: 'Github',
           fixed: 'left',
           key: 'githubId',
           dataIndex: 'githubId',
-          sorter: stringSorter('githubId'),
+          sorter: 'githubId',
           width: 150,
           render: (value: string) => (
             <div>
@@ -179,7 +184,7 @@ function renderTable(
           title: 'Name',
           dataIndex: 'name',
           width: 150,
-          sorter: stringSorter('name'),
+          sorter: 'name',
           render: (value: any, record: StudentScore) => <a href={`/profile?githubId=${record.githubId}`}>{value}</a>,
           ...getColumnSearchProps('name'),
         },
@@ -187,14 +192,14 @@ function renderTable(
           title: 'Location',
           dataIndex: 'cityName',
           width: 150,
-          sorter: stringSorter('cityName'),
+          sorter: 'cityName',
           ...getColumnSearchProps('cityName'),
         },
         {
           title: 'Total',
           dataIndex: 'totalScore',
           width: 80,
-          sorter: numberSorter('totalScore'),
+          sorter: 'totalScore',
           render: value => <Text strong>{value}</Text>,
         },
         ...columns,
@@ -202,21 +207,21 @@ function renderTable(
           title: 'Change Date',
           dataIndex: 'totalScoreChangeDate',
           width: 80,
-          sorter: dateSorter('totalScoreChangeDate'),
+          sorter: 'totalScoreChangeDate',
           render: dateRenderer,
         },
         {
           title: 'Last Commit Date',
           dataIndex: 'repositoryLastActivityDate',
           width: 80,
-          sorter: dateSorter('repositoryLastActivityDate'),
+          sorter: 'repositoryLastActivityDate',
           render: dateRenderer,
         },
         {
           title: 'Mentor',
           dataIndex: ['mentor', 'githubId'],
           width: 150,
-          sorter: stringSorter('mentor.githubId' as any),
+          sorter: 'mentor',
           render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
           ...getColumnSearchProps('mentor.githubId'),
         },
