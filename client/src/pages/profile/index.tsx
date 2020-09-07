@@ -146,7 +146,7 @@ export class ProfilePage extends React.Component<Props, State> {
         }
         case 'consent': {
           const { id, checked } = event;
-          const consents = profile?.consents!;
+          const consents = profile?.consents ?? [];
           const [existingConsent] = consents.filter(consent => consent.channelType === id);
           const otherConsents = consents.filter(consent => consent.channelType !== id);
           const newConsents = [...otherConsents];
