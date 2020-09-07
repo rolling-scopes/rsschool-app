@@ -7,11 +7,10 @@ const { serverRuntimeConfig } = getConfig();
 export function getServerAxiosProps(ctx?: NextPageContext): Partial<AxiosRequestConfig> {
   return {
     baseURL: serverRuntimeConfig.rsHost || '',
-    headers:
-      ctx && ctx.req
-        ? {
-            cookie: ctx.req.headers.cookie,
-          }
-        : undefined,
+    headers: ctx?.req?.headers?.cookie
+      ? {
+          cookie: ctx.req.headers.cookie,
+        }
+      : undefined,
   };
 }
