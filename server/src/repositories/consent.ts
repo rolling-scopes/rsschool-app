@@ -27,8 +27,8 @@ export class ConsentRepository extends AbstractRepository<Consent> {
       const [existingConsent] = existingConsents.filter(({ channelValue }) => channelValue === consent.channelValue);
       return existingConsent
         ? {
-            id: existingConsent.id,
             ...consent,
+            id: consent.id ?? existingConsent.id,
           }
         : consent;
     });
