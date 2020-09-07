@@ -41,12 +41,14 @@ function Page(props: Props) {
   const handleSubmit = async (values: IGratitude) => {
     try {
       setLoading(true);
+      const savedActiveCourseId = Number(localStorage.getItem('activeCourseId'));
       await Promise.all(
         (values.userId as number[]).map((id: number) =>
           gratitudeService.postGratitude({
             toUserId: id,
             comment: values.comment as string,
             badgeId: values.badgeId as string,
+            courseId: savedActiveCourseId,
           }),
         ),
       );

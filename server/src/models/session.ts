@@ -14,4 +14,9 @@ export interface CourseRoles {
   [key: string]: CourseRole[] | undefined;
 }
 
-export type CourseRole = 'taskOwner' | 'juryActivist' | 'manager' | 'supervisor';
+export const enum CourseRole {
+  taskOwner = 'taskOwner',
+  juryActivist = 'juryActivist',
+  manager = 'manager',
+  supervisor = 'supervisor',
+}

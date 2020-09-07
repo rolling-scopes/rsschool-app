@@ -1,5 +1,6 @@
 import { BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
+import { Next } from 'koa';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
 import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
@@ -65,7 +66,7 @@ import * as crossCheck from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
 import { postCopyCourse } from './template';
 
-const validateId = async (ctx: Router.RouterContext, next: any) => {
+const validateId = async (ctx: Router.RouterContext, next: Next) => {
   const id = Number(ctx.params.id);
   if (isNaN(id)) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [Id]');

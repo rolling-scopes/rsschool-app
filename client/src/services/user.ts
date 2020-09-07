@@ -56,6 +56,13 @@ export class UserService {
     });
   }
 
+  async submitStudentFeedback(data: { toUserId: number; comment: string }, courseId: string) {
+    await this.axios.post(`api/course/${courseId}/student/feedback`, {
+      toUserId: Number(data.toUserId),
+      comment: data.comment,
+    });
+  }
+
   async getMyProfile() {
     const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
     return response.data.data;

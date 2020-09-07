@@ -1,15 +1,16 @@
-import { Button, Col, Table, Form, Input, message, Row, Typography, notification } from 'antd';
+import { Button, Col, Table, Form, Input, message, Row, Typography, notification, Radio, Checkbox } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask } from 'services/course';
+import { CourseService, CourseTask, SelfEducationQuestion, SelfEducationQuestionWithIndex } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { notUrlPattern, udemyCertificateId } from 'services/validators';
+import { notUrlPattern } from 'services/validators';
 import { shortDateTimeRenderer } from 'components/Table';
 import { AxiosError } from 'axios';
+import shuffle from 'lodash/shuffle';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -20,6 +21,25 @@ function Page(props: CoursePageProps) {
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [verifications, setVerifications] = useState([] as any[]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+
+  const courseTask = useMemo(() => {
+    const courseTask = courseTasks.find(t => t.id === courseTaskId);
+
+    if (courseTask?.type === 'selfeducation') {
+      return {
+        ...courseTask,
+        publicAttributes: {
+          ...courseTask.publicAttributes!,
+          questions: getRandomQuestions(courseTask.publicAttributes?.questions || []).slice(
+            0,
+            courseTask?.publicAttributes?.numberOfQuestions,
+          ),
+        },
+      };
+    }
+
+    return courseTask;
+  }, [courseTaskId]);
 
   useAsync(async () => {
     try {
@@ -48,8 +68,17 @@ function Page(props: CoursePageProps) {
       }
 
       setLoading(true);
-      await courseService.postTaskVerification(courseTaskId, data);
-      message.success('The task has been submitted for verification and it will be checked soon.');
+      const {
+        courseTask: { type },
+      } = await courseService.postTaskVerification(courseTaskId, data);
+
+      if (type === 'selfeducation') {
+        message.success('The task has been submitted.');
+        loadVerifications();
+      } else {
+        message.success('The task has been submitted for verification and it will be checked soon.');
+      }
+
       form.resetFields();
     } catch (e) {
       const error = e as AxiosError;
@@ -64,6 +93,12 @@ function Page(props: CoursePageProps) {
       if (error.response?.status === 423) {
         notification.error({
           message: <>Please reload page. This task was expired for submit.</>,
+        });
+        return;
+      }
+      if (error.response?.status === 403) {
+        notification.error({
+          message: <>You already submit this task two times. Attempts limit is over!</>,
         });
         return;
       }
@@ -89,7 +124,6 @@ function Page(props: CoursePageProps) {
     loadVerifications();
   };
 
-  const courseTask = courseTasks.find(t => t.id === courseTaskId);
   return (
     <PageLayout loading={loading} title="Auto-Test" courseName={props.course.name} githubId={props.session.githubId}>
       <Row gutter={24}>
@@ -160,11 +194,11 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
     case 'kotlintask':
     case 'objctask':
       return renderKotlinTaskFields(repoUrl);
-    case 'htmlcssacademy':
+    case 'selfeducation':
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
-          {renderHtmlCssAcademyFields()}
+          {renderSelfEducation(courseTask)}
         </>
       );
     // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
@@ -187,6 +221,49 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
     default:
       return null;
   }
+}
+
+function renderSelfEducation(courseTask: CourseTask) {
+  const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
+  const { maxAttemptsNumber = 0, tresholdPercentage = 0 } = courseTask?.publicAttributes ?? {};
+
+  return (
+    <>
+      <Typography.Paragraph>To submit the task answer the questions.</Typography.Paragraph>
+      <Typography.Paragraph>
+        <Typography.Text mark strong>
+          Note: You must to score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
+          attempts.
+        </Typography.Text>
+      </Typography.Paragraph>
+      {questions.map(({ question, answers, multiple, index: questionIndex }) => (
+        <Form.Item
+          key={questionIndex}
+          label={question}
+          name={`answer-${questionIndex}`}
+          rules={[{ required: true, message: 'Please answer the question' }]}
+        >
+          {multiple ? (
+            <Checkbox.Group>
+              {answers.map((answer, index) => (
+                <Row key={index}>
+                  <Checkbox value={index}>{answer}</Checkbox>
+                </Row>
+              ))}
+            </Checkbox.Group>
+          ) : (
+            <Radio.Group>
+              {answers.map((answer, index) => (
+                <Row key={index}>
+                  <Radio value={index}>{answer}</Radio>
+                </Row>
+              ))}
+            </Radio.Group>
+          )}
+        </Form.Item>
+      ))}
+    </>
+  );
 }
 
 function renderJsTaskFields(repoUrl: string) {
@@ -222,45 +299,6 @@ function renderKotlinTaskFields(repoUrl: string) {
   );
 }
 
-function renderHtmlCssAcademyFields() {
-  return (
-    <Row gutter={24}>
-      <Col xs={12} sm={10}>
-        <Form.Item
-          name="codecademy"
-          label="Codecademy Account"
-          rules={[{ pattern: notUrlPattern, message: 'Enter valid Codecademy account' }]}
-        >
-          <Input placeholder="username" />
-        </Form.Item>
-        <Form.Item
-          name="htmlacademy"
-          label="Html Academy Account"
-          rules={[{ pattern: notUrlPattern, message: 'Enter valid HTML Academy account' }]}
-        >
-          <Input placeholder="id1234567" />
-        </Form.Item>
-      </Col>
-      <Col xs={12} sm={8} key="2">
-        <Form.Item
-          name="udemy1"
-          label="Udemy: Certificate Id 1"
-          rules={[{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }]}
-        >
-          <Input placeholder="UC-xxxxxx" />
-        </Form.Item>
-        <Form.Item
-          name="udemy2"
-          label="Udemy: Certificate Id 2"
-          rules={[{ pattern: udemyCertificateId, message: 'Enter valid Udemy Certificate Id (UC-XXXX)' }]}
-        >
-          <Input placeholder="UC-xxxxxx" />
-        </Form.Item>
-      </Col>
-    </Row>
-  );
-}
-
 function renderDescription(descriptionUrl: string | null | undefined) {
   if (descriptionUrl == null) {
     return null;
@@ -292,22 +330,22 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
   );
 }
 
+function getRandomQuestions(questions: SelfEducationQuestion[]) {
+  const questionsWithIndex = questions.map((question, index) => ({ ...question, index }));
+  return shuffle(questionsWithIndex);
+}
+
 function getSubmitData(task: CourseTask, values: any) {
   let data: object = {};
   switch (task.type) {
-    case 'htmlcssacademy':
-      if (!values.codecademy && !values.htmlacademy && !values.udemy1 && !values.udemy2) {
-        message.error('Enter any Account / Cerficate Id');
-        return null;
-      }
-
-      data = {
-        codecademy: values.codecademy,
-        htmlacademy: values.htmlacademy,
-        udemy: [values.udemy1, values.udemy2].filter(it => !!it),
-      };
+    case 'selfeducation':
+      data = Object.entries(values)
+        .filter(([key]) => /answer/.test(key))
+        .map(([key, value]) => {
+          const [, index] = key.match(/answer-(.*)$/) || [];
+          return { index: Number(index), value };
+        });
       break;
-
     // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
     case 'codewars':
     case 'codewars:stage1':

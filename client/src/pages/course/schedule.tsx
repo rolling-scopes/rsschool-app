@@ -16,7 +16,7 @@ enum EventTypeColor {
   test = '#63ab91',
   jstask = 'green',
   htmltask = 'green',
-  htmlcssacademy = 'green',
+  selfeducation = 'green',
   externaltask = 'green',
   codewars = 'green',
   codejam = 'green',
@@ -52,8 +52,8 @@ const EventTypeToName: Record<string, string> = {
   htmltask: 'html task',
   codejam: 'code jam',
   externaltask: 'external task',
-  htmlcssacademy: 'html/css academy',
   codewars: 'codewars',
+  selfeducation: 'self education',
   // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   'codewars:stage1': 'codewars',
   'codewars:stage2': 'codewars',

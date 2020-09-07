@@ -25,11 +25,11 @@
     "koa": "^2.11.0",
     "koa-basic-auth": "~4.0.0",
     "koa-bodyparser": "~4.2.1",
-    "koa-typeorm-pagination": "^1.0.0",
     "koa-jwt": "~3.6.0",
     "koa-passport": "~4.1.3",
     "koa-session": "~5.13.1",
     "koa-static": "~5.0.0",
+    "koa-typeorm-pagination": "^1.0.0",
     "koa2-swagger-ui": "~2.13.2",
     "lodash": "~4.17.19",
     "luxon": "^1.22.2",
@@ -50,7 +50,7 @@
     "@types/koa": "^2.11.3",
     "@types/koa-basic-auth": "2.0.3",
     "@types/koa-bodyparser": "4.2.0",
-    "@types/koa-passport": "^4.0.1",
+    "@types/koa-passport": "^4.0.2",
     "@types/koa-session": "^5.10.2",
     "@types/koa-static": "^4.0.1",
     "@types/koa__cors": "^2.2.2",
@@ -71,6 +71,6 @@
     "ts-jest": "^25.3.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.8.3"
+    "typescript": "^4.0.2"
   }
 }

@@ -3,9 +3,10 @@ import { Event } from './event';
 import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
-import { pickBy } from 'lodash';
 import { ScoreTableFilters } from '../../../common/types/score';
 import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
+import { onlyDefined } from '../utils/onlyDefined';
+import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 
 export interface CourseTask {
   id: number;
@@ -24,6 +25,24 @@ export interface CourseTask {
   useJury: boolean;
   checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwnerId: number | null;
+  publicAttributes?: SelfEducationPublicAttributes;
+}
+
+export interface SelfEducationPublicAttributes {
+  maxAttemptsNumber: number;
+  numberOfQuestions: number;
+  tresholdPercentage: number;
+  questions: SelfEducationQuestion[];
+}
+
+export interface SelfEducationQuestion {
+  question: string;
+  answers: string[];
+  multiple: boolean;
+}
+
+export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
+  index: number;
 }
 
 export interface CourseTaskDetails extends CourseTask {
@@ -179,8 +198,6 @@ export class CourseService {
   }
 
   async getCourseScore(pagination: IPaginationInfo, filter: ScoreTableFilters = { activeOnly: false }) {
-    const onlyDefined = (data: object) => pickBy(data, val => val !== undefined && val !== '' && val !== null);
-
     const params = new URLSearchParams({
       current: String(pagination.current),
       pageSize: String(pagination.pageSize),
@@ -271,7 +288,8 @@ export class CourseService {
   }
 
   async postTaskVerification(courseTaskId: number, data: any) {
-    await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
+    const result = await this.axios.post(`/student/me/task/${courseTaskId}/verification`, data);
+    return result.data.data;
   }
 
   async getTaskVerifications() {
@@ -435,7 +453,7 @@ export class CourseService {
 
   async createMentor(
     githubId: string,
-    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: string },
+    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation },
   ) {
     const result = await this.axios.post(`/mentor/${githubId}`, data);
     return result.data.data;

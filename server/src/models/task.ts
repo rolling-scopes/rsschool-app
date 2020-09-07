@@ -7,7 +7,7 @@ export type TaskType =
   | 'kotlintask'
   | 'objctask'
   | 'htmltask'
-  | 'htmlcssacademy'
+  | 'selfeducation'
   | 'codewars'
   | 'codewars:stage1'
   | 'codewars:stage2'

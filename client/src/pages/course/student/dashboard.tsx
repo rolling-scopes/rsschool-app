@@ -24,8 +24,14 @@ function Page(props: CoursePageProps) {
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
   const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
-  const [nextEvent, setNextEvent] = useState({} as CourseEvent);
+  const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
+  const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [loading, setLoading] = useState(false);
+
+  const changeCountEvents = (value: number) => {
+    localStorage.setItem('showCountEventsOnStudentsDashboard', String(value));
+    setCountEvents(value);
+  };
 
   useAsync(async () => {
     try {
@@ -40,13 +46,13 @@ function Page(props: CoursePageProps) {
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
       const startOfToday = moment().startOf('day');
-      const nextEvent =
+      const nextEvents =
         courseEvents
           .concat(tasksToEvents(courseTasks))
           .sort((a, b) => a.dateTime.localeCompare(b.dateTime))
-          .find(event => moment(event.dateTime).isAfter(startOfToday)) ?? ({} as CourseEvent);
+          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
 
-      setNextEvent(nextEvent);
+      setNextEvent(nextEvents);
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
@@ -105,7 +111,7 @@ function Page(props: CoursePageProps) {
     />,
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
-    <NextEventCard nextEvent={nextEvent} />,
+    <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,
   ].filter(Boolean) as JSX.Element[];
 
   return (
@@ -192,5 +198,12 @@ const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent 
     },
   } as CourseEvent;
 };
+
+const showCountEventsOnStudentsDashboard = () =>
+  Number(
+    localStorage.getItem('showCountEventsOnStudentsDashboard')
+      ? localStorage.getItem('showCountEventsOnStudentsDashboard')
+      : 1,
+  );
 
 export default withCourseData(withSession(Page));

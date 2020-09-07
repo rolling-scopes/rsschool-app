@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
-import { flatMap, union } from 'lodash';
+import { flatMap } from 'lodash';
 import { config } from '../config';
-import { Course, IUserSession, CourseRoles, User, CourseTask, CourseUser } from '../models';
+import { Course, IUserSession, CourseRoles, User, CourseTask, CourseUser, CourseRole } from '../models';
 import { userService } from '../services';
 
 const hirers: string[] = config.roles.hirers;
@@ -15,7 +15,7 @@ type Profile = {
   emails?: { value: string; primary?: boolean }[];
 };
 
-function getPrimaryEmail(emails: Array<{ value: string; primary: boolean }>) {
+function getPrimaryEmail(emails: Array<{ value: string; primary?: boolean }>) {
   return emails.filter(email => email.primary);
 }
 
@@ -26,7 +26,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
   const isAdmin = config.app.admins.includes(id) || admin;
   const isHirer = hirers.includes(id);
   if (result == null) {
-    const email = getPrimaryEmail((profile.emails as any) || [])[0];
+    const email = getPrimaryEmail(profile.emails || [])[0];
 
     const user: User = {
       githubId: id,
@@ -85,19 +85,19 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
   const coursesRoles = flatMap(courseUsers, u => {
     const result = [];
     if (u.isJuryActivist) {
-      result.push({ courseId: u.courseId, role: 'juryActivist' });
+      result.push({ courseId: u.courseId, role: CourseRole.juryActivist });
     }
     if (u.isManager) {
-      result.push({ courseId: u.courseId, role: 'manager' });
+      result.push({ courseId: u.courseId, role: CourseRole.manager });
     }
     return result;
   })
-    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: 'taskOwner' })))
+    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
     .reduce((acc, item) => {
       if (!acc[item.courseId]) {
         acc[item.courseId] = [];
       }
-      acc[item.courseId] = union(acc[item.courseId], [item.role]) as any[];
+      acc[item.courseId]!.push(item.role);
       return acc;
     }, {} as CourseRoles);
 
