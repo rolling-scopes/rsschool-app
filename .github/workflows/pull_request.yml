@@ -28,17 +28,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Format & Lint
+      - name: Format & Lint (npm run ci:lint && npm run ci:format)
         run: |
           npm run ci:format
           npm run ci:lint
 
-      - name: Test
+      - name: Test (npm test)
         run: |
           npm test
 
-      - name: Build
+      - name: Build (npm run ci:build)
         run: |
           npm run ci:build
-
-
