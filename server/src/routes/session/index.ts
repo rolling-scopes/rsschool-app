@@ -15,18 +15,6 @@ const getSession = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export function sessionRoute(logger: ILogger) {
   const router = new Router({ prefix: '/session' });
 
-  /**
-   * @swagger
-   *
-   * /session:
-   *   get:
-   *      description: Gets current user session
-   *      produces:
-   *        - application/json
-   *      responses:
-   *        200:
-   *          description: operation status
-   */
   router.get('/', getSession(logger));
 
   return router;
