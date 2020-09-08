@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Format & Lint (npm run ci:lint && npm run ci:format)
         run: |
