@@ -11,7 +11,7 @@ const getStages = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function stagesRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/stages' });
+  const router = new Router<any, any>({ prefix: '/stages' });
 
   /**
    * @swagger

@@ -3,7 +3,10 @@ import { config } from '../config';
 import { IUserSession, CourseRole } from '../models';
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
-type RouterContext = Router.RouterContext<{}, { state: { user?: IUserSession }; isAuthenticated: () => boolean }>;
+export type RouterContext = Router.RouterContext<
+  {},
+  { state: { user?: IUserSession }; isAuthenticated?: () => boolean }
+>;
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
 export const basicAuthAws = auth({
@@ -25,7 +28,7 @@ const userGuards = (user: IUserSession) => {
     isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
     isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner) ?? false,
-    isLoggedIn: (ctx: RouterContext) => user != null && (ctx.isAuthenticated() || config.isDevMode),
+    isLoggedIn: (ctx: RouterContext) => user != null && (ctx.isAuthenticated?.() || config.isDevMode),
     isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.supervisor) ?? false,
   };
   return {
@@ -61,7 +64,10 @@ export const courseGuard = async (ctx: RouterContext, next: () => Promise<void>)
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseMentorGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+export const courseMentorGuard: Router.Middleware<{}, RouterContext> = async (
+  ctx: RouterContext,
+  next: () => Promise<void>,
+) => {
   ctx.params.courseId = Number(ctx.params.courseId);
   const user = ctx.state.user;
   if (user) {
@@ -78,7 +84,10 @@ export const courseMentorGuard = async (ctx: RouterContext, next: () => Promise<
   await basicAuthAdmin(ctx, next);
 };
 
-export const anyCourseMentorGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+export const anyCourseMentorGuard: Router.Middleware<{}, RouterContext> = async (
+  ctx: RouterContext,
+  next: () => Promise<void>,
+) => {
   ctx.params.courseId = Number(ctx.params.courseId);
   const user = ctx.state.user;
   if (user) {
@@ -91,7 +100,10 @@ export const anyCourseMentorGuard = async (ctx: RouterContext, next: () => Promi
   await basicAuthAdmin(ctx, next);
 };
 
-export const adminGuard = async (ctx: RouterContext, next: () => Promise<void>) => {
+export const adminGuard: Router.Middleware<{}, RouterContext> = async (
+  ctx: RouterContext,
+  next: () => Promise<void>,
+) => {
   const user = ctx.state.user;
   if (user) {
     const guards = userGuards(user);

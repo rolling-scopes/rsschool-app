@@ -1,11 +1,11 @@
 import { OK } from 'http-status-codes';
-import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { Course, CourseManager, CourseUser, Mentor, Student, User, CourseTask } from '../../models';
 import { setResponse } from '../utils';
+import { RouterContext } from '../guards';
 
-export const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getCourses = (_: ILogger) => async (ctx: RouterContext) => {
   const { githubId } = ctx.params;
   const isAdmin = ctx.state!.user && ctx.state!.user.isAdmin;
 

@@ -13,7 +13,7 @@ const getSession = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function sessionRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/session' });
+  const router = new Router<any, any>({ prefix: '/session' });
 
   router.get('/', getSession(logger));
 

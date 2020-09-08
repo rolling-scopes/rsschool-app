@@ -39,7 +39,7 @@ function applyRouter(topRouter: Router, router: Router) {
 }
 
 export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
-  const router = new Router();
+  const router = new Router<any, any>();
 
   router.use(errorHandlerMiddleware(logger));
   router.use(userRolesMiddleware, courseMiddleware);

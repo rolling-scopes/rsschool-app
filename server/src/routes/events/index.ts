@@ -11,7 +11,7 @@ const getEvents = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function lecturesRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/events' });
+  const router = new Router<any, any>({ prefix: '/events' });
 
   /**
    * @swagger
