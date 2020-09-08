@@ -4,7 +4,7 @@ import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } fro
 import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {
-  scheduleJob('*/3 * * * *', async () => {
+  scheduleJob('*/6 * * * *', async () => {
     logger.info('Starting score update job');
 
     const courses = await getCourses();
