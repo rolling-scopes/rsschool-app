@@ -198,6 +198,8 @@ export class CourseService {
   }
 
   async getCourseScore(pagination: IPaginationInfo, filter: ScoreTableFilters = { activeOnly: false }) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const params = new URLSearchParams({
       current: String(pagination.current),
       pageSize: String(pagination.pageSize),

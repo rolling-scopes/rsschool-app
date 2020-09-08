@@ -22,7 +22,7 @@
     "@types/qs": "^6.9.4",
     "@types/react-gauge-chart": "^0.2.0",
     "algolia-places-react": "^1.5.1",
-    "antd": "^4.2.4",
+    "antd": "^4.6.2",
     "axios": "~0.19.0",
     "chart.js": "^2.9.3",
     "csvtojson": "~2.0.10",
