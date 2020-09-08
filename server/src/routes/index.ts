@@ -48,7 +48,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, certificateRoute(logger));
   applyRouter(router, authRoute());
 
-  router.use(userCheckMiddleware);
+  // router.use(userCheckMiddleware);
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
