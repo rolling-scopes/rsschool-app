@@ -101,4 +101,7 @@ export class CourseTask {
 
   @Column({ nullable: true, type: 'varchar' })
   type: TaskType;
+
+  @Column({ default: false, type: 'boolean' })
+  disabled: boolean;
 }
