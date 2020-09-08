@@ -29,7 +29,7 @@ import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
 
 import { ILogger } from '../logger';
-import { userRolesMiddleware, courseMiddleware, userCheckMiddleware } from './middlewares';
+import { userRolesMiddleware, courseMiddleware } from './middlewares';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
