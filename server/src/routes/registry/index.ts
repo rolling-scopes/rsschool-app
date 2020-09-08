@@ -5,7 +5,6 @@ import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
 import { IUserSession, CourseRole } from '../../models';
-import { getUserByGithubId } from '../../services/user.service';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
@@ -13,22 +12,9 @@ import { setResponse, setCsvResponse } from '../utils';
 import { notificationService } from '../../services';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry';
 
-interface LoggingError {
-  logger?: ILogger;
-  errorMsg: string;
-  ctx: Router.RouterContext;
-}
-
-const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
-  if (logger) {
-    logger.error(errorMsg);
-  }
-
-  setResponse(ctx, BAD_REQUEST, { message: errorMsg });
-};
-
 export function registryRouter(logger?: ILogger) {
   const router = new Router({ prefix: '/registry' });
+  const repository = getCustomRepository(MentorRegistryRepository);
 
   router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
     const { type, courseId } = ctx.query;
@@ -49,51 +35,25 @@ export function registryRouter(logger?: ILogger) {
   });
 
   router.post('/mentor', async (ctx: Router.RouterContext) => {
-    const { id: userId } = ctx.state!.user as IUserSession;
-
-    const {
-      comment,
-      maxStudentsLimit,
-      technicalMentoring,
-      preferedStudentsLocation,
-      preferedCourses,
-      englishMentoring,
-    } = ctx.request.body;
-
-    const mentorData: Partial<MentorRegistry> = {
-      comment,
-      maxStudentsLimit,
-      preferedStudentsLocation,
-      englishMentoring,
-      preferedCourses,
-      technicalMentoring,
-    };
-
-    const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
-    if (mentorRegistry == null) {
-      await getRepository(MentorRegistry).insert({ userId, ...mentorData });
-    } else {
-      await getRepository(MentorRegistry).update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
-    }
-
+    const { githubId } = ctx.state!.user as IUserSession;
+    await repository.register(githubId, ctx.request.body);
     setResponse(ctx, OK);
   });
 
   router.put('/mentor/:githubId', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
     const githubId = ctx.params.githubId;
-
     const { preselectedCourses } = ctx.request.body;
-
-    const mentorData: Partial<MentorRegistry> = { preselectedCourses };
-    const user = await getUserByGithubId(githubId);
-    if (user == null) {
-      setResponse(ctx, BAD_REQUEST);
-      return;
-    }
-    await getRepository(MentorRegistry).update({ userId: user.id }, mentorData);
+    repository.update(githubId, { preselectedCourses });
     setResponse(ctx, OK);
+
     const confirmationText = await notificationService.renderMentorConfirmationText(preselectedCourses);
     await notificationService.sendNotification([githubId], confirmationText, true);
+  });
+
+  router.delete('/mentor/:githubId', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
+    const githubId = ctx.params.githubId;
+    await repository.cancel(githubId);
+    setResponse(ctx, OK);
   });
 
   router.get('/mentor', async (ctx: Router.RouterContext) => {
@@ -104,7 +64,6 @@ export function registryRouter(logger?: ILogger) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
-
     const result = {
       maxStudentsLimit: mentorRegistry.maxStudentsLimit,
       preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
@@ -116,22 +75,20 @@ export function registryRouter(logger?: ILogger) {
   router.get('/mentors', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
     const state = ctx.state!.user as IUserSession;
     let mentorRegistries: Array<any> = [];
-    const repository = getCustomRepository(MentorRegistryRepository);
-
     if (state.isAdmin) {
-      mentorRegistries = await repository.findAllMentorRegistries();
+      mentorRegistries = await repository.findAll();
     } else {
       const coursesRoles = state.coursesRoles ?? {};
       const coursesIds = Object.entries(coursesRoles)
         .filter(([_, value = []]) => value.includes(CourseRole.manager) || value.includes(CourseRole.supervisor))
         .map(([key]) => Number(key));
-      mentorRegistries = await repository.findMentorRegistriesByCoursesIds(coursesIds);
+      mentorRegistries = await repository.findByCoursesIds(coursesIds);
     }
     setResponse(ctx, OK, mentorRegistries);
   });
 
   router.get('/mentors/csv', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
-    const data = await getCustomRepository(MentorRegistryRepository).findAllMentorRegistries();
+    const data = await repository.findAll();
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
 
     const csv = await parseAsync(
@@ -252,3 +209,17 @@ export function registryRouter(logger?: ILogger) {
 
   return router;
 }
+
+interface LoggingError {
+  logger?: ILogger;
+  errorMsg: string;
+  ctx: Router.RouterContext;
+}
+
+const handleError = ({ logger, errorMsg, ctx }: LoggingError) => {
+  if (logger) {
+    logger.error(errorMsg);
+  }
+
+  setResponse(ctx, BAD_REQUEST, { message: errorMsg });
+};

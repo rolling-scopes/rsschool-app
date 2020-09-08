@@ -25,6 +25,11 @@ export class MentorRegistryService {
     return response.data.data;
   }
 
+  public async cancelMentor(githubId: string) {
+    const response = await this.axios.delete(`/mentor/${githubId}`);
+    return response.data.data;
+  }
+
   public async getMentor() {
     const response = await this.axios.get(`/mentor`);
     return response.data.data as {

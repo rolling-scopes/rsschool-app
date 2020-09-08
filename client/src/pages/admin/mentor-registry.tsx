@@ -8,6 +8,8 @@ import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { CoursesService } from 'services/courses';
 import { ModalForm } from 'components/Forms';
+import { useLoading } from 'components/useLoading';
+
 import css from 'styled-jsx/css';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { isAnyCourseManager } from '../../domain/user';
@@ -20,7 +22,8 @@ const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
 
 function Page(props: Props) {
-  const [loading, setLoading] = useState(false);
+  const [loading, withLoading] = useLoading(false);
+
   const [modalLoading, setModalLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
@@ -38,18 +41,23 @@ function Page(props: Props) {
     setMaxStudents(data.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
   };
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
+  const loadData = useCallback(
+    withLoading(async () => {
+      const [allData, courses] = await Promise.all([mentorRegistryService.getMentors(), coursesService.getCourses()]);
+      setAllData(allData);
+      updateData(showAll, allData);
+      setCourses(courses);
+    }),
+    [showAll],
+  );
 
-    const allData = await mentorRegistryService.getMentors();
-    const courses = await coursesService.getCourses();
-
-    setAllData(allData);
-    updateData(showAll, allData);
-
-    setCourses(courses);
-    setLoading(false);
-  }, [showAll]);
+  const cancelMentor = useCallback(
+    withLoading(async (githubId: string) => {
+      await mentorRegistryService.cancelMentor(githubId);
+      await loadData();
+    }),
+    [],
+  );
 
   useAsync(loadData, []);
 
@@ -196,7 +204,12 @@ function Page(props: Props) {
                     width: 80,
                     title: 'Actions',
                     dataIndex: 'actions',
-                    render: (_: any, record: any) => <a onClick={() => setModalData(record)}>Edit</a>,
+                    render: (_: any, record: any) => (
+                      <>
+                        <a onClick={() => setModalData(record)}>Edit</a> <br />
+                        <a onClick={() => cancelMentor(record.githubId)}>Cancel</a>
+                      </>
+                    ),
                   },
                 ]}
               />
