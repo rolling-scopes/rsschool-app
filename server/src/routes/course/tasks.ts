@@ -18,6 +18,7 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
     .leftJoin('courseTask.taskOwner', 'taskOwner')
     .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
     .where(`courseTask.courseId = :courseId`, { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .addGroupBy('courseTask.id')
     .addGroupBy('task.id')
     .addGroupBy('taskOwner.id')
@@ -69,6 +70,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
     .where(`courseTask.courseId = :courseId`, { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .getMany();
 
   const data = courseTasks.map(item => {

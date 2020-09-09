@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { Next } from 'koa';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
-import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
+import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute, createDisableRoute } from '../common';
 import {
   adminGuard,
   guard,
@@ -124,7 +124,7 @@ function addEventApi(router: Router, logger: ILogger) {
 function addTaskApi(router: Router, logger: ILogger) {
   router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', courseManagerGuard, createDeleteRoute(CourseTask, logger));
+  router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
