@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { Next } from 'koa';
 import { ILogger } from '../../logger';
 import { Course, CourseTask, CourseEvent } from '../../models';
-import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute } from '../common';
+import { createDeleteRoute, createGetRoute, createPostRoute, createPutRoute, createDisableRoute } from '../common';
 import {
   adminGuard,
   guard,
@@ -124,7 +124,7 @@ function addEventApi(router: Router, logger: ILogger) {
 function addTaskApi(router: Router, logger: ILogger) {
   router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
-  router.delete('/task/:id', courseManagerGuard, createDeleteRoute(CourseTask, logger));
+  router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
 
   router.get('/tasks', courseGuard, getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
@@ -182,7 +182,12 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(logger));
   router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
-  router.post('/mentor/:githubId/status/expelled', courseManagerGuard, ...validators, postMentorStatusExpelled(logger));
+  router.post(
+    '/mentor/:githubId/status/expelled',
+    courseManagerGuard,
+    validateGithubId,
+    postMentorStatusExpelled(logger),
+  );
 }
 
 function addStudentApi(router: Router, logger: ILogger) {

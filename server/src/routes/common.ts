@@ -77,3 +77,18 @@ export const createDeleteRoute = <T extends ObjectType<T>>(entity: T, logger?: I
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }
 };
+
+export const createDisableRoute = <T extends ObjectType<{ disabled: boolean }>>(entity: T, logger?: ILogger) => async (
+  ctx: Router.RouterContext,
+) => {
+  const id: number = ctx.params.id;
+  try {
+    const result = await getRepository(entity).update(id, { disabled: true });
+    setResponse(ctx, OK, result);
+  } catch (e) {
+    if (logger) {
+      logger.error(e.message);
+    }
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
