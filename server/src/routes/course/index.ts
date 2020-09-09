@@ -182,7 +182,12 @@ function addMentorApi(router: Router, logger: ILogger) {
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(logger));
   router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
-  router.post('/mentor/:githubId/status/expelled', courseManagerGuard, ...validators, postMentorStatusExpelled(logger));
+  router.post(
+    '/mentor/:githubId/status/expelled',
+    courseManagerGuard,
+    validateGithubId,
+    postMentorStatusExpelled(logger),
+  );
 }
 
 function addStudentApi(router: Router, logger: ILogger) {
