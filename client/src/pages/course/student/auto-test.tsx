@@ -98,13 +98,20 @@ function Page(props: CoursePageProps) {
       }
       if (error.response?.status === 403) {
         notification.error({
-          message: <>You already submit this task two times. Attempts limit is over!</>,
+          message: (
+            <>
+              You already submit this task {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times. Attempts limit
+              is over!
+            </>
+          ),
         });
+        form.resetFields();
         return;
       }
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
+      setCourseTaskId(null);
     }
   };
 
@@ -119,6 +126,10 @@ function Page(props: CoursePageProps) {
   };
 
   const handleCourseTaskChange = (courseTaskId: number) => {
+    if (courseTask?.type === 'selfeducation') {
+      form.resetFields();
+    }
+
     setCourseTaskId(courseTaskId);
     form.setFieldsValue({ courseTaskId });
     loadVerifications();
