@@ -469,6 +469,7 @@ export async function getCourseTasks(courseId: number) {
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
     .where('courseTask.courseId = :courseId', { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .getMany();
   return courseTasks;
 }
