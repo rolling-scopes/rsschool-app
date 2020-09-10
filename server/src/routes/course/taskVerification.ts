@@ -112,7 +112,18 @@ const createSelfeducationVerification = async ({
   }
 
   const rightAnswersCount = studentAnswers
-    .map(({ index, value }) => Number(answers[index].toString() === value.toString()))
+    .map(({ index, value }) => {
+      const rightAnswer = String(answers[index])
+        .split(',')
+        .sort((a, b) => Number(a) - Number(b))
+        .join('');
+      const userAnswer = String(value)
+        .split(',')
+        .sort((a, b) => Number(a) - Number(b))
+        .join('');
+
+      return Number(rightAnswer === userAnswer);
+    })
     .reduce((sum, value) => sum + value, 0);
 
   const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
