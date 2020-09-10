@@ -44,7 +44,12 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   router.use(errorHandlerMiddleware(logger));
   router.use(userRolesMiddleware, courseMiddleware);
 
+  // public routes
+  applyRouter(router, certificateRoute(logger));
   applyRouter(router, authRoute());
+
+  // router.use(userCheckMiddleware);
+
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
   applyRouter(router, registryRouter(logger));
@@ -62,7 +67,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, stageRoute(logger));
   applyRouter(router, stagesRoute(logger));
-  applyRouter(router, certificateRoute(logger));
+
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
   applyRouter(router, jwtRoute(logger));

@@ -393,7 +393,9 @@ export async function getStudentsScore(
     .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
     .addSelect(['mentor.id', 'mentor.userId'])
     .leftJoin('student.taskResults', 'tr')
-    .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId'])
+    .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId', 'tr.courseTask'])
+    .leftJoin('tr.courseTask', 'ct')
+    .addSelect(['ct.disabled', 'ct.id'])
     .leftJoin('student.taskInterviewResults', 'tir')
     .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
     .leftJoin('mentor.user', 'mu')
@@ -433,7 +435,10 @@ export async function getStudentsScore(
       .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
       .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
     const taskResults =
-      student.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })).concat(interviews) ?? [];
+      student.taskResults
+        ?.filter(({ courseTask: { disabled } }) => !disabled)
+        .map(({ courseTaskId, score }) => ({ courseTaskId, score }))
+        .concat(interviews) ?? [];
 
     const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
     return {
@@ -462,11 +467,16 @@ export async function getStudentScore(studentId: number) {
   const student = await getRepository(Student)
     .createQueryBuilder('student')
     .leftJoinAndSelect('student.taskResults', 'taskResults')
+    .leftJoin('taskResults.courseTask', 'courseTask')
+    .addSelect(['courseTask.disabled', 'courseTask.id'])
     .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
     .where('student.id = :studentId', { studentId })
     .getOne();
 
-  const taskResults = student?.taskResults?.map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+  const taskResults =
+    student?.taskResults
+      ?.filter(({ courseTask: { disabled } }) => !disabled)
+      .map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
   const interviewResults =
     student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
       courseTaskId,
@@ -487,6 +497,7 @@ export async function getCourseTasks(courseId: number) {
     .createQueryBuilder('courseTask')
     .innerJoinAndSelect('courseTask.task', 'task')
     .where('courseTask.courseId = :courseId', { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .getMany();
   return courseTasks;
 }

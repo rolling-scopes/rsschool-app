@@ -40,7 +40,10 @@ export class TaskResult {
   @Column()
   courseTaskId: number;
 
-  @ManyToOne(_ => CourseTask)
+  @ManyToOne(
+    _ => CourseTask,
+    courseTask => courseTask.taskResults,
+  )
   courseTask: CourseTask;
 
   @Column({ nullable: true })
