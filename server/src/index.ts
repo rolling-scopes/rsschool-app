@@ -16,8 +16,6 @@ import { models } from './models';
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { startBackgroundJobs } from './schedule';
 
-const koaSwagger = require('koa2-swagger-ui'); //tslint:disable-line
-
 export class App {
   private koa = new Koa();
   private appLogger: ILogger;
@@ -42,6 +40,10 @@ export class App {
 
     this.koa.use(koaJwt({ key: 'user', secret: config.sessionKey, passthrough: true }));
 
+    process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
+  }
+
+  public start(): Server {
     const routes = routesMiddleware(this.appLogger);
 
     this.koa.use(routes.publicRouter.routes());
@@ -49,19 +51,7 @@ export class App {
 
     this.koa.use(routeLoggerMiddleware);
     this.koa.use(serve('public'));
-    this.koa.use(
-      koaSwagger({
-        routePrefix: '/swagger',
-        swaggerOptions: {
-          url: './swagger.yml',
-        },
-      }),
-    );
 
-    process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
-  }
-
-  public start(): Server {
     this.server = this.koa.listen(config.port);
     this.appLogger.info(`Service is running on ${config.port} port`);
     return this.server;
