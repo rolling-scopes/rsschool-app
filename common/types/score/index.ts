@@ -5,3 +5,9 @@ export type ScoreTableFilters = {
   cityName?: string;
   activeOnly: boolean;
 };
+
+export type ScoreOrder = {
+  field: string;
+  order: 'ascend' | 'descend';
+  column?: { sorter: string };
+};

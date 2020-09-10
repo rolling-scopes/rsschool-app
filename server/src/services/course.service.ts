@@ -357,6 +357,17 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
   return students;
 }
 
+const orderByFieldMapping = {
+  rank: 'student.rank',
+  totalScore: 'student.totalScore',
+  githubId: 'user.githubId',
+  name: 'user.firstName',
+  cityName: 'user.cityName',
+  mentor: 'mu.githubId',
+  totalScoreChangeDate: 'student.totalScoreChangeDate',
+  repositoryLastActivityDate: 'student.repositoryLastActivityDate',
+};
+
 export async function getStudentsScore(
   courseId: number,
   paginateOptions: IPaginationOptions = {
@@ -369,6 +380,10 @@ export async function getStudentsScore(
     name: '',
     'mentor.githubId': '',
     cityName: '',
+  },
+  orderBy: { field: keyof typeof orderByFieldMapping; direction: 'ASC' | 'DESC' } = {
+    field: 'totalScore',
+    direction: 'DESC',
   },
 ) {
   let query = getRepository(Student)
@@ -409,7 +424,10 @@ export async function getStudentsScore(
     query = query.andWhere('("user"."githubId" ILIKE :searchText)', { searchText: `%${filter.githubId}%` });
   }
 
-  const pagination = await paginate(query.orderBy('student.totalScore', 'DESC'), paginateOptions);
+  const pagination = await paginate(
+    query.orderBy(orderByFieldMapping[orderBy.field], orderBy.direction),
+    paginateOptions,
+  );
 
   const students = pagination.content.map(student => {
     const user = student.user;
