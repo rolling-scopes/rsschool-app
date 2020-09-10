@@ -95,6 +95,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
 
   query
     .where('"user"."githubId" = :githubId', { githubId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .groupBy('"course"."id", "student"."id", "userMentor"."id", "certificate"."publicId"')
     .orderBy('"course"."updatedDate"', 'DESC');
 
