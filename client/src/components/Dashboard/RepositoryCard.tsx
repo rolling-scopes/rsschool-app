@@ -17,7 +17,7 @@ export function RepositoryCard(props: Props) {
   const handleSubmit = async () => {
     try {
       await onSendInviteRepository(githubId);
-      message.success('Your feedback has been submitted.');
+      message.success('Your request has been submitted.');
     } catch (e) {
       message.error('An error occurred. Please try later.');
     }
