@@ -47,7 +47,7 @@ export class RepositoryService {
       this.courseId,
       githubId,
     );
-    const { githubId: mentorGithubId } = studentWithMentor?.mentor as MentorBasic;
+    const mentorGithubId = (studentWithMentor?.mentor as MentorBasic | undefined)?.githubId;
     const result = await this.createRepositoryInternally(this.github, course, githubId);
     if (mentorGithubId) {
       await this.inviteMentor(mentorGithubId, course);
