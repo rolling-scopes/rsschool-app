@@ -218,7 +218,7 @@ export const createCompletion = (__: ILogger) => async (ctx: Router.RouterContex
     setResponse(ctx, BAD_REQUEST);
     return;
   }
-  const pairsCount = (courseTask.pairsCount ?? defaultPairsCount) - 1;
+  const pairsCount = Math.max((courseTask.pairsCount ?? defaultPairsCount) - 1, 1);
   const studentScores = await courseService.getTaskSolutionCheckers(courseTaskId, pairsCount);
 
   for (const studentScore of studentScores) {
