@@ -47,7 +47,7 @@ export function RepositoryCard(props: Props) {
                 </div>
               )}
               <Button style={{ marginBottom: 7 }} type="primary" disabled={!!url} onClick={handleSubmit}>
-                Send invite again
+                Send invite
               </Button>
             </Col>
           </Row>
