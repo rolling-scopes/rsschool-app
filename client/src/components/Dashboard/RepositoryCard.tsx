@@ -17,7 +17,7 @@ export function RepositoryCard(props: Props) {
   const handleSubmit = async () => {
     try {
       await onSendInviteRepository(githubId);
-      message.success('Your feedback has been submitted.');
+      message.success('Your request has been submitted.');
     } catch (e) {
       message.error('An error occurred. Please try later.');
     }
@@ -46,8 +46,8 @@ export function RepositoryCard(props: Props) {
                   </Text>
                 </div>
               )}
-              <Button style={{ marginBottom: 7 }} type="primary" disabled={!url} onClick={handleSubmit}>
-                Send invite again
+              <Button style={{ marginBottom: 7 }} type="primary" disabled={!!url} onClick={handleSubmit}>
+                Send invite
               </Button>
             </Col>
           </Row>

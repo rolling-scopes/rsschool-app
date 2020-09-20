@@ -23,6 +23,7 @@ export const getStudentTaskVerifications = (_: ILogger) => async (ctx: Router.Ro
     .innerJoin('courseTask.task', 'task')
     .addSelect(['task.name', 'courseTask.id'])
     .where('v.studentId = :id', { id: student.id })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .orderBy('v.updatedDate', 'DESC')
     .getMany();
 
@@ -49,6 +50,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
       'courseTask.id',
     ])
     .where('courseTask.courseId = :courseId', { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .andWhere("v.status = 'pending' ")
     .orderBy('v.createdDate', 'ASC')
     .getMany();

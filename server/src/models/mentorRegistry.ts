@@ -39,4 +39,7 @@ export class MentorRegistry {
 
   @Column({ nullable: true })
   comment: string;
+
+  @Column({ default: false, type: 'boolean' })
+  canceled: boolean;
 }

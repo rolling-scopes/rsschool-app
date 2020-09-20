@@ -1,18 +1,71 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import { MentorRegistry } from '../models';
+import { userService } from '../services';
 
 @EntityRepository(MentorRegistry)
 export class MentorRegistryRepository extends AbstractRepository<MentorRegistry> {
-  public async findAllMentorRegistries() {
-    const data = await this.getPreparedMentorRegistriesQuery().getMany();
+  public async findAll() {
+    const data = await this.getPreparedMentorRegistriesQuery()
+      .where('mentorRegistry.canceled = false')
+      .getMany();
     return data.map(transformMentorRegistry);
   }
 
-  public async findMentorRegistriesByCoursesIds(coursesIds: Array<any>) {
+  public async findByCoursesIds(coursesIds: Array<any>) {
     const data = await this.getPreparedMentorRegistriesQuery()
       .where('mentorRegistry.preferedCourses IN (:...ids)', { ids: coursesIds })
       .getMany();
     return data.map(transformMentorRegistry);
+  }
+
+  public async cancel(githubId: string) {
+    const user = await userService.getUserByGithubId(githubId);
+    if (user == null) {
+      return;
+    }
+    await getRepository(MentorRegistry).update({ userId: user.id }, { canceled: true });
+  }
+
+  public async register(githubId: string, updateData: Partial<MentorRegistry>) {
+    const user = await userService.getUserByGithubId(githubId);
+
+    if (user == null) {
+      return;
+    }
+    const {
+      comment,
+      maxStudentsLimit,
+      technicalMentoring,
+      preferedStudentsLocation,
+      preferedCourses,
+      englishMentoring,
+    } = updateData;
+
+    const mentorData: Partial<MentorRegistry> = {
+      comment,
+      maxStudentsLimit,
+      preferedStudentsLocation,
+      englishMentoring,
+      preferedCourses,
+      technicalMentoring,
+      canceled: false,
+    };
+
+    const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId: user.id } });
+    if (mentorRegistry == null) {
+      await getRepository(MentorRegistry).insert({ userId: user.id, ...mentorData });
+    } else {
+      await getRepository(MentorRegistry).update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
+    }
+  }
+
+  public async update(githubId: string, updateData: { preselectedCourses: string[] }) {
+    const data: Partial<MentorRegistry> = updateData;
+    const user = await userService.getUserByGithubId(githubId);
+    if (user == null) {
+      return;
+    }
+    await getRepository(MentorRegistry).update({ userId: user.id }, data);
   }
 
   private getPreparedMentorRegistriesQuery() {

@@ -197,10 +197,16 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseScore(pagination: IPaginationInfo, filter: ScoreTableFilters = { activeOnly: false }) {
+  async getCourseScore(
+    pagination: IPaginationInfo,
+    filter: ScoreTableFilters = { activeOnly: false },
+    orderBy = { field: 'totalScore', direction: 'desc' },
+  ) {
     const params = new URLSearchParams({
       current: String(pagination.current),
       pageSize: String(pagination.pageSize),
+      orderBy: String(orderBy.field),
+      orderDirection: String(orderBy.direction),
       ...onlyDefined(filter),
     });
     const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
@@ -446,7 +452,6 @@ export class CourseService {
   }
 
   async getMentorInterviews(githubId: string) {
-    console.log({ githubId });
     const result = await this.axios.get(`/mentor/${githubId}/interviews`);
     return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
   }
