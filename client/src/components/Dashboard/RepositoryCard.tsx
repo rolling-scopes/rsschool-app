@@ -4,19 +4,23 @@ import CommonCard from './CommonDashboardCard';
 import { GithubFilled } from '@ant-design/icons';
 
 type Props = {
-  url?: string | null;
+  url?: string;
   githubId: string;
   onSendInviteRepository: (githubId: string) => Promise<void>;
+  updateUrl: () => void;
 };
+
+const getNameGithubRepository = (url: string | null | undefined) => (url ? url.split('/').pop() ?? '' : '');
 
 export function RepositoryCard(props: Props) {
   const { Text, Paragraph } = Typography;
-  const { url, githubId, onSendInviteRepository } = props;
-  const nameGithubRepository = url ? url.split('/').pop() ?? '' : '';
+  const { url, githubId, onSendInviteRepository, updateUrl } = props;
+  const nameGithubRepository = getNameGithubRepository(url);
 
   const handleSubmit = async () => {
     try {
       await onSendInviteRepository(githubId);
+      updateUrl();
       message.success('Your request has been submitted.');
     } catch (e) {
       message.error('An error occurred. Please try later.');
@@ -46,7 +50,7 @@ export function RepositoryCard(props: Props) {
                   </Text>
                 </div>
               )}
-              <Button style={{ marginBottom: 7 }} type="primary" disabled={!!url} onClick={handleSubmit}>
+              <Button style={{ marginBottom: 7 }} type="primary" onClick={handleSubmit}>
                 Send invite
               </Button>
             </Col>
