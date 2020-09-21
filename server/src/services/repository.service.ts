@@ -79,16 +79,25 @@ export class RepositoryService {
   public async createWebhook(github: Octokit, owner: string, repo: string) {
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating webhook`);
-    await github.repos.createWebhook({
-      owner,
-      repo,
-      config: {
-        url: `${config.aws.restApiUrl}/github/repository-event`,
-        secret: config.github.hooksSecret,
-        content_type: 'json',
-      },
-    });
-    this.logger?.info(`[${ownerRepo}] created webhook`);
+    try {
+      await github.repos.createWebhook({
+        owner,
+        repo,
+        config: {
+          url: `${config.aws.restApiUrl}/github/repository-event`,
+          secret: config.github.hooksSecret,
+          content_type: 'json',
+        },
+      });
+      this.logger?.info(`[${ownerRepo}] created webhook`);
+    } catch (e) {
+      if (e.status === 422) {
+        // hook exists already
+        this.logger?.info(e.errors[0].message);
+        return;
+      }
+      throw e;
+    }
   }
 
   public async inviteMentor(githubId: string, course?: Course) {
@@ -178,9 +187,9 @@ export class RepositoryService {
     const repo = RepositoryService.getRepoName(githubId, course);
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating`);
-    let response;
+    let repository = null;
     try {
-      response = await github.repos.createInOrg({
+      const response = await github.repos.createInOrg({
         org: owner,
         name: repo,
         private: true,
@@ -188,9 +197,11 @@ export class RepositoryService {
         gitignore_template: 'Node',
         description: `Private repository for @${githubId}`,
       });
+      repository = response.data.html_url;
     } catch (e) {
       if (e.status === 422) {
         // if repository exists
+        repository = `https://github.com/${owner}/${repo}`;
         this.logger?.info(e.errors[0].message);
       } else {
         throw e;
@@ -207,7 +218,7 @@ export class RepositoryService {
     if (student == null) {
       return null;
     }
-    student.repository = response ? response.data.html_url : student.repository;
+    student.repository = repository ?? student.repository;
     this.logger?.info({ repository: student.repository });
     await getRepository(Student).save(student);
     return student;
