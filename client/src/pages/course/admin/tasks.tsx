@@ -345,7 +345,7 @@ function getInitialValues(modalData: Partial<CourseTaskDetails>) {
     timeZone,
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
     maxScore: modalData.maxScore || 100,
-    scoreWeight: modalData.scoreWeight || 1,
+    scoreWeight: modalData.scoreWeight ?? 1,
     range:
       modalData.studentStartDate && modalData.studentEndDate
         ? [
