@@ -21,12 +21,23 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
 
-  const [studentSummary, setStudentSummary] = useState(null as StudentSummary | null);
+  const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
+  const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [loading, setLoading] = useState(false);
+
+  const getRepository = async () => {
+    const { repository } = await courseService.getStudentSummary(githubId);
+    return repository ? repository : '';
+  };
+
+  const updateUrl = async () => {
+    const newUrl = await getRepository();
+    setRepositoryUrl(newUrl);
+  };
 
   const changeCountEvents = (value: number) => {
     localStorage.setItem('showCountEventsOnStudentsDashboard', String(value));
@@ -56,6 +67,7 @@ function Page(props: CoursePageProps) {
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
+      setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
     } catch {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -63,7 +75,7 @@ function Page(props: CoursePageProps) {
     }
   }, [props.course.id]);
 
-  const currentDate = moment().format('YYYY MM DD');
+  const currentDate = new Date();
 
   const studentPosition = studentSummary?.rank ?? 0;
   const results = studentSummary?.results ?? [];
@@ -78,12 +90,14 @@ function Page(props: CoursePageProps) {
       const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
       return { ...task, comment, githubPrUri: taskGithubPrUris, score };
     });
+
   const tasksNotDone = courseTasks
     .filter(
       task =>
         moment(task.studentEndDate as string).isBefore(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
     .map(task => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
+
   const tasksFuture = courseTasks
     .filter(
       task => moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
@@ -104,8 +118,9 @@ function Page(props: CoursePageProps) {
     ),
     <RepositoryCard
       githubId={githubId}
-      url={studentSummary?.repository}
+      url={repositoryUrl}
       onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
+      updateUrl={updateUrl}
     />,
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
