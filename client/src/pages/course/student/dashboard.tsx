@@ -21,7 +21,7 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
 
-  const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
+  const [studentSummary, setStudentSummary] = useState(null as StudentSummary | null);
   const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
@@ -66,13 +66,14 @@ function Page(props: CoursePageProps) {
   const currentDate = moment().format('YYYY MM DD');
 
   const studentPosition = studentSummary?.rank ?? 0;
+  const results = studentSummary?.results ?? [];
 
   const maxCourseScore = Math.round(
     courseTasks.reduce((score, task) => score + (task.maxScore ?? 0) * task.scoreWeight, 0),
   );
 
   const tasksCompleted = courseTasks
-    .filter(task => !!checkTaskResults(studentSummary.results, task.id))
+    .filter(task => !!checkTaskResults(results, task.id))
     .map(task => {
       const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
       return { ...task, comment, githubPrUri: taskGithubPrUris, score };
@@ -80,20 +81,17 @@ function Page(props: CoursePageProps) {
   const tasksNotDone = courseTasks
     .filter(
       task =>
-        moment(task.studentEndDate as string).isBefore(currentDate, 'date') &&
-        !checkTaskResults(studentSummary.results, task.id),
+        moment(task.studentEndDate as string).isBefore(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
     .map(task => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
   const tasksFuture = courseTasks
     .filter(
-      task =>
-        moment(task.studentEndDate as string).isAfter(currentDate, 'date') &&
-        !checkTaskResults(studentSummary.results, task.id),
+      task => moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
     .map(task => ({ ...task, comment: null, githubPrUri: null, score: null }));
 
   const taskStatistics = { completed: tasksCompleted, notDone: tasksNotDone, future: tasksFuture };
-  const { isActive, totalScore } = studentSummary ?? {};
+  const { isActive = false, totalScore = 0 } = studentSummary ?? {};
 
   const cards = [
     studentSummary && (
@@ -145,7 +143,7 @@ function Page(props: CoursePageProps) {
           </div>
         ) : (
           <>
-            <Result status={'403' as any} title="No access or user does not exist" />
+            <Result status={'403' as any} title="You have no access to this page" />
           </>
         )}
       </LoadingScreen>

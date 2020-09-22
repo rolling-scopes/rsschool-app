@@ -79,17 +79,12 @@ export const getStudentSummary = (_: ILogger) => async (ctx: Router.RouterContex
     student.mentorId ? await courseService.getMentorWithContacts(student.mentorId) : null,
   ]);
 
-  setResponse(
-    ctx,
-    OK,
-    {
-      ...score,
-      isActive: !student.isExpelled && !student.isFailed,
-      mentor,
-      repository: student.repository,
-    },
-    60,
-  );
+  setResponse(ctx, OK, {
+    ...score,
+    isActive: !student.isExpelled && !student.isFailed,
+    mentor,
+    repository: student.repository,
+  });
 };
 
 export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
