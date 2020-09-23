@@ -2,6 +2,7 @@ import * as React from 'react';
 import axios from 'axios';
 import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
+import {TYPES} from "../configs/registry";
 
 export type Role = 'student' | 'mentor' | 'coursemanager';
 
