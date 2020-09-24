@@ -236,7 +236,8 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
 
 function renderSelfEducation(courseTask: CourseTask) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
-  const { maxAttemptsNumber = 0, tresholdPercentage = 0 } = courseTask?.publicAttributes ?? {};
+  const { maxAttemptsNumber = 0, tresholdPercentage = 0, strictAttemptsMode = true } =
+    courseTask?.publicAttributes ?? {};
 
   return (
     <>
@@ -244,7 +245,7 @@ function renderSelfEducation(courseTask: CourseTask) {
       <Typography.Paragraph>
         <Typography.Text mark strong>
           Note: You must to score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
-          attempts.
+          attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
         </Typography.Text>
       </Typography.Paragraph>
       {questions.map(({ question, answers, multiple, index: questionIndex }) => (

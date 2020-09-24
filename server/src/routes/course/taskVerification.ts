@@ -93,7 +93,7 @@ const createSelfeducationVerification = async ({
 }: SelfEducationVerificationParams) => {
   const {
     answers,
-    public: { tresholdPercentage, maxAttemptsNumber, numberOfQuestions },
+    public: { tresholdPercentage, maxAttemptsNumber, numberOfQuestions, strictAttemptsMode = true },
   } = courseTask.task.attributes as SelfEducationAttributes;
   const { id: courseTaskId, type: courseTaskType, maxScore } = courseTask;
 
@@ -106,7 +106,7 @@ const createSelfeducationVerification = async ({
       .getMany()
   ).length;
 
-  if (verificationsNumber >= maxAttemptsNumber) {
+  if (strictAttemptsMode && verificationsNumber >= maxAttemptsNumber) {
     setResponse(ctx, FORBIDDEN);
     return;
   }
@@ -127,8 +127,13 @@ const createSelfeducationVerification = async ({
     .reduce((sum, value) => sum + value, 0);
 
   const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
-  const score = rightAnswersPercent < tresholdPercentage ? 0 : maxScore;
-  const details = `Accuracy: ${rightAnswersPercent}%`;
+  let score = rightAnswersPercent < tresholdPercentage ? 0 : maxScore;
+  let details = `Accuracy: ${rightAnswersPercent}%`;
+
+  if (verificationsNumber >= maxAttemptsNumber) {
+    score = score / 2;
+    details += '. Attempts number was over, so score was divided by 2';
+  }
 
   const {
     identifiers: [identifier],
@@ -177,6 +182,7 @@ type SelfEducationVerificationParams = {
 type SelfEducationAttributes = {
   public: {
     maxAttemptsNumber: number;
+    strictAttemptsMode?: boolean;
     numberOfQuestions: number;
     tresholdPercentage: number;
     questions: {
