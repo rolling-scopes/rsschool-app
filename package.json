@@ -14,7 +14,7 @@
     "ci:lint": "eslint . --ext .ts,.tsx",
     "ci:build": "concurrently \"cd ./client && npm run ci:build\" \"cd ./server && npm run build\"",
     "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
-    "db:dump": "pg_dump -h localhost --username rs_master rs_school --file backup-local.sql",
+    "db:dump": "pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
     "db:up": "docker-compose -f ./setup/docker-compose.yml up  -d",
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
