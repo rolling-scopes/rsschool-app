@@ -94,6 +94,7 @@ export function courseRoute(logger: ILogger) {
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
   addCourseUserApi(router, logger);
+  addCrossCheckApi(router, logger);
 
   return router;
 }
@@ -137,6 +138,10 @@ function addTaskApi(router: Router, logger: ILogger) {
     crossCheck.createDistribution(logger),
   );
   router.post('/task/:courseTaskId/cross-check/completion', courseManagerGuard, crossCheck.createCompletion(logger));
+}
+
+function addCrossCheckApi(router: Router, logger: ILogger) {
+  router.get('/cross-check/pairs', adminGuard, crossCheck.getCrossCheckPairs(logger));
 }
 
 function addStageInterviewApi(router: Router, logger: ILogger) {

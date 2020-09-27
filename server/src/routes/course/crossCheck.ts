@@ -251,3 +251,33 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
   };
   setResponse(ctx, OK, response);
 };
+
+export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, courseId, courseTaskId } = ctx.params;
+  const { user } = ctx.state as { user: IUserSession };
+  const [student, checker, courseTask] = await Promise.all([
+    courseService.queryStudentByGithubId(courseId, githubId),
+    courseService.queryStudentByGithubId(courseId, user.githubId),
+    taskService.getCourseTask(courseTaskId),
+  ]);
+
+  if (student == null || courseTask == null || checker == null) {
+    setErrorResponse(ctx, BAD_REQUEST, 'not valid student or course task');
+    return;
+  }
+  if (courseTask.checker !== 'crossCheck') {
+    setErrorResponse(ctx, BAD_REQUEST, 'task solution is supported for this task');
+    return;
+  }
+  const taskChecker = await taskResultsService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
+  if (taskChecker == null) {
+    setErrorResponse(ctx, BAD_REQUEST, 'no assigned cross-check');
+    return;
+  }
+  const existingResult = await taskResultsService.getTaskSolutionResult(
+    taskChecker.studentId,
+    taskChecker.checkerId,
+    taskChecker.courseTaskId,
+  );
+  setResponse(ctx, OK, existingResult);
+}

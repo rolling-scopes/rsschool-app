@@ -447,6 +447,11 @@ export class CourseService {
     return result.data.data as { name: string; mentor: any }[];
   }
 
+  async getCrossCheckPairs(courseId: number) {
+    const result = await this.axios.get(`/course/${courseId}/cross-check/pairs`);
+    return result.data.data as CrossCheckPairs[];
+  }
+
   async createCertificate(githubId: string) {
     const result = await this.axios.post(`/student/${githubId}/certificate`);
     return result.data.data;
@@ -572,4 +577,12 @@ export interface TaskSolution {
   url: string;
   updatedDate: string;
   id: string;
+}
+
+export interface CrossCheckPairs {
+  taskName: string;
+  taskId: string;
+  checker: string;
+  student: string;
+  url: string;
 }
