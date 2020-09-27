@@ -32,6 +32,7 @@ export interface SelfEducationPublicAttributes {
   maxAttemptsNumber: number;
   numberOfQuestions: number;
   tresholdPercentage: number;
+  strictAttemptsMode?: boolean;
   questions: SelfEducationQuestion[];
 }
 

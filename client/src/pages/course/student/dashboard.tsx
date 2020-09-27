@@ -22,11 +22,22 @@ function Page(props: CoursePageProps) {
   const userService = useMemo(() => new UserService(), [props.course.id]);
 
   const [studentSummary, setStudentSummary] = useState({} as StudentSummary);
+  const [repositoryUrl, setRepositoryUrl] = useState('');
   const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [loading, setLoading] = useState(false);
+
+  const getRepository = async () => {
+    const { repository } = await courseService.getStudentSummary(githubId);
+    return repository ? repository : '';
+  };
+
+  const updateUrl = async () => {
+    const newUrl = await getRepository();
+    setRepositoryUrl(newUrl);
+  };
 
   const changeCountEvents = (value: number) => {
     localStorage.setItem('showCountEventsOnStudentsDashboard', String(value));
@@ -56,6 +67,7 @@ function Page(props: CoursePageProps) {
       setStudentSummary(studentSummary);
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
+      setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
     } catch {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -63,37 +75,37 @@ function Page(props: CoursePageProps) {
     }
   }, [props.course.id]);
 
-  const currentDate = moment().format('YYYY MM DD');
+  const currentDate = new Date();
 
   const studentPosition = studentSummary?.rank ?? 0;
+  const results = studentSummary?.results ?? [];
 
   const maxCourseScore = Math.round(
     courseTasks.reduce((score, task) => score + (task.maxScore ?? 0) * task.scoreWeight, 0),
   );
 
   const tasksCompleted = courseTasks
-    .filter(task => !!checkTaskResults(studentSummary.results, task.id))
+    .filter(task => !!checkTaskResults(results, task.id))
     .map(task => {
       const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
       return { ...task, comment, githubPrUri: taskGithubPrUris, score };
     });
+
   const tasksNotDone = courseTasks
     .filter(
       task =>
-        moment(task.studentEndDate as string).isBefore(currentDate, 'date') &&
-        !checkTaskResults(studentSummary.results, task.id),
+        moment(task.studentEndDate as string).isBefore(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
     .map(task => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
+
   const tasksFuture = courseTasks
     .filter(
-      task =>
-        moment(task.studentEndDate as string).isAfter(currentDate, 'date') &&
-        !checkTaskResults(studentSummary.results, task.id),
+      task => moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
     .map(task => ({ ...task, comment: null, githubPrUri: null, score: null }));
 
   const taskStatistics = { completed: tasksCompleted, notDone: tasksNotDone, future: tasksFuture };
-  const { isActive, totalScore } = studentSummary ?? {};
+  const { isActive = false, totalScore = 0 } = studentSummary ?? {};
 
   const cards = [
     studentSummary && (
@@ -106,8 +118,9 @@ function Page(props: CoursePageProps) {
     ),
     <RepositoryCard
       githubId={githubId}
-      url={studentSummary?.repository}
+      url={repositoryUrl}
       onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
+      updateUrl={updateUrl}
     />,
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
@@ -145,7 +158,7 @@ function Page(props: CoursePageProps) {
           </div>
         ) : (
           <>
-            <Result status={'403' as any} title="No access or user does not exist" />
+            <Result status={'403' as any} title="You have no access to this page" />
           </>
         )}
       </LoadingScreen>
