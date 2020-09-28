@@ -1,10 +1,9 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Layout, Popover, Spin, Table, Typography } from 'antd';
+import { Layout, Spin, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
-import { dateTimeRenderer, dateRenderer, getColumnSearchProps } from 'components/Table';
+import { getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, StudentScore, CrossCheckPairs } from 'services/course';
+import { CourseService, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../../common/types/pagination';
@@ -19,19 +18,15 @@ export function Page(props: CoursePageProps) {
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairs[],
     pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
-    orderBy: { field: 'totalScore', direction: 'desc' },
+    // orderBy: { field: 'totalScore', direction: 'desc' },
   });
   const [loaded, setLoaded] = useState(false);
 
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-      const { id: courseId } = props.course;
-      const crossCheckData = await courseService.getCrossCheckPairs(courseId);
-      setCrossCheckList({
-        ...crossCheckList, // todo: fix it
-        content: crossCheckData,
-      });
+      const crossCheckData = await courseService.getCrossCheckPairs();
+      setCrossCheckList(crossCheckData);
       setLoaded(true);
     } finally {
       setLoading(false);
@@ -62,14 +57,12 @@ export function Page(props: CoursePageProps) {
     loadInitialData();
   }, []);
 
-  const columns = useMemo(() => getColumns(crossCheckList.content), [crossCheckList.content]);
-
   return (
     <>
       <Header title="Cross-Check" username={props.session.githubId} courseName={props.course.name} />
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
-          {renderTable(loaded, crossCheckList.content, columns, crossCheckList.pagination, getCourseScore)}
+          {renderTable(loaded, crossCheckList.content, crossCheckList.pagination, getCourseScore)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -79,142 +72,89 @@ export function Page(props: CoursePageProps) {
 
 function renderTable(
   loaded: boolean,
-  students: any[],
-  columns: any[],
+  crossCheckPairs: CrossCheckPairs[],
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
 ) {
   if (!loaded) {
     return null;
   }
-  const columnWidth = 90;
   // where 800 is approximate sum of basic columns (GitHub, Name, etc.)
-  const tableWidth = columns.length * columnWidth + 800;
+  const tableWidth = 800;
   return (
-    <Table<StudentScore>
+    <Table<CrossCheckPairs>
       className="table-score"
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={pagination}
-      rowKey="githubId"
-      rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
-      dataSource={students}
+      rowKey="courseTask.id"
+      dataSource={crossCheckPairs}
       onChange={handleChange as any}
       columns={[
         {
-          title: '#',
+          title: 'Task',
           fixed: 'left',
-          dataIndex: 'rank',
-          key: 'rank',
+          dataIndex: ['task', 'name'],
+          key: 'task.id',
           width: 50,
-          sorter: 'rank',
+          // sorter: ['task', 'name'],
         },
         {
-          title: 'Github',
+          title: 'Checker',
           fixed: 'left',
-          key: 'githubId',
-          dataIndex: 'githubId',
-          sorter: 'githubId',
+          key: 'checkerStudent.githubId',
+          dataIndex: ['checkerStudent', 'githubId'],
+          // sorter: ['checkerStudent', 'githubId'],
           width: 150,
           render: (value: string) => (
             <div>
-              <GithubAvatar githubId={value} size={24} />
-              &nbsp;
-              <a target="_blank" href={`https://github.com/${value}`}>
-                {value}
-              </a>
+              {value ? <>
+                <GithubAvatar githubId={value} size={24} />
+                &nbsp;
+                <a target="_blank" href={`https://github.com/${value}`}>
+                  {value}
+                </a>
+              </> : null}
             </div>
           ),
-          ...getColumnSearchProps('githubId'),
+          ...getColumnSearchProps(['checkerStudent', 'githubId']),
         },
         {
-          title: 'Name',
-          dataIndex: 'name',
+          title: 'Student',
+          key: 'student.githubId',
+          dataIndex: ['student', 'githubId'],
+          // sorter: ['student', 'githubId'],
           width: 150,
-          sorter: 'name',
-          render: (value: any, record: StudentScore) => <a href={`/profile?githubId=${record.githubId}`}>{value}</a>,
-          ...getColumnSearchProps('name'),
+          render: (value: string) => (
+            <div>
+              {value ? <>
+                <GithubAvatar githubId={value} size={24} />
+                &nbsp;
+                <a target="_blank" href={`https://github.com/${value}`}>
+                  {value}
+                </a>
+              </> : null}
+            </div>
+          ),
+          ...getColumnSearchProps(['student', 'githubId']),
         },
         {
-          title: 'Location',
-          dataIndex: 'cityName',
+          title: 'Url',
+          dataIndex: 'url',
           width: 150,
-          sorter: 'cityName',
-          ...getColumnSearchProps('cityName'),
+          // sorter: 'url',
+          ...getColumnSearchProps('url'),
         },
         {
-          title: 'Total',
-          dataIndex: 'totalScore',
+          title: 'Score',
+          dataIndex: 'score',
           width: 80,
-          sorter: 'totalScore',
+          // sorter: 'score',
           render: value => <Text strong>{value}</Text>,
-        },
-        ...columns,
-        {
-          title: 'Change Date',
-          dataIndex: 'totalScoreChangeDate',
-          width: 80,
-          sorter: 'totalScoreChangeDate',
-          render: dateRenderer,
-        },
-        {
-          title: 'Last Commit Date',
-          dataIndex: 'repositoryLastActivityDate',
-          width: 80,
-          sorter: 'repositoryLastActivityDate',
-          render: dateRenderer,
-        },
-        {
-          title: 'Mentor',
-          dataIndex: ['mentor', 'githubId'],
-          width: 150,
-          sorter: 'mentor',
-          render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
-          ...getColumnSearchProps('mentor.githubId'),
         },
       ]}
     />
   );
-}
-
-function getColumns(courseTasks: any[]) { // todo: fix it
-  const columns = courseTasks.map(courseTask => ({
-    dataIndex: courseTask.id.toString(),
-    title: () => {
-      const icon = (
-        <Popover
-          content={
-            <ul>
-              <li>Coefficient: {courseTask.scoreWeight}</li>
-              <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
-            </ul>
-          }
-          trigger="click"
-        >
-          <QuestionCircleOutlined title="Click for details" />
-        </Popover>
-      );
-      return courseTask.descriptionUrl ? (
-        <>
-          <a className="table-header-link" target="_blank" href={courseTask.descriptionUrl}>
-            {courseTask.name}
-          </a>{' '}
-          {icon}
-        </>
-      ) : (
-        <div>
-          {courseTask.name} {icon}
-        </div>
-      );
-    },
-    width: 100,
-    className: 'align-right',
-    render: (_: any, d: StudentScore) => {
-      const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
-      return currentTask ? <div>{currentTask.score}</div> : 0;
-    },
-  }));
-  return columns;
 }
 
 const styles = css`

@@ -447,9 +447,9 @@ export class CourseService {
     return result.data.data as { name: string; mentor: any }[];
   }
 
-  async getCrossCheckPairs(courseId: number) {
-    const result = await this.axios.get(`/course/${courseId}/cross-check/pairs`);
-    return result.data.data as CrossCheckPairs[];
+  async getCrossCheckPairs() {
+    const result = await this.axios.get(`/cross-check/pairs`);
+    return result.data.data as { content: CrossCheckPairs[]; pagination: IPaginationInfo };
   }
 
   async createCertificate(githubId: string) {
@@ -580,9 +580,22 @@ export interface TaskSolution {
 }
 
 export interface CrossCheckPairs {
-  taskName: string;
-  taskId: string;
-  checker: string;
-  student: string;
-  url: string;
+  checkerStudent: {
+    githubId: string,
+    id: number,
+  },
+  courseTask: {
+    courseId: number,
+    id: number,
+  },
+  student: {
+    githubId: string,
+    id: number,
+  },
+  task: {
+    name: string,
+    id: number,
+  },
+  url: string,
+  score: number,
 }

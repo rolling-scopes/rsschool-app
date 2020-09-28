@@ -1,8 +1,15 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK, NOT_FOUND } from 'http-status-codes';
-import { getRepository } from 'typeorm';
+import { getRepository} from 'typeorm';
 import { ILogger } from '../../logger';
-import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
+import {
+  CourseTask,
+  IUserSession, Student,
+  TaskResult,
+  TaskSolution,
+  TaskSolutionChecker,
+  TaskSolutionResult, User,
+} from '../../models';
 import { createCrossCheckPairs } from '../../rules/distribution';
 import { courseService, taskResultsService, taskService, notificationService } from '../../services';
 import { setErrorResponse, setResponse } from '../utils';
@@ -253,31 +260,92 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
 };
 
 export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, courseId, courseTaskId } = ctx.params;
-  const { user } = ctx.state as { user: IUserSession };
-  const [student, checker, courseTask] = await Promise.all([
-    courseService.queryStudentByGithubId(courseId, githubId),
-    courseService.queryStudentByGithubId(courseId, user.githubId),
-    taskService.getCourseTask(courseTaskId),
-  ]);
+  const { courseId } = ctx.params;
 
-  if (student == null || courseTask == null || checker == null) {
-    setErrorResponse(ctx, BAD_REQUEST, 'not valid student or course task');
-    return;
-  }
-  if (courseTask.checker !== 'crossCheck') {
-    setErrorResponse(ctx, BAD_REQUEST, 'task solution is supported for this task');
-    return;
-  }
-  const taskChecker = await taskResultsService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
-  if (taskChecker == null) {
-    setErrorResponse(ctx, BAD_REQUEST, 'no assigned cross-check');
-    return;
-  }
-  const existingResult = await taskResultsService.getTaskSolutionResult(
-    taskChecker.studentId,
-    taskChecker.checkerId,
-    taskChecker.courseTaskId,
-  );
-  setResponse(ctx, OK, existingResult);
+
+  const courseTasks = await getRepository(TaskSolutionResult)
+    .createQueryBuilder('tsr')
+    .addSelect(['tsr.score'])
+    .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
+    .addSelect(['courseTask.id','courseTask.courseId'])
+    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+    .leftJoin('courseTask.task', 'task')
+    .addSelect(['task.id', 'task.name'])
+    .leftJoin(Student, 'st', '"tsr"."studentId" = "st"."id"')
+    .leftJoin(User, 'student', '"st"."userId" = "student"."id"')
+    .addSelect(['student.id', 'student.githubId'])
+    .leftJoin(Student, 'ch', '"tsr"."studentId" = "ch"."id"')
+    .leftJoin(User, 'checkerStudent', '"ch"."userId" = "checkerStudent"."id"')
+    .addSelect(['checkerStudent.id', 'checkerStudent.githubId'])
+    .leftJoin(TaskSolution, 'taskSolution', '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"')
+    .addSelect(['taskSolution.url'])
+    .where(`courseTask.courseId = :courseId`, { courseId })
+    .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' })
+    .getRawMany();
+
+
+  const courseTasks2 = await getRepository(TaskSolutionResult)
+    .createQueryBuilder('tsr')
+    // .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
+    // .addSelect(['courseTask.id','courseTask.courseId'])
+    // .where(`courseTask.courseId = :courseId`, { courseId })
+    // .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' })
+    .getMany();
+
+  // const courseTasks = await getRepository(CourseTask)
+  //   .createQueryBuilder('courseTask')
+  //   .select(['courseTask.id','courseTask.courseId'])
+  //   .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+  //   .innerJoin('courseTask.task', 'task')
+  //   .addSelect(['task.id', 'task.name'])
+  //   .leftJoin(TaskSolutionResult, 'tsr', '"tsr"."courseTaskId" = "courseTask"."id"')
+  //   .addSelect(['tsr.score'])
+  //   .leftJoin(Student, 'st', '"tsr"."studentId" = "st"."id"')
+  //   .leftJoin(User, 'student', '"st"."userId" = "student"."id"')
+  //   .addSelect(['student.id', 'student.githubId'])
+  //   .leftJoin(Student, 'ch', '"tsr"."studentId" = "ch"."id"')
+  //   .leftJoin(User, 'checkerStudent', '"ch"."userId" = "checkerStudent"."id"')
+  //   .addSelect(['checkerStudent.id', 'checkerStudent.githubId'])
+  //   .leftJoin(TaskSolution, 'taskSolution', '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"')
+  //   .addSelect(['taskSolution.url'])
+  //   .where(`courseTask.courseId = :courseId`, { courseId })
+  //   .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' })
+  //   .groupBy('courseTask.id')
+  //   .addGroupBy('task.id')
+  //   .addGroupBy('tsr.score')
+  //   .addGroupBy('student.id')
+  //   .addGroupBy('checkerStudent.id')
+  //   .addGroupBy('taskSolution.url')
+  //   .getRawMany();
+
+  // const courseTasks = await paginate(courseTasksQuery, {
+  //   current: 1,
+  //   pageSize: 1e9,
+  // })
+
+  const result = courseTasks.map((e: any) => ({
+    checkerStudent: {
+      githubId: e.checkerStudent_githubId,
+      id: e.checkerStudent_id,
+    },
+    courseTask: {
+      courseId: e.courseTask_courseId,
+      id: e.courseTask_id,
+    },
+    student: {
+      githubId: e.student_githubId,
+      id: e.student_id,
+    },
+    task: {
+      name: e.task_name,
+      id: e.task_id,
+    },
+    url: e.taskSolution_url,
+    score: e.tsr_score,
+  }))
+
+  setResponse(ctx, OK, {
+    content: result,
+    courseTasks2,
+  });
 }
