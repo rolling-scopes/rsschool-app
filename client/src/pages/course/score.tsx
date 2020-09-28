@@ -23,7 +23,7 @@ export function Page(props: CoursePageProps) {
     filter: {
       activeOnly: true,
     } as ScoreTableFilters,
-    orderBy: { field: 'rank', direction: 'desc' },
+    orderBy: { field: 'rank', direction: 'asc' },
   });
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
