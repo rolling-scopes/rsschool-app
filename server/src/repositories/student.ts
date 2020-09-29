@@ -169,7 +169,6 @@ export class StudentRepository extends AbstractRepository<Student> {
     },
     options: { keepWithMentor?: boolean },
   ): Promise<{ id: number }[]> {
-    console.log({ criteria, options });
 
     let query = getRepository(Student)
       .createQueryBuilder('student')
@@ -199,8 +198,6 @@ export class StudentRepository extends AbstractRepository<Student> {
     if (criteria.courseTaskIds.length > 0) {
       query = query.andWhere('tr.id IS NULL');
     }
-
-    console.log(query.getSql());
 
     return query.getMany();
   }

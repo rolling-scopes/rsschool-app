@@ -35,7 +35,7 @@ class CommonCard extends React.Component<Props, State> {
         }
         actions={
           isMoreContent
-            ? [<FullscreenOutlined key="main-card-actions-more" onClick={e => console.log(e)} />].filter(Boolean)
+            ? [<FullscreenOutlined key="main-card-actions-more" />].filter(Boolean)
             : []
         }
       >
