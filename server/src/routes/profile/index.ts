@@ -6,7 +6,7 @@ import { updateProfile } from './save';
 import { getMyProfile, updateMyProfile } from './me';
 
 export function profileRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/profile' });
+  const router = new Router<any, any>({ prefix: '/profile' });
 
   /**
    * @swagger

@@ -8,7 +8,7 @@ import { ConsentRepository } from '../../repositories/consent';
 import { getCustomRepository } from 'typeorm';
 
 export function consentRoute(_: ILogger) {
-  const router = new Router({ prefix: '/consent' });
+  const router = new Router<any, any>({ prefix: '/consent' });
   router.post('/capture', basicAuthAws, async (ctx: Router.RouterContext) => {
     const consent: Consent = ctx.request.body;
     const { channelType, channelValue, optIn }: Consent = consent;

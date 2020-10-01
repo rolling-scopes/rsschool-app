@@ -62,7 +62,7 @@ const postActivityByWebhook = (_: ILogger) => async (ctx: Router.RouterContext) 
 };
 
 export function activityRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/activity' });
+  const router = new Router<any, any>({ prefix: '/activity' });
 
   router.post('/', guard, postActivity(logger));
 

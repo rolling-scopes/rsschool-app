@@ -17,7 +17,7 @@ const validateId = async (ctx: Router.RouterContext, next: any) => {
 };
 
 export function studentRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/student' });
+  const router = new Router<any, any>({ prefix: '/student' });
 
   router.get('/:id', adminGuard, createGetRoute(Student, logger));
 

@@ -77,7 +77,7 @@ const validateId = async (ctx: Router.RouterContext, next: Next) => {
 };
 
 export function courseRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/course/:courseId' });
+  const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
   router.post('/certificates', courseManagerGuard, postCertificates(logger));
   router.post('/repositories', courseManagerGuard, createRepositories(logger));
@@ -98,21 +98,21 @@ export function courseRoute(logger: ILogger) {
   return router;
 }
 
-function addScoreApi(router: Router, logger: ILogger) {
+function addScoreApi(router: Router<any, any>, logger: ILogger) {
   router.post('/scores/:courseTaskId', taskOwnerGuard, postMultipleScores(logger));
 }
 
-function addInterviewsApi(router: Router, logger: ILogger) {
+function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   router.get('/interviews', courseGuard, interviews.getInterviews(logger));
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
 }
 
-function addStageApi(router: Router, logger: ILogger) {
+function addStageApi(router: Router<any, any>, logger: ILogger) {
   router.get('/stages', guard, getCourseStages(logger));
   router.post('/stages', adminGuard, postCourseStages(logger));
 }
 
-function addEventApi(router: Router, logger: ILogger) {
+function addEventApi(router: Router<any, any>, logger: ILogger) {
   router.put('/event/:id', courseManagerGuard, createPutRoute(CourseEvent, logger));
   router.post('/event', courseManagerGuard, createPostRoute(CourseEvent, logger));
   router.delete('/event/:id', courseManagerGuard, createDeleteRoute(CourseEvent, logger));
@@ -121,7 +121,7 @@ function addEventApi(router: Router, logger: ILogger) {
   router.get('/events/ical', courseGuard, getCourseEventsCalendar(logger));
 }
 
-function addTaskApi(router: Router, logger: ILogger) {
+function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
   router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
@@ -139,7 +139,7 @@ function addTaskApi(router: Router, logger: ILogger) {
   router.post('/task/:courseTaskId/cross-check/completion', courseManagerGuard, crossCheck.createCompletion(logger));
 }
 
-function addStageInterviewApi(router: Router, logger: ILogger) {
+function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
   router.post(
     '/interview/stage/interviewer/:githubId/student/:studentGithubId/',
     courseMentorGuard,
@@ -162,13 +162,13 @@ function addStageInterviewApi(router: Router, logger: ILogger) {
   router.get('/interviews/stage', courseMentorGuard, stageInterview.getInterviews(logger));
 }
 
-function addCourseUserApi(router: Router, logger: ILogger) {
+function addCourseUserApi(router: Router<any, any>, logger: ILogger) {
   router.get('/users', courseManagerGuard, getUsers(logger));
   router.post('/user/:githubId', courseManagerGuard, validateGithubId, postUser(logger));
   router.put('/user/:githubId', courseManagerGuard, validateGithubId, putUser(logger));
 }
 
-function addMentorApi(router: Router, logger: ILogger) {
+function addMentorApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   router.get('/mentors', courseSupervisorGuard, getMentors(logger));
   router.post('/mentors', adminGuard, createMentors(logger));
@@ -190,7 +190,7 @@ function addMentorApi(router: Router, logger: ILogger) {
   );
 }
 
-function addStudentApi(router: Router, logger: ILogger) {
+function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
@@ -255,7 +255,7 @@ function addStudentApi(router: Router, logger: ILogger) {
   router.get('/students/search/:searchText', courseGuard, searchStudent(logger));
 }
 
-function addStudentCrossCheckApi(router: Router, logger: ILogger) {
+function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const baseUrl = `/student/:githubId/task/:courseTaskId`;
 
@@ -274,7 +274,7 @@ function addStudentCrossCheckApi(router: Router, logger: ILogger) {
 }
 
 export function courseCrudRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/course' });
+  const router = new Router<any, any>({ prefix: '/course' });
 
   router.post('/', adminGuard, createPostRoute(Course, logger));
   router.get('/:id', guard, validateId, createGetRoute(Course, logger));
