@@ -23,7 +23,7 @@ export function Page(props: CoursePageProps) {
     filter: {
       activeOnly: true,
     } as ScoreTableFilters,
-    orderBy: { field: 'totalScore', direction: 'desc' },
+    orderBy: { field: 'rank', direction: 'asc' },
   });
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
@@ -48,10 +48,13 @@ export function Page(props: CoursePageProps) {
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
       setLoading(true);
       try {
+        const field = order.column?.sorter || 'rank';
+        const direction =
+          field === 'rank' ? (order.order === 'descend' ? 'desc' : 'asc') : order.order === 'ascend' ? 'asc' : 'desc';
         const courseScore = await courseService.getCourseScore(
           pagination,
           { ...filters, activeOnly },
-          { field: order.column?.sorter || 'totalScore', direction: order.order === 'ascend' ? 'asc' : 'desc' },
+          { field, direction },
         );
         setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       } finally {
