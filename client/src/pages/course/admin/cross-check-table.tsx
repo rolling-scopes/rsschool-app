@@ -1,5 +1,6 @@
 import { Layout, Spin, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
+import { omit } from 'lodash';
 import { getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
@@ -11,22 +12,42 @@ import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score
 
 const { Text } = Typography;
 
+export type CrossCheckFieldsTypes = {
+  task: string,
+  checkerStudent: string,
+  student: string,
+  url: string,
+  score: string,
+}
+
+export const fields = {
+  task: 'task',
+  checkerStudent: 'checkerStudent',
+  student: 'student',
+  url: 'url',
+  score: 'score',
+}
+
 export function Page(props: CoursePageProps) {
-  const courseService = useMemo(() => new CourseService(props.course.id), []);
+  const courseService = useMemo(() => new CourseService(props.course?.id), [props.course]);
 
   const [loading, setLoading] = useState(false);
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairs[],
     pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
-    // orderBy: { field: 'totalScore', direction: 'desc' },
+    orderBy: { field: 'task,name', order: 'asc' },
   });
   const [loaded, setLoaded] = useState(false);
 
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-      const crossCheckData = await courseService.getCrossCheckPairs();
-      setCrossCheckList(crossCheckData);
+      const crossCheckData = await courseService.getCrossCheckPairs(crossCheckList.pagination, {}, crossCheckList.orderBy);
+      setCrossCheckList({
+        content: crossCheckData.content,
+        pagination: crossCheckData.pagination,
+        orderBy: crossCheckList.orderBy
+      });
       setLoaded(true);
     } finally {
       setLoading(false);
@@ -34,21 +55,25 @@ export function Page(props: CoursePageProps) {
   }, []);
 
   const getCourseScore = useCallback(
-    async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
-      console.log(pagination)
-      console.log(filters)
-      console.log(order)
-      // setLoading(true);
-      // try {
-      //   const courseScore = await courseService.getCourseScore(
-      //     pagination,
-      //     { ...filters },
-      //     { field: order.column?.sorter || 'totalScore', direction: order.order === 'ascend' ? 'asc' : 'desc' },
-      //   );
-      //   setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
-      // } finally {
-      //   setLoading(false);
-      // }
+    async (pagination: IPaginationInfo, filters: any, order: ScoreOrder) => {
+      const orderBy = {
+        field: order.field,
+        order: order.order === 'ascend' ? 'ASC' : 'DESC'
+      }
+      setLoading(true);
+      try {
+        const crossCheckData = await courseService.getCrossCheckPairs(pagination, filters, orderBy);
+        setCrossCheckList({
+          content: crossCheckData.content,
+          pagination: crossCheckData.pagination,
+          orderBy: {
+            field: orderBy.field,
+            order: orderBy.order
+          }
+        });
+      } finally {
+        setLoading(false);
+      }
     },
     [crossCheckList.content],
   );
@@ -87,7 +112,6 @@ function renderTable(
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={pagination}
-      rowKey="courseTask.id"
       dataSource={crossCheckPairs}
       onChange={handleChange as any}
       columns={[
@@ -95,16 +119,17 @@ function renderTable(
           title: 'Task',
           fixed: 'left',
           dataIndex: ['task', 'name'],
-          key: 'task.id',
+          key: fields.task,
           width: 50,
-          // sorter: ['task', 'name'],
+          sorter: true,
+          ...omit(getColumnSearchProps(['task', 'name']), 'onFilter'),
         },
         {
           title: 'Checker',
           fixed: 'left',
-          key: 'checkerStudent.githubId',
+          key: fields.checkerStudent,
           dataIndex: ['checkerStudent', 'githubId'],
-          // sorter: ['checkerStudent', 'githubId'],
+          sorter: true,
           width: 150,
           render: (value: string) => (
             <div>
@@ -117,13 +142,13 @@ function renderTable(
               </> : null}
             </div>
           ),
-          ...getColumnSearchProps(['checkerStudent', 'githubId']),
+          ...omit(getColumnSearchProps(['checkerStudent', 'githubId']), 'onFilter'),
         },
         {
           title: 'Student',
-          key: 'student.githubId',
+          key: fields.student,
           dataIndex: ['student', 'githubId'],
-          // sorter: ['student', 'githubId'],
+          sorter: true,
           width: 150,
           render: (value: string) => (
             <div>
@@ -136,20 +161,22 @@ function renderTable(
               </> : null}
             </div>
           ),
-          ...getColumnSearchProps(['student', 'githubId']),
+          ...omit(getColumnSearchProps(['student', 'githubId']), 'onFilter'),
         },
         {
           title: 'Url',
           dataIndex: 'url',
+          key: fields.url,
           width: 150,
-          // sorter: 'url',
+          sorter: true,
           ...getColumnSearchProps('url'),
         },
         {
           title: 'Score',
           dataIndex: 'score',
+          key: fields.score,
           width: 80,
-          // sorter: 'score',
+          sorter: true,
           render: value => <Text strong>{value}</Text>,
         },
       ]}

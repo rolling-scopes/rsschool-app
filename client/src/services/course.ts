@@ -7,6 +7,7 @@ import { ScoreTableFilters } from '../../../common/types/score';
 import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 
 export interface CourseTask {
   id: number;
@@ -208,7 +209,7 @@ export class CourseService {
       pageSize: String(pagination.pageSize),
       orderBy: String(orderBy.field),
       orderDirection: String(orderBy.direction),
-      ...onlyDefined(filter),
+      ...onlyDefined(filter) as object,
     });
     const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
     return result.data.data;
@@ -447,8 +448,19 @@ export class CourseService {
     return result.data.data as { name: string; mentor: any }[];
   }
 
-  async getCrossCheckPairs() {
-    const result = await this.axios.get(`/cross-check/pairs`);
+  async getCrossCheckPairs(
+    pagination: IPaginationInfo,
+    filter: Partial<Record<keyof CrossCheckFieldsTypes, string>>,
+    orderBy = { field: 'student,githubId', order: 'desc' },
+  ) {
+    const params = new URLSearchParams({
+      current: String(pagination.current),
+      pageSize: String(pagination.pageSize),
+      orderBy: String(orderBy.field),
+      orderDirection: String(orderBy.order),
+      ...onlyDefined(filter) as object,
+    });
+    const result = await this.axios.get(`/cross-check/pairs?${params.toString()}`);
     return result.data.data as { content: CrossCheckPairs[]; pagination: IPaginationInfo };
   }
 
