@@ -21,7 +21,7 @@ export function startBackgroundJobs(logger: ILogger) {
 
       const scores = students.content
         .map(({ id, rank, taskResults, totalScore, totalScoreChangeDate }) => {
-          const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] ?? 1)));
+          const score = sum(taskResults.map((t) => t.score * (weightMap[t.courseTaskId] ?? 1)));
           const newTotalScore = round(score, 1);
           const scoreChanged = totalScore !== newTotalScore;
           return {
@@ -38,7 +38,7 @@ export function startBackgroundJobs(logger: ILogger) {
           rank: i + 1,
           changed: it.changed || it.rank != i + 1,
         }))
-        .filter(it => it.changed)
+        .filter((it) => it.changed)
         .map(({ changed, ...value }) => value);
 
       await updateScoreStudents(scores);

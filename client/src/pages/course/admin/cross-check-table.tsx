@@ -13,12 +13,12 @@ import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score
 const { Text } = Typography;
 
 export type CrossCheckFieldsTypes = {
-  task: string,
-  checkerStudent: string,
-  student: string,
-  url: string,
-  score: string,
-}
+  task: string;
+  checkerStudent: string;
+  student: string;
+  url: string;
+  score: string;
+};
 
 export const fields = {
   task: 'task',
@@ -26,7 +26,7 @@ export const fields = {
   student: 'student',
   url: 'url',
   score: 'score',
-}
+};
 
 export function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course?.id), [props.course]);
@@ -42,11 +42,15 @@ export function Page(props: CoursePageProps) {
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-      const crossCheckData = await courseService.getCrossCheckPairs(crossCheckList.pagination, {}, crossCheckList.orderBy);
+      const crossCheckData = await courseService.getCrossCheckPairs(
+        crossCheckList.pagination,
+        {},
+        crossCheckList.orderBy,
+      );
       setCrossCheckList({
         content: crossCheckData.content,
         pagination: crossCheckData.pagination,
-        orderBy: crossCheckList.orderBy
+        orderBy: crossCheckList.orderBy,
       });
       setLoaded(true);
     } finally {
@@ -58,8 +62,8 @@ export function Page(props: CoursePageProps) {
     async (pagination: IPaginationInfo, filters: any, order: ScoreOrder) => {
       const orderBy = {
         field: order.field,
-        order: order.order === 'ascend' ? 'ASC' : 'DESC'
-      }
+        order: order.order === 'ascend' ? 'ASC' : 'DESC',
+      };
       setLoading(true);
       try {
         const crossCheckData = await courseService.getCrossCheckPairs(pagination, filters, orderBy);
@@ -68,8 +72,8 @@ export function Page(props: CoursePageProps) {
           pagination: crossCheckData.pagination,
           orderBy: {
             field: orderBy.field,
-            order: orderBy.order
-          }
+            order: orderBy.order,
+          },
         });
       } finally {
         setLoading(false);
@@ -133,13 +137,15 @@ function renderTable(
           width: 150,
           render: (value: string) => (
             <div>
-              {value ? <>
-                <GithubAvatar githubId={value} size={24} />
-                &nbsp;
-                <a target="_blank" href={`https://github.com/${value}`}>
-                  {value}
-                </a>
-              </> : null}
+              {value ? (
+                <>
+                  <GithubAvatar githubId={value} size={24} />
+                  &nbsp;
+                  <a target="_blank" href={`https://github.com/${value}`}>
+                    {value}
+                  </a>
+                </>
+              ) : null}
             </div>
           ),
           ...omit(getColumnSearchProps(['checkerStudent', 'githubId']), 'onFilter'),
@@ -152,13 +158,15 @@ function renderTable(
           width: 150,
           render: (value: string) => (
             <div>
-              {value ? <>
-                <GithubAvatar githubId={value} size={24} />
-                &nbsp;
-                <a target="_blank" href={`https://github.com/${value}`}>
-                  {value}
-                </a>
-              </> : null}
+              {value ? (
+                <>
+                  <GithubAvatar githubId={value} size={24} />
+                  &nbsp;
+                  <a target="_blank" href={`https://github.com/${value}`}>
+                    {value}
+                  </a>
+                </>
+              ) : null}
             </div>
           ),
           ...omit(getColumnSearchProps(['student', 'githubId']), 'onFilter'),
@@ -177,7 +185,7 @@ function renderTable(
           key: fields.score,
           width: 80,
           sorter: true,
-          render: value => <Text strong>{value}</Text>,
+          render: (value) => <Text strong>{value}</Text>,
         },
       ]}
     />

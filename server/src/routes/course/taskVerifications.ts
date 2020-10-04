@@ -55,7 +55,7 @@ export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.Ro
     .orderBy('v.createdDate', 'ASC')
     .getMany();
 
-  const result = verifications.map(verification => ({
+  const result = verifications.map((verification) => ({
     courseId: Number(courseId),
     id: verification.id,
     githubId: verification.student.user.githubId,

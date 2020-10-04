@@ -70,7 +70,11 @@ export class StudentRepository extends AbstractRepository<Student> {
       .limit(20)
       .getRawMany();
 
-    return entities.map(entity => ({ id: entity.id, githubId: entity.githubId, name: userService.createName(entity) }));
+    return entities.map((entity) => ({
+      id: entity.id,
+      githubId: entity.githubId,
+      name: userService.createName(entity),
+    }));
   }
 
   public async findAndIncludeMentor(courseId: number, githubId: string): Promise<StudentBasic | null> {
@@ -158,7 +162,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       .andWhere('student.isExpelled = false AND student.isFailed = false')
       .andWhere('student.repository IS NOT NULL');
     const items = await query.getMany();
-    return items.map(m => m.user.githubId);
+    return items.map((m) => m.user.githubId);
   }
 
   public async findForExpel(
@@ -169,10 +173,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     },
     options: { keepWithMentor?: boolean },
   ): Promise<{ id: number }[]> {
-
-    let query = getRepository(Student)
-      .createQueryBuilder('student')
-      .select(['student.id']);
+    let query = getRepository(Student).createQueryBuilder('student').select(['student.id']);
 
     if (criteria.courseTaskIds.length > 0) {
       query = query.leftJoin(

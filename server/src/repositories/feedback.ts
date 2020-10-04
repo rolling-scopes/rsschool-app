@@ -8,7 +8,7 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
     const count = await getManager()
       .createQueryBuilder()
       .select('COUNT(*)')
-      .from(qb => {
+      .from((qb) => {
         const query = qb
           .subQuery()
           .from(Feedback, 'feedback')

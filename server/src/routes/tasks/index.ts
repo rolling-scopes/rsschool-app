@@ -41,10 +41,7 @@ const postTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const tasks = await getRepository(Task)
-    .createQueryBuilder()
-    .orderBy('"updatedDate"', 'DESC')
-    .getMany();
+  const tasks = await getRepository(Task).createQueryBuilder().orderBy('"updatedDate"', 'DESC').getMany();
 
   setResponse(ctx, OK, tasks);
 };

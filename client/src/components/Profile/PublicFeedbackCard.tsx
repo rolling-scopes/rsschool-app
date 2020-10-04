@@ -96,7 +96,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                 <Text strong>Total badges:</Text> {badges.length}
               </div>
               <div style={{ marginBottom: 30 }}>
-                {Object.keys(badgesCount).map(badgeId => (
+                {Object.keys(badgesCount).map((badgeId) => (
                   <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
                     <Badge count={badgesCount[badgeId]}>
                       <Tooltip title={(heroesBadges as any)[badgeId].name}>

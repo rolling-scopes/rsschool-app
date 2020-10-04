@@ -74,8 +74,8 @@ function Page(props: CoursePageProps) {
   return (
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
       <Row gutter={24}>
-        {interviews.map(interview => {
-          const items = data.filter(d => d.name === interview.name);
+        {interviews.map((interview) => {
+          const items = data.filter((d) => d.name === interview.name);
           return (
             <Col key={interview.id} xs={20} sm={16} md={14} lg={12} xl={10} xxl={10}>
               <Card
@@ -94,7 +94,7 @@ function Page(props: CoursePageProps) {
                   itemLayout="vertical"
                   dataSource={items}
                   size="small"
-                  renderItem={item => {
+                  renderItem={(item) => {
                     return (
                       <List.Item style={{ padding: '8px 0' }}>
                         <Descriptions layout="vertical" size="small">

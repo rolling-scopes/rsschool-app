@@ -32,10 +32,10 @@ export async function getAvailableStudents(courseId: number) {
     .getMany();
 
   const result = students
-    .filter(s => {
-      return !s.stageInterviews || s.stageInterviews.length === 0 || s.stageInterviews.every(i => i.isCompleted);
+    .filter((s) => {
+      return !s.stageInterviews || s.stageInterviews.length === 0 || s.stageInterviews.every((i) => i.isCompleted);
     })
-    .map(student => {
+    .map((student) => {
       const { id, user, totalScore } = student;
       const stageInterviews: StageInterview[] = student.stageInterviews || [];
       return {
@@ -68,7 +68,7 @@ export function getInterviewRatings({ skills, programmingTask }: StageInterviewF
 }
 
 const isGoodCandidate = (stageInterviews: StageInterview[]) =>
-  stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
+  stageInterviews.some((i) => i.isCompleted && i.isGoodCandidate);
 
 const getLastRating = (stageInterviews: StageInterview[]) => {
   const [lastInterview] = stageInterviews

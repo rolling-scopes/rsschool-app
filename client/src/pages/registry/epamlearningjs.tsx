@@ -31,7 +31,7 @@ function Page(props: Props & { courseAlias?: string }) {
     const userService = new UserService();
     const courseService = new CoursesService();
     const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
-    const course = courses.find(course => course.alias === courseAlias) ?? null;
+    const course = courses.find((course) => course.alias === courseAlias) ?? null;
     setActiveCourse(course);
     setInitialData(profile);
   }, []);

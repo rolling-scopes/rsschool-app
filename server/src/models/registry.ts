@@ -10,21 +10,13 @@ export type RegistryStatus = 'inactive' | 'pending' | 'approved' | 'rejected';
 export class Registry {
   @PrimaryGeneratedColumn() id: number;
 
-  @ManyToOne(
-    _ => User,
-    (user: User) => user.registries,
-    { nullable: true },
-  )
+  @ManyToOne((_) => User, (user: User) => user.registries, { nullable: true })
   user: User | number;
 
   @Column()
   userId: number;
 
-  @ManyToOne(
-    _ => Course,
-    (course: Course) => course.registries,
-    { nullable: true },
-  )
+  @ManyToOne((_) => Course, (course: Course) => course.registries, { nullable: true })
   course: Course;
 
   @Column()

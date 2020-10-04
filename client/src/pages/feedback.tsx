@@ -11,8 +11,8 @@ type User = { githubId: string; id: number; name: string };
 
 function Page(props: Props) {
   const { router } = props;
-  const githubId = router.query?.githubId as string ?? null;
-  const userId = router.query?.userId as string ?? null;
+  const githubId = (router.query?.githubId as string) ?? null;
+  const userId = (router.query?.userId as string) ?? null;
 
   const userService = useMemo(() => new UserService(), []);
   const [user] = useState<User | null>(githubId && userId ? { name: '', githubId, id: Number(userId) } : null);
@@ -36,7 +36,7 @@ function Page(props: Props) {
     }
   }, []);
 
-  const userSearchProps = user ? {defaultValues: [user]} : {searchFn: loadUsers}
+  const userSearchProps = user ? { defaultValues: [user] } : { searchFn: loadUsers };
 
   return (
     <PageLayoutSimple loading={loading} githubId={props.session.githubId} title="Student's Feedback">

@@ -29,6 +29,6 @@ const publicRoutes = [
   },
 ];
 
-export const Feedback = function() {
+export const Feedback = function () {
   return <Menu title="Feedback" data={publicRoutes} />;
 };

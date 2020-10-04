@@ -31,7 +31,7 @@ export async function canChangeStatus(
         message: 'not valid mentor',
       };
     }
-    if (!interviews.some(it => it.interviewer.githubId === session.githubId) && student.mentorId !== mentor.id) {
+    if (!interviews.some((it) => it.interviewer.githubId === session.githubId) && student.mentorId !== mentor.id) {
       return {
         allow: false,
         message: 'incorrect mentor-student relation',

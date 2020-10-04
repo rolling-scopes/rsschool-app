@@ -29,7 +29,7 @@ export function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const data = await courseService.getCourseTasks();
-    setCourseTasks(data.filter(item => item.taskOwnerId === props.session.id || props.session.isAdmin));
+    setCourseTasks(data.filter((item) => item.taskOwnerId === props.session.id || props.session.isAdmin));
   }, [courseService]);
 
   const handleTaskChange = () => setSubmitResults([]);
@@ -147,7 +147,7 @@ export function Page(props: CoursePageProps) {
               size="small"
               bordered
               dataSource={skippedStudents}
-              renderItem={item => <List.Item>{item}</List.Item>}
+              renderItem={(item) => <List.Item>{item}</List.Item>}
               style={{ marginBottom: '1em' }}
             />
           </Form.Item>
@@ -168,13 +168,13 @@ async function parseFiles(incomingFiles: any) {
           const reader = new FileReader();
           reader.readAsText(file.originFileObj, 'utf-8');
           reader.onload = ({ target }) => res(target ? target.result : '');
-          reader.onerror = e => rej(e);
+          reader.onerror = (e) => rej(e);
         }),
     ),
   );
   const scores = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
     .reduce((acc, cur) => acc.concat(cur), [])
-    .map(item => {
+    .map((item) => {
       if (isUndefined(item.Github) || isUndefined(item.Score)) {
         throw new Error('Incorrect data: CSV file should content the headers named "Github" and "Score"!');
       }

@@ -24,8 +24,8 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
     .addGroupBy('taskOwner.id')
     .getRawAndEntities();
 
-  const data = courseTasks.entities.map(item => {
-    const raw = courseTasks.raw.find(t => t.courseTask_id === item.id);
+  const data = courseTasks.entities.map((item) => {
+    const raw = courseTasks.raw.find((t) => t.courseTask_id === item.id);
 
     return {
       id: item.id,
@@ -73,7 +73,7 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
     .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .getMany();
 
-  const data = courseTasks.map(item => {
+  const data = courseTasks.map((item) => {
     return {
       id: item.id,
       taskId: (item.task as Task).id,
@@ -130,7 +130,7 @@ export const createCourseTaskDistribution = (logger: ILogger) => async (ctx: Rou
   const { mentors: crossMentors } = createCrossMentorPairs(mentors, existingPairs);
 
   const taskCheckPairs = crossMentors
-    .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
+    .map((stm) => stm.students?.map((s) => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
     .reduce((acc, student) => acc.concat(student), []);
 
   await checkerRepository.insert(taskCheckPairs);

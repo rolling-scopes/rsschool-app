@@ -43,12 +43,12 @@ function Page(props: CoursePageProps) {
           {
             title: 'Mentor',
             dataIndex: ['mentor', 'githubId'],
-            render: value => <GithubUserLink value={value} />,
+            render: (value) => <GithubUserLink value={value} />,
           },
           {
             title: 'Mentor Contacts',
             dataIndex: ['mentor'],
-            render: value => {
+            render: (value) => {
               return (
                 <ul>
                   {renderContact('Phone', value.contactsPhone)}

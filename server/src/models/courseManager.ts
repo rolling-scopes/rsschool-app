@@ -12,9 +12,9 @@ export class CourseManager {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Course)
+  @ManyToOne((_) => Course)
   course: Course;
 
-  @ManyToOne(_ => User)
+  @ManyToOne((_) => User)
   user: User;
 }

@@ -13,13 +13,13 @@ export class StageInterviewStudent {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Student)
+  @ManyToOne((_) => Student)
   student: Student;
 
   @Column()
   studentId: number;
 
-  @ManyToOne(_ => Course)
+  @ManyToOne((_) => Course)
   course: Course;
 
   @Column({ nullable: true })

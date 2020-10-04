@@ -17,11 +17,7 @@ import { TIMEZONES } from '../../../configs/timezones';
 type Props = CoursePageProps;
 
 const timeZoneRenderer = (timeZone: string) => (value: string) => {
-  return value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('HH:mm')
-    : '';
+  return value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 };
 
 function Page(props: Props) {
@@ -110,7 +106,7 @@ function Page(props: Props) {
             optionFilterProp={'children'}
             filterOption={(input, option) => option && option.children.toLowerCase().includes(input.toLowerCase())}
           >
-            {events.map(event => (
+            {events.map((event) => (
               <Select.Option key={event.id} value={event.id}>
                 {event.name}
               </Select.Option>
@@ -119,7 +115,7 @@ function Page(props: Props) {
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
-            {TIMEZONES.map(tz => (
+            {TIMEZONES.map((tz) => (
               <Select.Option key={tz} value={tz}>
                 {tz}
               </Select.Option>
@@ -162,7 +158,7 @@ function Page(props: Props) {
         defaultValue={timeZone}
         onChange={handleTimeZoneChange}
       >
-        {TIMEZONES.map(tz => (
+        {TIMEZONES.map((tz) => (
           <Select.Option key={tz} value={tz}>
             {tz}
           </Select.Option>

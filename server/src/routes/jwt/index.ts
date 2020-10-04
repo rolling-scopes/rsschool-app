@@ -8,7 +8,7 @@ import { ILogger } from '../../logger';
 export function jwtRoute(_: ILogger) {
   const router = new Router();
 
-  router.get('/jwt', guard, ctx => {
+  router.get('/jwt', guard, (ctx) => {
     ctx.status = OK;
     ctx.body = {
       token: jsonwebtoken.sign(

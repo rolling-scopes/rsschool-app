@@ -15,7 +15,7 @@ export class TaskSolution {
   @Column()
   courseTaskId: number;
 
-  @ManyToOne(_ => Student)
+  @ManyToOne((_) => Student)
   student: Student;
 
   @Column()

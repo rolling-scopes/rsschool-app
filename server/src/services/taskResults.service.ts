@@ -5,7 +5,8 @@ import {
   TaskSolutionResult,
   TaskSolutionChecker,
   CourseTask,
-  Student, User,
+  Student,
+  User,
 } from '../models';
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
@@ -65,8 +66,13 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
     .getOne();
 }
 
-export async function getCrossCheckData(filter: { checkerStudent?: string, student?: string, task?: string, url?: string, score?: string }, pagination: { current: number; pageSize: number; }, courseId: number, orderBy: string, orderDirection?: "ASC" | "DESC" | undefined) {
-
+export async function getCrossCheckData(
+  filter: { checkerStudent?: string; student?: string; task?: string; url?: string; score?: string },
+  pagination: { current: number; pageSize: number },
+  courseId: number,
+  orderBy: string,
+  orderDirection?: 'ASC' | 'DESC' | undefined,
+) {
   const orderByFieldMapping: Record<string, string> = {
     'checkerStudent,githubId': '"checkerStudent"."githubId"',
     'student,githubId': '"student"."githubId"',
@@ -79,7 +85,7 @@ export async function getCrossCheckData(filter: { checkerStudent?: string, stude
     .createQueryBuilder('tsr')
     .addSelect(['tsr.score'])
     .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
-    .addSelect(['courseTask.id','courseTask.courseId'])
+    .addSelect(['courseTask.id', 'courseTask.courseId'])
     .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .leftJoin('courseTask.task', 'task')
     .addSelect(['task.id', 'task.name'])
@@ -89,7 +95,11 @@ export async function getCrossCheckData(filter: { checkerStudent?: string, stude
     .leftJoin(Student, 'ch', '"tsr"."checkerId" = "ch"."id"')
     .leftJoin(User, 'checkerStudent', '"ch"."userId" = "checkerStudent"."id"')
     .addSelect(['checkerStudent.id', 'checkerStudent.githubId'])
-    .leftJoin(TaskSolution, 'taskSolution', '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"')
+    .leftJoin(
+      TaskSolution,
+      'taskSolution',
+      '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"',
+    )
     .addSelect(['taskSolution.url'])
     .where(`courseTask.courseId = :courseId`, { courseId })
     .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' });
@@ -118,13 +128,13 @@ export async function getCrossCheckData(filter: { checkerStudent?: string, stude
     });
   }
 
-  const total = await query.getCount()
+  const total = await query.getCount();
 
   const courseTasks = await query
     .orderBy(orderByFieldMapping[orderBy], orderDirection)
     .limit(pagination.pageSize)
     .offset((pagination.current - 1) * pagination.pageSize)
-    .getRawMany()
+    .getRawMany();
 
   const result = courseTasks.map((e: any) => ({
     checkerStudent: {
@@ -145,7 +155,7 @@ export async function getCrossCheckData(filter: { checkerStudent?: string, stude
     },
     url: e.taskSolution_url,
     score: e.tsr_score,
-  }))
+  }));
 
   return {
     content: result,
@@ -153,9 +163,9 @@ export async function getCrossCheckData(filter: { checkerStudent?: string, stude
       current: pagination.current,
       pageSize: pagination.pageSize,
       total,
-      totalPages: Math.ceil(total/pagination.pageSize),
-    }
-  }
+      totalPages: Math.ceil(total / pagination.pageSize),
+    },
+  };
 }
 
 export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {
@@ -169,7 +179,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       .where('"tsr"."studentId" = :studentId', { studentId })
       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
       .getMany()
-  ).map(c => {
+  ).map((c) => {
     const author = !c.anonymous
       ? {
           name: createName(c.checker.user),

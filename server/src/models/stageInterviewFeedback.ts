@@ -11,7 +11,7 @@ export class StageInterviewFeedback {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => StageInterview)
+  @ManyToOne((_) => StageInterview)
   stageInterview: StageInterview;
 
   @Column()

@@ -12,13 +12,13 @@ export class TaskVerification {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Student)
+  @ManyToOne((_) => Student)
   student: Student;
 
   @Column()
   studentId: number;
 
-  @ManyToOne(_ => CourseTask)
+  @ManyToOne((_) => CourseTask)
   courseTask: CourseTask;
 
   @Column()

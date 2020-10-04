@@ -80,7 +80,7 @@ function Page(props: Props) {
         <Row gutter={24}>
           <Col span={24}>
             {!isUpdate ? (
-              <Checkbox checked={isCopy} value={isCopy} onChange={e => setIsCopy(e.target.checked)}>
+              <Checkbox checked={isCopy} value={isCopy} onChange={(e) => setIsCopy(e.target.checked)}>
                 I want to copy stages and events from other course
               </Checkbox>
             ) : (
@@ -89,7 +89,7 @@ function Page(props: Props) {
             {isCopy && !isUpdate ? (
               <Form.Item name="courseId" label="Choose course">
                 <Select placeholder="Please select course template">
-                  {data.map(course => (
+                  {data.map((course) => (
                     <Select.Option key={course.id} value={course.id}>
                       {course.name}
                     </Select.Option>
@@ -135,7 +135,7 @@ function Page(props: Props) {
           rules={[{ required: true, message: 'Please select a primary skill' }]}
         >
           <Select placeholder="Please select a primary skill">
-            {PRIMARY_SKILLS.map(skill => (
+            {PRIMARY_SKILLS.map((skill) => (
               <Select.Option key={skill.id} value={skill.id}>
                 {skill.name}
               </Select.Option>
@@ -208,7 +208,7 @@ function createRecord(values: any) {
     inviteOnly: values.inviteOnly,
     description: values.description,
     primarySkillId: values.primarySkillId,
-    primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
+    primarySkillName: (PRIMARY_SKILLS.find((skill) => skill.id === values.primarySkillId) || { name: '' }).name,
   };
   return record;
 }

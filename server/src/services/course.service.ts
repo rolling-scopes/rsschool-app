@@ -94,7 +94,9 @@ export function convertToMentorBasic(mentor: Mentor): MentorBasic {
     name: createName(user),
     id: mentor.id,
     githubId: user.githubId,
-    students: mentor.students ? mentor.students.filter(s => !s.isExpelled && !s.isFailed).map(s => ({ id: s.id })) : [],
+    students: mentor.students
+      ? mentor.students.filter((s) => !s.isExpelled && !s.isFailed).map((s) => ({ id: s.id }))
+      : [],
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
   };
@@ -125,7 +127,7 @@ export function convertToStudentDetails(student: Student): StudentDetails {
     countryName: user.countryName || 'Other',
     interviews: _.isEmpty(student.stageInterviews)
       ? []
-      : student.stageInterviews!.map(i => ({
+      : student.stageInterviews!.map((i) => ({
           id: i.id,
           isCompleted: i.isCompleted,
         })),
@@ -160,10 +162,7 @@ function studentQuery() {
 }
 
 export async function getCourses() {
-  const records = await getRepository(Course)
-    .createQueryBuilder('course')
-    .where('course.completed = false')
-    .getMany();
+  const records = await getRepository(Course).createQueryBuilder('course').where('course.completed = false').getMany();
   return records;
 }
 
@@ -255,11 +254,11 @@ export async function getCrossStudentsByMentor(courseId: number, githubId: strin
     .getMany();
 
   const students = records
-    .map<AssignedStudent[]>(record => {
+    .map<AssignedStudent[]>((record) => {
       const student = convertToStudentBasic(record);
       student.mentor = record.mentor ? convertToMentorBasic(record.mentor) : null;
       const checkers: TaskChecker[] = record.taskChecker ?? [];
-      return checkers.map(checker => ({ ...student, courseTaskId: checker?.courseTaskId })) ?? [];
+      return checkers.map((checker) => ({ ...student, courseTaskId: checker?.courseTaskId })) ?? [];
     })
     .flat();
 
@@ -429,10 +428,10 @@ export async function getStudentsScore(
     paginateOptions,
   );
 
-  const students = pagination.content.map(student => {
+  const students = pagination.content.map((student) => {
     const user = student.user;
     const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
-      .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
+      .map((arr) => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
       .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
     const taskResults =
       student.taskResults
@@ -544,7 +543,7 @@ export async function getUsers(courseId: number) {
     .where(`"courseUser"."courseId" = :courseId`, { courseId })
     .getMany();
 
-  return records.map(r => ({
+  return records.map((r) => ({
     courseId: r.courseId,
     id: r.userId,
     name: createName(r.user),
@@ -559,7 +558,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCo
   const query = getManager()
     .createQueryBuilder()
     .select(['ROUND(AVG("score")) as "score"', '"studentId" '])
-    .from(qb => {
+    .from((qb) => {
       // do sub query to select only top X scores
       const query = qb
         .from(TaskSolutionResult, 'tsr')
@@ -568,7 +567,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCo
           'tsr.score as "score"',
           'row_number() OVER (PARTITION by tsr.studentId ORDER BY tsr.score desc) as "rownum"',
         ])
-        .where(qb => {
+        .where((qb) => {
           // query students who checked enough tasks
           const query = qb
             .subQuery()
@@ -596,7 +595,7 @@ export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCo
 
   const records = await query.getRawMany();
 
-  return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
+  return records.map((record) => ({ studentId: record.studentId, score: Number(record.score) }));
 }
 
 export async function getInterviewStudentsByMentorId(courseTaskId: number, mentorId: number) {
@@ -609,7 +608,7 @@ export async function getInterviewStudentsByMentorId(courseTaskId: number, mento
     .andWhere('"taskChecker"."mentorId" = :mentorId', { mentorId })
     .getMany();
 
-  const students = records.map(record => convertToStudentBasic(record));
+  const students = records.map((record) => convertToStudentBasic(record));
   return students;
 }
 
@@ -659,7 +658,7 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
     return [];
   }
 
-  const students = taskCheckers.map(record => {
+  const students = taskCheckers.map((record) => {
     const {
       githubId,
       primaryEmail,
@@ -693,9 +692,7 @@ export async function getStages(courseId: number) {
 }
 
 function shiftDate(date: string, shift: number, format: string): string {
-  return moment(date)
-    .add(shift, 'days')
-    .format(format);
+  return moment(date).add(shift, 'days').format(format);
 }
 
 function adjustStage(stage: any, startDateDaysDiff: number, courseId: number) {

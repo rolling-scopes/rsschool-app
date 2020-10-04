@@ -8,8 +8,8 @@ import { getCustomRepository } from 'typeorm';
 export async function renderMentorConfirmationText(preselectedCourseIds: number[]) {
   const preselectedCourseIdsSet = new Set(preselectedCourseIds);
   const courses = await courseService.getCourses();
-  const preselectedCourses = courses.filter(course => preselectedCourseIdsSet.has(course.id));
-  const names = preselectedCourses.map(course => course.name).join(', ');
+  const preselectedCourses = courses.filter((course) => preselectedCourseIdsSet.has(course.id));
+  const names = preselectedCourses.map((course) => course.name).join(', ');
   const confirmLinks = preselectedCourses
     .map(({ alias, name }) => `${name}: https://app.rs.school/course/mentor/confirm?course=${alias}`)
     .join('\n');

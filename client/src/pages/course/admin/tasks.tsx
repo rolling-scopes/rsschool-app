@@ -95,7 +95,7 @@ function Page(props: CoursePageProps) {
       if (!input) {
         return false;
       }
-      const task = tasks.find(t => t.id === option?.value);
+      const task = tasks.find((t) => t.id === option?.value);
       return task?.name.toLowerCase().includes(input.toLowerCase()) ?? false;
     },
     [tasks],
@@ -161,7 +161,7 @@ function Page(props: CoursePageProps) {
       <ModalForm
         getInitialValues={getInitialValues}
         data={modalData}
-        onChange={values => {
+        onChange={(values) => {
           setModalData({ ...modalData, checker: values.checker });
         }}
         title="Course Task"
@@ -214,7 +214,7 @@ function Page(props: CoursePageProps) {
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
-            {TIMEZONES.map(tz => (
+            {TIMEZONES.map((tz) => (
               <Option key={tz} value={tz}>
                 {tz}
               </Option>
@@ -248,7 +248,7 @@ function Page(props: CoursePageProps) {
         {modalData?.checker === 'crossCheck' ? (
           <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
             <Select placeholder="Cross-Check Pairs Count">
-              {times(10, num => (
+              {times(10, (num) => (
                 <Option key={num} value={num + 1}>
                   {num + 1}
                 </Option>

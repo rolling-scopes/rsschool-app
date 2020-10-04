@@ -55,13 +55,13 @@ function Page(props: CoursePageProps) {
         courseService.getCourseEvents(),
       ]);
       const tasksDetailCurrentCourse =
-        statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
+        statisticsCourses.studentStats?.find((course) => course.courseId === props.course.id)?.tasks ?? [];
       const startOfToday = moment().startOf('day');
       const nextEvents =
         courseEvents
           .concat(tasksToEvents(courseTasks))
           .sort((a, b) => a.dateTime.localeCompare(b.dateTime))
-          .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
+          .filter((event) => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
 
       setNextEvent(nextEvents);
       setStudentSummary(studentSummary);
@@ -85,24 +85,26 @@ function Page(props: CoursePageProps) {
   );
 
   const tasksCompleted = courseTasks
-    .filter(task => !!checkTaskResults(results, task.id))
-    .map(task => {
-      const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
+    .filter((task) => !!checkTaskResults(results, task.id))
+    .map((task) => {
+      const { comment, taskGithubPrUris, score } =
+        tasksDetail.find((taskDetail) => taskDetail.name === task.name) ?? {};
       return { ...task, comment, githubPrUri: taskGithubPrUris, score };
     });
 
   const tasksNotDone = courseTasks
     .filter(
-      task =>
+      (task) =>
         moment(task.studentEndDate as string).isBefore(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
-    .map(task => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
+    .map((task) => ({ ...task, comment: null, githubPrUri: null, score: 0 }));
 
   const tasksFuture = courseTasks
     .filter(
-      task => moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
+      (task) =>
+        moment(task.studentEndDate as string).isAfter(currentDate, 'date') && !checkTaskResults(results, task.id),
     )
-    .map(task => ({ ...task, comment: null, githubPrUri: null, score: null }));
+    .map((task) => ({ ...task, comment: null, githubPrUri: null, score: null }));
 
   const taskStatistics = { completed: tasksCompleted, notDone: tasksNotDone, future: tasksFuture };
   const { isActive = false, totalScore = 0 } = studentSummary ?? {};

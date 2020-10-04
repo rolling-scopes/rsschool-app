@@ -10,9 +10,7 @@ export const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const isAdmin = ctx.state!.user && ctx.state!.user.isAdmin;
 
   if (isAdmin) {
-    const courses = await getRepository(Course)
-      .createQueryBuilder()
-      .getMany();
+    const courses = await getRepository(Course).createQueryBuilder().getMany();
     setResponse(ctx, OK, courses);
     return;
   }

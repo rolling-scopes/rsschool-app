@@ -16,11 +16,11 @@ export function setupPassport(logger: ILogger) {
       (_1: string, _2, profile, cb) => {
         logger.info('request user');
         createUser(profile)
-          .then(result => {
+          .then((result) => {
             logger.info({ userId: result.id }, 'Created user');
             cb(null, result);
           })
-          .catch(err => {
+          .catch((err) => {
             logger.error(err, 'Failed to create user');
             cb(err, undefined);
           });

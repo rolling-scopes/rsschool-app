@@ -26,7 +26,7 @@ class EpamLearningJs extends React.Component<Props, State> {
   static async getInitialProps(ctx: NextPageContext) {
     try {
       const courses = await new UserService(ctx).getCourses();
-      const course = courses.find(c => c.alias === courseName) || null;
+      const course = courses.find((c) => c.alias === courseName) || null;
       if (course == null) {
         return EpamLearningJs.redirectToRegistry(ctx);
       }
@@ -57,7 +57,7 @@ class EpamLearningJs extends React.Component<Props, State> {
     this.setState({
       loading: false,
       courseTasks: courseTasks
-        .map(courseTask => {
+        .map((courseTask) => {
           const result = studentScore?.results.find(({ courseTaskId }) => courseTaskId === courseTask.id);
           return { ...courseTask, score: result?.score ?? 0 };
         })
@@ -67,13 +67,13 @@ class EpamLearningJs extends React.Component<Props, State> {
 
   render() {
     const { courseTasks, loading } = this.state;
-    const task = courseTasks.find(t => t.id === this.state.courseTaskId);
+    const task = courseTasks.find((t) => t.id === this.state.courseTaskId);
     return (
       <Spin spinning={loading}>
         <Form style={{ margin: 32 }} onFinish={this.handleSubmit} layout="vertical">
           <Row align="bottom" gutter={24}>
             <Col style={{ marginBottom: 32 }} xs={24} sm={12} md={12} lg={10}>
-              <CourseTaskSelect data={courseTasks} onChange={courseTaskId => this.setState({ courseTaskId })} />
+              <CourseTaskSelect data={courseTasks} onChange={(courseTaskId) => this.setState({ courseTaskId })} />
               {task && (
                 <>
                   <Typography.Paragraph>
@@ -131,7 +131,7 @@ class EpamLearningJs extends React.Component<Props, State> {
     }
 
     const { courseTaskId } = values;
-    const task = this.state.courseTasks.find(t => t.id === courseTaskId);
+    const task = this.state.courseTasks.find((t) => t.id === courseTaskId);
     if (!task) {
       return;
     }

@@ -93,7 +93,7 @@ export const searchMentors = (_: ILogger) => async (ctx: Router.RouterContext) =
     .limit(20)
     .getMany();
 
-  const result = entities.map(entity => ({
+  const result = entities.map((entity) => ({
     id: entity.id,
     githubId: entity.user.githubId,
     name: userService.createName(entity.user),

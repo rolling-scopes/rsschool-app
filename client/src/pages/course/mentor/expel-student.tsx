@@ -31,7 +31,7 @@ function Page(props: CoursePageProps) {
       }
     } else {
       const students = await courseService.getMentorStudents();
-      const activeStudents = students.filter(student => student.isActive);
+      const activeStudents = students.filter((student) => student.isActive);
       setStudents(activeStudents);
     }
   }, [courseId]);
@@ -48,7 +48,7 @@ function Page(props: CoursePageProps) {
         await courseService.expelStudent(values.githubId, values.comment);
       }
 
-      const activeStudents = students.filter(s => s.githubId !== values.githubId);
+      const activeStudents = students.filter((s) => s.githubId !== values.githubId);
       setStudents(activeStudents);
       form.resetFields();
       message.success('The student has been expelled');

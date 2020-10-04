@@ -67,7 +67,7 @@ export function registryRouter(logger?: ILogger) {
     const result = {
       maxStudentsLimit: mentorRegistry.maxStudentsLimit,
       preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
-      preselectedCourses: mentorRegistry.preselectedCourses.map(c => Number(c)),
+      preselectedCourses: mentorRegistry.preselectedCourses.map((c) => Number(c)),
     };
     setResponse(ctx, OK, result);
   });
@@ -92,13 +92,13 @@ export function registryRouter(logger?: ILogger) {
     const courses = await getRepository(Course).find({ select: ['id', 'name'] });
 
     const csv = await parseAsync(
-      data.map(d => ({
+      data.map((d) => ({
         ...d,
-        preferedCourses: d.preferedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+        preferedCourses: d.preferedCourses.map((id) => courses.find((c) => Number(id) === c.id)?.name).filter(Boolean),
         preselectedCourses: d.preselectedCourses
-          .map(id => courses.find(c => Number(id) === c.id)?.name)
+          .map((id) => courses.find((c) => Number(id) === c.id)?.name)
           .filter(Boolean),
-        courses: d.courses?.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+        courses: d.courses?.map((id) => courses.find((c) => Number(id) === c.id)?.name).filter(Boolean),
       })),
     );
     setCsvResponse(ctx, OK, csv, 'mentors');
@@ -145,7 +145,7 @@ export function registryRouter(logger?: ILogger) {
 
       if (type === 'student') {
         registryPayload.status = 'approved';
-        if ((user.students || []).every(s => s.courseId !== courseId)) {
+        if ((user.students || []).every((s) => s.courseId !== courseId)) {
           await getRepository(Student).save({ userId: user!.id, courseId: course!.id, startDate: new Date() });
         }
       } else if (type === 'mentor') {

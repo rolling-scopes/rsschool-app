@@ -87,7 +87,7 @@ export function SchedulePage(props: CoursePageProps) {
           defaultValue={timeZone}
           onChange={setTimeZone}
         >
-          {TIMEZONES.map(tz => (
+          {TIMEZONES.map((tz) => (
             <Select.Option key={tz} value={tz}>
               {tz}
             </Select.Option>
@@ -95,11 +95,11 @@ export function SchedulePage(props: CoursePageProps) {
         </Select>
       </Row>
       <Table
-        rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
+        rowKey={(record) => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
         pagination={false}
         size="small"
         dataSource={data}
-        rowClassName={record => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
+        rowClassName={(record) => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
         columns={[
           { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer(timeZone) },
           { title: 'Time', width: 60, dataIndex: 'dateTime', render: timeRenderer(timeZone) },
@@ -180,18 +180,10 @@ export function SchedulePage(props: CoursePageProps) {
 }
 
 const dateRenderer = (timeZone: string) => (value: string) =>
-  value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('YYYY-MM-DD')
-    : '';
+  value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('YYYY-MM-DD') : '';
 
 const timeRenderer = (timeZone: string) => (value: string) =>
-  value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('HH:mm')
-    : '';
+  value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 
 const tasksToEvents = (tasks: CourseTaskDetails[]) => {
   return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {

@@ -78,7 +78,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
       return;
     }
 
-    const existingJuryScore = existingResult.juryScores.find(score => score.authorId === authorId);
+    const existingJuryScore = existingResult.juryScores.find((score) => score.authorId === authorId);
     if (existingJuryScore) {
       existingJuryScore.score = data.score;
     } else {
@@ -235,7 +235,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
   const students = await getStudentsScore(courseId);
   const courseTasks = await getCourseTasks(courseId);
 
-  const result = students.content.map(student => {
+  const result = students.content.map((student) => {
     return {
       githubId: student.githubId,
       name: student.name,
@@ -253,7 +253,7 @@ export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) =
 
 function getTasksResults(taskResults: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
   return courseTasks.reduce((acc, courseTask) => {
-    const r = taskResults.find(r => r.courseTaskId === courseTask.id);
+    const r = taskResults.find((r) => r.courseTaskId === courseTask.id);
     acc[(courseTask.task as Task).name] = r ? r.score : 0;
     return acc;
   }, {} as Record<string, number>);

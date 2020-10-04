@@ -23,14 +23,11 @@ export class StageInterview {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(
-    _ => Student,
-    (student: Student) => student.stageInterviews,
-  )
+  @ManyToOne((_) => Student, (student: Student) => student.stageInterviews)
   student: Student;
 
   @OneToMany(
-    _ => StageInterviewFeedback,
+    (_) => StageInterviewFeedback,
     (StageInterviewFeedback: StageInterviewFeedback) => StageInterviewFeedback.stageInterview,
   )
   stageInterviewFeedbacks: StageInterviewFeedback[];
@@ -38,25 +35,25 @@ export class StageInterview {
   @Column()
   studentId: number;
 
-  @ManyToOne(_ => Mentor)
+  @ManyToOne((_) => Mentor)
   mentor: Mentor;
 
   @Column()
   mentorId: number;
 
-  @ManyToOne(_ => Stage, { nullable: true })
+  @ManyToOne((_) => Stage, { nullable: true })
   stage: Stage;
 
   @Column({ nullable: true })
   stageId: number;
 
-  @ManyToOne(_ => CourseTask, { nullable: true })
+  @ManyToOne((_) => CourseTask, { nullable: true })
   courseTask: CourseTask;
 
   @Column({ nullable: true })
   courseTaskId: number;
 
-  @ManyToOne(_ => Course, { nullable: true })
+  @ManyToOne((_) => Course, { nullable: true })
   course: Course;
 
   @Column({ nullable: true })

@@ -10,7 +10,7 @@ export class StudentFeedback {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(_ => Student)
+  @ManyToOne((_) => Student)
   student: Student | number;
 
   @Column()

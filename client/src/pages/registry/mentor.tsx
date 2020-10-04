@@ -33,7 +33,7 @@ function Page(props: Props & { courseAlias?: string }) {
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
       : courses
-          .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
+          .filter((course) => (course.planned || !course.completed) && !course.inviteOnly)
           .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     setLoading(false);
@@ -185,7 +185,7 @@ function Page(props: Props & { courseAlias?: string }) {
               <Col {...defaultColumnSizes}>
                 <Form.Item name="preferedCourses" label="Preferred Courses">
                   <Checkbox.Group
-                    options={courses.map(c => ({
+                    options={courses.map((c) => ({
                       label: (
                         <>
                           {`${c.name} (Start: ${formatMonthFriendly(c.startDate)})`}{' '}

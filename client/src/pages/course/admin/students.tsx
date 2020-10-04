@@ -63,7 +63,7 @@ function Page(props: Props) {
     const githubId = details?.githubId;
     if (githubId != null) {
       const { repository } = await courseService.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+      const newStudents = students.map((s) => (s.githubId === githubId ? { ...s, repository: repository } : s));
       setStudents(newStudents);
     }
   });
@@ -214,7 +214,7 @@ function Page(props: Props) {
           if (value.length === 0) {
             return <MinusCircleOutlined title="No Interview" />;
           }
-          if (value.every(e => e.isCompleted)) {
+          if (value.every((e) => e.isCompleted)) {
             return <CheckCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
           } else {
             return <ClockCircleTwoTone title="Assigned" />;
@@ -269,7 +269,7 @@ function calculateStats(students: StudentDetails[]) {
   return {
     activeStudentsCount,
     studentsCount: students.length,
-    countries: _.keys(countries).map(k => ({
+    countries: _.keys(countries).map((k) => ({
       name: k,
       count: countries[k].count,
       totalCount: countries[k].totalCount,

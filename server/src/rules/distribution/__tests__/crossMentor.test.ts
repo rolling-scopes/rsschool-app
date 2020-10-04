@@ -28,8 +28,8 @@ describe('cross check distribution', () => {
   it('should assigned students to mentor if it has active students', () => {
     const result = createCrossMentorPairs(mentors, []);
     const hasMentorsWithoutStudents = mentors
-      .filter(m => m.students?.length ?? 0)
-      .some(mentor => (result.mentors.find(m => m.id === mentor.id)?.students?.length ?? 0) > 0);
+      .filter((m) => m.students?.length ?? 0)
+      .some((mentor) => (result.mentors.find((m) => m.id === mentor.id)?.students?.length ?? 0) > 0);
     expect(hasMentorsWithoutStudents).toBeTruthy();
   });
 });

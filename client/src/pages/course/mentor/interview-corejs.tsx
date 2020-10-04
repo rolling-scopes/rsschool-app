@@ -75,7 +75,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const courseTasks = await courseService.getCourseTasks();
-    const courseTask = courseTasks.find(courseTask => courseTask.type === 'interview');
+    const courseTask = courseTasks.find((courseTask) => courseTask.type === 'interview');
     if (!courseTask) {
       return;
     }
@@ -152,8 +152,8 @@ function Page(props: CoursePageProps) {
 
         <Typography.Title level={4}>Variables, Hoisting, Closures</Typography.Title>
         {questions
-          .filter(question => section1.includes(question.questionId))
-          .map(question => (
+          .filter((question) => section1.includes(question.questionId))
+          .map((question) => (
             <Form.Item name={question.questionId} key={question.questionId} valuePropName="checked">
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>
@@ -164,16 +164,16 @@ function Page(props: CoursePageProps) {
         </Form.Item>
         <Typography.Title level={3}>Knowledge of the Dom Events</Typography.Title>
         {questions
-          .filter(question => section2.includes(question.questionId))
-          .map(question => (
+          .filter((question) => section2.includes(question.questionId))
+          .map((question) => (
             <Form.Item name={question.questionId} key={question.questionId} valuePropName="checked">
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>
           ))}
         <Typography.Title level={4}>Knowledge of the Event Loop</Typography.Title>
         {questions
-          .filter(question => section3.includes(question.questionId))
-          .map(question => (
+          .filter((question) => section3.includes(question.questionId))
+          .map((question) => (
             <Form.Item name={question.questionId} key={question.questionId} valuePropName="checked">
               <Checkbox>{question.questionText}</Checkbox>
             </Form.Item>

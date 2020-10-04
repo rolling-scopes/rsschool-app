@@ -122,7 +122,7 @@ function Page(props: Props) {
 
   const handleReject = async (e: any) => handleSubmit(e, 'rejected');
 
-  const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
+  const [description] = courses.filter((c) => c.id === courseId).map((c) => c.description);
   const rowSelection = { onChange: changeSelection };
 
   return (
@@ -136,7 +136,7 @@ function Page(props: Props) {
               <Row gutter={defaultRowGutter}>
                 <Col>
                   <Select style={{ width: 300 }} placeholder="Select a course..." onChange={handleCourseChange}>
-                    {courses.map(course => (
+                    {courses.map((course) => (
                       <Select.Option key={course.id} value={course.id}>
                         {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
                       </Select.Option>

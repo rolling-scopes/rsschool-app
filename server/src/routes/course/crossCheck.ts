@@ -1,19 +1,13 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, OK, NOT_FOUND } from 'http-status-codes';
-import { getRepository} from 'typeorm';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import {
-  IUserSession,
-  TaskSolution,
-  TaskSolutionChecker,
-  TaskSolutionResult,
-} from '../../models';
+import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } from '../../models';
 import { createCrossCheckPairs } from '../../rules/distribution';
 import { courseService, taskResultsService, taskService, notificationService } from '../../services';
 import { setErrorResponse, setResponse } from '../utils';
 import omit from 'lodash/omit';
 import { getCrossCheckData } from '../../services/taskResults.service';
-
 
 type Input = { url: string };
 const defaultPairsCount = 4;
@@ -95,8 +89,8 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
   const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
 
   const crossCheckPairs = pairs
-    .filter(pair => solutionsMap.has(pair.studentId))
-    .map(pair => ({
+    .filter((pair) => solutionsMap.has(pair.studentId))
+    .map((pair) => ({
       ...pair,
       courseTaskId,
       taskSolutionId: solutionsMap.get(pair.studentId),
@@ -211,7 +205,7 @@ export const getAssignments = (_: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
   const records = await taskResultsService.getTaskSolutionAssignments(student.id, courseTaskId);
-  const result = records.map(r => ({
+  const result = records.map((r) => ({
     student: courseService.convertToStudentBasic(r.student),
     url: r.taskSolution.url,
   }));
@@ -260,7 +254,6 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
   setResponse(ctx, OK, response);
 };
 
-
 export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId } = ctx.params;
   const orderBy = ctx.query.orderBy ?? 'task';
@@ -273,10 +266,16 @@ export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterConte
     ...omit(ctx.query, ['current', 'pageSize', 'orderBy', 'orderDirection']),
   };
 
-  const { content, pagination: paginationResult } = await getCrossCheckData(filter, pagination, orderBy, orderDirection, courseId)
+  const { content, pagination: paginationResult } = await getCrossCheckData(
+    filter,
+    pagination,
+    orderBy,
+    orderDirection,
+    courseId,
+  );
 
   setResponse(ctx, OK, {
     pagination: paginationResult,
     content,
   });
-}
+};

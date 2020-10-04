@@ -167,7 +167,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
 
 export const getStudentStats = async (githubId: string, permissions: Permissions) => {
   const studentStats = await getStudentStatsWithoutPosition(githubId, permissions);
-  const studentPositions = await Promise.all(studentStats.map(stats => getStudentPosition(stats)));
+  const studentPositions = await Promise.all(studentStats.map((stats) => getStudentPosition(stats)));
   const studentStatsWithPositions = studentStats.map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
 
   return studentStatsWithPositions;

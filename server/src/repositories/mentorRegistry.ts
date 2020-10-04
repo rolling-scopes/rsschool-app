@@ -5,9 +5,7 @@ import { userService } from '../services';
 @EntityRepository(MentorRegistry)
 export class MentorRegistryRepository extends AbstractRepository<MentorRegistry> {
   public async findAll() {
-    const data = await this.getPreparedMentorRegistriesQuery()
-      .where('mentorRegistry.canceled = false')
-      .getMany();
+    const data = await this.getPreparedMentorRegistriesQuery().where('mentorRegistry.canceled = false').getMany();
     return data.map(transformMentorRegistry);
   }
 
@@ -101,12 +99,12 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     cityName: user.cityName,
     maxStudentsLimit: mentorRegistry.maxStudentsLimit,
     name: `${user.firstName} ${user.lastName}`,
-    preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
-    preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
+    preferedCourses: mentorRegistry.preferedCourses?.map((id) => Number(id)),
+    preselectedCourses: mentorRegistry.preselectedCourses?.map((id) => Number(id)),
     preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
     technicalMentoring: mentorRegistry.technicalMentoring,
     updatedDate: mentorRegistry.updatedDate,
-    courses: mentorRegistry.user.mentors?.map(m => m.courseId),
-    hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
+    courses: mentorRegistry.user.mentors?.map((m) => m.courseId),
+    hasCertificate: mentorRegistry.user.students?.some((s) => s.certificate?.id),
   };
 }

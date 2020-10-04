@@ -209,7 +209,7 @@ export class CourseService {
       pageSize: String(pagination.pageSize),
       orderBy: String(orderBy.field),
       orderDirection: String(orderBy.direction),
-      ...onlyDefined(filter) as object,
+      ...(onlyDefined(filter) as object),
     });
     const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
     return result.data.data;
@@ -458,7 +458,7 @@ export class CourseService {
       pageSize: String(pagination.pageSize),
       orderBy: String(orderBy.field),
       orderDirection: String(orderBy.order),
-      ...onlyDefined(filter) as object,
+      ...(onlyDefined(filter) as object),
     });
     const result = await this.axios.get(`/cross-check/pairs?${params.toString()}`);
     return result.data.data as { content: CrossCheckPairs[]; pagination: IPaginationInfo };
@@ -593,21 +593,21 @@ export interface TaskSolution {
 
 export interface CrossCheckPairs {
   checkerStudent: {
-    githubId: string,
-    id: number,
-  },
+    githubId: string;
+    id: number;
+  };
   courseTask: {
-    courseId: number,
-    id: number,
-  },
+    courseId: number;
+    id: number;
+  };
   student: {
-    githubId: string,
-    id: number,
-  },
+    githubId: string;
+    id: number;
+  };
   task: {
-    name: string,
-    id: number,
-  },
-  url: string,
-  score: number,
+    name: string;
+    id: number;
+  };
+  url: string;
+  score: number;
 }

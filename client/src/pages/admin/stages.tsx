@@ -46,7 +46,7 @@ function Page(props: Props) {
             ? await service.updateStage(modalData!.id!, record)
             : await service.createStage(record);
         const updatedData =
-          modalAction === 'update' ? data.map(d => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
+          modalAction === 'update' ? data.map((d) => (d.id === item.id ? { ...d, ...item } : d)) : data.concat([item]);
         setModalData(null);
         setData(updatedData);
       } catch (e) {

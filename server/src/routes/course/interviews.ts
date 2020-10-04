@@ -39,11 +39,11 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
   const data = await courseService.getCourseTasks(courseId);
 
   const result = data
-    .filter(interview => {
+    .filter((interview) => {
       const type = interview.type ?? interview.task.type;
       return type === 'stage-interview' || type === 'interview';
     })
-    .map(interview => {
+    .map((interview) => {
       return {
         id: interview.id,
         name: interview.task.name,

@@ -42,7 +42,7 @@ export function UserSearch(props: UserProps) {
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
     >
-      {data.map(person => {
+      {data.map((person) => {
         const key = keyField ? get(person, keyField) : person.id;
         return (
           <Select.Option key={key} value={key}>
@@ -54,6 +54,6 @@ export function UserSearch(props: UserProps) {
   );
 
   async function defaultSearch(value: string) {
-    return defaultValues?.filter(v => v.name.startsWith(value) || v.githubId.startsWith(value)) ?? [];
+    return defaultValues?.filter((v) => v.name.startsWith(value) || v.githubId.startsWith(value)) ?? [];
   }
 }

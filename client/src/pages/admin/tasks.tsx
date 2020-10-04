@@ -63,7 +63,7 @@ function Page(props: Props) {
 
   // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   const renderModal = useCallback(() => {
-    const allTags = union(...data.map(d => d.tags || []));
+    const allTags = union(...data.map((d) => d.tags || []));
     return (
       <ModalForm
         data={modalData}
@@ -116,7 +116,7 @@ function Page(props: Props) {
           <Col span={12}>
             <Form.Item name="tags" label="Tags">
               <Select mode="tags">
-                {allTags.map(tag => (
+                {allTags.map((tag) => (
                   <Select.Option key={tag} value={tag}>
                     {tag}
                   </Select.Option>
