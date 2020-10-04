@@ -13,7 +13,7 @@ type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; cou
 type FeedbackInput = { toUserId: number; comment: string };
 
 export function feedbackRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/feedback' });
+  const router = new Router<any, any>({ prefix: '/feedback' });
   router.post('/private', guard, postPrivateFeedback(logger));
   router.post('/gratitude', guard, postGratitudeFeedback(logger));
   router.get('/gratitude', guard, getGratitudeFeedback());

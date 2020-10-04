@@ -5,7 +5,7 @@ import { ILogger } from '../../logger';
 import { Task } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { adminGuard } from '../guards';
+import { adminGuard, RouterContext } from '../guards';
 import { OperationResult } from '../../services/operationResult';
 
 type TaskInput = {
@@ -13,7 +13,7 @@ type TaskInput = {
   descriptionUrl?: string;
 };
 
-const postTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+const postTasks = (logger: ILogger) => async (ctx: RouterContext) => {
   const data: TaskInput[] = ctx.request.body;
 
   const response: OperationResult[] = [];
@@ -40,14 +40,17 @@ const postTasks = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, response);
 };
 
-const getTasks = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const tasks = await getRepository(Task).createQueryBuilder().orderBy('"updatedDate"', 'DESC').getMany();
+const getTasks = (_: ILogger) => async (ctx: RouterContext) => {
+  const tasks = await getRepository(Task)
+    .createQueryBuilder()
+    .orderBy('"updatedDate"', 'DESC')
+    .getMany();
 
   setResponse(ctx, OK, tasks);
 };
 
 export function tasksRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/tasks' });
+  const router = new Router<any, any>({ prefix: '/tasks' });
 
   router.post('/', adminGuard, postTasks(logger));
   router.get('/', getTasks(logger));

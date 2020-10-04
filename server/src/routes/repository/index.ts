@@ -4,7 +4,7 @@ import { basicAuthAws } from '../guards';
 import { createRepositoryEvents } from './events';
 
 export function repositoryRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/repository' });
+  const router = new Router<any, any>({ prefix: '/repository' });
 
   router.post('/events', basicAuthAws, createRepositoryEvents(logger));
 

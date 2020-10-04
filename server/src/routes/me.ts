@@ -6,7 +6,7 @@ import { ILogger } from '../logger';
 import { setResponse } from './utils';
 
 export function publicMeRouter(_: ILogger) {
-  const router = new Router({ prefix: '/v2/me' });
+  const router = new Router<any, any>({ prefix: '/v2/me' });
 
   /**
    * @swagger

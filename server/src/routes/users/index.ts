@@ -4,10 +4,10 @@ import { ILogger } from '../../logger';
 import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { adminGuard, guard } from '../guards';
+import { adminGuard, guard, RouterContext } from '../guards';
 import { OperationResult, userService } from '../../services';
 
-const postUsers = (_: ILogger) => async (ctx: Router.RouterContext) => {
+const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
   const data = ctx.request.body as { githubId: string }[];
 
   const result: OperationResult[] = [];
@@ -47,7 +47,7 @@ const generateSearchString = (searchConfig: SearchConfigItem[], parameterName: s
 const generateResponse = (user: any, searchConfig: SearchConfigItem[]) =>
   searchConfig.reduce((response: any, { field }: SearchConfigItem) => ({ ...response, [field]: user[field] }), {});
 
-const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (ctx: Router.RouterContext) => {
+const getSearch = (_: ILogger) => (searchConfig: SearchConfigItem[]) => async (ctx: RouterContext) => {
   const searchText = ctx.params.searchText;
   if (!searchText) {
     setResponse(ctx, OK, []);
@@ -80,7 +80,7 @@ const getSearchByGithubId = (logger: ILogger) =>
     { field: 'lastName', isCaseSensitive: false },
   ]);
 
-const postUserActivist = (_: ILogger) => async (ctx: Router.RouterContext) => {
+const postUserActivist = (_: ILogger) => async (ctx: RouterContext) => {
   const data = ctx.request.body as { activist: boolean };
   const userId: number = ctx.params.userId;
   const user = await userService.getUserById(userId);
@@ -94,7 +94,7 @@ const postUserActivist = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function usersRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/users' });
+  const router = new Router<any, any>({ prefix: '/users' });
 
   /**
    * @swagger

@@ -67,7 +67,7 @@ const getProfiles = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function opportunitiesRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/opportunities' });
+  const router = new Router<any, any>({ prefix: '/opportunities' });
 
   router.post('/:githubId', guard, validateGithubId, postProfile(logger));
   router.get('/', guard, getProfiles(logger));

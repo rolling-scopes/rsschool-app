@@ -3,10 +3,10 @@ import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { Stage } from '../../models';
 import { createGetRoute, createPostRoute, createPutRoute } from '../common';
-import { adminGuard, guard } from '../guards';
+import { adminGuard, guard, RouterContext } from '../guards';
 import { setResponse } from '../utils';
 
-const validateStageId = async (ctx: Router.RouterContext, next: any) => {
+const validateStageId = async (ctx: RouterContext, next: any) => {
   const stageId = Number(ctx.params.id);
   if (isNaN(stageId)) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [Stage Id]');
@@ -17,7 +17,7 @@ const validateStageId = async (ctx: Router.RouterContext, next: any) => {
 };
 
 export function stageRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/stage' });
+  const router = new Router<any, any>({ prefix: '/stage' });
 
   router.get('/:id', guard, createGetRoute(Stage, logger));
 

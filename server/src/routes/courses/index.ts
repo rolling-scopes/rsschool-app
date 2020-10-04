@@ -15,7 +15,7 @@ const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export function coursesRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/courses' });
+  const router = new Router<any, any>({ prefix: '/courses' });
   router.get('/', guard, getCourses(logger));
 
   return router;

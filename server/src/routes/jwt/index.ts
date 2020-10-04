@@ -6,7 +6,7 @@ import { config } from '../../config';
 import { ILogger } from '../../logger';
 
 export function jwtRoute(_: ILogger) {
-  const router = new Router();
+  const router = new Router<any, any>();
 
   router.get('/jwt', guard, (ctx) => {
     ctx.status = OK;

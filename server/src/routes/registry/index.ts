@@ -13,7 +13,7 @@ import { notificationService } from '../../services';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry';
 
 export function registryRouter(logger?: ILogger) {
-  const router = new Router({ prefix: '/registry' });
+  const router = new Router<any, any>({ prefix: '/registry' });
   const repository = getCustomRepository(MentorRegistryRepository);
 
   router.get('/', adminGuard, async (ctx: Router.RouterContext) => {

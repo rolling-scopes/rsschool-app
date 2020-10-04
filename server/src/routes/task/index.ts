@@ -49,7 +49,7 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
 };
 
 export function taskRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/task' });
+  const router = new Router<any, any>({ prefix: '/task' });
 
   router.post('/verification', adminGuard, createPostRoute(TaskVerification, logger));
   router.put('/verification/:id', basicAuthAws, validateTaskId, updateVerification(logger));

@@ -1,10 +1,10 @@
 import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
-import Router from '@koa/router';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { userService, courseService } from '../../services';
 import { CourseUser } from '../../models';
+import { RouterContext } from '../guards';
 
 type PostInput = {
   isManager: boolean;
@@ -12,7 +12,7 @@ type PostInput = {
   isSupervisor: boolean;
 };
 
-export const postUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
+export const postUser = (_?: ILogger) => async (ctx: RouterContext) => {
   const { githubId, courseId } = ctx.params;
   const user = await userService.getUserByGithubId(githubId);
   if (user == null) {
@@ -24,7 +24,7 @@ export const postUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK);
 };
 
-export const getUsers = (_?: ILogger) => async (ctx: Router.RouterContext) => {
+export const getUsers = (_?: ILogger) => async (ctx: RouterContext) => {
   const { courseId } = ctx.params;
   const data = await courseService.getUsers(courseId);
   if (data == null) {
@@ -34,7 +34,7 @@ export const getUsers = (_?: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, data);
 };
 
-export const putUser = (_?: ILogger) => async (ctx: Router.RouterContext) => {
+export const putUser = (_?: ILogger) => async (ctx: RouterContext) => {
   const { githubId, courseId } = ctx.params;
   const user = await userService.getUserByGithubId(githubId);
   if (user == null) {
