@@ -11,7 +11,7 @@ export const createRepositoryEvents = (_: ILogger) => async (ctx: Router.RouterC
   const data: Pick<RepositoryEvent, 'action' | 'githubId' | 'repositoryUrl'>[] = ctx.request.body;
   await getCustomRepository(RepositoryEventRepository).save(data);
 
-  await Promise.all(data.map((it) => updateRepositoryActivity(it.repositoryUrl)));
+  await Promise.all(data.map(it => updateRepositoryActivity(it.repositoryUrl)));
 
   setResponse(ctx, OK);
 };

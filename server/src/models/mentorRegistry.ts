@@ -7,7 +7,7 @@ export class MentorRegistry {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((_) => User)
+  @ManyToOne(_ => User)
   user: User;
 
   @Column({ unique: true })

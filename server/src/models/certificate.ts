@@ -25,7 +25,7 @@ export class Certificate {
   @Column()
   studentId: number;
 
-  @OneToOne(() => Student, (student) => student.certificate)
+  @OneToOne(() => Student, student => student.certificate)
   @JoinColumn()
   student: Student;
 

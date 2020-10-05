@@ -14,19 +14,19 @@ export class CourseEvent {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne((_) => Event, (lecture: Event) => lecture.courseEvents)
+  @ManyToOne(_ => Event, (lecture: Event) => lecture.courseEvents)
   event: Event;
 
   @Column()
   eventId: number;
 
-  @ManyToOne((_) => Course, (course: Course) => course.stages)
+  @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
 
   @Column()
   courseId: number;
 
-  @ManyToOne((_) => Stage, { nullable: true })
+  @ManyToOne(_ => Stage, { nullable: true })
   stage: Stage;
 
   @Column({ nullable: true })
@@ -50,7 +50,7 @@ export class CourseEvent {
   @Column({ nullable: true })
   comment: string;
 
-  @ManyToOne((_) => User, { nullable: true })
+  @ManyToOne(_ => User, { nullable: true })
   organizer: User;
 
   @Column({ nullable: true })

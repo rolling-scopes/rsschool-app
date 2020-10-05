@@ -16,7 +16,7 @@ type Profile = {
 };
 
 function getPrimaryEmail(emails: Array<{ value: string; primary?: boolean }>) {
-  return emails.filter((email) => email.primary);
+  return emails.filter(email => email.primary);
 }
 
 export async function createUser(profile: Profile, admin: boolean = false): Promise<IUserSession> {
@@ -60,10 +60,10 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     };
   }
   const roles: { [key: string]: 'student' | 'mentor' } = {};
-  result.students?.forEach((student) => {
+  result.students?.forEach(student => {
     roles[(student.course as Course).id] = 'student';
   });
-  result.mentors?.forEach((mentor) => {
+  result.mentors?.forEach(mentor => {
     roles[(mentor.course as Course).id] = 'mentor';
   });
 
@@ -82,7 +82,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       .getMany(),
   ] as const);
 
-  const coursesRoles = flatMap(courseUsers, (u) => {
+  const coursesRoles = flatMap(courseUsers, u => {
     const result = [];
     if (u.isJuryActivist) {
       result.push({ courseId: u.courseId, role: CourseRole.juryActivist });
@@ -92,7 +92,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     }
     return result;
   })
-    .concat(taskOwner.map((t) => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
+    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
     .reduce((acc, item) => {
       if (!acc[item.courseId]) {
         acc[item.courseId] = [];

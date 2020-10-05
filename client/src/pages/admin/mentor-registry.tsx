@@ -89,7 +89,7 @@ function Page(props: Props) {
       >
         <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
           <Select mode="multiple">
-            {courses.map((course) => (
+            {courses.map(course => (
               <Select.Option disabled={course.completed} key={course.id} value={course.id}>
                 {course.name}
               </Select.Option>
@@ -117,7 +117,7 @@ function Page(props: Props) {
               <Row justify="space-between">
                 <Form.Item>
                   <Checkbox
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.checked;
                       updateData(value, allData);
                     }}
@@ -166,7 +166,7 @@ function Page(props: Props) {
                     title: 'Preferred',
                     dataIndex: 'preferedCourses',
                     render: (values: number[]) =>
-                      tagsRenderer(values.map((v) => courses.find((c) => c.id === v)?.name ?? v)),
+                      tagsRenderer(values.map(v => courses.find(c => c.id === v)?.name ?? v)),
                   },
                   {
                     title: 'Pre-Selected',
@@ -248,10 +248,10 @@ function filterData(
     return data;
   }
   return data.filter(
-    (it) =>
+    it =>
       it.courses.length === 0 ||
       !it.preselectedCourses.length ||
-      !it.preselectedCourses.every((c) => it.courses.includes(c)),
+      !it.preselectedCourses.every(c => it.courses.includes(c)),
   );
 }
 
@@ -260,11 +260,11 @@ function renderPreselectedCourses(courses: Course[]) {
     return (
       <>
         {values
-          .map((v) => ({
-            value: courses.find((c) => c.id === v)?.name ?? v.toString(),
+          .map(v => ({
+            value: courses.find(c => c.id === v)?.name ?? v.toString(),
             color: record.courses.includes(v) ? '#87d068' : undefined,
           }))
-          .map((v) => colorTagRenderer(v.value, v.color))}
+          .map(v => colorTagRenderer(v.value, v.color))}
       </>
     );
   };

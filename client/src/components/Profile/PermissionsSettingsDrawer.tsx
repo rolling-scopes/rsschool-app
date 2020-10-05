@@ -68,7 +68,7 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
                         style={{ fontSize: 12 }}
                         onChange={
                           onPermissionsSettingsChange
-                            ? (event) => onPermissionsSettingsChange(event, { permissionName, role })
+                            ? event => onPermissionsSettingsChange(event, { permissionName, role })
                             : undefined
                         }
                       >

@@ -91,7 +91,7 @@ function Page(props: CoursePageProps) {
   const dataEffect = () => {
     const getData = async () => {
       const data = await courseService.getCourseTasks();
-      const courseTasks = data.filter((t) => t.checker === 'crossCheck');
+      const courseTasks = data.filter(t => t.checker === 'crossCheck');
       setCourseTasks(courseTasks);
     };
     getData();
@@ -122,7 +122,7 @@ function Page(props: CoursePageProps) {
 
   const handleTaskChange = async (value: number) => {
     const courseTaskId = Number(value);
-    const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+    const courseTask = courseTasks.find(t => t.id === courseTaskId);
     if (courseTask == null) {
       return;
     }
@@ -138,7 +138,7 @@ function Page(props: CoursePageProps) {
     form.setFieldsValue({ githubId });
   };
 
-  const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (

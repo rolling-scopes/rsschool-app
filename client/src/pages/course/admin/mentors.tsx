@@ -38,7 +38,7 @@ function Page(props: CoursePageProps) {
     setMentors(records);
     setStats({
       recordCount: records.length,
-      countries: Object.keys(countries).map((k) => ({
+      countries: Object.keys(countries).map(k => ({
         name: k,
         totalCount: countries[k].totalCount,
       })),
@@ -49,7 +49,7 @@ function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       await service.expelMentor(githubId);
-      const records = mentors.map((r) => (r.githubId === githubId ? { ...r, isActive: false } : r));
+      const records = mentors.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
       setMentors(records);
     } catch (e) {
       message.error('An error occured. Please try later.');
@@ -80,7 +80,7 @@ function Page(props: CoursePageProps) {
       <Divider dashed />
       <Table<MentorDetails>
         rowKey="githubId"
-        rowClassName={(record) => (!record.isActive ? 'rs-table-row-disabled' : '')}
+        rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         pagination={{ pageSize: 100 }}
         size="small"
         dataSource={mentors}

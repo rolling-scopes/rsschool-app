@@ -99,12 +99,12 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
     cityName: user.cityName,
     maxStudentsLimit: mentorRegistry.maxStudentsLimit,
     name: `${user.firstName} ${user.lastName}`,
-    preferedCourses: mentorRegistry.preferedCourses?.map((id) => Number(id)),
-    preselectedCourses: mentorRegistry.preselectedCourses?.map((id) => Number(id)),
+    preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
+    preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
     preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
     technicalMentoring: mentorRegistry.technicalMentoring,
     updatedDate: mentorRegistry.updatedDate,
-    courses: mentorRegistry.user.mentors?.map((m) => m.courseId),
-    hasCertificate: mentorRegistry.user.students?.some((s) => s.certificate?.id),
+    courses: mentorRegistry.user.mentors?.map(m => m.courseId),
+    hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
   };
 }

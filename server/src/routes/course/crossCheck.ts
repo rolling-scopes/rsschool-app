@@ -89,8 +89,8 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
   const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
 
   const crossCheckPairs = pairs
-    .filter((pair) => solutionsMap.has(pair.studentId))
-    .map((pair) => ({
+    .filter(pair => solutionsMap.has(pair.studentId))
+    .map(pair => ({
       ...pair,
       courseTaskId,
       taskSolutionId: solutionsMap.get(pair.studentId),
@@ -205,7 +205,7 @@ export const getAssignments = (_: ILogger) => async (ctx: Router.RouterContext) 
     return;
   }
   const records = await taskResultsService.getTaskSolutionAssignments(student.id, courseTaskId);
-  const result = records.map((r) => ({
+  const result = records.map(r => ({
     student: courseService.convertToStudentBasic(r.student),
     url: r.taskSolution.url,
   }));

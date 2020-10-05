@@ -116,7 +116,7 @@ class EducationCard extends React.Component<Props> {
                       <Input
                         value={university}
                         style={{ width: '100%' }}
-                        onChange={(event) =>
+                        onChange={event =>
                           onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].university`)
                         }
                       />
@@ -128,7 +128,7 @@ class EducationCard extends React.Component<Props> {
                       <Input
                         value={faculty}
                         style={{ width: '100%' }}
-                        onChange={(event) =>
+                        onChange={event =>
                           onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].faculty`)
                         }
                       />
@@ -140,7 +140,7 @@ class EducationCard extends React.Component<Props> {
                       <Input
                         value={graduationYear}
                         style={{ width: '100%' }}
-                        onChange={(event) =>
+                        onChange={event =>
                           onProfileSettingsChange(event, `generalInfo.educationHistory[${index}].graduationYear`)
                         }
                       />

@@ -23,8 +23,8 @@ class ConsentsCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { data } = props;
-    const [emailConsent] = data.filter((consent) => consent.channelType === 'email');
-    const [tgConsent] = data.filter((consent) => consent.channelType === 'tg');
+    const [emailConsent] = data.filter(consent => consent.channelType === 'email');
+    const [tgConsent] = data.filter(consent => consent.channelType === 'tg');
     this.state = {
       emailOptIn: emailConsent && emailConsent.optIn,
       tgOptIn: tgConsent && tgConsent.optIn,
@@ -95,7 +95,7 @@ class ConsentsCard extends React.Component<Props, State> {
         title="Consents"
         icon={<NotificationOutlined />}
         content={
-          <List itemLayout="horizontal" dataSource={listItems} renderItem={(listItemContent) => listItemContent} />
+          <List itemLayout="horizontal" dataSource={listItems} renderItem={listItemContent => listItemContent} />
         }
         noDataDescrption="Consents not found"
         isEditingModeEnabled={isEditingModeEnabled}
@@ -103,7 +103,7 @@ class ConsentsCard extends React.Component<Props, State> {
           <List
             itemLayout="horizontal"
             dataSource={settingsListItems}
-            renderItem={(listItemContent) => listItemContent}
+            renderItem={listItemContent => listItemContent}
           />
         }
       />

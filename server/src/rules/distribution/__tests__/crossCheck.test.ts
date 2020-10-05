@@ -12,7 +12,7 @@ describe('cross check distribution', () => {
 
   it('should return only uniq pairs', () => {
     const result = createCrossCheckPairs(persons, pairsCountPerPerson);
-    const pairsAsStrings = result.map((it) => `${it.checkerId}|${it.studentId}`);
+    const pairsAsStrings = result.map(it => `${it.checkerId}|${it.studentId}`);
     const hasDuplicates = uniq(pairsAsStrings).length !== result.length;
     expect(hasDuplicates).toBeFalsy();
   });

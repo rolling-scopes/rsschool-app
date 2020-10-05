@@ -29,7 +29,7 @@ function Page({ session, course }: CoursePageProps) {
     const courseTasks = tasks
       .reverse()
       .filter(
-        (task) =>
+        task =>
           isSubmittedByPowerAdmin(session, courseId)(task) ||
           isSubmittedByTaskOwner(userId)(task) ||
           isSubmittedByMentor(session, courseId)(task),
@@ -39,7 +39,7 @@ function Page({ session, course }: CoursePageProps) {
   }, []);
 
   const loadStudents = async (searchText: string) => {
-    const task = courseTasks.find((t) => t.id === courseTaskId);
+    const task = courseTasks.find(t => t.id === courseTaskId);
     return isPowerMentor(session, courseId) || isTaskOwner(userId)(task)
       ? courseService.searchStudents(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
@@ -48,9 +48,9 @@ function Page({ session, course }: CoursePageProps) {
   };
 
   const handleTaskChange = (courseTaskId: number) => {
-    const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+    const courseTask = courseTasks.find(t => t.id === courseTaskId);
     if (courseTask?.checker === 'assigned') {
-      const assignedStudents = allStudents?.assignedStudents.filter((s) => s.courseTaskId === courseTaskId) ?? [];
+      const assignedStudents = allStudents?.assignedStudents.filter(s => s.courseTaskId === courseTaskId) ?? [];
       setStudents(assignedStudents);
     } else {
       setStudents(allStudents?.students ?? []);
@@ -75,7 +75,7 @@ function Page({ session, course }: CoursePageProps) {
     }
   };
 
-  const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
   return (
     <PageLayoutSimple loading={loading} title="Submit Review" courseName={course.name} githubId={githubId}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">

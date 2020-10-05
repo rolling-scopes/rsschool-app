@@ -60,7 +60,7 @@ function Page(props: CoursePageProps) {
         </Button>
         {isCourseManager(props.session, props.course.id) ? (
           <div>
-            <Checkbox checked={noRegistration} onChange={(e) => setNoRegistration(e.target.checked)}>
+            <Checkbox checked={noRegistration} onChange={e => setNoRegistration(e.target.checked)}>
               No Registration
             </Checkbox>
             <Button onClick={createInterviews}>Create Interviews</Button>
@@ -79,14 +79,14 @@ function Page(props: CoursePageProps) {
             title: 'Interviewer',
             dataIndex: 'interviewer',
             sorter: stringSorter('interviewer.githubId'),
-            render: (value) => <PersonCell value={value} />,
+            render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('interviewer.githubId'),
           },
           {
             title: 'Student',
             dataIndex: 'student',
             sorter: stringSorter('student.githubId'),
-            render: (value) => <PersonCell value={value} />,
+            render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('student.githubId'),
           },
           {

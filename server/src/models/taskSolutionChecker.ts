@@ -16,20 +16,20 @@ export class TaskSolutionChecker {
   @Index()
   courseTaskId: number;
 
-  @ManyToOne((_) => TaskSolution)
+  @ManyToOne(_ => TaskSolution)
   taskSolution: TaskSolution;
 
   @Column()
   @Index()
   taskSolutionId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
   studentId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   checker: Student;
 
   @Column()

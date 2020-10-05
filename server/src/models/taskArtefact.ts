@@ -18,10 +18,10 @@ export class TaskArtefact {
   @Column()
   studentId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
-  @ManyToOne((_) => CourseTask)
+  @ManyToOne(_ => CourseTask)
   courseTask: CourseTask;
 
   @Column({ nullable: true })

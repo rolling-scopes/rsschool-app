@@ -63,10 +63,10 @@ const isAdminRole = (_1: Course, _2: Role, session: Session) => session.isAdmin;
 const isCourseNotCompleted = (course: Course) => !course.completed;
 
 const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
-  checks.every((check) => check(course, role, session));
+  checks.every(check => check(course, role, session));
 
 const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
-  checks.some((check) => check(course, role, session));
+  checks.some(check => check(course, role, session));
 
 const routes = [
   {
@@ -297,8 +297,8 @@ class IndexPage extends React.PureComponent<Props, State> {
 
     const role = this.props.session.roles[course.id];
     return routes
-      .filter((route) => route.access(course, role, this.props.session))
-      .map((route) => ({
+      .filter(route => route.access(course, role, this.props.session))
+      .map(route => ({
         name: route.name(),
         link: route.getLink(course),
       }));
@@ -311,8 +311,8 @@ class IndexPage extends React.PureComponent<Props, State> {
 
     const role = this.props.session.roles[course.id];
     return courseManagementRoutes
-      .filter((route) => route.access(course, role, this.props.session))
-      .map((route) => ({
+      .filter(route => route.access(course, role, this.props.session))
+      .map(route => ({
         name: route.name(),
         link: route.getLink(course),
       }));
@@ -326,8 +326,8 @@ class IndexPage extends React.PureComponent<Props, State> {
     const { isAdmin } = session;
     // TODO: it seems no need to filter. It is done on the server already.
     return courses
-      .filter((course) => isAdmin || session.roles[course.id] || !isEmpty(session.coursesRoles?.[course.id]))
-      .filter((course) => !(!isAdmin && course.alias === 'epamlearningjs' && session.roles[course.id] === 'student'))
+      .filter(course => isAdmin || session.roles[course.id] || !isEmpty(session.coursesRoles?.[course.id]))
+      .filter(course => !(!isAdmin && course.alias === 'epamlearningjs' && session.roles[course.id] === 'student'))
       .sort((a, b) => (a.startDate && b.startDate ? b.startDate.localeCompare(a.startDate) : 0));
   }
 
@@ -338,7 +338,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     }
     const savedActiveCourseId = this.loadActiveCourseId();
     const activeCourseId = this.state.activeCourseId || Number(savedActiveCourseId);
-    const course = courses.find((course) => course.id === activeCourseId);
+    const course = courses.find(course => course.id === activeCourseId);
     if (course) {
       return course;
     }
@@ -356,13 +356,13 @@ class IndexPage extends React.PureComponent<Props, State> {
   };
 
   async componentDidMount() {
-    const wasMentor = Object.values(this.props.session.roles).some((v) => v === 'mentor');
+    const wasMentor = Object.values(this.props.session.roles).some(v => v === 'mentor');
 
-    const plannedCourses = (this.props.courses || []).filter((course) => course.planned && !course.inviteOnly);
+    const plannedCourses = (this.props.courses || []).filter(course => course.planned && !course.inviteOnly);
     const hasRegistryBanner =
       wasMentor &&
       plannedCourses.length > 0 &&
-      plannedCourses.every((course) => this.props.session.roles[course.id] == null);
+      plannedCourses.every(course => this.props.session.roles[course.id] == null);
     this.setState({ hasRegistryBanner });
     const activeCourse = this.getActiveCourse();
     if (activeCourse) {
@@ -372,7 +372,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     this.setState({ allCourses });
 
     const mentor = await mentorRegistryService.getMentor();
-    const preselectedCourses = allCourses.filter((c) => mentor.preselectedCourses.includes(c.id));
+    const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
     this.setState({ preselectedCourses });
   }
 
@@ -410,7 +410,7 @@ class IndexPage extends React.PureComponent<Props, State> {
   }
 
   private renderNoCourse() {
-    const hasPlanned = this.state.allCourses?.some((course) => course.planned && !course.completed);
+    const hasPlanned = this.state.allCourses?.some(course => course.planned && !course.completed);
     return (
       <Result
         icon={<QuestionCircleTwoTone twoToneColor="#52c41a" />}
@@ -446,7 +446,7 @@ class IndexPage extends React.PureComponent<Props, State> {
               )}
             </Row>
             <Row justify="center" style={{ marginTop: 16 }}>
-              {this.state.preselectedCourses.map((c) => {
+              {this.state.preselectedCourses.map(c => {
                 return (
                   <Button
                     key={c.id}
@@ -482,7 +482,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     if (!course || !preselectedCourses) {
       return null;
     }
-    const [active] = preselectedCourses.filter((course) => !this.props.session.roles?.[course.id]);
+    const [active] = preselectedCourses.filter(course => !this.props.session.roles?.[course.id]);
     if (!active) {
       return null;
     }
@@ -508,7 +508,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     }
     return (
       <Select style={{ width: 250, marginBottom: 16 }} defaultValue={course.id} onChange={this.handleChange}>
-        {courses.map((course) => (
+        {courses.map(course => (
           <Select.Option key={course.id} value={course.id}>
             {course.name} ({this.getStatus(course)})
           </Select.Option>
@@ -567,7 +567,7 @@ class IndexPage extends React.PureComponent<Props, State> {
     }
     const { name, githubId, contactsEmail, contactsPhone, contactsSkype, contactsTelegram, contactsNotes } =
       summary.mentor ?? {};
-    const tasksCount = summary.results.filter((r) => r.score > 0).length;
+    const tasksCount = summary.results.filter(r => r.score > 0).length;
     const courseTasks = this.state.courseTasks;
     const totalTaskCount = courseTasks.length;
     return (
@@ -639,7 +639,7 @@ class IndexPage extends React.PureComponent<Props, State> {
         courseService.getStudentSummary('me'),
         courseService.getCourseTasks(),
       ]);
-      this.setState({ studentSummary, courseTasks: courseTasks.map((t) => ({ id: t.id })) });
+      this.setState({ studentSummary, courseTasks: courseTasks.map(t => ({ id: t.id })) });
     }
   }
 

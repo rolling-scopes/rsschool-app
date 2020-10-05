@@ -38,7 +38,7 @@ export function tagsRenderer(values: (number | string)[]) {
   if (!Array.isArray(values)) {
     return '';
   }
-  return <span>{values.map((v) => renderTag(v))}</span>;
+  return <span>{values.map(v => renderTag(v))}</span>;
 }
 
 function renderTag(value: number | string, color?: string) {
@@ -54,6 +54,6 @@ export function stringTrimRenderer(value: string) {
 }
 
 export const idFromArrayRenderer = <T extends { id: number; name: string }>(data: T[]) => (value: number) => {
-  const item = data.find((d) => d.id === value);
+  const item = data.find(d => d.id === value);
   return item ? item.name : '(Empty)';
 };

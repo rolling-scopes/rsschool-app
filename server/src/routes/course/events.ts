@@ -26,7 +26,7 @@ export const getCourseEventsCalendar = (_: ILogger) => async (ctx: Router.Router
 async function createICalEvents(data: CourseEvent[]) {
   return new Promise<string>((resolve, reject) => {
     const { value, error } = ics.createEvents(
-      data.map((d) => {
+      data.map(d => {
         const date = DateTime.fromISO(`${d.dateTime}`).toUTC();
         return {
           uid: `${d.id}.event.course@app.rs.school`,

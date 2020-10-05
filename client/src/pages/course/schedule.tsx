@@ -87,7 +87,7 @@ export function SchedulePage(props: CoursePageProps) {
           defaultValue={timeZone}
           onChange={setTimeZone}
         >
-          {TIMEZONES.map((tz) => (
+          {TIMEZONES.map(tz => (
             <Select.Option key={tz} value={tz}>
               {tz}
             </Select.Option>
@@ -95,11 +95,11 @@ export function SchedulePage(props: CoursePageProps) {
         </Select>
       </Row>
       <Table
-        rowKey={(record) => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
+        rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
         pagination={false}
         size="small"
         dataSource={data}
-        rowClassName={(record) => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
+        rowClassName={record => (moment(record.dateTime).isBefore(startOfToday) ? 'rs-table-row-disabled' : '')}
         columns={[
           { title: 'Date', width: 120, dataIndex: 'dateTime', render: dateRenderer(timeZone) },
           { title: 'Time', width: 60, dataIndex: 'dateTime', render: timeRenderer(timeZone) },

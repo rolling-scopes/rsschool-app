@@ -31,7 +31,7 @@ export class TaskResult {
   @UpdateDateColumn()
   updatedDate: string;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
@@ -40,7 +40,7 @@ export class TaskResult {
   @Column()
   courseTaskId: number;
 
-  @ManyToOne((_) => CourseTask, (courseTask) => courseTask.taskResults)
+  @ManyToOne(_ => CourseTask, courseTask => courseTask.taskResults)
   courseTask: CourseTask;
 
   @Column({ nullable: true })

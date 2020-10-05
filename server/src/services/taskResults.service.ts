@@ -179,7 +179,7 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
       .where('"tsr"."studentId" = :studentId', { studentId })
       .andWhere('"tsr"."courseTaskId" = :courseTaskId', { courseTaskId })
       .getMany()
-  ).map((c) => {
+  ).map(c => {
     const author = !c.anonymous
       ? {
           name: createName(c.checker.user),

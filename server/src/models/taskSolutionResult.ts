@@ -29,21 +29,21 @@ export class TaskSolutionResult {
   @UpdateDateColumn()
   updatedDate: string;
 
-  @ManyToOne((_) => CourseTask)
+  @ManyToOne(_ => CourseTask)
   courseTask: CourseTask;
 
   @Column()
   @Index()
   courseTaskId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
   @Index()
   studentId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   checker: Student;
 
   @Column()

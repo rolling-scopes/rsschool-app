@@ -48,7 +48,7 @@ function Page(props: CoursePageProps) {
 
   return (
     <PageLayout loading={loading} title="Interviews" githubId={props.session.githubId} courseName={props.course.name}>
-      {interviews.map((interview) => {
+      {interviews.map(interview => {
         const name = interview.name;
         return (
           <List

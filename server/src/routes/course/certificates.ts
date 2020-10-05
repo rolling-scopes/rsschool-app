@@ -42,7 +42,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       .getMany();
   }
 
-  const result = students.map((student) => {
+  const result = students.map(student => {
     const course = student.course!;
     const user = student.user!;
     return {

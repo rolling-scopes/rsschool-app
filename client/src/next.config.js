@@ -10,7 +10,7 @@ const nextConfig = {
     BUILD_VERSION: process.env.BUILD_VERSION || '0.0.0.0.0',
     APP_VERSION: process.env.APP_VERSION,
   },
-  webpack: (config) => {
+  webpack: config => {
     config.resolve.alias['configs'] = path.join(__dirname, 'configs');
     config.resolve.alias['components'] = path.join(__dirname, 'components');
     config.resolve.alias['services'] = path.join(__dirname, 'services');
@@ -24,9 +24,9 @@ module.exports = withTranspiledModules(['react-gauge-chart'])(nextConfig);
 
 function withGaugeChartCss(config) {
   const rule = config.module.rules
-    .find((rule) => rule.oneOf)
+    .find(rule => rule.oneOf)
     .oneOf.find(
-      (r) =>
+      r =>
         // Find the global CSS loader
         r.issuer && r.issuer.include && r.issuer.include.includes('_app'),
     );

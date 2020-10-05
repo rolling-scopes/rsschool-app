@@ -13,19 +13,19 @@ export class TaskChecker {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne((_) => CourseTask)
+  @ManyToOne(_ => CourseTask)
   courseTask: CourseTask;
 
   @Column()
   courseTaskId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
   studentId: number;
 
-  @ManyToOne((_) => Mentor)
+  @ManyToOne(_ => Mentor)
   mentor: Mentor;
 
   @Column()

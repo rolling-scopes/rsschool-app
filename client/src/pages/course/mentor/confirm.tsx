@@ -33,7 +33,7 @@ function Page(props: { session: Session }) {
       setLoading(true);
       const courseAlias = router.query['course'];
       const courses = await new CoursesService().getCourses();
-      const course = courses.find((c) => c.alias === courseAlias) ?? null;
+      const course = courses.find(c => c.alias === courseAlias) ?? null;
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
 

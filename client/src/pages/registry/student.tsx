@@ -102,7 +102,7 @@ function Page(props: Props & { courseAlias?: string }) {
     );
   } else {
     const courseId = form.getFieldValue('courseId');
-    const [description] = courses.filter((c) => c.id === courseId).map((c) => c.description);
+    const [description] = courses.filter(c => c.id === courseId).map(c => c.description);
     content = (
       <Form
         layout="vertical"
@@ -119,7 +119,7 @@ function Page(props: Props & { courseAlias?: string }) {
             <Col xs={24} sm={20} md={16} lg={12} xl={10}>
               <Form.Item name="courseId">
                 <Select placeholder="Select course...">
-                  {courses.map((course) => (
+                  {courses.map(course => (
                     <Select.Option key={course.id} value={course.id}>
                       {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
                     </Select.Option>

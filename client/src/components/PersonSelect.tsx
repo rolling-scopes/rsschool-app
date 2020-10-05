@@ -15,7 +15,7 @@ export class PersonSelect extends React.PureComponent<Props> {
     const { data, keyField, defaultValue, ...other } = this.props;
     return (
       <Select showSearch optionFilterProp="children" defaultValue={defaultValue} placeholder="Select..." {...other}>
-        {data.map((person) => {
+        {data.map(person => {
           const id = keyField ? get(person, keyField) : person.id;
           return (
             <Select.Option key={id} value={id}>

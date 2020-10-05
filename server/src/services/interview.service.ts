@@ -31,7 +31,7 @@ export async function createInterviewsAutomatically(
   let registeredStudentsIds: number[] | undefined = undefined;
   if (options.registrationEnabled) {
     const student = await getCustomRepository(InterviewRepository).findRegisteredStudents(courseId, courseTaskId);
-    registeredStudentsIds = student.map((student) => student.id);
+    registeredStudentsIds = student.map(student => student.id);
   }
 
   const existingPairs = await checkerRepository.find({ courseTaskId });
@@ -39,7 +39,7 @@ export async function createInterviewsAutomatically(
   const { mentors: crossMentors } = createCrossMentorPairs(mentors, existingPairs, registeredStudentsIds);
 
   const taskCheckPairs = crossMentors
-    .map((stm) => stm.students?.map((s) => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
+    .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
     .reduce((acc, student) => acc.concat(student), []);
 
   if (taskCheckPairs.length > 0) {

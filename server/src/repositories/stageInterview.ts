@@ -40,7 +40,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
       .orderBy('si.updatedDate', 'DESC')
       .getMany();
 
-    const result = stageInterviews.map((it) => {
+    const result = stageInterviews.map(it => {
       return {
         id: it.id,
         name: it.courseTask.task.name,
@@ -126,7 +126,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
       .where('sis.courseId = :courseId AND student.isExpelled = false', { courseId })
       .getMany();
 
-    return records.map((record) => ({
+    return records.map(record => ({
       id: record.student.id,
       name: userService.createName(record.student.user),
       githubId: record.student.user.githubId,
@@ -151,7 +151,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     const result = createInterviews(mentors, students, interviews, keepReserve);
 
     return getRepository(StageInterview).save(
-      result.map((r) => ({ courseTaskId: courseTask?.id, courseId, mentorId: r.mentor.id, studentId: r.student.id })),
+      result.map(r => ({ courseTaskId: courseTask?.id, courseId, mentorId: r.mentor.id, studentId: r.student.id })),
     );
   }
 
@@ -167,7 +167,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         .andWhere('s.mentorId = :mentorId', { mentorId: mentor.id })
         .getMany();
       if (interviews.length > 0) {
-        await getRepository(StageInterview).delete(interviews.map((i) => i.id));
+        await getRepository(StageInterview).delete(interviews.map(i => i.id));
       }
     }
   }
@@ -199,7 +199,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
       .andWhere(`${userType === 'student' ? 'mentor' : 'student'}.isExpelled = false`)
       .getMany();
 
-    const result = stageInterviews.map((it) => {
+    const result = stageInterviews.map(it => {
       return {
         id: it.id,
         name: it.courseTask.task.name,

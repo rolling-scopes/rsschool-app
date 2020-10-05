@@ -131,7 +131,7 @@ const radioStyle = { display: 'block', height: '30px', lineHeight: '30px' };
 const renderSkills = () => (
   <>
     <Typography.Title level={3}>Skills</Typography.Title>
-    {SKILLS.map((category) => (
+    {SKILLS.map(category => (
       <div key={`skills.${category.name}`}>
         <Typography.Title level={4} key={category.name}>
           {category.label}
@@ -251,7 +251,7 @@ function Page(props: CoursePageProps) {
 
   const loadData = async () => {
     const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
-    setStudents(interviews.filter((i) => !i.completed).map((i) => i.student));
+    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
     setInterviews(interviews);
   };
 
@@ -272,7 +272,7 @@ function Page(props: CoursePageProps) {
   };
 
   const handleStudentSelect = async (githubId: string) => {
-    const interview = interviews.find((i) => i.student.githubId === githubId);
+    const interview = interviews.find(i => i.student.githubId === githubId);
     if (interview != null) {
       const feedback = await courseService.getStageInterviewFeedback(interview.id);
       form.setFieldsValue(deserializeFromJson(feedback));
@@ -284,7 +284,7 @@ function Page(props: CoursePageProps) {
       return;
     }
 
-    const interview = interviews.find((i) => i.student.githubId === values.githubId);
+    const interview = interviews.find(i => i.student.githubId === values.githubId);
     if (interview == null) {
       return;
     }
@@ -352,7 +352,7 @@ function Page(props: CoursePageProps) {
 
 function serializeToJson(values: any) {
   return _.keys(values)
-    .filter((v) => v !== 'githubId')
+    .filter(v => v !== 'githubId')
     .reduce((acc, key) => {
       return _.set(acc, key.split('-').join('.'), values[key]);
     }, {});
@@ -360,7 +360,7 @@ function serializeToJson(values: any) {
 
 function deserializeFromJson(json: any) {
   return _.keys(defaultInitialValues)
-    .filter((key) => key !== 'githubId')
+    .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
       acc[key] = _.get(json, key.split('-'));
       return acc;

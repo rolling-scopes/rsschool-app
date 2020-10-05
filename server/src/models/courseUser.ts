@@ -12,14 +12,14 @@ export class CourseUser {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne((_) => Course)
+  @ManyToOne(_ => Course)
   course: Course;
 
   @Column()
   @Index()
   courseId: number;
 
-  @ManyToOne((_) => User)
+  @ManyToOne(_ => User)
   user: User;
 
   @Column()

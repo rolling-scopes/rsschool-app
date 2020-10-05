@@ -27,13 +27,13 @@ export class Mentor {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne((_) => Course, (course: Course) => course.mentors, { nullable: true })
+  @ManyToOne(_ => Course, (course: Course) => course.mentors, { nullable: true })
   course: Course;
 
   @Column({ nullable: true })
   courseId: number;
 
-  @ManyToOne((_) => User)
+  @ManyToOne(_ => User)
   user: User;
 
   @Column()
@@ -42,10 +42,10 @@ export class Mentor {
   @Column({ default: false })
   isExpelled: boolean;
 
-  @OneToMany((_) => Student, (student) => student.mentor, { nullable: true })
+  @OneToMany(_ => Student, student => student.mentor, { nullable: true })
   students: Student[] | null;
 
-  @OneToMany((_) => TaskChecker, (taskChecker: TaskChecker) => taskChecker.mentor, { nullable: true })
+  @OneToMany(_ => TaskChecker, (taskChecker: TaskChecker) => taskChecker.mentor, { nullable: true })
   taskChecker: TaskChecker[] | null;
 
   @Column({ nullable: true })
@@ -54,6 +54,6 @@ export class Mentor {
   @Column({ nullable: true, type: 'varchar' })
   studentsPreference: 'any' | 'city' | 'country';
 
-  @OneToMany((_) => StageInterview, (stageInterview) => stageInterview.mentor, { nullable: true })
+  @OneToMany(_ => StageInterview, stageInterview => stageInterview.mentor, { nullable: true })
   stageInterviews: StageInterview[] | null;
 }

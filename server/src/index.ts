@@ -40,7 +40,7 @@ export class App {
 
     this.koa.use(koaJwt({ key: 'user', secret: config.sessionKey, passthrough: true }));
 
-    process.on('unhandledRejection', (reason) => this.appLogger.error(reason as any));
+    process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
   }
 
   public start(): Server {

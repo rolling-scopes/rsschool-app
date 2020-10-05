@@ -23,7 +23,7 @@ function Page(props: CoursePageProps) {
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
   const courseTask = useMemo(() => {
-    const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+    const courseTask = courseTasks.find(t => t.id === courseTaskId);
 
     if (courseTask?.type === 'selfeducation') {
       return {
@@ -57,7 +57,7 @@ function Page(props: CoursePageProps) {
 
   const handleSubmit = async (values: any) => {
     const { courseTaskId } = values;
-    const task = courseTasks.find((t) => t.id === courseTaskId);
+    const task = courseTasks.find(t => t.id === courseTaskId);
     if (!task) {
       return;
     }
@@ -329,7 +329,7 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 
 function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
-    (task) =>
+    task =>
       task.studentEndDate &&
       (new Date(task.studentEndDate).getTime() > Date.now() ||
         task.type === 'codewars' ||

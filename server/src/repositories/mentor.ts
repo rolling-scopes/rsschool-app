@@ -36,7 +36,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .leftJoin('mentor.students', 'students')
       .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
       .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
-        taskIds: courseTasks.length > 0 ? courseTasks.map((t) => t.id) : [null],
+        taskIds: courseTasks.length > 0 ? courseTasks.map(t => t.id) : [null],
       })
       .leftJoin('mentor.stageInterviews', 'si')
       .leftJoin('mentor.taskChecker', 'taskChecker')
@@ -58,13 +58,13 @@ export class MentorRepository extends AbstractRepository<Mentor> {
     const records = await query.getMany();
 
     const count = courseTasks.length;
-    const mentors = records.map((mentor) => {
+    const mentors = records.map(mentor => {
       const mentorBasic = transformMentor(mentor);
       const user = mentor.user;
-      const activeStudents = mentor.students?.filter((s) => !s.isExpelled && !s.isFailed) ?? [];
+      const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
       const totalToCheck = activeStudents.length * count;
       const lastUpdatedDate = max(
-        flatMap(mentor.students ?? [], (s) => s.taskResults?.map((r) => new Date(r.updatedDate).getTime()) ?? []),
+        flatMap(mentor.students ?? [], s => s.taskResults?.map(r => new Date(r.updatedDate).getTime()) ?? []),
       );
       return {
         ...mentorBasic,
@@ -75,7 +75,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
         studentsCount: activeStudents.length,
         interviews: {
           techScreeningsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
-          interviewsCount: mentor.taskChecker?.filter((tc) => tc.courseTask.type === 'interview').length,
+          interviewsCount: mentor.taskChecker?.filter(tc => tc.courseTask.type === 'interview').length,
         },
         taskResultsStats: {
           lastUpdatedDate,
@@ -120,6 +120,6 @@ function transformMentor(record: Mentor): MentorBasic {
     cityName: record.user.cityName ?? 'Unknown',
     countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled,
-    students: record.students?.map((s) => ({ id: s.id })) ?? [],
+    students: record.students?.map(s => ({ id: s.id })) ?? [],
   };
 }

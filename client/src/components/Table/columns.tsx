@@ -8,11 +8,11 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={(node) => (searchInput = node)}
-          onKeyDown={(e) => (e.keyCode === 13 ? confirm() : undefined)}
+          ref={node => (searchInput = node)}
+          onKeyDown={e => (e.keyCode === 13 ? confirm() : undefined)}
           placeholder={`Search ${label || dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys([e.target.value])}
+          onChange={e => setSelectedKeys([e.target.value])}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
         <Button
@@ -32,7 +32,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
-      return fields.some((field) =>
+      return fields.some(field =>
         (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),
       );
     },

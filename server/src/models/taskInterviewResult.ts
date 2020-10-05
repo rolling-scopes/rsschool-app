@@ -27,17 +27,17 @@ export class TaskInterviewResult {
   @Index()
   studentId: number;
 
-  @ManyToOne((_) => Student)
+  @ManyToOne(_ => Student)
   student: Student;
 
-  @ManyToOne((_) => Mentor)
+  @ManyToOne(_ => Mentor)
   mentor: Mentor;
 
   @Column()
   @Index()
   mentorId: number;
 
-  @ManyToOne((_) => CourseTask)
+  @ManyToOne(_ => CourseTask)
   courseTask: CourseTask;
 
   @Column({ type: 'json', default: [] })

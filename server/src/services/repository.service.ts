@@ -147,7 +147,7 @@ export class RepositoryService {
       const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
       await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
     }
-    await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch((response) => {
+    await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
       if (response.status !== 409 && response.status !== 500) {
         throw response;
       }
@@ -163,7 +163,7 @@ export class RepositoryService {
     const owner = config.github.org;
     const teamName = this.getTeamName(course);
     const { data: teams } = await github.teams.list({ org: owner });
-    const team = teams.find((team) => team.name === teamName);
+    const team = teams.find(team => team.name === teamName);
     if (!team) {
       await this.createTeam(github, teamName, course.id);
     }
@@ -232,7 +232,7 @@ export class RepositoryService {
     const { org } = config.github;
     const { data: teams } = await github.teams.list({ org });
     const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
-    let courseTeam = teams.find((d) => d.name === teamName);
+    let courseTeam = teams.find(d => d.name === teamName);
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
@@ -249,5 +249,5 @@ export class RepositoryService {
     return courseTeam.slug;
   }
 
-  private timeout = (num: number) => new Promise((resolve) => setTimeout(resolve, num));
+  private timeout = (num: number) => new Promise(resolve => setTimeout(resolve, num));
 }

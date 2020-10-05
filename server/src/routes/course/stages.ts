@@ -16,7 +16,7 @@ export const postCourseStages = (_: ILogger) => async (ctx: Router.RouterContext
   const courseId: number = ctx.params.courseId;
   const inputData: { name: string }[] = ctx.request.body;
   const result = await getRepository(Stage).save(
-    inputData.map((d) => ({
+    inputData.map(d => ({
       name: d.name,
       courseId,
     })),

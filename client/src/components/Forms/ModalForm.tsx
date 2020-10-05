@@ -24,7 +24,7 @@ export function ModalForm(props: Props) {
       visible={true}
       title={props.title}
       okText="Save"
-      onOk={async (e) => {
+      onOk={async e => {
         e.preventDefault();
         const values = await form.validateFields().catch(() => null);
         if (values == null) {
@@ -32,7 +32,7 @@ export function ModalForm(props: Props) {
         }
         props.submit(values);
       }}
-      onCancel={(e) => {
+      onCancel={e => {
         props.cancel(e);
         form.resetFields();
       }}

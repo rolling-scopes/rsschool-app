@@ -29,16 +29,16 @@ export function createInterviews(
   keepReserve: boolean = true,
 ) {
   // filter students who has interview already
-  const availableStudents = allStudents.filter((s) => !interviews.find((i) => i.student.githubId === s.githubId));
+  const availableStudents = allStudents.filter(s => !interviews.find(i => i.student.githubId === s.githubId));
 
   // create pairs if student already has mentor
   let distibution = allMentors
-    .filter((m) => m.students.length && !interviews.find((i) => i.interviewer.githubId === m.githubId))
-    .map((m) => m.students.map((s: any) => ({ student: { id: s.id }, mentor: { id: m.id } })))
+    .filter(m => m.students.length && !interviews.find(i => i.interviewer.githubId === m.githubId))
+    .map(m => m.students.map((s: any) => ({ student: { id: s.id }, mentor: { id: m.id } })))
     .flat();
 
   const filterFreeStudents = (students: Student[]) =>
-    students.filter((s) => !distibution.find((d) => d.student.id === s.id));
+    students.filter(s => !distibution.find(d => d.student.id === s.id));
 
   const freeStudents = filterFreeStudents(availableStudents);
 
@@ -97,8 +97,8 @@ function findStudents(
 ) {
   const mentorCapacity = sumBy(mentors, 'capacity');
   const freeStudents = allStudents
-    .filter((s) => {
-      const newStudent = !students.find((student) => student.id === s.id);
+    .filter(s => {
+      const newStudent = !students.find(student => student.id === s.id);
       return predicate(s) && newStudent;
     })
     .sort((a, b) => b.totalScore - a.totalScore)
@@ -109,7 +109,7 @@ function findStudents(
 
 function filterMentors(mentors: MentorDetails[], interviews: InterviewInfo[]): Mentor[] {
   return mentors
-    .map((m) => {
+    .map(m => {
       const studentsCount = m.students.length;
 
       let lowGrade = false;
@@ -124,16 +124,16 @@ function filterMentors(mentors: MentorDetails[], interviews: InterviewInfo[]): M
       } else {
         maxCapacity = capacity > 1 ? capacity + 2 : capacity === 1 ? capacity + 1 : 0;
       }
-      const interviewCount = interviews.filter((i) => i.interviewer.githubId === m.githubId).length;
+      const interviewCount = interviews.filter(i => i.interviewer.githubId === m.githubId).length;
       const leftCapacity = Math.max(0, maxCapacity - interviewCount);
       return { ...m, capacity: leftCapacity, lowGrade };
     })
-    .filter((m) => m.capacity > 0);
+    .filter(m => m.capacity > 0);
 }
 
 export function distributeStudentsRandomly(mentors: Mentor[], students: Student[]) {
   const pairs = [];
-  let capacity = Math.min(sum(mentors.map((m) => m.capacity)), students.length);
+  let capacity = Math.min(sum(mentors.map(m => m.capacity)), students.length);
   const shuffledStudents = shuffle(students);
 
   while (capacity > 0) {

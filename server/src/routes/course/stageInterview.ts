@@ -91,7 +91,7 @@ export const createFeedback = (_: ILogger) => async (ctx: Router.RouterContext) 
   try {
     const repository = getCustomRepository(StageInterviewRepository);
     const interviews = await repository.findByStudent(courseId, githubId);
-    const interview = interviews.find((it) => it.interviewer.githubId === user.githubId);
+    const interview = interviews.find(it => it.interviewer.githubId === user.githubId);
 
     if (interview == null) {
       throw new Error(`Stage Interview for interviewer='${user.githubId}' and student='${githubId}' is not found'`);

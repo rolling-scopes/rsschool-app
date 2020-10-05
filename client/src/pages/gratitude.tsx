@@ -71,7 +71,7 @@ function Page(props: Props) {
         </Form.Item>
         <Form.Item name="badgeId" label="Badge">
           <Select placeholder="Select a badge">
-            {badges.map((badge) => (
+            {badges.map(badge => (
               <Select.Option key={badge.id} value={badge.id}>
                 {badge.name}
               </Select.Option>

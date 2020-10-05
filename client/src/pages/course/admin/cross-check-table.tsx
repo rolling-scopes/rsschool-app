@@ -185,7 +185,7 @@ function renderTable(
           key: fields.score,
           width: 80,
           sorter: true,
-          render: (value) => <Text strong>{value}</Text>,
+          render: value => <Text strong>{value}</Text>,
         },
       ]}
     />

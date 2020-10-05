@@ -70,7 +70,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       .limit(20)
       .getRawMany();
 
-    return entities.map((entity) => ({
+    return entities.map(entity => ({
       id: entity.id,
       githubId: entity.githubId,
       name: userService.createName(entity),
@@ -162,7 +162,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       .andWhere('student.isExpelled = false AND student.isFailed = false')
       .andWhere('student.repository IS NOT NULL');
     const items = await query.getMany();
-    return items.map((m) => m.user.githubId);
+    return items.map(m => m.user.githubId);
   }
 
   public async findForExpel(

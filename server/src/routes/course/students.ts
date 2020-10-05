@@ -21,7 +21,7 @@ export const getStudentsCsv = (_: ILogger) => async (ctx: Router.RouterContext) 
   const status: string = ctx.query.status;
   const students = await courseService.getStudents(courseId, status === 'active');
   const csv = await parseAsync(
-    students.map((student) => ({
+    students.map(student => ({
       id: student.id,
       githubId: student.githubId,
       name: student.name,

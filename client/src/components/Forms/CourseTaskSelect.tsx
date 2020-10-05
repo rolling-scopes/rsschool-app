@@ -10,7 +10,7 @@ export function CourseTaskSelect(props: Props) {
   return (
     <Form.Item {...rest} name="courseTaskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
       <Select placeholder="Select task" {...selectProps}>
-        {data.map((task) => (
+        {data.map(task => (
           <Select.Option key={task.id} value={task.id}>
             {task.name}
           </Select.Option>

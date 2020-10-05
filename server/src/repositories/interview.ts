@@ -44,7 +44,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
       .andWhere('student.isExpelled = false')
       .getMany();
 
-    return records.map((record) => ({
+    return records.map(record => ({
       id: record.student.id,
       name: userService.createName(record.student.user),
       githubId: record.student.user.githubId,
@@ -92,13 +92,13 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
 
     const taskResults = await getRepository(TaskInterviewResult)
       .createQueryBuilder('tir')
-      .where('tir.courseTaskId IN (:...ids)', { ids: interviews.map((i) => i.courseTaskId) })
+      .where('tir.courseTaskId IN (:...ids)', { ids: interviews.map(i => i.courseTaskId) })
       .getMany();
 
-    const students = interviews.map((record) => {
+    const students = interviews.map(record => {
       const { courseTask } = record;
       const taskResult = taskResults.find(
-        (taskResult) => taskResult.courseTaskId === record.courseTaskId && record.student.id === taskResult.studentId,
+        taskResult => taskResult.courseTaskId === record.courseTaskId && record.student.id === taskResult.studentId,
       );
       return {
         id: courseTask.id,

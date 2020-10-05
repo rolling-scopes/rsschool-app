@@ -35,7 +35,7 @@ export function Page(props: CoursePageProps) {
         courseService.getCourseScore(students.pagination, { activeOnly }, students.orderBy),
         courseService.getCourseTasks(),
       ]);
-      const sortedTasks = courseTasks.filter((task) => !!task.studentEndDate || props.course.completed);
+      const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
       setLoaded(true);
@@ -153,7 +153,7 @@ function renderTable(
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={pagination}
       rowKey="githubId"
-      rowClassName={(record) => (!record.isActive ? 'rs-table-row-disabled' : '')}
+      rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
       dataSource={students}
       onChange={handleChange as any}
       columns={[
@@ -203,7 +203,7 @@ function renderTable(
           dataIndex: 'totalScore',
           width: 80,
           sorter: 'totalScore',
-          render: (value) => <Text strong>{value}</Text>,
+          render: value => <Text strong>{value}</Text>,
         },
         ...columns,
         {
@@ -234,7 +234,7 @@ function renderTable(
 }
 
 function getColumns(courseTasks: CourseTask[]) {
-  const columns = courseTasks.map((courseTask) => ({
+  const columns = courseTasks.map(courseTask => ({
     dataIndex: courseTask.id.toString(),
     title: () => {
       const icon = (
@@ -266,7 +266,7 @@ function getColumns(courseTasks: CourseTask[]) {
     width: 100,
     className: 'align-right',
     render: (_: any, d: StudentScore) => {
-      const currentTask = d.taskResults.find((taskResult) => taskResult.courseTaskId === courseTask.id);
+      const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
       return currentTask ? <div>{currentTask.score}</div> : 0;
     },
   }));

@@ -93,7 +93,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
         </Form.Item>
         <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300 }}>
           <Select>
-            {courses.map((task) => (
+            {courses.map(task => (
               <Select.Option key={task.id} value={task.id}>
                 {task.name}
               </Select.Option>
@@ -108,7 +108,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
         </Button>
       </Form>
       <Row gutter={24}>
-        {heroesData.map((e) => (
+        {heroesData.map(e => (
           <Col xs={24} sm={12} md={8} lg={4}>
             <Card
               hoverable

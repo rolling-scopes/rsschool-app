@@ -22,7 +22,7 @@ export function authRoute() {
     ctx.redirect('/');
   });
 
-  router.get('/github/callback', passport.authenticate('github', { failureFlash: true }), (ctx) => {
+  router.get('/github/callback', passport.authenticate('github', { failureFlash: true }), ctx => {
     if (ctx.isAuthenticated() || config.isDevMode) {
       (ctx.logger as ILogger).info('Successfully authenticated');
       const state = ctx.query?.state;

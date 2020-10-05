@@ -22,7 +22,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const data = await courseService.getCourseTasks();
-    const courseTasks = data.filter((t) => t.checker === 'crossCheck');
+    const courseTasks = data.filter(t => t.checker === 'crossCheck');
     setCourseTasks(courseTasks);
   }, [props.course.id]);
 
@@ -42,7 +42,7 @@ function Page(props: CoursePageProps) {
   const handleTaskChange = async (value: number) => {
     setFeedback(null);
     const courseTaskId = Number(value);
-    const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+    const courseTask = courseTasks.find(t => t.id === courseTaskId);
     if (courseTask == null) {
       return;
     }
@@ -56,7 +56,7 @@ function Page(props: CoursePageProps) {
   };
 
   const comments = feedback?.comments ?? [];
-  const task = courseTasks.find((task) => task.id === courseTaskId);
+  const task = courseTasks.find(task => task.id === courseTaskId);
   const studentEndDate = task?.studentEndDate ?? 0;
   const isSubmitDisabled = studentEndDate ? new Date(studentEndDate).getTime() < Date.now() : false;
   const submitAllowed = !isSubmitDisabled && task;

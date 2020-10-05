@@ -18,7 +18,7 @@ function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const data = await courseService.getCourseTasks();
-    const courseTasks = data.filter((task) => task.checker === 'jury');
+    const courseTasks = data.filter(task => task.checker === 'jury');
     setCourseTasks(courseTasks);
   }, []);
 
@@ -41,7 +41,7 @@ function Page(props: CoursePageProps) {
     }
   };
 
-  const courseTask = courseTasks.find((t) => t.id === courseTaskId);
+  const courseTask = courseTasks.find(t => t.id === courseTaskId);
   return (
     <PageLayoutSimple
       loading={loading}

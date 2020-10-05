@@ -43,7 +43,7 @@ export function ExpelCriteria(props: Props) {
             }
             setApplyEnabled(!!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0));
           }}
-          onFinish={(values) => {
+          onFinish={values => {
             const { minScore, keepWithMentor, courseTaskIds } = values;
             props.onApply({ courseTaskIds, minScore }, { keepWithMentor }, values.reason);
           }}
@@ -58,7 +58,7 @@ export function ExpelCriteria(props: Props) {
 
           <Form.Item name="courseTaskIds" label="Tasks">
             <Select mode="multiple">
-              {courseTasks.map((task) => (
+              {courseTasks.map(task => (
                 <Select.Option key={task.id} value={task.id}>
                   {task.name}
                 </Select.Option>

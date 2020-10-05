@@ -60,14 +60,14 @@ function Page(props: CoursePageProps) {
             dataIndex: 'isGoodCandidate',
             width: 180,
             sorter: boolSorter('isGoodCandidate'),
-            render: (value) => (value ? boolIconRenderer(value) : null),
+            render: value => (value ? boolIconRenderer(value) : null),
           },
           {
             title: 'Interview Rating',
             dataIndex: 'rating',
             sorter: numberSorter('rating'),
             width: 210,
-            render: (value) => (value != null ? <Rating rating={value} /> : null),
+            render: value => (value != null ? <Rating rating={value} /> : null),
           },
           {
             title: 'City',

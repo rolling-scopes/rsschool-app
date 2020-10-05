@@ -147,8 +147,8 @@ export class ProfilePage extends React.Component<Props, State> {
         case 'consent': {
           const { id, checked } = event;
           const consents = profile?.consents ?? [];
-          const [existingConsent] = consents.filter((consent) => consent.channelType === id);
-          const otherConsents = consents.filter((consent) => consent.channelType !== id);
+          const [existingConsent] = consents.filter(consent => consent.channelType === id);
+          const otherConsents = consents.filter(consent => consent.channelType !== id);
           const newConsents = [...otherConsents];
           if (existingConsent) {
             const newConsent = cloneDeep(existingConsent);
@@ -166,7 +166,7 @@ export class ProfilePage extends React.Component<Props, State> {
           const initialConsents = initialProfileSettings?.consents;
           const getconsentParamsString = ({ optIn, channelType }: Consent) => `${optIn}${channelType}`;
           const consentParamsStrings = new Set(initialConsents!.map(getconsentParamsString));
-          isInitialProfileSettingsChanged = !newConsents.every((consent) =>
+          isInitialProfileSettingsChanged = !newConsents.every(consent =>
             consentParamsStrings.has(getconsentParamsString(consent)),
           );
           break;

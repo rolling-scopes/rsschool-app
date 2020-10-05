@@ -18,10 +18,9 @@ export function createCrossCheckPairs(students: number[], minPairsPerPerson = 3,
     if (randomStudents.length > 0) {
       const randomStudentId = randomStudents.shift();
       const isInvalidPair =
-        randomStudentId === checkerId ||
-        pairs.find((p) => p.studentId === randomStudentId && p.checkerId === checkerId);
+        randomStudentId === checkerId || pairs.find(p => p.studentId === randomStudentId && p.checkerId === checkerId);
       if (isInvalidPair) {
-        if (randomStudents.length > 0 && randomStudents.some((s) => s !== checkerId)) {
+        if (randomStudents.length > 0 && randomStudents.some(s => s !== checkerId)) {
           randomStudents.push(randomStudentId!);
           return createPair(pairs, checkerId);
         }
