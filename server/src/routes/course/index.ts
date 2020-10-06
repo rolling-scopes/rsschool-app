@@ -252,7 +252,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/students/score', courseGuard, getScore(logger));
   router.get('/students/score/csv', courseSupervisorGuard, getScoreAsCsv(logger));
 
-  router.get('/students/search/:searchText', courseGuard, searchStudent(logger));
+  router.get('/students/search/:searchText', guard, searchStudent(logger));
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
