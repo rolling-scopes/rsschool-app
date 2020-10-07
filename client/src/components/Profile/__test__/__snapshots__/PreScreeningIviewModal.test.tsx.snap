@@ -34,7 +34,6 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
   >
     Good candidate: 
     <Tag
-      closable={false}
       color="green"
     >
       Yes
@@ -94,7 +93,6 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
     Has the student solved the task(s)?
      
     <Tag
-      closable={false}
       color="green"
     >
       Yes
