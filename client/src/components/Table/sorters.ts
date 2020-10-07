@@ -11,14 +11,7 @@ export function stringSorter<T>(field: keyof T) {
     if (b == null) {
       return 1;
     }
-    return get(a, field, '')
-      .toString()
-      .toLowerCase()
-      .localeCompare(
-        get(b, field, '')
-          .toString()
-          .toLowerCase(),
-      );
+    return get(a, field, '').toString().toLowerCase().localeCompare(get(b, field, '').toString().toLowerCase());
   };
 }
 

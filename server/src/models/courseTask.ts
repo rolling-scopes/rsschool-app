@@ -25,35 +25,20 @@ export class CourseTask {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(
-    _ => Task,
-    (task: Task) => task.courseTasks,
-  )
+  @ManyToOne(_ => Task, (task: Task) => task.courseTasks)
   task: Task;
 
   @Column()
   @Index()
   taskId: number;
 
-  @OneToMany(
-    _ => TaskChecker,
-    (checker: TaskChecker) => checker.courseTaskId,
-    { nullable: true },
-  )
+  @OneToMany(_ => TaskChecker, (checker: TaskChecker) => checker.courseTaskId, { nullable: true })
   taskCheckers: TaskChecker[] | null;
 
-  @OneToMany(
-    _ => TaskResult,
-    (taskResult: TaskResult) => taskResult.courseTask,
-    { nullable: true },
-  )
+  @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;
 
-  @ManyToOne(
-    _ => Stage,
-    (stage: Stage) => stage.courseTasks,
-    { nullable: true },
-  )
+  @ManyToOne(_ => Stage, (stage: Stage) => stage.courseTasks, { nullable: true })
   stage: Stage | number;
 
   @Column({ nullable: true })
