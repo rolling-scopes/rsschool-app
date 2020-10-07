@@ -144,8 +144,11 @@ export class RepositoryService {
     }
     const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
     if (ghPagesRef === null) {
-      const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
-      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
+      const mainRef = await github.git
+        .getRef({ owner, repo, ref: 'heads/main' })
+        // for backward compatibility
+        .catch(() => github.git.getRef({ owner, repo, ref: 'heads/master' }));
+      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: mainRef.data.object.sha });
     }
     await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
       if (response.status !== 409 && response.status !== 500) {

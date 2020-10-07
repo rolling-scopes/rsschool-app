@@ -14,8 +14,8 @@
   "dependencies": {
     "@koa/cors": "~3.0.0",
     "@koa/router": "~8.0.8",
-    "@octokit/app": "4.2.0",
-    "@octokit/rest": "18.0.0",
+    "@octokit/app": "4.2.1",
+    "@octokit/rest": "18.0.6",
     "aws-sdk": "^2.654.0",
     "axios": "^0.19.0",
     "http-status-codes": "~1.4.0",
