@@ -16,6 +16,7 @@ import {
   getRelationsRoles,
   getStudentCourses,
   getPermissions,
+  getMentorRegistryCourses,
   defineRole,
   RelationRole,
   Permissions,
@@ -43,8 +44,10 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     permissionsSettings = getProfilePermissionsSettings(profilePermissions);
   } else {
     const relationsRoles = await getRelationsRoles(userGithubId, requestedGithubId);
-    const studentCourses = !relationsRoles ? await getStudentCourses(requestedGithubId) : null;
-    role = defineRole({ relationsRoles, studentCourses, roles, coursesRoles, userGithubId });
+    const [studentCourses, registryCourses] = !relationsRoles
+      ? await Promise.all([getStudentCourses(requestedGithubId), getMentorRegistryCourses(requestedGithubId)])
+      : [null, null];
+    role = defineRole({ relationsRoles, studentCourses, registryCourses, roles, coursesRoles, userGithubId });
     permissions = getPermissions({ isAdmin, isProfileOwner, role, permissions: profilePermissions });
   }
 
