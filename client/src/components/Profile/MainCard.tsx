@@ -123,7 +123,7 @@ class MainCard extends React.Component<Props, State> {
                     </p>
                     <div style={{ marginBottom: 5 }}>
                       <LocationSelect
-                        onChange={(location: Location) => {
+                        onChange={(location) => {
                           onProfileSettingsChange(location, 'generalInfo.location');
                         }}
                         location={location}
