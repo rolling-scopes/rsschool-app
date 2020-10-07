@@ -23,7 +23,7 @@ function Page(props: Props) {
   const loadUsers = async (searchText: string) => userService.searchUser(searchText);
 
   const handleSubmit = useCallback(async (values: { userId: number; comment: string }) => {
-    if (!activeCourseId) return
+    if (!activeCourseId) return;
     try {
       setLoading(true);
       const data = { toUserId: values.userId, comment: values.comment };
