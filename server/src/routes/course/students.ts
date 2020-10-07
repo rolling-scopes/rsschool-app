@@ -48,7 +48,7 @@ export const searchStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
   const { courseId, searchText } = ctx.params;
 
   const repository = getCustomRepository(StudentRepository);
-  const result = await repository.search(courseId, searchText);
+  const result = await repository.search(Number(courseId), searchText);
 
   setResponse(ctx, OK, result);
 };
