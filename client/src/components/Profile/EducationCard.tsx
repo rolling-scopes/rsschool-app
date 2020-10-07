@@ -68,9 +68,7 @@ class EducationCard extends React.Component<Props> {
                 </List.Item>
               )}
             />
-          ) : (
-            undefined
-          )
+          ) : undefined
         }
         noDataDescrption="Education history isn't filled in"
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}

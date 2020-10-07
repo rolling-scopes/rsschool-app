@@ -25,6 +25,6 @@ const publicRoutes = [
   },
 ];
 
-export const Help = function() {
+export const Help = function () {
   return <Menu title="Help" data={publicRoutes} />;
 };

@@ -153,39 +153,19 @@ export class User {
   })
   externalAccounts: ExternalAccount[] = [];
 
-  @OneToMany(
-    _ => Mentor,
-    (mentor: Mentor) => mentor.user,
-    { nullable: true },
-  )
+  @OneToMany(_ => Mentor, (mentor: Mentor) => mentor.user, { nullable: true })
   mentors: Mentor[] | null;
 
-  @OneToMany(
-    _ => Student,
-    (student: Student) => student.user,
-    { nullable: true },
-  )
+  @OneToMany(_ => Student, (student: Student) => student.user, { nullable: true })
   students: Student[] | null;
 
-  @OneToMany(
-    _ => Feedback,
-    (feedback: Feedback) => feedback.fromUser,
-    { nullable: true },
-  )
+  @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.fromUser, { nullable: true })
   givenFeedback: Feedback[] | null;
 
-  @OneToMany(
-    _ => Feedback,
-    (feedback: Feedback) => feedback.toUser,
-    { nullable: true },
-  )
+  @OneToMany(_ => Feedback, (feedback: Feedback) => feedback.toUser, { nullable: true })
   receivedFeedback: Feedback[] | null;
 
-  @OneToMany(
-    _ => Registry,
-    (registry: Registry) => registry.course,
-    { nullable: true },
-  )
+  @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
   registries: Registry[] | null;
 
   @Column({ nullable: true })
@@ -197,18 +177,11 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(
-    () => ProfilePermissions,
-    profilePermissions => profilePermissions.user,
-  )
+  @OneToOne(() => ProfilePermissions, profilePermissions => profilePermissions.user)
   @JoinColumn()
   profilePermissions: ProfilePermissions | null;
 
-  @OneToMany(
-    _ => CourseManager,
-    (courseManager: CourseManager) => courseManager.user,
-    { nullable: true },
-  )
+  @OneToMany(_ => CourseManager, (courseManager: CourseManager) => courseManager.user, { nullable: true })
   courseManagers: CourseManager[] | null;
 
   @BeforeInsert()

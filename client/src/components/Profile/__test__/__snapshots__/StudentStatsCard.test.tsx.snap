@@ -171,7 +171,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
       visible={false}
       width="80%"
     >
-      <Component
+      <_default
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -197,13 +197,12 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </Component>
+      </_default>
     </Modal>
   </StudentStatsModal>
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -306,10 +305,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(BookOutlined) />}
@@ -358,7 +354,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -368,29 +364,26 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -399,97 +392,86 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(BookOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(BookOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "book",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="book"
-                                  className="anticon anticon-book"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
                                         },
-                                        "name": "book",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "book",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="book"
+                                className="anticon anticon-book"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "book",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="book"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-book"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="book"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-book"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                                        key="svg-book-svg-0"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(BookOutlined)>
-                             
-                            Student Statistics
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                      key="svg-book-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(BookOutlined)>
+                           
+                          Student Statistics
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -499,7 +481,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -602,10 +583,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -626,7 +604,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -660,53 +637,44 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              rs-2018-q1
-                                               / Minsk
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            rs-2018-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <div
@@ -866,52 +834,43 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              32
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -926,52 +885,43 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 mark={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   mark={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    mark={true}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <mark>
-                                              1201
-                                            </mark>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <mark>
+                                            1201
+                                          </mark>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                           </div>
@@ -994,7 +944,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                   loading={false}
                                   prefixCls="ant-btn"
                                 >
-                                  <ForwardRef
+                                  <CSSMotion
                                     motionName="ant-btn-loading-icon-motion"
                                     onAppearActive={[Function]}
                                     onAppearStart={[Function]}
@@ -1005,22 +955,8 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                     removeOnLeave={true}
                                     visible={false}
                                   >
-                                    <CSSMotion
-                                      internalRef={null}
-                                      motionAppear={true}
-                                      motionEnter={true}
-                                      motionLeave={true}
-                                      motionName="ant-btn-loading-icon-motion"
-                                      onAppearActive={[Function]}
-                                      onAppearStart={[Function]}
-                                      onEnterActive={[Function]}
-                                      onEnterStart={[Function]}
-                                      onLeaveActive={[Function]}
-                                      onLeaveStart={[Function]}
-                                      removeOnLeave={true}
-                                      visible={false}
-                                    />
-                                  </ForwardRef>
+                                    <DomWrapper />
+                                  </CSSMotion>
                                 </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
@@ -1103,7 +1039,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="list-item-1/.1"
                         style={
                           Object {
                             "display": "flex",
@@ -1137,53 +1072,44 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              rs-2019-q1
-                                               / Minsk
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            rs-2019-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <div
@@ -1343,52 +1269,43 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              32
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -1403,52 +1320,43 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               <Text
                                 mark={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   mark={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    mark={true}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <mark>
-                                              101
-                                            </mark>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <mark>
+                                            101
+                                          </mark>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                           </div>
@@ -1471,7 +1379,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                   loading={false}
                                   prefixCls="ant-btn"
                                 >
-                                  <ForwardRef
+                                  <CSSMotion
                                     motionName="ant-btn-loading-icon-motion"
                                     onAppearActive={[Function]}
                                     onAppearStart={[Function]}
@@ -1482,22 +1390,8 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                     removeOnLeave={true}
                                     visible={false}
                                   >
-                                    <CSSMotion
-                                      internalRef={null}
-                                      motionAppear={true}
-                                      motionEnter={true}
-                                      motionLeave={true}
-                                      motionName="ant-btn-loading-icon-motion"
-                                      onAppearActive={[Function]}
-                                      onAppearStart={[Function]}
-                                      onEnterActive={[Function]}
-                                      onEnterStart={[Function]}
-                                      onLeaveActive={[Function]}
-                                      onLeaveStart={[Function]}
-                                      removeOnLeave={true}
-                                      visible={false}
-                                    />
-                                  </ForwardRef>
+                                    <DomWrapper />
+                                  </CSSMotion>
                                 </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
@@ -1763,7 +1657,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
       visible={false}
       width="80%"
     >
-      <Component
+      <_default
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -1789,13 +1683,12 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </Component>
+      </_default>
     </Modal>
   </StudentStatsModal>
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -1898,10 +1791,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(BookOutlined) />}
@@ -1951,7 +1841,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -1961,29 +1851,26 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -1992,97 +1879,86 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(BookOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(BookOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "book",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="book"
-                                  className="anticon anticon-book"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
                                         },
-                                        "name": "book",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "book",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="book"
+                                className="anticon anticon-book"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "book",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="book"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-book"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="book"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-book"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                                        key="svg-book-svg-0"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(BookOutlined)>
-                             
-                            Student Statistics
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                      key="svg-book-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(BookOutlined)>
+                           
+                          Student Statistics
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -2092,7 +1968,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -2195,10 +2070,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -2219,7 +2091,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -2253,53 +2124,44 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              rs-2018-q1
-                                               / Minsk
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            rs-2018-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <div
@@ -2459,52 +2321,43 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              32
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -2519,52 +2372,43 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 mark={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   mark={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    mark={true}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <mark>
-                                              1201
-                                            </mark>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <mark>
+                                            1201
+                                          </mark>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                           </div>
@@ -2587,7 +2431,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                   loading={false}
                                   prefixCls="ant-btn"
                                 >
-                                  <ForwardRef
+                                  <CSSMotion
                                     motionName="ant-btn-loading-icon-motion"
                                     onAppearActive={[Function]}
                                     onAppearStart={[Function]}
@@ -2598,22 +2442,8 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                     removeOnLeave={true}
                                     visible={false}
                                   >
-                                    <CSSMotion
-                                      internalRef={null}
-                                      motionAppear={true}
-                                      motionEnter={true}
-                                      motionLeave={true}
-                                      motionName="ant-btn-loading-icon-motion"
-                                      onAppearActive={[Function]}
-                                      onAppearStart={[Function]}
-                                      onEnterActive={[Function]}
-                                      onEnterStart={[Function]}
-                                      onLeaveActive={[Function]}
-                                      onLeaveStart={[Function]}
-                                      removeOnLeave={true}
-                                      visible={false}
-                                    />
-                                  </ForwardRef>
+                                    <DomWrapper />
+                                  </CSSMotion>
                                 </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
@@ -2696,7 +2526,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                         </li>
                       </Item>
                       <Item
-                        key="list-item-1/.1"
                         style={
                           Object {
                             "display": "flex",
@@ -2730,53 +2559,44 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              rs-2019-q1
-                                               / Minsk
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            rs-2019-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <div
@@ -2936,52 +2756,43 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              32
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -2996,52 +2807,43 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               <Text
                                 mark={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   mark={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    mark={true}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <mark>
-                                              101
-                                            </mark>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <mark>
+                                            101
+                                          </mark>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                           </div>
@@ -3064,7 +2866,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                   loading={false}
                                   prefixCls="ant-btn"
                                 >
-                                  <ForwardRef
+                                  <CSSMotion
                                     motionName="ant-btn-loading-icon-motion"
                                     onAppearActive={[Function]}
                                     onAppearStart={[Function]}
@@ -3075,22 +2877,8 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                     removeOnLeave={true}
                                     visible={false}
                                   >
-                                    <CSSMotion
-                                      internalRef={null}
-                                      motionAppear={true}
-                                      motionEnter={true}
-                                      motionLeave={true}
-                                      motionName="ant-btn-loading-icon-motion"
-                                      onAppearActive={[Function]}
-                                      onAppearStart={[Function]}
-                                      onEnterActive={[Function]}
-                                      onEnterStart={[Function]}
-                                      onLeaveActive={[Function]}
-                                      onLeaveStart={[Function]}
-                                      removeOnLeave={true}
-                                      visible={false}
-                                    />
-                                  </ForwardRef>
+                                    <DomWrapper />
+                                  </CSSMotion>
                                 </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
@@ -3211,6 +2999,11 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
+                push={
+                  Object {
+                    "distance": 180,
+                  }
+                }
                 renderEmpty={[Function]}
                 style={
                   Object {
@@ -3418,13 +3211,9 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 className="ant-drawer-body"
                               >
                                 <List
-                                  bordered={false}
                                   dataSource={Array []}
                                   itemLayout="horizontal"
-                                  loading={false}
-                                  pagination={false}
                                   renderItem={[Function]}
-                                  split={true}
                                 >
                                   <div
                                     className="ant-list ant-list-split"

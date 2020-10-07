@@ -14,19 +14,13 @@ export class CourseEvent {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(
-    _ => Event,
-    (lecture: Event) => lecture.courseEvents,
-  )
+  @ManyToOne(_ => Event, (lecture: Event) => lecture.courseEvents)
   event: Event;
 
   @Column()
   eventId: number;
 
-  @ManyToOne(
-    _ => Course,
-    (course: Course) => course.stages,
-  )
+  @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
 
   @Column()

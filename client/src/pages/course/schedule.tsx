@@ -180,18 +180,10 @@ export function SchedulePage(props: CoursePageProps) {
 }
 
 const dateRenderer = (timeZone: string) => (value: string) =>
-  value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('YYYY-MM-DD')
-    : '';
+  value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('YYYY-MM-DD') : '';
 
 const timeRenderer = (timeZone: string) => (value: string) =>
-  value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('HH:mm')
-    : '';
+  value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 
 const tasksToEvents = (tasks: CourseTaskDetails[]) => {
   return tasks.reduce((acc: Array<CourseEvent>, task: CourseTaskDetails) => {

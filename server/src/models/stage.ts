@@ -28,20 +28,13 @@ export class Stage {
   @Column({ default: 'OPEN' })
   status: STAGE_STATUS;
 
-  @ManyToOne(
-    _ => Course,
-    (course: Course) => course.stages,
-  )
+  @ManyToOne(_ => Course, (course: Course) => course.stages)
   course: Course;
 
   @Column()
   courseId: number;
 
-  @OneToMany(
-    _ => CourseTask,
-    (courseTask: CourseTask) => courseTask.stage,
-    { nullable: true },
-  )
+  @OneToMany(_ => CourseTask, (courseTask: CourseTask) => courseTask.stage, { nullable: true })
   courseTasks: CourseTask[] | null;
 
   @Column({ type: 'timestamptz', nullable: true })

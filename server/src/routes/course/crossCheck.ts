@@ -6,6 +6,8 @@ import { IUserSession, TaskSolution, TaskSolutionChecker, TaskSolutionResult } f
 import { createCrossCheckPairs } from '../../rules/distribution';
 import { courseService, taskResultsService, taskService, notificationService } from '../../services';
 import { setErrorResponse, setResponse } from '../utils';
+import omit from 'lodash/omit';
+import { getCrossCheckData } from '../../services/taskResults.service';
 
 type Input = { url: string };
 const defaultPairsCount = 4;
@@ -250,4 +252,30 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
     comments: feedback.comments,
   };
   setResponse(ctx, OK, response);
+};
+
+export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId } = ctx.params;
+  const orderBy = ctx.query.orderBy ?? 'task';
+  const orderDirection = ctx.query.orderDirection?.toUpperCase() ?? 'ASC';
+  const pagination = {
+    current: ctx.state.pageable.current,
+    pageSize: ctx.state.pageable.pageSize,
+  };
+  const filter = {
+    ...omit(ctx.query, ['current', 'pageSize', 'orderBy', 'orderDirection']),
+  };
+
+  const { content, pagination: paginationResult } = await getCrossCheckData(
+    filter,
+    pagination,
+    orderBy,
+    orderDirection,
+    courseId,
+  );
+
+  setResponse(ctx, OK, {
+    pagination: paginationResult,
+    content,
+  });
 };

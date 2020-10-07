@@ -33,11 +33,7 @@ class CommonCard extends React.Component<Props, State> {
             {icon} {title}
           </Title>
         }
-        actions={
-          isMoreContent
-            ? [<FullscreenOutlined key="main-card-actions-more" onClick={e => console.log(e)} />].filter(Boolean)
-            : []
-        }
+        actions={isMoreContent ? [<FullscreenOutlined key="main-card-actions-more" />].filter(Boolean) : []}
       >
         {content ? content : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={noDataDescription} />}
       </Card>

@@ -46,7 +46,6 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
           </p>
         </div>
         <List
-          bordered={false}
           dataSource={
             Array [
               Object {
@@ -76,10 +75,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
             ]
           }
           itemLayout="horizontal"
-          loading={false}
-          pagination={false}
           renderItem={[Function]}
-          split={true}
         />
       </React.Fragment>
     }
@@ -137,7 +133,6 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
           </p>
         </div>
         <List
-          bordered={false}
           dataSource={
             Array [
               Object {
@@ -167,10 +162,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
             ]
           }
           itemLayout="horizontal"
-          loading={false}
-          pagination={false}
           renderItem={[Function]}
-          split={true}
         />
       </React.Fragment>
     }
