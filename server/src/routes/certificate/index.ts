@@ -16,7 +16,7 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 export function certificateRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/certificate' });
+  const router = new Router<any, any>({ prefix: '/certificate' });
 
   router.get('/:id', async (ctx: Router.RouterContext) => {
     try {

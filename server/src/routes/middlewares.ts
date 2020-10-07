@@ -65,13 +65,3 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
   user.coursesRoles = courseRoles;
   await next();
 };
-
-export const userCheckMiddleware = async (ctx: Router.RouterContext, next: Next) => {
-  const user = ctx.state?.user as IUserSession;
-  if (user == null) {
-    ctx.status = 401;
-    ctx.body = JSON.stringify({ message: 'There is no user' });
-    return;
-  }
-  await next();
-};

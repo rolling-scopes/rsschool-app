@@ -7,7 +7,7 @@ import { config } from '../../config';
 import { devAuthMiddleware } from './devAuthMiddleware';
 
 export function authRoute() {
-  const router = new Router({ prefix: '/auth' });
+  const router = new Router<any, any>({ prefix: '/auth' });
 
   router.get(
     '/github',

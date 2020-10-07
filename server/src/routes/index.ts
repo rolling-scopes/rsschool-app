@@ -39,7 +39,7 @@ function applyRouter(topRouter: Router, router: Router) {
 }
 
 export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
-  const router = new Router();
+  const router = new Router<any, any>();
 
   router.use(errorHandlerMiddleware(logger));
   router.use(userRolesMiddleware, courseMiddleware);
@@ -47,8 +47,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   // public routes
   applyRouter(router, certificateRoute(logger));
   applyRouter(router, authRoute());
-
-  // router.use(userCheckMiddleware);
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));

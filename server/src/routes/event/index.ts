@@ -17,7 +17,7 @@ const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
 };
 
 export function lectureRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/event' });
+  const router = new Router<any, any>({ prefix: '/event' });
 
   router.get('/:id', anyCourseManagerGuard, validateTaskId, createGetRoute(Event, logger));
   router.post('/', anyCourseManagerGuard, createPostRoute(Event, logger));

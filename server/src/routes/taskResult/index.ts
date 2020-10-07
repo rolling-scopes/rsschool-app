@@ -8,7 +8,7 @@ import { setResponse } from '../utils';
 import { taskResultsService } from '../../services';
 
 export function taskResultRoute(logger: ILogger) {
-  const router = new Router({ prefix: '/taskResult' });
+  const router = new Router<any, any>({ prefix: '/taskResult' });
 
   router.post('/', adminGuard, createPostTaskResult(logger));
 
