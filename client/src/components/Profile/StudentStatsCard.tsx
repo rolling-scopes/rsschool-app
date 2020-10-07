@@ -10,7 +10,7 @@ import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CourseService } from '../../services/course';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { WarningTwoTone } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -68,7 +68,7 @@ class StudentStatsCard extends React.Component<Props, State> {
 
     const title = (
       <Typography.Title level={3}>
-        <ExclamationCircleOutlined /> <Text strong>Are you sure?</Text>
+        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
       </Typography.Title>
     );
 
