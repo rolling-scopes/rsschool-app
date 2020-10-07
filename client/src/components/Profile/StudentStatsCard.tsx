@@ -11,8 +11,9 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CourseService } from '../../services/course';
 import { WarningTwoTone } from '@ant-design/icons';
+import { CSSProperties } from 'react'
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 type Props = {
   data: StudentStats[];
@@ -67,8 +68,8 @@ class StudentStatsCard extends React.Component<Props, State> {
     for (let i = 0; i < keyLength; i++) key += random(0, 9);
 
     const title = (
-      <Typography.Title level={3}>
-        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
+      <Typography.Title level={3} style={{textAlign: 'center'}}>
+        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text><WarningTwoTone twoToneColor="#fcbe03" />
       </Typography.Title>
     );
 
@@ -84,13 +85,19 @@ class StudentStatsCard extends React.Component<Props, State> {
       }
     };
 
-    const message = 'Are you sure you want to expel yourself from course?';
+    const message = 'Are you sure you want to leave the course? Your learning will be finished.';
+    const messageRu = 'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено.';
+
+    const textStyle = {textAlign: 'center', backgroundColor: '#ff0000', borderRadius: '10px'};
 
     const content = (
       <>
-        <Text underline strong>
+        <Paragraph style={textStyle as CSSProperties} underline strong>
           {message}
-        </Text>
+        </Paragraph>
+        <Paragraph style={textStyle as CSSProperties} underline strong>
+          {messageRu}
+        </Paragraph>
         <Divider plain style={{ whiteSpace: 'normal' }}>
           Enter following number to confirm action: <Text strong>{key}</Text>
         </Divider>
