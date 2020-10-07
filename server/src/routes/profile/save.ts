@@ -23,6 +23,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
     permissionsSettings,
     contacts,
     consents,
+    discord,
     generalInfo,
   } = profileInfo;
 
@@ -51,6 +52,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
         countryName,
         cityName,
         educationHistory,
+        discord,
         englishLevel: englishLevel || 'a0',
         aboutMyself: aboutMyself || '',
         contactsTelegram: telegram || '',
