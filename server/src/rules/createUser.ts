@@ -41,6 +41,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       givenFeedback: [],
       receivedFeedback: [],
       registries: [],
+      discord: null,
       activist: false,
       lastActivityTime: Date.now(),
       isActive: true,

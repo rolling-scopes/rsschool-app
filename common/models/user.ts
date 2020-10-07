@@ -1,5 +1,3 @@
-import { Discord } from './profile';
-
 export interface UserBasic {
   id: number;
   githubId: string;
