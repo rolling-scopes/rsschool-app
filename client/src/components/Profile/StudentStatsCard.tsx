@@ -89,7 +89,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     const message = 'Are you sure you want to leave the course? Your learning will be finished.';
     const messageRu = 'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено.';
 
-    const textStyle: CSSProperties = { textAlign: 'center', backgroundColor: '#ff0000', borderRadius: '10px' };
+    const textStyle: CSSProperties = { textAlign: 'center' };
 
     const content = (
       <>
@@ -107,6 +107,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     );
 
     const modal = Modal.confirm({
+      maskStyle: { backgroundColor: 'red' },
       title: title,
       content: content,
       centered: true,
