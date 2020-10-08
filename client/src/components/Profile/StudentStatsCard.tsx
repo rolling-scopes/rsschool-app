@@ -89,14 +89,14 @@ class StudentStatsCard extends React.Component<Props, State> {
     const message = 'Are you sure you want to leave the course? Your learning will be finished.';
     const messageRu = 'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено.';
 
-    const textStyle = { textAlign: 'center', backgroundColor: '#ff0000', borderRadius: '10px' };
+    const textStyle: CSSProperties = { textAlign: 'center', backgroundColor: '#ff0000', borderRadius: '10px' };
 
     const content = (
       <>
-        <Paragraph style={textStyle as CSSProperties} underline strong>
+        <Paragraph style={textStyle} underline strong>
           {message}
         </Paragraph>
-        <Paragraph style={textStyle as CSSProperties} underline strong>
+        <Paragraph style={textStyle} underline strong>
           {messageRu}
         </Paragraph>
         <Divider plain style={{ whiteSpace: 'normal' }}>
