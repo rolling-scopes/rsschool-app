@@ -1,15 +1,31 @@
 import Router from '@koa/router';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import axios from 'axios';
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { Student } from '../../models';
 import { setResponse } from '../utils';
 import { config } from '../../config';
+import { StudentRepository } from '../../repositories/student';
 
 export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId = ctx.params.courseId;
-  const inputIds = ctx.request.body as number[];
+  const courseId: number = ctx.params.courseId;
+  const data: {
+    criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore: number };
+  } = ctx.request.body;
+
+  if (data == null) {
+    setResponse(ctx, BAD_REQUEST);
+    return;
+  }
+
+  const studentRepository = getCustomRepository(StudentRepository);
+  const studentIds = await studentRepository.findByCriteria(courseId, {
+    courseTaskIds: data.criteria.courseTaskIds ?? [],
+    minScore: data.criteria.minScore != null ? Number(data.criteria.minScore) : null,
+    minTotalScore: data.criteria.minTotalScore != null ? Number(data.criteria.minTotalScore) : null,
+  });
+
   let students: Student[] = [];
   const initialQuery = getRepository(Student)
     .createQueryBuilder('student')
@@ -23,8 +39,8 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       'course.name',
       'course.primarySkillName',
     ]);
-  if (Array.isArray(inputIds) && inputIds.length > 0) {
-    students = await initialQuery.where('student."id" IN (:...ids)', { ids: inputIds }).getMany();
+  if (Array.isArray(studentIds) && studentIds.length > 0) {
+    students = await initialQuery.where('student."id" IN (:...ids)', { ids: studentIds }).getMany();
   } else {
     students = await initialQuery
       .leftJoinAndSelect('student.certificate', 'certificate')
