@@ -108,6 +108,7 @@ class StudentStatsCard extends React.Component<Props, State> {
 
     const modal = Modal.confirm({
       maskStyle: { backgroundColor: 'red' },
+      icon: null,
       title: title,
       content: content,
       centered: true,
