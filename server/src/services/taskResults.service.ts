@@ -1,4 +1,13 @@
-import { TaskResult, TaskArtefact, TaskSolution, TaskSolutionResult, TaskSolutionChecker } from '../models';
+import {
+  TaskResult,
+  TaskArtefact,
+  TaskSolution,
+  TaskSolutionResult,
+  TaskSolutionChecker,
+  CourseTask,
+  Student,
+  User,
+} from '../models';
 import { getRepository } from 'typeorm';
 import { getPrimaryUserFields } from './course.service';
 import { createName } from './user.service';
@@ -55,6 +64,108 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
     .andWhere('"taskSolutionResult"."checkerId" = :checkerId', { checkerId })
     .andWhere('"taskSolutionResult"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
+}
+
+export async function getCrossCheckData(
+  filter: { checkerStudent?: string; student?: string; task?: string; url?: string; score?: string },
+  pagination: { current: number; pageSize: number },
+  courseId: number,
+  orderBy: string,
+  orderDirection?: 'ASC' | 'DESC' | undefined,
+) {
+  const orderByFieldMapping: Record<string, string> = {
+    'checkerStudent,githubId': '"checkerStudent"."githubId"',
+    'student,githubId': '"student"."githubId"',
+    'task,name': '"task"."name"',
+    url: 'taskSolution.url',
+    score: 'tsr.score',
+  };
+
+  const query = getRepository(TaskSolutionResult)
+    .createQueryBuilder('tsr')
+    .addSelect(['tsr.score'])
+    .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
+    .addSelect(['courseTask.id', 'courseTask.courseId'])
+    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+    .leftJoin('courseTask.task', 'task')
+    .addSelect(['task.id', 'task.name'])
+    .leftJoin(Student, 'st', '"tsr"."studentId" = "st"."id"')
+    .leftJoin(User, 'student', '"st"."userId" = "student"."id"')
+    .addSelect(['student.id', 'student.githubId'])
+    .leftJoin(Student, 'ch', '"tsr"."checkerId" = "ch"."id"')
+    .leftJoin(User, 'checkerStudent', '"ch"."userId" = "checkerStudent"."id"')
+    .addSelect(['checkerStudent.id', 'checkerStudent.githubId'])
+    .leftJoin(
+      TaskSolution,
+      'taskSolution',
+      '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"',
+    )
+    .addSelect(['taskSolution.url'])
+    .where(`courseTask.courseId = :courseId`, { courseId })
+    .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' });
+
+  if (filter.checkerStudent) {
+    query.andWhere('"checkerStudent"."githubId" ILIKE :checkerStudent', {
+      checkerStudent: `%${filter.checkerStudent}%`,
+    });
+  }
+
+  if (filter.student) {
+    query.andWhere('"student"."githubId" ILIKE :student', {
+      student: `%${filter.student}%`,
+    });
+  }
+
+  if (filter.task) {
+    query.andWhere('"task"."name" ILIKE :task', {
+      task: `%${filter.task}%`,
+    });
+  }
+
+  if (filter.url) {
+    query.andWhere('"taskSolution"."url" ILIKE :url', {
+      url: `%${filter.url}%`,
+    });
+  }
+
+  const total = await query.getCount();
+
+  const courseTasks = await query
+    .orderBy(orderByFieldMapping[orderBy], orderDirection)
+    .limit(pagination.pageSize)
+    .offset((pagination.current - 1) * pagination.pageSize)
+    .getRawMany();
+
+  const result = courseTasks.map((e: any) => ({
+    checkerStudent: {
+      githubId: e.checkerStudent_githubId,
+      id: e.checkerStudent_id,
+    },
+    courseTask: {
+      courseId: e.courseTask_courseId,
+      id: e.courseTask_id,
+    },
+    student: {
+      githubId: e.student_githubId,
+      id: e.student_id,
+    },
+    task: {
+      name: e.task_name,
+      id: e.task_id,
+    },
+    url: e.taskSolution_url,
+    score: e.tsr_score,
+  }));
+
+  return {
+    content: result,
+    pagination: {
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+      total,
+      totalPages: Math.ceil(total / pagination.pageSize),
+    },
+  };
 }
 
 export async function getTaskSolutionFeedback(studentId: number, courseTaskId: number) {

@@ -182,7 +182,22 @@ export class RepositoryService {
     const ownerRepo = `${owner}/${repo}`;
     const teamName = this.getTeamName(course);
     this.logger?.info(`[${ownerRepo}] adding team ${teamName}`);
-    await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
+    try {
+      await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
+    } catch (e) {
+      if (e.status === 404) {
+        await this.createTeam(github, owner, course.id);
+        await github.teams.addOrUpdateRepoPermissionsInOrg({
+          permission: 'push',
+          owner,
+          repo,
+          team_slug: teamName,
+          org,
+        });
+      } else {
+        throw e;
+      }
+    }
   }
 
   private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {

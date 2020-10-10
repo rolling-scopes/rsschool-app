@@ -10,10 +10,9 @@ WORKDIR /client
 COPY package.json /client
 COPY package-lock.json /client
 
-RUN npm install --production --no-optional
-
 COPY src/next.config.js /client
 COPY src/static /client/static
 COPY src/.next /client/.next
+COPY node_modules /client/node_modules
 
 CMD [ "npm", "run", "prod" ]

@@ -33,10 +33,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     onFilter: (value: any, record: any) => {
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
       return fields.some(field =>
-        (get(record as any, field) || '')
-          .toString()
-          .toLowerCase()
-          .includes(value.toLowerCase()),
+        (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),
       );
     },
     onFilterDropdownVisibleChange: (visible: boolean) => {

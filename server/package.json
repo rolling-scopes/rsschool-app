@@ -16,8 +16,8 @@
     "@koa/router": "~8.0.8",
     "@octokit/app": "4.2.1",
     "@octokit/rest": "18.0.6",
-    "aws-sdk": "^2.654.0",
-    "axios": "^0.19.0",
+    "aws-sdk": "^2.769.0",
+    "axios": "^0.20.0",
     "http-status-codes": "~1.4.0",
     "ics": "2.16.0",
     "json2csv": "~4.5.2",
@@ -31,8 +31,8 @@
     "koa-static": "~5.0.0",
     "koa-typeorm-pagination": "^1.0.0",
     "koa2-swagger-ui": "~2.13.2",
-    "lodash": "~4.17.19",
-    "luxon": "^1.22.2",
+    "lodash": "~4.17.20",
+    "luxon": "^1.25.0",
     "node-cache": "~5.0.2",
     "node-schedule": "~1.3.2",
     "passport-github": "~1.1.0",
@@ -71,6 +71,6 @@
     "ts-jest": "^25.3.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   }
 }

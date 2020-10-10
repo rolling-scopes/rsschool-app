@@ -121,7 +121,6 @@ export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => 
   try {
     const repository = getCustomRepository(StageInterviewFeedbackRepository);
     const feedback = await repository.find(Number(interviewId), mentorGithubId);
-    console.log(feedback);
     setResponse(ctx, OK, JSON.parse(feedback?.json ?? '{}'));
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });

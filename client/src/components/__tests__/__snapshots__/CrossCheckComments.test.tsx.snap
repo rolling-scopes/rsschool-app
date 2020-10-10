@@ -3,7 +3,6 @@
 exports[`CrossCheckComments Should render correctly if there are anonymous comments 1`] = `
 <Col>
   <Row
-    gutter={0}
     key="0"
   >
     <Divider />
@@ -32,7 +31,6 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
     />
   </Row>
   <Row
-    gutter={0}
     key="1"
   >
     <Divider />
@@ -61,7 +59,6 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
     />
   </Row>
   <Row
-    gutter={0}
     key="2"
   >
     <Divider />
@@ -95,7 +92,6 @@ exports[`CrossCheckComments Should render correctly if there are anonymous comme
 exports[`CrossCheckComments Should render correctly if there are both types of comments 1`] = `
 <Col>
   <Row
-    gutter={0}
     key="0"
   >
     <Divider />
@@ -124,7 +120,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
     />
   </Row>
   <Row
-    gutter={0}
     key="1"
   >
     <Divider />
@@ -153,7 +148,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
     />
   </Row>
   <Row
-    gutter={0}
     key="2"
   >
     <Divider />
@@ -186,7 +180,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
     />
   </Row>
   <Row
-    gutter={0}
     key="3"
   >
     <Divider />
@@ -219,7 +212,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
     />
   </Row>
   <Row
-    gutter={0}
     key="4"
   >
     <Divider />
@@ -253,7 +245,6 @@ exports[`CrossCheckComments Should render correctly if there are both types of c
 exports[`CrossCheckComments Should render correctly if there are signed comments 1`] = `
 <Col>
   <Row
-    gutter={0}
     key="0"
   >
     <Divider />
@@ -286,7 +277,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
     />
   </Row>
   <Row
-    gutter={0}
     key="1"
   >
     <Divider />
@@ -319,7 +309,6 @@ exports[`CrossCheckComments Should render correctly if there are signed comments
     />
   </Row>
   <Row
-    gutter={0}
     key="2"
   >
     <Divider />

@@ -4,7 +4,7 @@ import { config } from '../config';
 import { Location } from '../../../common/models/profile';
 
 type Props = {
-  onChange: Function;
+  onChange: (arg: Location | null) => void;
   location: Location | null;
 };
 

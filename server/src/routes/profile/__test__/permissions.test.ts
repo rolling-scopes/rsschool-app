@@ -1,3 +1,4 @@
+import { CourseRole } from '../../../models';
 import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
 
 describe('getPermissions', () => {
@@ -260,6 +261,7 @@ describe('defineRole', () => {
             stageInterviewers: ['alex'],
             checkers: ['masha', 'ivan'],
           },
+          registryCourses: null,
           studentCourses: null,
           roles: {
             1: 'student',
@@ -280,6 +282,7 @@ describe('defineRole', () => {
             stageInterviewers: ['alex'],
             checkers: ['masha', 'ivan'],
           },
+          registryCourses: null,
           studentCourses: null,
           roles: {
             1: 'student',
@@ -300,6 +303,7 @@ describe('defineRole', () => {
             stageInterviewers: ['alex'],
             checkers: ['masha', 'ivan'],
           },
+          registryCourses: null,
           studentCourses: null,
           roles: {
             1: 'student',
@@ -320,6 +324,7 @@ describe('defineRole', () => {
             stageInterviewers: ['alex'],
             checkers: ['masha', 'ivan'],
           },
+          registryCourses: null,
           studentCourses: null,
           roles: {
             1: 'student',
@@ -340,6 +345,7 @@ describe('defineRole', () => {
             stageInterviewers: ['alex'],
             checkers: ['masha', 'ivan'],
           },
+          registryCourses: null,
           studentCourses: null,
           roles: {
             1: 'student',
@@ -354,6 +360,7 @@ describe('defineRole', () => {
       expect(
         defineRole({
           relationsRoles: null,
+          registryCourses: null,
           studentCourses: [{ courseId: 1 }, { courseId: 11 }],
           roles: {
             '1': 'student',
@@ -364,10 +371,25 @@ describe('defineRole', () => {
         }),
       ).toBe('coursementor');
     });
+    it('"coursemanager", if user is mentor waiting confirmation and current user is coursemanager', () => {
+      expect(
+        defineRole({
+          relationsRoles: null,
+          registryCourses: [{ courseId: 1 }],
+          studentCourses: null,
+          roles: {},
+          coursesRoles: {
+            1: [CourseRole.manager],
+          },
+          userGithubId: 'denis',
+        }),
+      ).toBe('coursemanager');
+    });
     it('"all", if user is not a mentor at the same course where requested user is a student', () => {
       expect(
         defineRole({
           relationsRoles: null,
+          registryCourses: null,
           studentCourses: [{ courseId: 1 }],
           roles: {
             '1': 'student',
@@ -382,6 +404,7 @@ describe('defineRole', () => {
       expect(
         defineRole({
           relationsRoles: null,
+          registryCourses: null,
           studentCourses: null,
           roles: {
             '1': 'student',

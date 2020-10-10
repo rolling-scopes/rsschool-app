@@ -74,7 +74,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
       visible={false}
       width="80%"
     >
-      <Component
+      <_default
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -100,13 +100,12 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </Component>
+      </_default>
     </Modal>
   </CoreJsIviewsModal>
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -137,10 +136,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(QuestionCircleOutlined) />}
@@ -187,7 +183,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -197,29 +193,26 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -228,113 +221,102 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(QuestionCircleOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(QuestionCircleOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "question-circle",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="question-circle"
-                                  className="anticon anticon-question-circle"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
                                         },
-                                        "name": "question-circle",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "question-circle",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="question-circle"
+                                className="anticon anticon-question-circle"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "question-circle",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="question-circle"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-question-circle"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="question-circle"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-question-circle"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                                        key="svg-question-circle-svg-0"
-                                      />
-                                      <path
-                                        d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z"
-                                        key="svg-question-circle-svg-1"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(QuestionCircleOutlined)>
-                             
-                            CoreJS Interviews
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                                      key="svg-question-circle-svg-0"
+                                    />
+                                    <path
+                                      d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z"
+                                      key="svg-question-circle-svg-1"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(QuestionCircleOutlined)>
+                           
+                          CoreJS Interviews
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -344,7 +326,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -375,10 +356,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -399,7 +377,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                       className="ant-list-items"
                     >
                       <Item
-                        key="list-item-0/.0"
                         style={
                           Object {
                             "display": "flex",
@@ -433,53 +410,44 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                               <Text
                                 strong={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   strong={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
-                                    strong={true}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <strong>
-                                              rs-2019
-                                               / minsk
-                                            </strong>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <strong>
+                                            rs-2019
+                                             / minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -494,52 +462,43 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                               <Text
                                 mark={true}
                               >
-                                <withConfigConsumer(Base)
+                                <Base
                                   component="span"
                                   ellipsis={false}
                                   mark={true}
                                 >
-                                  <Base
-                                    component="span"
-                                    ellipsis={false}
-                                    getPrefixCls={[Function]}
-                                    mark={true}
-                                    prefixCls="ant-typography"
-                                    renderEmpty={[Function]}
+                                  <LocaleReceiver
+                                    componentName="Text"
                                   >
-                                    <LocaleReceiver
-                                      componentName="Text"
+                                    <ResizeObserver
+                                      disabled={true}
+                                      onResize={[Function]}
                                     >
-                                      <ResizeObserver
-                                        disabled={true}
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": null,
+                                          }
+                                        }
                                       >
-                                        <Typography
-                                          className=""
-                                          component="span"
+                                        <span
+                                          className="ant-typography"
                                           style={
                                             Object {
                                               "WebkitLineClamp": null,
                                             }
                                           }
                                         >
-                                          <span
-                                            className="ant-typography"
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": null,
-                                              }
-                                            }
-                                          >
-                                            <mark>
-                                              4
-                                            </mark>
-                                          </span>
-                                        </Typography>
-                                      </ResizeObserver>
-                                    </LocaleReceiver>
-                                  </Base>
-                                </withConfigConsumer(Base)>
+                                          <mark>
+                                            4
+                                          </mark>
+                                        </span>
+                                      </Typography>
+                                    </ResizeObserver>
+                                  </LocaleReceiver>
+                                </Base>
                               </Text>
                             </p>
                             <p
@@ -577,7 +536,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                   loading={false}
                                   prefixCls="ant-btn"
                                 >
-                                  <ForwardRef
+                                  <CSSMotion
                                     motionName="ant-btn-loading-icon-motion"
                                     onAppearActive={[Function]}
                                     onAppearStart={[Function]}
@@ -588,22 +547,8 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                     removeOnLeave={true}
                                     visible={false}
                                   >
-                                    <CSSMotion
-                                      internalRef={null}
-                                      motionAppear={true}
-                                      motionEnter={true}
-                                      motionLeave={true}
-                                      motionName="ant-btn-loading-icon-motion"
-                                      onAppearActive={[Function]}
-                                      onAppearStart={[Function]}
-                                      onEnterActive={[Function]}
-                                      onEnterStart={[Function]}
-                                      onLeaveActive={[Function]}
-                                      onLeaveStart={[Function]}
-                                      removeOnLeave={true}
-                                      visible={false}
-                                    />
-                                  </ForwardRef>
+                                    <DomWrapper />
+                                  </CSSMotion>
                                 </LoadingIcon>
                                 <ForwardRef(FullscreenOutlined)
                                   key=".0"
