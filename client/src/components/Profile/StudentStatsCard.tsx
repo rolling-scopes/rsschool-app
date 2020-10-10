@@ -86,8 +86,10 @@ class StudentStatsCard extends React.Component<Props, State> {
       }
     };
 
-    const message = 'Are you sure you want to leave the course? Your learning will be finished.';
-    const messageRu = 'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено.';
+    const message =
+      "Are you sure you want to leave the course? Your learning will be finished. You won't be able to return to the course on your own.";
+    const messageRu =
+      'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено. Вы не сможете вернуться на курс самостоятельно.';
 
     const textStyle: CSSProperties = { textAlign: 'center' };
 
