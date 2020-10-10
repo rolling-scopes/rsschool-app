@@ -10,9 +10,10 @@ import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CourseService } from '../../services/course';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { WarningTwoTone } from '@ant-design/icons';
+import { CSSProperties } from 'react';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 type Props = {
   data: StudentStats[];
@@ -67,8 +68,9 @@ class StudentStatsCard extends React.Component<Props, State> {
     for (let i = 0; i < keyLength; i++) key += random(0, 9);
 
     const title = (
-      <Typography.Title level={3}>
-        <ExclamationCircleOutlined /> <Text strong>Are you sure?</Text>
+      <Typography.Title level={3} style={{ textAlign: 'center' }}>
+        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
+        <WarningTwoTone twoToneColor="#fcbe03" />
       </Typography.Title>
     );
 
@@ -84,13 +86,19 @@ class StudentStatsCard extends React.Component<Props, State> {
       }
     };
 
-    const message = 'Are you sure you want to expel yourself from course?';
+    const message = 'Are you sure you want to leave the course? Your learning will be finished.';
+    const messageRu = 'Вы уверены, что хотите покинуть курс? Ваше обучение будет окончено.';
+
+    const textStyle: CSSProperties = { textAlign: 'center' };
 
     const content = (
       <>
-        <Text underline strong>
+        <Paragraph style={textStyle} underline strong>
           {message}
-        </Text>
+        </Paragraph>
+        <Paragraph style={textStyle} underline strong>
+          {messageRu}
+        </Paragraph>
         <Divider plain style={{ whiteSpace: 'normal' }}>
           Enter following number to confirm action: <Text strong>{key}</Text>
         </Divider>
@@ -99,6 +107,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     );
 
     const modal = Modal.confirm({
+      maskStyle: { backgroundColor: 'red' },
       title: title,
       content: content,
       centered: true,
@@ -212,8 +221,8 @@ class StudentStatsCard extends React.Component<Props, State> {
                       </p>
 
                       {isActive && isProfileOwner ? (
-                        <Button size="small" onClick={() => this.showExpelConfirmationModal(gitHubId, courseId)}>
-                          Self expel
+                        <Button danger size="small" onClick={() => this.showExpelConfirmationModal(gitHubId, courseId)}>
+                          Leave course
                         </Button>
                       ) : (
                         ''
