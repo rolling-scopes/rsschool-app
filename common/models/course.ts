@@ -12,4 +12,5 @@ export interface Course {
   primarySkillName: string;
   registrationEndDate: string;
   startDate: string;
+  certificateIssuer: string;
 }
