@@ -89,6 +89,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
       'user.githubId',
       'course.name',
       'course.primarySkillName',
+      'course.certificateIssuer',
     ])
     .where('student."courseId" = :courseId', { courseId })
     .andWhere('"user"."githubId" = :githubId', { githubId })
@@ -102,6 +103,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
     courseId,
     courseName: student.course.name,
     coursePrimarySkill: student.course.primarySkillName,
+    certificateIssuer: student.course.certificateIssuer,
     studentId: student.id,
     studentName: `${student.user.firstName} ${student.user.lastName}`,
     timestamp: Date.now(),
