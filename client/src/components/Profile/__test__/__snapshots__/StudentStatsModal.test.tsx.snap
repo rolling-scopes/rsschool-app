@@ -12,9 +12,7 @@ exports[`StudentStatsModal Should render correctly 1`] = `
   visible={true}
   width="80%"
 >
-  <Row
-    gutter={0}
-  >
+  <Row>
     <Col
       style={
         Object {

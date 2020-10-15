@@ -31,7 +31,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
       >
         <Select
           bordered={true}
-          choiceTransitionName="zoom"
+          choiceTransitionName=""
           defaultValue="a0"
           onChange={[Function]}
           style={
@@ -152,7 +152,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
       >
         <Select
           bordered={true}
-          choiceTransitionName="zoom"
+          choiceTransitionName=""
           defaultValue="a2"
           onChange={[Function]}
           style={

@@ -88,9 +88,7 @@ export function NextEventCard(props: Props) {
             </div>
             {listEvents}
           </div>
-        ) : (
-          undefined
-        )
+        ) : undefined
       }
     />
   );

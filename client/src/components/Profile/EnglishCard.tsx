@@ -47,9 +47,7 @@ class EnglishCard extends React.Component<Props> {
         content={
           englishLevel ? (
             <Text style={{ textTransform: 'capitalize', fontSize: '48px' }}>{englishLevel}</Text>
-          ) : (
-            undefined
-          )
+          ) : undefined
         }
         noDataDescrption="English level isn't choosen"
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}

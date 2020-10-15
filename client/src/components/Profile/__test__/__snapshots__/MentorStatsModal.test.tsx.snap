@@ -44,7 +44,6 @@ exports[`MentorStatsModal Should render correctly 1`] = `
       }
     >
       <Row
-        gutter={0}
         justify="space-between"
         style={
           Object {
@@ -90,7 +89,6 @@ exports[`MentorStatsModal Should render correctly 1`] = `
             }
           >
             <Tag
-              closable={false}
               color="green"
             >
               active
@@ -169,7 +167,6 @@ exports[`MentorStatsModal Should render correctly 1`] = `
       }
     >
       <Row
-        gutter={0}
         justify="space-between"
         style={
           Object {
@@ -215,7 +212,6 @@ exports[`MentorStatsModal Should render correctly 1`] = `
             }
           >
             <Tag
-              closable={false}
               color="red"
             >
               expelled

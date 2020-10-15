@@ -20,7 +20,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -31,10 +30,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(ReadOutlined) />}
@@ -44,7 +40,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
     profileSettingsContent={
       <React.Fragment>
         <List
-          bordered={false}
           dataSource={
             Array [
               Object {
@@ -55,10 +50,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             ]
           }
           itemLayout="horizontal"
-          loading={false}
-          pagination={false}
           renderItem={[Function]}
-          split={true}
         />
         <Button
           block={false}
@@ -128,7 +120,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -138,29 +130,26 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -169,97 +158,86 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(ReadOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(ReadOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "read",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="read"
-                                  className="anticon anticon-read"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
                                         },
-                                        "name": "read",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "read",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="read"
+                                className="anticon anticon-read"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "read",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="read"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-read"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="read"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-read"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                        key="svg-read-svg-0"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(ReadOutlined)>
-                             
-                            Education
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                      key="svg-read-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(ReadOutlined)>
+                           
+                          Education
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -269,7 +247,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -280,10 +257,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -303,9 +277,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                     <ul
                       className="ant-list-items"
                     >
-                      <Item
-                        key="list-item-0/.0"
-                      >
+                      <Item>
                         <li
                           className="ant-list-item"
                         >
@@ -353,6 +325,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
+                push={
+                  Object {
+                    "distance": 180,
+                  }
+                }
                 renderEmpty={[Function]}
                 style={
                   Object {
@@ -560,13 +537,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 className="ant-drawer-body"
                               >
                                 <List
-                                  bordered={false}
                                   dataSource={Array []}
                                   itemLayout="horizontal"
-                                  loading={false}
-                                  pagination={false}
                                   renderItem={[Function]}
-                                  split={true}
                                 >
                                   <div
                                     className="ant-list ant-list-split"
@@ -666,7 +639,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             content={
               <React.Fragment>
                 <List
-                  bordered={false}
                   dataSource={
                     Array [
                       Object {
@@ -677,10 +649,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                     ]
                   }
                   itemLayout="horizontal"
-                  loading={false}
-                  pagination={false}
                   renderItem={[Function]}
-                  split={true}
                 />
                 <Button
                   block={false}
@@ -731,6 +700,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
+                push={
+                  Object {
+                    "distance": 180,
+                  }
+                }
                 renderEmpty={[Function]}
                 style={
                   Object {
@@ -938,7 +912,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 className="ant-drawer-body"
                               >
                                 <List
-                                  bordered={false}
                                   dataSource={
                                     Array [
                                       Object {
@@ -949,10 +922,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                     ]
                                   }
                                   itemLayout="horizontal"
-                                  loading={false}
-                                  pagination={false}
                                   renderItem={[Function]}
-                                  split={true}
                                 >
                                   <div
                                     className="ant-list ant-list-split"
@@ -972,9 +942,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                           <ul
                                             className="ant-list-items"
                                           >
-                                            <Item
-                                              key="list-item-0/.0"
-                                            >
+                                            <Item>
                                               <li
                                                 className="ant-list-item"
                                               >
@@ -1021,7 +989,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             loading={false}
                                                             prefixCls="ant-btn"
                                                           >
-                                                            <ForwardRef
+                                                            <CSSMotion
                                                               motionName="ant-btn-loading-icon-motion"
                                                               onAppearActive={[Function]}
                                                               onAppearStart={[Function]}
@@ -1032,22 +1000,8 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               removeOnLeave={true}
                                                               visible={false}
                                                             >
-                                                              <CSSMotion
-                                                                internalRef={null}
-                                                                motionAppear={true}
-                                                                motionEnter={true}
-                                                                motionLeave={true}
-                                                                motionName="ant-btn-loading-icon-motion"
-                                                                onAppearActive={[Function]}
-                                                                onAppearStart={[Function]}
-                                                                onEnterActive={[Function]}
-                                                                onEnterStart={[Function]}
-                                                                onLeaveActive={[Function]}
-                                                                onLeaveStart={[Function]}
-                                                                removeOnLeave={true}
-                                                                visible={false}
-                                                              />
-                                                            </ForwardRef>
+                                                              <DomWrapper />
+                                                            </CSSMotion>
                                                           </LoadingIcon>
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
@@ -1144,52 +1098,43 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    University:
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  University:
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -1211,6 +1156,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       value={null}
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -1269,52 +1215,43 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    Faculty
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  Faculty
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -1336,6 +1273,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       value={null}
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -1394,52 +1332,43 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    Graduation year:
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  Graduation year:
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -1461,6 +1390,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       value={null}
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -1546,7 +1476,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                         loading={false}
                                         prefixCls="ant-btn"
                                       >
-                                        <ForwardRef
+                                        <CSSMotion
                                           motionName="ant-btn-loading-icon-motion"
                                           onAppearActive={[Function]}
                                           onAppearStart={[Function]}
@@ -1557,22 +1487,8 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                           removeOnLeave={true}
                                           visible={false}
                                         >
-                                          <CSSMotion
-                                            internalRef={null}
-                                            motionAppear={true}
-                                            motionEnter={true}
-                                            motionLeave={true}
-                                            motionName="ant-btn-loading-icon-motion"
-                                            onAppearActive={[Function]}
-                                            onAppearStart={[Function]}
-                                            onEnterActive={[Function]}
-                                            onEnterStart={[Function]}
-                                            onLeaveActive={[Function]}
-                                            onLeaveStart={[Function]}
-                                            removeOnLeave={true}
-                                            visible={false}
-                                          />
-                                        </ForwardRef>
+                                          <DomWrapper />
+                                        </CSSMotion>
                                       </LoadingIcon>
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"
@@ -1781,13 +1697,9 @@ exports[`EducationCard Should render correctly if "educationHistory" is empty 1`
   profileSettingsContent={
     <React.Fragment>
       <List
-        bordered={false}
         dataSource={Array []}
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
       <Button
         block={false}
@@ -1831,7 +1743,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -1842,10 +1753,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(ReadOutlined) />}
@@ -1855,7 +1763,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
     profileSettingsContent={
       <React.Fragment>
         <List
-          bordered={false}
           dataSource={
             Array [
               Object {
@@ -1866,10 +1773,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
             ]
           }
           itemLayout="horizontal"
-          loading={false}
-          pagination={false}
           renderItem={[Function]}
-          split={true}
         />
         <Button
           block={false}
@@ -1932,7 +1836,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -1942,29 +1846,26 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -1973,97 +1874,86 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(ReadOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(ReadOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "read",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="read"
-                                  className="anticon anticon-read"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
                                         },
-                                        "name": "read",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "read",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="read"
+                                className="anticon anticon-read"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "read",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="read"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-read"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="read"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-read"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                        key="svg-read-svg-0"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(ReadOutlined)>
-                             
-                            Education
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                      key="svg-read-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(ReadOutlined)>
+                           
+                          Education
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -2073,7 +1963,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -2084,10 +1973,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -2107,9 +1993,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                     <ul
                       className="ant-list-items"
                     >
-                      <Item
-                        key="list-item-0/.0"
-                      >
+                      <Item>
                         <li
                           className="ant-list-item"
                         >
@@ -2117,52 +2001,43 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                             <Text
                               strong={true}
                             >
-                              <withConfigConsumer(Base)
+                              <Base
                                 component="span"
                                 ellipsis={false}
                                 strong={true}
                               >
-                                <Base
-                                  component="span"
-                                  ellipsis={false}
-                                  getPrefixCls={[Function]}
-                                  prefixCls="ant-typography"
-                                  renderEmpty={[Function]}
-                                  strong={true}
+                                <LocaleReceiver
+                                  componentName="Text"
                                 >
-                                  <LocaleReceiver
-                                    componentName="Text"
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
                                   >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
                                     >
-                                      <Typography
-                                        className=""
-                                        component="span"
+                                      <span
+                                        className="ant-typography"
                                         style={
                                           Object {
                                             "WebkitLineClamp": null,
                                           }
                                         }
                                       >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": null,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            2002
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </withConfigConsumer(Base)>
+                                        <strong>
+                                          2002
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
                             </Text>
                              
                              MIT / POIT
@@ -2202,7 +2077,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
   <CommonCard
     content={
       <List
-        bordered={false}
         dataSource={
           Array [
             Object {
@@ -2213,10 +2087,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           ]
         }
         itemLayout="horizontal"
-        loading={false}
-        pagination={false}
         renderItem={[Function]}
-        split={true}
       />
     }
     icon={<ForwardRef(ReadOutlined) />}
@@ -2226,7 +2097,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
     profileSettingsContent={
       <React.Fragment>
         <List
-          bordered={false}
           dataSource={
             Array [
               Object {
@@ -2237,10 +2107,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             ]
           }
           itemLayout="horizontal"
-          loading={false}
-          pagination={false}
           renderItem={[Function]}
-          split={true}
         />
         <Button
           block={false}
@@ -2310,7 +2177,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   }
                 }
               >
-                <withConfigConsumer(Base)
+                <Base
                   component="h2"
                   ellipsis={true}
                   style={
@@ -2320,29 +2187,26 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                     }
                   }
                 >
-                  <Base
-                    component="h2"
-                    ellipsis={true}
-                    getPrefixCls={[Function]}
-                    prefixCls="ant-typography"
-                    renderEmpty={[Function]}
-                    style={
-                      Object {
-                        "fontSize": 16,
-                        "marginBottom": 0,
-                      }
-                    }
+                  <LocaleReceiver
+                    componentName="Text"
                   >
-                    <LocaleReceiver
-                      componentName="Text"
+                    <ResizeObserver
+                      disabled={false}
+                      onResize={[Function]}
                     >
-                      <ResizeObserver
-                        disabled={false}
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": null,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <Typography
-                          className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                          component="h2"
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": null,
@@ -2351,97 +2215,86 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                             }
                           }
                         >
-                          <h2
-                            className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
-                            style={
-                              Object {
-                                "WebkitLineClamp": null,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
-                            }
-                          >
-                            <ForwardRef(ReadOutlined)>
-                              <AntdIcon
-                                icon={
-                                  Object {
-                                    "icon": Object {
-                                      "attrs": Object {
-                                        "focusable": "false",
-                                        "viewBox": "64 64 896 896",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "attrs": Object {
-                                            "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                          },
-                                          "tag": "path",
-                                        },
-                                      ],
-                                      "tag": "svg",
+                          <ForwardRef(ReadOutlined)>
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
                                     },
-                                    "name": "read",
-                                    "theme": "outlined",
-                                  }
-                                }
-                              >
-                                <span
-                                  aria-label="read"
-                                  className="anticon anticon-read"
-                                  role="img"
-                                >
-                                  <IconReact
-                                    className=""
-                                    icon={
+                                    "children": Array [
                                       Object {
-                                        "icon": Object {
-                                          "attrs": Object {
-                                            "focusable": "false",
-                                            "viewBox": "64 64 896 896",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "attrs": Object {
-                                                "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                              },
-                                              "tag": "path",
-                                            },
-                                          ],
-                                          "tag": "svg",
+                                        "attrs": Object {
+                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
                                         },
-                                        "name": "read",
-                                        "theme": "outlined",
-                                      }
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "read",
+                                  "theme": "outlined",
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="read"
+                                className="anticon anticon-read"
+                                role="img"
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "read",
+                                      "theme": "outlined",
                                     }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="read"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-read"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      className=""
-                                      data-icon="read"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="1em"
-                                      key="svg-read"
-                                      viewBox="64 64 896 896"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                        key="svg-read-svg-0"
-                                      />
-                                    </svg>
-                                  </IconReact>
-                                </span>
-                              </AntdIcon>
-                            </ForwardRef(ReadOutlined)>
-                             
-                            Education
-                          </h2>
-                        </Typography>
-                      </ResizeObserver>
-                    </LocaleReceiver>
-                  </Base>
-                </withConfigConsumer(Base)>
+                                    <path
+                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                      key="svg-read-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(ReadOutlined)>
+                           
+                          Education
+                        </h2>
+                      </Typography>
+                    </ResizeObserver>
+                  </LocaleReceiver>
+                </Base>
               </Title>
             </div>
           </div>
@@ -2451,7 +2304,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           style={Object {}}
         >
           <List
-            bordered={false}
             dataSource={
               Array [
                 Object {
@@ -2462,10 +2314,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               ]
             }
             itemLayout="horizontal"
-            loading={false}
-            pagination={false}
             renderItem={[Function]}
-            split={true}
           >
             <div
               className="ant-list ant-list-split"
@@ -2485,9 +2334,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                     <ul
                       className="ant-list-items"
                     >
-                      <Item
-                        key="list-item-0/.0"
-                      >
+                      <Item>
                         <li
                           className="ant-list-item"
                         >
@@ -2495,52 +2342,43 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                             <Text
                               strong={true}
                             >
-                              <withConfigConsumer(Base)
+                              <Base
                                 component="span"
                                 ellipsis={false}
                                 strong={true}
                               >
-                                <Base
-                                  component="span"
-                                  ellipsis={false}
-                                  getPrefixCls={[Function]}
-                                  prefixCls="ant-typography"
-                                  renderEmpty={[Function]}
-                                  strong={true}
+                                <LocaleReceiver
+                                  componentName="Text"
                                 >
-                                  <LocaleReceiver
-                                    componentName="Text"
+                                  <ResizeObserver
+                                    disabled={true}
+                                    onResize={[Function]}
                                   >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
+                                    <Typography
+                                      className=""
+                                      component="span"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": null,
+                                        }
+                                      }
                                     >
-                                      <Typography
-                                        className=""
-                                        component="span"
+                                      <span
+                                        className="ant-typography"
                                         style={
                                           Object {
                                             "WebkitLineClamp": null,
                                           }
                                         }
                                       >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": null,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            2002
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </withConfigConsumer(Base)>
+                                        <strong>
+                                          2002
+                                        </strong>
+                                      </span>
+                                    </Typography>
+                                  </ResizeObserver>
+                                </LocaleReceiver>
+                              </Base>
                             </Text>
                              
                              MIT / POIT
@@ -2586,6 +2424,11 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
+                push={
+                  Object {
+                    "distance": 180,
+                  }
+                }
                 renderEmpty={[Function]}
                 style={
                   Object {
@@ -2793,13 +2636,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 className="ant-drawer-body"
                               >
                                 <List
-                                  bordered={false}
                                   dataSource={Array []}
                                   itemLayout="horizontal"
-                                  loading={false}
-                                  pagination={false}
                                   renderItem={[Function]}
-                                  split={true}
                                 >
                                   <div
                                     className="ant-list ant-list-split"
@@ -2899,7 +2738,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             content={
               <React.Fragment>
                 <List
-                  bordered={false}
                   dataSource={
                     Array [
                       Object {
@@ -2910,10 +2748,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                     ]
                   }
                   itemLayout="horizontal"
-                  loading={false}
-                  pagination={false}
                   renderItem={[Function]}
-                  split={true}
                 />
                 <Button
                   block={false}
@@ -2964,6 +2799,11 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
+                push={
+                  Object {
+                    "distance": 180,
+                  }
+                }
                 renderEmpty={[Function]}
                 style={
                   Object {
@@ -3171,7 +3011,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 className="ant-drawer-body"
                               >
                                 <List
-                                  bordered={false}
                                   dataSource={
                                     Array [
                                       Object {
@@ -3182,10 +3021,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     ]
                                   }
                                   itemLayout="horizontal"
-                                  loading={false}
-                                  pagination={false}
                                   renderItem={[Function]}
-                                  split={true}
                                 >
                                   <div
                                     className="ant-list ant-list-split"
@@ -3205,9 +3041,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                           <ul
                                             className="ant-list-items"
                                           >
-                                            <Item
-                                              key="list-item-0/.0"
-                                            >
+                                            <Item>
                                               <li
                                                 className="ant-list-item"
                                               >
@@ -3228,52 +3062,43 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    2002
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  2002
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                      
                                                     MIT / POIT
@@ -3305,7 +3130,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             loading={false}
                                                             prefixCls="ant-btn"
                                                           >
-                                                            <ForwardRef
+                                                            <CSSMotion
                                                               motionName="ant-btn-loading-icon-motion"
                                                               onAppearActive={[Function]}
                                                               onAppearStart={[Function]}
@@ -3316,22 +3141,8 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               removeOnLeave={true}
                                                               visible={false}
                                                             >
-                                                              <CSSMotion
-                                                                internalRef={null}
-                                                                motionAppear={true}
-                                                                motionEnter={true}
-                                                                motionLeave={true}
-                                                                motionName="ant-btn-loading-icon-motion"
-                                                                onAppearActive={[Function]}
-                                                                onAppearStart={[Function]}
-                                                                onEnterActive={[Function]}
-                                                                onEnterStart={[Function]}
-                                                                onLeaveActive={[Function]}
-                                                                onLeaveStart={[Function]}
-                                                                removeOnLeave={true}
-                                                                visible={false}
-                                                              />
-                                                            </ForwardRef>
+                                                              <DomWrapper />
+                                                            </CSSMotion>
                                                           </LoadingIcon>
                                                           <ForwardRef(DeleteOutlined)
                                                             key=".0"
@@ -3428,52 +3239,43 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    University:
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  University:
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -3495,6 +3297,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       value="MIT"
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -3553,52 +3356,43 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    Faculty
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  Faculty
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -3620,6 +3414,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       value="POIT"
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -3678,52 +3473,43 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <withConfigConsumer(Base)
+                                                      <Base
                                                         component="span"
                                                         ellipsis={false}
                                                         strong={true}
                                                       >
-                                                        <Base
-                                                          component="span"
-                                                          ellipsis={false}
-                                                          getPrefixCls={[Function]}
-                                                          prefixCls="ant-typography"
-                                                          renderEmpty={[Function]}
-                                                          strong={true}
+                                                        <LocaleReceiver
+                                                          componentName="Text"
                                                         >
-                                                          <LocaleReceiver
-                                                            componentName="Text"
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
                                                           >
-                                                            <ResizeObserver
-                                                              disabled={true}
-                                                              onResize={[Function]}
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": null,
+                                                                }
+                                                              }
                                                             >
-                                                              <Typography
-                                                                className=""
-                                                                component="span"
+                                                              <span
+                                                                className="ant-typography"
                                                                 style={
                                                                   Object {
                                                                     "WebkitLineClamp": null,
                                                                   }
                                                                 }
                                                               >
-                                                                <span
-                                                                  className="ant-typography"
-                                                                  style={
-                                                                    Object {
-                                                                      "WebkitLineClamp": null,
-                                                                    }
-                                                                  }
-                                                                >
-                                                                  <strong>
-                                                                    Graduation year:
-                                                                  </strong>
-                                                                </span>
-                                                              </Typography>
-                                                            </ResizeObserver>
-                                                          </LocaleReceiver>
-                                                        </Base>
-                                                      </withConfigConsumer(Base)>
+                                                                <strong>
+                                                                  Graduation year:
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
                                                     </Text>
                                                   </p>
                                                   <p
@@ -3745,6 +3531,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       value={2002}
                                                     >
                                                       <ClearableLabeledInput
+                                                        bordered={true}
                                                         element={
                                                           <input
                                                             className="ant-input"
@@ -3830,7 +3617,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         loading={false}
                                         prefixCls="ant-btn"
                                       >
-                                        <ForwardRef
+                                        <CSSMotion
                                           motionName="ant-btn-loading-icon-motion"
                                           onAppearActive={[Function]}
                                           onAppearStart={[Function]}
@@ -3841,22 +3628,8 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                           removeOnLeave={true}
                                           visible={false}
                                         >
-                                          <CSSMotion
-                                            internalRef={null}
-                                            motionAppear={true}
-                                            motionEnter={true}
-                                            motionLeave={true}
-                                            motionName="ant-btn-loading-icon-motion"
-                                            onAppearActive={[Function]}
-                                            onAppearStart={[Function]}
-                                            onEnterActive={[Function]}
-                                            onEnterStart={[Function]}
-                                            onLeaveActive={[Function]}
-                                            onLeaveStart={[Function]}
-                                            removeOnLeave={true}
-                                            visible={false}
-                                          />
-                                        </ForwardRef>
+                                          <DomWrapper />
+                                        </CSSMotion>
                                       </LoadingIcon>
                                       <ForwardRef(FileAddOutlined)
                                         key=".0"

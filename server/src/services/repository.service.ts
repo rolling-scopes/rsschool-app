@@ -144,8 +144,11 @@ export class RepositoryService {
     }
     const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
     if (ghPagesRef === null) {
-      const masterRef = await github.git.getRef({ owner, repo, ref: 'heads/master' });
-      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: masterRef.data.object.sha });
+      const mainRef = await github.git
+        .getRef({ owner, repo, ref: 'heads/main' })
+        // for backward compatibility
+        .catch(() => github.git.getRef({ owner, repo, ref: 'heads/master' }));
+      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: mainRef.data.object.sha });
     }
     await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
       if (response.status !== 409 && response.status !== 500) {
@@ -179,7 +182,22 @@ export class RepositoryService {
     const ownerRepo = `${owner}/${repo}`;
     const teamName = this.getTeamName(course);
     this.logger?.info(`[${ownerRepo}] adding team ${teamName}`);
-    await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
+    try {
+      await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
+    } catch (e) {
+      if (e.status === 404) {
+        await this.createTeam(github, owner, course.id);
+        await github.teams.addOrUpdateRepoPermissionsInOrg({
+          permission: 'push',
+          owner,
+          repo,
+          team_slug: teamName,
+          org,
+        });
+      } else {
+        throw e;
+      }
+    }
   }
 
   private async createRepositoryInternally(github: Octokit, course: Course, githubId: string) {

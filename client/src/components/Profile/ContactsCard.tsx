@@ -128,9 +128,7 @@ class ContactsCard extends React.Component<Props> {
                 </List.Item>
               )}
             />
-          ) : (
-            undefined
-          )
+          ) : undefined
         }
         noDataDescrption="Contacts aren't filled in"
         permissionsSettings={permissionsSettings ? this.filterPermissions(permissionsSettings) : undefined}

@@ -17,11 +17,7 @@ import { TIMEZONES } from '../../../configs/timezones';
 type Props = CoursePageProps;
 
 const timeZoneRenderer = (timeZone: string) => (value: string) => {
-  return value
-    ? moment(value, 'YYYY-MM-DD HH:mmZ')
-        .tz(timeZone)
-        .format('HH:mm')
-    : '';
+  return value ? moment(value, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('HH:mm') : '';
 };
 
 function Page(props: Props) {

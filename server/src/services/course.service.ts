@@ -162,10 +162,7 @@ function studentQuery() {
 }
 
 export async function getCourses() {
-  const records = await getRepository(Course)
-    .createQueryBuilder('course')
-    .where('course.completed = false')
-    .getMany();
+  const records = await getRepository(Course).createQueryBuilder('course').where('course.completed = false').getMany();
   return records;
 }
 
@@ -695,9 +692,7 @@ export async function getStages(courseId: number) {
 }
 
 function shiftDate(date: string, shift: number, format: string): string {
-  return moment(date)
-    .add(shift, 'days')
-    .format(format);
+  return moment(date).add(shift, 'days').format(format);
 }
 
 function adjustStage(stage: any, startDateDaysDiff: number, courseId: number) {

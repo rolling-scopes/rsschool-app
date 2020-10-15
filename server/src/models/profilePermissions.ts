@@ -55,10 +55,7 @@ export class ProfilePermissions {
   @Column({ unique: true })
   userId: number;
 
-  @OneToOne(
-    () => User,
-    user => user.profilePermissions,
-  )
+  @OneToOne(() => User, user => user.profilePermissions)
   user: User;
 
   @Column({ type: 'json', default: defaultPublicVisibilitySettings })
