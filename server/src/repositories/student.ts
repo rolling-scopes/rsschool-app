@@ -263,6 +263,47 @@ export class StudentRepository extends AbstractRepository<Student> {
         ...this.getPrimaryUserFields('mUser'),
       ]);
   }
+
+  public async findByCriteria(
+    courseId: number,
+    criteria: {
+      courseTaskIds: number[];
+      minScore: number | null;
+      minTotalScore: number | null;
+    },
+  ): Promise<{ id: number }[]> {
+    let query = await getRepository(Student).createQueryBuilder('student').select(['student.id']);
+
+    if (criteria.courseTaskIds.length > 0) {
+      query = query
+        .leftJoin(
+          'student.taskResults',
+          'tr',
+          'tr.studentId = student.id AND tr.score >= :minScore AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
+          {
+            requiredCourseTaskIds: criteria.courseTaskIds,
+            minScore: criteria.minScore,
+          },
+        )
+        .addSelect('ARRAY_AGG ("tr"."courseTaskId") AS "tasks"');
+    }
+
+    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
+
+    if (criteria.minScore != null) {
+      query = query.andWhere('student.totalScore >= :minTotalScore', { minTotalScore: criteria.minTotalScore });
+    }
+
+    if (criteria.courseTaskIds.length > 0) {
+      query = query.andWhere('tr.id IS NOT NULL');
+    }
+
+    const rawCertificates = await query.getRawMany();
+
+    return rawCertificates
+      .map(({ id, tasks }) => (tasks.length === criteria.courseTaskIds ? id : undefined))
+      .filter(Boolean);
+  }
 }
 
 function transformStudent(record: Student): StudentBasic {
