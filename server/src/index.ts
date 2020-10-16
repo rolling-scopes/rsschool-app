@@ -21,7 +21,7 @@ export class App {
   private appLogger: ILogger;
   private server: Server | undefined = undefined;
 
-  constructor(logger: ILogge = createDefaultLogger()) {
+  constructor(logger: ILogger = createDefaultLogger()) {
     this.appLogger = logger;
 
     this.koa.use(loggerMiddleware(this.appLogger));
