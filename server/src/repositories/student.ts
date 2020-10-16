@@ -297,6 +297,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     if (criteria.courseTaskIds.length > 0) {
       query = query.andWhere('tr.id IS NOT NULL');
     }
+    query = query.groupBy('"student"."id"');
 
     const rawCertificates = await query.getRawMany();
 
