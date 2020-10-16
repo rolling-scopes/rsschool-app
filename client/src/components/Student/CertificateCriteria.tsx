@@ -46,7 +46,7 @@ export function CertificateCriteria(props: Props) {
         >
           <Alert
             style={{ marginBottom: 8 }}
-            message="He will issue certificates to students who have completed all the tasks from the selected ones, scored more than the specified score and have an overall score greater than the specified one."
+            message="It will issue certificates to students who have completed all the tasks from the selected ones, scored more than the specified score and have an overall score greater than the specified one."
           />
 
           <Form.Item name="courseTaskIds" label="Tasks">
