@@ -271,7 +271,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       minScore: number | null;
       minTotalScore: number | null;
     },
-  ): Promise<{ id: number }[]> {
+  ): Promise<number[]> {
     let query = await getRepository(Student).createQueryBuilder('student').select(['student.id']);
 
     if (criteria.courseTaskIds.length > 0) {
@@ -290,7 +290,7 @@ export class StudentRepository extends AbstractRepository<Student> {
 
     query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
 
-    if (criteria.minScore != null) {
+    if (criteria.minTotalScore != null) {
       query = query.andWhere('student.totalScore >= :minTotalScore', { minTotalScore: criteria.minTotalScore });
     }
 
@@ -302,7 +302,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     const rawCertificates = await query.getRawMany();
 
     return rawCertificates
-      .map(({ id, tasks }) => (tasks.length === criteria.courseTaskIds ? id : undefined))
+      .map(({ student_id, tasks }) => (tasks.length === criteria.courseTaskIds.length ? student_id : undefined))
       .filter(Boolean);
   }
 }
