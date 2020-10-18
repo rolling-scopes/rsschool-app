@@ -3,7 +3,7 @@ import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
 import { InterviewInfo, InterviewDetails } from './interview';
 import { createInterviews } from '../rules/interviews';
-import { queryMentorByGithubId } from '../services/course.service';
+import { queryMentorByGithubId, queryStudentByGithubId } from '../services/course.service';
 
 @EntityRepository(StageInterview)
 export class StageInterviewRepository extends AbstractRepository<StageInterview> {
@@ -37,6 +37,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         ...courseService.getPrimaryUserFields('sUser'),
       ])
       .where('si.courseId = :courseId', { courseId })
+      .andWhere(`si.isCanceled <> :canceled`, { canceled: true })
       .orderBy('si.updatedDate', 'DESC')
       .getMany();
 
@@ -155,7 +156,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     );
   }
 
-  public async removeByMentor(courseId: number, githubId: string) {
+  public async cancelByMentor(courseId: number, githubId: string) {
     const mentor = await queryMentorByGithubId(courseId, githubId);
     if (mentor) {
       const interviews = await getRepository(StageInterview)
@@ -167,9 +168,26 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         .andWhere('s.mentorId = :mentorId', { mentorId: mentor.id })
         .getMany();
       if (interviews.length > 0) {
-        await getRepository(StageInterview).delete(interviews.map(i => i.id));
+        await getRepository(StageInterview).update(
+          interviews.map(i => i.id),
+          { isCanceled: true },
+        );
       }
     }
+  }
+
+  public async cancelByStudent(courseId: number, githubId: string) {
+    const student = await queryStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await getRepository(StageInterview).update(
+      {
+        studentId: student.id,
+        isCompleted: false,
+      },
+      { isCanceled: true },
+    );
   }
 
   private async find(courseId: number, githubId: string, userType: 'student' | 'mentor') {
@@ -196,6 +214,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         ...courseService.getPrimaryUserFields('sUser'),
       ])
       .where(`stageInterview.courseId = :courseId AND ${userKey}.githubId = :githubId`, { courseId, githubId })
+      .andWhere(`stageInterview.isCanceled <> :canceled`, { canceled: true })
       .andWhere(`${userType === 'student' ? 'mentor' : 'student'}.isExpelled = false`)
       .getMany();
 
