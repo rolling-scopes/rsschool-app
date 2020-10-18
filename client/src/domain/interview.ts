@@ -1,4 +1,4 @@
-import { StageInterviewFeedbackVerdict } from '../../../common/models';
+import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from '../../../common/models';
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
   switch (value) {
@@ -13,4 +13,12 @@ export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdi
     default:
       return null;
   }
+}
+
+export type InterviewDetails = CommonInterviewDetails;
+
+export enum InterviewStatus {
+  NotCompleted,
+  Completed,
+  Canceled,
 }
