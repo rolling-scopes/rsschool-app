@@ -120,6 +120,11 @@ function Page(props: Props) {
             </Form.Item>
           </Col>
           <Col span={12}>
+            <Form.Item name="certificateIssuer" label="Certificate Issuer">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
             <Form.Item
               name="description"
               label="Description"
@@ -209,6 +214,7 @@ function createRecord(values: any) {
     description: values.description,
     primarySkillId: values.primarySkillId,
     primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
+    certificateIssuer: values.certificateIssuer,
   };
   return record;
 }

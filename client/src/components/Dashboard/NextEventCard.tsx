@@ -12,7 +12,7 @@ type Props = {
   setShowCountEvents: (count: number) => void;
 };
 
-const COUNT_EVENTS_LIST = [1, 2, 3];
+const COUNT_EVENTS_LIST = [1, 2, 3, 5, 10];
 
 const EventTypeColor: Record<string, string> = {
   deadline: 'red',

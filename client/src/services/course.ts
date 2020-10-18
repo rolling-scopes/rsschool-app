@@ -266,6 +266,10 @@ export class CourseService {
     await this.axios.post(`/students/status`, { criteria, options, expellingReason, status: 'expelled' });
   }
 
+  async postCertificateStudents(criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number }) {
+    await this.axios.post(`/certificates`, { criteria });
+  }
+
   async restoreStudent(githubId: string) {
     await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
   }

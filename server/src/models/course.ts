@@ -71,4 +71,7 @@ export class Course {
 
   @Column({ default: false })
   inviteOnly: boolean;
+
+  @Column({ nullable: true })
+  certificateIssuer: string;
 }

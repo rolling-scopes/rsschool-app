@@ -29,7 +29,14 @@ export function Page(props: CoursePageProps) {
 
   useAsync(async () => {
     const data = await courseService.getCourseTasks();
-    setCourseTasks(data.filter(item => item.taskOwnerId === props.session.id || props.session.isAdmin));
+    setCourseTasks(
+      data.filter(
+        item =>
+          item.taskOwnerId === props.session.id ||
+          props.session.isAdmin ||
+          props.session.coursesRoles?.[courseId]?.includes('manager'),
+      ),
+    );
   }, [courseService]);
 
   const handleTaskChange = () => setSubmitResults([]);

@@ -5,11 +5,12 @@ import {
   FileExcelOutlined,
   MinusCircleOutlined,
   CloseCircleTwoTone,
+  SolutionOutlined,
 } from '@ant-design/icons';
 import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { PageLayout, withSession } from 'components';
-import { DashboardDetails, ExpelCriteria } from 'components/Student';
+import { DashboardDetails, ExpelCriteria, CertificateCriteria } from 'components/Student';
 import {
   boolIconRenderer,
   boolSorter,
@@ -43,6 +44,7 @@ function Page(props: Props) {
   const [activeOnly, setActiveOnly] = useState(false);
   const [details, setDetails] = useState<StudentDetails | null>(null);
   const [expelModel, setExpelMode] = useToggle(false);
+  const [certificateModel, setCertificateMode] = useToggle(false);
 
   useAsync(withLoading(loadStudents), [activeOnly]);
 
@@ -98,6 +100,11 @@ function Page(props: Props) {
     loadStudents();
   });
 
+  const certificateStudents = withLoading(async (criteria: any) => {
+    await courseService.postCertificateStudents(criteria);
+    setCertificateMode();
+  });
+
   return render();
 
   function render() {
@@ -133,6 +140,9 @@ function Page(props: Props) {
         {expelModel ? (
           <ExpelCriteria courseId={props.course.id} onClose={setExpelMode} onApply={expelStudents} />
         ) : null}
+        {certificateModel ? (
+          <CertificateCriteria courseId={props.course.id} onClose={setCertificateMode} onApply={certificateStudents} />
+        ) : null}
       </PageLayout>
     );
   }
@@ -144,6 +154,9 @@ function Page(props: Props) {
           <>
             <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
               Create Repos
+            </Button>
+            <Button icon={<SolutionOutlined />} style={{ marginRight: 8 }} onClick={setCertificateMode}>
+              Certificates
             </Button>
             <Button icon={<CloseCircleTwoTone twoToneColor="red" />} style={{ marginRight: 8 }} onClick={setExpelMode}>
               Expel
