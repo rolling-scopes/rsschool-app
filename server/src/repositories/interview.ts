@@ -1,6 +1,7 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
 import { TaskChecker, TaskInterviewResult, TaskInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
+import { InterviewStatus, InterviewDetails } from '../../../common/models/interview';
 
 @EntityRepository(TaskChecker)
 export class InterviewRepository extends AbstractRepository<TaskChecker> {
@@ -107,6 +108,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
         startDate: courseTask.studentStartDate,
         endDate: courseTask.studentEndDate,
         completed: !!taskResult,
+        status: taskResult ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
         interviewer: {
           githubId: record.mentor.user.githubId,
           name: userService.createName(record.mentor.user),
@@ -122,22 +124,11 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
   }
 }
 
-export interface InterviewDetails {
-  id: number;
-  name: string;
-  completed: boolean;
-  result: string | null;
-  descriptionUrl: string;
-  startDate: string;
-  endDate: string;
-  interviewer: { name: string; githubId: string };
-  student: { name: string; githubId: string };
-}
-
 export interface InterviewInfo {
   id: number;
   name: string;
   completed: boolean;
+  status: InterviewStatus;
   interviewer: {
     name: string;
     cityName?: string;

@@ -1,7 +1,8 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
+import { InterviewStatus, InterviewDetails } from '../../../common/models/interview';
 import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
-import { InterviewInfo, InterviewDetails } from './interview';
+import { InterviewInfo } from './interview';
 import { createInterviews } from '../rules/interviews';
 import { queryMentorByGithubId, queryStudentByGithubId } from '../services/course.service';
 
@@ -48,6 +49,11 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         startDate: it.courseTask.studentStartDate,
         endDate: it.courseTask.studentEndDate,
         completed: it.isCompleted,
+        status: it.isCompleted
+          ? InterviewStatus.Completed
+          : it.isCanceled
+          ? InterviewStatus.Canceled
+          : InterviewStatus.NotCompleted,
         student: {
           totalScore: it.student.totalScore,
           cityName: it.student.user.cityName,
@@ -223,6 +229,11 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         id: it.id,
         name: it.courseTask.task.name,
         completed: it.isCompleted,
+        status: it.isCompleted
+          ? InterviewStatus.Completed
+          : it.isCanceled
+          ? InterviewStatus.Canceled
+          : InterviewStatus.NotCompleted,
         descriptionUrl: it.courseTask.task.descriptionUrl,
         startDate: it.courseTask.studentStartDate,
         endDate: it.courseTask.studentEndDate,
