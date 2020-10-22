@@ -56,6 +56,12 @@ export interface Contacts {
   linkedIn: string | null;
 }
 
+export interface Discord {
+  id: number;
+  username: string;
+  discriminator: number;
+}
+
 export interface Consent {
   id?: number;
   createdDate?: number;
@@ -154,6 +160,7 @@ export interface StageInterviewDetailedFeedback {
 export interface UserInfo {
   generalInfo: GeneralInfo;
   contacts?: Contacts;
+  discord: Discord | null;
 }
 
 export interface ProfileInfo {
@@ -165,6 +172,7 @@ export interface ProfileInfo {
   studentStats?: StudentStats[];
   publicFeedback?: PublicFeedback[];
   stageInterviewFeedback?: StageInterviewDetailedFeedback[];
+  discord: Discord | null;
 }
 
 export interface SaveProfileInfo {
@@ -172,6 +180,7 @@ export interface SaveProfileInfo {
   generalInfo: GeneralInfo;
   contacts: Contacts;
   consents: Consent[];
+  discord: Discord | null;
   isPermissionsSettingsChanged: boolean;
   isProfileSettingsChanged: boolean;
 }

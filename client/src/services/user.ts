@@ -4,6 +4,7 @@ import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
 import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
 import { Course } from './models';
+import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
   name: string;
@@ -18,6 +19,31 @@ export class UserService {
 
   constructor(ctx?: NextPageContext) {
     this.axios = axios.create(getServerAxiosProps(ctx));
+  }
+
+  async getDiscordIds() {
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+
+    if (fragment.has('access_token')) {
+      const accessToken = fragment.get('access_token');
+      const tokenType = fragment.get('token_type');
+
+      const response = await fetch(discordIntegration.api.me, {
+        headers: {
+          authorization: `${tokenType} ${accessToken}`,
+        },
+      });
+
+      const { username, discriminator, id } = await response.json();
+
+      return {
+        username,
+        discriminator,
+        id,
+      };
+    }
+
+    return null;
   }
 
   async getCourses() {
