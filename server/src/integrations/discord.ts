@@ -4,6 +4,7 @@ import { config } from '../config';
 
 interface BadgeParams {
   fromGithubId: string;
+  toDiscordId: number | null;
   toGithubId: string;
   comment: string;
 }
@@ -29,10 +30,13 @@ export class DiscordService {
       return null;
     }
     const { gratitudeUrl } = config.integrations.discord;
+
+    const mention = params.toDiscordId ? `<@${params.toDiscordId}>` : `**@${params.toGithubId}**`;
+
     const message: DiscordMessage = {
       avatar_url: `https://github.com/${params.fromGithubId}.png`,
       username: params.fromGithubId,
-      content: `@${params.toGithubId}\n${params.comment}`,
+      content: `${mention}\n${params.comment}`,
     };
     const result = await axios.post(gratitudeUrl!, message);
     this.logger.info(result.status.toString());

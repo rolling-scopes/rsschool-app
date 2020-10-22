@@ -95,6 +95,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
     }
     return discordService.pushGratitude({
       toGithubId: toUser.githubId,
+      toDiscordId: toUser.discord?.id ?? null,
       fromGithubId: fromUser.githubId,
       comment: data.comment,
     });

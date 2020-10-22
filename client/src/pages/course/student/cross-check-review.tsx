@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
+import CopyToClipboardButton from 'components/CopyToClipboardButton';
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number };
@@ -68,11 +69,23 @@ function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignment }) {
   if (!assignment) {
     return null;
   }
+  const discordUsername = `@${assignment.student.discord}`;
   return (
     <div style={{ marginTop: 16 }}>
-      <Typography.Text>
+      <Typography.Paragraph>
+        Student Discord:{' '}
+        {assignment.student.discord ? (
+          <>
+            <Typography.Text strong>{discordUsername}</Typography.Text>{' '}
+            <CopyToClipboardButton value={discordUsername} />
+          </>
+        ) : (
+          'unknown'
+        )}
+      </Typography.Paragraph>
+      <Typography.Paragraph>
         Solution: <a href={assignment.url}>{assignment.url}</a>
-      </Typography.Text>
+      </Typography.Paragraph>
     </div>
   );
 }
@@ -156,11 +169,11 @@ function Page(props: CoursePageProps) {
               />
               <CrossCheckAssignmentLink assignment={assignment} />
             </Form.Item>
+            <ScoreInput courseTask={courseTask} />
+            <CommentInput />
             <Form.Item valuePropName="checked" name="visibleName">
               <Checkbox>Make my name visible in feedback</Checkbox>
             </Form.Item>
-            <ScoreInput courseTask={courseTask} />
-            <CommentInput />
             <Button size="large" type="primary" htmlType="submit">
               Submit
             </Button>

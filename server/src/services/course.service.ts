@@ -31,6 +31,7 @@ export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.githubId`,
   `${modelName}.cityName`,
   `${modelName}.countryName`,
+  `${modelName}.discord`,
 ];
 
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
@@ -110,6 +111,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     mentor: student.mentor ? convertToMentorBasic(student.mentor) : null,
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
+    discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : '',
   };
 }
 

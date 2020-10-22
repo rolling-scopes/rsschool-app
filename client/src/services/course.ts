@@ -576,6 +576,7 @@ export interface StudentSummary {
   totalScore: number;
   results: any[];
   isActive: boolean;
+  discord: string;
   mentor:
     | (MentorBasic & {
         contactsEmail?: string;

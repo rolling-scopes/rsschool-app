@@ -64,7 +64,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     return setResponse(ctx, FORBIDDEN);
   }
 
-  const { generalInfo, contacts } = await getUserInfo(requestedGithubId, permissions);
+  const { generalInfo, contacts, discord } = await getUserInfo(requestedGithubId, permissions);
   const publicFeedback = isPublicFeedbackVisible ? await getPublicFeedback(requestedGithubId) : undefined;
   const mentorStats = isMentorStatsVisible ? await getMentorStats(requestedGithubId) : undefined;
   const studentStats = isStudentStatsVisible ? await getStudentStats(requestedGithubId, permissions) : undefined;
@@ -80,6 +80,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     generalInfo,
     contacts,
     consents,
+    discord,
     mentorStats,
     publicFeedback,
     stageInterviewFeedback,
