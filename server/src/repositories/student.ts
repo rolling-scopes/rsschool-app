@@ -1,7 +1,8 @@
-import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
+import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
 import { Student } from '../models';
 import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
+import { StageInterviewRepository } from './stageInterview';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -16,6 +17,9 @@ export class StudentRepository extends AbstractRepository<Student> {
       expellingReason: comment || '',
       endDate: new Date(),
     });
+
+    const repo = getCustomRepository(StageInterviewRepository);
+    await repo.cancelByStudent(courseId, githubId);
   }
 
   public async restore(courseId: number, githubId: string) {

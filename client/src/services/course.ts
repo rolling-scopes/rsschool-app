@@ -1,6 +1,6 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
-import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
 import { ScoreTableFilters } from '../../../common/types/score';
@@ -444,7 +444,7 @@ export class CourseService {
 
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/interviews`);
-    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
+    return result.data.data as InterviewDetails[];
   }
 
   async getStudentCrossMentors(githubId: string) {

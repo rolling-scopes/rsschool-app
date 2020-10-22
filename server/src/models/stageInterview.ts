@@ -62,6 +62,9 @@ export class StageInterview {
   @Column({ default: false })
   isCompleted: boolean;
 
+  @Column({ default: false })
+  isCanceled: boolean;
+
   @Column({ nullable: true })
   decision: string;
 

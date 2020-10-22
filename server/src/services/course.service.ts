@@ -179,7 +179,7 @@ export async function expelMentor(courseId: number, githubId: string) {
   if (mentor) {
     await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
     await getRepository(Mentor).update(mentor.id, { isExpelled: true });
-    await getCustomRepository(StageInterviewRepository).removeByMentor(courseId, githubId);
+    await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
   }
 }
 
