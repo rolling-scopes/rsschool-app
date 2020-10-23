@@ -32,12 +32,14 @@ export function CertificateCriteria(props: Props) {
           layout="vertical"
           form={form}
           onValuesChange={(changes: any, values: any) => {
-            const { minScore, courseTaskIds } = values as FormValues;
+            const { minScore, courseTaskIds, minTotalScore } = values as FormValues;
             const formChanges = changes as FormValues;
             if (formChanges.minScore === undefined && formChanges.courseTaskIds === undefined) {
               return;
             }
-            setApplyEnabled(!!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0));
+            setApplyEnabled(
+              !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0) || !!minTotalScore,
+            );
           }}
           onFinish={values => {
             const { minScore, courseTaskIds, minTotalScore } = values;
@@ -61,7 +63,7 @@ export function CertificateCriteria(props: Props) {
           <Form.Item name="minScore" label="Min score for tasks">
             <InputNumber />
           </Form.Item>
-          <Form.Item name="minTotalScore" rules={[{ required: true }]} label="Min total score">
+          <Form.Item name="minTotalScore" label="Min total score">
             <InputNumber />
           </Form.Item>
           <Button disabled={!applyEnabled} htmlType="submit" type="primary">
@@ -76,4 +78,5 @@ export function CertificateCriteria(props: Props) {
 type FormValues = {
   courseTaskIds: string[];
   minScore: number;
+  minTotalScore: number;
 };
