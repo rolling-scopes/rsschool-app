@@ -287,7 +287,7 @@ export class StudentRepository extends AbstractRepository<Student> {
           'tr.studentId = student.id AND tr.score >= :minScore AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
           {
             requiredCourseTaskIds: criteria.courseTaskIds,
-            minScore: criteria.minScore,
+            minScore: criteria.minScore ? criteria.minScore : 1,
           },
         )
         .addSelect('ARRAY_AGG ("tr"."courseTaskId") AS "tasks"');
@@ -296,7 +296,9 @@ export class StudentRepository extends AbstractRepository<Student> {
     query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
 
     if (criteria.minTotalScore != null) {
-      query = query.andWhere('student.totalScore >= :minTotalScore', { minTotalScore: criteria.minTotalScore });
+      query = query.andWhere('student.totalScore >= :minTotalScore', {
+        minTotalScore: criteria.minTotalScore ? criteria.minTotalScore : 1,
+      });
     }
 
     if (criteria.courseTaskIds.length > 0) {
