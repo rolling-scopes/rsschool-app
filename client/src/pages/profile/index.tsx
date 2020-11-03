@@ -311,8 +311,15 @@ export class ProfilePage extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    await this.fetchData();
-    await this.authorizeDiscord();
+    // it's a dirty hack to fix an issue with empty query params
+    // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
+    //
+    // >> After hydration, Next.js will trigger an update to your application
+    // >> to provide the route parameters in the query object.
+    setTimeout(async () => {
+      await this.fetchData();
+      await this.authorizeDiscord();
+    }, 200);
   }
 
   render() {
