@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from 'antd';
+import { Card, Avatar } from 'antd';
 
 type Props = {
   title?: string;
@@ -10,9 +10,16 @@ type Props = {
 function SectionCV(props: Props) {
   const { title, icon, content } = props;
 
+  const avatar = icon ? <Avatar icon={icon} /> : null;
+
+  const complexTitle = (
+    <>
+    {avatar} {title}
+    </>
+  );
+
   return (
-    <Card title={title || null} bordered={false}>
-      <Card.Meta avatar={icon || null}></Card.Meta>
+    <Card title={complexTitle} bordered={false}>
       {content}
     </Card>
   );
