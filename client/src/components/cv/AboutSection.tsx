@@ -15,7 +15,7 @@ function AboutSection(props: Props) {
   const sectionContent = (
     <Row>
       <Col>
-        <Text>{notes}</Text>
+        <Text style={{fontSize: '16px'}}>{notes}</Text>
       </Col>
     </Row>
   );
