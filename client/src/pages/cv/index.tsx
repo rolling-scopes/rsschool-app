@@ -4,7 +4,8 @@ import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { LoadingScreen } from 'components/LoadingScreen';
 import MainSection from 'components/cv/MainSection';
-import { mockContactsList, mockUserData } from './mockData';
+import AboutSection from 'components/cv/AboutSection';
+import { mockContactsList, mockUserData, notes } from './mockData';
 
 const { Content } = Layout;
 
@@ -33,6 +34,9 @@ class CVPage extends React.Component<Props, State> {
                   contacts={mockContactsList}
                   name={mockUserData.name}
                   desiredPosition={mockUserData.desiredPosition}
+                />
+                <AboutSection
+                  notes={notes}
                 />
               </Space>
             </Content>
