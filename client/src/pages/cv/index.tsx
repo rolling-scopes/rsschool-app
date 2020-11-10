@@ -5,7 +5,8 @@ import withSession, { Session } from 'components/withSession';
 import { LoadingScreen } from 'components/LoadingScreen';
 import MainSection from 'components/cv/MainSection';
 import AboutSection from 'components/cv/AboutSection';
-import { mockContactsList, mockUserData, notes } from './mockData';
+import EducationSection from 'components/cv/EducationSection';
+import { mockContactsList, mockUserData, notes, educationHistory } from './mockData';
 
 const { Content } = Layout;
 
@@ -37,6 +38,9 @@ class CVPage extends React.Component<Props, State> {
                 />
                 <AboutSection
                   notes={notes}
+                />
+                <EducationSection
+                  educationHistory={educationHistory}
                 />
               </Space>
             </Content>
