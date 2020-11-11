@@ -61,7 +61,7 @@ export function registryRouter(logger?: ILogger) {
 
     const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
     if (mentorRegistry == null) {
-      setResponse(ctx, BAD_REQUEST);
+      setResponse(ctx, NOT_FOUND);
       return;
     }
     const result = {

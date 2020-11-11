@@ -6,7 +6,8 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { CourseTask, Student, Task, TaskResult, IUserSession, CourseRole } from '../../models';
 import { courseService, OperationResult, taskResultsService, taskService, notificationService } from '../../services';
-import { getCourseTasks, getStudentsScore, getStudentScore } from '../../services/course.service';
+import { getCourseTasks, getStudentScore } from '../../services/course.service';
+import { getStudentsScore } from '../../services/score.service';
 
 import { setCsvResponse, setResponse } from '../utils';
 
