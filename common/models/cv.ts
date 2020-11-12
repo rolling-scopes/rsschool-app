@@ -10,3 +10,10 @@ export interface EducationRecord {
   startYear: number;
   finishYear: number;
 }
+
+export interface EmploymentRecord {
+  organization: string | null;
+  position: string;
+  startYear: number;
+  finishYear: number;
+}
