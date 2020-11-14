@@ -7,7 +7,8 @@ import MainSection from 'components/cv/MainSection';
 import AboutSection from 'components/cv/AboutSection';
 import EducationSection from 'components/cv/EducationSection';
 import EmploymentSection from 'components/cv/EmploymentSection';
-import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory } from './mockData';
+import CoursesSection from 'components/cv/CoursesSection';
+import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData } from './mockData';
 
 const { Content } = Layout;
 
@@ -24,6 +25,31 @@ class CVPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
   };
+
+  private extractCoursesData(coursesData: any) {
+    const coursesRaw = coursesData;
+    return coursesRaw.map((course: any) => {
+      const {
+        certificateId,
+        courseFullName,
+        isExpelled,
+        locationName,
+        position,
+        isCourseCompleted,
+        totalScore
+      } = course;
+
+      return {
+        certificateId,
+        courseFullName,
+        isExpelled,
+        locationName,
+        position,
+        isCourseCompleted,
+        totalScore
+      }
+    });
+  }
 
   render() {
     return (
@@ -45,6 +71,9 @@ class CVPage extends React.Component<Props, State> {
                 />
                 <EmploymentSection
                   employmentHistory={employmentHistory}
+                />
+                <CoursesSection
+                  coursesData={this.extractCoursesData(coursesData)}
                 />
               </Space>
             </Content>
