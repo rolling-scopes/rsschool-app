@@ -17,3 +17,13 @@ export interface EmploymentRecord {
   startYear: number;
   finishYear: number;
 }
+
+export interface CourseData {
+  locationName: string;
+  courseFullName: string;
+  isExpelled: boolean;
+  certificateId: string | null;
+  isCourseCompleted: boolean;
+  totalScore: number;
+  position: number | null;
+}
