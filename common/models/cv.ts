@@ -27,3 +27,8 @@ export interface CourseData {
   totalScore: number;
   position: number | null;
 }
+
+export interface BadgesData {
+  badges: string[];
+  total: number;
+}
