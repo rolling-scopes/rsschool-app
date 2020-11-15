@@ -10,6 +10,7 @@ import EmploymentSection from 'components/cv/EmploymentSection';
 import CoursesSection from 'components/cv/CoursesSection';
 import BadgesSection from 'components/cv/BadgesSection';
 import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from './mockData';
+import {EnglishLevel, MilitaryService} from '../../../../common/models/cv';
 
 const { Content } = Layout;
 
@@ -75,6 +76,7 @@ class CVPage extends React.Component<Props, State> {
   }
 
   render() {
+    const {name, desiredPosition, selfIntroLink, englishLevel, militaryService} = mockUserData;
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
@@ -83,8 +85,11 @@ class CVPage extends React.Component<Props, State> {
               <Space direction="vertical" style={{ width: '100%' }}>
                 <MainSection
                   contacts={mockContactsList}
-                  name={mockUserData.name}
-                  desiredPosition={mockUserData.desiredPosition}
+                  name={name}
+                  desiredPosition={desiredPosition}
+                  selfIntroLink={selfIntroLink}
+                  englishLevel={englishLevel as EnglishLevel}
+                  militaryService={militaryService as MilitaryService}
                 />
                 <AboutSection
                   notes={notes}
