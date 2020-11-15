@@ -71,7 +71,7 @@ function ContactsList(props: Props) {
           </Item>
         );
       }}
-    ></List>
+    />
   );
 }
 
