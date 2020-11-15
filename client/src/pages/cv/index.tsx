@@ -8,7 +8,8 @@ import AboutSection from 'components/cv/AboutSection';
 import EducationSection from 'components/cv/EducationSection';
 import EmploymentSection from 'components/cv/EmploymentSection';
 import CoursesSection from 'components/cv/CoursesSection';
-import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData } from './mockData';
+import BadgesSection from 'components/cv/BadgesSection';
+import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from './mockData';
 
 const { Content } = Layout;
 
@@ -51,6 +52,28 @@ class CVPage extends React.Component<Props, State> {
     });
   }
 
+  private extractBadgesData(badges: any) {
+    const uniqueBadgesSummarized = badges.reduce((uniqueBadges: any, badge: any) => {
+      const { badgeId } = badge;
+      if (uniqueBadges[badgeId]) {
+        uniqueBadges[badgeId]++;
+      } else {
+        uniqueBadges[badgeId] = 1;
+      }
+      return uniqueBadges;
+    }, {} as any);
+
+    const badgesFormatted = Object.entries(uniqueBadgesSummarized).map(entry => {
+      const [badgeId, badgeCount] = entry;
+      return `${badgeId}: ${badgeCount}`;
+    });
+
+    return {
+      badges: badgesFormatted,
+      total: badges.length
+    };
+  }
+
   render() {
     return (
       <>
@@ -74,6 +97,9 @@ class CVPage extends React.Component<Props, State> {
                 />
                 <CoursesSection
                   coursesData={this.extractCoursesData(coursesData)}
+                />
+                <BadgesSection
+                  badgesData={this.extractBadgesData(badgesData)}
                 />
               </Space>
             </Content>
