@@ -80,6 +80,8 @@ export interface CourseEvent {
   organizer: UserBasic;
   detailsUrl: string;
   broadcastUrl: string;
+  special?: string;
+  duration?: number;
 }
 
 export interface CourseUser {
