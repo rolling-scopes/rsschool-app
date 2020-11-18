@@ -45,3 +45,9 @@ export const EventTypeToName: Record<string, string> = {
   'codewars:stage1': 'codewars',
   'codewars:stage2': 'codewars',
 };
+
+export enum ViewMode {
+  TABLE = 'TABLE',
+  LIST = 'LIST',
+  CALENDAR = 'CALENDAR',
+}
