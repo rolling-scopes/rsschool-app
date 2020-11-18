@@ -25,6 +25,7 @@
     "chart.js": "^2.9.4",
     "csvtojson": "~2.0.10",
     "lodash": "~4.17.21",
+    "mobile-device-detect": "^0.4.3",
     "moment": "~2.29.1",
     "moment-timezone": "~0.5.33",
     "next": "~10.2.0",

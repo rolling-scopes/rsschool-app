@@ -1,13 +1,18 @@
-import { Row, Select } from 'antd';
+import { Col, Row, Select } from 'antd';
 import { withSession, PageLayout } from 'components';
-import TableView from 'components/Schedule/TableView';
+import { TableView, CalendarView, ListView } from 'components/Schedule';
 import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
 import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { TIMEZONES } from '../../configs/timezones';
-import { useAsync } from 'react-use';
+import { useAsync, useLocalStorage } from 'react-use';
 import { useLoading } from 'components/useLoading';
+import { isMobileOnly } from 'mobile-device-detect';
+import { ViewMode } from 'components/Schedule/model';
+
+const { Option } = Select;
+const LOCAL_VIEW_MODE = 'scheduleViewMode';
 
 const TaskTypes = {
   deadline: 'deadline',
@@ -20,6 +25,7 @@ export function SchedulePage(props: CoursePageProps) {
   const [loading, withLoading] = useLoading(false);
   const [data, setData] = useState<CourseEvent[]>([]);
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [scheduleViewMode, setScheduleViewMode] = useLocalStorage<string>(LOCAL_VIEW_MODE, getDefaultViewMode());
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
   useAsync(
@@ -34,23 +40,41 @@ export function SchedulePage(props: CoursePageProps) {
     [courseService],
   );
 
+  const mapScheduleViewToComponent = {
+    [ViewMode.TABLE]: TableView,
+    [ViewMode.LIST]: ListView,
+    [ViewMode.CALENDAR]: CalendarView,
+  };
+
+  const viewMode = scheduleViewMode as ViewMode;
+  const ScheduleView = mapScheduleViewToComponent[viewMode] || TableView;
+
   return (
     <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
-      <Row justify="space-between" style={{ marginBottom: 16 }}>
-        <Select
-          style={{ width: 200 }}
-          placeholder="Please select a timezone"
-          defaultValue={timeZone}
-          onChange={setTimeZone}
-        >
-          {TIMEZONES.map(tz => (
-            <Select.Option key={tz} value={tz}>
-              {tz}
-            </Select.Option>
-          ))}
-        </Select>
+      <Row justify="start" gutter={[16, 16]}>
+        <Col>
+          <Select style={{ width: 100 }} defaultValue={scheduleViewMode} onChange={setScheduleViewMode}>
+            <Option value={ViewMode.TABLE}>Table</Option>
+            <Option value={ViewMode.LIST}>List</Option>
+            <Option value={ViewMode.CALENDAR}>Calendar</Option>
+          </Select>
+        </Col>
+        <Col>
+          <Select
+            style={{ width: 200 }}
+            placeholder="Please select a timezone"
+            defaultValue={timeZone}
+            onChange={setTimeZone}
+          >
+            {TIMEZONES.map(tz => (
+              <Option key={tz} value={tz}>
+                {tz}
+              </Option>
+            ))}
+          </Select>
+        </Col>
       </Row>
-      <TableView data={data} timeZone={timeZone} />
+      <ScheduleView data={data} timeZone={timeZone} />
     </PageLayout>
   );
 }
@@ -78,6 +102,20 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
       githubId: task.taskOwner ? task.taskOwner.githubId : '',
     },
   } as CourseEvent;
+};
+
+const getDefaultViewMode = () => {
+  const localView = localStorage.getItem(LOCAL_VIEW_MODE);
+
+  if (localView) {
+    return localView;
+  }
+
+  if (isMobileOnly) {
+    return ViewMode.LIST;
+  }
+
+  return ViewMode.TABLE;
 };
 
 export default withCourseData(withSession(SchedulePage));
