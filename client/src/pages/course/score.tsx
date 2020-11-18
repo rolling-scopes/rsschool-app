@@ -99,7 +99,7 @@ export function Page(props: CoursePageProps) {
               <span style={{ display: 'inline-block', lineHeight: '24px' }}>Active Students Only</span>{' '}
               <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
             </div>
-            <Text mark>Total score and position is updated every day at 00:00 GMT+3</Text>
+            <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
             {renderCsvExportButton(props)}
           </Row>
           {renderTable(loaded, students.content, columns, students.pagination, getCourseScore)}

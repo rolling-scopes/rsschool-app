@@ -34,7 +34,7 @@ export function MainStatsCard(props: Props) {
                 hideText={true}
                 style={chartStyle}
               />
-              <Tooltip title={`Your performance: ${percentageTasksCompleted * 100} %`}>
+              <Tooltip title={`Your performance: ${Math.round(percentageTasksCompleted * 100)} %`}>
                 <Text strong>Your performance</Text>
               </Tooltip>
             </Col>

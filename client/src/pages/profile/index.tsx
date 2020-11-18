@@ -21,10 +21,12 @@ import {
   Contacts,
   GeneralInfo,
   Consent,
+  Discord,
 } from '../../../../common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
+import DiscordCard from 'components/Profile/DiscordCard';
 import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
@@ -258,12 +260,13 @@ export class ProfilePage extends React.Component<Props, State> {
 
     if (profile) {
       try {
-        const { permissionsSettings, generalInfo, contacts, consents } = profile;
+        const { permissionsSettings, generalInfo, contacts, consents, discord } = profile;
         await this.userService.saveProfileInfo({
           permissionsSettings: permissionsSettings as ConfigurableProfilePermissions,
           generalInfo: generalInfo as GeneralInfo,
           contacts: contacts as Contacts,
           consents: consents as Consent[],
+          discord: discord as Discord,
           isPermissionsSettingsChanged: isInitialPermissionsSettingsChanged,
           isProfileSettingsChanged: isInitialProfileSettingsChanged,
         });
@@ -285,8 +288,38 @@ export class ProfilePage extends React.Component<Props, State> {
     }
   };
 
+  authorizeDiscord = async () => {
+    await this.setState({ isLoading: true });
+
+    const discord = await this.userService.getDiscordIds();
+
+    if (discord) {
+      this.setState(({ profile, ...state }) => ({
+        ...state,
+        profile: {
+          ...profile,
+          discord,
+        },
+        isInitialProfileSettingsChanged: true,
+      }));
+
+      await this.saveProfile();
+      this.props.router.replace('/profile');
+    }
+
+    await this.setState({ isLoading: false });
+  };
+
   async componentDidMount() {
-    await this.fetchData();
+    // it's a dirty hack to fix an issue with empty query params
+    // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
+    //
+    // >> After hydration, Next.js will trigger an update to your application
+    // >> to provide the route parameters in the query object.
+    setTimeout(async () => {
+      await this.fetchData();
+      await this.authorizeDiscord();
+    }, 200);
   }
 
   render() {
@@ -347,6 +380,7 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
+      profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
       profile?.consents && (
         <ConsentsCard
           data={profile.consents}

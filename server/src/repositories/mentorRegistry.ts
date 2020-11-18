@@ -5,9 +5,7 @@ import { userService } from '../services';
 @EntityRepository(MentorRegistry)
 export class MentorRegistryRepository extends AbstractRepository<MentorRegistry> {
   public async findAll() {
-    const data = await this.getPreparedMentorRegistriesQuery()
-      .where('mentorRegistry.canceled = false')
-      .getMany();
+    const data = await this.getPreparedMentorRegistriesQuery().where('mentorRegistry.canceled = false').getMany();
     return data.map(transformMentorRegistry);
   }
 

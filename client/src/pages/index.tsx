@@ -260,7 +260,11 @@ const courseManagementRoutes = [
     getLink: (course: Course) => `/course/admin/users?course=${course.alias}`,
     access: isAdminRole,
   },
-
+  {
+    name: () => `Cross-Сheck Table`,
+    getLink: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
+    access: isAdminRole,
+  },
   {
     name: () => `Technical Screening`,
     getLink: (course: Course) => `/course/admin/stage-interviews?course=${course.alias}`,
@@ -367,8 +371,8 @@ class IndexPage extends React.PureComponent<Props, State> {
     const [allCourses] = await Promise.all([new CoursesService().getCourses(), this.loadCourseData(activeCourse?.id)]);
     this.setState({ allCourses });
 
-    const mentor = await mentorRegistryService.getMentor();
-    const preselectedCourses = allCourses.filter(c => mentor.preselectedCourses.includes(c.id));
+    const mentor = await mentorRegistryService.getMentor().catch(() => null);
+    const preselectedCourses = allCourses.filter(c => mentor?.preselectedCourses.includes(c.id));
     this.setState({ preselectedCourses });
   }
 

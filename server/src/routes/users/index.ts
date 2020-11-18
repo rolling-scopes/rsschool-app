@@ -12,8 +12,6 @@ const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
 
   const result: OperationResult[] = [];
   for await (const item of data) {
-    console.time(item.githubId);
-
     try {
       const userRepository = getRepository(User);
       const entity = await userRepository.findOne({ where: { githubId: item.githubId.toLowerCase() } });
@@ -28,8 +26,6 @@ const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
     } catch (e) {
       result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${e.message}` });
     }
-
-    console.timeEnd(item.githubId);
   }
 
   setResponse(ctx, OK, result);

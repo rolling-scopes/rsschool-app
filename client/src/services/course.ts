@@ -1,12 +1,13 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
-import { UserBasic, MentorBasic, StudentBasic } from '../../../common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
 import { ScoreTableFilters } from '../../../common/types/score';
 import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 
 export interface CourseTask {
   id: number;
@@ -208,7 +209,7 @@ export class CourseService {
       pageSize: String(pagination.pageSize),
       orderBy: String(orderBy.field),
       orderDirection: String(orderBy.direction),
-      ...onlyDefined(filter),
+      ...(onlyDefined(filter) as object),
     });
     const result = await this.axios.get<{ data: Pagination<StudentScore> }>(`/students/score?${params.toString()}`);
     return result.data.data;
@@ -263,6 +264,10 @@ export class CourseService {
     expellingReason: string,
   ) {
     await this.axios.post(`/students/status`, { criteria, options, expellingReason, status: 'expelled' });
+  }
+
+  async postCertificateStudents(criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number }) {
+    await this.axios.post(`/certificates`, { criteria });
   }
 
   async restoreStudent(githubId: string) {
@@ -439,12 +444,28 @@ export class CourseService {
 
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/interviews`);
-    return result.data.data as { name: string; endDate: string; completed: boolean; interviewer: any }[];
+    return result.data.data as InterviewDetails[];
   }
 
   async getStudentCrossMentors(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/tasks/cross-mentors`);
     return result.data.data as { name: string; mentor: any }[];
+  }
+
+  async getCrossCheckPairs(
+    pagination: IPaginationInfo,
+    filter: Partial<Record<keyof CrossCheckFieldsTypes, string>>,
+    orderBy = { field: 'student,githubId', order: 'desc' },
+  ) {
+    const params = new URLSearchParams({
+      current: String(pagination.current),
+      pageSize: String(pagination.pageSize),
+      orderBy: String(orderBy.field),
+      orderDirection: String(orderBy.order),
+      ...(onlyDefined(filter) as object),
+    });
+    const result = await this.axios.get(`/cross-check/pairs?${params.toString()}`);
+    return result.data.data as { content: CrossCheckPairs[]; pagination: IPaginationInfo };
   }
 
   async createCertificate(githubId: string) {
@@ -555,6 +576,7 @@ export interface StudentSummary {
   totalScore: number;
   results: any[];
   isActive: boolean;
+  discord: string;
   mentor:
     | (MentorBasic & {
         contactsEmail?: string;
@@ -572,4 +594,25 @@ export interface TaskSolution {
   url: string;
   updatedDate: string;
   id: string;
+}
+
+export interface CrossCheckPairs {
+  checkerStudent: {
+    githubId: string;
+    id: number;
+  };
+  courseTask: {
+    courseId: number;
+    id: number;
+  };
+  student: {
+    githubId: string;
+    id: number;
+  };
+  task: {
+    name: string;
+    id: number;
+  };
+  url: string;
+  score: number;
 }

@@ -1,5 +1,4 @@
 import { Col, Form, Input, Modal, Row } from 'antd';
-import { useForm } from 'antd/lib/form/util';
 
 type Props = {
   title: string;
@@ -9,7 +8,7 @@ type Props = {
 };
 
 export function CommentModal(props: Props) {
-  const [form] = useForm();
+  const [form] = Form.useForm();
 
   return (
     <Modal

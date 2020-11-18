@@ -21,7 +21,9 @@ type ErrorObj = {
 };
 
 export interface ILogger {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   info(obj: object | string, ...params: any[]): void;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   warn(obj: object | string, ...params: any[]): void;
   error(obj: Error | ErrorObj | string, ...params: any[]): void;
   child(options: { module: string; userId?: string }): ILogger;

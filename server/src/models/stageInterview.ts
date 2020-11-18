@@ -23,10 +23,7 @@ export class StageInterview {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @ManyToOne(
-    _ => Student,
-    (student: Student) => student.stageInterviews,
-  )
+  @ManyToOne(_ => Student, (student: Student) => student.stageInterviews)
   student: Student;
 
   @OneToMany(
@@ -64,6 +61,9 @@ export class StageInterview {
 
   @Column({ default: false })
   isCompleted: boolean;
+
+  @Column({ default: false })
+  isCanceled: boolean;
 
   @Column({ nullable: true })
   decision: string;

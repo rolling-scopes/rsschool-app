@@ -14,6 +14,7 @@ import {
   CourseRoles,
   StundetMentorRoles as StudentMentorRoles,
   CourseRole,
+  MentorRegistry,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -54,13 +55,26 @@ export interface Permissions {
   isConsentsVisible: boolean;
 }
 
-export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> =>
-  (await getRepository(User)
+export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
+  const result = await getRepository(User)
     .createQueryBuilder('user')
     .select('"student"."courseId" AS "courseId"')
     .leftJoin(Student, 'student', '"student"."userId" = "user"."id"')
     .where('"user"."githubId" = :githubId', { githubId })
-    .getRawMany()) || null;
+    .getRawMany();
+  return result ?? null;
+};
+
+export const getMentorRegistryCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
+  const result = await getRepository(MentorRegistry)
+    .createQueryBuilder('mentorRegistry')
+    .select(['mentorRegistry.preferedCourses'])
+    .leftJoin('mentorRegistry.user', 'user')
+    .where('user.githubId = :githubId', { githubId })
+    .andWhere('"mentorRegistry".canceled = false')
+    .getOne();
+  return result?.preferedCourses?.map(course => ({ courseId: Number(course) })) ?? null;
+};
 
 export const getConfigurableProfilePermissions = async (githubId: string): Promise<ConfigurableProfilePermissions> =>
   (await getRepository(ProfilePermissions)
@@ -123,17 +137,21 @@ export const getRelationsRoles = async (userGithubId: string, requestedGithubId:
 export const defineRole = ({
   relationsRoles,
   studentCourses,
+  registryCourses,
   roles,
   coursesRoles,
   userGithubId,
 }: {
   relationsRoles: Relations | null;
+  registryCourses: { courseId: number }[] | null;
   studentCourses: { courseId: number }[] | null;
   coursesRoles?: CourseRoles;
   roles: StudentMentorRoles;
   userGithubId: string;
 }): RelationRole => {
-  if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
+  if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
+    return 'coursemanager';
+  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
   } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
     return 'coursemanager';

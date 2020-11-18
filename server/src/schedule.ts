@@ -1,10 +1,11 @@
 import { scheduleJob } from 'node-schedule';
 import { ILogger } from './logger';
-import { getStudentsScore, getCourseTasks, updateScoreStudents, getCourses } from './services/course.service';
+import { getCourseTasks, updateScoreStudents, getCourses } from './services/course.service';
+import { getStudentsScore } from './services/score.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
 
 export function startBackgroundJobs(logger: ILogger) {
-  scheduleJob('0 21 * * *', async () => {
+  scheduleJob('0 1 * * *', async () => {
     logger.info('Starting score update job');
 
     const courses = await getCourses();

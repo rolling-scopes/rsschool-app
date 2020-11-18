@@ -1,7 +1,8 @@
-import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
+import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
 import { Student } from '../models';
 import { userService, courseService } from '../services';
-import { StudentBasic, UserBasic } from '../../../common/models';
+import { Discord, StudentBasic, UserBasic } from '../../../common/models';
+import { StageInterviewRepository } from './stageInterview';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -16,6 +17,9 @@ export class StudentRepository extends AbstractRepository<Student> {
       expellingReason: comment || '',
       endDate: new Date(),
     });
+
+    const repo = getCustomRepository(StageInterviewRepository);
+    await repo.cancelByStudent(courseId, githubId);
   }
 
   public async restore(courseId: number, githubId: string) {
@@ -70,7 +74,11 @@ export class StudentRepository extends AbstractRepository<Student> {
       .limit(20)
       .getRawMany();
 
-    return entities.map(entity => ({ id: entity.id, githubId: entity.githubId, name: userService.createName(entity) }));
+    return entities.map(entity => ({
+      id: entity.id,
+      githubId: entity.githubId,
+      name: userService.createName(entity),
+    }));
   }
 
   public async findAndIncludeMentor(courseId: number, githubId: string): Promise<StudentBasic | null> {
@@ -89,6 +97,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       cityName: record.user.cityName ?? '',
       countryName: record.user.countryName ?? '',
       isActive: !record.isExpelled && !record.isFailed,
+      discord: getDiscordUsername(record.user.discord),
       mentor: record.mentor
         ? {
             id: record.mentor.id,
@@ -169,11 +178,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     },
     options: { keepWithMentor?: boolean },
   ): Promise<{ id: number }[]> {
-    console.log({ criteria, options });
-
-    let query = getRepository(Student)
-      .createQueryBuilder('student')
-      .select(['student.id']);
+    let query = getRepository(Student).createQueryBuilder('student').select(['student.id']);
 
     if (criteria.courseTaskIds.length > 0) {
       query = query.leftJoin(
@@ -199,8 +204,6 @@ export class StudentRepository extends AbstractRepository<Student> {
     if (criteria.courseTaskIds.length > 0) {
       query = query.andWhere('tr.id IS NULL');
     }
-
-    console.log(query.getSql());
 
     return query.getMany();
   }
@@ -265,6 +268,54 @@ export class StudentRepository extends AbstractRepository<Student> {
         ...this.getPrimaryUserFields('mUser'),
       ]);
   }
+
+  public async findByCriteria(
+    courseId: number,
+    criteria: {
+      courseTaskIds: number[];
+      minScore: number | null;
+      minTotalScore: number | null;
+    },
+  ): Promise<number[]> {
+    let query = await getRepository(Student).createQueryBuilder('student').select(['student.id']);
+
+    if (criteria.courseTaskIds.length > 0) {
+      query = query
+        .leftJoin(
+          'student.taskResults',
+          'tr',
+          'tr.studentId = student.id AND tr.score >= :minScore AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
+          {
+            requiredCourseTaskIds: criteria.courseTaskIds,
+            minScore: criteria.minScore ? criteria.minScore : 1,
+          },
+        )
+        .addSelect('ARRAY_AGG ("tr"."courseTaskId") AS "tasks"');
+    }
+
+    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
+
+    if (criteria.minTotalScore != null) {
+      query = query.andWhere('student.totalScore >= :minTotalScore', {
+        minTotalScore: criteria.minTotalScore ? criteria.minTotalScore : 1,
+      });
+    }
+
+    if (criteria.courseTaskIds.length > 0) {
+      query = query.andWhere('tr.id IS NOT NULL');
+    }
+    query = query.groupBy('"student"."id"');
+
+    const rawCertificates = await query.getRawMany();
+
+    return rawCertificates
+      .map(({ student_id, tasks }) => (tasks.length === criteria.courseTaskIds.length ? student_id : undefined))
+      .filter(Boolean);
+  }
+}
+
+function getDiscordUsername(discord: Discord | null) {
+  return discord ? `${discord?.username}#${discord?.discriminator}` : '';
 }
 
 function transformStudent(record: Student): StudentBasic {
@@ -275,6 +326,7 @@ function transformStudent(record: Student): StudentBasic {
     cityName: record.user.cityName ?? 'Unknown',
     countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled && !record.isFailed,
+    discord: getDiscordUsername(record.user.discord),
     mentor: record.mentor
       ? {
           id: record.mentor.id,

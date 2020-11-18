@@ -25,7 +25,7 @@ export const getStageInterviewFeedback = async (githubId: string): Promise<Stage
         'stageInterviewFeedback',
         '"stageInterview"."id" = "stageInterviewFeedback"."stageInterviewId"',
       )
-      .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
+      .leftJoin(Mentor, 'mentor', '"mentor"."id" = "stageInterview"."mentorId"')
       .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
       .where('"user"."githubId" = :githubId', { githubId })
       .andWhere('"stageInterview"."isCompleted" = true')

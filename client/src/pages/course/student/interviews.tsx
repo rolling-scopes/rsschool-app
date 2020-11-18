@@ -8,12 +8,12 @@ import { useAsync } from 'react-use';
 import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { formatShortDate } from 'services/formatter';
-import { friendlyStageInterviewVerdict } from 'domain/interview';
+import { friendlyStageInterviewVerdict, InterviewDetails, InterviewStatus } from 'domain/interview';
 
 function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const [data, setData] = useState([] as any[]);
-  const [interviews, setInterviews] = useState([] as Interview[]);
+  const [data, setData] = useState<InterviewDetails[]>([]);
+  const [interviews, setInterviews] = useState<Interview[]>([]);
   const [hasStageInterview, setStageInterview] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -102,10 +102,10 @@ function Page(props: CoursePageProps) {
                             <GithubUserLink value={item.interviewer.githubId} />
                           </Descriptions.Item>
                           <Descriptions.Item label="Status">
-                            {item.completed ? <Tag color="green">Completed</Tag> : <Tag color="red">Not Completed</Tag>}
+                            <StatusLabel status={item.status} />
                           </Descriptions.Item>
                           <Descriptions.Item label="Result">
-                            <b>{friendlyStageInterviewVerdict(item.result) ?? '-'}</b>
+                            <b>{friendlyStageInterviewVerdict(item.result as any) ?? '-'}</b>
                           </Descriptions.Item>
                         </Descriptions>
                       </List.Item>
@@ -119,6 +119,18 @@ function Page(props: CoursePageProps) {
       </Row>
     </PageLayout>
   );
+}
+
+function StatusLabel({ status }: { status: InterviewStatus }) {
+  switch (status) {
+    case InterviewStatus.Completed:
+      return <Tag color="green">Completed</Tag>;
+    case InterviewStatus.Canceled:
+      return <Tag color="red">Canceled</Tag>;
+    case InterviewStatus.NotCompleted:
+    default:
+      return <Tag color="orange">Not Completed</Tag>;
+  }
 }
 
 export default withCourseData(withSession(Page));
