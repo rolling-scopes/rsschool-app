@@ -19,6 +19,7 @@
     "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
+    "@types/react-color": "^2.17.4",
     "algolia-places-react": "^1.5.1",
     "antd": "^4.6.6",
     "axios": "~0.20.0",
@@ -32,6 +33,7 @@
     "qs": "^6.9.4",
     "react": "~16.13.1",
     "react-chartjs-2": "^2.9.0",
+    "react-color": "^2.19.3",
     "react-dom": "~16.13.1",
     "react-gauge-chart": "git+https://github.com/BossBele/react-gauge-chart.git",
     "react-masonry-css": "^1.0.14",
