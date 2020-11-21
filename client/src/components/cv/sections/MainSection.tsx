@@ -1,57 +1,46 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
-import ContactsListCV from '../ContactsListCV';
+import ContactsList from '../ContactsList';
 import AvatarCV from '../AvatarCV';
-import { Contacts, MilitaryService, EnglishLevel } from '../../../../../common/models/cv';
+import { Contact, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
-interface Props {
-  avatarLink: string | null;
-  name: string | null;
-  desiredPosition: string | null;
-  selfIntroLink: string | null;
-  englishLevel: EnglishLevel | null; 
-  militaryService: MilitaryService;
-  startFrom: string | null;
-  fullTime: boolean | null;
-  contacts: Contacts;
-}
+type Props = {
+  name: string;
+  desiredPosition: string;
+  contacts: Contact[];
+  englishLevel: EnglishLevel,
+  militaryService: MilitaryService,
+  selfIntroLink: SelfIntroLink
+};
 
 function MainSection(props: Props) {
-  const { avatarLink, name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink, startFrom, fullTime } = props;
+  const { name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink } = props;
 
   const sectionContent = (
     <Row>
-      <Col flex={4} style={{ minWidth: '120px' }}>
-        <AvatarCV src={avatarLink} />
+      <Col span={4} style={{ minWidth: '120px' }}>
+        <AvatarCV />
         <br />
         <br />
-        <Text>English level: <Text strong>{englishLevel}</Text></Text>
+        <Text>English level: {englishLevel}</Text>
         <br />
-        {militaryService && <Text>Military service: <Text strong>{militaryService}</Text> </Text>}
+        {militaryService && <Text>Military service: {militaryService}</Text>}
         <br />
-        {selfIntroLink && (
-          <>
-          <a className='hide-on-print' href={selfIntroLink}>Self introduction video</a>
-          <br className='hide-on-print' />
-          </>
-        )}
-        <Text>Ready to work full time: <Text strong>{fullTime ? 'yes' : 'no'}</Text></Text>
-        <br />
-        {startFrom && <time dateTime={startFrom}>Ready to work from <Text strong>{startFrom}</Text></time>}
+        {selfIntroLink && <a href={selfIntroLink}>Self introduction video</a>}
       </Col>
-      <Col flex={14}>
+      <Col span={14}>
         <Title level={2}>{name}</Title>
         <Text>{desiredPosition}</Text>
       </Col>
-      <Col flex={6}>
-        <ContactsListCV contacts={contacts} />
+      <Col span={6}>
+        <ContactsList contacts={contacts} />
       </Col>
     </Row>
   );
-  return <SectionCV content={sectionContent} className='hide-on-print' />;
+  return <SectionCV content={sectionContent} />;
 }
 
 export default MainSection;
