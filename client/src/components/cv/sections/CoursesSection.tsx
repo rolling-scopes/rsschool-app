@@ -1,9 +1,9 @@
 
 import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
-import SectionCV from './SectionCV';
+import SectionCV from '../SectionCV';
 import { SafetyOutlined } from '@ant-design/icons';
-import { CourseData } from '../../../../common/models/cv';
+import { CourseData } from '../../../../../common/models/cv';
 
 const { Text } = Typography;
 const { Item } = List;

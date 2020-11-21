@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
-import SectionCV from './SectionCV';
-import ContactsList from './ContactsList';
-import AvatarCV from './AvatarCV';
-import { Contact, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../common/models/cv';
+import SectionCV from '../SectionCV';
+import ContactsList from '../ContactsList';
+import AvatarCV from '../AvatarCV';
+import { Contact, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
