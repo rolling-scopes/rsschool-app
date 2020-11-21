@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
-import SectionCV from './SectionCV';
+import SectionCV from '../SectionCV';
 import { SafetyOutlined } from '@ant-design/icons';
-import { BadgesData } from '../../../../common/models/cv';
+import { BadgesData } from '../../../../../common/models/cv';
 
 const { Text } = Typography;
 
