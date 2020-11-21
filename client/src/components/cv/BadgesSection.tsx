@@ -21,7 +21,7 @@ function BadgesSection(props: Props) {
     margin: '0 5px'
   };
 
-  const badgesElements = badges.map(badge => <Text style={badgeStyle}>{badge}</Text>)
+  const badgesElements = badges.map(badge => <Text style={badgeStyle} key={badge}>{badge}</Text>)
 
   const sectionContent = (
     <>
