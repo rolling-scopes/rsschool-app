@@ -15,12 +15,14 @@ function AboutSection(props: Props) {
   const sectionContent = (
     <Row>
       <Col>
-        <Text style={{ fontSize: '16px' }}>{notes}</Text>
+        <Text style={{fontSize: '16px'}}>{notes}</Text>
       </Col>
     </Row>
   );
 
-  return <SectionCV content={sectionContent} title="About me" icon={<ScheduleOutlined />} />;
+  const icon = <ScheduleOutlined />
+
+  return <SectionCV content={sectionContent} title="About me" icon={icon} />;
 }
 
 export default AboutSection;
