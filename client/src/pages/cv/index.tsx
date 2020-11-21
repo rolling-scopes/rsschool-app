@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Space } from 'antd';
+import { Layout, Space, Switch } from 'antd';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -9,6 +9,7 @@ import EducationSection from 'components/cv/EducationSection';
 import EmploymentSection from 'components/cv/EmploymentSection';
 import CoursesSection from 'components/cv/CoursesSection';
 import BadgesSection from 'components/cv/BadgesSection';
+import FormCV from 'components/cv/FormCV';
 import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from './mockData';
 import {EnglishLevel, MilitaryService} from '../../../../common/models/cv';
 
@@ -21,11 +22,13 @@ type Props = {
 
 type State = {
   isLoading: boolean;
+  editMode: boolean;
 };
 
 class CVPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
+    editMode: true
   };
 
   private extractCoursesData(coursesData: any) {
@@ -75,38 +78,75 @@ class CVPage extends React.Component<Props, State> {
     };
   }
 
+  private switchView(checked: boolean) {
+    if (checked) {
+      this.setState({
+        editMode: true
+      });
+    } else {
+      this.setState({
+        editMode: false
+      });
+    }
+  }
+
   render() {
     const {name, desiredPosition, selfIntroLink, englishLevel, militaryService} = mockUserData;
+    const { editMode } = this.state;
+
+    const cvData = {
+      userData: {
+        name,
+        desiredPosition,
+        selfIntroLink,
+        englishLevel,
+        militaryService
+      },
+      educationHistory,
+      employmentHistory,
+      notes,
+      contactsList: mockContactsList,
+    };
+
     return (
       <>
         <LoadingScreen show={this.state.isLoading}>
           <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
             <Content>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                <MainSection
-                  contacts={mockContactsList}
-                  name={name}
-                  desiredPosition={desiredPosition}
-                  selfIntroLink={selfIntroLink}
-                  englishLevel={englishLevel as EnglishLevel}
-                  militaryService={militaryService as MilitaryService}
-                />
-                <AboutSection
-                  notes={notes}
-                />
-                <EducationSection
-                  educationHistory={educationHistory}
-                />
-                <EmploymentSection
-                  employmentHistory={employmentHistory}
-                />
-                <CoursesSection
-                  coursesData={this.extractCoursesData(coursesData)}
-                />
-                <BadgesSection
-                  badgesData={this.extractBadgesData(badgesData)}
-                />
-              </Space>
+              <label>
+                Switch view:
+                <br />
+                <Switch defaultChecked={editMode} onChange={this.switchView.bind(this)} checkedChildren='CV view' unCheckedChildren='Form view'/>
+              </label>
+              {editMode ? (
+                <Space direction="vertical" style={{ width: '100%' }}>
+                  <MainSection
+                    contacts={mockContactsList}
+                    name={name}
+                    desiredPosition={desiredPosition}
+                    selfIntroLink={selfIntroLink}
+                    englishLevel={englishLevel as EnglishLevel}
+                    militaryService={militaryService as MilitaryService}
+                  />
+                  <AboutSection
+                    notes={notes}
+                  />
+                  <EducationSection
+                    educationHistory={educationHistory}
+                  />
+                  <EmploymentSection
+                    employmentHistory={employmentHistory}
+                  />
+                  <CoursesSection
+                    coursesData={this.extractCoursesData(coursesData)}
+                  />
+                  <BadgesSection
+                    badgesData={this.extractBadgesData(badgesData)}
+                  />
+                </Space>
+              ) : (
+                <FormCV cvData={cvData} />
+              )}
             </Content>
           </Layout>
         </LoadingScreen>
