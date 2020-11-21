@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
 import SectionCV from '../SectionCV';
@@ -19,20 +20,10 @@ function CoursesSection(props: Props) {
     <List
       dataSource={coursesToShow}
       renderItem={(record: CourseData) => {
-        const {
-          courseFullName,
-          locationName,
-          isExpelled,
-          certificateId,
-          isCourseCompleted,
-          totalScore,
-          position,
-          mentor: { name: mentorName, githubId: mentorGithubId }
-        } = record;
+        const { courseFullName, locationName, isExpelled, certificateId, isCourseCompleted, totalScore, position } = record;
         const title = `${courseFullName}${locationName ? locationName : ''}`;
         const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
-        const courseStats = `Score: ${totalScore}
-        Position: ${position}`;
+        const courseStats = `Score: ${totalScore} Position: ${position}`;
         let courseStatus;
         if (isExpelled) {
           courseStatus = <Text>Expelled</Text>;
@@ -51,17 +42,14 @@ function CoursesSection(props: Props) {
 
         return (
           <Item style={{ fontSize: '16px' }}>
-            <Row justify="space-between" style={{ width: '100%' }}>
+            <Row justify='space-between' style={{ width: '100%' }}>
               <Col span={12}>
                 <Text strong>{title}</Text>
                 <br />
                 <Text>Course status: </Text>
                 {courseStatus}
               </Col>
-              <Col span={3} >
-                <Text>Mentor: <a className='black-on-print' href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
-              </Col>
-              <Col span={3}>
+              <Col span={3} offset={9}>
                 <Text>{courseStats}</Text>
               </Col>
             </Row>
@@ -71,7 +59,9 @@ function CoursesSection(props: Props) {
     />
   );
 
-  return <SectionCV content={sectionContent} title="RSS courses" icon={<SafetyOutlined />} />;
+  const icon = <SafetyOutlined />
+
+  return <SectionCV content={sectionContent} title="RSS courses" icon={icon} />;
 }
 
 export default CoursesSection;
