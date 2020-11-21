@@ -1,87 +1,46 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
-import ContactsListCV from '../ContactsListCV';
+import ContactsList from '../ContactsList';
 import AvatarCV from '../AvatarCV';
-import { Contacts, UserData } from '../../../../../common/models/cv';
+import { Contact, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
 type Props = {
-  userData: UserData;
-  contacts: Contacts;
-  expires: number | null;
+  name: string;
+  desiredPosition: string;
+  contacts: Contact[];
+  englishLevel: EnglishLevel,
+  militaryService: MilitaryService,
+  selfIntroLink: SelfIntroLink
 };
 
-function formatDate(expirationValue: number | null) {
-  if (expirationValue === null || expirationValue === 0) {
-    return 'CV expiration date is not set';
-  } else {
-    const expirationDate = new Date(expirationValue);
-    const addZeroPadding = (num: number) => `0${num}`.slice(-2);
-    const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
-    const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
-    return `CV expiration date: ${expirationDateFormatted}`;
-  }
-}
-
 function MainSection(props: Props) {
-  const { userData, contacts, expires } = props;
-  const {
-    avatarLink,
-    name,
-    desiredPosition,
-    englishLevel,
-    militaryService,
-    selfIntroLink,
-    startFrom,
-    fullTime,
-  } = userData;
+  const { name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink } = props;
 
   const sectionContent = (
     <Row>
-      <Col flex={4} style={{ minWidth: '120px' }}>
-        <AvatarCV src={avatarLink} />
+      <Col span={4} style={{ minWidth: '120px' }}>
+        <AvatarCV />
         <br />
         <br />
-        <Text>
-          English level: <Text strong>{englishLevel}</Text>
-        </Text>
+        <Text>English level: {englishLevel}</Text>
         <br />
-        {militaryService && (
-          <Text>
-            Military service: <Text strong>{militaryService}</Text>{' '}
-          </Text>
-        )}
+        {militaryService && <Text>Military service: {militaryService}</Text>}
         <br />
-        {selfIntroLink && (
-          <>
-            <a className="hide-on-print" href={selfIntroLink}>
-              Self introduction video
-            </a>
-            <br className="hide-on-print" />
-          </>
-        )}
-        <Text>
-          Ready to work full time: <Text strong>{fullTime ? 'yes' : 'no'}</Text>
-        </Text>
-        <br />
-        {startFrom && (
-          <time dateTime={startFrom}>
-            Ready to work from <Text strong>{startFrom}</Text>
-          </time>
-        )}
+        {selfIntroLink && <a href={selfIntroLink}>Self introduction video</a>}
       </Col>
-      <Col flex={14}>
+      <Col span={14}>
         <Title level={2}>{name}</Title>
         <Text>{desiredPosition}</Text>
       </Col>
-      <Col flex={6}>
-        <ContactsListCV contacts={contacts} />
+      <Col span={6}>
+        <ContactsList contacts={contacts} />
       </Col>
     </Row>
   );
-  return <SectionCV title={formatDate(expires)} content={sectionContent} />;
+  return <SectionCV content={sectionContent} />;
 }
 
 export default MainSection;
