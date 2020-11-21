@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
-import SectionCV from './SectionCV';
+import SectionCV from '../SectionCV';
 import { ReadOutlined } from '@ant-design/icons';
-import { EducationRecord } from '../../../../common/models/cv';
+import { EducationRecord } from '../../../../../common/models/cv';
 
 const { Text } = Typography;
 const { Item } = List;

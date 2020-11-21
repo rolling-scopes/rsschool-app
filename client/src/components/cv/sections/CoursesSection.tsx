@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
 import SectionCV from '../SectionCV';
@@ -6,22 +7,6 @@ import { CourseData } from '../../../../../common/models/cv';
 
 const { Text } = Typography;
 const { Item } = List;
-
-function StudentStatus(props: { isExpelled: boolean; certificateId: string | null; isCourseCompleted: boolean }) {
-  const { isExpelled, certificateId, isCourseCompleted } = props;
-  if (isExpelled) return <Text>Expelled</Text>;
-  const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
-
-  if (certificateId)
-    return (
-      <>
-        <Text>Completed with </Text>
-        <a href={certificateLink}>certificate</a>
-      </>
-    );
-  if (isCourseCompleted) return <Text>Completed</Text>;
-  return <Text>In progress</Text>;
-}
 
 type Props = {
   coursesData: CourseData[];
@@ -35,41 +20,36 @@ function CoursesSection(props: Props) {
     <List
       dataSource={coursesToShow}
       renderItem={(record: CourseData) => {
-        const {
-          courseFullName,
-          locationName,
-          isExpelled,
-          certificateId,
-          isCourseCompleted,
-          totalScore,
-          position,
-          mentor: { name: mentorName, githubId: mentorGithubId },
-        } = record;
+        const { courseFullName, locationName, isExpelled, certificateId, isCourseCompleted, totalScore, position } = record;
         const title = `${courseFullName}${locationName ? locationName : ''}`;
-        const courseStats = `Score: ${totalScore}
-        Position: ${position}`;
+        const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
+        const courseStats = `Score: ${totalScore} Position: ${position}`;
+        let courseStatus;
+        if (isExpelled) {
+          courseStatus = <Text>Expelled</Text>;
+        } else if (certificateId) {
+          courseStatus = (
+            <>
+              <Text>Completed with </Text>
+              <a href={certificateLink}>certificate</a>
+            </>
+          );
+        } else if (isCourseCompleted) {
+          courseStatus = <Text>Completed</Text>;
+        } else {
+          courseStatus = <Text>In progress</Text>;
+        }
+
         return (
           <Item style={{ fontSize: '16px' }}>
-            <Row justify="space-between" style={{ width: '100%' }}>
+            <Row justify='space-between' style={{ width: '100%' }}>
               <Col span={12}>
                 <Text strong>{title}</Text>
                 <br />
                 <Text>Course status: </Text>
-                <StudentStatus
-                  isExpelled={isExpelled}
-                  certificateId={certificateId}
-                  isCourseCompleted={isCourseCompleted}
-                />
+                {courseStatus}
               </Col>
-              <Col span={3}>
-                <Text>
-                  Mentor:{' '}
-                  <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
-                    {mentorName}
-                  </a>
-                </Text>
-              </Col>
-              <Col span={3}>
+              <Col span={3} offset={9}>
                 <Text>{courseStats}</Text>
               </Col>
             </Row>
@@ -79,7 +59,9 @@ function CoursesSection(props: Props) {
     />
   );
 
-  return <SectionCV content={sectionContent} title="RSS courses" icon={<SafetyOutlined />} />;
+  const icon = <SafetyOutlined />
+
+  return <SectionCV content={sectionContent} title="RSS courses" icon={icon} />;
 }
 
 export default CoursesSection;
