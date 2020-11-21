@@ -3,12 +3,14 @@ import { Layout, Space, Switch } from 'antd';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { LoadingScreen } from 'components/LoadingScreen';
-import MainSection from 'components/cv/MainSection';
-import AboutSection from 'components/cv/AboutSection';
-import EducationSection from 'components/cv/EducationSection';
-import EmploymentSection from 'components/cv/EmploymentSection';
-import CoursesSection from 'components/cv/CoursesSection';
-import BadgesSection from 'components/cv/BadgesSection';
+import {
+  MainSection,
+  AboutSection,
+  EducationSection,
+  EmploymentSection,
+  CoursesSection,
+  BadgesSection
+} from 'components/cv/sections';
 import FormCV from 'components/cv/FormCV';
 import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from './mockData';
 import {EnglishLevel, MilitaryService} from '../../../../common/models/cv';

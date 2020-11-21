@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
-import SectionCV from './SectionCV';
+import SectionCV from '../SectionCV';
 import { ScheduleOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
