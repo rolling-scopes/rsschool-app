@@ -101,12 +101,12 @@ class CVPage extends React.Component<Props, State> {
         name,
         desiredPosition,
         selfIntroLink,
-        englishLevel,
-        militaryService
+        englishLevel: englishLevel as EnglishLevel,
+        militaryService: militaryService as MilitaryService,
+        notes
       },
       educationHistory,
       employmentHistory,
-      notes,
       contactsList: mockContactsList,
     };
 
