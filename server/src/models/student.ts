@@ -105,6 +105,9 @@ export class Student {
   @Column({ default: 0, type: 'float' })
   totalScore: number;
 
+  @Column({ default: 0, type: 'float' })
+  crossCheckScore: number;
+
   @Column({ default: 999999 })
   rank: number;
 
