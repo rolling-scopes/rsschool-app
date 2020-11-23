@@ -199,6 +199,13 @@ function renderTable(
           ...getColumnSearchProps('cityName'),
         },
         {
+          title: 'Cross-Check',
+          dataIndex: 'crossCheckScore',
+          width: 90,
+          sorter: 'crossCheckScore',
+          render: value => <Text strong>{value}</Text>,
+        },
+        {
           title: 'Total',
           dataIndex: 'totalScore',
           width: 80,
