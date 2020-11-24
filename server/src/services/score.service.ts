@@ -9,6 +9,7 @@ import { getPrimaryUserFields, convertToMentorBasic } from './course.service';
 const orderByFieldMapping = {
   rank: 'student.rank',
   totalScore: 'student.totalScore',
+  crossCheckScore: 'student.crossCheckScore',
   githubId: 'user.githubId',
   name: 'user.firstName',
   cityName: 'user.cityName',
