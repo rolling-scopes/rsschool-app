@@ -51,3 +51,46 @@ export enum ViewMode {
   LIST = 'LIST',
   CALENDAR = 'CALENDAR',
 }
+export interface ScheduleRow {
+  id: number;
+  event: {
+    name: string;
+    descriptionUrl: string;
+    type: string;
+  };
+  dateTime: string;
+  place: string;
+  organizer: {
+    githubId: string;
+  };
+  special?: [];
+  duration?: number;
+}
+
+export const EVENT_TYPES = [
+  'code jam',
+  'codewars',
+  'cross-check',
+  'interview',
+  'review',
+  'self education',
+  'special',
+  'task',
+  'test',
+  'webinar',
+] as const;
+
+export const SPECIAL_EVENT_TAGS = [
+  'optional',
+  'live',
+  'record',
+  'js',
+  'node.js',
+  'react',
+  'angular',
+  'css',
+  'html',
+  'git',
+  'markdown',
+  'task',
+];
