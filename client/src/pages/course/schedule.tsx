@@ -79,7 +79,7 @@ export function SchedulePage(props: CoursePageProps) {
           <UserSettings />
         </Col>
       </Row>
-      <ScheduleView data={data} timeZone={timeZone} />
+      <ScheduleView data={data} timeZone={timeZone} isAdmin={props.session.isAdmin} courseId={props.course.id} />
     </PageLayout>
   );
 }
