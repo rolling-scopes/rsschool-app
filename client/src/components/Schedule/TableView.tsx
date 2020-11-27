@@ -25,6 +25,7 @@ type Props = {
   timeZone: string;
   isAdmin: boolean;
   courseId: number;
+  refreshData: Function;
 };
 
 const getColumns = (timeZone: string) => [
@@ -106,9 +107,8 @@ const getColumns = (timeZone: string) => [
   },
 ];
 
-export function TableView({ data, timeZone, isAdmin, courseId }: Props) {
+export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Props) {
   const [form] = Form.useForm();
-  const [localData, setLocalData] = useState(data);
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
@@ -125,11 +125,9 @@ export function TableView({ data, timeZone, isAdmin, courseId }: Props) {
   };
 
   const handleDelete = async (id: number) => {
-    const newData = localData.filter(event => event.id !== id);
-
-    setLocalData(newData);
     try {
       await courseService.deleteCourseEvent(id);
+      await refreshData();
     } catch {
       message.error('Failed to delete item. Please try later.');
     }
@@ -141,16 +139,15 @@ export function TableView({ data, timeZone, isAdmin, courseId }: Props) {
 
   const save = async (key: React.Key) => {
     const updatedRow = (await form.validateFields()) as ScheduleRow;
-    const index = localData.findIndex(item => key === item.id.toString());
+    const index = data.findIndex(item => key === item.id.toString());
 
     if (index > -1) {
-      const newData = [...localData];
-      const editableEvent = newData[index];
+      const editableEvent = data[index];
 
       updateEvent(editableEvent, updatedRow);
-      setLocalData(newData);
       try {
         await courseService.updateCourseEvent(editableEvent.id, editableEvent);
+        await refreshData();
       } catch {
         message.error('An error occurred. Please try later.');
       }
@@ -243,7 +240,7 @@ export function TableView({ data, timeZone, isAdmin, courseId }: Props) {
         }}
         rowKey={record => (record.event.type === TaskTypes.deadline ? `${record.id}d` : record.id).toString()}
         pagination={false}
-        dataSource={localData}
+        dataSource={data}
         size="middle"
         columns={mergedColumns}
         rowClassName="editable-row"
