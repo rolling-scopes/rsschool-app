@@ -24,7 +24,7 @@ type State = {
   badgesData: BadgesData | null;
 };
 
-class ViewCV extends React.Component<State> {
+class ViewCV extends React.Component {
   state: State = {
     isLoading: false,
     contactsList: null,
