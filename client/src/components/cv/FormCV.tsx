@@ -16,7 +16,7 @@ type State = {
   employmentHistory: EmploymentRecord[] | null;
 };
 
-class FormCV extends React.Component<State> {
+class FormCV extends React.Component {
 
   state: State = {
     isLoading: false,
