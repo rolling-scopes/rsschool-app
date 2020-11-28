@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { Contact } from '../../../../../common/models/cv';
 
 const { Item } = Form;
 
 type Props = {
-  contactsList: Contact[]
+  contactsList: Contact[];
+  handleFunc: (data: any) => void;
 };
 
 export default function UserDataForm(props: Props) {
 
-  const {contactsList} = props;
+  const { contactsList, handleFunc } = props;
 
   return (
-    <Form name='contacts'>
+    <Form name='contacts' onFinish={handleFunc}>
       {contactsList.map(contact => {
         const { contactType, contactText } = contact;
         return (
@@ -22,6 +23,9 @@ export default function UserDataForm(props: Props) {
           </Item>
         )
       })}
+      <Item>
+        <Button type='primary' htmlType='submit'>Save</Button>
+      </Item>
     </Form>
   );
 }

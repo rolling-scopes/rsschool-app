@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Layout, Space, Switch } from 'antd';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
-import { LoadingScreen } from 'components/LoadingScreen';
 import {
   MainSection,
   AboutSection,
@@ -112,8 +111,7 @@ class CVPage extends React.Component<Props, State> {
 
     return (
       <>
-        <LoadingScreen show={this.state.isLoading}>
-          <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
+        <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
             <Content>
               <label>
                 Switch view:
@@ -151,7 +149,6 @@ class CVPage extends React.Component<Props, State> {
               )}
             </Content>
           </Layout>
-        </LoadingScreen>
       </>
     );
   }
