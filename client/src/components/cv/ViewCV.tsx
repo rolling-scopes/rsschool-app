@@ -1,88 +1,65 @@
 import * as React from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
-import { Contacts, UserData, CourseData, GetCVData } from '../../../../common/models/cv';
-import { PublicFeedback } from '../../../../common/models/profile';
-import { UserService } from 'services/user';
+import {
+  MainSection,
+  AboutSection,
+  EducationSection,
+  EmploymentSection,
+  CoursesSection,
+  BadgesSection
+} from 'components/cv/sections';
+import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from 'pages/cv/mockData';
+import { EnglishLevel, MilitaryService, Contact, UserData, EducationRecord, EmploymentRecord, CourseData, BadgesData } from '../../../../common/models/cv';
 
 const { Content } = Layout;
 
-type Props = {
-  ownerId: string;
-};
-
 type State = {
   isLoading: boolean;
-  contactsList: Contacts | null;
+  contactsList: Contact[] | null;
   userData: UserData | null;
+  educationHistory: EducationRecord[] | null;
+  employmentHistory: EmploymentRecord[] | null;
   coursesData: CourseData[] | null;
-  publicFeedback: PublicFeedback[] | null;
-  expires: number | null;
+  badgesData: BadgesData | null;
 };
 
-class ViewCV extends React.Component<Props, State> {
+class ViewCV extends React.Component<State> {
   state: State = {
     isLoading: false,
     contactsList: null,
     userData: null,
+    educationHistory: null,
+    employmentHistory: null,
     coursesData: null,
-    publicFeedback: null,
-    expires: null
+    badgesData: null
   };
 
-  private userService = new UserService();
-
   private async fetchData() {
-    const { ownerId } = this.props;
     await this.setState({
-      isLoading: true,
+      isLoading: true
     });
 
-    const CVData: GetCVData = await this.userService.getCVData(ownerId);
-
-    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses, expires } = CVData;
-
-    const userData = {
-      notes,
-      name,
-      selfIntroLink,
-      militaryService,
-      avatarLink,
-      desiredPosition,
-      englishLevel,
-      startFrom,
-      fullTime
-    };
-
-    const contactsList = {
-      email,
-      github,
-      linkedin,
-      location,
-      phone,
-      skype,
-      telegram,
-      website
-    };
-
-    const coursesDataExtracted = this.extractCoursesData(courses);
+    const badgesDataExtracted = this.extractBadgesData(badgesData);
+    const coursesDataExtracted = this.extractCoursesData(coursesData);
 
     await this.setState({
-      contactsList: contactsList as Contacts,
-      userData: userData as UserData,
+      contactsList: mockContactsList,
+      userData: mockUserData,
+      educationHistory: educationHistory,
+      employmentHistory: employmentHistory,
       coursesData: coursesDataExtracted,
-      publicFeedback,
-      expires: Number(expires)
+      badgesData: badgesDataExtracted
     });
 
     await this.setState({
-      isLoading: false,
+      isLoading: false
     });
   }
 
   private extractCoursesData(coursesData: any) {
-    return coursesData.map((course: any) => {
+    const coursesRaw = coursesData;
+    return coursesRaw.map((course: any) => {
       const {
         certificateId,
         courseFullName,
@@ -90,8 +67,7 @@ class ViewCV extends React.Component<Props, State> {
         locationName,
         position,
         isCourseCompleted,
-        totalScore,
-        mentor
+        totalScore
       } = course;
 
       return {
@@ -101,10 +77,31 @@ class ViewCV extends React.Component<Props, State> {
         locationName,
         position,
         isCourseCompleted,
-        totalScore,
-        mentor
-      };
+        totalScore
+      }
     });
+  }
+
+  private extractBadgesData(badges: any) {
+    const uniqueBadgesSummarized = badges.reduce((uniqueBadges: any, badge: any) => {
+      const { badgeId } = badge;
+      if (uniqueBadges[badgeId]) {
+        uniqueBadges[badgeId]++;
+      } else {
+        uniqueBadges[badgeId] = 1;
+      }
+      return uniqueBadges;
+    }, {} as any);
+
+    const badgesFormatted = Object.entries(uniqueBadgesSummarized).map(entry => {
+      const [badgeId, badgeCount] = entry;
+      return `${badgeId}: ${badgeCount}`;
+    });
+
+    return {
+      badges: badgesFormatted,
+      total: badges.length
+    };
   }
 
   async componentDidMount() {
@@ -112,25 +109,37 @@ class ViewCV extends React.Component<Props, State> {
   }
 
   render() {
-
-    const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = this.state;
+    const { name, desiredPosition, selfIntroLink, englishLevel, militaryService } = mockUserData;
+    const { isLoading } = this.state;
 
     return (
       <LoadingScreen show={isLoading}>
-        <Layout className='view-cv-layout' style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
+        <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
           <Content>
-            <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
-              {userData && contactsList && (
-                <>
-                  <MainSection
-                    userData={userData}
-                    contacts={contactsList}
-                    expires={expires}
-                  />
-                  {userData.notes && <AboutSection notes={userData.notes} />}
-                </>)}
-              {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
-              {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <MainSection
+                contacts={mockContactsList}
+                name={name}
+                desiredPosition={desiredPosition}
+                selfIntroLink={selfIntroLink}
+                englishLevel={englishLevel as EnglishLevel}
+                militaryService={militaryService as MilitaryService}
+              />
+              <AboutSection
+                notes={notes}
+              />
+              <EducationSection
+                educationHistory={educationHistory}
+              />
+              <EmploymentSection
+                employmentHistory={employmentHistory}
+              />
+              <CoursesSection
+                coursesData={this.extractCoursesData(coursesData)}
+              />
+              <BadgesSection
+                badgesData={this.extractBadgesData(badgesData)}
+              />
             </Space>
           </Content>
         </Layout>
