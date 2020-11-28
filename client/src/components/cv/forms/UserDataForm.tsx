@@ -1,22 +1,23 @@
 import * as React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
 import { UserData } from '../../../../../common/models/cv';
 
 const { Item } = Form;
 const { Option } = Select;
 
 type Props = {
-  userData: UserData
+  userData: UserData;
+  handleFunc: (data: any) => void;
 };
 
 export default function UserDataForm(props: Props) {
 
-  const { userData } = props;
+  const { userData, handleFunc } = props;
 
   const { name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
 
   return (
-    <Form name='userData'>
+    <Form name='userData' onFinish={handleFunc}>
       <Item label='Name' name='name' initialValue={name}>
         <Input />
       </Item>
@@ -51,6 +52,9 @@ export default function UserDataForm(props: Props) {
       </Item>
       <Item label='About me' name='notes' initialValue={notes}>
         <Input.TextArea rows={4} />
+      </Item>
+      <Item>
+        <Button type='primary' htmlType='submit'>Save</Button>
       </Item>
     </Form>
   );

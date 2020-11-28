@@ -38,5 +38,10 @@ export type MilitaryService = 'served' | 'liable' | 'notLiable' | null;
 export type SelfIntroLink = string | null;
 
 export interface UserData {
-
+  name: string;
+  desiredPosition: string;
+  selfIntroLink: SelfIntroLink;
+  englishLevel: EnglishLevel;
+  militaryService: MilitaryService;
+  notes: string;
 }
