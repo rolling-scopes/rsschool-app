@@ -51,30 +51,22 @@ class ConsentsCard extends React.Component<Props, State> {
 
     const listItems: any[] = [
       <List.Item>
-        <Text>Receive E-Mail notifications</Text>
+        <Text>E-Mail notifications</Text>
         {emailOptIn ? <CheckOutlined /> : <CloseOutlined />}
       </List.Item>,
       <List.Item>
-        <Text>Receive Telegram notifications</Text>
+        <Text>Telegram notifications</Text>
         {tgOptIn ? <CheckOutlined /> : <CloseOutlined />}
       </List.Item>,
     ];
 
     const settingsListItems: any[] = [
-      <List.Item>
-        {emailOptIn ? (
-          <label htmlFor={'email'}>Unsubscribe from E-Mail notifications</label>
-        ) : (
-          <label htmlFor={'email'}>Subscribe to E-Mail notifications</label>
-        )}
+      <List.Item title={`You ${emailOptIn ? 'are' : "aren't"} subscribed to email notifications`}>
+        <label htmlFor={'email'}>E-Mail notifications</label>
         <Checkbox id={'email'} checked={emailOptIn} onChange={this.onConsentChanged} />
       </List.Item>,
-      <List.Item>
-        {tgOptIn ? (
-          <label htmlFor={'tg'}>Unsubscribe from Telegram notifications</label>
-        ) : (
-          <label htmlFor={'tg'}>Subscribe to Telegram notifications</label>
-        )}
+      <List.Item title={`You ${tgOptIn ? 'are' : "aren't"} subscribed to telegram notifications`}>
+        <label htmlFor={'tg'}>Telegram notifications</label>
         <Checkbox id={'tg'} disabled={!isTgConsentExist} checked={tgOptIn} onChange={this.onConsentChanged} />
       </List.Item>,
       !isTgConsentExist ? (
@@ -92,12 +84,13 @@ class ConsentsCard extends React.Component<Props, State> {
 
     return (
       <CommonCard
-        title="Consents"
+        title="Subscriptions"
+        settingsTitle="Edit subscriptions"
         icon={<NotificationOutlined />}
         content={
           <List itemLayout="horizontal" dataSource={listItems} renderItem={listItemContent => listItemContent} />
         }
-        noDataDescrption="Consents not found"
+        noDataDescrption="Subscriptions not found"
         isEditingModeEnabled={isEditingModeEnabled}
         profileSettingsContent={
           <List
