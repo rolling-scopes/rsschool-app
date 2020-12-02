@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { ModalWindow } from './Modal';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
+import style from 'styled-jsx';
 
 type Props = {
   data: CourseEvent[];
@@ -14,7 +15,7 @@ type Props = {
 
 
 const DesktopCalendar: React.FC<Props> = ({ data, timeZone }) => {
-  const [modalWindowData, setModalWindowData] = useState<CourseEvent>(data[0]);
+  const [modalWindowData, setModalWindowData] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
 
   const handleOnClose = () => {

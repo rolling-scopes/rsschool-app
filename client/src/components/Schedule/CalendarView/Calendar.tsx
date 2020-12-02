@@ -1,6 +1,6 @@
 import React from 'react';
-//import MiniCalendar from './components/MobileCalendar';
-//import useWindowDimensions from './utils/useWindowDimensions';
+import MobileCalendar from './components/MobileCalendar';
+import useWindowDimensions from './utils/useWindowDimensions';
 import DesktopCalendar from './components/DesktopCalendar';
 import { CourseEvent } from 'services/course';
 
@@ -10,10 +10,13 @@ type Props = {
 };
 
 export const CalendarView: React.FC<Props> = ({data, timeZone}) => {
-  //const { width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   return <>
-    <DesktopCalendar data={data} timeZone={timeZone}/>
+    {width > 750
+      ? <DesktopCalendar data={data} timeZone={timeZone}/>
+      : <MobileCalendar data={data} timeZone={timeZone}/>
+    }
   </>
 };
 
