@@ -35,8 +35,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone }) => {
     }
   }
 
-  function onPanelChange(_: any, mode: any) {
-    console.log(mode)
+  function onPanelChange(_: any, mode: string) {
     setCalendarMode(mode);
     setModalWindowData([]);
   }

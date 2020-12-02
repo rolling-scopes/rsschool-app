@@ -6,7 +6,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { ModalWindow } from './Modal';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
-import style from 'styled-jsx';
 
 type Props = {
   data: CourseEvent[];
