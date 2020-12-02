@@ -5,7 +5,9 @@ type Props = {
   timeZone: string;
 };
 
+
 export function CalendarView({ data, timeZone }: Props) {
+  console.log(data);
   return (
     <div>
       <h2>Calendar</h2>

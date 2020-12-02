@@ -19,6 +19,7 @@
     "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
+    "@types/react-custom-scrollbars": "^4.0.7",
     "algolia-places-react": "^1.5.1",
     "antd": "~4.15.5",
     "axios": "~0.21.1",
@@ -33,6 +34,7 @@
     "qs": "^6.9.4",
     "react": "~17.0.2",
     "react-chartjs-2": "^2.9.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "~17.0.2",
     "react-gauge-chart": "git+https://github.com/BossBele/react-gauge-chart.git",
     "react-masonry-css": "~1.0.16",
