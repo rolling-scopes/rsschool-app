@@ -3,6 +3,7 @@ import { SettingOutlined } from '@ant-design/icons';
 import { Popconfirm, Table, Typography, Space, Form, Button, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment-timezone';
+import mergeWith from 'lodash/mergeWith';
 import { GithubUserLink } from 'components';
 import {
   dateSorter,
@@ -120,6 +121,7 @@ export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Pr
       dateTime: moment(record.dateTime),
       time: moment(record.dateTime),
       special: record.special ? record.special.split(',') : [],
+      duration: record.duration ? record.duration : '',
     });
     setEditingKey(record.id.toString());
   };
@@ -144,7 +146,9 @@ export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Pr
     if (index > -1) {
       const editableEvent = data[index];
 
-      updateEvent(editableEvent, updatedRow);
+      mergeWith(editableEvent, updatedRow);
+      editableEvent.special = updatedRow.special ? updatedRow.special.join(',') : '';
+
       try {
         await courseService.updateCourseEvent(editableEvent.id, editableEvent);
         await refreshData();
@@ -248,16 +252,5 @@ export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Pr
     </Form>
   );
 }
-
-const updateEvent = (row: CourseEvent, updatedRow: ScheduleRow) => {
-  row.dateTime = updatedRow.dateTime;
-  row.event.type = updatedRow.event.type;
-  row.special = updatedRow.special ? updatedRow.special.join(',') : '';
-  row.event.name = updatedRow.event.name;
-  row.event.descriptionUrl = updatedRow.event.descriptionUrl;
-  row.duration = updatedRow.duration;
-  row.organizer.githubId = updatedRow.organizer.githubId;
-  row.place = updatedRow.place;
-};
 
 export default TableView;
