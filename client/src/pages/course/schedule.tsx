@@ -10,6 +10,8 @@ import { useAsync, useLocalStorage } from 'react-use';
 import { useLoading } from 'components/useLoading';
 import { isMobileOnly } from 'mobile-device-detect';
 import { ViewMode } from 'components/Schedule/model';
+import UserSettings from '../../components/UserSettings/UserSettings';
+
 
 const { Option } = Select;
 const LOCAL_VIEW_MODE = 'scheduleViewMode';
@@ -72,6 +74,9 @@ export function SchedulePage(props: CoursePageProps) {
               </Option>
             ))}
           </Select>
+        </Col>
+        <Col>
+          <UserSettings />
         </Col>
       </Row>
       <ScheduleView data={data} timeZone={timeZone} />
