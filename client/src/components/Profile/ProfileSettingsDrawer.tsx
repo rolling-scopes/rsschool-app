@@ -6,14 +6,15 @@ type Props = {
   isSettingsVisible: boolean;
   hideSettings: () => void;
   content: JSX.Element;
+  settingsTitle?: string;
 };
 
 class ProfileSettingsDrawer extends React.Component<Props> {
   render() {
-    const { isSettingsVisible, hideSettings, content } = this.props;
+    const { isSettingsVisible, hideSettings, content, settingsTitle } = this.props;
     return (
       <Drawer
-        title="Profile settings"
+        title={settingsTitle ?? 'Profile settings'}
         placement="top"
         closable={true}
         onClose={hideSettings}
