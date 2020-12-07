@@ -27,12 +27,12 @@ interface Relations {
   checkers: string[];
 }
 
-export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursemanager' | 'all';
+export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursesupervisor' | 'coursemanager' | 'all';
 
 interface PermissionsSetup {
   isProfileOwner: boolean;
   isAdmin: boolean;
-  role?: RelationRole;
+  role: RelationRole;
   permissions?: ConfigurableProfilePermissions;
 }
 
@@ -151,6 +151,8 @@ export const defineRole = ({
 }): RelationRole => {
   if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
+  } else if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
+    return 'coursesupervisor';
   } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
   } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
@@ -190,7 +192,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isConsentsVisible: false,
   };
 
-  const accessToContacts = (permission: string, role: string = '') => {
+  const accessToContacts = (permission: string, role: RelationRole) => {
     return (
       [
         'isEmailVisible',
@@ -199,11 +201,11 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
         'isPhoneVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
-      ].includes(permission) && ['mentor', 'coursemanager'].includes(role)
+      ].includes(permission) && ['mentor', 'coursemanager', 'coursesupervisor'].includes(role)
     );
   };
 
-  const defaultAccessToContacts = (permission: string, role: string = '') => {
+  const defaultAccessToContacts = (permission: string, role: RelationRole) => {
     return (
       ['isEmailVisible', 'isTelegramVisible', 'isSkypeVisible', 'isPhoneVisible', 'isContactsNodesVisible'].includes(
         permission,
@@ -211,7 +213,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     );
   };
 
-  const accessToFeedbacks = (permission: string, role: string = '') => {
+  const accessToFeedbacks = (permission: string, role: RelationRole) => {
     return (
       [
         'isStageInterviewFeedbackVisible',
@@ -222,7 +224,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     );
   };
 
-  const accessToProfile = (permission: string, role: string = '') =>
+  const accessToProfile = (permission: string, role: RelationRole) =>
     ['isProfileVisible'].includes(permission) && ['student'].includes(role);
 
   return mapValues(defaultPermissions, (_, permission) => {
