@@ -32,7 +32,7 @@ export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursesuperv
 interface PermissionsSetup {
   isProfileOwner: boolean;
   isAdmin: boolean;
-  role: RelationRole;
+  role?: RelationRole;
   permissions?: ConfigurableProfilePermissions;
 }
 
@@ -192,7 +192,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isConsentsVisible: false,
   };
 
-  const accessToContacts = (permission: string, role: RelationRole) => {
+  const accessToContacts = (permission: string, role?: RelationRole) => {
     return (
       [
         'isEmailVisible',
@@ -201,34 +201,43 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
         'isPhoneVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
-      ].includes(permission) && ['mentor', 'coursemanager', 'coursesupervisor'].includes(role)
+      ].includes(permission) &&
+      role &&
+      ['mentor', 'coursemanager', 'coursesupervisor'].includes(role)
     );
   };
 
-  const defaultAccessToContacts = (permission: string, role: RelationRole) => {
+  const defaultAccessToContacts = (permission: string, role?: RelationRole) => {
     return (
       ['isEmailVisible', 'isTelegramVisible', 'isSkypeVisible', 'isPhoneVisible', 'isContactsNodesVisible'].includes(
         permission,
-      ) && ['student'].includes(role)
+      ) &&
+      role &&
+      ['student'].includes(role)
     );
   };
 
-  const accessToFeedbacks = (permission: string, role: RelationRole) => {
+  const accessToFeedbacks = (permission: string, role?: RelationRole) => {
     return (
       [
         'isStageInterviewFeedbackVisible',
         'isStudentStatsVisible',
         'isCoreJsFeedbackVisible',
         'isProfileVisible',
-      ].includes(permission) && ['mentor', 'coursementor', 'coursemanager'].includes(role)
+      ].includes(permission) &&
+      role &&
+      ['mentor', 'coursementor', 'coursemanager'].includes(role)
     );
   };
 
-  const accessToProfile = (permission: string, role: RelationRole) =>
-    ['isProfileVisible'].includes(permission) && ['student'].includes(role);
+  const accessToProfile = (permission: string, role?: RelationRole) =>
+    ['isProfileVisible'].includes(permission) && role && ['student'].includes(role);
 
   return mapValues(defaultPermissions, (_, permission) => {
     if (isAdmin || role === 'coursemanager') {
+      return true;
+    }
+    if (role === 'coursesupervisor' && permission === 'isProfileVisible') {
       return true;
     }
     if (accessToFeedbacks(permission, role)) {
