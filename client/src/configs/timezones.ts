@@ -6,7 +6,7 @@ export const TIMEZONES = [
   'Europe/Minsk',
   'Europe/Moscow',
   'Europe/Volgograd',
-  'Europe/Yekaterinburg',
+  'Asia/Yekaterinburg',
   'Asia/Tashkent',
   'Asia/Tbilisi',
 ];

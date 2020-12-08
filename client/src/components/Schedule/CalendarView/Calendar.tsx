@@ -1,8 +1,8 @@
 import React from 'react';
 import MobileCalendar from './components/MobileCalendar';
-import useWindowDimensions from './utils/useWindowDimensions';
 import DesktopCalendar from './components/DesktopCalendar';
 import { CourseEvent } from 'services/course';
+import { isMobile } from 'mobile-device-detect';
 
 type Props = {
   data: CourseEvent[];
@@ -10,12 +10,11 @@ type Props = {
 };
 
 export const CalendarView: React.FC<Props> = ({data, timeZone}) => {
-  const { width } = useWindowDimensions();
 
   return <>
-    {width > 750
-      ? <DesktopCalendar data={data} timeZone={timeZone}/>
-      : <MobileCalendar data={data} timeZone={timeZone}/>
+    {isMobile
+      ? <MobileCalendar data={data} timeZone={timeZone}/>
+      : <DesktopCalendar data={data} timeZone={timeZone}/>
     }
   </>
 };

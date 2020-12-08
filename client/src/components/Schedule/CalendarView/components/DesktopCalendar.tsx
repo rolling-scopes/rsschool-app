@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Badge } from 'antd';
-import { getMonthValue } from '../utils/DateFuncs';
-import { getListData } from '../utils/DataFuncs';
+import { getMonthValue, getListData } from '../utils/filters';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ModalWindow } from './Modal';
 import { CourseEvent } from 'services/course';
@@ -58,12 +57,12 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone }) => {
   const monthCellRender = (date: unknown | Moment) => {
     const num = getMonthValue(date as unknown as Moment, data, timeZone);
 
-    return num ? (
+    return !!num && (
       <div >
         <span>Number of events</span>
         <section>{num}</section>
       </div>
-    ) : null;
+    );
   }
 
 

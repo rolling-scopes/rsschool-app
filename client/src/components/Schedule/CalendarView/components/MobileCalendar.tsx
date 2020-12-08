@@ -1,11 +1,23 @@
 import React, { useState} from 'react';
 import { Calendar, Badge, List } from 'antd';
-import { getMonthValue } from '../utils/DateFuncs';
+import { getMonthValue, getListData } from '../utils/filters';
 import {ModalWindow} from './Modal';
-import { getListData } from '../utils/DataFuncs';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
 import {dateWithTimeZoneRenderer} from 'components/Table';
+import css from 'styled-jsx/css';
+
+const numberEventsStyle = css`section {
+  position: absolute;
+  bottom: 12px;
+  background: #FB6216;
+  right: -13px;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  line-height: 19px;
+  color: white;
+}`
 
 type Props = {
   data: CourseEvent[];
@@ -42,48 +54,26 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone }) => {
 
   function dateCellRender(date: unknown | Moment) {
     const numberEvents = getListData(date as unknown as Moment, data, timeZone).length;
-    return numberEvents > 0 ? (
+    return !!(numberEvents > 0) && (
       <>
         <section>{numberEvents}</section>
         <style jsx>
-          {`section {
-            position: absolute;
-            bottom: 12px;
-            background: #FB6216;
-            right: -13px;
-            border-radius: 100%;
-            width: 20px;
-            height: 20px;
-            line-height: 20px;
-            color: white;
-          }`}
+          {numberEventsStyle}
         </style>
       </>
-    ) : null;
+    );
   }
 
   const monthCellRender = (date: unknown | Moment) => {
-    const num = getMonthValue(date as unknown as Moment, data, timeZone);
-    return num ? (
+    const numberEvents = getMonthValue(date as unknown as Moment, data, timeZone);
+    return !!numberEvents && (
       <>
-      <section>{num}</section>
+      <section>{numberEvents}</section>
       <style jsx>
-          {`
-            section {
-              position: absolute;
-              bottom: 12px;
-              background: #FB6216;
-              right: -13px;
-              border-radius: 100%;
-              width: 20px;
-              height: 20px;
-              line-height: 20px;
-              color: white;
-            }
-          `}
-        </style>
+        {numberEventsStyle}
+      </style>
       </>
-    ) : null;
+    );
   }
 
   return (
@@ -106,7 +96,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone }) => {
             <List.Item.Meta
               title={<Badge style={{paddingLeft: 8, paddingRight: 10}} color={item.color} text={item.name} />}
             />
-            <div><b>Time:</b> {dateWithTimeZoneRenderer(timeZone, 'h:mm')(dateTime)}</div>
+            <div>Time: {dateWithTimeZoneRenderer(timeZone, 'h:mm')(dateTime)}</div>
           </List.Item>
         )
       }}/>

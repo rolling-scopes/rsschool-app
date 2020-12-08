@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal} from 'antd';
+import { Modal, Space} from 'antd';
 import moment from 'moment';
 import {GithubUserLink} from 'components';
 import { renderTag, urlRenderer } from 'components/Table/renderers';
@@ -15,9 +15,6 @@ type Props = {
 
 export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone }: Props) {
 
-  //!plug
-  const newTimeZone = timeZone === 'Europe/Yekaterinburg' ? 'Asia/Yekaterinburg' : timeZone;
-
   return (
     <>
       <Modal
@@ -28,19 +25,21 @@ export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone }: Prop
         onCancel={() => handleOnClose()}
         visible={isOpen}
       >
-        <div>Date: {moment(dataEvent.dateTime, 'YYYY-MM-DD HH:mmZ').tz(newTimeZone).format('LLL')}</div>
-        {dataEvent.event.descriptionUrl &&
-          <div>Url: {urlRenderer(dataEvent.event.descriptionUrl)}</div>
-        }
+        <div>Date: {moment(dataEvent.dateTime, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('LLL')}</div>
         {dataEvent.event.description &&
           <div>{dataEvent.event.description}</div>
         }
-        <div>
-          {renderTag(EventTypeToName[dataEvent.event.type] || dataEvent.event.type, EventTypeColor[dataEvent.event.type as keyof typeof EventTypeColor])}
-        </div>
         {!!dataEvent.organizer.githubId &&
           <div>Organizer: <GithubUserLink value={dataEvent.organizer.githubId} /></div>
         }
+        <Space>
+          {dataEvent.event.descriptionUrl &&
+            <div>Url: {urlRenderer(dataEvent.event.descriptionUrl)}</div>
+          }
+          <div>
+            {renderTag(EventTypeToName[dataEvent.event.type] || dataEvent.event.type, EventTypeColor[dataEvent.event.type as keyof typeof EventTypeColor])}
+          </div>
+        </Space>
         <style jsx>{`
           div {
             margin-bottom: 10px;
