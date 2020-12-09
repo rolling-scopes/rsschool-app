@@ -46,8 +46,15 @@ export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
   const getCurrentDayKey = useMemo(() => {
     const day = moment().day();
     const currentDay = day ? day - 1 : 6;
+    const date = moment().format('YYYYMMDD');
+    const todaysEvents = data.filter(({ dateTime }) => date === moment(dateTime).format('YYYYMMDD'));
+
+    if (todaysEvents.length === 0) {
+      return [];
+    }
+
     return `${WEEK[currentDay]}0`;
-  }, []);
+  }, [data]);
 
   return (
     <div className={'List'}>
