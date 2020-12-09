@@ -1,79 +1,117 @@
-import React, { useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-import { Collapse, Tag, Badge, Spin, Button, Row, Typography, Col, Tooltip } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Collapse, Badge, Button, Row, Typography, Col, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-
-import { CourseEvent } from 'services/course';
-const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-// import { getTagColorByEventType, getFormatTime } from '../../helpers/schedule-utils';
-// import { TaskType } from '../../constants/settings';
-
 import css from 'styled-jsx/css';
+import moment from 'moment-timezone';
+import { CourseEvent } from 'services/course';
+import { dateWithTimeZoneRenderer, renderTag } from 'components/Table';
+import { EventTypeColor, EventTypeToName } from './model';
 
 const { Panel } = Collapse;
+const { Text } = Typography;
 
+const currentDayColor = '#ffd591';
+const previuosDaysColor = '#fff1f0';
+const nextDaysColor = '#d9f7be';
+const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const weekLength = WEEK.length;
-const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
-const getStartAndEndWeekTime = (currentWeek: number) => {
-  const dateNow = 1586250152000;
-  // поменять на Date.now()
-  const now = new Date(dateNow + currentWeek * weekLength * millisecondsPerDay);
-  let day = now.getDay();
-  if (day === 0) {
-    day = 7;
-  }
+type Props = {
+  data: CourseEvent[];
+  timeZone: string;
+};
 
-  now.setHours(0);
-  now.setMinutes(0);
-  now.setSeconds(0);
-  now.setMilliseconds(0);
-  const startWeek = now.getTime() - millisecondsPerDay * (day - 1);
-  const endWeek = now.getTime() + millisecondsPerDay * (weekLength - day + 1) - 1;
+export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
+  const [currentWeek, setCurrentWeek] = useState(0);
+  const [startWeekDate, setStartWeekDate] = useState('');
+  const [endWeekDate, setEndWeekDate] = useState('');
+
+  useEffect(() => {
+    const startAndEnd = getStartAndEndWeekTime(currentWeek, timeZone);
+    const startWeekText = startAndEnd[0].format('D MMM');
+    const endWeekText = startAndEnd[1].format('D MMM');
+
+    setStartWeekDate(startWeekText);
+    setEndWeekDate(endWeekText);
+  }, [currentWeek]);
+
+  const handleClickBack = () => {
+    setCurrentWeek(currentWeek - 1);
+  };
+
+  const handleClickForward = () => {
+    setCurrentWeek(currentWeek + 1);
+  };
+
+  const getCurrentDayKey = useMemo(() => {
+    const day = moment().day();
+    const currentDay = day ? day - 1 : 6;
+    return `${WEEK[currentDay]}0`;
+  }, []);
+
+  return (
+    <div className={'List'}>
+      <Row justify="center" align="middle" gutter={[16, 16]}>
+        <Col>
+          <Tooltip title="Previous week">
+            <Button shape="circle" icon={<LeftOutlined />} size="large" onClick={handleClickBack} />
+          </Tooltip>
+        </Col>
+        <Col>
+          <Text strong>{`${startWeekDate} - ${endWeekDate}`}</Text>
+        </Col>
+        <Col>
+          <Tooltip title="Next week">
+            <Button shape="circle" icon={<RightOutlined />} size="large" onClick={handleClickForward} />
+          </Tooltip>
+        </Col>
+      </Row>
+      <Collapse defaultActiveKey={getCurrentDayKey}>{weekElements(data, currentWeek, timeZone)}</Collapse>
+      <style jsx>{listStyles}</style>
+    </div>
+  );
+};
+
+const getStartAndEndWeekTime = (currentWeek: number, timeZone: string) => {
+  const dayOfSelectedWeek = moment()
+    .tz(timeZone)
+    .add(currentWeek * weekLength, 'days');
+  const startWeek = dayOfSelectedWeek.clone().startOf('isoWeek');
+  const endWeek = dayOfSelectedWeek.clone().endOf('isoWeek');
 
   return [startWeek, endWeek];
 };
 
-const isCurrentWeek = (date: string, currentWeek: number) => {
-  const startAndEnd = getStartAndEndWeekTime(currentWeek);
-  const milliseconds = Date.parse(date);
-  return milliseconds > startAndEnd[0] && milliseconds < startAndEnd[1];
+const isCurrentWeek = (date: string, timeZone: string, currentWeek: number) => {
+  const startAndEnd = getStartAndEndWeekTime(currentWeek, timeZone);
+  const milliseconds = moment(date).tz(timeZone).valueOf();
+
+  return milliseconds > startAndEnd[0].valueOf() && milliseconds < startAndEnd[1].valueOf();
 };
 
-const panelClassName = (daySelected: number, currentWeek: number) => {
-  const now = new Date(Date.now());
-  let dayNow = now.getDay();
-  if (dayNow === 0) {
-    dayNow = 7;
+const panelClassName = (dayOfWeek: number, currentWeek: number) => {
+  const today = moment().day();
+
+  if (currentWeek < 0 || (currentWeek === 0 && dayOfWeek < today)) {
+    return { backgroundColor: previuosDaysColor };
   }
 
-  if (currentWeek > 0) {
-    return { backgroundColor: '#d9f7be' };
+  if (currentWeek > 0 || (currentWeek === 0 && dayOfWeek > today)) {
+    return { backgroundColor: nextDaysColor };
   }
-  if (currentWeek < 0) {
-    return { backgroundColor: '#fff1f0', opacity: '0.5' };
-  }
-  if (dayNow > daySelected) {
-    return { backgroundColor: '#fff1f0', opacity: '0.5' };
-  }
-  if (dayNow < daySelected) {
-    return { backgroundColor: '#d9f7be' };
-  }
-  if (dayNow === daySelected) {
-    return { backgroundColor: '#ffd591' };
+
+  if (dayOfWeek === today) {
+    return { backgroundColor: currentDayColor };
   }
 
   return {};
 };
 
-const mapToWeek = (events: CourseEvent[]) => {
+const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   const weekMap = new Array(weekLength).fill([]);
 
   events.forEach((event: CourseEvent) => {
-    const time = Date.parse(event.dateTime);
-    const date = new Date(time);
-    let eventDay = date.getDay();
+    let eventDay = moment(event.dateTime).tz(timeZone).day();
 
     if (eventDay === 0) {
       eventDay = 6;
@@ -94,32 +132,20 @@ const mapToWeek = (events: CourseEvent[]) => {
   return weekMap;
 };
 
-const getFormatTime = (dateNumb: number, timeZone: number): string => {
-  const date = new Date(dateNumb + timeZone * 3600 * 1000);
-  const hour = `${date.getUTCHours()}`.padStart(2, '0');
-  const minutes = `${date.getUTCMinutes()}`.padStart(2, '0');
-
-  return `${hour}:${minutes}`;
-};
-
-const dayEvents = (events: CourseEvent[], timeZone: number) => {
+const dayEvents = (events: CourseEvent[], timeZone: string) => {
   return events.map((data: CourseEvent) => {
     const { id, event, dateTime } = data;
     const { type, name } = event;
-    // const color = getTagColorByEventType(type as TaskType);
-    const color = 'red';
-    // const eventCopy = { ...event };
-    const eventTime = getFormatTime(Date.parse(dateTime), timeZone);
+
     return (
       <tbody key={id}>
         <tr>
-          <th style={{ width: '15%' }}>{eventTime}</th>
-          <th style={{ width: '15%' }}>
-            <Tag color={color}>{type}</Tag>
+          <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
+          <th style={{ width: '10%' }}>
+            {renderTag(EventTypeToName[type] || type, EventTypeColor[type as keyof typeof EventTypeColor])}
           </th>
-          <th style={{ width: '70%' }}>
+          <th style={{ width: '80%' }}>
             <span>{name}</span>
-            {/*<Link to={{ pathname: `/task/${id}`, state: { event: eventCopy } }}>{name}</Link>*/}
           </th>
         </tr>
         <style jsx>{tableStyles}</style>
@@ -128,26 +154,25 @@ const dayEvents = (events: CourseEvent[], timeZone: number) => {
   });
 };
 
-const weekElements = (events: CourseEvent[], currentWeekCount: number, timeZone: number) => {
-  const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, currentWeekCount));
-  const weekMap = mapToWeek(currentWeek);
-  const currentDate = Date.now();
+const weekElements = (events: CourseEvent[], selectedWeek: number, timeZone: string) => {
+  const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
+  const weekMap = mapToWeek(currentWeek, timeZone);
 
-  return weekMap.map((event: CourseEvent[], index: number) => {
-    const eventCount = event.length;
+  return weekMap.map((eventsPerDay: CourseEvent[], index: number) => {
+    const eventCount = eventsPerDay.length;
     const eventCountElem = (
       <Badge count={eventCount}>
-        <span style={{ marginRight: '10px' }}>{WEEK[index]}</span>
+        <span style={{ marginRight: '15px' }}>{WEEK[index]}</span>
       </Badge>
     );
-    const style = panelClassName(index + 1, currentWeekCount);
-    const key = currentDate + index;
+    const style = panelClassName(index + 1, selectedWeek);
+    const key = `${WEEK[index]}${selectedWeek}`;
 
-    if (event.length) {
+    if (eventCount) {
       return (
         <Panel style={style} header={eventCountElem} key={key}>
           <table className={'ListTable'}>
-            {dayEvents(event, timeZone)}
+            {dayEvents(eventsPerDay, timeZone)}
             <style jsx>{tableStyles}</style>
           </table>
         </Panel>
@@ -158,77 +183,10 @@ const weekElements = (events: CourseEvent[], currentWeekCount: number, timeZone:
   });
 };
 
-type Props = {
-  data: any;
-  timeZone: string;
-};
-
-const ScheduleList = ({ data }: Props): React.ReactElement => {
-  const { Text } = Typography;
-  const [currentWeek, setCurrentWeek] = useState(0);
-
-  const [startWeekDate, setStartWeekDate] = useState('');
-  const [endWeekDate, setEndWeekDate] = useState('');
-  // const {
-  //   settings: {
-  //     settings: { timeZone },
-  //   },
-  // } = useStores();
-  const timeZone = 3;
-
-  useEffect(() => {
-    const startAndEnd = getStartAndEndWeekTime(currentWeek);
-    const startWeek = new Date(startAndEnd[0]);
-    const endWeek = new Date(startAndEnd[1]);
-    const startWeekText = `${startWeek.getDate()} ${MONTHS[startWeek.getMonth()]}`;
-    const endWeekText = `${endWeek.getDate()} ${MONTHS[endWeek.getMonth()]}`;
-
-    setStartWeekDate(startWeekText);
-    setEndWeekDate(endWeekText);
-  }, [currentWeek]);
-
-  const handleClickBack = () => {
-    setCurrentWeek(currentWeek - 1);
-  };
-
-  const handleClickForward = () => {
-    setCurrentWeek(currentWeek + 1);
-  };
-
-  if (data === null) return <Spin tip="Loading..." size="large" />;
-
-  return (
-    <div className={'List'}>
-      <Row justify="center" align="middle" gutter={[16, 16]}>
-        <Col>
-          <Tooltip title="Previous week">
-            <Button shape="circle" icon={<LeftOutlined />} onClick={handleClickBack} />
-          </Tooltip>
-        </Col>
-        <Col>
-          <Text strong>{`${startWeekDate} - ${endWeekDate}`}</Text>
-        </Col>
-        <Col>
-          <Tooltip title="Next week">
-            <Button shape="circle" icon={<RightOutlined />} onClick={handleClickForward} />
-          </Tooltip>
-        </Col>
-      </Row>
-      <Collapse style={{ margin: '0 auto', maxWidth: '500px' }}>{weekElements(data, currentWeek, timeZone)}</Collapse>
-      <style jsx>{listStyles}</style>
-    </div>
-  );
-};
-
 const listStyles = css`
   .List {
-    padding: 0 100px;
-  }
-
-  @media (max-width: 600px) {
-    .List {
-      padding: 0;
-    }
+    margin: 0 auto;
+    max-width: 500px;
   }
 `;
 
@@ -237,18 +195,18 @@ const tableStyles = css`
     border-collapse: collapse;
     margin: 0 auto;
     width: 100%;
+  }
 
-    th {
-      border-bottom: 1px solid #f0f0f0;
-      padding: 5px 20px;
-      text-align: center;
-      cursor: pointer;
-    }
+  .ListTable th {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 5px 20px;
+    text-align: center;
+    cursor: pointer;
+  }
 
-    tr:hover {
-      background-color: #fcc;
-    }
+  .ListTable tr:hover {
+    background-color: #f2f2f2;
   }
 `;
 
-export default ScheduleList;
+export default ListView;
