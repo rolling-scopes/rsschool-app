@@ -491,13 +491,13 @@ export class CourseService {
     return result.data.data as StudentBasic;
   }
 
-  async createInterviewStudent(githubId: string) {
-    const result = await this.axios.post(`/student/${githubId}/interview/stage`);
+  async createInterviewStudent(githubId: string, interviewId: string) {
+    const result = await this.axios.post(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data;
   }
 
-  async getInterviewStudent(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/interview/stage`);
+  async getInterviewStudent(githubId: string, interviewId: string) {
+    const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data as { id: number } | null;
   }
 
