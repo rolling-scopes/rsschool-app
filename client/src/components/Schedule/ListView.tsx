@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Collapse, Badge, Button, Row, Typography, Col, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import css from 'styled-jsx/css';
@@ -10,6 +10,7 @@ import { EventTypeColor, EventTypeToName } from './model';
 const { Panel } = Collapse;
 const { Text } = Typography;
 
+const LAST_WEEK_DAY = 6;
 const currentDayColor = '#ffd591';
 const previuosDaysColor = '#fff1f0';
 const nextDaysColor = '#d9f7be';
@@ -23,17 +24,24 @@ type Props = {
 
 export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
   const [currentWeek, setCurrentWeek] = useState(0);
-  const [startWeekDate, setStartWeekDate] = useState('');
-  const [endWeekDate, setEndWeekDate] = useState('');
 
-  useEffect(() => {
+  const currentDayKey = useMemo(() => {
+    const day = moment().day();
+    const currentDay = day ? day - 1 : LAST_WEEK_DAY;
+    const date = moment().format('YYYYMMDD');
+    const todaysEvents = data.filter(({ dateTime }) => date === moment(dateTime).tz(timeZone).format('YYYYMMDD'));
+
+    if (todaysEvents.length === 0) {
+      return [];
+    }
+
+    return `${WEEK[currentDay]}0`;
+  }, [data, timeZone]);
+
+  const startEndWeekLabel = useMemo(() => {
     const startAndEnd = getStartAndEndWeekTime(currentWeek, timeZone);
-    const startWeekText = startAndEnd[0].format('D MMM');
-    const endWeekText = startAndEnd[1].format('D MMM');
-
-    setStartWeekDate(startWeekText);
-    setEndWeekDate(endWeekText);
-  }, [currentWeek]);
+    return `${startAndEnd[0].format('D MMM')} - ${startAndEnd[1].format('D MMM')}`;
+  }, [currentWeek, timeZone]);
 
   const handleClickBack = () => {
     setCurrentWeek(currentWeek - 1);
@@ -43,21 +51,8 @@ export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
     setCurrentWeek(currentWeek + 1);
   };
 
-  const getCurrentDayKey = useMemo(() => {
-    const day = moment().day();
-    const currentDay = day ? day - 1 : 6;
-    const date = moment().format('YYYYMMDD');
-    const todaysEvents = data.filter(({ dateTime }) => date === moment(dateTime).format('YYYYMMDD'));
-
-    if (todaysEvents.length === 0) {
-      return [];
-    }
-
-    return `${WEEK[currentDay]}0`;
-  }, [data]);
-
   return (
-    <div className={'List'}>
+    <div className="List">
       <Row justify="center" align="middle" gutter={[16, 16]}>
         <Col>
           <Tooltip title="Previous week">
@@ -65,7 +60,7 @@ export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
           </Tooltip>
         </Col>
         <Col>
-          <Text strong>{`${startWeekDate} - ${endWeekDate}`}</Text>
+          <Text strong>{startEndWeekLabel}</Text>
         </Col>
         <Col>
           <Tooltip title="Next week">
@@ -73,7 +68,7 @@ export const ListView = ({ data, timeZone }: Props): React.ReactElement => {
           </Tooltip>
         </Col>
       </Row>
-      <Collapse defaultActiveKey={getCurrentDayKey}>{weekElements(data, currentWeek, timeZone)}</Collapse>
+      <Collapse defaultActiveKey={currentDayKey}>{getWeekElements(data, currentWeek, timeZone)}</Collapse>
       <style jsx>{listStyles}</style>
     </div>
   );
@@ -121,7 +116,7 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
     let eventDay = moment(event.dateTime).tz(timeZone).day();
 
     if (eventDay === 0) {
-      eventDay = 6;
+      eventDay = LAST_WEEK_DAY;
     } else {
       eventDay -= 1;
     }
@@ -139,7 +134,7 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   return weekMap;
 };
 
-const dayEvents = (events: CourseEvent[], timeZone: string) => {
+const getDayEvents = (events: CourseEvent[], timeZone: string) => {
   return events.map((data: CourseEvent) => {
     const { id, event, dateTime } = data;
     const { type, name } = event;
@@ -161,7 +156,7 @@ const dayEvents = (events: CourseEvent[], timeZone: string) => {
   });
 };
 
-const weekElements = (events: CourseEvent[], selectedWeek: number, timeZone: string) => {
+const getWeekElements = (events: CourseEvent[], selectedWeek: number, timeZone: string) => {
   const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
 
@@ -178,8 +173,8 @@ const weekElements = (events: CourseEvent[], selectedWeek: number, timeZone: str
     if (eventCount) {
       return (
         <Panel style={style} header={eventCountElem} key={key}>
-          <table className={'ListTable'}>
-            {dayEvents(eventsPerDay, timeZone)}
+          <table className="ListTable">
+            {getDayEvents(eventsPerDay, timeZone)}
             <style jsx>{tableStyles}</style>
           </table>
         </Panel>
