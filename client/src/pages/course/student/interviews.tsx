@@ -14,20 +14,21 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const [data, setData] = useState<InterviewDetails[]>([]);
   const [interviews, setInterviews] = useState<Interview[]>([]);
-  const [hasStageInterview, setStageInterview] = useState(false);
+  const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useAsync(async () => {
     try {
       setLoading(true);
-      const [data, interviews, stageInterview] = await Promise.all([
+      const [data, interviews] = await Promise.all([
         courseService.getStudentInterviews(props.session.githubId),
         courseService.getInterviews(),
-        courseService.getInterviewStudent(props.session.githubId).catch(() => null),
       ] as const);
+      const registeredInterviews = await getRegisteredInterviews(interviews);
+
       setData(data);
       setInterviews(interviews);
-      setStageInterview(!!stageInterview);
+      setRegisteredInterviews(registeredInterviews);
     } catch {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -35,9 +36,9 @@ function Page(props: CoursePageProps) {
     }
   }, [props.course.id]);
 
-  const handleRegister = async () => {
+  const handleRegister = async (interviewId: string) => {
     Modal.confirm({
-      title: 'Are you ready to participate in Technical Screening?',
+      title: 'Are you ready to participate in the interview?',
       content: (
         <>
           You are committing to do the following:
@@ -51,22 +52,35 @@ function Page(props: CoursePageProps) {
       ),
       okText: 'Yes',
       onOk: async () => {
-        await courseService.createInterviewStudent(props.session.githubId);
-        setStageInterview(true);
+        await courseService.createInterviewStudent(props.session.githubId, interviewId);
+        setRegisteredInterviews(registeredInterviews.concat([interviewId]));
       },
     });
   };
 
+  const getRegisteredInterviews = async (interviews: Interview[]) => {
+    const requests = interviews
+      .map(({ type, id }) => (type === 'stage-interview' ? 'stage' : id))
+      .map(async id => {
+        const data = await courseService.getInterviewStudent(props.session.githubId, id).catch(() => null);
+        return data ? id : null;
+      });
+
+    const result = await Promise.all(requests);
+    return result.filter(id => id != null) as string[];
+  };
+
   const renderExtra = (interview: Interview) => {
+    const id = interview.type === 'stage-interview' ? 'stage' : interview.id;
+    const hasInterview = registeredInterviews.includes(id);
     return (
       <Button
-        hidden={interview.type !== 'stage-interview'}
-        onClick={handleRegister}
-        icon={hasStageInterview ? <CheckCircleOutlined /> : null}
-        disabled={hasStageInterview}
-        type={hasStageInterview ? 'default' : 'primary'}
+        onClick={() => handleRegister(id)}
+        icon={hasInterview ? <CheckCircleOutlined /> : null}
+        disabled={hasInterview}
+        type={hasInterview ? 'default' : 'primary'}
       >
-        {hasStageInterview ? 'Registered' : 'Register'}
+        {hasInterview ? 'Registered' : 'Register'}
       </Button>
     );
   };
