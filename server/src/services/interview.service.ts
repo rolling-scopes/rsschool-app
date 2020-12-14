@@ -48,3 +48,20 @@ export async function createInterviewsAutomatically(
 
   return taskCheckPairs;
 }
+
+export async function getInterviewPairs(courseTaskId: number) {
+  return getCustomRepository(InterviewRepository).findByInterviewId(courseTaskId);
+}
+
+export async function cancelInterviewPair(pairId: number) {
+  return getCustomRepository(InterviewRepository).cancelById(pairId);
+}
+
+export async function createInterview(
+  courseId: number,
+  courseTaskId: number,
+  interviewerGithubId: string,
+  studentGithubId: string,
+) {
+  return getCustomRepository(InterviewRepository).addPair(courseId, courseTaskId, interviewerGithubId, studentGithubId);
+}

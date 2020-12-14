@@ -56,6 +56,12 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
   setResponse(ctx, OK, result);
 };
 
+export const getInterviewPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseTaskId: number = Number(ctx.params.courseTaskId);
+  const data = await interviewService.getInterviewPairs(courseTaskId);
+  setResponse(ctx, OK, data);
+};
+
 export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
   try {
@@ -88,6 +94,12 @@ export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterCont
   }
 };
 
+export const createInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
+  const result = await interviewService.createInterview(courseId, courseTaskId, interviewerGithubId, studentGithubId);
+  setResponse(ctx, OK, { id: result?.id });
+};
+
 export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   const courseTaskId: number = Number(ctx.params.courseTaskId);
@@ -105,6 +117,16 @@ export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext
       return;
     }
     setResponse(ctx, OK, result);
+  } catch (e) {
+    setResponse(ctx, BAD_REQUEST, { message: e.message });
+  }
+};
+
+export const cancelInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const pairId: number = Number(ctx.params.id);
+  try {
+    await interviewService.cancelInterviewPair(pairId);
+    setResponse(ctx, OK, {});
   } catch (e) {
     setResponse(ctx, BAD_REQUEST, { message: e.message });
   }

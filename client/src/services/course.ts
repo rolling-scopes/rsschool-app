@@ -1,6 +1,6 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
-import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '../../../common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '../../../common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
 import { ScoreTableFilters } from '../../../common/types/score';
@@ -504,6 +504,23 @@ export class CourseService {
   async getInterviews() {
     const result = await this.axios.get(`/interviews`);
     return result.data.data as Interview[];
+  }
+
+  async getInterviewPairs(interviewId: string) {
+    const result = await this.axios.get(`/interviews/${interviewId}`);
+    return result.data.data as InterviewPair[];
+  }
+
+  async cancelInterviewPair(interviewId: string, pairId: string) {
+    const result = await this.axios.delete(`/interviews/${interviewId}/${pairId}`);
+    return result.data.data;
+  }
+
+  async addInterviewPair(interviewId: string, interviewerGithubId: string, studentGithubId: string) {
+    const result = await this.axios.post(
+      `/interview/${interviewId}/interviewer/${interviewerGithubId}/student/${studentGithubId}`,
+    );
+    return result.data.data as { id: string };
   }
 
   async sendInviteRepository(githubId: string) {
