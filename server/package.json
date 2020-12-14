@@ -37,11 +37,11 @@
     "node-schedule": "~1.3.2",
     "passport-github": "~1.1.0",
     "pg": "~7.17.1",
-    "pino-cloudwatch": "0.5.1",
+    "pino-cloudwatch": "^0.7.0",
     "pino-multi-stream": "~4.2.0",
     "reflect-metadata": "0.1.13",
     "swagger-jsdoc": "3.5.0",
-    "typeorm": "^0.2.24"
+    "typeorm": "^0.2.29"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
@@ -71,6 +71,6 @@
     "ts-jest": "^25.3.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.3"
   }
 }

@@ -60,6 +60,6 @@
     "http-proxy-middleware": "~0.19.1",
     "jest": "~25.1.0",
     "ts-jest": "~25.2.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.3"
   }
 }

@@ -517,7 +517,6 @@ export type StudentCrossMentor = {
   };
 };
 
-
 export async function getCrossMentorsByStudent(courseId: number, githubId: string): Promise<StudentCrossMentor[]> {
   const student = await getStudentByGithubId(courseId, githubId);
 
