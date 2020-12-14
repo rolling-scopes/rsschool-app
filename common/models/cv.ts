@@ -1,9 +1,3 @@
-export interface Contact {
-  contactType: ContactType;
-  contactText: string;
-  transformable: boolean;
-}
-
 export interface EducationRecord {
   organization: string;
   education: string;
@@ -45,4 +39,25 @@ export interface UserData {
   englishLevel: EnglishLevel;
   militaryService: MilitaryService;
   notes: string;
+}
+
+export type Contacts = {
+  [key in ContactType]: string | null;
+};
+
+export interface ContactsFromProfile {
+  phone: string | null;
+  email: string | null;
+  skype: string | null;
+  telegram: string | null;
+  linkedin: string | null;
+  location: string | null;
+}
+
+export interface FieldData {
+  name: string[];
+  value: any;
+  touched: boolean;
+  validating: boolean;
+  errors: string[];
 }
