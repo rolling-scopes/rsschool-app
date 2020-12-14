@@ -3,17 +3,17 @@ import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
 import ContactsList from '../ContactsList';
 import AvatarCV from '../AvatarCV';
-import { Contact, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../../common/models/cv';
+import { Contacts, MilitaryService, SelfIntroLink, EnglishLevel } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
 type Props = {
   name: string;
   desiredPosition: string;
-  contacts: Contact[];
-  englishLevel: EnglishLevel,
-  militaryService: MilitaryService,
-  selfIntroLink: SelfIntroLink
+  contacts: Contacts;
+  englishLevel: EnglishLevel;
+  militaryService: MilitaryService;
+  selfIntroLink: SelfIntroLink | null;
 };
 
 function MainSection(props: Props) {
