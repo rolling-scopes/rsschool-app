@@ -38,6 +38,11 @@ export class TaskService {
     return result.data.data;
   }
 
+  async getTask(id: string) {
+    const result = await axios.get<{ data: Task }>(`/api/task/${id}`);
+    return result.data.data;
+  }
+
   async updateTask(id: number, data: Partial<Task>) {
     const result = await axios.put<{ data: Task }>(`/api/task/${id}`, data);
     return result.data.data;

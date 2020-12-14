@@ -396,6 +396,16 @@ export async function getStudentScore(studentId: number) {
   };
 }
 
+export async function getCourseTask(taskId: number) {
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .innerJoinAndSelect('courseTask.task', 'task')
+    .where('courseTask.id = :id', { id: taskId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
+    .getMany();
+  return courseTasks;
+}
+
 export async function getCourseTasks(courseId: number) {
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
@@ -417,6 +427,17 @@ export function isPowerUser(courseId: number, session: IUserSession) {
     session.coursesRoles?.[courseId]?.includes(CourseRole.manager) ||
     session.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)
   );
+}
+
+export async function getEvent(eventId: number) {
+  const answer = await getRepository(CourseEvent)
+    .createQueryBuilder('courseEvent')
+    .innerJoinAndSelect('courseEvent.event', 'event')
+    .leftJoin('courseEvent.organizer', 'organizer')
+    .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
+    .where('courseEvent.id = :id', { id: eventId })
+    .getOne();
+  return answer;
 }
 
 export async function getEvents(courseId: number) {
