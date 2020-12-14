@@ -14,7 +14,7 @@ function SectionCV(props: Props) {
 
   const complexTitle = (
     <>
-    {avatar} {title}
+      {avatar} {title}
     </>
   );
 
