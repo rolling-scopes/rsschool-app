@@ -104,7 +104,7 @@ export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext
   const courseId: number = Number(ctx.params.courseId);
   const courseTaskId: number = Number(ctx.params.courseTaskId);
   try {
-    const { clean = false, registrationEnabled = false } = ctx.request.body as {
+    const { clean = false, registrationEnabled = true } = ctx.request.body as {
       clean: boolean;
       registrationEnabled: boolean;
     };
