@@ -7,16 +7,32 @@ import {
   EducationSection,
   EmploymentSection,
   CoursesSection,
-  BadgesSection
+  BadgesSection,
 } from 'components/cv/sections';
-import { mockContactsList, mockUserData, notes, educationHistory, employmentHistory, coursesData, badgesData } from 'pages/cv/mockData';
-import { EnglishLevel, MilitaryService, Contact, UserData, EducationRecord, EmploymentRecord, CourseData, BadgesData } from '../../../../common/models/cv';
+import {
+  mockContactsList,
+  mockUserData,
+  educationHistory,
+  employmentHistory,
+  coursesData,
+  badgesData,
+} from 'pages/cv/mockData';
+import {
+  EnglishLevel,
+  MilitaryService,
+  Contacts,
+  UserData,
+  EducationRecord,
+  EmploymentRecord,
+  CourseData,
+  BadgesData,
+} from '../../../../common/models/cv';
 
 const { Content } = Layout;
 
 type State = {
   isLoading: boolean;
-  contactsList: Contact[] | null;
+  contactsList: Contacts | null;
   userData: UserData | null;
   educationHistory: EducationRecord[] | null;
   employmentHistory: EmploymentRecord[] | null;
@@ -32,12 +48,12 @@ class ViewCV extends React.Component {
     educationHistory: null,
     employmentHistory: null,
     coursesData: null,
-    badgesData: null
+    badgesData: null,
   };
 
   private async fetchData() {
     await this.setState({
-      isLoading: true
+      isLoading: true,
     });
 
     const badgesDataExtracted = this.extractBadgesData(badgesData);
@@ -49,11 +65,11 @@ class ViewCV extends React.Component {
       educationHistory: educationHistory,
       employmentHistory: employmentHistory,
       coursesData: coursesDataExtracted,
-      badgesData: badgesDataExtracted
+      badgesData: badgesDataExtracted,
     });
 
     await this.setState({
-      isLoading: false
+      isLoading: false,
     });
   }
 
@@ -67,7 +83,7 @@ class ViewCV extends React.Component {
         locationName,
         position,
         isCourseCompleted,
-        totalScore
+        totalScore,
       } = course;
 
       return {
@@ -77,8 +93,8 @@ class ViewCV extends React.Component {
         locationName,
         position,
         isCourseCompleted,
-        totalScore
-      }
+        totalScore,
+      };
     });
   }
 
@@ -100,7 +116,7 @@ class ViewCV extends React.Component {
 
     return {
       badges: badgesFormatted,
-      total: badges.length
+      total: badges.length,
     };
   }
 
@@ -109,7 +125,7 @@ class ViewCV extends React.Component {
   }
 
   render() {
-    const { name, desiredPosition, selfIntroLink, englishLevel, militaryService } = mockUserData;
+    const { name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = mockUserData;
     const { isLoading } = this.state;
 
     return (
@@ -125,21 +141,11 @@ class ViewCV extends React.Component {
                 englishLevel={englishLevel as EnglishLevel}
                 militaryService={militaryService as MilitaryService}
               />
-              <AboutSection
-                notes={notes}
-              />
-              <EducationSection
-                educationHistory={educationHistory}
-              />
-              <EmploymentSection
-                employmentHistory={employmentHistory}
-              />
-              <CoursesSection
-                coursesData={this.extractCoursesData(coursesData)}
-              />
-              <BadgesSection
-                badgesData={this.extractBadgesData(badgesData)}
-              />
+              <AboutSection notes={notes} />
+              <EducationSection educationHistory={educationHistory} />
+              <EmploymentSection employmentHistory={employmentHistory} />
+              <CoursesSection coursesData={this.extractCoursesData(coursesData)} />
+              <BadgesSection badgesData={this.extractBadgesData(badgesData)} />
             </Space>
           </Content>
         </Layout>

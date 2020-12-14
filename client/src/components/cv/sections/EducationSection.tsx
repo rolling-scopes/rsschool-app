@@ -15,7 +15,7 @@ function EducationSection(props: Props) {
   const { educationHistory } = props;
 
   const sectionContent = (
-      <List
+    <List
       dataSource={educationHistory}
       renderItem={(record: EducationRecord) => {
         const { startYear, finishYear, education, organization } = record;
@@ -23,8 +23,8 @@ function EducationSection(props: Props) {
         const areYearsDifferent = startYear !== finishYear;
 
         return (
-          <Item style={{fontSize: '16px'}}>
-            <Row justify='space-between' style={{width: '100%'}}>
+          <Item style={{ fontSize: '16px' }}>
+            <Row justify="space-between" style={{ width: '100%' }}>
               <Col span={12}>
                 <Text strong>{organization}</Text>
                 <br />
@@ -33,10 +33,10 @@ function EducationSection(props: Props) {
               <Col span={3} offset={9}>
                 <Text>{startYear}</Text>
                 {areYearsDifferent && (
-                <>
-                  <br />
-                  <Text>{finishYear}</Text>
-                </>
+                  <>
+                    <br />
+                    <Text>{finishYear}</Text>
+                  </>
                 )}
               </Col>
             </Row>
@@ -46,7 +46,7 @@ function EducationSection(props: Props) {
     />
   );
 
-  const icon = <ReadOutlined />
+  const icon = <ReadOutlined />;
 
   return <SectionCV content={sectionContent} title="Education history" icon={icon} />;
 }
