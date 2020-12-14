@@ -105,7 +105,14 @@ function addScoreApi(router: Router<any, any>, logger: ILogger) {
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   router.get('/interviews', courseGuard, interviews.getInterviews(logger));
+  router.get('/interviews/:courseTaskId', courseManagerGuard, interviews.getInterviewPairs(logger));
+  router.post(
+    '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
+    courseManagerGuard,
+    interviews.createInterview(logger),
+  );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
+  router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
 }
 
 function addStageApi(router: Router<any, any>, logger: ILogger) {

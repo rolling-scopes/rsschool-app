@@ -28,7 +28,7 @@ export function numberSorter<T>(field: keyof T) {
     }
     const aValue = get(a, field, 0);
     const bValue = get(b, field, 0);
-    return bValue - aValue;
+    return Number(bValue) - Number(aValue);
   };
 }
 

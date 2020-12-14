@@ -49,6 +49,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         startDate: it.courseTask.studentStartDate,
         endDate: it.courseTask.studentEndDate,
         completed: it.isCompleted,
+        result: null,
         status: it.isCompleted
           ? InterviewStatus.Completed
           : it.isCanceled

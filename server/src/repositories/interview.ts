@@ -1,7 +1,7 @@
-import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
+import { EntityRepository, AbstractRepository, getRepository, getManager } from 'typeorm';
 import { TaskChecker, TaskInterviewResult, TaskInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
-import { InterviewStatus, InterviewDetails } from '../../../common/models/interview';
+import { InterviewStatus, InterviewDetails, InterviewPair } from '../../../common/models/interview';
 
 @EntityRepository(TaskChecker)
 export class InterviewRepository extends AbstractRepository<TaskChecker> {
@@ -13,6 +13,10 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
     return this.getInterviews(courseId, githubId, 'student');
   }
 
+  public findByInterviewId(id: number): Promise<InterviewPair[]> {
+    return this.getInterviewPairs(id);
+  }
+
   public async addStudent(courseId: number, courseTaskId: number, studentId: number) {
     const repository = await getRepository(TaskInterviewStudent);
     let record = await repository.findOne({ where: { courseId, studentId, courseTaskId } });
@@ -20,6 +24,35 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
       record = await repository.save({ courseId, studentId, courseTaskId });
     }
     return { id: record.id };
+  }
+
+  public async cancelById(id: number) {
+    await getRepository(TaskChecker).delete(id);
+  }
+
+  public async addPair(courseId: number, courseTaskId: number, interviewerGithubId: string, studentGithubId: string) {
+    const [interviewer, student] = await Promise.all([
+      courseService.queryMentorByGithubId(courseId, interviewerGithubId),
+      courseService.queryStudentByGithubId(courseId, studentGithubId),
+    ]);
+    if (interviewer && student) {
+      const record = {
+        courseTaskId: courseTaskId,
+        studentId: student.id,
+        mentorId: interviewer.id,
+      };
+      const current = await this.repository.findOne({
+        where: record,
+      });
+      if (!current) {
+        const {
+          identifiers: [{ id }],
+        } = await this.repository.insert(record);
+        return { id: Number(id) };
+      }
+      return { id: current.id };
+    }
+    return null;
   }
 
   public async findRegisteredStudent(courseId: number, courseTaskId: number, studentId: number) {
@@ -122,13 +155,56 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
     });
     return students as InterviewDetails[];
   }
+
+  private async getInterviewPairs(courseTaskId: number): Promise<InterviewPair[]> {
+    const result = await getManager().query(
+      `
+SELECT
+  tc.id,
+  task_interview_result.score,
+  m_user."firstName" AS "interviewerFirstName",
+  m_user."lastName" AS "interviewerLastName",
+  m_user."githubId" AS "interviewerGithubId",
+  s_user."firstName" AS "studentFirstName",
+  s_user."lastName" AS "studentLastName",
+  s_user."githubId" AS "studentGithubId"
+FROM task_checker AS tc
+LEFT JOIN task_interview_result ON tc."studentId" = task_interview_result."studentId"
+LEFT JOIN mentor AS m ON m.id = tc."mentorId"
+LEFT JOIN student AS s ON s.id = tc."studentId"
+LEFT JOIN "user" AS m_user ON m_user.id = m."userId"
+LEFT JOIN "user" AS s_user ON s_user.id = s."userId"
+WHERE tc."courseTaskId" = $1
+    `,
+      [courseTaskId],
+    );
+    return result.map((item: any) => {
+      return {
+        id: item.id,
+        result: item.score,
+        status: item.score ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
+        interviewer: {
+          githubId: item.interviewerGithubId,
+          name: userService.createName({
+            firstName: item.interviewerFirstName,
+            lastName: item.interviewerLastName,
+          }),
+        },
+        student: {
+          githubId: item.studentGithubId,
+          name: userService.createName({
+            firstName: item.studentFirstName,
+            lastName: item.studentLastName,
+          }),
+        },
+      } as InterviewPair;
+    });
+  }
 }
 
-export interface InterviewInfo {
-  id: number;
+export interface InterviewInfo extends InterviewPair {
   name: string;
   completed: boolean;
-  status: InterviewStatus;
   interviewer: {
     name: string;
     cityName?: string;
