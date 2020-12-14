@@ -9,16 +9,16 @@ import {
   GithubOutlined,
   IdcardOutlined,
 } from '@ant-design/icons';
-import { Contact, ContactType } from '../../../../common/models/cv';
+import { Contacts, ContactType } from '../../../../common/models/cv';
 
 const { Item } = List;
 const { Text } = Typography;
 
 type AllowedContacts = {
   [key in ContactType]: {
-    icon: React.ReactNode,
-    transformFunc?: (contact: string) => React.ReactNode
-  }
+    icon: React.ReactNode;
+    transformFunc?: (contact: string) => React.ReactNode;
+  };
 };
 
 const allowedContacts: AllowedContacts = {
@@ -55,36 +55,45 @@ const allowedContacts: AllowedContacts = {
 };
 
 type Props = {
-  contacts: Contact[];
+  contacts: Contacts | null;
 };
+
+type EntryOf<T extends object> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
 function ContactsList(props: Props) {
   const { contacts } = props;
+  let res;
+  if (contacts !== null) {
+    const contactsFiltered = Object.entries(contacts);
+    const renderContacts = contactsFiltered.filter((contact): contact is EntryOf<Contacts> => contact[1] !== null);
+    res = (
+      <List
+        dataSource={renderContacts}
+        renderItem={contact => {
+          const contactType: ContactType = contact[0];
+          const contactText = contact[1];
+          const icon = allowedContacts[contactType].icon;
+          let contactTextElem;
+          const transformFunction = allowedContacts[contactType].transformFunc;
+          if (transformFunction) {
+            contactTextElem = transformFunction(contactText as string);
+          } else {
+            contactTextElem = <Text>{contactText}</Text>;
+          }
+          return (
+            <Item>
+              {icon}
+              {contactTextElem}
+            </Item>
+          );
+        }}
+      />
+    );
+  } else {
+    res = null;
+  }
 
-  const contactsFiltered = contacts!.filter((item: Contact) => Object.keys(allowedContacts).includes(item.contactType));
-
-  return (
-    <List
-      dataSource={contactsFiltered}
-      renderItem={(contact: Contact) => {
-        const { contactType, contactText, transformable } = contact;
-        const icon = allowedContacts[contactType].icon;
-        let contactTextElem;
-        if (transformable) {
-          const transformFunc = allowedContacts[contactType].transformFunc!;
-          contactTextElem = transformFunc(contactText);
-        } else {
-          contactTextElem = <Text>{contactText}</Text>;
-        }
-        return (
-          <Item>
-            {icon}
-            {contactTextElem}
-          </Item>
-        );
-      }}
-    />
-  );
+  return res;
 }
 
 export default ContactsList;
