@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
 import SectionCV from '../SectionCV';
@@ -20,7 +19,15 @@ function CoursesSection(props: Props) {
     <List
       dataSource={coursesToShow}
       renderItem={(record: CourseData) => {
-        const { courseFullName, locationName, isExpelled, certificateId, isCourseCompleted, totalScore, position } = record;
+        const {
+          courseFullName,
+          locationName,
+          isExpelled,
+          certificateId,
+          isCourseCompleted,
+          totalScore,
+          position,
+        } = record;
         const title = `${courseFullName}${locationName ? locationName : ''}`;
         const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
         const courseStats = `Score: ${totalScore} Position: ${position}`;
@@ -42,7 +49,7 @@ function CoursesSection(props: Props) {
 
         return (
           <Item style={{ fontSize: '16px' }}>
-            <Row justify='space-between' style={{ width: '100%' }}>
+            <Row justify="space-between" style={{ width: '100%' }}>
               <Col span={12}>
                 <Text strong>{title}</Text>
                 <br />
@@ -59,7 +66,7 @@ function CoursesSection(props: Props) {
     />
   );
 
-  const icon = <SafetyOutlined />
+  const icon = <SafetyOutlined />;
 
   return <SectionCV content={sectionContent} title="RSS courses" icon={icon} />;
 }
