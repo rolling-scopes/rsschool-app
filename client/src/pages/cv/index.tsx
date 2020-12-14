@@ -20,23 +20,24 @@ type State = {
 class CVPage extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
-    editMode: true
+    editMode: true,
   };
 
   private switchView(checked: boolean) {
     if (checked) {
       this.setState({
-        editMode: true
+        editMode: true,
       });
     } else {
       this.setState({
-        editMode: false
+        editMode: false,
       });
     }
   }
 
   render() {
     const { editMode } = this.state;
+    const githubId = this.props.session.githubId;
 
     return (
       <>
@@ -44,14 +45,15 @@ class CVPage extends React.Component<Props, State> {
           <Content>
             <label>
               Switch view:
-                <br />
-              <Switch defaultChecked={editMode} onChange={this.switchView.bind(this)} checkedChildren='CV view' unCheckedChildren='Form view' />
+              <br />
+              <Switch
+                defaultChecked={editMode}
+                onChange={this.switchView.bind(this)}
+                checkedChildren="CV view"
+                unCheckedChildren="Form view"
+              />
             </label>
-            {editMode ? (
-              <ViewCV />
-            ) : (
-                <FormCV />
-              )}
+            {editMode ? <ViewCV /> : <FormCV ownerId={githubId} />}
           </Content>
         </Layout>
       </>

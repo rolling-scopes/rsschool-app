@@ -15,7 +15,7 @@ function EmploymentSection(props: Props) {
   const { employmentHistory } = props;
 
   const sectionContent = (
-      <List
+    <List
       dataSource={employmentHistory}
       renderItem={(record: EmploymentRecord) => {
         const { startYear, finishYear, position, organization } = record;
@@ -23,8 +23,8 @@ function EmploymentSection(props: Props) {
         const areYearsDifferent = startYear !== finishYear;
 
         return (
-          <Item style={{fontSize: '16px'}}>
-            <Row justify='space-between' style={{width: '100%'}}>
+          <Item style={{ fontSize: '16px' }}>
+            <Row justify="space-between" style={{ width: '100%' }}>
               <Col span={12}>
                 {organization ? (
                   <>
@@ -33,17 +33,16 @@ function EmploymentSection(props: Props) {
                     <Text>{position}</Text>
                   </>
                 ) : (
-                    <Text strong>{position}</Text>
+                  <Text strong>{position}</Text>
                 )}
-
               </Col>
               <Col span={3} offset={9}>
                 <Text>{startYear}</Text>
                 {areYearsDifferent && (
-                <>
-                  <br />
-                  <Text>{finishYear}</Text>
-                </>
+                  <>
+                    <br />
+                    <Text>{finishYear}</Text>
+                  </>
                 )}
               </Col>
             </Row>
@@ -53,7 +52,7 @@ function EmploymentSection(props: Props) {
     />
   );
 
-  const icon = <UserOutlined />
+  const icon = <UserOutlined />;
 
   return <SectionCV content={sectionContent} title="Employment history" icon={icon} />;
 }
