@@ -76,6 +76,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
       .where('is.courseId = :courseId', { courseId })
       .andWhere('is.courseTaskId = :courseTaskId', { courseTaskId })
       .andWhere('student.isExpelled = false')
+      .orderBy('student.totalScore', 'DESC')
       .getMany();
 
     return records.map(record => ({
