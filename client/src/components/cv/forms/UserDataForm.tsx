@@ -32,16 +32,16 @@ export default function UserDataForm(props: Props) {
 
   return (
     <Form form={form} name="userData" onFinish={handleFunc}>
-      <Item label="Name" name="name">
+      <Item label="Name" name="name" rules={[{required: true, max: 100, whitespace: false}]}>
         <Input />
       </Item>
-      <Item label="Desired position" name="desiredPosition">
+      <Item label="Desired position" name="desiredPosition" rules={[{required: true, max: 100,  whitespace: false}]}>
         <Input />
       </Item>
-      <Item label="Self introduction video" name="selfIntroLink">
+      <Item label="Self introduction video" name="selfIntroLink"rules={[{max: 300,  whitespace: false}]}>
         <Input />
       </Item>
-      <Item label="Select your English level" name="englishLevel">
+      <Item label="Select your English level" name="englishLevel" rules={[{required: true}]}>
         <Select>
           <Option value="a0">A0</Option>
           <Option value="a1">A1</Option>
@@ -64,12 +64,15 @@ export default function UserDataForm(props: Props) {
           <Option value="notLiable">Not liable</Option>
         </Select>
       </Item>
-      <Item label="About me" name="notes">
+      <Item label="About me" name="notes" rules={[{required: true, max: 1000, min: 30,  whitespace: false}]}>
         <Input.TextArea rows={4} />
       </Item>
       <Item>
         <Button type="primary" htmlType="submit">
           Save
+        </Button>
+        <Button type="primary" htmlType="submit" onClick={() => form.resetFields()}>
+          Reset
         </Button>
       </Item>
     </Form>
