@@ -33,25 +33,3 @@ export function getTagStyle(tagName: string, storedTagColors = {}, styles?: CSSP
     backgroundColor: `${tagColor}10`,
   };
 }
-
-export const mockedTags = [
-  { name: 'deadline' },
-  { name: 'test' },
-  { name: 'jstask' },
-  { name: 'htmltask' },
-  { name: 'externaltask' },
-  { name: 'selfeducation' },
-  { name: 'codewars' },
-  { name: 'codejam' },
-  { name: 'newtask' },
-  { name: 'lecture' },
-  { name: 'lecture_online' },
-  { name: 'lecture_offline' },
-  { name: 'lecture_mixed' },
-  { name: 'lecture_self_study' },
-  { name: 'info' },
-  { name: 'warmup' },
-  { name: 'meetup' },
-  { name: 'workshop' },
-  { name: 'interview' },
-];

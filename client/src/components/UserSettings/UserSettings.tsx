@@ -4,7 +4,11 @@ import { SettingOutlined } from '@ant-design/icons';
 import TagColor from './TagColor';
 
 
-const UserSettings: React.FC = () => {
+type Props = {
+  tags: string[];
+};
+
+const UserSettings = ({ tags }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const showDrawer = () => {
     setIsOpen(true);
@@ -18,7 +22,7 @@ const UserSettings: React.FC = () => {
       <Button icon={<SettingOutlined />} title='User settings' size='middle' type="primary" onClick={showDrawer} />
 
       <Drawer title="User Settings" placement="right" closable={false} onClose={onClose} visible={isOpen}>
-        <TagColor />
+        <TagColor tags={tags} />
       </Drawer>
     </>
   );
