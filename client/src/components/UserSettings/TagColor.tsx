@@ -2,17 +2,17 @@ import React, { useCallback } from 'react';
 import TagColorIcon from './TagColorIcon';
 import { Collapse, Tag } from 'antd';
 import { GithubPicker } from 'react-color';
-import { pickerColors, setTagColor, getTagStyle, DEFAULT_COLOR } from './userSettingsHandlers';
-import { useLocalStorage } from 'react-use';
+import { pickerColors, setTagColor, getTagStyle } from './userSettingsHandlers';
 import { ColorState as IColorState } from 'react-color';
 
 type Props = {
   tags: string[];
+  storedTagColors: object;
+  setStoredTagColors: (value: object) => void;
 };
 
-const TagColor = ({ tags }: Props) => {
+const TagColor: React.FC<Props> = ({ storedTagColors, setStoredTagColors, tags }) => {
   const { Panel } = Collapse;
-  const [storedTagColors, setStoredTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
 
   const memoizedSetTagColor = useCallback(
     (e: IColorState, tagName, storedTagColors) => {
