@@ -41,27 +41,48 @@ export default function EducationHistoryForm(props: Props) {
   };
 
   return (
-    <Form form={form} initialValues={{
-      educationRecords: [
-        {
-          organization: 'Organization',
-          education: 'Education',
-          educationYears: [moment(1970, 'YYYY'), moment(1970, 'YYYY')]
-        }
-      ]}
-    } name="dynamic_form_nest_item" onFinish={handleFunc} autoComplete="off">
+    <Form
+      form={form}
+      initialValues={{
+        educationRecords: [
+          {
+            organization: 'Organization',
+            education: 'Education',
+            educationYears: [moment(1970, 'YYYY'), moment(1970, 'YYYY')],
+          },
+        ],
+      }}
+      name="dynamic_form_nest_item"
+      onFinish={handleFunc}
+      autoComplete="off"
+    >
       <Form.List name="educationRecords">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field, index) => (
               <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                <Item {...field} name={[field.name, 'organization']} fieldKey={[field.fieldKey, 'organization']} rules={[{ max: 100 }]}>
+                <Item
+                  {...field}
+                  name={[field.name, 'organization']}
+                  fieldKey={[field.fieldKey, 'organization']}
+                  rules={[{ max: 100 }]}
+                >
                   <Input placeholder="Organization" />
                 </Item>
-                <Item {...field} name={[field.name, 'education']} fieldKey={[field.fieldKey, 'education']} rules={[{ required: true, max: 100 }]}>
+                <Item
+                  {...field}
+                  name={[field.name, 'education']}
+                  fieldKey={[field.fieldKey, 'education']}
+                  rules={[{ required: true, max: 100 }]}
+                >
                   <Input placeholder="Education" />
                 </Item>
-                <Item {...field} name={[field.name, 'educationYears']} fieldKey={[field.fieldKey, 'educationYears']} rules={[{ required: true }]}>
+                <Item
+                  {...field}
+                  name={[field.name, 'educationYears']}
+                  fieldKey={[field.fieldKey, 'educationYears']}
+                  rules={[{ required: true }]}
+                >
                   <RangePicker picker="year" />
                 </Item>
                 <Button type="dashed" onClick={() => removeRecord(index, remove, fields.length)}>
