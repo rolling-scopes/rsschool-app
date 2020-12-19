@@ -33,6 +33,7 @@ export type SelfIntroLink = string | null;
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'location' | 'github' | 'website';
 
 export interface UserData {
+  avatarLink: string | null;
   name: string;
   desiredPosition: string;
   selfIntroLink: SelfIntroLink;

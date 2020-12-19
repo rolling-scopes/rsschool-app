@@ -13,11 +13,12 @@ type Props = {
 export default function UserDataForm(props: Props) {
   const { userData, handleFunc } = props;
 
-  const { name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
+  const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
 
   const [form] = Form.useForm();
 
   const formValues = {
+    avatarLink,
     name,
     desiredPosition,
     selfIntroLink,
