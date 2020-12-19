@@ -16,7 +16,7 @@ export default function EmploymentHistoryForm(props: Props) {
   const [form] = Form.useForm();
 
   React.useEffect(() => {
-    const eduHistoryTransformed = employmentHistory.map(record => {
+    const employmentHistoryTransformed = employmentHistory.map(record => {
       const { organization, position, startYear, finishYear } = record;
       return {
         organization,
@@ -25,7 +25,7 @@ export default function EmploymentHistoryForm(props: Props) {
       };
     });
     form.setFieldsValue({
-      users: eduHistoryTransformed,
+      employmentRecords: employmentHistoryTransformed,
     });
   }, [employmentHistory]);
 
@@ -41,19 +41,27 @@ export default function EmploymentHistoryForm(props: Props) {
   };
 
   return (
-    <Form form={form} name="dynamic_form_nest_item" onFinish={handleFunc} autoComplete="off">
-      <Form.List name="users">
+    <Form form={form} initialValues={{
+      employmentRecords: [
+        {
+          organization: 'Organization',
+          position: 'Position',
+          educationYears: [moment(1970, 'YYYY'), moment(1970, 'YYYY')]
+        }
+      ]}
+    } name="dynamic_form_nest_item" onFinish={handleFunc} autoComplete="off">
+      <Form.List name="employmentRecords">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field, index) => (
               <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                <Item {...field} name={[field.name, 'organization']} fieldKey={[field.fieldKey, 'organization']}>
+                <Item {...field} name={[field.name, 'organization']} fieldKey={[field.fieldKey, 'organization']} rules={[{ max: 100 }]}>
                   <Input placeholder="Organization" />
                 </Item>
-                <Item {...field} name={[field.name, 'position']} fieldKey={[field.fieldKey, 'position']}>
-                  <Input placeholder="Education" />
+                <Item {...field} name={[field.name, 'position']} fieldKey={[field.fieldKey, 'position']} rules={[{ required: true, max: 100 }]}>
+                  <Input placeholder="Position" />
                 </Item>
-                <Item {...field} name={[field.name, 'educationYears']} fieldKey={[field.fieldKey, 'educationYears']}>
+                <Item {...field} name={[field.name, 'educationYears']} fieldKey={[field.fieldKey, 'educationYears']} rules={[{ required: true }]}>
                   <RangePicker picker="year" />
                 </Item>
                 <Button type="dashed" onClick={() => removeRecord(index, remove, fields.length)}>
@@ -72,6 +80,11 @@ export default function EmploymentHistoryForm(props: Props) {
       <Item>
         <Button type="primary" htmlType="submit">
           Submit
+        </Button>
+      </Item>
+      <Item>
+        <Button type="primary" htmlType="button" onClick={() => form.resetFields()}>
+          Reset
         </Button>
       </Item>
     </Form>
