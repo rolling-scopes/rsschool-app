@@ -125,7 +125,7 @@ class ViewCV extends React.Component {
   }
 
   render() {
-    const { name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = mockUserData;
+    const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = mockUserData;
     const { isLoading } = this.state;
 
     return (
@@ -134,6 +134,7 @@ class ViewCV extends React.Component {
           <Content>
             <Space direction="vertical" style={{ width: '100%' }}>
               <MainSection
+                avatarLink={avatarLink}
                 contacts={mockContactsList}
                 name={name}
                 desiredPosition={desiredPosition}
