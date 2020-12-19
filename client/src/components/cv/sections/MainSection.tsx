@@ -8,6 +8,7 @@ import { Contacts, MilitaryService, SelfIntroLink, EnglishLevel } from '../../..
 const { Title, Text } = Typography;
 
 type Props = {
+  avatarLink: string | null;
   name: string;
   desiredPosition: string;
   contacts: Contacts;
@@ -17,12 +18,12 @@ type Props = {
 };
 
 function MainSection(props: Props) {
-  const { name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink } = props;
+  const { avatarLink, name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink } = props;
 
   const sectionContent = (
     <Row>
       <Col span={4} style={{ minWidth: '120px' }}>
-        <AvatarCV />
+        <AvatarCV src={avatarLink} />
         <br />
         <br />
         <Text>English level: {englishLevel}</Text>
