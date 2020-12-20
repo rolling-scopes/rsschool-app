@@ -15,8 +15,8 @@ export default function EducationHistoryForm(props: Props) {
   const { educationHistory, handleFunc } = props;
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    const eduHistoryTransformed = educationHistory.map(record => {
+  const transformEducationHistory = (educationRecords: EducationRecord[]) => {
+    return educationRecords.map(record => {
       const { organization, education, startYear, finishYear } = record;
       return {
         organization,
@@ -24,10 +24,19 @@ export default function EducationHistoryForm(props: Props) {
         educationYears: [moment(startYear, 'YYYY'), moment(finishYear, 'YYYY')],
       };
     });
+  };
+
+  const setEducationHistoryTransformed = (fieldsData: EducationRecord[], transformFunc: typeof transformEducationHistory): void => {
+    const fieldsDataTransformed = transformFunc(fieldsData);
     form.setFieldsValue({
-      educationRecords: eduHistoryTransformed,
+      educationRecords: fieldsDataTransformed
     });
+  };
+
+  React.useEffect(() => {
+    setEducationHistoryTransformed(educationHistory, transformEducationHistory);
   }, [educationHistory]);
+
 
   type RmFunc = (x: number) => void;
 
