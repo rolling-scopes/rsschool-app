@@ -1,7 +1,8 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Form, Input, Space, DatePicker, Button, message } from 'antd';
+import { Form, Input, Space, DatePicker, Button, Checkbox, message } from 'antd';
 import { EmploymentRecord } from '../../../../../common/models/cv';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Item } = Form;
 const { RangePicker } = DatePicker;
@@ -15,19 +16,38 @@ export default function EmploymentHistoryForm(props: Props) {
   const { employmentHistory, handleFunc } = props;
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    const employmentHistoryTransformed = employmentHistory.map(record => {
-      const { organization, position, startYear, finishYear } = record;
+  const transformEmploymentHistory = (employmentRecords: EmploymentRecord[]) => {
+    return employmentRecords.map(record => {
+      const { organization, position, startYear, finishYear, isCurrent } = record;
       return {
         organization,
         position,
-        educationYears: [moment(startYear, 'YYYY'), moment(finishYear, 'YYYY')],
+        isCurrent,
+        employmentYears: [moment(startYear, 'YYYY'), moment(finishYear, 'YYYY')],
       };
     });
+  };
+
+  const setEmploymentHistoryTransformed = (fieldsData: EmploymentRecord[], transformFunc: typeof transformEmploymentHistory): void => {
+    const fieldsDataTransformed = transformFunc(fieldsData);
     form.setFieldsValue({
-      employmentRecords: employmentHistoryTransformed,
+      employmentRecords: fieldsDataTransformed
     });
+  };
+
+  React.useEffect(() => {
+    setEmploymentHistoryTransformed(employmentHistory, transformEmploymentHistory);
   }, [employmentHistory]);
+
+
+  const setCurrent = (e: CheckboxChangeEvent, index: number): void => {
+    const nextValue = e.target.checked;
+
+    const newEmploymentHistory = [...employmentHistory];
+    newEmploymentHistory[index].isCurrent = nextValue;
+
+    setEmploymentHistoryTransformed(newEmploymentHistory, transformEmploymentHistory);
+  };
 
   type RmFunc = (x: number) => void;
 
@@ -48,7 +68,7 @@ export default function EmploymentHistoryForm(props: Props) {
           {
             organization: 'Organization',
             position: 'Position',
-            educationYears: [moment(1970, 'YYYY'), moment(1970, 'YYYY')],
+            employmentYears: [moment(1970, 'YYYY'), moment(1970, 'YYYY')],
           },
         ],
       }}
@@ -79,11 +99,19 @@ export default function EmploymentHistoryForm(props: Props) {
                 </Item>
                 <Item
                   {...field}
-                  name={[field.name, 'educationYears']}
-                  fieldKey={[field.fieldKey, 'educationYears']}
+                  name={[field.name, 'employmentYears']}
+                  fieldKey={[field.fieldKey, 'employmentYears']}
                   rules={[{ required: true }]}
                 >
-                  <RangePicker picker="year" />
+                  <RangePicker disabled={[false, employmentHistory[index].isCurrent]} picker="year" />
+                </Item>
+                <Item
+                  {...field}
+                  name={[field.name, 'isCurrent']}
+                  fieldKey={[field.fieldKey, 'isCurrent']}
+                  label='Current'
+                >
+                  <Checkbox checked={employmentHistory[index].isCurrent} onChange={(e) => setCurrent(e, index)}/>
                 </Item>
                 <Button type="dashed" onClick={() => removeRecord(index, remove, fields.length)}>
                   REMOVE
