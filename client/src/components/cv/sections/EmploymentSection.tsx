@@ -18,9 +18,29 @@ function EmploymentSection(props: Props) {
     <List
       dataSource={employmentHistory}
       renderItem={(record: EmploymentRecord) => {
-        const { startYear, finishYear, position, organization } = record;
+        const { startYear, finishYear, position, organization, isCurrent } = record;
 
         const areYearsDifferent = startYear !== finishYear;
+
+        let finishYearView;
+
+        if (isCurrent) {
+          finishYearView = (
+            <>
+              <br />
+              <Text>Currently</Text>
+            </>
+          );
+        } else if (areYearsDifferent) {
+          finishYearView = (
+            <>
+              <br />
+              <Text>{finishYear}</Text>
+            </>
+          );
+        } else {
+          finishYearView = null;
+        }
 
         return (
           <Item style={{ fontSize: '16px' }}>
@@ -33,17 +53,12 @@ function EmploymentSection(props: Props) {
                     <Text>{position}</Text>
                   </>
                 ) : (
-                  <Text strong>{position}</Text>
-                )}
+                    <Text strong>{position}</Text>
+                  )}
               </Col>
               <Col span={3} offset={9}>
                 <Text>{startYear}</Text>
-                {areYearsDifferent && (
-                  <>
-                    <br />
-                    <Text>{finishYear}</Text>
-                  </>
-                )}
+                {finishYearView}
               </Col>
             </Row>
           </Item>

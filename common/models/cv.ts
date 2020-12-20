@@ -10,6 +10,7 @@ export interface EmploymentRecord {
   position: string;
   startYear: number;
   finishYear: number;
+  isCurrent: boolean;
 }
 
 export interface CourseData {
