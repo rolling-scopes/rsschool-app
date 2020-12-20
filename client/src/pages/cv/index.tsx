@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Layout, Switch } from 'antd';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
+import { Header, FooterLayout } from 'components';
 import FormCV from 'components/cv/FormCV';
 import ViewCV from 'components/cv/ViewCV';
 
@@ -41,6 +42,7 @@ class CVPage extends React.Component<Props, State> {
 
     return (
       <>
+        <Header username={githubId} />
         <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
           <Content>
             <label>
@@ -56,6 +58,7 @@ class CVPage extends React.Component<Props, State> {
             {editMode ? <ViewCV /> : <FormCV ownerId={githubId} />}
           </Content>
         </Layout>
+        <FooterLayout />
       </>
     );
   }
