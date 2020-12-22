@@ -205,6 +205,13 @@ function renderTable(
           sorter: 'totalScore',
           render: value => <Text strong>{value}</Text>,
         },
+        {
+          title: 'Cross-Check',
+          dataIndex: 'crossCheckScore',
+          width: 90,
+          sorter: 'crossCheckScore',
+          render: value => <Text strong>{value}</Text>,
+        },
         ...columns,
         {
           title: 'Change Date',

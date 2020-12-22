@@ -19,16 +19,25 @@ export function startBackgroundJobs(logger: ILogger) {
       const [students, courseTasks] = await Promise.all([getStudentsScore(courseId), getCourseTasks(courseId)]);
       logger.info({ msg: `Loaded course score`, course: course.name, duration: Date.now() - dataStart });
       const weightMap = mapValues(keyBy(courseTasks, 'id'), 'scoreWeight');
+      const crossCheckTaskIds = courseTasks.filter(({ checker }) => checker === 'crossCheck').map(({ id }) => id);
+
+      const calculateScore = (t: { courseTaskId: number; score: number }) => t.score * (weightMap[t.courseTaskId] ?? 1);
 
       const scores = students.content
-        .map(({ id, rank, taskResults, totalScore, totalScoreChangeDate }) => {
-          const score = sum(taskResults.map(t => t.score * (weightMap[t.courseTaskId] ?? 1)));
+        .map(({ id, rank, taskResults, totalScore, crossCheckScore, totalScoreChangeDate }) => {
+          const score = sum(taskResults.map(calculateScore));
+
+          const newCrossCheckScore = round(
+            sum(taskResults.filter(t => crossCheckTaskIds.includes(t.courseTaskId)).map(calculateScore)),
+            1,
+          );
           const newTotalScore = round(score, 1);
-          const scoreChanged = totalScore !== newTotalScore;
+          const scoreChanged = totalScore !== newTotalScore || crossCheckScore !== newCrossCheckScore;
           return {
             id,
             rank,
             changed: scoreChanged,
+            crossCheckScore: newCrossCheckScore,
             totalScore: newTotalScore,
             totalScoreChangeDate: scoreChanged ? new Date() : totalScoreChangeDate,
           };

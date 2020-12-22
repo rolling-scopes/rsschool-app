@@ -22,7 +22,7 @@ export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =
     .leftJoin(User, 'userStudent', '"userStudent"."id" = "student"."userId"')
     .where('"user"."githubId" = :githubId', { githubId })
     .groupBy('"course"."id"')
-    .orderBy('"course"."updatedDate"', 'DESC')
+    .orderBy('"course"."endDate"', 'DESC')
     .getRawMany();
   return rawData.map(
     ({

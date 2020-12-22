@@ -15,6 +15,7 @@ type Props = {
   profileSettingsContent?: JSX.Element;
   isEditingModeEnabled?: boolean;
   noDataDescrption?: string;
+  settingsTitle?: string;
   title: string;
   icon: any;
   content: any;
@@ -57,6 +58,7 @@ class CommonCard extends React.Component<Props, State> {
       isEditingModeEnabled,
       permissionsSettings,
       noDataDescrption,
+      settingsTitle,
       onPermissionsSettingsChange,
       actions,
     } = this.props;
@@ -95,6 +97,7 @@ class CommonCard extends React.Component<Props, State> {
               <ProfileSettingsDrawer
                 isSettingsVisible={isProfileSettingsVisible}
                 hideSettings={this.hideProfileSettings}
+                settingsTitle={settingsTitle}
                 content={profileSettingsContent}
               />
             )}

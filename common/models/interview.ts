@@ -16,3 +16,11 @@ export interface InterviewDetails {
   interviewer: { name: string; githubId: string };
   student: { name: string; githubId: string };
 }
+
+export interface InterviewPair {
+  id: number;
+  status: InterviewStatus;
+  result: string | null;
+  interviewer: { name: string; githubId: string };
+  student: { name: string; githubId: string };
+}

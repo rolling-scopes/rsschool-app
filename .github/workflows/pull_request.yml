@@ -18,9 +18,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Setup Node.js environment
-        uses: actions/setup-node@v1.4.3
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: 12.x
+          node-version: '12'
 
       - name: Checkout
         uses: actions/checkout@v2

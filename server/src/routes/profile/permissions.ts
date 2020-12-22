@@ -27,7 +27,7 @@ interface Relations {
   checkers: string[];
 }
 
-export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursemanager' | 'all';
+export type RelationRole = 'student' | 'mentor' | 'coursementor' | 'coursesupervisor' | 'coursemanager' | 'all';
 
 interface PermissionsSetup {
   isProfileOwner: boolean;
@@ -151,6 +151,8 @@ export const defineRole = ({
 }): RelationRole => {
   if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
+  } else if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
+    return 'coursesupervisor';
   } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
     return 'coursemanager';
   } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
@@ -190,7 +192,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isConsentsVisible: false,
   };
 
-  const accessToContacts = (permission: string, role: string = '') => {
+  const accessToContacts = (permission: string, role?: RelationRole) => {
     return (
       [
         'isEmailVisible',
@@ -199,34 +201,43 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
         'isPhoneVisible',
         'isContactsNodesVisible',
         'isEnglishVisible',
-      ].includes(permission) && ['mentor', 'coursemanager'].includes(role)
+      ].includes(permission) &&
+      role &&
+      ['mentor', 'coursemanager', 'coursesupervisor'].includes(role)
     );
   };
 
-  const defaultAccessToContacts = (permission: string, role: string = '') => {
+  const defaultAccessToContacts = (permission: string, role?: RelationRole) => {
     return (
       ['isEmailVisible', 'isTelegramVisible', 'isSkypeVisible', 'isPhoneVisible', 'isContactsNodesVisible'].includes(
         permission,
-      ) && ['student'].includes(role)
+      ) &&
+      role &&
+      ['student'].includes(role)
     );
   };
 
-  const accessToFeedbacks = (permission: string, role: string = '') => {
+  const accessToFeedbacks = (permission: string, role?: RelationRole) => {
     return (
       [
         'isStageInterviewFeedbackVisible',
         'isStudentStatsVisible',
         'isCoreJsFeedbackVisible',
         'isProfileVisible',
-      ].includes(permission) && ['mentor', 'coursementor', 'coursemanager'].includes(role)
+      ].includes(permission) &&
+      role &&
+      ['mentor', 'coursementor', 'coursemanager'].includes(role)
     );
   };
 
-  const accessToProfile = (permission: string, role: string = '') =>
-    ['isProfileVisible'].includes(permission) && ['student'].includes(role);
+  const accessToProfile = (permission: string, role?: RelationRole) =>
+    ['isProfileVisible'].includes(permission) && role && ['student'].includes(role);
 
   return mapValues(defaultPermissions, (_, permission) => {
     if (isAdmin || role === 'coursemanager') {
+      return true;
+    }
+    if (role === 'coursesupervisor' && permission === 'isProfileVisible') {
       return true;
     }
     if (accessToFeedbacks(permission, role)) {
