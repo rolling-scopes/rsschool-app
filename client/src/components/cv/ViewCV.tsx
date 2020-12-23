@@ -4,8 +4,8 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import {
   MainSection,
   AboutSection,
-  EducationSection,
-  EmploymentSection,
+/*   EducationSection,
+  EmploymentSection, */
   CoursesSection,
   BadgesSection,
 } from 'components/cv/sections';
@@ -40,6 +40,7 @@ type State = {
   badgesData: BadgesData | null;
 };
 
+
 class ViewCV extends React.Component {
   state: State = {
     isLoading: false,
@@ -50,6 +51,8 @@ class ViewCV extends React.Component {
     coursesData: null,
     badgesData: null,
   };
+
+
 
   private async fetchData() {
     await this.setState({
@@ -143,8 +146,8 @@ class ViewCV extends React.Component {
                 militaryService={militaryService as MilitaryService}
               />
               <AboutSection notes={notes} />
-              <EducationSection educationHistory={educationHistory} />
-              <EmploymentSection employmentHistory={employmentHistory} />
+              {/* <EducationSection educationHistory={educationHistory} /> */}
+              {/* <EmploymentSection employmentHistory={employmentHistory} /> */}
               <CoursesSection coursesData={this.extractCoursesData(coursesData)} />
               <BadgesSection badgesData={this.extractBadgesData(badgesData)} />
             </Space>
