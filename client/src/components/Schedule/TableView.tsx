@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { SettingOutlined } from '@ant-design/icons';
-import { Popconfirm, Table, Typography, Space, Form, Button, message } from 'antd';
+import { Popconfirm, Dropdown, Table, Typography, Space, Form, Button, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment-timezone';
 import mergeWith from 'lodash/mergeWith';
@@ -18,6 +18,7 @@ import { CourseEvent, CourseService } from 'services/course';
 import { ScheduleRow, TaskTypes } from './model';
 import { EventTypeColor, EventTypeToName } from 'components/Schedule/model';
 import EditableCell from './EditableCell';
+import FilterComponent from '../Table/FilterComponent';
 
 const { Text } = Typography;
 
@@ -29,9 +30,18 @@ type Props = {
   refreshData: Function;
 };
 
-const getColumns = (timeZone: string) => [
+const styles  = {
+  backgroundColor: '#fff',
+  boxShadow: '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+  borderRadius: '2px',
+  padding: '15px',
+}
+
+const getColumns = (timeZone: string, hiddenColumn:Set<string>, setHiddenColumn: any) => [
   {
-    title: <SettingOutlined />,
+    title:<Dropdown overlayStyle={styles} overlay={() => <FilterComponent setHiddenColumn={setHiddenColumn} hiddenColumn={hiddenColumn}/>} placement="bottomRight" trigger={['click']}>
+        <SettingOutlined />
+      </Dropdown>,
     width: 20,
     dataIndex: '#',
     render: (_text: string, _record: CourseEvent, index: number) => index + 1,
@@ -112,6 +122,7 @@ export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Pr
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const [hiddenColumn, setHiddenColumn] = useState<Set<string>>(new Set);
 
   const isEditing = (record: CourseEvent) => record.id.toString() === editingKey;
 
@@ -217,7 +228,8 @@ export function TableView({ data, timeZone, isAdmin, courseId, refreshData }: Pr
     ];
   };
 
-  const columns = [...getColumns(timeZone), ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
+  const sortedColumns = getColumns(timeZone, hiddenColumn, setHiddenColumn).filter((element) => element?.title && !hiddenColumn.has(element.title.toString()));
+  const columns = [...sortedColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
 
   const mergedColumns = columns.map((col: any) => {
     if (!col.editable) {
