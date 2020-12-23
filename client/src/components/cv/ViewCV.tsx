@@ -4,8 +4,6 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import {
   MainSection,
   AboutSection,
-/*   EducationSection,
-  EmploymentSection, */
   CoursesSection,
   BadgesSection,
 } from 'components/cv/sections';
@@ -146,8 +144,6 @@ class ViewCV extends React.Component {
                 militaryService={militaryService as MilitaryService}
               />
               <AboutSection notes={notes} />
-              {/* <EducationSection educationHistory={educationHistory} /> */}
-              {/* <EmploymentSection employmentHistory={employmentHistory} /> */}
               <CoursesSection coursesData={this.extractCoursesData(coursesData)} />
               <BadgesSection badgesData={this.extractBadgesData(badgesData)} />
             </Space>
