@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Layout, Space, Button } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { ContactsForm,  UserDataForm } from './forms';
-import { Contacts, UserData, EducationRecord, EmploymentRecord, EnglishLevel } from '../../../../common/models/cv';
+import { ContactsForm, UserDataForm } from './forms';
+import { Contacts, UserData, EnglishLevel } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
 
-import { mockContactsList, mockUserData, educationHistory, employmentHistory } from 'pages/cv/mockData';
+import { mockContactsList, mockUserData } from 'pages/cv/mockData';
 
 const { Content } = Layout;
 
@@ -13,8 +13,6 @@ type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  educationHistory: EducationRecord[] | null;
-  employmentHistory: EmploymentRecord[] | null;
 };
 
 type Props = {
@@ -26,8 +24,6 @@ class FormCV extends React.Component<Props, State> {
     isLoading: false,
     contactsList: null,
     userData: null,
-    educationHistory: null,
-    employmentHistory: null,
   };
 
   private userService = new UserService();
@@ -40,8 +36,6 @@ class FormCV extends React.Component<Props, State> {
     await this.setState({
       contactsList: mockContactsList,
       userData: mockUserData as UserData,
-      educationHistory: educationHistory,
-      employmentHistory: employmentHistory,
     });
 
     await this.setState({
@@ -99,7 +93,6 @@ class FormCV extends React.Component<Props, State> {
       userData: newUserData as UserData,
       contactsList: newContacts as Contacts,
     });
-
   }
 
   render() {
