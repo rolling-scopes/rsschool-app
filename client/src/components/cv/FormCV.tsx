@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Layout, Space, Button } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { ContactsForm, EducationHistoryForm, EmploymentHistoryForm, UserDataForm } from './forms';
+import { ContactsForm, /* EducationHistoryForm, EmploymentHistoryForm, */ UserDataForm } from './forms';
 import { Contacts, UserData, EducationRecord, EmploymentRecord, EnglishLevel } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
 
@@ -68,8 +68,8 @@ class FormCV extends React.Component<Props, State> {
     const location = profile.generalInfo?.location
       ? `${profile.generalInfo.location.cityName}, ${profile.generalInfo.location.countryName}`
       : null;
-    const educationHistory = profile.generalInfo?.educationHistory ?? null;
-
+/*     const educationHistory = profile.generalInfo?.educationHistory ?? null;
+ */
     const phone = profile.contacts?.phone ?? null;
     const email = profile.contacts?.email ?? null;
     const skype = profile.contacts?.skype ?? null;
@@ -79,7 +79,7 @@ class FormCV extends React.Component<Props, State> {
     const prevUserData = this.state.userData;
     const prevContacts = this.state.contactsList;
 
-    let newEducationHistory;
+/*     let newEducationHistory;
 
     if (educationHistory.length) {
       newEducationHistory = educationHistory.map(
@@ -94,7 +94,6 @@ class FormCV extends React.Component<Props, State> {
         },
       );
     } else {
-      //newEducationHistory = null;
       newEducationHistory = [
         {
           organization: 'university',
@@ -103,7 +102,7 @@ class FormCV extends React.Component<Props, State> {
           education: 'faculty',
         },
       ];
-    }
+    } */
 
     const newUserData = {
       ...prevUserData,
@@ -127,11 +126,11 @@ class FormCV extends React.Component<Props, State> {
       contactsList: newContacts as Contacts,
     });
 
-    if (newEducationHistory) await this.setState({ educationHistory: newEducationHistory });
+    /* if (newEducationHistory) await this.setState({ educationHistory: newEducationHistory }); */
   }
 
   render() {
-    const { isLoading, contactsList, userData, educationHistory, employmentHistory } = this.state;
+    const { isLoading, contactsList, userData, /* educationHistory, employmentHistory */ } = this.state;
 
     return (
       <LoadingScreen show={isLoading}>
@@ -143,12 +142,12 @@ class FormCV extends React.Component<Props, State> {
             <Space direction="vertical" style={{ width: '100%' }}>
               {userData && <UserDataForm userData={userData} handleFunc={this.handleSave} />}
               {contactsList && <ContactsForm contactsList={contactsList} handleFunc={this.handleSave} />}
-              {educationHistory && (
+{/*               {educationHistory && (
                 <EducationHistoryForm educationHistory={educationHistory} handleFunc={this.handleSave} />
               )}
               {employmentHistory && (
                 <EmploymentHistoryForm employmentHistory={employmentHistory} handleFunc={this.handleSave} />
-              )}
+              )} */}
             </Space>
           </Content>
         </Layout>
