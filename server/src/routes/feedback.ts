@@ -8,6 +8,7 @@ import { guard } from './guards';
 import { setResponse } from './utils';
 import { FeedbackRepository } from '../repositories/feedback';
 import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
+import { courseService } from '../services';
 
 type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; courseId: number };
 type FeedbackInput = { toUserId: number; comment: string };
@@ -88,9 +89,14 @@ const postGratitudeFeedback = (logger: ILogger) => {
     });
   };
 
-  const postToDiscord = (fromUser: User | undefined, toUser: User | undefined, data: FeedbackInput) => {
-    if (!fromUser || !toUser || !data.comment) {
-      logger.info('No fromUser or toUser or comment');
+  const postToDiscord = (
+    fromUser: User | undefined,
+    toUser: User | undefined,
+    data: GratitudeInput,
+    gratitudeUrl?: string,
+  ) => {
+    if (!fromUser || !toUser || !data.comment || !gratitudeUrl) {
+      logger.info('No fromUser or toUser or comment or gratitudeUrl');
       return Promise.resolve(null);
     }
     return discordService.pushGratitude({
@@ -98,6 +104,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
       toDiscordId: toUser.discord?.id ?? null,
       fromGithubId: fromUser.githubId,
       comment: data.comment,
+      gratitudeUrl: gratitudeUrl,
     });
   };
 
@@ -114,7 +121,9 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
     const heroesUrl = (await postToHeroes(fromUser, toUser, data)) ?? undefined;
-    await postToDiscord(fromUser, toUser, data);
+    const course = await courseService.getCourse(data.courseId);
+
+    await postToDiscord(fromUser, toUser, data, course?.discordServer.gratitudeUrl);
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,

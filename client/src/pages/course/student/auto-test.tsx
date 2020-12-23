@@ -244,7 +244,7 @@ function renderSelfEducation(courseTask: CourseTask) {
       <Typography.Paragraph>To submit the task answer the questions.</Typography.Paragraph>
       <Typography.Paragraph>
         <Typography.Text mark strong>
-          Note: You must to score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
+          Note: You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
           attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
         </Typography.Text>
       </Typography.Paragraph>

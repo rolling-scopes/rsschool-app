@@ -9,6 +9,7 @@ import { setResponse } from '../utils';
 const getCourses = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courses = await getRepository(Course)
     .createQueryBuilder('course')
+    .leftJoinAndSelect('course.discordServer', 'discordServer')
     .orderBy('course."startDate"', 'DESC')
     .getMany();
   setResponse(ctx, OK, courses);
