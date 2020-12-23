@@ -1,11 +1,11 @@
 import moment, { Moment } from 'moment';
 import { CourseEvent } from 'services/course';
-import { EventTypeColor} from 'components/Schedule/model';
+import { DEFAULT_COLOR } from 'components/UserSettings/userSettingsHandlers';
 
-export function getListData(calendarCellDate: Moment, data: CourseEvent[], timeZone: string) {
+export function getListData(calendarCellDate: Moment, data: CourseEvent[], timeZone: string, storedTagColors: object) {
   return filterByDate(calendarCellDate, data, timeZone).map((el: CourseEvent) => {
-    const tagColor = EventTypeColor[el.event.type as keyof typeof EventTypeColor];
-    return { color: tagColor || '#d9d9d9' , name: el.event.name, key: el.id };
+    const tagColor = storedTagColors[el.event.type as keyof typeof storedTagColors];
+    return { color: tagColor || DEFAULT_COLOR, name: el.event.name, key: el.id };
   });
 }
 

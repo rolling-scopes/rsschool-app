@@ -9,10 +9,11 @@ import { Moment } from 'moment';
 type Props = {
   data: CourseEvent[];
   timeZone: string;
+  storedTagColors: object;
 };
 
 
-const DesktopCalendar: React.FC<Props> = ({ data, timeZone }) => {
+const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) => {
   const [modalWindowData, setModalWindowData] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
 
@@ -30,14 +31,14 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone }) => {
   const dateCellRender = (date: unknown | Moment) => {
     return (
       <Scrollbars autoHide autoHideTimeout={500} autoHideDuration={200}>
-        <ul style={{padding: '5px'}}>
-          {getListData(date as unknown as Moment, data, timeZone).map((coloredEvent) => {
-            return(
+        <ul style={{ padding: '5px' }}>
+          {getListData(date as unknown as Moment, data, timeZone, storedTagColors).map((coloredEvent) => {
+            return (
               <li
                 style={{
                   border: `1px solid ${coloredEvent.color}`,
                   borderRadius: '5px',
-                  backgroundColor: `${coloredEvent.color}50`,
+                  backgroundColor: `${coloredEvent.color}10`,
                   listStyleType: 'none',
                   overflowWrap: 'anywhere',
                   marginBottom: '5px',
@@ -48,29 +49,30 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone }) => {
               >
                 <Badge color={coloredEvent.color} text={coloredEvent.name} />
               </li>
-          )})}
+            );
+          })}
         </ul>
       </Scrollbars>
     );
-  }
+  };
 
   const monthCellRender = (date: unknown | Moment) => {
     const num = getMonthValue(date as unknown as Moment, data, timeZone);
 
     return !!num && (
-      <div >
+      <div>
         <span>Number of events</span>
         <section>{num}</section>
       </div>
     );
-  }
-
+  };
 
 
   return (
     <div className="calendar-container">
-      { modalWindowData &&
-        <ModalWindow isOpen={showWindow} dataEvent={modalWindowData} handleOnClose={handleOnClose} timeZone={timeZone}/>
+      {modalWindowData &&
+      <ModalWindow isOpen={showWindow} dataEvent={modalWindowData} handleOnClose={handleOnClose} timeZone={timeZone}
+                   storedTagColors={storedTagColors} />
       }
       <Calendar
         dateCellRender={dateCellRender}

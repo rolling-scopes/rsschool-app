@@ -1,9 +1,8 @@
 import React from 'react';
-import { Modal, Space} from 'antd';
+import { Modal, Space } from 'antd';
 import moment from 'moment';
-import {GithubUserLink} from 'components';
-import { renderTag, urlRenderer } from 'components/Table/renderers';
-import { EventTypeColor, EventTypeToName } from 'components/Schedule/model';
+import { GithubUserLink } from 'components';
+import { renderTagWithStyle, urlRenderer } from 'components/Table/renderers';
 import { CourseEvent } from 'services/course';
 
 type Props = {
@@ -11,9 +10,10 @@ type Props = {
   dataEvent: CourseEvent;
   handleOnClose: Function;
   timeZone: string;
+  storedTagColors: object;
 };
 
-export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone }: Props) {
+export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone, storedTagColors }: Props) {
 
   return (
     <>
@@ -27,17 +27,17 @@ export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone }: Prop
       >
         <div>Date: {moment(dataEvent.dateTime, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('LLL')}</div>
         {dataEvent.event.description &&
-          <div>{dataEvent.event.description}</div>
+        <div>{dataEvent.event.description}</div>
         }
         {!!dataEvent.organizer.githubId &&
-          <div>Organizer: <GithubUserLink value={dataEvent.organizer.githubId} /></div>
+        <div>Organizer: <GithubUserLink value={dataEvent.organizer.githubId} /></div>
         }
         <Space>
           {dataEvent.event.descriptionUrl &&
-            <div>Url: {urlRenderer(dataEvent.event.descriptionUrl)}</div>
+          <div>Url: {urlRenderer(dataEvent.event.descriptionUrl)}</div>
           }
           <div>
-            {renderTag(EventTypeToName[dataEvent.event.type] || dataEvent.event.type, EventTypeColor[dataEvent.event.type as keyof typeof EventTypeColor])}
+            {renderTagWithStyle(dataEvent.event.type, storedTagColors)}
           </div>
         </Space>
         <style jsx>{`
