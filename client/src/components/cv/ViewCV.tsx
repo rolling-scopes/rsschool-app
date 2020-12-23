@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import {
-  MainSection,
-  AboutSection,
-  CoursesSection,
-  BadgesSection,
-} from 'components/cv/sections';
+import { MainSection, AboutSection, CoursesSection, BadgesSection } from 'components/cv/sections';
 import {
   mockContactsList,
   mockUserData,
@@ -20,8 +15,6 @@ import {
   MilitaryService,
   Contacts,
   UserData,
-  EducationRecord,
-  EmploymentRecord,
   CourseData,
   BadgesData,
 } from '../../../../common/models/cv';
@@ -32,25 +25,18 @@ type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  educationHistory: EducationRecord[] | null;
-  employmentHistory: EmploymentRecord[] | null;
   coursesData: CourseData[] | null;
   badgesData: BadgesData | null;
 };
-
 
 class ViewCV extends React.Component {
   state: State = {
     isLoading: false,
     contactsList: null,
     userData: null,
-    educationHistory: null,
-    employmentHistory: null,
     coursesData: null,
     badgesData: null,
   };
-
-
 
   private async fetchData() {
     await this.setState({
