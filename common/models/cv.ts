@@ -1,18 +1,3 @@
-export interface EducationRecord {
-  organization: string;
-  education: string;
-  startYear: number;
-  finishYear: number;
-}
-
-export interface EmploymentRecord {
-  organization: string | null;
-  position: string;
-  startYear: number;
-  finishYear: number;
-  isCurrent: boolean;
-}
-
 export interface CourseData {
   locationName: string;
   courseFullName: string;
