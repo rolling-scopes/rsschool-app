@@ -89,7 +89,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =>
       <List
         dataSource={modalWindowData}
         renderItem={item => {
-          if (!data.length) return <></>
+          if (!data.length) return null
           const dateTime = data.filter((event) => event.id === item.key)[0].dateTime;
           return (
             <List.Item
