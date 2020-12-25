@@ -31,8 +31,18 @@ export default function UserDataForm(props: Props) {
     form.setFieldsValue(formValues);
   });
 
+  const sumbitData = (values: FormData) => {
+
+    const dataObj = {
+      type: 'userData',
+      data: values
+    };
+
+    handleFunc(dataObj);
+  }
+
   return (
-    <Form form={form} name="userData" onFinish={handleFunc}>
+    <Form form={form} name="userData" onFinish={sumbitData}>
       <Item label="Name" name="name" rules={[{ required: true, max: 100, whitespace: false }]}>
         <Input />
       </Item>
