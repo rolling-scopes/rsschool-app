@@ -18,8 +18,19 @@ export default function ContactsForm(props: Props) {
     form.setFieldsValue(contactsList);
   });
 
+  const sumbitData = (values: FormData) => {
+
+    const dataObj = {
+      type: 'contacts',
+      data: values
+    };
+
+    handleFunc(dataObj);
+
+  };
+
   return (
-    <Form form={form} name="contacts" onFinish={handleFunc}>
+    <Form form={form} name="contacts" onFinish={sumbitData}>
       <Item label="Phone" name="phone" rules={[{ max: 15, whitespace: false }]}>
         <Input />
       </Item>
