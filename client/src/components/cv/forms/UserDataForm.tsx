@@ -52,6 +52,9 @@ export default function UserDataForm(props: Props) {
       <Item label="Self introduction video" name="selfIntroLink" rules={[{ max: 300, whitespace: false }]}>
         <Input />
       </Item>
+      <Item label="Link to avatar" name="avatarLink" rules={[{ max: 300, whitespace: false }]}>
+        <Input />
+      </Item>
       <Item label="Select your English level" name="englishLevel" rules={[{ required: true }]}>
         <Select>
           <Option value="a0">A0</Option>
