@@ -32,14 +32,13 @@ export default function UserDataForm(props: Props) {
   });
 
   const sumbitData = (values: FormData) => {
-
     const dataObj = {
       type: 'userData',
-      data: values
+      data: values,
     };
 
     handleFunc(dataObj);
-  }
+  };
 
   return (
     <Form form={form} name="userData" onFinish={sumbitData}>
