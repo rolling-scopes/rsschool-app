@@ -10,14 +10,8 @@ import {
   coursesData,
   badgesData,
 } from 'pages/cv/mockData';
-import {
-  EnglishLevel,
-  MilitaryService,
-  Contacts,
-  UserData,
-  CourseData,
-  BadgesData,
-} from '../../../../common/models/cv';
+import { EnglishLevel, MilitaryService, Contacts, UserData, CourseData } from '../../../../common/models/cv';
+import { PublicFeedback } from '../../../../common/models/profile';
 
 const { Content } = Layout;
 
@@ -26,7 +20,7 @@ type State = {
   contactsList: Contacts | null;
   userData: UserData | null;
   coursesData: CourseData[] | null;
-  badgesData: BadgesData | null;
+  badgesData: PublicFeedback[] | null;
 };
 
 class ViewCV extends React.Component {
@@ -43,7 +37,6 @@ class ViewCV extends React.Component {
       isLoading: true,
     });
 
-    const badgesDataExtracted = this.extractBadgesData(badgesData);
     const coursesDataExtracted = this.extractCoursesData(coursesData);
 
     await this.setState({
@@ -52,7 +45,7 @@ class ViewCV extends React.Component {
       educationHistory: educationHistory,
       employmentHistory: employmentHistory,
       coursesData: coursesDataExtracted,
-      badgesData: badgesDataExtracted,
+      badgesData,
     });
 
     await this.setState({
@@ -61,8 +54,7 @@ class ViewCV extends React.Component {
   }
 
   private extractCoursesData(coursesData: any) {
-    const coursesRaw = coursesData;
-    return coursesRaw.map((course: any) => {
+    return coursesData.map((course: any) => {
       const {
         certificateId,
         courseFullName,
@@ -83,28 +75,6 @@ class ViewCV extends React.Component {
         totalScore,
       };
     });
-  }
-
-  private extractBadgesData(badges: any) {
-    const uniqueBadgesSummarized = badges.reduce((uniqueBadges: any, badge: any) => {
-      const { badgeId } = badge;
-      if (uniqueBadges[badgeId]) {
-        uniqueBadges[badgeId]++;
-      } else {
-        uniqueBadges[badgeId] = 1;
-      }
-      return uniqueBadges;
-    }, {} as any);
-
-    const badgesFormatted = Object.entries(uniqueBadgesSummarized).map(entry => {
-      const [badgeId, badgeCount] = entry;
-      return `${badgeId}: ${badgeCount}`;
-    });
-
-    return {
-      badges: badgesFormatted,
-      total: badges.length,
-    };
   }
 
   async componentDidMount() {
@@ -131,7 +101,7 @@ class ViewCV extends React.Component {
               />
               <AboutSection notes={notes} />
               <CoursesSection coursesData={this.extractCoursesData(coursesData)} />
-              <BadgesSection badgesData={this.extractBadgesData(badgesData)} />
+              <BadgesSection badgesData={badgesData} />
             </Space>
           </Content>
         </Layout>
