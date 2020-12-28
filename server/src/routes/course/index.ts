@@ -65,6 +65,7 @@ import {
 import * as crossCheck from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
 import { postCopyCourse } from './template';
+import { getScheduleAsCsv } from './schedule';
 
 const validateId = async (ctx: Router.RouterContext, next: Next) => {
   const id = Number(ctx.params.id);
@@ -95,6 +96,7 @@ export function courseRoute(logger: ILogger) {
   addStudentCrossCheckApi(router, logger);
   addCourseUserApi(router, logger);
   addCrossCheckApi(router, logger);
+  addScheduleApi(router, logger);
 
   return router;
 }
@@ -294,6 +296,10 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, crossCheck.getFeedback(logger));
   router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, crossCheck.getAssignments(logger));
+}
+
+function addScheduleApi(router: Router<any, any>, logger: ILogger) {
+  router.get('/schedule/csv', courseSupervisorGuard, getScheduleAsCsv(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {
