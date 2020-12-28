@@ -62,6 +62,6 @@ export class CourseEvent {
   @Column({ nullable: true })
   broadcastUrl: string;
 
-  @Column({ type: 'simple-array', default: '' })
-  special: string[];
+  @Column({ default: '' })
+  special: string;
 }

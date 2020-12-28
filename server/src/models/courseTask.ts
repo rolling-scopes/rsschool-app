@@ -90,6 +90,6 @@ export class CourseTask {
   @Column({ default: false, type: 'boolean' })
   disabled: boolean;
 
-  @Column({ type: 'simple-array', default: '' })
-  special: string[];
+  @Column({ default: '' })
+  special: string;
 }
