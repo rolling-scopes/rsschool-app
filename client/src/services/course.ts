@@ -172,6 +172,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async postMultipleEntities(data: Partial<CourseTask | CourseEvent>) {
+    const result = await this.axios.post<{ data: Partial<CourseTask | CourseEvent> }>(`/schedule/csv`, data);
+    return result.data.data;
+  }
+
   async deleteCourseEvent(courseTaskId: number) {
     const result = await this.axios.delete(`/event/${courseTaskId}`);
     return result.data.data;

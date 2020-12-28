@@ -3,7 +3,10 @@ import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { getCourseTasks, getEvents } from '../../services/course.service';
-import { setCsvResponse } from '../utils';
+import { setCsvResponse, setResponse } from '../utils';
+import { getManager, getRepository, ObjectType, UpdateEvent } from 'typeorm';
+import { Task, CourseTask, Event, CourseEvent } from '../../models';
+
 
 export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
@@ -37,4 +40,40 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
   const csv = await parseAsync([...tasksToCsv, ...eventsToCsv]);
 
   setCsvResponse(ctx, OK, csv, `schedule_${courseId}`);
+};
+
+export const setScheduleFromCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId = Number(ctx.params.courseId);
+  const data = ctx.request.body;
+  
+  const isOldTasks = (entity: any) => entity.entityType === 'task' && entity.id;
+  const isNewTasks = (entity: any) => entity.entityType === 'task' && !entity.id;
+  const isOldEvents = (entity: any) => entity.entityType === 'event' && entity.id;
+  const isNewEvents = (entity: any) => entity.entityType === 'event' && !entity.id;
+
+  // we make 100500 requests in parallel and process them. But it's better to do it all in one transaction.
+  const result = await Promise.allSettled(data.map(async (entity: any) => {
+    if (isOldTasks(entity)) {
+      const response1 = await getRepository(Task).update(entity.id, entity);
+      const response2 = await getRepository(CourseTask).update(entity.id, entity);
+      return { response1, response2, status: 'OK' };
+    }
+    if (isNewTasks(entity)) {
+      const response1 = await getRepository(Task).insert(entity);
+      const response2 = await getRepository(CourseTask).insert(entity);
+      return { response1, response2, status: 'OK' };
+    }
+    if (isOldEvents(entity)) {
+      const response1 = await getRepository(Event).update(entity.id, entity);
+      const response2 = await getRepository(CourseEvent).update(entity.id, entity);
+      return { response1, response2, status: 'OK' };
+    }
+    if (isNewEvents(entity)) {
+      const response1 = await getRepository(Event).insert(entity);
+      const response2 = await getRepository(CourseEvent).insert(entity);
+      return { response1, response2, status: 'OK' };
+    }
+  }));
+
+  setResponse(ctx, OK, result);
 };
