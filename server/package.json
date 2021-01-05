@@ -17,7 +17,7 @@
     "@octokit/app": "4.2.1",
     "@octokit/rest": "18.0.6",
     "aws-sdk": "^2.769.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "http-status-codes": "~1.4.0",
     "ics": "2.16.0",
     "json2csv": "~4.5.2",
