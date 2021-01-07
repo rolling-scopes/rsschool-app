@@ -13,4 +13,5 @@ export interface Course {
   registrationEndDate: string;
   startDate: string;
   certificateIssuer: string;
+  discordServerId: number;
 }

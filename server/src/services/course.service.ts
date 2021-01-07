@@ -164,6 +164,15 @@ export async function getCourses() {
   return records;
 }
 
+export async function getCourse(id: number) {
+  const records = await getRepository(Course)
+    .createQueryBuilder('course')
+    .leftJoinAndSelect('course.discordServer', 'discordServer')
+    .where({ id })
+    .getOne();
+  return records;
+}
+
 export async function getMentorByUserId(courseId: number, userId: number): Promise<{ id: number } | null> {
   const record = await mentorQuery()
     .where('mentor."userId" = :userId', { userId })

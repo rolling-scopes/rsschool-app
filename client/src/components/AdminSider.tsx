@@ -7,6 +7,7 @@ import {
   TeamOutlined,
   IdcardFilled,
   HomeOutlined,
+  RobotFilled,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
@@ -70,11 +71,21 @@ export function AdminSider(props: Props) {
             </a>
           </Menu.Item>
         ) : null}
+
         {props.isAdmin || props.isCoursePowerUser ? (
           <Menu.Item key="7">
             <a href="/admin/mentor-registry">
               <IdcardFilled />
               <span>Mentor Registry</span>
+            </a>
+          </Menu.Item>
+        ) : null}
+
+        {props.isAdmin ? (
+          <Menu.Item key="8">
+            <a href="/admin/discord-server">
+              <RobotFilled />
+              <span>Discord Servers</span>
             </a>
           </Menu.Item>
         ) : null}
