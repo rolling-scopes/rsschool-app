@@ -29,7 +29,7 @@ const FilterComponent: React.FC<any> = ({setHiddenColumn,  hiddenColumn}) => {
                 columnsName.map((el, ind) => {
                     return <Checkbox key={`${ind}_${el}`} value={el} checked={!hiddenColumn.has(el)} onChange={handledFilter}>{el}</Checkbox>;
                 })
-            } 
+             } 
         </Space>
     );
 }
