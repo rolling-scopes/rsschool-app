@@ -270,6 +270,11 @@ const courseManagementRoutes = [
     getLink: (course: Course) => `/course/admin/stage-interviews?course=${course.alias}`,
     access: combineOr(isAdminRole, isCourseManager, isCourseSupervisor),
   },
+  {
+    name: () => `CoreJs Interviews`,
+    getLink: (course: Course) => `/course/admin/interviews?course=${course.alias}`,
+    access: combineOr(isAdminRole, isCourseManager),
+  },
 ];
 
 const mentorRegistryService = new MentorRegistryService();
