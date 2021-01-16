@@ -1,7 +1,4 @@
-import React, { useMemo, useState } from 'react';
-import { Header } from 'components';
-import { useRouter } from 'next/router'
-import { useAsync } from 'react-use';
+import React from 'react';
 import {
     Row,
     Col,
@@ -9,34 +6,13 @@ import {
     Tooltip,
 } from 'antd';
 import { EventTypeColor, EventTypeToName } from 'components/Schedule/model';
-import {
+import { 
     renderTag,
 } from 'components/Table';
-import withCourseData from 'components/withCourseData';
-import { withSession } from 'components';
-import { useLoading } from 'components/useLoading';
-import { CourseService, CourseTaskDetails } from '../../../services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseTaskDetails } from 'services/course';
 
-export function TaskDetailsPage(props: CoursePageProps) {
-    const router = useRouter();
-    const { taskDetails } = router.query;
-
-    const [taskData, setTaskData] = useState<CourseTaskDetails>();
-    const [, withLoading] = useLoading(false);
-
-    const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-
-    useAsync(
-        withLoading(async () => {
-            const task = await courseService.getCourseTask(taskDetails as string);
-            setTaskData(task as CourseTaskDetails);
-        }),
-        [courseService],
-    );
+export function TaskDetails({taskData}: {taskData: CourseTaskDetails}) {
     const { Title, Text } = Typography;
-
-    if (!taskData) return (<></>);
 
     const {
         description,
@@ -58,7 +34,6 @@ export function TaskDetailsPage(props: CoursePageProps) {
 
     return (
         <>
-            <Header title="Task details" username={props.session.githubId} />
             <div style={{
                 margin: '20px auto',
                 maxWidth: '1200px',
@@ -144,4 +119,4 @@ export function TaskDetailsPage(props: CoursePageProps) {
     );
 }
 
-export default withCourseData(withSession(TaskDetailsPage));
+export default TaskDetails;

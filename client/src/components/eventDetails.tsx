@@ -1,39 +1,13 @@
-import React, { useMemo, useState } from 'react';
-
-import { Header } from 'components';
-import { useRouter } from 'next/router'
-import { useAsync } from 'react-use';
+import React from 'react';
 import {
     Row,
     Col,
     Typography,
-    Tooltip,
+    Tooltip, 
 } from 'antd';
-import withCourseData from 'components/withCourseData';
-import { withSession } from 'components';
-import { useLoading } from 'components/useLoading';
-import { CourseService, CourseEvent } from '../../../services/course';
-import { CoursePageProps } from 'services/models';
+import { CourseEvent } from 'services/course';
 
-export function EventDetailsPage(props: CoursePageProps) {
-    const router = useRouter();
-    const { eventDetails } = router.query;
-
-    const [eventData, setEventData] = useState<CourseEvent>();
-    const [, withLoading] = useLoading(false);
-
-    const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-
-    useAsync(
-        withLoading(async () => {
-            const event = await courseService.getEventById(eventDetails as string);
-            setEventData(event);
-        }),
-        [courseService],
-    );
-
-    if (!eventData) return <>!!</>;
-
+export function EventDetails({eventData}: {eventData: CourseEvent}) {
     const { Title, Text } = Typography;
 
     const {
@@ -54,7 +28,6 @@ export function EventDetailsPage(props: CoursePageProps) {
         <>
             {eventData &&
                 <>
-                    <Header title="Event details" username={props.session.githubId} />
                     <div style={{
                         margin: '20px auto',
                         maxWidth: '1200px',
@@ -156,4 +129,4 @@ export function EventDetailsPage(props: CoursePageProps) {
     )
 }
 
-export default withCourseData(withSession(EventDetailsPage));
+export default EventDetails;
