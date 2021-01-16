@@ -57,15 +57,15 @@ export function TasksStatsCard(props: Props) {
   const showTasksStatsModal = (chartLabel: string) => {
     switch (chartLabel) {
       case GroupTaskName.Completed:
-        setCurrentTaskStatsModal(completed);
         setStatisticsTableName('Completed tasks');
+        setCurrentTaskStatsModal(completed);
         break;
       case GroupTaskName.Future:
+        setStatisticsTableName('Future tasks');
         setCurrentTaskStatsModal(future);
-        setStatisticsTableName('Tasks not completed');
         break;
       default:
-        setStatisticsTableName('Future tasks');
+        setStatisticsTableName('Tasks not completed');
         setCurrentTaskStatsModal(notDone);
         break;
     }
