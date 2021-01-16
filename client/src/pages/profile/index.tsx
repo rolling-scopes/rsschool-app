@@ -14,6 +14,7 @@ import { NextRouter, withRouter } from 'next/router';
 import { LoadingScreen } from 'components/LoadingScreen';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from 'services/user';
+import { CoursesService } from 'services/courses';
 import {
   ProfileInfo,
   StudentStats,
@@ -184,6 +185,12 @@ export class ProfilePage extends React.Component<Props, State> {
   };
 
   private userService = new UserService();
+  private coursesService = new CoursesService();
+
+  private getCoursesInfo = async (profile: ProfileInfo) =>
+    profile?.studentStats
+      ? await Promise.all(profile?.studentStats?.map(({ courseId }) => this.coursesService.getCourse(courseId)))
+      : [];
 
   private hadStudentCoreJSInterview = (stats: StudentStats[]) =>
     stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
@@ -213,6 +220,17 @@ export class ProfilePage extends React.Component<Props, State> {
     try {
       const githubId = router.query ? (router.query.githubId as string) : undefined;
       const profile = await this.userService.getProfileInfo(githubId);
+
+      const coursesInfo = await this.getCoursesInfo(profile);
+
+      const updateProfile = {
+        ...profile,
+        studentStats: profile.studentStats?.map(stats => ({
+          ...stats,
+          isCourseCompleted: coursesInfo.find(course => course.id === stats.courseId)?.completed ?? false,
+        })),
+      };
+
       let isProfileOwner = false;
       if (profile) {
         const userId = this.props.session.githubId;
@@ -225,7 +243,7 @@ export class ProfilePage extends React.Component<Props, State> {
 
       await this.setState({
         isLoading: false,
-        profile,
+        profile: updateProfile,
         isProfileOwner,
         initialPermissionsSettings,
         isEditingModeEnabled,
