@@ -12,6 +12,7 @@ import { CoursePageProps } from 'services/models';
 type Stats = {
   recordCount: number;
   countries: { name: string; totalCount: number }[];
+  students: { studentsGroupName: string; totalCount: number }[];
 };
 
 function Page(props: CoursePageProps) {
@@ -22,10 +23,21 @@ function Page(props: CoursePageProps) {
 
   const service = useMemo(() => new CourseService(courseId), [courseId]);
 
+  const studentsValueName = ['Students with a mentor', 'Students who can have a mentor'];
+
   useAsync(async () => {
     setLoading(true);
     const records: any[] = await service.getMentorsWithDetails();
     const countries: Record<string, { totalCount: number }> = {};
+
+    const studentsGroupCount = records.reduce(
+      (acc, { studentsCount, maxStudentsLimit }) => {
+        acc[0] += studentsCount ? studentsCount : 0;
+        acc[1] += maxStudentsLimit ? maxStudentsLimit : 0;
+        return acc;
+      },
+      [0, 0],
+    );
 
     for (const record of records) {
       const { countryName } = record;
@@ -41,6 +53,10 @@ function Page(props: CoursePageProps) {
       countries: Object.keys(countries).map(k => ({
         name: k,
         totalCount: countries[k].totalCount,
+      })),
+      students: studentsValueName.map((valueName, idx) => ({
+        studentsGroupName: valueName,
+        totalCount: studentsGroupCount[idx],
       })),
     });
   }, []);
@@ -65,18 +81,42 @@ function Page(props: CoursePageProps) {
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
-      <Statistic title="Total Count" value={stats?.recordCount} />
-      <Table
-        style={{ width: 250 }}
-        pagination={false}
-        size="small"
-        rowKey="name"
-        dataSource={stats?.countries ?? []}
-        columns={[
-          { title: 'Country', dataIndex: 'name' },
-          { title: 'Count', dataIndex: 'totalCount' },
-        ]}
-      />
+      <div style={{ display: 'flex' }}>
+        <div
+          style={{
+            maxWidth: 280,
+            flex: 'auto',
+            border: '1px rgba(0, 0, 0, 0.06) dashed',
+            padding: '10px',
+            marginRight: '20px',
+          }}
+        >
+          <Statistic title="Total Count" value={stats?.recordCount} />
+          <Table
+            pagination={false}
+            size="small"
+            rowKey="name"
+            dataSource={stats?.countries ?? []}
+            columns={[
+              { title: 'Country', dataIndex: 'name', width: 200 },
+              { title: 'Count', dataIndex: 'totalCount' },
+            ]}
+          />
+        </div>
+        <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
+          <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
+          <Table
+            pagination={false}
+            size="small"
+            rowKey="studentsGroupName"
+            dataSource={stats?.students ?? []}
+            columns={[
+              { title: 'Group of students', dataIndex: 'studentsGroupName' },
+              { title: 'Count', dataIndex: 'totalCount' },
+            ]}
+          />
+        </div>
+      </div>
       <Divider dashed />
       <Table<MentorDetails>
         rowKey="githubId"
