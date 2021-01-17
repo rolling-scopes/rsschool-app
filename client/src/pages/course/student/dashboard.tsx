@@ -13,6 +13,9 @@ import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentTasksDetail } from '../../../../../common/models';
 import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard, RepositoryCard } from 'components/Dashboard';
+import { InterviewStatus } from 'domain/interview';
+
+const TECHNICAL_SCRINING_TASK_NAME = 'Technical Screening';
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
@@ -48,12 +51,14 @@ function Page(props: CoursePageProps) {
     try {
       setLoading(true);
 
-      const [studentSummary, courseTasks, statisticsCourses, courseEvents] = await Promise.all([
+      const [studentSummary, courseTasks, statisticsCourses, courseEvents, interviews] = await Promise.all([
         courseService.getStudentSummary(githubId),
         courseService.getCourseTasks(),
         userService.getProfileInfo(githubId),
         courseService.getCourseEvents(),
+        courseService.getStudentInterviews(githubId),
       ]);
+
       const tasksDetailCurrentCourse =
         statisticsCourses.studentStats?.find(course => course.courseId === props.course.id)?.tasks ?? [];
       const startOfToday = moment().startOf('day');
@@ -63,8 +68,29 @@ function Page(props: CoursePageProps) {
           .sort((a, b) => a.dateTime.localeCompare(b.dateTime))
           .filter(event => moment(event.dateTime).isAfter(startOfToday)) ?? ([] as CourseEvent[]);
 
+      const technicalScriningId =
+        courseTasks.find(task => task.name.includes(TECHNICAL_SCRINING_TASK_NAME))?.id ?? null;
+
+      const isTechnicalScriningCompleted =
+        interviews.find(interview => interview.name.includes(TECHNICAL_SCRINING_TASK_NAME))?.status ===
+        InterviewStatus.Completed;
+
+      const updateStudentSummary = {
+        ...studentSummary,
+        results: technicalScriningId
+          ? [
+              ...studentSummary.results.filter(t => t.courseTaskId !== technicalScriningId),
+              isTechnicalScriningCompleted
+                ? {
+                    courseTaskId: technicalScriningId,
+                    score: 0,
+                  }
+                : undefined,
+            ].filter(Boolean)
+          : [...studentSummary.results],
+      };
       setNextEvent(nextEvents);
-      setStudentSummary(studentSummary);
+      setStudentSummary(updateStudentSummary);
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
@@ -88,7 +114,7 @@ function Page(props: CoursePageProps) {
     .filter(task => !!checkTaskResults(results, task.id))
     .map(task => {
       const { comment, taskGithubPrUris, score } = tasksDetail.find(taskDetail => taskDetail.name === task.name) ?? {};
-      return { ...task, comment, githubPrUri: taskGithubPrUris, score };
+      return { ...task, comment, githubPrUri: taskGithubPrUris, score: score ? score : null };
     });
 
   const tasksNotDone = courseTasks
