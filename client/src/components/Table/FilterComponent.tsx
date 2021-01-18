@@ -1,5 +1,6 @@
 import React from 'react';
 import { Space, Checkbox } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 type Props = {
   setHiddenColumnsRows: Function,
@@ -7,10 +8,10 @@ type Props = {
   eventTypes: Array<string>,
 }
 
-const FilterComponent: React.FC<any> = ({ setHiddenColumnsRows,  hiddenColumnsRows, eventTypes }: Props) => {
+const FilterComponent: React.FC<Props> = ({ setHiddenColumnsRows,  hiddenColumnsRows, eventTypes }) => {
     const columnsName: Array<string> = ['Type', 'Special', 'Url', 'Organizer', 'Place'];
     
-    const handledFilter = (event: any) => {
+    const handledFilter = (event: CheckboxChangeEvent) => {
         const {value} = event.target;
         const {checked} = event.target;
         if (checked && hiddenColumn.has(value)) {
@@ -27,10 +28,9 @@ const FilterComponent: React.FC<any> = ({ setHiddenColumnsRows,  hiddenColumnsRo
           });
         }
     };
-      
     return (
       <Space style={{alignItems: 'flex-start'}}>
-        <Space direction="vertical">
+        <Space direction='vertical'>
           <span style={{fontWeight: 'bold'}}>Events</span>
             {
                 columnsName.map((el, ind) => {
@@ -40,7 +40,7 @@ const FilterComponent: React.FC<any> = ({ setHiddenColumnsRows,  hiddenColumnsRo
         </Space>
         {
           eventTypes.length !== 0 
-          ? (<Space direction="vertical">
+          ? (<Space direction='vertical'>
               <span style={{fontWeight: 'bold'}}>Columns</span>
               {
                   eventTypes.map((el, ind) => {
