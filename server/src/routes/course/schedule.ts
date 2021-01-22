@@ -12,8 +12,7 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
 
   const tasksToCsv = courseTasks.map(item => ({
     entityType: 'task',
-    eventId: null,
-    taskId: item.task.id,
+    id: item.task.id,
     startDate: item.studentStartDate,
     endDate: item.studentEndDate,
     type: item.type || item.task.type,
@@ -25,7 +24,7 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
   }));
   const eventsToCsv = courseEvents.map(item => ({
     entityType: 'event',
-    eventId: item.eventId,
+    id: item.eventId,
     startDate: item.dateTime,
     type: item.event.type,
     special: item.special,
