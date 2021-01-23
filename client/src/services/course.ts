@@ -37,6 +37,8 @@ export interface IColumn {
   className: string;
   render: (_: any, d: StudentScore) => JSX.Element | 0;
   name: string;
+  special?: string;
+  duration?: number;
 }
 
 export interface SelfEducationPublicAttributes {
@@ -150,7 +152,7 @@ export class CourseService {
     return result.data.data.sort(sortTasksByEndDate);
   }
 
-  async getEventById(id:string) {
+  async getEventById(id: string) {
     const result = await this.axios.get<{ data: CourseEvent }>(`/event/${id}`);
     return result.data.data;
   }

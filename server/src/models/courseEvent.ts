@@ -64,4 +64,7 @@ export class CourseEvent {
 
   @Column({ default: '' })
   special: string;
+
+  @Column({ default: '' })
+  duration: string;
 }
