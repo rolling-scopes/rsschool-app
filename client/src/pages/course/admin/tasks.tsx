@@ -183,6 +183,7 @@ function Page(props: CoursePageProps) {
             <Select.Option value="kotlintask">Kotlin task</Select.Option>
             <Select.Option value="objctask">ObjC task</Select.Option>
             <Select.Option value="htmltask">HTML task</Select.Option>
+            <Select.Option value="ipynb">Jupyter Notebook</Select.Option>
             <Select.Option value="cv:markdown">CV Markdown</Select.Option>
             <Select.Option value="cv:html">CV HTML</Select.Option>
             <Select.Option value="selfeducation">Self Education</Select.Option>
