@@ -213,6 +213,8 @@ function Page(props: CoursePageProps) {
               {
                 title: 'Details',
                 dataIndex: 'details',
+                render: (value: string) =>
+                  typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value,
               },
             ]}
             dataSource={verifications}
