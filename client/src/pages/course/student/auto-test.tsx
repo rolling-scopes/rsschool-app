@@ -13,7 +13,7 @@ import {
   Upload,
   Spin,
 } from 'antd';
-import { ReloadOutlined, UploadOutlined, ClockCircleOutlined, EnterOutlined } from '@ant-design/icons';
+import { ReloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
@@ -251,25 +251,9 @@ function UploadJupyterNotebook() {
   return (
     <Spin spinning={loading}>
       <Form.Item name="upload">
-        <Row style={{ marginBottom: 8 }}>
-          <ul>
-            <li>
-              <UploadOutlined /> Press <b>"Upload Jupyter Notebook"</b> and select notebook from local computer
-            </li>
-            <li>
-              <EnterOutlined /> Press <b>"Submit"</b>
-            </li>
-            <li>
-              <ClockCircleOutlined /> Wait a little bit
-            </li>
-            <li>
-              <ReloadOutlined /> Press <b>"Refresh"</b> to check result
-            </li>
-          </ul>
-        </Row>
         <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
           <Button>
-            <UploadOutlined /> Upload Jupyter Notebook
+            <UploadOutlined /> Select Jupyter Notebook
           </Button>
         </Upload>
       </Form.Item>
