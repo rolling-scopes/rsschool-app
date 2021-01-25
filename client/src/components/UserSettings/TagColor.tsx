@@ -7,7 +7,7 @@ import { ColorState as IColorState } from 'react-color';
 
 type Props = {
   tags: string[];
-  storedTagColors: object;
+  storedTagColors?: object;
   setStoredTagColors: (value: object) => void;
 };
 
@@ -23,23 +23,14 @@ const TagColor: React.FC<Props> = ({ storedTagColors, setStoredTagColors, tags }
 
   const collapseTags = (
     <Collapse accordion ghost>
-      {tags.map((tag) => {
+      {tags.map(tag => {
         return (
-          <Panel
-            header={
-              <Tag
-                style={getTagStyle(tag, storedTagColors, { cursor: 'pointer' })}
-              >
-                {tag}
-              </Tag>
-            }
-            key={tag}
-          >
+          <Panel header={<Tag style={getTagStyle(tag, storedTagColors, { cursor: 'pointer' })}>{tag}</Tag>} key={tag}>
             <GithubPicker
               colors={pickerColors}
               triangle="hide"
               width={'138px'}
-              onChange={(e) => memoizedSetTagColor(e, tag, storedTagColors)}
+              onChange={e => memoizedSetTagColor(e, tag, storedTagColors)}
             />
           </Panel>
         );

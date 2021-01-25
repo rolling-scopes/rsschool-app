@@ -19,7 +19,7 @@ const weekLength = WEEK.length;
 type Props = {
   data: CourseEvent[];
   timeZone: string;
-  storedTagColors: object;
+  storedTagColors?: object;
 };
 
 export const ListView = ({ data, timeZone, storedTagColors }: Props): React.ReactElement => {
@@ -68,8 +68,9 @@ export const ListView = ({ data, timeZone, storedTagColors }: Props): React.Reac
           </Tooltip>
         </Col>
       </Row>
-      <Collapse
-        defaultActiveKey={currentDayKey}>{getWeekElements(data, currentWeek, timeZone, storedTagColors)}</Collapse>
+      <Collapse defaultActiveKey={currentDayKey}>
+        {getWeekElements(data, currentWeek, timeZone, storedTagColors)}
+      </Collapse>
       <style jsx>{listStyles}</style>
     </div>
   );
@@ -135,29 +136,27 @@ const mapToWeek = (events: CourseEvent[], timeZone: string) => {
   return weekMap;
 };
 
-const getDayEvents = (events: CourseEvent[], timeZone: string, storedTagColors: object) => {
+const getDayEvents = (events: CourseEvent[], timeZone: string, storedTagColors?: object) => {
   return events.map((data: CourseEvent) => {
     const { id, event, dateTime } = data;
     const { type, name } = event;
 
     return (
       <tbody key={id}>
-      <tr>
-        <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
-        <th style={{ width: '10%' }}>
-          {renderTagWithStyle(type, storedTagColors)}
-        </th>
-        <th style={{ width: '80%' }}>
-          <span>{name}</span>
-        </th>
-      </tr>
-      <style jsx>{tableStyles}</style>
+        <tr>
+          <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
+          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors)}</th>
+          <th style={{ width: '80%' }}>
+            <span>{name}</span>
+          </th>
+        </tr>
+        <style jsx>{tableStyles}</style>
       </tbody>
     );
   });
 };
 
-const getWeekElements = (events: CourseEvent[], selectedWeek: number, timeZone: string, storedTagColors: object) => {
+const getWeekElements = (events: CourseEvent[], selectedWeek: number, timeZone: string, storedTagColors?: object) => {
   const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
 

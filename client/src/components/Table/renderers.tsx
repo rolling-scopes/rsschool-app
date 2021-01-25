@@ -60,7 +60,7 @@ export function renderTag(value: number | string, color?: string) {
   );
 }
 
-export function renderTagWithStyle(tagName: string, storedTagColors: object) {
+export function renderTagWithStyle(tagName: string, storedTagColors?: object) {
   return (
     <Tag style={getTagStyle(tagName, storedTagColors)} key={tagName}>
       {tagName}
