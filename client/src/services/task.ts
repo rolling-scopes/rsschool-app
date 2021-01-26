@@ -6,6 +6,7 @@ export type TaskType =
   | 'kotlintask'
   | 'objctask'
   | 'htmltask'
+  | 'ipynb'
   | 'cv:markdown'
   | 'cv:html'
   | 'selfeducation'

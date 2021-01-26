@@ -6,6 +6,7 @@ import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
+import { discordServerRoute } from './discordServer';
 import { stageRoute } from './stage';
 import { stagesRoute } from './stages';
 import { authRoute } from './auth';
@@ -27,6 +28,7 @@ import { jwtRoute } from './jwt';
 import { userRoute } from './user';
 import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
+import { filesRoute } from './file';
 
 import { ILogger } from '../logger';
 import { userRolesMiddleware, courseMiddleware } from './middlewares';
@@ -54,6 +56,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
+  applyRouter(router, discordServerRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, taskResultRoute(logger));
@@ -72,6 +75,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, userRoute(logger));
   applyRouter(router, consentRoute(logger));
   applyRouter(router, repositoryRoute(logger));
+  applyRouter(router, filesRoute(logger));
 
   return { publicRouter: router };
 };

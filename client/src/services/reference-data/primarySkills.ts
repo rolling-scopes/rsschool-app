@@ -19,4 +19,8 @@ export const PRIMARY_SKILLS = [
     id: 'business-intelligence',
     name: 'Business intelligence',
   },
+  {
+    id: 'data-science',
+    name: 'Data Science',
+  },
 ];

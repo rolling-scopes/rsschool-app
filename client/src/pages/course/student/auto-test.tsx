@@ -1,5 +1,20 @@
-import { Button, Col, Table, Form, Input, message, Row, Typography, notification, Radio, Checkbox } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import {
+  Button,
+  Col,
+  Table,
+  Form,
+  Input,
+  message,
+  Row,
+  Typography,
+  notification,
+  Radio,
+  Checkbox,
+  Upload,
+  Spin,
+} from 'antd';
+import { ReloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadFile } from 'antd/lib/upload/interface';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
@@ -11,6 +26,8 @@ import { notUrlPattern } from 'services/validators';
 import { shortDateTimeRenderer } from 'components/Table';
 import { AxiosError } from 'axios';
 import shuffle from 'lodash/shuffle';
+import snakeCase from 'lodash/snakeCase';
+import { FilesService } from 'services/files';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -62,9 +79,20 @@ function Page(props: CoursePageProps) {
       return;
     }
     try {
-      const data = getSubmitData(task, values);
-      if (data == null) {
-        return;
+      let data: any = {};
+      if (task.type === 'ipynb') {
+        const filesService = new FilesService();
+        const fileData = await readFile(values.upload.file);
+        const { s3Key } = await filesService.uploadFile('', fileData);
+        data = {
+          s3Key,
+          taskName: snakeCase(task.name),
+        };
+      } else {
+        data = getSubmitData(task, values);
+        if (data == null) {
+          return;
+        }
       }
 
       setLoading(true);
@@ -185,6 +213,8 @@ function Page(props: CoursePageProps) {
               {
                 title: 'Details',
                 dataIndex: 'details',
+                render: (value: string) =>
+                  typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value,
               },
             ]}
             dataSource={verifications}
@@ -197,6 +227,40 @@ function Page(props: CoursePageProps) {
 
 export default withCourseData(withSession(Page));
 
+function readFile(file: any) {
+  return new Promise<string>((res, rej) => {
+    const reader = new FileReader();
+    reader.readAsText(file.originFileObj, 'utf-8');
+    reader.onload = ({ target }) => res(target ? (target.result as string) : '');
+    reader.onerror = e => rej(e);
+  });
+}
+
+function UploadJupyterNotebook() {
+  const [uploadFile, setUploadFile] = useState<UploadFile | null>(null);
+  const [loading, setLoading] = useState(false);
+  const handleFileChose = async (info: any) => {
+    switch (info.file.status) {
+      case 'done': {
+        setUploadFile(info.file);
+        setLoading(false);
+        break;
+      }
+    }
+  };
+  return (
+    <Spin spinning={loading}>
+      <Form.Item name="upload">
+        <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
+          <Button>
+            <UploadOutlined /> Select Jupyter Notebook
+          </Button>
+        </Upload>
+      </Form.Item>
+    </Spin>
+  );
+}
+
 function renderTaskFields(githubId: string, courseTask?: CourseTask) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
@@ -205,6 +269,12 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
     case 'kotlintask':
     case 'objctask':
       return renderKotlinTaskFields(repoUrl);
+    case 'ipynb':
+      return (
+        <Row>
+          <UploadJupyterNotebook />
+        </Row>
+      );
     case 'selfeducation':
       return (
         <>
@@ -244,7 +314,7 @@ function renderSelfEducation(courseTask: CourseTask) {
       <Typography.Paragraph>To submit the task answer the questions.</Typography.Paragraph>
       <Typography.Paragraph>
         <Typography.Text mark strong>
-          Note: You must to score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
+          Note: You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
           attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
         </Typography.Text>
       </Typography.Paragraph>

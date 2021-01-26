@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { ILogger } from '../logger';
-import { config } from '../config';
 
 interface BadgeParams {
   fromGithubId: string;
   toDiscordId: number | null;
   toGithubId: string;
   comment: string;
+  gratitudeUrl: string;
 }
 
 interface DiscordMessage {
@@ -25,12 +25,6 @@ export class DiscordService {
   }
 
   public async pushGratitude(params: BadgeParams) {
-    if (this.isDisabled()) {
-      this.logger.info('pushGratitude is disabled');
-      return null;
-    }
-    const { gratitudeUrl } = config.integrations.discord;
-
     const mention = params.toDiscordId ? `<@${params.toDiscordId}>` : `**@${params.toGithubId}**`;
 
     const message: DiscordMessage = {
@@ -38,11 +32,7 @@ export class DiscordService {
       username: params.fromGithubId,
       content: `${mention}\n${params.comment}`,
     };
-    const result = await axios.post(gratitudeUrl!, message);
+    const result = await axios.post(params.gratitudeUrl, message);
     this.logger.info(result.status.toString());
-  }
-
-  private isDisabled() {
-    return !config.integrations.discord.gratitudeUrl;
   }
 }

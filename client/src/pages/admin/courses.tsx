@@ -6,23 +6,30 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { Course } from 'services/models';
+import { DiscordServerService } from 'services/discordServer';
+import { Course, DiscordServer } from 'services/models';
 import { PRIMARY_SKILLS } from 'services/reference-data';
 
 const { Content } = Layout;
 type Props = { session: Session };
 
 function Page(props: Props) {
-  const [data, setData] = useState([] as Course[]);
+  const [courses, setCourses] = useState([] as Course[]);
+  const [discordServers, setDiscordServers] = useState([] as DiscordServer[]);
   const [modalData, setModalData] = useState(null as Partial<Course> | null);
   const [modalAction, setModalAction] = useState('update');
   const [modalLoading, setModalLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
+  const discordServerService = new DiscordServerService();
 
   const loadData = async () => {
-    const data = await courseService.getCourses();
-    setData(data);
+    const [courses, discordServers] = await Promise.all([
+      courseService.getCourses(),
+      discordServerService.getDiscordServers(),
+    ]);
+    setCourses(courses);
+    setDiscordServers(discordServers);
   };
 
   useAsync(loadData, []);
@@ -89,7 +96,7 @@ function Page(props: Props) {
             {isCopy && !isUpdate ? (
               <Form.Item name="courseId" label="Choose course">
                 <Select placeholder="Please select course template">
-                  {data.map(course => (
+                  {courses.map(course => (
                     <Select.Option key={course.id} value={course.id}>
                       {course.name}
                     </Select.Option>
@@ -131,6 +138,21 @@ function Page(props: Props) {
               rules={[{ required: true, message: 'Please course description' }]}
             >
               <Input.TextArea />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="discordServerId"
+              label="Choose discord server"
+              rules={[{ required: true, message: 'Please select discord server' }]}
+            >
+              <Select placeholder="Please select discord server">
+                {discordServers.map(discordServer => (
+                  <Select.Option key={discordServer.id} value={discordServer.id}>
+                    {discordServer.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>
@@ -187,7 +209,7 @@ function Page(props: Props) {
           <Table
             size="small"
             style={{ marginTop: 8 }}
-            dataSource={data}
+            dataSource={courses}
             pagination={{ pageSize: 100 }}
             rowKey="id"
             columns={getColumns(handleEditItem)}
@@ -215,6 +237,7 @@ function createRecord(values: any) {
     primarySkillId: values.primarySkillId,
     primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
     certificateIssuer: values.certificateIssuer,
+    discordServerId: values.discordServerId,
   };
   return record;
 }

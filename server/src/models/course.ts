@@ -1,4 +1,15 @@
-import { Entity, Column, CreateDateColumn, OneToMany, UpdateDateColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+  ManyToOne,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  Unique,
+  Index,
+} from 'typeorm';
+import { DiscordServer } from './discordServer';
 import { Stage } from './stage';
 import { Student } from './student';
 import { Mentor } from './mentor';
@@ -6,6 +17,7 @@ import { Registry } from './registry';
 
 @Entity()
 @Unique(['name', 'alias'])
+@Index(['discordServerId'])
 export class Course {
   @PrimaryGeneratedColumn() id: number;
 
@@ -62,6 +74,12 @@ export class Course {
 
   @OneToMany(_ => Registry, (registry: Registry) => registry.course, { nullable: true })
   registries: Registry[] | null;
+
+  @ManyToOne(_ => DiscordServer, (discordServer: DiscordServer) => discordServer.courses, { nullable: true })
+  discordServer: DiscordServer;
+
+  @Column({ nullable: true })
+  discordServerId: number;
 
   @Column({ default: false })
   completed: boolean;

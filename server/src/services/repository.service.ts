@@ -24,13 +24,15 @@ export class RepositoryService {
 
     for (const student of students) {
       const studentWithMentor = await studentRepo.findAndIncludeMentor(this.courseId, student.githubId);
-      const { githubId: mentorGithubId } = studentWithMentor?.mentor as MentorBasic;
-      const record = await this.createRepositoryInternally(this.github, course, student.githubId);
-      if (mentorGithubId) {
-        await this.inviteMentor(mentorGithubId, course);
-      }
-      await this.addTeamToRepository(this.github, course, student.githubId);
 
+      const record = await this.createRepositoryInternally(this.github, course, student.githubId);
+      if (studentWithMentor?.mentor) {
+        const { githubId: mentorGithubId } = studentWithMentor.mentor as MentorBasic;
+        if (mentorGithubId) {
+          await this.inviteMentor(mentorGithubId, course);
+        }
+        await this.addTeamToRepository(this.github, course, student.githubId);
+      }
       if (record?.repository) {
         result.push({ repository: record.repository });
       }

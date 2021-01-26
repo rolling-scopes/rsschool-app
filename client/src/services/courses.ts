@@ -24,4 +24,9 @@ export class CoursesService {
     const result = await axios.get<CoursesResponse>(`/api/courses`);
     return result.data.data;
   }
+
+  async getCourse(id: number) {
+    const result = await axios.get<CourseResponse>(`/api/course/${id}`);
+    return result.data.data;
+  }
 }
