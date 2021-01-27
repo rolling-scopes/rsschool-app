@@ -1,4 +1,5 @@
 import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select, Tag, Typography } from 'antd';
+import { HeartTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 import { NextPageContext } from 'next';
 import { LocationSelect, PageLayout } from 'components';
@@ -362,10 +363,13 @@ const SuccessComponent = () => {
   const titleCmp = (
     <Row gutter={24} justify="center">
       <Col xs={18} sm={16} md={12}>
-        <p>Thanks a lot for registration!</p>
-        <p>We will send you an email to the introduction meeting when the course is started. Stay tuned!</p>
+        <p>Your application has been saved!</p>
         <p>
-          Join our <a href="https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ">RSSchool Mentors FAQ</a> Telegram group.
+          Before the start of the course, our coordinator will contact you to confirm your participation in the course
+          and provide the next steps.
+        </p>
+        <p>
+          Thanks a lot for your interest! <HeartTwoTone twoToneColor="#eb2f96" />
         </p>
         <p>
           <Button type="primary" href="/">
