@@ -7,6 +7,8 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
+const rsschoolBotLink = 'https://t.me/rsschool_bot';
+
 type Props = {
   data: Consent[];
   isEditingModeEnabled: boolean;
@@ -65,18 +67,21 @@ class ConsentsCard extends React.Component<Props, State> {
         <label htmlFor={'email'}>E-Mail notifications</label>
         <Checkbox id={'email'} checked={emailOptIn} onChange={this.onConsentChanged} />
       </List.Item>,
-      <List.Item title={`You ${tgOptIn ? 'are' : "aren't"} subscribed to telegram notifications`}>
+      <List.Item
+        style={{ borderBottom: 'none' }}
+        title={`You ${tgOptIn ? 'are' : "aren't"} subscribed to telegram notifications`}
+      >
         <label htmlFor={'tg'}>Telegram notifications</label>
         <Checkbox id={'tg'} disabled={!isTgConsentExist} checked={tgOptIn} onChange={this.onConsentChanged} />
       </List.Item>,
       !isTgConsentExist ? (
-        <List.Item>
-          Note: you must start a conversation with the{' '}
-          <Text code={true} copyable={true}>
+        <p style={{ fontSize: '11px', maxWidth: '85%', color: 'gray', marginTop: '-12px' }}>
+          Note: To enable telegram notifications please open the{' '}
+          <a target="_blank" href={rsschoolBotLink}>
             @rsschool_bot
-          </Text>{' '}
-          in order to change telegram consent
-        </List.Item>
+          </a>{' '}
+          and click the <b>Start</b> button
+        </p>
       ) : (
         <></>
       ),
