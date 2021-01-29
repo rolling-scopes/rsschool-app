@@ -85,5 +85,7 @@ export const SPECIAL_EVENT_TAGS = [
   'html',
   'git',
   'markdown',
-  'task',
+  'mobile',
+  'kotlin',
+  'aws',
 ];

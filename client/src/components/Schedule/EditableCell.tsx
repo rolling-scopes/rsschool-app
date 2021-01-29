@@ -71,6 +71,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <UserSearch style={{ minWidth: 150 }} searchFn={loadUsers} />;
       rules = { required: false, message: 'Please select a organizer' };
       break;
+    case 'Place':
+      inputNode = <Input style={{ minWidth: 150 }} disabled={record.isTask} />;
+      rules = { type: 'string', required: false };
+      break;
     default:
       inputNode = <Input style={{ minWidth: 150 }} />;
       rules = { type: 'string', required: false };

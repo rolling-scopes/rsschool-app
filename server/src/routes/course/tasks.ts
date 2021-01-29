@@ -57,6 +57,8 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
       sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
       type: item.type || (item.task as Task).type,
       pairsCount: item.pairsCount,
+      special: item.special,
+      duration: item.duration,
     };
   });
 
