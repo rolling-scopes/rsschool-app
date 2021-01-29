@@ -16,7 +16,12 @@ export const pickerColors = [
 
 export const DEFAULT_COLOR = { default: '#308e00' };
 
-export function setTagColor(e: IColorState, tagName: string, localStorageHook: (value: object) => void, storedTagColors = {}) {
+export function setTagColor(
+  e: IColorState,
+  tagName: string,
+  localStorageHook: (value: object) => void,
+  storedTagColors = {},
+) {
   localStorageHook({ ...storedTagColors, [tagName]: e.hex });
 }
 
