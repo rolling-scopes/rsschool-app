@@ -96,6 +96,8 @@ export const getCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) =
     type: courseTask?.type || (courseTask?.task as Task).type,
     pairsCount: courseTask?.pairsCount,
     publicAttributes: (courseTask?.task as Task).attributes?.public,
+    special: courseTask?.special,
+    duration: courseTask?.duration,
   };
 
   setResponse(ctx, OK, data);
@@ -131,6 +133,8 @@ export const getCourseTasks = (_: ILogger) => async (ctx: Router.RouterContext) 
       type: item.type || (item.task as Task).type,
       pairsCount: item.pairsCount,
       publicAttributes: (item.task as Task).attributes?.public,
+      special: item.special,
+      duration: item.duration,
     };
   });
 

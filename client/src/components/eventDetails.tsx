@@ -1,81 +1,67 @@
 import React from 'react';
+import { useLocalStorage } from 'react-use';
 import { Row, Col, Typography, Tooltip } from 'antd';
+import moment from 'moment-timezone';
+import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
+import { DEFAULT_COLOR } from './UserSettings/userSettingsHandlers';
+import { renderTagWithStyle, tagsRenderer } from 'components/Table';
+import { GithubUserLink } from './GithubUserLink';
+
+const { Title, Text } = Typography;
 
 export function EventDetails({ eventData }: { eventData: CourseEvent }) {
-  const { Title, Text } = Typography;
-
-  const {
-    event,
-    dateTime,
-    place,
-    comment,
-    owner,
-    coordinator,
-    organizer,
-    detailsUrl,
-    broadcastUrl,
-    special,
-    duration,
-  } = eventData as CourseEvent;
+  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
+  const { event, dateTime, place, organizer, special, duration } = eventData;
 
   return (
     <>
       {eventData && (
         <>
-          <div
-            style={{
-              margin: '20px auto',
-              maxWidth: '1200px',
-              padding: '20px 10px',
-            }}
-          >
+          <div className="container">
             <Row justify="center" align="middle" gutter={[40, 8]}>
               <Col>
                 <Title>{event.name}</Title>
-                {owner && <Typography>Owner: {owner}</Typography>}
               </Col>
             </Row>
 
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {event.createdDate && (
-                <Col>
-                  <Tooltip title="Verification">
-                    <Text strong>Date of creation: {event.createdDate.replace(/[a-z]/gi, ' ').slice(0, -8)}</Text>
-                  </Tooltip>
-                </Col>
-              )}
-              {event.updatedDate && (
-                <Col>
-                  <Text strong>Update date: {event.updatedDate.replace(/[a-z]/gi, ' ').slice(0, -8)}</Text>
-                </Col>
-              )}
+            <Row justify="center" align="middle" gutter={[40, 8]}>
+              <Col>
+                <Title level={3}>{moment(dateTime).format('MMM Do YYYY HH:mm')}</Title>
+              </Col>
             </Row>
 
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {event.discipline && (
-                <Col>
-                  <Tooltip title="Verification">
-                    <Text strong>Discipline: {event.discipline}</Text>
-                  </Tooltip>
-                </Col>
-              )}
-              {event.type && (
-                <Col>
-                  <Text>Type: {event.type.split('_').join(' ')}</Text>
-                </Col>
-              )}
+            <Row justify="center" align="middle" gutter={[24, 20]}>
+              <Col>{renderTagWithStyle(event.type, storedTagColors)}</Col>
+              {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
             </Row>
 
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {dateTime && (
+            {organizer && (
+              <Tooltip title="Organizer">
+                <Row justify="center" align="middle" gutter={[16, 16]}>
+                  <Col>
+                    <GithubUserLink value={organizer.githubId} />
+                  </Col>
+                </Row>
+              </Tooltip>
+            )}
+
+            {event.descriptionUrl && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
                 <Col>
-                  <Text strong>When: {dateTime.replace(/[a-z]/gi, ' ').slice(0, -8)}</Text>
+                  <Title level={3}>
+                    <a href={event.descriptionUrl} target="_blank">
+                      Event link
+                    </a>
+                  </Title>
                 </Col>
-              )}
+              </Row>
+            )}
+
+            <Row justify="center" align="middle" gutter={[16, 16]}>
               {duration && (
                 <Col>
-                  <Text strong>Duration: {duration}</Text>
+                  <Text strong>{`Duration: ${duration} hours`}</Text>
                 </Col>
               )}
               {place && (
@@ -85,68 +71,29 @@ export function EventDetails({ eventData }: { eventData: CourseEvent }) {
               )}
             </Row>
 
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {event.descriptionUrl && (
+            {event.description && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
                 <Col>
-                  <Text strong>
-                    <a href={event.descriptionUrl}>Description</a>
-                  </Text>
+                  <Tooltip title="Description">
+                    <Text>{event.description}</Text>
+                  </Tooltip>
                 </Col>
-              )}
-              {broadcastUrl && (
-                <Col>
-                  <Text strong>
-                    <a href={broadcastUrl}>Broadcast url</a>
-                  </Text>
-                </Col>
-              )}
-              {detailsUrl && (
-                <Col>
-                  <Text strong>
-                    <a href={detailsUrl}>Details url</a>
-                  </Text>
-                </Col>
-              )}
-            </Row>
-
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {event.description && (
-                <Col>
-                  <Text>{event.description}</Text>
-                </Col>
-              )}
-            </Row>
-
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {coordinator && (
-                <Col>
-                  <Text>Coordinator: {coordinator}</Text>
-                </Col>
-              )}
-              {organizer && (
-                <Col>
-                  <Text>Organizer: {organizer}</Text>
-                </Col>
-              )}
-              {special && (
-                <Col>
-                  <Text>Special: {special}</Text>
-                </Col>
-              )}
-            </Row>
-
-            <Row justify="center" align="middle" gutter={[16, 16]}>
-              {comment && (
-                <Col>
-                  <Text>Comment: {comment}</Text>
-                </Col>
-              )}
-            </Row>
+              </Row>
+            )}
           </div>
+          <style jsx>{styles}</style>
         </>
       )}
     </>
   );
 }
+
+const styles = css`
+  .container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px 10px;
+  }
+`;
 
 export default EventDetails;

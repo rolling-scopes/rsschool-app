@@ -1,75 +1,91 @@
 import React from 'react';
+import { useLocalStorage } from 'react-use';
 import { Row, Col, Typography, Tooltip } from 'antd';
-import { EventTypeColor, EventTypeToName } from 'components/Schedule/model';
-import { renderTag } from 'components/Table';
+import moment from 'moment-timezone';
+import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
+import { DEFAULT_COLOR } from './UserSettings/userSettingsHandlers';
+import { renderTagWithStyle, tagsRenderer } from 'components/Table';
+import { GithubUserLink } from './GithubUserLink';
 
 export function TaskDetails({ taskData }: { taskData: CourseTaskDetails }) {
+  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
   const { Title, Text } = Typography;
 
   const {
     description,
-    checker,
     descriptionUrl,
-    githubPrRequired,
-    githubRepoName,
     maxScore,
     name,
     scoreWeight,
-    sourceGithubRepoUrl,
-    studentEndDate,
     studentStartDate,
+    studentEndDate,
     taskOwner,
     type,
-    useJury,
-    verification,
-  } = taskData as CourseTaskDetails;
+    special,
+    duration,
+  } = taskData;
 
   return (
     <>
-      <div
-        style={{
-          margin: '20px auto',
-          maxWidth: '1200px',
-          padding: '20px 10px',
-        }}
-      >
+      <div className="container">
         <Row justify="center" align="middle" gutter={[40, 8]}>
           <Col>
             <Title>{name}</Title>
-            {taskOwner?.name && <Typography>Owner: {taskOwner?.name}</Typography>}
           </Col>
         </Row>
 
-        <Row justify="center" align="middle" gutter={[40, 16]}>
-          {studentStartDate && (
+        {studentStartDate && (
+          <Row justify="center" align="middle" gutter={[8, 8]}>
             <Col>
-              {renderTag(EventTypeToName[type] || type, EventTypeColor[type as keyof typeof EventTypeColor])}
-              {studentStartDate?.replace(/[a-z]/gi, ' ').slice(0, -8)}
+              <Title level={3}>{moment(studentStartDate).format('MMM Do YYYY HH:mm')}</Title>
             </Col>
-          )}
-          {studentEndDate && (
-            <Col>
-              {renderTag('deadline', EventTypeColor.deadline)}
-              {studentEndDate?.replace(/[a-z]/gi, ' ').slice(0, -8)}
-            </Col>
-          )}
+            {studentEndDate && (
+              <>
+                <Col>
+                  <Title level={3}>-</Title>
+                </Col>
+                <Col>
+                  <Title level={3}>{moment(studentEndDate).format('MMM Do YYYY HH:mm')}</Title>
+                </Col>
+              </>
+            )}
+          </Row>
+        )}
+
+        <Row justify="center" align="middle" gutter={[24, 20]}>
+          <Col>{renderTagWithStyle(type, storedTagColors)}</Col>
+          {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
         </Row>
 
-        {description && (
+        {taskOwner && (
+          <Tooltip title="Organizer">
+            <Row justify="center" align="middle" gutter={[16, 16]}>
+              <Col>
+                <GithubUserLink value={taskOwner.githubId} />
+              </Col>
+            </Row>
+          </Tooltip>
+        )}
+
+        {descriptionUrl && (
           <Row justify="center" align="middle" gutter={[16, 16]}>
             <Col>
-              <Tooltip title="Description">
-                <Text strong>Description:</Text>
-              </Tooltip>
-            </Col>
-            <Col>
-              <Text strong>{description}</Text>
+              <Title level={3}>
+                <a href={descriptionUrl} target="_blank">
+                  Task link
+                </a>
+              </Title>
             </Col>
           </Row>
         )}
 
         <Row justify="center" align="middle" gutter={[16, 16]}>
+          {duration && (
+            <Col>
+              <Text strong>{`Duration: ${duration} hours`}</Text>
+            </Col>
+          )}
           {maxScore && (
             <Col>
               <Tooltip title="Score">
@@ -82,61 +98,29 @@ export function TaskDetails({ taskData }: { taskData: CourseTaskDetails }) {
               <Text strong>Score weight: {scoreWeight}</Text>
             </Col>
           )}
-          {checker && (
-            <Col>
-              <Text strong>Checker: {checker}</Text>
-            </Col>
-          )}
-          {githubPrRequired && (
-            <Col>
-              <Tooltip title="Git gub">
-                <Text strong>PR required {githubPrRequired}</Text>
-              </Tooltip>
-            </Col>
-          )}
         </Row>
 
-        <Row justify="center" align="middle" gutter={[16, 16]}>
-          {useJury && (
+        {description && (
+          <Row justify="center" align="middle" gutter={[16, 16]}>
             <Col>
-              <Tooltip title="Verification">
-                <Text strong>Checked by the jury</Text>
+              <Tooltip title="Description">
+                <Text strong>{description}</Text>
               </Tooltip>
             </Col>
-          )}
-          {verification && (
-            <Col>
-              <Text strong>Verification: {verification}</Text>
-            </Col>
-          )}
-        </Row>
-
-        <Row justify="center" align="middle" gutter={[16, 16]}>
-          {githubRepoName && (
-            <Col>
-              <Tooltip title="Git gub">
-                <Text strong>{githubRepoName}</Text>
-              </Tooltip>
-            </Col>
-          )}
-          {descriptionUrl && (
-            <Col>
-              <Text strong>
-                <a href={descriptionUrl}>Description</a>
-              </Text>
-            </Col>
-          )}
-          {sourceGithubRepoUrl && (
-            <Col>
-              <Text strong>
-                <a href={sourceGithubRepoUrl}>Git source</a>
-              </Text>
-            </Col>
-          )}
-        </Row>
+          </Row>
+        )}
       </div>
+      <style jsx>{styles}</style>
     </>
   );
 }
+
+const styles = css`
+  .container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px 10px;
+  }
+`;
 
 export default TaskDetails;
