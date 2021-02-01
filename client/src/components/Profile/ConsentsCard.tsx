@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Consent } from '../../../../common/models/profile';
 import CommonCard from './CommonCard';
-import { NotificationOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { NotificationOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { List, Typography, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Text } = Typography;
 
-const rsschoolBotLink = 'https://t.me/rsschool_bot';
+const rsschoolBotLink = 'https://t.me/rsschool_bot?start';
 
 type Props = {
   data: Consent[];
@@ -54,11 +54,11 @@ class ConsentsCard extends React.Component<Props, State> {
     const listItems: any[] = [
       <List.Item>
         <Text>E-Mail notifications</Text>
-        {emailOptIn ? <CheckOutlined /> : <CloseOutlined />}
+        {emailOptIn ? <CheckSquareTwoTone twoToneColor="#52c41a" /> : <CloseSquareTwoTone twoToneColor="#ff4d4f" />}
       </List.Item>,
       <List.Item>
         <Text>Telegram notifications</Text>
-        {tgOptIn ? <CheckOutlined /> : <CloseOutlined />}
+        {tgOptIn ? <CheckSquareTwoTone twoToneColor="#52c41a" /> : <CloseSquareTwoTone twoToneColor="#ff4d4f" />}
       </List.Item>,
     ];
 
