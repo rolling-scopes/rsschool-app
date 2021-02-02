@@ -1,4 +1,4 @@
-import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select, Tag, Typography } from 'antd';
+import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select, Tag, Typography, Alert } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 import { NextPageContext } from 'next';
@@ -13,6 +13,8 @@ import { UserFull, UserService } from 'services/user';
 import { emailPattern, epamEmailPattern, phonePattern } from 'services/validators';
 import { Course, Location } from '../../../../common/models';
 import { Props } from '../../configs/registry';
+
+const rsschoolBotLink = 'https://t.me/rsschool_bot?start';
 
 const defaultColumnSizes = { xs: 20, sm: 16, md: 12, lg: 10 };
 const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
@@ -341,6 +343,23 @@ function Page(props: Props & { courseAlias?: string }) {
             </Row>
 
             <Row>
+              <Typography.Paragraph>
+                <Alert
+                  message={
+                    <span>
+                      Subscribe to our{' '}
+                      <a href={rsschoolBotLink} target="_blank">
+                        Telegram-bot
+                      </a>{' '}
+                      to keep in touch with us.
+                    </span>
+                  }
+                  showIcon
+                />
+              </Typography.Paragraph>
+            </Row>
+
+            <Row>
               <GdprCheckbox />
             </Row>
             <Button size="large" type="primary" disabled={!form.getFieldValue('gdpr') || loading} htmlType="submit">
@@ -365,8 +384,8 @@ const SuccessComponent = () => {
       <Col xs={18} sm={16} md={12}>
         <p>Your application has been saved!</p>
         <p>
-          Before the start of the course, our coordinator will contact you to confirm your participation in the course
-          and provide the next steps.
+          Subscribe to our <a href={rsschoolBotLink}>Telegram-bot</a>. Before the start of the course, it will send you
+          the message to confirm your participation in the course and provide the next steps.
         </p>
         <p>
           Thanks a lot for your interest! <HeartTwoTone twoToneColor="#eb2f96" />
