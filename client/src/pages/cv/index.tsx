@@ -4,7 +4,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { Header, FooterLayout } from 'components';
-import FormCV from 'components/CV/FormCV';
+import FormCV from 'components/CV/EditCV';
 import ViewCV from 'components/CV/ViewCV';
 import NoConsentViewCV from 'components/CV/NoConsentViewCV';
 
@@ -92,7 +92,7 @@ class CVPage extends React.Component<Props, State> {
               defaultChecked={!editMode}
               onChange={this.switchView.bind(this)}
               checkedChildren="CV view"
-              unCheckedChildren="Form view"
+              unCheckedChildren="Edit view"
             />
             {editMode ? <FormCV ownerId={userGithubId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} /> : <ViewCV ownerId={userGithubId} />}
           </>
