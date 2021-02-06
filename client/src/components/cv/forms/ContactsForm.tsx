@@ -16,7 +16,7 @@ export default function ContactsForm(props: Props) {
 
   React.useEffect(() => {
     form.setFieldsValue(contactsList);
-  });
+  }, [contactsList]);
 
   const sumbitData = (values: FormData) => {
 
@@ -61,7 +61,7 @@ export default function ContactsForm(props: Props) {
         </Button>
       </Item>
       <Item>
-        <Button type="primary" htmlType="submit" onClick={() => form.resetFields()}>
+        <Button type="primary" htmlType="button" onClick={() => form.resetFields()}>
           Reset
         </Button>
       </Item>
