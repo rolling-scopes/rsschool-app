@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, Form, Input, Select } from 'antd';
+import moment from 'moment';
+import { Button, Form, Input, Select, DatePicker, Checkbox } from 'antd';
 import { UserData } from '../../../../../common/models/cv';
 
 const { Item } = Form;
@@ -15,6 +16,9 @@ export default function UserDataForm(props: Props) {
 
   const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
 
+  const startFrom = userData.startFrom ? moment(userData.startFrom, 'YYYY.MM.DD') : undefined;
+  const fullTime = userData.fullTime ?? false;
+
   const [form] = Form.useForm();
 
   const formValues = {
@@ -25,16 +29,21 @@ export default function UserDataForm(props: Props) {
     englishLevel,
     militaryService,
     notes,
+    startFrom,
+    fullTime
   };
 
   React.useEffect(() => {
     form.setFieldsValue(formValues);
-  });
+  }, [userData]);
 
   const sumbitData = (values: FormData) => {
+    console.log('FROM');
+    console.log(values);
+
     const dataObj = {
       type: 'userData',
-      data: values,
+      data: values
     };
 
     handleFunc(dataObj);
@@ -76,6 +85,12 @@ export default function UserDataForm(props: Props) {
           <Option value="liable">Liable</Option>
           <Option value="notLiable">Not liable</Option>
         </Select>
+      </Item>
+      <Item label='Ready to start work from' name='startFrom'>
+          <DatePicker picker='date' />
+      </Item>
+      <Item label='Ready to work full time' name='fullTime' valuePropName='checked'>
+          <Checkbox />
       </Item>
       <Item label="About me" name="notes" rules={[{ required: true, max: 1000, min: 30, whitespace: false }]}>
         <Input.TextArea rows={4} />

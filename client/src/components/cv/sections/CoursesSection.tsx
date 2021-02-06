@@ -66,9 +66,7 @@ function CoursesSection(props: Props) {
     />
   );
 
-  const icon = <SafetyOutlined />;
-
-  return <SectionCV content={sectionContent} title="RSS courses" icon={icon} />;
+  return <SectionCV content={sectionContent} title="RSS courses" icon={<SafetyOutlined />} />;
 }
 
 export default CoursesSection;

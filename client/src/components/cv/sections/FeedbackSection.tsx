@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Card, Tooltip, Button } from 'antd';
+import { Row, Col, Typography, Comment, Tooltip, Button } from 'antd';
 import moment from 'moment';
 import SectionCV from '../SectionCV';
 import { CommentOutlined } from '@ant-design/icons';
@@ -19,8 +19,11 @@ function PublicFeedbackSection(props: Props) {
 
   const sectionContent = (
     <>
-      <Text>{title}</Text>
-      <br />
+      <Row style={{ fontSize: '16px' }}>
+        <Col>
+          <Text>{title}</Text>
+        </Col>
+      </Row>
       {feedbackAvailable && <Feedback feedback={feedback as PublicFeedback[]} showCount={5} />}
     </>
   );
@@ -35,7 +38,7 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
     padding: '2px',
     border: '1px solid black',
     borderRadius: '15px',
-    marginBottom: '8px'
+    marginBottom: '8px',
   };
 
   const feedbackPartial = feedback.slice(0, showCount);
@@ -61,32 +64,36 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
     } = feedback;
 
     return (
-      <Card
+      <Comment
         key={`feedback-${index}`}
         style={feedbackStyle}
-        size="small"
-        title={(
+        content={
+          <>
+            <Paragraph ellipsis={{ rows: 2, expandable: true }}>{comment}</Paragraph>
+          </>
+        }
+        datetime={
           <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment(feedbackDate).fromNow().toUpperCase()}</span>
+            <span>{moment(feedbackDate).fromNow()}</span>
           </Tooltip>
-        )}
-      >
-        <Paragraph ellipsis={{ rows: 2, expandable: true }}>{comment}</Paragraph>
-      </Card>
+        }
+      />
     );
   });
 
   return (
-    <>
-      <Text>Recent feedback</Text>
-      {feedbackElements}
-      {expansionNeeded &&
-        (allFeedbackVisible ? (
-          <Button className='hide-on-print' onClick={showFeedbackPartially}>Show partially</Button>
-        ) : (
+    <Row style={{ fontSize: '16px' }}>
+      <Col flex={1}>
+        <Text>Recent feedback</Text>
+        {feedbackElements}
+        {expansionNeeded &&
+          (allFeedbackVisible ? (
+            <Button className='hide-on-print' onClick={showFeedbackPartially}>Show partially</Button>
+          ) : (
             <Button className='hide-on-print' onClick={showAllFeedback}>Show all</Button>
           ))}
-    </>
+      </Col>
+    </Row>
   );
 }
 
