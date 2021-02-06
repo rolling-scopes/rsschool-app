@@ -3,6 +3,7 @@ import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
 import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
+import { OpportunitiesInfo } from '../../../common/models/cv';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
@@ -110,6 +111,33 @@ export class UserService {
     const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
     return response.data.data;
   }
+
+  async getAllOpportunities() {
+    const response = await this.axios.get<{data: any}>('/api/opportunities');
+    return response.data.data;
+  }
+
+  async getOpportunitiesInfo(githubId: string) {
+    const response = await this.axios.get<{ data: any }>(`/api/opportunities/${githubId}`);
+    return response.data.data;
+  }
+
+  async saveOpportunitiesInfo(githubId: string, opportunitiesInfo: OpportunitiesInfo) {
+    const response = await this.axios.post<{ data: OpportunitiesInfo }>(`/api/opportunities/${githubId}`, opportunitiesInfo);
+    return response.data.data;
+  }
+
+  async getOpportunitiesConsent(githubId: string) {
+    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/${githubId}`);
+    return response.data.data;
+  }
+
+  async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
+    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`,{opportunitiesConsent});
+    return response.data.data;
+  }
+
+
 }
 
 export type ResponseStudent = {
