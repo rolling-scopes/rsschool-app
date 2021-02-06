@@ -92,6 +92,15 @@ export class User {
   opportunitiesConsent: boolean;
 
   @Column({ nullable: true, type: 'text' })
+  selfIntroLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  startFrom?: string | null;
+
+  @Column({default: false, nullable: true})
+  fullTime: boolean;
+
+  @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
 
   @Column({ nullable: true, type: 'text' })
@@ -99,6 +108,42 @@ export class User {
 
   @Column({ nullable: true })
   englishLevel?: EnglishLevel;
+
+  @Column({ nullable: true, type: 'text' })
+  avatarLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  desiredPosition?: string;
+
+  @Column({ nullable: true, type: 'text' })
+  cvName?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvNotes?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvPhone?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvEmail?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvSkype?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvTelegram?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvLinkedin?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvLocation?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvGithub?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvWebsite?: string | null;
 
   @Column({
     type: 'json',
