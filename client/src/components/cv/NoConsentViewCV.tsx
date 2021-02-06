@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Button, Modal, List, Result, Tooltip } from 'antd';
+import { Typography, Button, Modal, List, Divider } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+const { Title } = Typography;
 const { Item } = List;
 
 type Props = {
@@ -15,29 +17,38 @@ function NoConsentViewCV(props: Props) {
     en: {
       header: 'Are you sure? The following information will be available to recruiters:',
       availableDataList: [
-        'Personal information (name, desired position, English level, military service, avatar, link to self-presentation, short self-description, etc.);',
-        'Contact details (phone, email, skype, telegram, linkedIn, location to work, github, website link);',
-        'Information about passed school courses (courses info, mentor, course status, score, position);',
+        'Personal information (name, desired position, English level, military service, avatar, link to self-presentation, short self-description);',
+        'Contact details (phone, email, skype, telegram, linkedIn, location, github, website link);',
+        'Information about the courses taken at the school (in which courses he takes part, result, speed, position in the near future);',
         'Public feedback information (grattitudes)'
       ]
     },
     ru: {
       header: 'Вы уверены? Следующая информация будет доступна рекрутерам:',
       availableDataList: [
-        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военное службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.);',
-        'Контактные данные (телефон, электронная почта, скайп, телеграм, linkedIn, локация, в которой хотите работать, гитхаб, ссылка на вебсайт);',
-        'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре);',
+        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военное службе, аватар, ссылка на самопрезентацию, краткое самоописание);',
+        'Контактные данные (телефон, электронная почта, скайп, телеграм, linkedIn, местоположение, гитхаб, ссылка на вебсайт);',
+        'Информация о пройденных в школе курсах (в каких курсах принимает участие, результат, скор, позиция в скоре);',
         'Информация о публичной обратной связи (grattitudes)'
       ]
     }
   };
 
   const confirmationModalContent = (
-    <List
-      header={<Tooltip placement='topLeft' title={confirmationModalInfo.ru.header}>{confirmationModalInfo.en.header}</Tooltip>}
-      dataSource={confirmationModalInfo.en.availableDataList}
-      renderItem={(item, idx) => <Tooltip placement='topLeft' title={confirmationModalInfo.ru.availableDataList[idx]}><Item>{item}</Item></Tooltip>}
-    />
+    <>
+      <List
+        header={confirmationModalInfo.en.header}
+        dataSource={confirmationModalInfo.en.availableDataList}
+        renderItem={item => <Item>{item}</Item>}
+      />
+{/*       <Divider />
+      <List
+        header={confirmationModalInfo.ru.header}
+        dataSource={confirmationModalInfo.ru.availableDataList}
+        renderItem={item => <Item>{item}</Item>}
+      /> */}
+
+    </>
   );
 
   const showConfirmationModal = () => {
@@ -52,16 +63,18 @@ function NoConsentViewCV(props: Props) {
     });
   };
 
-  return isOwner ? (
-    <Result
-      status='info'
-      title='To create your CV page for recruiters to view, you need to allow the use and processing of your data.'
-      extra={<Button htmlType='button' onClick={showConfirmationModal}>Give consent</Button>}
-    />
-  ) : (
-      <Result status={403} title="This user doesn't have CV yet" />
-    );
-
+  if (isOwner) {
+    return (
+      <>
+        <Title>To create your CV page for recruiters to view, you need to allow the use and processing of your data.</Title>
+        <Button htmlType='button' onClick={showConfirmationModal}>Give consent</Button>
+      </>
+    )
+  } else {
+    return (
+      <Title>This user does not have a CV yet.</Title>
+    )
+  }
 }
 
 export default NoConsentViewCV;
