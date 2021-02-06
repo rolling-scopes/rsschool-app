@@ -97,8 +97,8 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   startFrom?: string | null;
 
-  @Column({default: false, nullable: true})
-  fullTime: boolean;
+  @Column({nullable: true})
+  fullTime?: boolean;
 
   @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
