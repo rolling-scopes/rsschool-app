@@ -20,9 +20,7 @@ function AboutSection(props: Props) {
     </Row>
   );
 
-  const icon = <ScheduleOutlined />;
-
-  return <SectionCV content={sectionContent} title="About me" icon={icon} />;
+  return <SectionCV content={sectionContent} title="About me" icon={<ScheduleOutlined />} />;
 }
 
 export default AboutSection;
