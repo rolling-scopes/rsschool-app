@@ -60,7 +60,7 @@ type Props = {
 
 type EntryOf<T extends object> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
-function ContactsList(props: Props) {
+function ContactsListCV(props: Props) {
   const { contacts } = props;
   let res;
   if (contacts !== null) {
@@ -96,4 +96,4 @@ function ContactsList(props: Props) {
   return res;
 }
 
-export default ContactsList;
+export default ContactsListCV;
