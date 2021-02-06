@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm } from 'antd';
+import { Layout, Table, Button, List, Typography, Row, Col, Badge, Card, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from '../../services/user';
+import { mockCVInfo } from './mockData';
 import heroesBadges from '../../configs/heroes-badges';
+import { JobSeeker } from '../../../../common/models/cv';
 import { DeleteOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -123,7 +125,6 @@ class Page extends React.Component<Props, State> {
                 isCourseCompleted,
                 totalScore,
                 position,
-                mentor: { name: mentorName, githubId: mentorGithubId }
               } = record;
               const title = `${courseFullName}${locationName ? locationName : ''}`;
               const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
@@ -156,10 +157,7 @@ class Page extends React.Component<Props, State> {
                         <Text>Course status: </Text>
                         {courseStatus}
                       </Col>
-                      <Col span={3} >
-                        <Text>Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
-                      </Col>
-                      <Col span={3}>
+                      <Col span={3} offset={9}>
                         <Text>{courseStats}</Text>
                       </Col>
                     </Row>
@@ -188,8 +186,9 @@ class Page extends React.Component<Props, State> {
     }
   ];
 
-  private fetchData() {
-    return this.userService.getJobSeekers();
+  private async fetchData() {
+    const data = await this.userService.getAllOpportunities();
+    console.log(data);
   }
 
   private async removeJobSeeker(githubId: string) {
@@ -198,15 +197,17 @@ class Page extends React.Component<Props, State> {
     await this.setState({ isLoading: false });
   }
 
-  /*   private async setAdminMode() {
-      await this.setState({
-        adminMode: true
-      });
-    } */
+
+
+  private async setAdminMode() {
+    await this.setState({
+      adminMode: true
+    });
+  }
 
   async componentDidMount() {
+    const data = [mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo];
     await this.setState({ isLoading: true });
-    const data = await this.fetchData();
     await this.setState({ users: data })
     await this.setState({ isLoading: false });
   }
@@ -220,10 +221,10 @@ class Page extends React.Component<Props, State> {
 
     if (users) {
       data = users.map((item: any, index: any) => {
-        const { name, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, location } = item;
+        const { cvName, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, cvLocation: location } = item;
         return {
           key: index,
-          complexData: { name, githubId },
+          complexData: { name: cvName, githubId },
           courses,
           publicFeedback,
           desiredPosition,
@@ -243,8 +244,8 @@ class Page extends React.Component<Props, State> {
         <LoadingScreen show={isLoading}>
           <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-
-              <Table style={{ minWidth: '99vw' }} columns={this.columns} dataSource={data}></Table>
+              <Button htmlType='button' onClick={this.setAdminMode.bind(this)}>Set admin mode</Button>
+              <Table style={{minWidth: '99vw'}} columns={this.columns} dataSource={data}></Table>
             </Content>
           </Layout>
         </LoadingScreen>
