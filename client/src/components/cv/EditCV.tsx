@@ -1,21 +1,18 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography } from 'antd';
+import { Layout, Space, Button, Card } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
+import { Contacts, UserData } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
-import { CSSProperties, RefObject } from 'react';
-import { WarningTwoTone, SaveOutlined, ClearOutlined, DeleteOutlined, FieldTimeOutlined, CopyOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
-const { Paragraph, Text, Title } = Typography;
 
 type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  expires: string | null;
+
 };
 
 type Props = {
@@ -23,16 +20,12 @@ type Props = {
   withdrawConsent: () => void;
 };
 
-class EditCV extends React.Component<Props, State> {
+class FormCV extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     contactsList: null,
-    userData: null,
-    expires: null
+    userData: null
   };
-
-  private userFormRef: RefObject<typeof UserDataForm> = React.createRef();
-  private contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
 
   private userService = new UserService();
 
@@ -40,50 +33,14 @@ class EditCV extends React.Component<Props, State> {
     return value === '' ? null : value;
   }
 
-  private showConfirmationModal() {
-    const textStyle: CSSProperties = { textAlign: 'center' };
-
-    const title = (
-      <Title level={3} style={{ textAlign: 'center' }}>
-        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
-        <WarningTwoTone twoToneColor="#fcbe03" />
-      </Title>
-    );
-
-    const message =
-      "Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.";
-    const messageRu =
-      'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
-    const confirmationModalContent = (
-      <>
-        <Paragraph style={textStyle} underline strong>
-          {message}
-        </Paragraph>
-        <Paragraph style={textStyle} underline strong>
-          {messageRu}
-        </Paragraph>
-      </>
-    );
-    Modal.confirm({
-      icon: null,
-      title,
-      content: confirmationModalContent,
-      centered: true,
-      maskStyle: { backgroundColor: 'red' },
-      maskClosable: true,
-      onOk: () => this.props.withdrawConsent()
-    });
-  }
-
-
   private async fetchData() {
     await this.setState({
       isLoading: true,
     });
 
-    const CVData: GetCVData = await this.userService.getCVData(this.props.ownerId);
+    const opportunitiesInfo = await this.userService.getOpportunitiesInfo(this.props.ownerId);
 
-    const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime, expires } = CVData;
+    const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime } = opportunitiesInfo;
 
     const userData = {
       notes,
@@ -110,8 +67,7 @@ class EditCV extends React.Component<Props, State> {
 
     await this.setState({
       contactsList: contactsList,
-      userData: userData,
-      expires
+      userData: userData
     });
 
     await this.setState({
@@ -119,65 +75,88 @@ class EditCV extends React.Component<Props, State> {
     });
   }
 
-  private async submitData(data: any) {
-    const {
-      avatarLink,
-      desiredPosition,
-      email,
-      englishLevel,
-      fullTime,
-      github,
-      linkedin,
-      location,
-      militaryService,
-      name,
-      notes,
-      phone,
-      selfIntroLink,
-      skype,
-      startFrom,
-      telegram,
-      website,
-    } = data;
+  private async submitData(dataSource: { type: 'contacts' | 'userData', data: any }) {
+    const { data, type } = dataSource;
+    const { userData, contactsList } = this.state;
+    const { notes: cvNotes, name: cvName, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, startFrom, fullTime } = userData!;
+    const { email, github, linkedin, location, phone, skype, telegram, website } = contactsList!;
 
-    const CVData: SaveCVData = {
-      selfIntroLink: this.nullifyConditional(selfIntroLink),
-      militaryService,
-      avatarLink,
-      desiredPosition,
-      englishLevel,
-      name: this.nullifyConditional(name),
-      notes: this.nullifyConditional(notes),
-      phone: this.nullifyConditional(phone),
-      email: this.nullifyConditional(email),
-      skype: this.nullifyConditional(skype),
-      telegram: this.nullifyConditional(telegram),
-      linkedin: this.nullifyConditional(linkedin),
-      location: this.nullifyConditional(location),
-      github: this.nullifyConditional(github),
-      website: this.nullifyConditional(website),
-      startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
-      fullTime
-    };
+    switch (type) {
+      case 'contacts': {
+        const {
+          email,
+          github,
+          linkedin,
+          location,
+          phone,
+          skype,
+          telegram,
+          website
+        } = data;
 
-    this.userService.saveCVData(CVData);
+        await this.userService.saveOpportunitiesInfo(this.props.ownerId, {
+          selfIntroLink,
+          militaryService,
+          avatarLink,
+          desiredPosition,
+          englishLevel,
+          cvEmail: this.nullifyConditional(email),
+          cvGithub: this.nullifyConditional(github),
+          cvLinkedin: this.nullifyConditional(linkedin),
+          cvLocation: this.nullifyConditional(location),
+          cvPhone: this.nullifyConditional(phone),
+          cvSkype: this.nullifyConditional(skype),
+          cvTelegram: this.nullifyConditional(telegram),
+          cvWebsite: this.nullifyConditional(website),
+          cvNotes,
+          cvName,
+          startFrom,
+          fullTime
+        });
+      }
+        break;
+
+      case 'userData': {
+        const {
+          avatarLink,
+          desiredPosition,
+          englishLevel,
+          militaryService,
+          name: cvName,
+          notes: cvNotes,
+          selfIntroLink,
+          startFrom: startFromRaw,
+          fullTime
+        } = data;
+
+        const startFrom = startFromRaw ? moment(startFromRaw).format('YYYY.MM.DD') : null;
+
+        await this.userService.saveOpportunitiesInfo(this.props.ownerId, {
+          selfIntroLink,
+          militaryService,
+          desiredPosition,
+          englishLevel,
+          avatarLink,
+          cvEmail: this.nullifyConditional(email),
+          cvGithub: this.nullifyConditional(github),
+          cvLinkedin: this.nullifyConditional(linkedin),
+          cvLocation: this.nullifyConditional(location),
+          cvPhone: this.nullifyConditional(phone),
+          cvSkype: this.nullifyConditional(skype),
+          cvTelegram: this.nullifyConditional(telegram),
+          cvWebsite: this.nullifyConditional(website),
+          cvNotes,
+          cvName,
+          startFrom,
+          fullTime
+        });
+      }
+    }
   }
 
   private async handleSave(data: any) {
     await this.submitData(data);
     await this.fetchData();
-  }
-
-  private getDataFromRefs(refs: RefObject<any>[]) {
-    const values = refs
-      .map(ref => {
-        const data = ref.current!.getFieldsValue();
-        return {
-          ...data
-        }
-      })
-      .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
-    this.handleSave(values);
   }
 
   async componentDidMount() {
@@ -201,8 +180,8 @@ class EditCV extends React.Component<Props, State> {
     const telegram = profile.contacts?.telegram ?? null;
     const linkedin = profile.contacts?.linkedIn ?? null;
 
-    const prevUserData = this.state.userData as UserData;
-    const prevContacts = this.state.contactsList as Contacts;
+    const prevUserData = this.state.userData;
+    const prevContacts = this.state.contactsList;
 
     const newUserData = {
       ...prevUserData,
@@ -221,28 +200,18 @@ class EditCV extends React.Component<Props, State> {
     };
 
     await this.setState({
-      userData: newUserData,
-      contactsList: newContacts,
+      userData: newUserData as UserData,
+      contactsList: newContacts as Contacts,
     });
-  }
-
-  private async resetFields() {
-    await this.fetchData();
-  }
-
-  private async extendCV() {
-    const newExpirationDate = await this.userService.extendCV()
-    this.setState({
-      expires: newExpirationDate
-    })
   }
 
   render() {
     const { isLoading, contactsList, userData } = this.state;
+    const { withdrawConsent } = this.props;
 
     const buttonStyle = {
       borderRadius: '15px',
-      margin: '5px 0'
+      margin: '10px 0'
     };
 
     return (
@@ -250,28 +219,16 @@ class EditCV extends React.Component<Props, State> {
         <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
           <Content>
             <Card>
-              <Text>CV expires <Text strong>{this.state.expires}</Text></Text>
-              <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
-                {contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}
+              <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.fillFromProfile()}>
+                Get data from profile
+            </Button>
+              <Button style={buttonStyle} block type="primary" danger htmlType="button" onClick={withdrawConsent}>
+                Withdraw consent
+            </Button>
+              <Space direction="horizontal" align="start" style={{ width: '100%' }}>
+                {userData && <UserDataForm userData={userData} handleFunc={this.handleSave.bind(this)} />}
+                {contactsList && <ContactsForm contactsList={contactsList} handleFunc={this.handleSave.bind(this)} />}
               </Space>
-              <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
-                Save
-              </Button>
-              <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <Button style={{ ...buttonStyle, width: '33%' }} type="default" htmlType="button" onClick={() => this.fillFromProfile()} icon={<CopyOutlined />}>
-                  Get data from profile
-                </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
-                  Reset fields
-                </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
-                  Extend CV
-                </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
-                  Delete my CV
-                </Button>
-              </div>
             </Card>
           </Content>
         </Layout>
@@ -280,4 +237,4 @@ class EditCV extends React.Component<Props, State> {
   }
 }
 
-export default EditCV;
+export default FormCV;
