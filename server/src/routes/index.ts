@@ -28,7 +28,11 @@ import { jwtRoute } from './jwt';
 import { userRoute } from './user';
 import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
+<<<<<<< HEAD
+import { filesRoute } from './file';
+=======
 import { opportunitiesRoute } from './opportunities';
+>>>>>>> 6ebdb3f (Add files via upload)
 
 import { ILogger } from '../logger';
 import { userRolesMiddleware, courseMiddleware } from './middlewares';
@@ -75,7 +79,11 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, userRoute(logger));
   applyRouter(router, consentRoute(logger));
   applyRouter(router, repositoryRoute(logger));
+<<<<<<< HEAD
+  applyRouter(router, filesRoute(logger));
+=======
   applyRouter(router, opportunitiesRoute(logger));
+>>>>>>> 6ebdb3f (Add files via upload)
 
   return { publicRouter: router };
 };
