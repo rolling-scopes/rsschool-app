@@ -68,7 +68,6 @@ function ContactsListCV(props: Props) {
     const renderContacts = contactsFiltered.filter((contact): contact is EntryOf<Contacts> => contact[1] !== null);
     res = (
       <List
-      size='small'
         dataSource={renderContacts}
         renderItem={contact => {
           const contactType: ContactType = contact[0];
