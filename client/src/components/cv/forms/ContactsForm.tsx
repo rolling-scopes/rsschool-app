@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input } from 'antd';
+import FormCV from '../FormCV';
 import { Contacts } from '../../../../../common/models/cv';
 
 const { Item } = Form;
@@ -9,62 +10,40 @@ type Props = {
   handleFunc: (data: any) => void;
 };
 
-export default function ContactsForm(props: Props) {
+export default function UserDataForm(props: Props) {
   const { contactsList, handleFunc } = props;
 
-  const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    form.setFieldsValue(contactsList);
-  }, [contactsList]);
-
-  const sumbitData = (values: FormData) => {
-
-    const dataObj = {
-      type: 'contacts',
-      data: values
-    };
-
-    handleFunc(dataObj);
-
-  };
-
-  return (
-    <Form form={form} name="contacts" onFinish={sumbitData}>
+  const content = (
+    <>
       <Item label="Phone" name="phone" rules={[{ max: 15, whitespace: false }]}>
-        <Input />
+        <Input placeholder="Phone number" />
       </Item>
       <Item label="Email" name="email" rules={[{ max: 50, whitespace: false }]}>
-        <Input />
+        <Input placeholder="Email" />
       </Item>
       <Item label="Skype" name="skype" rules={[{ max: 30, whitespace: false }]}>
-        <Input />
+        <Input placeholder="Skype" />
       </Item>
       <Item label="Telegram" name="telegram" rules={[{ max: 30, whitespace: false }]}>
-        <Input />
+        <Input placeholder="Telegram username" />
       </Item>
       <Item label="LinkedIn" name="linkedin" rules={[{ max: 30, whitespace: false }]}>
-        <Input />
+        <Input placeholder="LinkedIn username" />
       </Item>
       <Item label="Location" name="location" rules={[{ max: 100, whitespace: false }]}>
-        <Input />
+        <Input placeholder="The location in which you want to work" />
       </Item>
       <Item label="Github" name="github" rules={[{ max: 30, whitespace: false }]}>
-        <Input />
+        <Input placeholder="Github username" />
       </Item>
       <Item label="Website" name="website" rules={[{ max: 100, whitespace: false }]}>
-        <Input />
+        <Input placeholder="For example, a link to a portfolio or something like that" />
       </Item>
-      <Item>
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-      </Item>
-      <Item>
-        <Button type="primary" htmlType="button" onClick={() => form.resetFields()}>
-          Reset
-        </Button>
-      </Item>
-    </Form>
+    </>
+  )
+
+  return (
+    <FormCV name="contacts" title="Contacts" content={content} submitFunc={handleFunc} data={contactsList} />
   );
 }
