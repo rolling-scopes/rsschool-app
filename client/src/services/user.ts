@@ -3,7 +3,7 @@ import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
 import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
-import { GetCVData, SaveCVData, JobSeekerData } from '../../../common/models/cv';
+import { OpportunitiesInfo } from '../../../common/models/cv';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
@@ -112,37 +112,28 @@ export class UserService {
     return response.data.data;
   }
 
-  async getJobSeekers() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>('/api/opportunities');
+  async getAllOpportunities() {
+    const response = await this.axios.get<{data: any}>('/api/opportunities');
     return response.data.data;
   }
 
-  async getCVData(githubId: string) {
-    const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/cv`, {
-      params: { githubId }
-    });
+  async getOpportunitiesInfo(githubId: string) {
+    const response = await this.axios.get<{ data: any }>(`/api/opportunities/${githubId}`);
     return response.data.data;
   }
 
-  async saveCVData(opportunitiesInfo: SaveCVData) {
-    const response = await this.axios.post<{ data: SaveCVData }>(`/api/opportunities`, opportunitiesInfo);
+  async saveOpportunitiesInfo(githubId: string, opportunitiesInfo: OpportunitiesInfo) {
+    const response = await this.axios.post<{ data: OpportunitiesInfo }>(`/api/opportunities/${githubId}`, opportunitiesInfo);
     return response.data.data;
   }
 
   async getOpportunitiesConsent(githubId: string) {
-    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/`, {
-      params: { githubId }
-    });
+    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/${githubId}`);
     return response.data.data;
   }
 
   async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`, { opportunitiesConsent });
-    return response.data.data;
-  }
-
-  async extendCV() {
-    const response = await this.axios.post<{data: string}>('/api/opportunities/extend');
+    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`,{opportunitiesConsent});
     return response.data.data;
   }
 
