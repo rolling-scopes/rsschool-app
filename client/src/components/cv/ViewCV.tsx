@@ -1,51 +1,81 @@
 import * as React from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { MainSection, AboutSection, CoursesSection, BadgesSection } from 'components/cv/sections';
-import {
-  mockContactsList,
-  mockUserData,
-  educationHistory,
-  employmentHistory,
-  coursesData,
-  badgesData,
-} from 'pages/cv/mockData';
-import { EnglishLevel, MilitaryService, Contacts, UserData, CourseData } from '../../../../common/models/cv';
+import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/CV/sections';
+import { Contacts, UserData, CourseData } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
+import { UserService } from 'services/user';
+import {badgesData as publicFeedback, coursesData} from '../../pages/cv/mockData';
 
 const { Content } = Layout;
+
+type Props = {
+  ownerId: string;
+};
 
 type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
   coursesData: CourseData[] | null;
-  badgesData: PublicFeedback[] | null;
+  publicFeedback: PublicFeedback[] | null;
 };
 
-class ViewCV extends React.Component {
+class ViewCV extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     contactsList: null,
     userData: null,
     coursesData: null,
-    badgesData: null,
+    publicFeedback: null,
   };
 
+  private userService = new UserService();
+
   private async fetchData() {
+    const { ownerId } = this.props;
     await this.setState({
       isLoading: true,
     });
 
+    const profile = await this.userService.getProfileInfo(ownerId);
+
+    //const coursesData = profile.studentStats;
+    //const publicFeedback = profile.publicFeedback ? profile.publicFeedback : null;
+    const opportunitiesInfo = await this.userService.getOpportunitiesInfo(ownerId);
+
+    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime } = opportunitiesInfo;
+
+    const userData = {
+      notes,
+      name,
+      selfIntroLink,
+      militaryService,
+      avatarLink,
+      desiredPosition,
+      englishLevel,
+      startFrom,
+      fullTime
+    };
+
+    const contactsList = {
+      email,
+      github,
+      linkedin,
+      location,
+      phone,
+      skype,
+      telegram,
+      website
+    };
+
     const coursesDataExtracted = this.extractCoursesData(coursesData);
 
     await this.setState({
-      contactsList: mockContactsList,
-      userData: mockUserData,
-      educationHistory: educationHistory,
-      employmentHistory: employmentHistory,
+      contactsList: contactsList as Contacts,
+      userData: userData as UserData,
       coursesData: coursesDataExtracted,
-      badgesData,
+      publicFeedback,
     });
 
     await this.setState({
@@ -82,26 +112,31 @@ class ViewCV extends React.Component {
   }
 
   render() {
-    const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = mockUserData;
-    const { isLoading } = this.state;
+
+    const { isLoading, userData, contactsList, coursesData, publicFeedback } = this.state;
 
     return (
       <LoadingScreen show={isLoading}>
-        <Layout style={{ paddingTop: '30px', margin: 'auto', maxWidth: '960px' }}>
+        <Layout style={{ marginBottom: '15px', maxWidth: '960px', backgroundColor: '#FFF', border: '1px solid black' }}>
           <Content>
-            <Space direction="vertical" style={{ width: '100%' }}>
+            <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
+              {userData && contactsList && (
+              <>
               <MainSection
-                avatarLink={avatarLink}
-                contacts={mockContactsList}
-                name={name}
-                desiredPosition={desiredPosition}
-                selfIntroLink={selfIntroLink}
-                englishLevel={englishLevel as EnglishLevel}
-                militaryService={militaryService as MilitaryService}
+                avatarLink={userData.avatarLink}
+                contacts={contactsList as Contacts}
+                name={userData.name}
+                desiredPosition={userData.desiredPosition}
+                selfIntroLink={userData.selfIntroLink}
+                englishLevel={userData.englishLevel}
+                militaryService={userData.militaryService}
+                startFrom={userData.startFrom}
+                fullTime={userData.fullTime}
               />
-              <AboutSection notes={notes} />
-              <CoursesSection coursesData={this.extractCoursesData(coursesData)} />
-              <BadgesSection badgesData={badgesData} />
+              {userData.notes &&<AboutSection notes={userData.notes} />}
+              </>)}
+              {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
+              {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
             </Space>
           </Content>
         </Layout>
