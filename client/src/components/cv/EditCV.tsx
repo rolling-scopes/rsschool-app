@@ -225,7 +225,7 @@ class FormCV extends React.Component<Props, State> {
               <Button style={buttonStyle} block type="primary" danger htmlType="button" onClick={withdrawConsent}>
                 Withdraw consent
             </Button>
-              <Space direction="horizontal" align="start" style={{ width: '100%' }}>
+              <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 {userData && <UserDataForm userData={userData} handleFunc={this.handleSave.bind(this)} />}
                 {contactsList && <ContactsForm contactsList={contactsList} handleFunc={this.handleSave.bind(this)} />}
               </Space>
