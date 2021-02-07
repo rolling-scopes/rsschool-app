@@ -5,7 +5,6 @@ import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'comp
 import { Contacts, UserData, CourseData } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
 import { UserService } from 'services/user';
-import {badgesData as publicFeedback, coursesData} from '../../pages/cv/mockData';
 
 const { Content } = Layout;
 
@@ -38,13 +37,9 @@ class ViewCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const profile = await this.userService.getProfileInfo(ownerId);
+    const CVDATA = await this.userService.getCVData(ownerId);
 
-    //const coursesData = profile.studentStats;
-    //const publicFeedback = profile.publicFeedback ? profile.publicFeedback : null;
-    const opportunitiesInfo = await this.userService.getOpportunitiesInfo(ownerId);
-
-    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime } = opportunitiesInfo;
+    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses } = CVDATA;
 
     const userData = {
       notes,
@@ -69,7 +64,7 @@ class ViewCV extends React.Component<Props, State> {
       website
     };
 
-    const coursesDataExtracted = this.extractCoursesData(coursesData);
+    const coursesDataExtracted = this.extractCoursesData(courses);
 
     await this.setState({
       contactsList: contactsList as Contacts,
