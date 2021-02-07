@@ -8,7 +8,6 @@ import withSession, { Session } from 'components/withSession';
 import { UserService } from '../../services/user';
 import { mockCVInfo } from './mockData';
 import heroesBadges from '../../configs/heroes-badges';
-import { JobSeeker } from '../../../../common/models/cv';
 import { DeleteOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -187,8 +186,7 @@ class Page extends React.Component<Props, State> {
   ];
 
   private async fetchData() {
-    const data = await this.userService.getAllOpportunities();
-    console.log(data);
+    const data = await this.userService.getJobSeekers();
   }
 
   private async removeJobSeeker(githubId: string) {
@@ -245,6 +243,7 @@ class Page extends React.Component<Props, State> {
           <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
               <Button htmlType='button' onClick={this.setAdminMode.bind(this)}>Set admin mode</Button>
+              <Button htmlType='button' onClick={this.fetchData.bind(this)}>Get profiles</Button>
               <Table style={{minWidth: '99vw'}} columns={this.columns} dataSource={data}></Table>
             </Content>
           </Layout>
