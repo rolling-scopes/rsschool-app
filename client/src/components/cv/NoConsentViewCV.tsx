@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Button, Modal, List, Divider } from 'antd';
+import { Typography, Button, Modal, List } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -41,13 +41,6 @@ function NoConsentViewCV(props: Props) {
         dataSource={confirmationModalInfo.en.availableDataList}
         renderItem={item => <Item>{item}</Item>}
       />
-{/*       <Divider />
-      <List
-        header={confirmationModalInfo.ru.header}
-        dataSource={confirmationModalInfo.ru.availableDataList}
-        renderItem={item => <Item>{item}</Item>}
-      /> */}
-
     </>
   );
 
