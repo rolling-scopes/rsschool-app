@@ -3,7 +3,7 @@ import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
 import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
-import { OpportunitiesInfo } from '../../../common/models/cv';
+import { GetCVData, SaveCVData, JobSeekerData } from '../../../common/models/cv';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
@@ -112,18 +112,18 @@ export class UserService {
     return response.data.data;
   }
 
-  async getAllOpportunities() {
-    const response = await this.axios.get<{data: any}>('/api/opportunities');
+  async getJobSeekers() {
+    const response = await this.axios.get<{data: JobSeekerData[]}>('/api/opportunities');
     return response.data.data;
   }
 
-  async getOpportunitiesInfo(githubId: string) {
-    const response = await this.axios.get<{ data: any }>(`/api/opportunities/${githubId}`);
+  async getCVData(githubId: string) {
+    const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/${githubId}`);
     return response.data.data;
   }
 
-  async saveOpportunitiesInfo(githubId: string, opportunitiesInfo: OpportunitiesInfo) {
-    const response = await this.axios.post<{ data: OpportunitiesInfo }>(`/api/opportunities/${githubId}`, opportunitiesInfo);
+  async saveCVData(githubId: string, opportunitiesInfo: SaveCVData) {
+    const response = await this.axios.post<{ data: SaveCVData }>(`/api/opportunities/${githubId}`, opportunitiesInfo);
     return response.data.data;
   }
 

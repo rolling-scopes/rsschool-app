@@ -16,8 +16,8 @@ export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' 
 
 export interface UserData {
   avatarLink: string | null;
-  name: string;
-  desiredPosition: string;
+  name: string | null;
+  desiredPosition: string | null;
   selfIntroLink: string | null;
   englishLevel: EnglishLevel;
   militaryService: MilitaryService;
@@ -52,11 +52,11 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface CVUserData {
+export interface SaveCVData {
   selfIntroLink: string | null;
   militaryService: MilitaryService;
   avatarLink: string | null;
-  desiredPosition: string;
+  desiredPosition: string | null;
   englishLevel: EnglishLevel;
   cvName: string | null;
   cvNotes: string | null;
@@ -69,19 +69,41 @@ export interface CVUserData {
   cvGithub: string | null;
   cvWebsite: string | null;
   startFrom: string | null;
+  fullTime: boolean | null;
+}
+
+export interface GetCVData {
+  selfIntroLink: string | null;
+  startFrom: string | null;
   fullTime: boolean;
+  militaryService: MilitaryService;
+  avatarLink: string | null;
+  desiredPosition: string
+  englishLevel: EnglishLevel;
+  name: string | null;
+  notes: string | null;
+  phone: string | null;
+  email: string | null;
+  skype: string | null;
+  telegram: string | null;
+  linkedin: string | null;
+  location: string | null;
+  github: string | null;
+  website: string | null;
+  courses: StudentStats[];
+  publicFeedback: PublicFeedback[];
 }
 
 export interface JobSeekerData {
-  cvName: string | null;
-  desiredPosition: string | null;
-  githubId: string;
-  englishLevel: EnglishLevel;
+  cvname: string | null;
+  desiredposition: string | null;
+  githubid: string;
+  englishlevel: EnglishLevel;
   fullTime: boolean;
-  cvLocation: string | null;
-  startFrom: string | null;
-  courses: StudentStats;
-  publicFeedback: PublicFeedback[]
+  cvlocation: string | null;
+  startfrom: string | null;
+  courses: StudentStats[];
+  publicfeedback: PublicFeedback[]
 }
 
 
