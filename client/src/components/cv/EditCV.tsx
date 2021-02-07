@@ -38,9 +38,9 @@ class FormCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const opportunitiesInfo = await this.userService.getOpportunitiesInfo(this.props.ownerId);
+    const CVData = await this.userService.getCVData(this.props.ownerId);
 
-    const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime } = opportunitiesInfo;
+    const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime } = CVData;
 
     const userData = {
       notes,
@@ -94,7 +94,7 @@ class FormCV extends React.Component<Props, State> {
           website
         } = data;
 
-        await this.userService.saveOpportunitiesInfo(this.props.ownerId, {
+        await this.userService.saveCVData(this.props.ownerId, {
           selfIntroLink,
           militaryService,
           avatarLink,
@@ -131,7 +131,7 @@ class FormCV extends React.Component<Props, State> {
 
         const startFrom = startFromRaw ? moment(startFromRaw).format('YYYY.MM.DD') : null;
 
-        await this.userService.saveOpportunitiesInfo(this.props.ownerId, {
+        await this.userService.saveCVData(this.props.ownerId, {
           selfIntroLink,
           militaryService,
           desiredPosition,
