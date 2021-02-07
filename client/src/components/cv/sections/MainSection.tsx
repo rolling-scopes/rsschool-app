@@ -10,8 +10,8 @@ const { Title, Text } = Typography;
 
 type Props = {
   avatarLink: string | null;
-  name: string;
-  desiredPosition: string;
+  name: string | null;
+  desiredPosition: string | null;
   contacts: Contacts;
   englishLevel: EnglishLevel;
   militaryService: MilitaryService;
