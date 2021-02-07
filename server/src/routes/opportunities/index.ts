@@ -8,7 +8,7 @@ import { User, IUserSession } from '../../models';
 import { validateGithubId } from '../validators';
 import { getStudentStats } from '../profile/student-stats';
 import { getPublicFeedback } from '../profile/public-feedback';
-import {Permissions} from '../profile/permissions';
+import { Permissions } from '../profile/permissions';
 
 const saveCVIData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.params;
@@ -62,50 +62,38 @@ const saveCVIData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, result);
 };
 
-const getProfiles = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const users = await getRepository(User)
-    .createQueryBuilder('user')
-    .select([
-      'user.selfIntroLink AS selfIntroLink',
-      'user.militaryService AS militaryService',
-      'user.startFrom AS startFrom',
-      'user.fullTime AS fullTime',
-      'user.avatarLink AS avatarLink',
-      'user.desiredPosition AS desiredPosition',
-      'user.englishLevel AS englishLevel',
-      'user.educationHistory AS educationHistory',
-      'user.cvName AS name',
-      'user.cvNotes AS notes',
-      'user.cvPhone AS phone',
-      'user.cvEmail AS email',
-      'user.cvSkype AS skype',
-      'user.cvTelegram AS telegram',
-      'user.cvLinkedin AS linkedin',
-      'user.cvLocation AS location',
-      'user.cvGithub AS github',
-      'user.cvWebsite AS website'
-    ])
-    .where('"opportunitiesConsent" = true')
-    .execute();
-  setResponse(ctx, OK, users);
-};
+const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
-const getCVProfilesGeneralInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const users = await getRepository(User)
-    .createQueryBuilder('user')
-    .select([
-      'user.cvName AS cvName',
-      'user.githubId as githubId',
-      'user.desiredPosition AS desiredPosition',
-      'user.englishLevel AS englishLevel',
-      'user.fullTime AS fullTime',
-      'user.cvLocation AS cvLocation',
-      'user.startFrom AS startFrom'
-    ])
-    .where('"opportunitiesConsent" = true')
-    .leftJoinAndSelect('user.githubId', 'student.githubId')
-    .execute();
-  setResponse(ctx, OK, users);
+    .find({ where: { opportunitiesConsent: true } })
+
+  let CVProfiles = users.map(item => {
+    const { cvName, githubId, desiredPosition, englishLevel, fullTime, cvLocation, startFrom } = item;
+    return {
+      cvName,
+      githubId,
+      desiredPosition,
+      englishLevel,
+      fullTime,
+      cvLocation,
+      startFrom
+    };
+  });
+
+  if (CVProfiles.length) {
+    CVProfiles = await Promise.all(CVProfiles.map(async (profile: any) => {
+      const { githubid } = profile;
+      const feedback = await getPublicFeedback(githubid);
+      const courses = await getStudentStats(githubid, { isCoreJsFeedbackVisible: false } as Permissions);
+      return {
+        ...profile,
+        feedback,
+        courses
+      };
+    }));
+  }
+
+  setResponse(ctx, OK, CVProfiles);
 };
 
 export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -139,7 +127,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     cvNotes: notes
   } = profile;
 
-  const studentStats = await getStudentStats(githubId, {isCoreJsFeedbackVisible: false} as Permissions );
+  const studentStats = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
   const publicFeedback = await getPublicFeedback(githubId);
 
   const CVData = {
@@ -159,7 +147,9 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     linkedin,
     location,
     github,
-    website
+    website,
+    courses: studentStats,
+    publicFeedback
   };
 
   setResponse(ctx, OK, CVData);
@@ -189,8 +179,6 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
     fullTime: false,
     startFrom: null,
     cvLink: null,
-    educationHistory: [],
-    employmentHistory: [],
     militaryService: null,
     avatarLink: null,
     cvName: null,
@@ -231,7 +219,7 @@ export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
 
-  router.get('/', guard, getProfiles(logger));
+  router.get('/', guard, getJobSeekersData(logger));
 
   router.get('/:githubId', guard, getCVData(logger));
   router.post('/:githubId', guard, validateGithubId, saveCVIData(logger));
