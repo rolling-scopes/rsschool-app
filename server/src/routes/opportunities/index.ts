@@ -81,9 +81,10 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   if (CVProfiles.length) {
     CVProfiles = await Promise.all(CVProfiles.map(async (profile: any) => {
-      const { githubid } = profile;
-      const feedback = await getPublicFeedback(githubid);
-      const courses = await getStudentStats(githubid, { isCoreJsFeedbackVisible: false } as Permissions);
+      const { githubId } = profile;
+      const feedback = await getPublicFeedback(githubId);
+      const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
+      console.log(courses);
       return {
         ...profile,
         feedback,
