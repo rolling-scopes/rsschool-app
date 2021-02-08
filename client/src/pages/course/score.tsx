@@ -17,6 +17,7 @@ const { Text } = Typography;
 
 export function Page(props: CoursePageProps) {
   const router = useRouter();
+  const { cityName, ...newQuery } = router.query;
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,6 @@ export function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       let filters = { activeOnly };
-      const { cityName } = router.query;
       if (!isUndefined(cityName)) {
         filters = { ...filters, cityName } as ScoreTableFilters;
       }
@@ -74,11 +74,9 @@ export function Page(props: CoursePageProps) {
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
       const { cityName } = filters;
       if (isNull(cityName)) {
-        const newQuery = { ...router.query };
-        delete newQuery.cityName;
         setQueryParams(newQuery);
       } else if (isArray(cityName) && cityName[0] !== '') {
-        setQueryParams({ ...router.query, cityName: cityName[0] });
+        setQueryParams({ ...newQuery, cityName: cityName[0] });
       }
       setLoading(true);
       try {
@@ -95,7 +93,7 @@ export function Page(props: CoursePageProps) {
         setLoading(false);
       }
     },
-    [students, router],
+    [students, newQuery],
   );
 
   const handleActiveOnlyChange = useCallback(async () => {
@@ -136,7 +134,7 @@ export function Page(props: CoursePageProps) {
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
             {renderCsvExportButton(props)}
           </Row>
-          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore)}
+          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -173,6 +171,7 @@ function renderTable(
   columns: any[],
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
+  cityName: string | string[] = '',
 ) {
   if (!loaded) {
     return null;
@@ -230,6 +229,7 @@ function renderTable(
           dataIndex: 'cityName',
           width: 150,
           sorter: 'cityName',
+          defaultFilteredValue: isArray(cityName) ? cityName : [cityName],
           ...getColumnSearchProps('cityName'),
         },
         {
