@@ -1,5 +1,7 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
+import { useRouter } from 'next/router';
+import { isArray, isNull, isUndefined } from 'lodash';
 import { GithubAvatar, Header, withSession } from 'components';
 import { dateTimeRenderer, dateRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -9,10 +11,12 @@ import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
 import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
+import { ParsedUrlQuery } from 'querystring';
 
 const { Text } = Typography;
 
 export function Page(props: CoursePageProps) {
+  const router = useRouter();
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
   const [loading, setLoading] = useState(false);
@@ -31,8 +35,14 @@ export function Page(props: CoursePageProps) {
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
+      let filters = { activeOnly };
+      const { cityName } = router.query;
+      if (!isUndefined(cityName)) {
+        filters = { ...filters, cityName } as ScoreTableFilters;
+      }
+
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(students.pagination, { activeOnly }, students.orderBy),
+        courseService.getCourseScore(students.pagination, filters, students.orderBy),
         courseService.getCourseTasks(),
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
@@ -44,8 +54,32 @@ export function Page(props: CoursePageProps) {
     }
   }, []);
 
+  const setQueryParams = useCallback(
+    (query: ParsedUrlQuery) => {
+      router.push(
+        {
+          pathname: router.pathname,
+          query,
+        },
+        undefined,
+        {
+          shallow: true,
+        },
+      );
+    },
+    [router],
+  );
+
   const getCourseScore = useCallback(
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
+      const { cityName } = filters;
+      if (isNull(cityName)) {
+        const newQuery = { ...router.query };
+        delete newQuery.cityName;
+        setQueryParams(newQuery);
+      } else if (isArray(cityName) && cityName[0] !== '') {
+        setQueryParams({ ...router.query, cityName: cityName[0] });
+      }
       setLoading(true);
       try {
         const field = order.column?.sorter || 'rank';
@@ -61,7 +95,7 @@ export function Page(props: CoursePageProps) {
         setLoading(false);
       }
     },
-    [students],
+    [students, router],
   );
 
   const handleActiveOnlyChange = useCallback(async () => {
