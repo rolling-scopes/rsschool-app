@@ -73,7 +73,7 @@ export const EVENT_TYPES = [
   'webinar',
 ] as const;
 
-export const SPECIAL_EVENT_TAGS = [
+export const SPECIAL_ENTITY_TAGS = [
   'optional',
   'live',
   'record',

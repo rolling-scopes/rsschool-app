@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, Avatar, Empty, Rate, Tag } from 'antd';
+import { Card, Empty, Rate, Tag } from 'antd';
 import moment from 'moment';
+// import TagColor from './UserSettings/TagColor';
 // import MapComponent from '../../TaskPageDrawer/Map';
 // import UploadFilesView from '../../TaskPageDrawer/UploadFilesView';
 // import { tagColor } from '../../TaskPageDrawer/utils';
@@ -9,21 +10,13 @@ import moment from 'moment';
 const { Meta } = Card;
 
 interface Props {
-  addingItem: any,
-  tag: any,
-  darkTheme: any,
-  activeMarker?: any,
-  userPreferences?: any
+  addingItem: any;
+  tag: any;
+  activeMarker?: any;
+  userPreferences?: any;
 }
 
-const TaskPreview: React.FC<Props> = ({ addingItem, tag, darkTheme, activeMarker, userPreferences }) => {
-  const owlsImage = 'https://res.cloudinary.com/dv4fxot90/image/upload/v1601110530/schedule/owls_big_xkdavi.png';
-  const slothImage = 'https://res.cloudinary.com/dv4fxot90/image/upload/v1601109894/schedule/sloth_big_jsio5q.png';
-  const owlsAvatar = 'https://res.cloudinary.com/dv4fxot90/image/upload/v1601110529/schedule/owls_ava_emxxwe.png';
-  const slothAvatar = 'https://res.cloudinary.com/dv4fxot90/image/upload/v1601110529/schedule/sloth_ava_fmo9ir.png';
-  const previewCover = darkTheme ? owlsImage : slothImage;
-  const previewAvatar = darkTheme ? owlsAvatar : slothAvatar;
-
+const TaskPreview: React.FC<Props> = ({ addingItem, tag }) => {
   const renderTag = (tag: string) => {
     // const tagColor = tagsMap.get(tag) || 'self_education';
     return (
@@ -41,32 +34,32 @@ const TaskPreview: React.FC<Props> = ({ addingItem, tag, darkTheme, activeMarker
     );
   };
 
-  const renderLinks = () => {
-    if (addingItem.links) {
-      const linksList = addingItem.links.map((link, i) => {
-        return (
-          <a key={`${link}${i}`} href={link}>
-            {link}
-          </a>
-        );
-      });
-      return linksList;
-    }
-  };
+  // const renderLinks = () => {
+  //   if (addingItem.links) {
+  //     const linksList = addingItem.links.map((link, i) => {
+  //       return (
+  //         <a key={`${link}${i}`} href={link}>
+  //           {link}
+  //         </a>
+  //       );
+  //     });
+  //     return linksList;
+  //   }
+  // };
   if (addingItem) {
     return (
       <Card
         style={{ margin: 'auto' }}
         cover={
           <div className="task-preview-cover">
-            <img className="task-preview-image" alt="sloth" src={previewCover} />
+            {/* <img className="task-preview-image" alt="sloth" src={previewCover} /> */}
           </div>
         }
       >
         <Meta
           title={
             <>
-              <Avatar src={previewAvatar} />
+              {/* <Avatar src={previewAvatar} /> */}
               {addingItem.author && <span className="task-preview-author">{addingItem.author}</span>}
             </>
           }
@@ -75,11 +68,11 @@ const TaskPreview: React.FC<Props> = ({ addingItem, tag, darkTheme, activeMarker
               <div className="info-tag-wrapper">
                 <h1 className="task-page-drawer-title">{addingItem.name}</h1>
                 {addingItem.rating && <Rate allowHalf value={addingItem()} />}
-                {addingItem.tag && (
-                  <Tag color={tagColor(addingItem.tag)} key={addingItem.tag}>
+                {/* {addingItem.tag && (
+                  <Tag color={TagColor(addingItem.tag)} key={addingItem.tag}>
                     {addingItem.tag}
                   </Tag>
-                )}
+                )} */}
                 {tag && renderTag(tag)}
                 {addingItem.date && <span>{moment(addingItem.date).format('YYYY-MM-DD')}</span>}
               </div>
@@ -96,7 +89,7 @@ const TaskPreview: React.FC<Props> = ({ addingItem, tag, darkTheme, activeMarker
               {addingItem.description && <p className="info-text">Description: {addingItem.description}</p>}
               {addingItem.result && <p className="info-text">Result: {addingItem.result}</p>}
               {addingItem.remark && <p className="info-text">Remark: {addingItem.remark}</p>}
-              {addingItem.links && <div className="info-link-wrapper">{renderLinks()}</div>}
+              {/* {addingItem.links && <div className="info-link-wrapper">{renderLinks()}</div>} */}
               {/* {activeMarker && Object.keys(activeMarker).length !== 0 && (
                 <div className="task-modal-map">
                   <MapComponent darkTheme={darkTheme} activeMarker={activeMarker} />
@@ -122,10 +115,7 @@ const TaskPreview: React.FC<Props> = ({ addingItem, tag, darkTheme, activeMarker
     return <Empty>No data for preview, please, fill the form</Empty>;
   }
 
-  return (
-    <>
-    </>
-  )
+  return <></>;
 };
 
 export default TaskPreview;

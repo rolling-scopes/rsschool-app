@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, DatePicker, TimePicker, Select } from 'antd';
 import { Rule } from 'antd/lib/form';
 import { UserSearch } from 'components/UserSearch';
 import { CourseEvent } from 'services/course';
-import { EVENT_TYPES, SPECIAL_EVENT_TAGS } from './model';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from './model';
 import { UserService } from 'services/user';
 
 const { Option } = Select;
@@ -54,7 +54,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'Special':
       inputNode = (
         <Select mode="tags" style={{ minWidth: 100 }} tokenSeparators={[',']} allowClear>
-          {SPECIAL_EVENT_TAGS.map((tag: string) => (
+          {SPECIAL_ENTITY_TAGS.map((tag: string) => (
             <Option key={tag} value={tag}>
               {tag}
             </Option>
