@@ -1,17 +1,15 @@
-import React, { useState, useMemo } from 'react';
-// import { useAsync } from 'react-use';
+import React, { useState } from 'react';
 import { TaskService } from 'services/task';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { formatTimezoneToUTC } from 'services/formatter';
-// import DynamicFieldSet from '../DynamicLinksField';
 import { union } from 'lodash';
-import { Form, Input, InputNumber, Button, DatePicker, Select, Alert } from 'antd';
+import { Form, Input, InputNumber, Button, DatePicker, Select, Alert, Row, Col } from 'antd';
 import 'moment-timezone';
 
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from '../Schedule/model';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from './model';
 import { TIMEZONES } from '../../configs/timezones';
 
 const { Option } = Select;
@@ -37,24 +35,21 @@ const validateMessages = {
 type Props = {
   handleCancel: any;
   onFieldsChange: any;
-  onSelectChange: any;
   courseId: number;
+  entityType: string;
+  onEntityTypeChange: (type: string) => void;
   tags: string[];
 };
 
-const FormAddEntity: React.FC<Props> = ({ handleCancel, courseId, tags, onFieldsChange }: Props) => {
-  // const serviceTask = new TaskService();
-  // const serviceCouseTask = useMemo(() => new CourseService(courseId), [courseId]);
-
-  const [entityType, setEntityType] = useState('task');
+const FormAddEntity: React.FC<Props> = ({
+  handleCancel,
+  courseId,
+  tags,
+  onFieldsChange,
+  onEntityTypeChange,
+  entityType,
+}: Props) => {
   const [isSuccess, setSuccess] = useState(false);
-  // const [tasks, setTasks] = useState([] as Task[]);
-  // const [modalData, setModalData] = useState(null as Partial<CourseTaskDetails> | null);
-
-  // useAsync(async () => {
-  //   const tasks = await serviceTask.getTasks();
-  //   setTasks(tasks);
-  // }, [modalData]);
 
   const entityTypes = union(EVENT_TYPES, tags).filter(tag => tag !== 'deadline');
 
@@ -83,12 +78,13 @@ const FormAddEntity: React.FC<Props> = ({ handleCancel, courseId, tags, onFields
     setSuccess(true);
   };
 
+  const handleFormChange = (_changedValues: any, allValues: any) => {
+    onFieldsChange(allValues);
+  };
+
   if (isSuccess) {
     return <Alert message="Your task successfully added" type="success" showIcon />;
   }
-  // if (error) {
-  //   return <Alert message="Something went wrong" type="error" showIcon />;
-  // }
 
   return (
     <Form
@@ -96,15 +92,17 @@ const FormAddEntity: React.FC<Props> = ({ handleCancel, courseId, tags, onFields
       {...layout}
       // name="nest-messages"
       onFinish={handleModalSubmit}
+      // onChange={handleFormChange}
+      onValuesChange={handleFormChange}
       // onChange={values => {
       //   setModalData({ ...modalData, checker: values.checker }); // not done
       // }}
       validateMessages={validateMessages}
       initialValues={getInitialValues(entityType, {})}
-      onFieldsChange={onFieldsChange}
+      // onFieldsChange={onFieldsChange}
     >
       <Form.Item name="entityType" label="Entity type">
-        <Select onChange={selectedValue => setEntityType(selectedValue as string)}>
+        <Select onChange={selectedValue => onEntityTypeChange(selectedValue as string)}>
           <Option value="task">Task</Option>
           <Option value="event">Event</Option>
         </Select>
@@ -168,7 +166,7 @@ const FormAddEntity: React.FC<Props> = ({ handleCancel, courseId, tags, onFields
         <Input />
       </Form.Item>
 
-      <Form.Item name="taskOwnerId" label="Organizer" rules={[{ required: false }]}>
+      <Form.Item name="organizerId" label="Organizer" rules={[{ required: false }]}>
         {/* <UserSearch defaultValues={modalData?.taskOwner ? [modalData.taskOwner] : []} searchFn={loadUsers} /> */}
         <UserSearch searchFn={loadUsers} />
       </Form.Item>
@@ -200,14 +198,16 @@ const FormAddEntity: React.FC<Props> = ({ handleCancel, courseId, tags, onFields
           <Input style={{ minWidth: 250 }} />
         </Form.Item>
       )}
-      <div style={{ width: '50%', margin: '0 auto' }}>
-        <Button type="primary" htmlType="submit" style={{ margin: '0 10px' }}>
-          Submit
-        </Button>
-        <Button type="default" htmlType="submit" onClick={handleCancel} style={{ margin: '0 10px' }}>
-          Cancel
-        </Button>
-      </div>
+      <Row justify="center" align="middle" gutter={[16, 16]}>
+        <Col>
+          <Button type="primary" htmlType="submit" style={{ margin: '0 10px' }}>
+            Submit
+          </Button>
+          <Button type="default" htmlType="submit" onClick={handleCancel} style={{ margin: '0 10px' }}>
+            Cancel
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

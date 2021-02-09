@@ -7,8 +7,8 @@ import { withSession } from 'components';
 import { useLoading } from 'components/useLoading';
 import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
 import { CoursePageProps } from 'services/models';
-import TaskDetails from '../../components/taskDetails';
-import EventDetails from '../../components/eventDetails';
+import TaskDetails from 'components/Schedule/taskDetails';
+import EventDetails from 'components/Schedule/eventDetails';
 
 export function EntityDetailsPage(props: CoursePageProps) {
   const router = useRouter();

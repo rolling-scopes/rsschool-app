@@ -4,9 +4,9 @@ import { Row, Col, Typography, Tooltip } from 'antd';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
-import { DEFAULT_COLOR } from './UserSettings/userSettingsHandlers';
+import { DEFAULT_COLOR } from '../UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
-import { GithubUserLink } from './GithubUserLink';
+import { GithubUserLink } from '../GithubUserLink';
 
 const { Title, Text } = Typography;
 
@@ -36,7 +36,7 @@ export function EventDetails({ eventData }: { eventData: CourseEvent }) {
               {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
             </Row>
 
-            {organizer && (
+            {organizer && organizer.githubId && (
               <Tooltip title="Organizer">
                 <Row justify="center" align="middle" gutter={[16, 16]}>
                   <Col>
