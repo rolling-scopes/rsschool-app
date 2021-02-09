@@ -13,11 +13,13 @@ type Props = {
   visible: boolean;
   handleCancel: () => void;
   courseId: number;
-  tags: string[];
+  typesFromBase: string[];
+  editableRecord?: CourseEvent | null;
 };
 
-const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, tags }: Props) => {
-  const [entityType, setEntityType] = useState('task');
+const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, typesFromBase, editableRecord }) => {
+  const initialEntityType = (editableRecord && (editableRecord.isTask ? 'task' : 'event')) || 'task';
+  const [entityType, setEntityType] = useState(initialEntityType);
   const [entityData, setEntityData] = useState(null);
   const { width } = useWindowDimensions();
 
@@ -35,22 +37,23 @@ const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, 
       style={{ maxWidth: '100%', top: 10 }}
       title={
         <Tabs defaultActiveKey="1">
-          <TabPane tab="Add new entity" key="1">
+          <TabPane tab="New entity" key="1">
             <FormAddEntity
               handleCancel={handleCancel}
               onFieldsChange={onFieldsChange}
               courseId={courseId}
-              tags={tags}
+              typesFromBase={typesFromBase}
               entityType={entityType}
               onEntityTypeChange={setEntityType}
+              editableRecord={editableRecord}
             />
           </TabPane>
           <TabPane tab="Preview" key="2">
             {entityType === 'task' && entityData && (
-              <TaskDetails taskData={getTaskDataForPreview(entityType, entityData) as CourseTaskDetails} />
+              <TaskDetails taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails} />
             )}
             {entityType === 'event' && entityData && (
-              <EventDetails eventData={getTaskDataForPreview(entityType, entityData) as CourseEvent} />
+              <EventDetails eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent} />
             )}
           </TabPane>
         </Tabs>
@@ -61,7 +64,11 @@ const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, 
   );
 };
 
-const getTaskDataForPreview = (entityType: string, entityData: any) => {
+const getEntityDataForPreview = (entityType: string, entityData: any) => {
+  if (!entityData) {
+    return {};
+  }
+
   if (entityType === 'task') {
     const [startDate, endDate] = entityData.range || [null, null];
 
@@ -86,7 +93,7 @@ const getTaskDataForPreview = (entityType: string, entityData: any) => {
       type: entityData.type,
       descriptionUrl: entityData.descriptionUrl,
     },
-    dateTime: formatTimezoneToUTC(entityData.dateTime, entityData.timeZone),
+    dateTime: entityData.dateTime ? formatTimezoneToUTC(entityData.dateTime, entityData.timeZone) : null,
     organizerId: entityData.organizerId,
     place: entityData.place,
     special: entityData.special ? entityData.special.join(',') : '',

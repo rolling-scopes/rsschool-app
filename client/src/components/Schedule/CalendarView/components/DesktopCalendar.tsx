@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Calendar, Badge } from 'antd';
+import { Calendar, Badge, Typography } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ModalWindow } from './Modal';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
+
+const { Title } = Typography;
 
 type Props = {
   data: CourseEvent[];
@@ -58,14 +60,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =
   const monthCellRender = (date: unknown | Moment) => {
     const num = getMonthValue((date as unknown) as Moment, data, timeZone);
 
-    return (
-      !!num && (
-        <div>
-          <span>Number of events</span>
-          <section>{num}</section>
-        </div>
-      )
-    );
+    return !!num && <Title level={5} style={{ textAlign: 'center' }}>{`Events & tasks: ${num}.`}</Title>;
   };
 
   return (
