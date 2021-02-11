@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
-import FormAddEntity from './FormAddEntity';
+import FormAddEntity from './FormEntity';
 import useWindowDimensions from '../../utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -15,9 +16,21 @@ type Props = {
   courseId: number;
   typesFromBase: string[];
   editableRecord?: CourseEvent | null;
+  refreshData: Function;
 };
 
-const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, typesFromBase, editableRecord }) => {
+const ModalFormAddEntity: React.FC<Props> = ({
+  visible,
+  handleCancel,
+  courseId,
+  typesFromBase,
+  editableRecord,
+  refreshData,
+}) => {
+  const router = useRouter();
+  const { course } = router.query;
+  const alias = Array.isArray(course) ? course[0] : course;
+
   const initialEntityType = (editableRecord && (editableRecord.isTask ? 'task' : 'event')) || 'task';
   const [entityType, setEntityType] = useState(initialEntityType);
   const [entityData, setEntityData] = useState(null);
@@ -46,14 +59,23 @@ const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, 
               entityType={entityType}
               onEntityTypeChange={setEntityType}
               editableRecord={editableRecord}
+              refreshData={refreshData}
             />
           </TabPane>
           <TabPane tab="Preview" key="2">
             {entityType === 'task' && entityData && (
-              <TaskDetails taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails} />
+              <TaskDetails
+                taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails}
+                alias={alias}
+                isPreview
+              />
             )}
             {entityType === 'event' && entityData && (
-              <EventDetails eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent} />
+              <EventDetails
+                eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
+                alias={alias}
+                isPreview
+              />
             )}
           </TabPane>
         </Tabs>
@@ -76,11 +98,12 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       name: entityData.name,
       type: entityData.type,
       special: entityData.special ? entityData.special.join(',') : '',
+
       studentStartDate: startDate ? formatTimezoneToUTC(startDate, entityData.timeZone) : null,
       studentEndDate: endDate ? formatTimezoneToUTC(endDate, entityData.timeZone) : null,
       descriptionUrl: entityData.descriptionUrl,
       duration: entityData.duration,
-      description: entityData.description,
+      // description: entityData.description,
       scoreWeight: entityData.scoreWeight,
       maxScore: entityData.maxScore,
       taskOwner: { githubId: entityData.organizerId },
@@ -92,6 +115,7 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       name: entityData.name,
       type: entityData.type,
       descriptionUrl: entityData.descriptionUrl,
+      // description: entityData.description,
     },
     dateTime: entityData.dateTime ? formatTimezoneToUTC(entityData.dateTime, entityData.timeZone) : null,
     organizerId: entityData.organizerId,

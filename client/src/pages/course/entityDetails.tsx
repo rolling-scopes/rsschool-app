@@ -13,6 +13,7 @@ import EventDetails from 'components/Schedule/eventDetails';
 export function EntityDetailsPage(props: CoursePageProps) {
   const router = useRouter();
   const { entityType, entityId, course } = router.query;
+  const alias = Array.isArray(course) ? course[0] : course;
 
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
   const [, withLoading] = useLoading(false);
@@ -40,8 +41,8 @@ export function EntityDetailsPage(props: CoursePageProps) {
   return (
     <>
       <Header title={entityType === 'event' ? eventHeaderTitle : taskHeaderTitle} username={props.session.githubId} />
-      {entityType === 'task' && <TaskDetails taskData={entityData as CourseTaskDetails} />}
-      {entityType === 'event' && <EventDetails eventData={entityData as CourseEvent} />}
+      {entityType === 'task' && <TaskDetails taskData={entityData as CourseTaskDetails} alias={alias} />}
+      {entityType === 'event' && <EventDetails eventData={entityData as CourseEvent} alias={alias} />}
     </>
   );
 }

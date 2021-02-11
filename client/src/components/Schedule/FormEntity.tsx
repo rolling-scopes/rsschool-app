@@ -10,9 +10,9 @@ import { Form, Input, InputNumber, Button, DatePicker, Select, Alert, Row, Col }
 import moment from 'moment-timezone';
 import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from './model';
 import { TIMEZONES } from '../../configs/timezones';
+import { Event, EventService } from 'services/event';
 
 const { Option } = Select;
-const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 6 },
@@ -39,6 +39,7 @@ type Props = {
   onEntityTypeChange: (type: string) => void;
   typesFromBase: string[];
   editableRecord: CourseEvent | null;
+  refreshData: Function;
 };
 
 const FormAddEntity: React.FC<Props> = ({
@@ -49,19 +50,22 @@ const FormAddEntity: React.FC<Props> = ({
   onEntityTypeChange,
   entityType,
   editableRecord,
+  refreshData,
 }) => {
   const [isSuccess, setSuccess] = useState(false);
 
   const entityTypes = union(EVENT_TYPES, typesFromBase).filter(type => type !== 'deadline');
-
   const isUpdateMode = editableRecord ? true : false;
 
   const handleModalSubmit = async (values: any) => {
     if (entityType === 'task') {
-      await createTask(courseId, values);
+      await createTask(courseId, values, isUpdateMode, editableRecord);
+    } else {
+      await createEvent(courseId, values, isUpdateMode, editableRecord);
     }
 
     setSuccess(true);
+    await refreshData();
   };
 
   const handleFormChange = (_changedValues: any, allValues: any) => {
@@ -69,7 +73,7 @@ const FormAddEntity: React.FC<Props> = ({
   };
 
   if (isSuccess) {
-    return <Alert message="Your task successfully added" type="success" showIcon />;
+    return <Alert message={`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`} type="success" showIcon />;
   }
 
   return (
@@ -154,9 +158,9 @@ const FormAddEntity: React.FC<Props> = ({
         <InputNumber min={0} />
       </Form.Item>
 
-      <Form.Item name="description" label="Description">
+      {/* <Form.Item name="description" label="Description">
         <TextArea />
-      </Form.Item>
+      </Form.Item> */}
 
       {entityType === 'task' && (
         <>
@@ -192,15 +196,16 @@ const FormAddEntity: React.FC<Props> = ({
 };
 
 const getInitialValues = (entityType: string, data: any) => {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   if (!data) {
     return {
       entityType,
       maxScore: 100,
       scoreWeight: 1,
+      timeZone,
     };
   }
-
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   if (entityType === 'task') {
     return {
@@ -238,8 +243,8 @@ const loadUsers = async (searchText: string) => {
   return new UserService().searchUser(searchText);
 };
 
-const createTask = async (courseId: number, values: any) => {
-  const serviceTask = new TaskService();
+const createTask = async (courseId: number, values: any, isUpdateMode: boolean, editableRecord: CourseEvent | null) => {
+  const taskService = new TaskService();
   const serviceCouseTask = new CourseService(courseId);
 
   const templateTaskData = {
@@ -250,8 +255,15 @@ const createTask = async (courseId: number, values: any) => {
     githubPrRequired: false,
   } as Partial<Task>;
 
-  const data: any = await serviceTask.createTask(templateTaskData);
-  const taskTemplateId = data.identifiers[0].id;
+  let taskTemplateId;
+
+  if (isUpdateMode && editableRecord) {
+    taskTemplateId = editableRecord.id;
+    await taskService.updateTask(taskTemplateId, templateTaskData);
+  } else {
+    const data: any = await taskService.createTask(templateTaskData);
+    taskTemplateId = data.identifiers[0].id;
+  }
 
   const [startDate, endDate] = values.range || [null, null];
   values = {
@@ -267,40 +279,55 @@ const createTask = async (courseId: number, values: any) => {
     taskOwner: { githubId: values.organizerId },
   };
 
-  await serviceCouseTask.createCourseTask(values);
+  if (isUpdateMode && editableRecord) {
+    await serviceCouseTask.updateCourseTask(editableRecord.id, values);
+  } else {
+    await serviceCouseTask.createCourseTask(values);
+  }
+};
+
+const createEvent = async (
+  courseId: number,
+  values: any,
+  isUpdateMode: boolean,
+  editableRecord: CourseEvent | null,
+) => {
+  const eventService = new EventService();
+  const serviceCouse = new CourseService(courseId);
+
+  const templateEventData = {
+    name: values.name,
+    type: values.type,
+    descriptionUrl: values.descriptionUrl,
+  } as Partial<Event>;
+
+  let eventTemplateId;
+
+  if (isUpdateMode && editableRecord) {
+    eventTemplateId = editableRecord.event.id;
+    await eventService.updateEvent(eventTemplateId, templateEventData);
+  } else {
+    const data: any = await eventService.createEvent(templateEventData);
+    eventTemplateId = data.identifiers[0].id;
+  }
+
+  const dateTime = values.dateTime || null;
+  values = {
+    courseId,
+    eventId: eventTemplateId,
+    special: values.special ? values.special.join(',') : '',
+    dateTime,
+    duration: values.duration,
+    description: values.description,
+    place: values.place,
+    organizer: { githubId: values.organizerId },
+  };
+
+  if (isUpdateMode && editableRecord) {
+    await serviceCouse.updateCourseEvent(editableRecord.id, values);
+  } else {
+    await serviceCouse.createCourseEvent(values);
+  }
 };
 
 export default withSession(FormAddEntity);
-
-// const getEntityDataForPreview = (entityType: string, entityData: any) => {
-//   if (entityType === 'task') {
-//     const [startDate, endDate] = entityData.range || [null, null];
-
-//     return {
-//       name: entityData.name,
-//       type: entityData.type,
-//       special: entityData.special ? entityData.special.join(',') : '',
-//       studentStartDate: startDate ? formatTimezoneToUTC(startDate, entityData.timeZone) : null,
-//       studentEndDate: endDate ? formatTimezoneToUTC(endDate, entityData.timeZone) : null,
-//       descriptionUrl: entityData.descriptionUrl,
-//       duration: entityData.duration,
-//       description: entityData.description,
-//       scoreWeight: entityData.scoreWeight,
-//       maxScore: entityData.maxScore,
-//       taskOwner: { githubId: entityData.organizerId },
-//     };
-//   }
-
-//   return {
-//     event: {
-//       name: entityData.name,
-//       type: entityData.type,
-//       descriptionUrl: entityData.descriptionUrl,
-//     },
-//     dateTime: formatTimezoneToUTC(entityData.dateTime, entityData.timeZone),
-//     organizerId: entityData.organizerId,
-//     place: entityData.place,
-//     special: entityData.special ? entityData.special.join(',') : '',
-//     duration: entityData.duration,
-//   };
-// };

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useLocalStorage } from 'react-use';
-import { Row, Col, Typography, Tooltip } from 'antd';
+import Link from 'next/link';
+import { Row, Col, Typography, Tooltip, Button } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
@@ -8,7 +10,13 @@ import { DEFAULT_COLOR } from '../UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
 
-export function TaskDetails({ taskData }: { taskData: CourseTaskDetails }) {
+type Props = {
+  taskData: CourseTaskDetails;
+  alias: string;
+  isPreview?: boolean;
+};
+
+const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview }) => {
   const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
   const { Title, Text } = Typography;
 
@@ -53,10 +61,12 @@ export function TaskDetails({ taskData }: { taskData: CourseTaskDetails }) {
           </Row>
         )}
 
-        <Row justify="center" align="middle" gutter={[24, 20]}>
-          <Col>{renderTagWithStyle(type, storedTagColors)}</Col>
-          {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
-        </Row>
+        {type && (
+          <Row justify="center" align="middle" gutter={[24, 20]}>
+            <Col>{renderTagWithStyle(type, storedTagColors)}</Col>
+            {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
+          </Row>
+        )}
 
         {taskOwner && taskOwner.githubId && (
           <Tooltip title="Organizer">
@@ -109,17 +119,32 @@ export function TaskDetails({ taskData }: { taskData: CourseTaskDetails }) {
             </Col>
           </Row>
         )}
+        {!isPreview && (
+          <div className="button__close">
+            <Link href={`/course/schedule?course=${alias}`}>
+              <a>
+                <Button icon={<CloseOutlined />} />
+              </a>
+            </Link>
+          </div>
+        )}
       </div>
       <style jsx>{styles}</style>
     </>
   );
-}
+};
 
 const styles = css`
   .container {
+    position: relative;
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px 10px;
+  }
+  .button__close {
+    position: absolute;
+    right: 10px;
+    top: 0;
   }
 `;
 
