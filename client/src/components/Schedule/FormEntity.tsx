@@ -276,7 +276,7 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     description: values.description,
     scoreWeight: values.scoreWeight,
     maxScore: values.maxScore,
-    taskOwner: { githubId: values.organizerId },
+    taskOwnerId: values.organizerId,
   };
 
   if (isUpdateMode && editableRecord) {
