@@ -185,8 +185,8 @@ class Page extends React.Component<Props, State> {
     }
   ];
 
-  private async fetchData() {
-    const data = await this.userService.getJobSeekers();
+  private fetchData() {
+    return this.userService.getJobSeekers();
   }
 
   private async removeJobSeeker(githubId: string) {
@@ -204,8 +204,10 @@ class Page extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const data = [mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo];
+    //const data = [mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo];
     await this.setState({ isLoading: true });
+    const data = await this.fetchData();
+    console.log(data);
     await this.setState({ users: data })
     await this.setState({ isLoading: false });
   }
