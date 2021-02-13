@@ -11,7 +11,7 @@ import NoConsentViewCV from 'components/CV/NoConsentViewCV';
 import { UserService } from '../../services/user';
 
 const { Content } = Layout;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 type Props = {
   router: NextRouter;
@@ -75,38 +75,46 @@ class CVPage extends React.Component<Props, State> {
     const { editMode, opportunitiesConsent, isLoading } = this.state;
     const userGithubId = this.props.session.githubId;
 
-    const ownerId = this.props.router.query.githubId as string;
+    const ownerId = this.props.router.query.githubId;
+    console.log(ownerId);
 
     const isOwner = userGithubId === ownerId;
 
     let content;
 
-    if (isOwner) {
-      if (opportunitiesConsent) {
-        content = (
-          <>
-            <Text className='hide-on-print'>Switch view:</Text>
-            <Switch
-              className='hide-on-print'
-              style={{ marginLeft: '5px' }}
-              defaultChecked={!editMode}
-              onChange={this.switchView.bind(this)}
-              checkedChildren="CV view"
-              unCheckedChildren="Edit view"
-            />
-            {editMode ? <FormCV ownerId={userGithubId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} /> : <ViewCV ownerId={userGithubId} />}
-          </>
-        );
-      } else {
-        content = <NoConsentViewCV isOwner={true} giveConsent={() => this.giveConsent(ownerId as string)} />;
-      }
+    if (ownerId === undefined || ownerId instanceof Array) {
+      content = <Title>This page doesn't exist</Title>;
     } else {
-      if (opportunitiesConsent) {
-        content = <ViewCV ownerId={ownerId} />;
+      if (isOwner) {
+        if (opportunitiesConsent) {
+          content = (
+            <>
+              <Text className='hide-on-print'>Switch view:</Text>
+              <Switch
+                className='hide-on-print'
+                style={{ marginLeft: '5px' }}
+                defaultChecked={!editMode}
+                onChange={this.switchView.bind(this)}
+                checkedChildren="CV view"
+                unCheckedChildren="Edit view"
+              />
+              {editMode ? <FormCV ownerId={ownerId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} /> : <ViewCV ownerId={ownerId} />}
+            </>
+          );
+        } else {
+          content = <NoConsentViewCV isOwner={true} giveConsent={() => this.giveConsent(ownerId as string)} />;
+        }
       } else {
-        content = <NoConsentViewCV isOwner={false} />;
+        if (opportunitiesConsent) {
+          console.log(1);
+          content = <ViewCV ownerId={ownerId} />;
+        } else {
+          content = <NoConsentViewCV isOwner={false} />;
+        }
       }
     }
+
+    
 
     return (
       <>
@@ -124,7 +132,10 @@ class CVPage extends React.Component<Props, State> {
       <style jsx global>{`
           @media print {
             .hide-on-print, .ant-avatar-icon, .profile, .footer {
-              display: none
+              display: none !important;
+            }
+            .hide-border-on-print {
+              border: none !important;
             }
           }
       `}</style>

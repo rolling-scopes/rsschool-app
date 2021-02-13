@@ -52,7 +52,7 @@ function MainSection(props: Props) {
       </Col>
     </Row>
   );
-  return <SectionCV title='General info' icon={<SmileOutlined />} content={sectionContent} />;
+  return <SectionCV title={'General info'} icon={<SmileOutlined />} content={sectionContent} className='hide-on-print' />;
 }
 
 export default MainSection;
