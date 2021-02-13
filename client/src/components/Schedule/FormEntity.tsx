@@ -40,7 +40,7 @@ type Props = {
   refreshData: Function;
 };
 
-const FormAddEntity: React.FC<Props> = ({
+const FormEntity: React.FC<Props> = ({
   handleCancel,
   courseId,
   onFieldsChange,
@@ -50,7 +50,6 @@ const FormAddEntity: React.FC<Props> = ({
   refreshData,
 }) => {
   const [isFormSubmitted, setFormSubmitted] = useState(false);
-
   const isUpdateMode = editableRecord ? true : false;
 
   const handleModalSubmit = async (values: any) => {
@@ -342,4 +341,4 @@ const createEvent = async (
   }
 };
 
-export default withSession(FormAddEntity);
+export default withSession(FormEntity);

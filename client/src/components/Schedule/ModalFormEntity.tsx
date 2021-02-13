@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Modal, Tabs } from 'antd';
-import FormAddEntity from './FormEntity';
+import FormEntity from './FormEntity';
 import useWindowDimensions from '../../utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -18,7 +18,7 @@ type Props = {
   refreshData: Function;
 };
 
-const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
+const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -43,7 +43,7 @@ const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, 
       title={
         <Tabs defaultActiveKey="1">
           <TabPane tab="New entity" key="1">
-            <FormAddEntity
+            <FormEntity
               handleCancel={handleCancel}
               onFieldsChange={onFieldsChange}
               courseId={courseId}
@@ -115,4 +115,4 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
   };
 };
 
-export default ModalFormAddEntity;
+export default ModalFormEntity;

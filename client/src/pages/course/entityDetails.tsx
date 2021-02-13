@@ -9,41 +9,65 @@ import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/co
 import { CoursePageProps } from 'services/models';
 import TaskDetails from 'components/Schedule/TaskDetails';
 import EventDetails from 'components/Schedule/EventDetails';
+import ModalFormEntity from 'components/Schedule/ModalFormEntity';
 
 export function EntityDetailsPage(props: CoursePageProps) {
   const router = useRouter();
   const { entityType, entityId, course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
-
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editableRecord, setEditableRecord] = useState<CourseTaskDetails | CourseEvent | null>(null);
   const [, withLoading] = useLoading(false);
-
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
-  useAsync(
-    withLoading(async () => {
-      if (entityType === 'task') {
-        const entity = await courseService.getCourseTask(entityId as string);
-        setEntityData(entity as CourseTaskDetails);
-      }
-      if (entityType === 'event') {
-        const entity = await courseService.getEventById(entityId as string);
-        setEntityData(entity as CourseEvent);
-      }
-    }),
-    [courseService],
-  );
+  const loadData = async () => {
+    if (entityType === 'task') {
+      const entity = await courseService.getCourseTask(entityId as string);
+      setEntityData(entity as CourseTaskDetails);
+    }
+    if (entityType === 'event') {
+      const entity = await courseService.getEventById(entityId as string);
+      setEntityData(entity as CourseEvent);
+    }
+  };
+
+  useAsync(withLoading(loadData), [courseService]);
 
   if (!entityData) return <></>;
 
-  const eventHeaderTitle = `Event`;
-  const taskHeaderTitle = `Task`;
+  const handleFullEdit = async (isTask?: boolean) => {
+    if (isTask) {
+      setEditableRecord({ ...entityData, isTask: true });
+    } else {
+      setEditableRecord(entityData);
+    }
+
+    setModalOpen(true);
+  };
+
+  const closeModal = async () => {
+    setModalOpen(false);
+  };
 
   return (
     <>
-      <Header title={entityType === 'event' ? eventHeaderTitle : taskHeaderTitle} username={props.session.githubId} />
-      {entityType === 'task' && <TaskDetails taskData={entityData as CourseTaskDetails} alias={alias} />}
-      {entityType === 'event' && <EventDetails eventData={entityData as CourseEvent} alias={alias} />}
+      <Header title={entityType === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
+      {entityType === 'task' && (
+        <TaskDetails taskData={entityData as CourseTaskDetails} alias={alias} onEdit={handleFullEdit} />
+      )}
+      {entityType === 'event' && (
+        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} />
+      )}
+      {isModalOpen && (
+        <ModalFormEntity
+          visible={isModalOpen}
+          editableRecord={editableRecord as CourseEvent}
+          handleCancel={closeModal}
+          courseId={props.course.id}
+          refreshData={loadData}
+        />
+      )}
     </>
   );
 }
