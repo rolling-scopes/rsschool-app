@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { Card, Avatar } from 'antd';
+import { Card, Avatar, Typography } from 'antd';
+
+const { Title } = Typography;
 
 type Props = {
-  title?: string;
+  title?: React.ReactNode;
   icon?: React.ReactNode;
   content: React.ReactNode;
+  className?: string;
 };
 
 function SectionCV(props: Props) {
-  const { title, icon, content } = props;
+  const { title, icon, content, className } = props;
 
-  const avatar = icon ? <Avatar icon={icon} /> : null;
+  const avatar = icon ? <Avatar size={51} icon={icon} /> : null;
 
   const complexTitle = (
-    <>
-      {avatar} {title}
-    </>
+      <Title style={{display: 'inline-block'}} className={className}>{avatar} {title}</Title>
   );
 
   return (
