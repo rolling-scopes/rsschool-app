@@ -5,8 +5,8 @@ import FormAddEntity from './FormEntity';
 import useWindowDimensions from '../../utils/useWindowDimensions';
 import { CourseEvent, CourseTaskDetails } from 'services/course';
 import { formatTimezoneToUTC } from 'services/formatter';
-import TaskDetails from './taskDetails';
-import EventDetails from './eventDetails';
+import TaskDetails from './TaskDetails';
+import EventDetails from './EventDetails';
 
 const { TabPane } = Tabs;
 
@@ -14,19 +14,11 @@ type Props = {
   visible: boolean;
   handleCancel: () => void;
   courseId: number;
-  typesFromBase: string[];
   editableRecord?: CourseEvent | null;
   refreshData: Function;
 };
 
-const ModalFormAddEntity: React.FC<Props> = ({
-  visible,
-  handleCancel,
-  courseId,
-  typesFromBase,
-  editableRecord,
-  refreshData,
-}) => {
+const ModalFormAddEntity: React.FC<Props> = ({ visible, handleCancel, courseId, editableRecord, refreshData }) => {
   const router = useRouter();
   const { course } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
@@ -55,7 +47,6 @@ const ModalFormAddEntity: React.FC<Props> = ({
               handleCancel={handleCancel}
               onFieldsChange={onFieldsChange}
               courseId={courseId}
-              typesFromBase={typesFromBase}
               entityType={entityType}
               onEntityTypeChange={setEntityType}
               editableRecord={editableRecord}
@@ -98,7 +89,6 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       name: entityData.name,
       type: entityData.type,
       special: entityData.special ? entityData.special.join(',') : '',
-
       studentStartDate: startDate ? formatTimezoneToUTC(startDate, entityData.timeZone) : null,
       studentEndDate: endDate ? formatTimezoneToUTC(endDate, entityData.timeZone) : null,
       descriptionUrl: entityData.descriptionUrl,
@@ -118,7 +108,7 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       // description: entityData.description,
     },
     dateTime: entityData.dateTime ? formatTimezoneToUTC(entityData.dateTime, entityData.timeZone) : null,
-    organizerId: entityData.organizerId,
+    organizer: { githubId: entityData.organizerId },
     place: entityData.place,
     special: entityData.special ? entityData.special.join(',') : '',
     duration: entityData.duration,

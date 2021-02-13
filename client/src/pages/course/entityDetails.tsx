@@ -7,8 +7,8 @@ import { withSession } from 'components';
 import { useLoading } from 'components/useLoading';
 import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
 import { CoursePageProps } from 'services/models';
-import TaskDetails from 'components/Schedule/taskDetails';
-import EventDetails from 'components/Schedule/eventDetails';
+import TaskDetails from 'components/Schedule/TaskDetails';
+import EventDetails from 'components/Schedule/EventDetails';
 
 export function EntityDetailsPage(props: CoursePageProps) {
   const router = useRouter();
@@ -36,8 +36,9 @@ export function EntityDetailsPage(props: CoursePageProps) {
 
   if (!entityData) return <></>;
 
-  const eventHeaderTitle = `Event details (course: ${course})`;
-  const taskHeaderTitle = `Task details (course: ${course})`;
+  const eventHeaderTitle = `Event`;
+  const taskHeaderTitle = `Task`;
+
   return (
     <>
       <Header title={entityType === 'event' ? eventHeaderTitle : taskHeaderTitle} username={props.session.githubId} />

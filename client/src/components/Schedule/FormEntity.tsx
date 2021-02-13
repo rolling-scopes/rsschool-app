@@ -5,10 +5,9 @@ import { withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { formatTimezoneToUTC } from 'services/formatter';
-import { union } from 'lodash';
-import { Form, Input, InputNumber, Button, DatePicker, Select, Alert, Row, Col } from 'antd';
+import { Form, Input, InputNumber, Button, DatePicker, Select, Alert, Row, Col, message } from 'antd';
 import moment from 'moment-timezone';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from './model';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
 import { TIMEZONES } from '../../configs/timezones';
 import { Event, EventService } from 'services/event';
 
@@ -37,7 +36,6 @@ type Props = {
   courseId: number;
   entityType: string;
   onEntityTypeChange: (type: string) => void;
-  typesFromBase: string[];
   editableRecord: CourseEvent | null;
   refreshData: Function;
 };
@@ -45,26 +43,29 @@ type Props = {
 const FormAddEntity: React.FC<Props> = ({
   handleCancel,
   courseId,
-  typesFromBase,
   onFieldsChange,
   onEntityTypeChange,
   entityType,
   editableRecord,
   refreshData,
 }) => {
-  const [isSuccess, setSuccess] = useState(false);
+  const [isFormSubmitted, setFormSubmitted] = useState(false);
 
-  const entityTypes = union(EVENT_TYPES, typesFromBase).filter(type => type !== 'deadline');
   const isUpdateMode = editableRecord ? true : false;
 
   const handleModalSubmit = async (values: any) => {
-    if (entityType === 'task') {
-      await createTask(courseId, values, isUpdateMode, editableRecord);
-    } else {
-      await createEvent(courseId, values, isUpdateMode, editableRecord);
+    try {
+      if (entityType === 'task') {
+        await createTask(courseId, values, isUpdateMode, editableRecord);
+      } else {
+        await createEvent(courseId, values, isUpdateMode, editableRecord);
+      }
+    } catch (error) {
+      message.error('An error occurred. Please try later.');
+      return;
     }
 
-    setSuccess(true);
+    setFormSubmitted(true);
     await refreshData();
   };
 
@@ -72,9 +73,26 @@ const FormAddEntity: React.FC<Props> = ({
     onFieldsChange(allValues);
   };
 
-  if (isSuccess) {
+  if (isFormSubmitted) {
     return <Alert message={`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`} type="success" showIcon />;
   }
+
+  const entityTypes =
+    entityType === 'task'
+      ? TASK_TYPES.map(tag => {
+          return (
+            <Option key={tag} value={tag}>
+              {tag}
+            </Option>
+          );
+        })
+      : EVENT_TYPES.map(tag => {
+          return (
+            <Option key={tag} value={tag}>
+              {tag}
+            </Option>
+          );
+        });
 
   return (
     <Form
@@ -97,13 +115,7 @@ const FormAddEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
-        <Select>
-          {entityTypes.map(type => (
-            <Select.Option value={type} key={type}>
-              {type}
-            </Select.Option>
-          ))}
-        </Select>
+        <Select>{entityTypes}</Select>
       </Form.Item>
 
       <Form.Item name="special" label="Special">
@@ -151,7 +163,7 @@ const FormAddEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="organizerId" label="Organizer" rules={[{ required: false }]}>
-        <UserSearch searchFn={loadUsers} />
+        <UserSearch keyField="githubId" searchFn={loadUsers} />
       </Form.Item>
 
       <Form.Item name="duration" rules={[{ type: 'number' }]} label="Duration">

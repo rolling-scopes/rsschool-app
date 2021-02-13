@@ -61,16 +61,35 @@ export interface ScheduleRow {
 }
 
 export const EVENT_TYPES = [
-  'code jam',
-  'codewars',
-  'cross-check',
-  'interview',
-  'review',
-  'self education',
-  'special',
-  'task',
-  'test',
-  'webinar',
+  'Online Lecture',
+  'Offline Lecture',
+  'Online/Offline Lecture',
+  'Self-studying',
+  'Warm-up',
+  'Info',
+  'Workshop',
+  'Meetup',
+  'Webinar',
+  'Special',
+  'Code review',
+] as const;
+
+export const TASK_TYPES = [
+  'JS task',
+  'Kotlin task',
+  'ObjC task',
+  'HTML task',
+  'CV Markdown',
+  'CV HTML',
+  'Codewars',
+  'Code Jam',
+  'Self Education',
+  'Test',
+  'Technical Screening',
+  'Interview',
+  'Special',
+  'Task',
+  'Cross-check',
 ] as const;
 
 export const SPECIAL_ENTITY_TAGS = [

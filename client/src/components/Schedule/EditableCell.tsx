@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, DatePicker, TimePicker, Select } from 'antd';
 import { Rule } from 'antd/lib/form';
 import { UserSearch } from 'components/UserSearch';
 import { CourseEvent } from 'services/course';
-import { EVENT_TYPES, SPECIAL_ENTITY_TAGS } from './model';
+import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
 import { UserService } from 'services/user';
 
 const { Option } = Select;
@@ -29,6 +29,23 @@ const EditableCell: React.FC<EditableCellProps> = ({
   let inputNode;
   let rules: Rule = { type: 'string', required: false };
 
+  const types =
+    record && record.isTask
+      ? TASK_TYPES.map(tag => {
+          return (
+            <Option key={tag} value={tag}>
+              {tag}
+            </Option>
+          );
+        })
+      : EVENT_TYPES.map(tag => {
+          return (
+            <Option key={tag} value={tag}>
+              {tag}
+            </Option>
+          );
+        });
+
   switch (title) {
     case 'Date':
       inputNode = <DatePicker style={{ minWidth: 120 }} />;
@@ -39,17 +56,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       rules = { type: 'object', required: true };
       break;
     case 'Type':
-      inputNode = (
-        <Select style={{ minWidth: 120 }}>
-          {EVENT_TYPES.map(tag => {
-            return (
-              <Option key={tag} value={tag}>
-                {tag}
-              </Option>
-            );
-          })}
-        </Select>
-      );
+      inputNode = <Select style={{ minWidth: 120 }}>{types}</Select>;
       break;
     case 'Special':
       inputNode = (
