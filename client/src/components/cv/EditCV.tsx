@@ -1,12 +1,15 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card } from 'antd';
+import { Layout, Space, Button, Card, Modal, Typography } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
+import { CSSProperties } from 'react';
+import { WarningTwoTone } from '@ant-design/icons';
 
 const { Content } = Layout;
+const { Paragraph, Text, Title } = Typography;
 
 type State = {
   isLoading: boolean;
@@ -20,7 +23,7 @@ type Props = {
   withdrawConsent: () => void;
 };
 
-class FormCV extends React.Component<Props, State> {
+class EditCV extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
     contactsList: null,
@@ -32,6 +35,42 @@ class FormCV extends React.Component<Props, State> {
   private nullifyConditional(value: string | null) {
     return value === '' ? null : value;
   }
+
+  private showConfirmationModal() {
+    const textStyle: CSSProperties = { textAlign: 'center' };
+
+    const title = (
+      <Title level={3} style={{ textAlign: 'center' }}>
+        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
+        <WarningTwoTone twoToneColor="#fcbe03" />
+      </Title>
+    );
+
+    const message =
+      "Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.";
+    const messageRu =
+      'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
+    const confirmationModalContent = (
+      <>
+        <Paragraph style={textStyle} underline strong>
+          {message}
+        </Paragraph>
+        <Paragraph style={textStyle} underline strong>
+          {messageRu}
+        </Paragraph>
+      </>
+    );
+    Modal.confirm({
+      icon: null,
+      title,
+      content: confirmationModalContent,
+      centered: true,
+      maskStyle: { backgroundColor: 'red' },
+      maskClosable: true,
+      onOk: () => this.props.withdrawConsent()
+    });
+  }
+
 
   private async fetchData() {
     await this.setState({
@@ -94,7 +133,7 @@ class FormCV extends React.Component<Props, State> {
           website
         } = data;
 
-        await this.userService.saveCVData(this.props.ownerId, {
+        await this.userService.saveCVData({
           selfIntroLink,
           militaryService,
           avatarLink,
@@ -131,7 +170,7 @@ class FormCV extends React.Component<Props, State> {
 
         const startFrom = startFromRaw ? moment(startFromRaw).format('YYYY.MM.DD') : null;
 
-        await this.userService.saveCVData(this.props.ownerId, {
+        await this.userService.saveCVData({
           selfIntroLink,
           militaryService,
           desiredPosition,
@@ -207,7 +246,6 @@ class FormCV extends React.Component<Props, State> {
 
   render() {
     const { isLoading, contactsList, userData } = this.state;
-    const { withdrawConsent } = this.props;
 
     const buttonStyle = {
       borderRadius: '15px',
@@ -222,13 +260,13 @@ class FormCV extends React.Component<Props, State> {
               <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.fillFromProfile()}>
                 Get data from profile
             </Button>
-              <Button style={buttonStyle} block type="primary" danger htmlType="button" onClick={withdrawConsent}>
-                Withdraw consent
-            </Button>
               <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 {userData && <UserDataForm userData={userData} handleFunc={this.handleSave.bind(this)} />}
                 {contactsList && <ContactsForm contactsList={contactsList} handleFunc={this.handleSave.bind(this)} />}
               </Space>
+              <Button style={buttonStyle} block type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)}>
+                Delete my CV
+            </Button>
             </Card>
           </Content>
         </Layout>
@@ -237,4 +275,4 @@ class FormCV extends React.Component<Props, State> {
   }
 }
 
-export default FormCV;
+export default EditCV;

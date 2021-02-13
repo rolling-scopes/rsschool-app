@@ -5,13 +5,15 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import { guard } from '../guards';
 import { getRepository } from 'typeorm';
 import { User, IUserSession } from '../../models';
-import { validateGithubId } from '../validators';
+//import { validateGithubId } from '../validators';
 import { getStudentStats } from '../profile/student-stats';
 import { getPublicFeedback } from '../profile/public-feedback';
 import { Permissions } from '../profile/permissions';
 
-const saveCVIData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.params;
+const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  console.log(111);
+  console.log(ctx.state);
+  const { githubId } = ctx.state!.user as IUserSession;
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ where: { githubId } });
   if (user === undefined) {
@@ -98,7 +100,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.query;
 
   const userRepository = getRepository(User);
   const profile = await userRepository.findOne({ where: { githubId } });
@@ -222,11 +224,11 @@ export function opportunitiesRoute(logger: ILogger) {
 
   router.get('/', guard, getJobSeekersData(logger));
 
-  router.get('/:githubId', guard, getCVData(logger));
-  router.post('/:githubId', guard, validateGithubId, saveCVIData(logger));
+  router.get('/cv', guard, getCVData(logger));
+  router.post('/', guard, saveCVData(logger));
 
 
-  router.get('/consent/:githubId', guard, getOpportunitiesConsent(logger));
+  router.get('/consent/', guard, getOpportunitiesConsent(logger));
   router.post('/consent/:githubId', guard, setOpportunitiesConsent(logger));
 
   return router;
