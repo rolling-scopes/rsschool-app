@@ -113,27 +113,31 @@ export class UserService {
   }
 
   async getJobSeekers() {
-    const response = await this.axios.get<{data: JobSeekerData[]}>('/api/opportunities');
+    const response = await this.axios.get<{ data: JobSeekerData[] }>('/api/opportunities');
     return response.data.data;
   }
 
   async getCVData(githubId: string) {
-    const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/${githubId}`);
+    const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/cv`, {
+      params: { githubId }
+    });
     return response.data.data;
   }
 
-  async saveCVData(githubId: string, opportunitiesInfo: SaveCVData) {
-    const response = await this.axios.post<{ data: SaveCVData }>(`/api/opportunities/${githubId}`, opportunitiesInfo);
+  async saveCVData(opportunitiesInfo: SaveCVData) {
+    const response = await this.axios.post<{ data: SaveCVData }>(`/api/opportunities`, opportunitiesInfo);
     return response.data.data;
   }
 
   async getOpportunitiesConsent(githubId: string) {
-    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/${githubId}`);
+    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/`, {
+      params: { githubId }
+    });
     return response.data.data;
   }
 
   async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`,{opportunitiesConsent});
+    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`, { opportunitiesConsent });
     return response.data.data;
   }
 
