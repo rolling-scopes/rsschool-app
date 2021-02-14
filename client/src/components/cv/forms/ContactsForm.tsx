@@ -46,7 +46,6 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
         </Item>
       </Form>
     </Card>
-    //<FormCV name="contacts" title="Contacts" content={content} submitFunc={handleFunc} data={contactsList} />
   );
 });
 
