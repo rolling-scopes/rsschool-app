@@ -166,7 +166,7 @@ class EditCV extends React.Component<Props, State> {
     await this.fetchData();
   }
 
-  private getFromRefs(refs: RefObject<any>[]) {
+  private getDataFromRefs(refs: RefObject<any>[]) {
     const values = refs
       .map(ref => {
         const data = ref.current!.getFieldsValue();
@@ -224,6 +224,10 @@ class EditCV extends React.Component<Props, State> {
     });
   }
 
+  private async resetFields () {
+    await this.fetchData();
+  }
+
   render() {
     const { isLoading, contactsList, userData } = this.state;
 
@@ -245,10 +249,10 @@ class EditCV extends React.Component<Props, State> {
                 {contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}
               </Space>
               <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" htmlType="button" onClick={() => this.getFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
+                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
                   Save
               </Button>
-                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" danger htmlType="button" icon={<ClearOutlined />}>
+                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" danger htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
                   Reset fields
               </Button>
               </div>
