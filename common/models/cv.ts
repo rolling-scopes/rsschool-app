@@ -7,6 +7,10 @@ export interface CourseData {
   isCourseCompleted: boolean;
   totalScore: number;
   position: number | null;
+  mentor: { 
+    githubId: string;
+    name: string; 
+  }
 }
 
 export type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
