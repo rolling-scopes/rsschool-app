@@ -88,6 +88,7 @@ class ViewCV extends React.Component<Props, State> {
         position,
         isCourseCompleted,
         totalScore,
+        mentor
       } = course;
 
       return {
@@ -98,6 +99,7 @@ class ViewCV extends React.Component<Props, State> {
         position,
         isCourseCompleted,
         totalScore,
+        mentor
       };
     });
   }
