@@ -124,6 +124,7 @@ class Page extends React.Component<Props, State> {
                 isCourseCompleted,
                 totalScore,
                 position,
+                mentor: { name: mentorName, githubId: mentorGithubId }
               } = record;
               const title = `${courseFullName}${locationName ? locationName : ''}`;
               const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
@@ -156,7 +157,10 @@ class Page extends React.Component<Props, State> {
                         <Text>Course status: </Text>
                         {courseStatus}
                       </Col>
-                      <Col span={3} offset={9}>
+                      <Col span={3} >
+                        <Text>Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
+                      </Col>
+                      <Col span={3}>
                         <Text>{courseStats}</Text>
                       </Col>
                     </Row>
@@ -246,7 +250,7 @@ class Page extends React.Component<Props, State> {
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
               <Button htmlType='button' onClick={this.setAdminMode.bind(this)}>Set admin mode</Button>
               <Button htmlType='button' onClick={this.fetchData.bind(this)}>Get profiles</Button>
-              <Table style={{minWidth: '99vw'}} columns={this.columns} dataSource={data}></Table>
+              <Table style={{ minWidth: '99vw' }} columns={this.columns} dataSource={data}></Table>
             </Content>
           </Layout>
         </LoadingScreen>
