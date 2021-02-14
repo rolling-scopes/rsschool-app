@@ -88,6 +88,7 @@ export const getCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) =
     githubPrRequired: !!(courseTask?.task as Task).githubPrRequired,
     verification: (courseTask?.task as Task).verification,
     descriptionUrl: (courseTask?.task as Task).descriptionUrl,
+    description: (courseTask?.task as Task).description,
     studentStartDate: courseTask?.studentStartDate,
     studentEndDate: courseTask?.studentEndDate,
     useJury: (courseTask?.task as Task).useJury,

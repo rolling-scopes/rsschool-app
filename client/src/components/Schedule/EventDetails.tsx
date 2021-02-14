@@ -82,7 +82,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isPreview, onEdit }) 
           )}
         </Row>
 
-        {/* {event.description && (
+        {event.description && (
           <Row justify="center" align="middle" gutter={[16, 16]}>
             <Col>
               <Tooltip title="Description">
@@ -90,7 +90,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isPreview, onEdit }) 
               </Tooltip>
             </Col>
           </Row>
-        )} */}
+        )}
 
         {!isPreview && (
           <>

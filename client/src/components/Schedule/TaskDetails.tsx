@@ -120,6 +120,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview, onEdit }) =>
             </Col>
           </Row>
         )}
+
         {!isPreview && (
           <>
             <div className="button__close">

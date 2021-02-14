@@ -12,6 +12,7 @@ import { TIMEZONES } from '../../configs/timezones';
 import { Event, EventService } from 'services/event';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 6 },
@@ -162,16 +163,16 @@ const FormEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="organizerId" label="Organizer" rules={[{ required: false }]}>
-        <UserSearch keyField="githubId" searchFn={loadUsers} />
+        <UserSearch searchFn={loadUsers} />
       </Form.Item>
 
       <Form.Item name="duration" rules={[{ type: 'number' }]} label="Duration">
         <InputNumber min={0} />
       </Form.Item>
 
-      {/* <Form.Item name="description" label="Description">
+      <Form.Item name="description" label="Description">
         <TextArea />
-      </Form.Item> */}
+      </Form.Item>
 
       {entityType === 'task' && (
         <>
@@ -227,6 +228,7 @@ const getInitialValues = (entityType: string, data: any) => {
       special: data && data.special ? data.special.split(',') : [],
       maxScore: (data && data.maxScore) ?? 100,
       scoreWeight: (data && data.scoreWeight) ?? 1,
+      description: data.description ? data.description : '',
       range:
         data && data.studentStartDate && data.studentEndDate
           ? [
@@ -241,7 +243,8 @@ const getInitialValues = (entityType: string, data: any) => {
     ...data,
     name: data.event.name,
     type: data.event.type,
-    descriptionUrl: data.event.descriptionUrl,
+    descriptionUrl: data.event.descriptionUrl ? data.event.descriptionUrl : '',
+    description: data.event.description ? data.event.description : '',
     entityType,
     timeZone,
     organizerId: data.organizer ? data.organizer.githubId : '',
@@ -261,7 +264,8 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
   const templateTaskData = {
     name: values.name,
     type: values.type,
-    descriptionUrl: values.descriptionUrl,
+    descriptionUrl: values.descriptionUrl || '',
+    description: values.description || '',
     verification: 'manual',
     githubPrRequired: false,
   } as Partial<Task>;
@@ -283,11 +287,11 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     special: values.special ? values.special.join(',') : '',
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
-    duration: values.duration,
-    description: values.description,
-    scoreWeight: values.scoreWeight,
-    maxScore: values.maxScore,
-    taskOwnerId: values.organizerId,
+    duration: values.duration ? values.duration : null,
+
+    scoreWeight: values.scoreWeight ? values.scoreWeight : 1,
+    maxScore: values.maxScore ? values.maxScore : 100,
+    taskOwnerId: values.organizerId ? values.organizerId : null,
   };
 
   if (isUpdateMode && editableRecord) {
@@ -310,6 +314,7 @@ const createEvent = async (
     name: values.name,
     type: values.type,
     descriptionUrl: values.descriptionUrl,
+    description: values.description,
   } as Partial<Event>;
 
   let eventTemplateId;
@@ -322,16 +327,14 @@ const createEvent = async (
     eventTemplateId = data.identifiers[0].id;
   }
 
-  const dateTime = values.dateTime || null;
   values = {
     courseId,
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
-    dateTime,
-    duration: values.duration,
-    description: values.description,
-    place: values.place,
-    organizer: { githubId: values.organizerId },
+    dateTime: values.dateTime || null,
+    duration: values.duration || null,
+    place: values.place || null,
+    organizer: values.organizerId ? { id: values.organizerId } : null,
   };
 
   if (isUpdateMode && editableRecord) {

@@ -56,7 +56,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
       rules = { type: 'object', required: true };
       break;
     case 'Type':
-      inputNode = <Select style={{ minWidth: 120 }}>{types}</Select>;
+      inputNode = (
+        <Select style={{ minWidth: 120 }} disabled={record.event.type === 'deadline'}>
+          {types}
+        </Select>
+      );
       break;
     case 'Special':
       inputNode = (
