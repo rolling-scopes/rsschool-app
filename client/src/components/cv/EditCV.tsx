@@ -3,10 +3,10 @@ import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData } from '../../../../common/models/cv';
+import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
-import { CSSProperties } from 'react';
-import { WarningTwoTone } from '@ant-design/icons';
+import { CSSProperties, RefObject } from 'react';
+import { WarningTwoTone, SaveOutlined, ClearOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -29,6 +29,9 @@ class EditCV extends React.Component<Props, State> {
     contactsList: null,
     userData: null
   };
+
+  private userFormRef: RefObject<typeof UserDataForm> = React.createRef();
+  private contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
 
   private userService = new UserService();
 
@@ -77,7 +80,7 @@ class EditCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const CVData = await this.userService.getCVData(this.props.ownerId);
+    const CVData: GetCVData = await this.userService.getCVData(this.props.ownerId);
 
     const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime } = CVData;
 
@@ -114,88 +117,65 @@ class EditCV extends React.Component<Props, State> {
     });
   }
 
-  private async submitData(dataSource: { type: 'contacts' | 'userData', data: any }) {
-    const { data, type } = dataSource;
-    const { userData, contactsList } = this.state;
-    const { notes: cvNotes, name: cvName, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, startFrom, fullTime } = userData!;
-    const { email, github, linkedin, location, phone, skype, telegram, website } = contactsList!;
+  private async submitData(data: any) {
+    const {
+      avatarLink,
+      desiredPosition,
+      email,
+      englishLevel,
+      fullTime,
+      github,
+      linkedin,
+      location,
+      militaryService,
+      name,
+      notes,
+      phone,
+      selfIntroLink,
+      skype,
+      startFrom,
+      telegram,
+      website,
+    } = data;
 
-    switch (type) {
-      case 'contacts': {
-        const {
-          email,
-          github,
-          linkedin,
-          location,
-          phone,
-          skype,
-          telegram,
-          website
-        } = data;
+    const CVData: SaveCVData = {
+      selfIntroLink: this.nullifyConditional(selfIntroLink),
+      militaryService,
+      avatarLink,
+      desiredPosition,
+      englishLevel,
+      cvName: this.nullifyConditional(name),
+      cvNotes: this.nullifyConditional(notes),
+      cvPhone: this.nullifyConditional(phone),
+      cvEmail: this.nullifyConditional(email),
+      cvSkype: this.nullifyConditional(skype),
+      cvTelegram: this.nullifyConditional(telegram),
+      cvLinkedin: this.nullifyConditional(linkedin),
+      cvLocation: this.nullifyConditional(location),
+      cvGithub: this.nullifyConditional(github),
+      cvWebsite: this.nullifyConditional(website),
+      startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
+      fullTime
+    };
 
-        await this.userService.saveCVData({
-          selfIntroLink,
-          militaryService,
-          avatarLink,
-          desiredPosition,
-          englishLevel,
-          cvEmail: this.nullifyConditional(email),
-          cvGithub: this.nullifyConditional(github),
-          cvLinkedin: this.nullifyConditional(linkedin),
-          cvLocation: this.nullifyConditional(location),
-          cvPhone: this.nullifyConditional(phone),
-          cvSkype: this.nullifyConditional(skype),
-          cvTelegram: this.nullifyConditional(telegram),
-          cvWebsite: this.nullifyConditional(website),
-          cvNotes,
-          cvName,
-          startFrom,
-          fullTime
-        });
-      }
-        break;
-
-      case 'userData': {
-        const {
-          avatarLink,
-          desiredPosition,
-          englishLevel,
-          militaryService,
-          name: cvName,
-          notes: cvNotes,
-          selfIntroLink,
-          startFrom: startFromRaw,
-          fullTime
-        } = data;
-
-        const startFrom = startFromRaw ? moment(startFromRaw).format('YYYY.MM.DD') : null;
-
-        await this.userService.saveCVData({
-          selfIntroLink,
-          militaryService,
-          desiredPosition,
-          englishLevel,
-          avatarLink,
-          cvEmail: this.nullifyConditional(email),
-          cvGithub: this.nullifyConditional(github),
-          cvLinkedin: this.nullifyConditional(linkedin),
-          cvLocation: this.nullifyConditional(location),
-          cvPhone: this.nullifyConditional(phone),
-          cvSkype: this.nullifyConditional(skype),
-          cvTelegram: this.nullifyConditional(telegram),
-          cvWebsite: this.nullifyConditional(website),
-          cvNotes,
-          cvName,
-          startFrom,
-          fullTime
-        });
-      }
-    }
+    this.userService.saveCVData(CVData);
   }
 
   private async handleSave(data: any) {
     await this.submitData(data);
     await this.fetchData();
+  }
+
+  private getFromRefs(refs: RefObject<any>[]) {
+    const values = refs
+      .map(ref => {
+        const data = ref.current!.getFieldsValue();
+        return {
+          ...data
+        }
+      })
+      .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
+    this.handleSave(values);
   }
 
   async componentDidMount() {
@@ -259,14 +239,22 @@ class EditCV extends React.Component<Props, State> {
             <Card>
               <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.fillFromProfile()}>
                 Get data from profile
-            </Button>
+              </Button>
               <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                {userData && <UserDataForm userData={userData} handleFunc={this.handleSave.bind(this)} />}
-                {contactsList && <ContactsForm contactsList={contactsList} handleFunc={this.handleSave.bind(this)} />}
+                {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
+                {contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}
               </Space>
+              <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" htmlType="button" onClick={() => this.getFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
+                  Save
+              </Button>
+                <Button style={{ ...buttonStyle, width: '45%' }} block type="primary" danger htmlType="button" icon={<ClearOutlined />}>
+                  Reset fields
+              </Button>
+              </div>
               <Button style={buttonStyle} block type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)}>
                 Delete my CV
-            </Button>
+              </Button>
             </Card>
           </Content>
         </Layout>
