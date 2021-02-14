@@ -26,7 +26,7 @@ export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone, stored
       >
         <div>Date: {moment(dataEvent.dateTime, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('LLL')}</div>
         {dataEvent.event.description && <div>{dataEvent.event.description}</div>}
-        {!!dataEvent.organizer.githubId && (
+        {dataEvent.organizer && dataEvent.organizer.githubId && (
           <div>
             Organizer: <GithubUserLink value={dataEvent.organizer.githubId} />
           </div>

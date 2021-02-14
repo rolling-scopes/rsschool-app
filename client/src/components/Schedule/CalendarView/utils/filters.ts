@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment';
 import { CourseEvent } from 'services/course';
-import { DEFAULT_COLOR } from 'components/UserSettings/userSettingsHandlers';
+import { DEFAULT_COLOR } from 'components/Schedule/UserSettings/userSettingsHandlers';
 
 export function getListData(
   calendarCellDate: Moment,

@@ -6,7 +6,7 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
-import { DEFAULT_COLOR } from '../UserSettings/userSettingsHandlers';
+import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
 
@@ -18,7 +18,7 @@ type Props = {
 };
 
 const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview, onEdit }) => {
-  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
+  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
   const { Title, Text } = Typography;
 
   const {

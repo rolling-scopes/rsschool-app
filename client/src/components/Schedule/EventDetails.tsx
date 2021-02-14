@@ -6,7 +6,7 @@ import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
-import { DEFAULT_COLOR } from '../UserSettings/userSettingsHandlers';
+import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
 
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const EventDetails: React.FC<Props> = ({ eventData, alias, isPreview, onEdit }) => {
-  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLOR);
+  const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
   const { event, dateTime, place, organizer, special, duration } = eventData;
 
   return (
