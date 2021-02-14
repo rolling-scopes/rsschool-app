@@ -27,10 +27,12 @@ function CoursesSection(props: Props) {
           isCourseCompleted,
           totalScore,
           position,
+          mentor: { name: mentorName, githubId: mentorGithubId }
         } = record;
         const title = `${courseFullName}${locationName ? locationName : ''}`;
         const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
-        const courseStats = `Score: ${totalScore} Position: ${position}`;
+        const courseStats = `Score: ${totalScore}
+        Position: ${position}`;
         let courseStatus;
         if (isExpelled) {
           courseStatus = <Text>Expelled</Text>;
@@ -56,7 +58,10 @@ function CoursesSection(props: Props) {
                 <Text>Course status: </Text>
                 {courseStatus}
               </Col>
-              <Col span={3} offset={9}>
+              <Col span={3} >
+                <Text>Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
+              </Col>
+              <Col span={3}>
                 <Text>{courseStats}</Text>
               </Col>
             </Row>
