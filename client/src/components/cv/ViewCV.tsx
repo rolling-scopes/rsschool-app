@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/CV/sections';
-import { Contacts, UserData, CourseData } from '../../../../common/models/cv';
+import { Contacts, UserData, CourseData, GetCVData } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
 import { UserService } from 'services/user';
 
@@ -37,9 +37,9 @@ class ViewCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const CVDATA = await this.userService.getCVData(ownerId);
+    const CVData: GetCVData = await this.userService.getCVData(ownerId);
 
-    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses } = CVDATA;
+    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses } = CVData;
 
     const userData = {
       notes,

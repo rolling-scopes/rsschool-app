@@ -92,13 +92,13 @@ export class User {
   opportunitiesConsent: boolean;
 
   @Column({ nullable: true, type: 'text' })
-  selfIntroLink?: string | null;
+  cvSelfIntroLink?: string | null;
 
   @Column({ nullable: true, type: 'text' })
-  startFrom?: string | null;
+  cvStartFrom?: string | null;
 
   @Column({nullable: true})
-  fullTime?: boolean;
+  cvFullTime?: boolean;
 
   @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
@@ -106,14 +106,20 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   militaryService?: string | null;
 
+  @Column({ nullable: true, type: 'text' })
+  cvMilitaryService?: string | null;
+
   @Column({ nullable: true })
   englishLevel?: EnglishLevel;
 
-  @Column({ nullable: true, type: 'text' })
-  avatarLink?: string | null;
+  @Column({nullable: true})
+  cvEnglishLevel?: EnglishLevel;
 
   @Column({ nullable: true, type: 'text' })
-  desiredPosition?: string;
+  cvAvatarLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvDesiredPosition?: string;
 
   @Column({ nullable: true, type: 'text' })
   cvName?: string | null;
