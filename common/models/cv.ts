@@ -23,11 +23,11 @@ export interface UserData {
   name: string | null;
   desiredPosition: string | null;
   selfIntroLink: string | null;
-  englishLevel: EnglishLevel;
+  englishLevel: EnglishLevel | null; 
   militaryService: MilitaryService;
   notes: string | null;
   startFrom: string | null;
-  fullTime: boolean
+  fullTime: boolean | null;
 }
 
 export type Contacts = {
@@ -58,32 +58,10 @@ export interface FieldData {
 
 export interface SaveCVData {
   selfIntroLink: string | null;
-  militaryService: MilitaryService;
+  militaryService: MilitaryService | null;
   avatarLink: string | null;
   desiredPosition: string | null;
-  englishLevel: EnglishLevel;
-  cvName: string | null;
-  cvNotes: string | null;
-  cvPhone: string | null;
-  cvEmail: string | null;
-  cvSkype: string | null;
-  cvTelegram: string | null;
-  cvLinkedin: string | null;
-  cvLocation: string | null;
-  cvGithub: string | null;
-  cvWebsite: string | null;
-  startFrom: string | null;
-  fullTime: boolean | null;
-}
-
-export interface GetCVData {
-  selfIntroLink: string | null;
-  startFrom: string | null;
-  fullTime: boolean;
-  militaryService: MilitaryService;
-  avatarLink: string | null;
-  desiredPosition: string
-  englishLevel: EnglishLevel;
+  englishLevel: EnglishLevel | null;
   name: string | null;
   notes: string | null;
   phone: string | null;
@@ -94,6 +72,31 @@ export interface GetCVData {
   location: string | null;
   github: string | null;
   website: string | null;
+  startFrom: string | null;
+  fullTime: boolean | null;
+}
+
+export interface ServerData {
+  cvSelfIntroLink: string | null;
+  cvMilitaryService: MilitaryService;
+  cvAvatarLink: string | null;
+  cvDesiredPosition: string | null;
+  cvEnglishLevel: EnglishLevel;
+  cvName: string | null;
+  cvNotes: string | null;
+  cvPhone: string | null;
+  cvEmail: string | null;
+  cvSkype: string | null;
+  cvTelegram: string | null;
+  cvLinkedin: string | null;
+  cvLocation: string | null;
+  cvGithub: string | null;
+  cvWebsite: string | null;
+  cvStartFrom: string | null;
+  cvFullTime: boolean | null;
+}
+
+export interface GetCVData extends SaveCVData {
   courses: StudentStats[];
   publicFeedback: PublicFeedback[];
 }

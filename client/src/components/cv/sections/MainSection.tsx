@@ -8,17 +8,17 @@ import { SmileOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
-type Props = {
+interface Props {
   avatarLink: string | null;
   name: string | null;
   desiredPosition: string | null;
-  contacts: Contacts;
-  englishLevel: EnglishLevel;
-  militaryService: MilitaryService;
   selfIntroLink: string | null;
+  englishLevel: EnglishLevel | null; 
+  militaryService: MilitaryService;
   startFrom: string | null;
-  fullTime: boolean;
-};
+  fullTime: boolean | null;
+  contacts: Contacts;
+}
 
 function MainSection(props: Props) {
   const { avatarLink, name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink, startFrom, fullTime } = props;
