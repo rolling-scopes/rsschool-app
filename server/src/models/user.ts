@@ -101,15 +101,6 @@ export class User {
   cvFullTime?: boolean;
 
   @Column({ nullable: true, type: 'text' })
-  cvExpires?: string | null;
-
-  @Column({ nullable: true, type: 'text' })
-  startFrom?: string | null;
-
-  @Column({nullable: true})
-  fullTime?: boolean;
-
-  @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
 
   @Column({ nullable: true, type: 'text' })
@@ -121,11 +112,14 @@ export class User {
   @Column({ nullable: true })
   englishLevel?: EnglishLevel;
 
-  @Column({ nullable: true, type: 'text' })
-  avatarLink?: string | null;
+  @Column({nullable: true})
+  cvEnglishLevel?: EnglishLevel;
 
   @Column({ nullable: true, type: 'text' })
-  desiredPosition?: string;
+  cvAvatarLink?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
+  cvDesiredPosition?: string;
 
   @Column({ nullable: true, type: 'text' })
   cvName?: string | null;
