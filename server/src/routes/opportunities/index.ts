@@ -5,14 +5,11 @@ import { NOT_FOUND, OK } from 'http-status-codes';
 import { guard } from '../guards';
 import { getRepository } from 'typeorm';
 import { User, IUserSession } from '../../models';
-//import { validateGithubId } from '../validators';
 import { getStudentStats } from '../profile/student-stats';
 import { getPublicFeedback } from '../profile/public-feedback';
 import { Permissions } from '../profile/permissions';
 
 const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  console.log(111);
-  console.log(ctx.state);
   const { githubId } = ctx.state!.user as IUserSession;
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ where: { githubId } });
@@ -29,37 +26,37 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     avatarLink,
     englishLevel,
     desiredPosition,
-    cvName,
-    cvNotes,
-    cvPhone,
-    cvEmail,
-    cvSkype,
-    cvTelegram,
-    cvLinkedin,
-    cvLocation,
-    cvGithub,
-    cvWebsite
+    name,
+    notes,
+    phone,
+    email,
+    skype,
+    telegram,
+    linkedin,
+    location,
+    github,
+    website
   } = ctx.request.body;
 
   const result = await userRepository.save({
     ...user,
-    selfIntroLink,
-    startFrom,
-    fullTime,
-    militaryService,
-    avatarLink,
-    englishLevel,
-    desiredPosition,
-    cvName,
-    cvNotes,
-    cvPhone,
-    cvEmail,
-    cvSkype,
-    cvTelegram,
-    cvLinkedin,
-    cvLocation,
-    cvGithub,
-    cvWebsite
+    cvSelfIntroLink: selfIntroLink,
+    cvStartFrom: startFrom,
+    cvFullTime: fullTime,
+    cvMilitaryService: militaryService,
+    cvAvatarLink: avatarLink,
+    cvEnglishLevel: englishLevel,
+    cvDesiredPosition: desiredPosition,
+    cvName: name,
+    cvNotes: notes,
+    cvPhone: phone,
+    cvEmail: email,
+    cvSkype: skype,
+    cvTelegram: telegram,
+    cvLinkedin: linkedin,
+    cvLocation: location,
+    cvGithub: github,
+    cvWebsite: website
   });
   setResponse(ctx, OK, result);
 };
@@ -70,15 +67,15 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     .find({ where: { opportunitiesConsent: true } })
 
   let CVProfiles = users.map(item => {
-    const { cvName, githubId, desiredPosition, englishLevel, fullTime, cvLocation, startFrom } = item;
+    const { cvName, githubId, cvDesiredPosition, cvEnglishLevel, cvFullTime, cvLocation, cvStartFrom } = item;
     return {
-      cvName,
+      name: cvName,
       githubId,
-      desiredPosition,
-      englishLevel,
-      fullTime,
-      cvLocation,
-      startFrom
+      desiredPosition: cvDesiredPosition,
+      englishLevel: cvEnglishLevel,
+      fullTime: cvFullTime,
+      location: cvLocation,
+      startFrom: cvStartFrom
     };
   });
 
@@ -112,13 +109,13 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const {
     cvName: name,
-    desiredPosition,
-    avatarLink,
-    englishLevel,
-    militaryService,
-    selfIntroLink,
-    fullTime,
-    startFrom,
+    cvDesiredPosition: desiredPosition,
+    cvAvatarLink: avatarLink,
+    cvEnglishLevel: englishLevel,
+    cvMilitaryService: militaryService,
+    cvEnglishLevel: selfIntroLink,
+    cvFullTime: fullTime,
+    cvStartFrom: startFrom,
     cvPhone: phone,
     cvEmail: email,
     cvSkype: skype,
@@ -130,7 +127,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     cvNotes: notes
   } = profile;
 
-  const studentStats = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
+  const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
   const publicFeedback = await getPublicFeedback(githubId);
 
   const CVData = {
@@ -151,7 +148,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     location,
     github,
     website,
-    courses: studentStats,
+    courses,
     publicFeedback
   };
 
@@ -178,12 +175,12 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
   }
 
   const emptyOpportunitiesInfo = {
-    selfIntroLink: null,
+    cvSelfIntroLink: null,
     fullTime: false,
-    startFrom: null,
+    cvStartFrom: null,
     cvLink: null,
-    militaryService: null,
-    avatarLink: null,
+    cvMilitaryService: null,
+    cvAvatarLink: null,
     cvName: null,
     cvNotes: null,
     cvPhone: null,
