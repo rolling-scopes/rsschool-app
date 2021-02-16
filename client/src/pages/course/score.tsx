@@ -170,7 +170,7 @@ export function Page(props: CoursePageProps) {
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
             {renderCsvExportButton(props, handleLoadCsv)}
           </Row>
-          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName)}
+          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName, mentor)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -205,6 +205,7 @@ function renderTable(
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
   cityName: string | string[] = '',
+  mentor: string | string[] = '',
 ) {
   if (!loaded) {
     return null;
@@ -299,6 +300,7 @@ function renderTable(
           dataIndex: ['mentor', 'githubId'],
           width: 150,
           sorter: 'mentor',
+          defaultFilteredValue: isArray(mentor) ? mentor : [mentor],
           render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
           ...getColumnSearchProps('mentor.githubId'),
         },
