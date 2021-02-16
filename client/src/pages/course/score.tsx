@@ -12,12 +12,42 @@ import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
 import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
+import { onlyDefined } from '../../utils/onlyDefined';
 
 const { Text } = Typography;
 
+const getQueryParams = (
+  queryParams: { [key: string]: string | string[] | null | undefined },
+  initialQueryParams: ParsedUrlQuery = {},
+): ParsedUrlQuery => {
+  let params = { ...initialQueryParams };
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (!isNull(value) && !isUndefined(value)) {
+      if (isArray(value) && value[0] !== '') {
+        params = { ...params, [key]: value[0] };
+      } else if (typeof value === 'string' && value !== '') {
+        params = { ...params, [key]: value };
+      }
+    }
+  }
+  return params;
+};
+
+const getUrl = (id: number, params: string): string => {
+  return `/api/course/${id}/students/score/csv${params}`;
+};
+
+const getQueryParamsCSV = (params = {}): string => {
+  const queryParams = new URLSearchParams({
+    ...(onlyDefined(params) as object),
+  });
+  const queryString = queryParams.toString();
+  return queryString && `?${queryString}`;
+};
+
 export function Page(props: CoursePageProps) {
   const router = useRouter();
-  const { cityName, ...newQuery } = router.query;
+  const { ['mentor.githubId']: mentor, cityName, ...currentQuery } = router.query;
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
   const [loading, setLoading] = useState(false);
@@ -39,6 +69,9 @@ export function Page(props: CoursePageProps) {
       let filters = { activeOnly };
       if (!isUndefined(cityName)) {
         filters = { ...filters, cityName } as ScoreTableFilters;
+      }
+      if (!isUndefined(mentor)) {
+        filters = { ...filters, ['mentor.githubId']: mentor } as ScoreTableFilters;
       }
 
       const [courseScore, courseTasks] = await Promise.all([
@@ -72,12 +105,9 @@ export function Page(props: CoursePageProps) {
 
   const getCourseScore = useCallback(
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
-      const { cityName } = filters;
-      if (isNull(cityName)) {
-        setQueryParams(newQuery);
-      } else if (isArray(cityName) && cityName[0] !== '') {
-        setQueryParams({ ...newQuery, cityName: cityName[0] });
-      }
+      const { cityName, ['mentor.githubId']: mentor } = filters;
+      const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor }, currentQuery);
+      setQueryParams(newQueryParams);
       setLoading(true);
       try {
         const field = order.column?.sorter || 'rank';
@@ -93,7 +123,7 @@ export function Page(props: CoursePageProps) {
         setLoading(false);
       }
     },
-    [students, newQuery],
+    [students, currentQuery],
   );
 
   const handleActiveOnlyChange = useCallback(async () => {
@@ -115,6 +145,12 @@ export function Page(props: CoursePageProps) {
     }
   }, [activeOnly]);
 
+  const handleLoadCsv = useCallback(() => {
+    const queryParams = getQueryParamsCSV(getQueryParams({ cityName, ['mentor.githubId']: mentor }));
+    const url = getUrl(props.course.id, queryParams);
+    window.location.href = url;
+  }, [cityName, mentor, props.course.id]);
+
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -132,7 +168,7 @@ export function Page(props: CoursePageProps) {
               <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
             </div>
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
-            {renderCsvExportButton(props)}
+            {renderCsvExportButton(props, handleLoadCsv)}
           </Row>
           {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName)}
         </Spin>
@@ -142,7 +178,7 @@ export function Page(props: CoursePageProps) {
   );
 }
 
-function renderCsvExportButton(props: CoursePageProps) {
+function renderCsvExportButton(props: CoursePageProps, handleClick: () => void) {
   const { isAdmin, isHirer, roles, coursesRoles } = props.session;
   const courseId = props.course.id;
   const courseRole = coursesRoles?.[courseId];
@@ -156,10 +192,7 @@ function renderCsvExportButton(props: CoursePageProps) {
     return null;
   }
   return (
-    <Button
-      icon={<FileExcelOutlined />}
-      onClick={() => (window.location.href = `/api/course/${props.course.id}/students/score/csv`)}
-    >
+    <Button icon={<FileExcelOutlined />} onClick={handleClick}>
       Export CSV
     </Button>
   );
