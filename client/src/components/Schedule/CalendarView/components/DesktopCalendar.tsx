@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Badge, Typography } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { ModalWindow } from './Modal';
+import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
 

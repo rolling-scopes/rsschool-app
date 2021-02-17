@@ -28,7 +28,6 @@ const validateMessages = {
   number: {
     range: '${label} must be between ${min} and ${max}',
   },
-  links: 'Input link or delete this field.',
 };
 
 type Props = {

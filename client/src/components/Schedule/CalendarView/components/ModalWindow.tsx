@@ -13,7 +13,7 @@ type Props = {
   storedTagColors?: object;
 };
 
-export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone, storedTagColors }: Props) {
+const ModalWindow: React.FC<Props> = ({ isOpen, dataEvent, handleOnClose, timeZone, storedTagColors }) => {
   return (
     <>
       <Modal
@@ -43,4 +43,6 @@ export function ModalWindow({ isOpen, dataEvent, handleOnClose, timeZone, stored
       </Modal>
     </>
   );
-}
+};
+
+export default ModalWindow;

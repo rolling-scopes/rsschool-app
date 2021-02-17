@@ -5,58 +5,50 @@ import { EVENT_TYPES, TASK_TYPES } from '../model';
 
 export const pickerColors = [
   '#ff0000',
-  '#03968d',
-  '#fccb00',
-  '#37d67a',
+  '#4b5a59',
+  '#ffa940',
+  '#13c2c2',
   '#308e00',
   '#2db7f5',
   '#004dcf',
-  '#a326f4',
+  '#b04df0',
   '#fa28ff',
   '#959e3c',
+  '#9ce20d',
+  '#24db00',
+  '#ff7a45',
+  '#ae8989',
+  '#9321a2',
 ];
-
-// export const pickerColors = [
-//   '#ff0000',
-//   '#FF6900',
-//   '#FCCB00',
-//   '#37D67A',
-//   '#308e00',
-//   '#2db7f5',
-//   '#004DCF',
-//   '#a326f4',
-//   '#FA28FF',
-//   '#F78DA7',
-// ];
 
 export const DEFAULT_COLORS = {
   'CV HTML': '#004dcf',
   'CV Markdown': '#2db7f5',
   'Code Jam': '#fa28ff',
-  'Code review': '#a326f4',
-  Codewars: '#a326f4',
+  'Code review': '#b04df0',
+  Codewars: '#b04df0',
   'Cross-check': '#004dcf',
   'HTML task': '#308e00',
-  Info: '#37d67a',
-  Interview: '#37d67a',
-  'JS task': '#03968d',
-  'Kotlin task': '#fccb00',
+  Info: '#13c2c2',
+  Interview: '#13c2c2',
+  'JS task': '#4b5a59',
+  'Kotlin task': '#ffa940',
   Meetup: '#2db7f5',
-  'ObjC task': '#37d67a',
+  'ObjC task': '#13c2c2',
   'Offline Lecture': '#fa28ff',
-  'Online Lecture': '#a326f4',
+  'Online Lecture': '#b04df0',
   'Online/Offline Lecture': '#959e3c',
   'Self Education': '#959e3c',
-  'Self-studying': '#03968d',
+  'Self-studying': '#4b5a59',
   Special: '#308e00',
   Task: '#2db7f5',
-  'Technical Screening': '#fccb00',
-  Test: '#03968d',
-  'Warm-up': '#fccb00',
+  'Technical Screening': '#ffa940',
+  Test: '#4b5a59',
+  'Warm-up': '#ffa940',
   Webinar: '#004dcf',
   Workshop: '#308e00',
   deadline: '#ff0000',
-  default: '#fccb00',
+  default: '#ffa940',
 };
 
 export const DEFAULT_COLOR = {
@@ -80,20 +72,20 @@ export const getDefaultColors = () => {
   return defColors;
 };
 
-export function setTagColor(
+export const setTagColor = (
   e: IColorState,
   tagName: string,
   localStorageHook: (value: object) => void,
   storedTagColors = {},
-) {
+) => {
   localStorageHook({ ...storedTagColors, [tagName]: e.hex });
-}
+};
 
-export function getTagColor(tagName: string, storedTagColors: Record<string, string> = {}) {
+export const getTagColor = (tagName: string, storedTagColors: Record<string, string> = {}) => {
   return storedTagColors[tagName] || DEFAULT_COLOR.default;
-}
+};
 
-export function getTagStyle(tagName: string, storedTagColors = {}, styles?: CSSProperties) {
+export const getTagStyle = (tagName: string, storedTagColors = {}, styles?: CSSProperties) => {
   const tagColor: string = getTagColor(tagName, storedTagColors);
   return {
     ...styles,
@@ -101,4 +93,4 @@ export function getTagStyle(tagName: string, storedTagColors = {}, styles?: CSSP
     color: tagColor,
     backgroundColor: `${tagColor}10`,
   };
-}
+};

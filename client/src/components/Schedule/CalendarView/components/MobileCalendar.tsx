@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Badge, List } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
-import { ModalWindow } from './Modal';
+import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
 import { dateWithTimeZoneRenderer } from 'components/Table';

@@ -80,7 +80,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       break;
     case 'Organizer':
       inputNode = <UserSearch style={{ minWidth: 150 }} searchFn={loadUsers} />;
-      rules = { required: false, message: 'Please select a organizer' };
+      rules = { required: false, message: 'Please select an organizer' };
       break;
     case 'Place':
       inputNode = <Input style={{ minWidth: 150 }} disabled={record.isTask} />;

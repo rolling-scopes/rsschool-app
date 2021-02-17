@@ -24,7 +24,7 @@ type Props = {
   alias: string;
 };
 
-export const ListView = ({ data, timeZone, storedTagColors, alias }: Props): React.ReactElement => {
+export const ListView: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
   const [currentWeek, setCurrentWeek] = useState(0);
 
   const currentDayKey = useMemo(() => {
