@@ -9,6 +9,7 @@ import { CourseService, CourseTask } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
+import { useAsync } from 'react-use';
 
 type Assignment = { student: StudentBasic; url: string };
 type HistoryItem = { comment: string; score: number; dateTime: number };
@@ -101,16 +102,10 @@ function Page(props: CoursePageProps) {
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
-  const dataEffect = () => {
-    const getData = async () => {
-      const data = await courseService.getCourseTasks();
-      const courseTasks = data.filter(t => t.checker === 'crossCheck');
-      setCourseTasks(courseTasks);
-    };
-    getData();
-  };
-
-  useEffect(dataEffect, [props.course.id]);
+  useAsync(async () => {
+    const data = await courseService.getCourseCrossCheckTasks();
+    setCourseTasks(data);
+  }, [courseService]);
 
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
@@ -123,6 +118,8 @@ function Page(props: CoursePageProps) {
         score: values.score,
         comment: values.comment,
         anonymous: values.visibleName !== true,
+        comments: [],
+        review: [],
       });
       message.success('The review has been submitted. Thanks!');
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);

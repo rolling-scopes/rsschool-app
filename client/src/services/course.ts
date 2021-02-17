@@ -95,6 +95,14 @@ export interface MentorWithContacts {
   phone: string;
 }
 
+export type CrossCheckCriteria = { type: string; title?: string; text?: string; max: number; criteriaId: string };
+export type CrossCheckReview = { percentage: number; criteriaId: string };
+export type CrossCheckComment = {
+  text: string;
+  criteriaId: string;
+  timestamp: number;
+};
+
 export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
 
 export class CourseService {
@@ -108,6 +116,11 @@ export class CourseService {
     type Response = { data: CourseTask[] };
     const result = await this.axios.get<Response>('/tasks');
     return result.data.data.sort(sortTasksByEndDate);
+  }
+
+  async getCourseCrossCheckTasks() {
+    const data = await this.getCourseTasks();
+    return data.filter(t => t.checker === 'crossCheck');
   }
 
   async getCourseTasksDetails() {
@@ -274,9 +287,17 @@ export class CourseService {
     await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
   }
 
-  async postTaskSolution(githubId: string, courseTaskId: number, url: string) {
+  async postTaskSolution(
+    githubId: string,
+    courseTaskId: number,
+    url: string,
+    review?: CrossCheckReview[],
+    comments?: CrossCheckComment[],
+  ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
       url,
+      review,
+      comments,
     });
   }
 
@@ -289,7 +310,13 @@ export class CourseService {
   async postTaskSolutionResult(
     githubId: string,
     courseTaskId: number,
-    data: { score: number; comment: string; anonymous: boolean },
+    data: {
+      score: number;
+      comment: string;
+      anonymous: boolean;
+      review: CrossCheckReview[];
+      comments: CrossCheckComment[];
+    },
   ) {
     await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
@@ -297,6 +324,13 @@ export class CourseService {
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
     const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/result`);
     return result.data.data as { historicalScores: { score: number; comment: string; dateTime: number }[] } | null;
+  }
+
+  async getCrossCheckTaskDetails(courseTaskId: number) {
+    const result = await this.axios.get(`/task/${courseTaskId}/cross-check/details`);
+    return result.data.data as {
+      criteria: CrossCheckCriteria[];
+    } | null;
   }
 
   async postTaskVerification(courseTaskId: number, data: any) {
@@ -611,6 +645,8 @@ export interface TaskSolution {
   url: string;
   updatedDate: string;
   id: string;
+  review?: CrossCheckReview[];
+  comments?: CrossCheckComment[];
 }
 
 export interface CrossCheckPairs {
