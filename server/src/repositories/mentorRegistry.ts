@@ -12,6 +12,7 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
   public async findByCoursesIds(coursesIds: Array<any>) {
     const data = await this.getPreparedMentorRegistriesQuery()
       .where('mentorRegistry.preferedCourses IN (:...ids)', { ids: coursesIds })
+      .andWhere('mentorRegistry.canceled = false')
       .getMany();
     return data.map(transformMentorRegistry);
   }
