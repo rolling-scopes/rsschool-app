@@ -6,7 +6,7 @@ import { getCourseTasks, getEvents } from '../../services/course.service';
 import { setCsvResponse, setResponse } from '../utils';
 import { getManager, getRepository, ObjectType, UpdateEvent } from 'typeorm';
 import { Task, CourseTask, Event, CourseEvent } from '../../models';
-
+import { getConnection } from 'typeorm';
 
 export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
@@ -45,35 +45,86 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
 export const setScheduleFromCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);
   const data = ctx.request.body;
-  
-  const isOldTasks = (entity: any) => entity.entityType === 'task' && entity.id;
-  const isNewTasks = (entity: any) => entity.entityType === 'task' && !entity.id;
-  const isOldEvents = (entity: any) => entity.entityType === 'event' && entity.id;
-  const isNewEvents = (entity: any) => entity.entityType === 'event' && !entity.id;
 
-  // we make 100500 requests in parallel and process them. But it's better to do it all in one transaction.
-  const result = await Promise.allSettled(data.map(async (entity: any) => {
-    if (isOldTasks(entity)) {
-      const response1 = await getRepository(Task).update(entity.id, entity);
-      const response2 = await getRepository(CourseTask).update(entity.id, entity);
-      return { response1, response2, status: 'OK' };
-    }
-    if (isNewTasks(entity)) {
-      const response1 = await getRepository(Task).insert(entity);
-      const response2 = await getRepository(CourseTask).insert(entity);
-      return { response1, response2, status: 'OK' };
-    }
-    if (isOldEvents(entity)) {
-      const response1 = await getRepository(Event).update(entity.id, entity);
-      const response2 = await getRepository(CourseEvent).update(entity.id, entity);
-      return { response1, response2, status: 'OK' };
-    }
-    if (isNewEvents(entity)) {
-      const response1 = await getRepository(Event).insert(entity);
-      const response2 = await getRepository(CourseEvent).insert(entity);
-      return { response1, response2, status: 'OK' };
-    }
-  }));
+  const saveCsvToDatabase = async (data: any, courseId: number) => {
+    const rawOldTasks = data.filter((entity: any) => entity.entityType === 'task' && entity.id);
+    const rawNewTasks = data.filter((entity: any) => entity.entityType === 'task' && !entity.id);
+    const rawOldEvents = data.filter((entity: any) => entity.entityType === 'event' && entity.id);
+    const rawNewEvents = data.filter((entity: any) => entity.entityType === 'event' && !entity.id);
+    console.log(data.length);
+    console.log('!!!!',rawOldTasks, rawNewTasks, rawOldEvents, rawNewEvents);
+    // preparation of data for sending to DB
+    const oldTasksForTaskRepository = rawNewTasks.map((entity: any) => ({
+      name: entity.name,
+      descriptionUrl: entity.descriptionUrl,
+    }));
 
-  setResponse(ctx, OK, result);
+    const oldldTasksForCourseTaskRepository = rawNewTasks.map((entity: any) => ({
+      name: entity.name,
+      descriptionUrl: entity.descriptionUrl,
+    }));
+
+    const newTasksForTaskRepository = rawOldTasks.map((entity: any) => ({}));
+    const newTasksForCourseTaskRepository = rawOldTasks.map((entity: any) => ({}));
+
+    const oOldEventsForEventRepository = rawNewEvents.map((entity: any) => ({}));
+    const oldEventsForCourseEventRepository = rawNewEvents.map((entity: any) => ({}));
+
+    const newEventsForTaskRepository = rawOldEvents.map((entity: any) => ({}));
+    const newEventsForCourseTaskRepository = rawOldEvents.map((entity: any) => ({}));
+
+    // sending data to DB // const recordOldTasksForTaskRepository = oldTasksForTaskRepository.map((entity: any) => getRepository(Task).update(entity.id, entity));
+
+    // oldTasks
+    const recordOldTasksForTaskRepository = oldTasksForTaskRepository.map((entity: any) => ({}));
+    const recordOldTasksForCourseTaskRepository = oldldTasksForCourseTaskRepository.map((entity: any) => ({}));
+
+    // newTasks
+    const recordNewTasksForTaskRepository = newTasksForTaskRepository.map((entity: any) => ({}));
+    const recordNewTasksForCourseTaskRepository = newTasksForCourseTaskRepository.map((entity: any) => ({}));
+    // oldEvents
+    const recordOldEventsForEventRepository = oOldEventsForEventRepository.map((entity: any) => ({}));
+    const recordOldEventsForCourseEventRepository = oldEventsForCourseEventRepository.map((entity: any) => ({}));
+    // newEvents
+    const recordNewEventsForTaskRepository = newEventsForTaskRepository.map((entity: any) => ({}));
+    const recordNewEventsForCourseTaskRepository = newEventsForCourseTaskRepository.map((entity: any) => ({}));
+
+    console.log({
+      recordOldTasksForTaskRepository,
+      recordOldTasksForCourseTaskRepository,
+      recordNewTasksForTaskRepository,
+      recordNewTasksForCourseTaskRepository,
+      recordOldEventsForEventRepository,
+      recordOldEventsForCourseEventRepository,
+      recordNewEventsForTaskRepository,
+      recordNewEventsForCourseTaskRepository,
+    });
+
+    return {
+      recordOldTasksForTaskRepository,
+      recordOldTasksForCourseTaskRepository,
+      recordNewTasksForTaskRepository,
+      recordNewTasksForCourseTaskRepository,
+      recordOldEventsForEventRepository,
+      recordOldEventsForCourseEventRepository,
+      recordNewEventsForTaskRepository,
+      recordNewEventsForCourseTaskRepository,
+    };
+  };
+
+  const queryRunner = getConnection().createQueryRunner();
+  let response = null;
+
+  await queryRunner.startTransaction();
+  try {
+    response = saveCsvToDatabase(data, courseId);
+    await queryRunner.commitTransaction();
+  } catch (err) {
+    response = err;
+    await queryRunner.rollbackTransaction();
+    return;
+  } finally {
+    await queryRunner.release();
+    setResponse(ctx, OK, response);
+  }
 };
