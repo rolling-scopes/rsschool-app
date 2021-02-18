@@ -114,7 +114,7 @@ class ViewCV extends React.Component<Props, State> {
 
     return (
       <LoadingScreen show={isLoading}>
-        <Layout className="hide-border-on-print" style={{ marginBottom: '15px', maxWidth: '960px', backgroundColor: '#FFF', border: '1px solid black' }}>
+        <Layout className="hide-border-on-print" style={{ marginBottom: '15px', maxWidth: '960px', backgroundColor: '#FFF'}}>
           <Content>
             <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
               {userData && contactsList && (
