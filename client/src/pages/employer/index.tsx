@@ -225,10 +225,10 @@ class Page extends React.Component<Props, State> {
 
     if (users) {
       data = users.map((item: any, index: any) => {
-        const { cvName, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, cvLocation: location } = item;
+        const { name, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, location } = item;
         return {
           key: index,
-          complexData: { name: cvName, githubId },
+          complexData: { name, githubId },
           courses,
           publicFeedback,
           desiredPosition,
