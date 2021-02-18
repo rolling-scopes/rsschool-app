@@ -1,48 +1,23 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
 import { useRouter } from 'next/router';
-import { isArray, isNull, isUndefined } from 'lodash';
+import { isArray, isUndefined } from 'lodash';
 import { GithubAvatar, Header, withSession } from 'components';
-import { dateTimeRenderer, dateRenderer, getColumnSearchProps } from 'components/Table';
+import { dateRenderer, dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, StudentScore, CourseTask } from 'services/course';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { CourseService, CourseTask, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
-import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
+import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
-import { onlyDefined } from '../../utils/onlyDefined';
+import { getQueryParams, getQueryString } from '../../utils/queryParams-utils';
 
 const { Text } = Typography;
 
-const getQueryParams = (
-  queryParams: { [key: string]: string | string[] | null | undefined },
-  initialQueryParams: ParsedUrlQuery = {},
-): ParsedUrlQuery => {
-  let params = { ...initialQueryParams };
-  for (const [key, value] of Object.entries(queryParams)) {
-    if (!isNull(value) && !isUndefined(value)) {
-      if (isArray(value) && value[0] !== '') {
-        params = { ...params, [key]: value[0] };
-      } else if (typeof value === 'string' && value !== '') {
-        params = { ...params, [key]: value };
-      }
-    }
-  }
-  return params;
-};
-
 const getUrl = (id: number, params: string): string => {
   return `/api/course/${id}/students/score/csv${params}`;
-};
-
-const getQueryParamsCSV = (params = {}): string => {
-  const queryParams = new URLSearchParams({
-    ...(onlyDefined(params) as object),
-  });
-  const queryString = queryParams.toString();
-  return queryString && `?${queryString}`;
 };
 
 export function Page(props: CoursePageProps) {
@@ -146,7 +121,7 @@ export function Page(props: CoursePageProps) {
   }, [activeOnly]);
 
   const handleLoadCsv = useCallback(() => {
-    const queryParams = getQueryParamsCSV(getQueryParams({ cityName, ['mentor.githubId']: mentor }));
+    const queryParams = getQueryString(getQueryParams({ cityName, ['mentor.githubId']: mentor }));
     const url = getUrl(props.course.id, queryParams);
     window.location.href = url;
   }, [cityName, mentor, props.course.id]);
