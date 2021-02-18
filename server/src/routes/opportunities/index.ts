@@ -124,7 +124,8 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     cvLocation: location,
     cvGithub: github,
     cvWebsite: website,
-    cvNotes: notes
+    cvNotes: notes,
+    cvExpires: expires
   } = profile;
 
   const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
@@ -149,7 +150,8 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     github,
     website,
     courses,
-    publicFeedback
+    publicFeedback,
+    expires
   };
 
   setResponse(ctx, OK, CVData);
@@ -216,6 +218,31 @@ export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
   setResponse(ctx, OK, profile.opportunitiesConsent);
 };
 
+export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId } = ctx.state!.user as IUserSession;
+  const userRepository = getRepository(User);
+
+  const profile = await getRepository(User).findOne({ where: { githubId } });
+  
+  if (profile === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const now = new Date();
+
+  now.setDate(now.getDate() + 14);
+  
+  const addZeroPadding = (num: number) => `0${num}`.slice(-2);
+
+  const [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+
+  const newExpirationDateFormatted=`${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
+
+  const result = await userRepository.save({ ...profile, cvExpires: newExpirationDateFormatted});
+  setResponse(ctx, OK, result.cvExpires);
+};
+
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
 
@@ -224,9 +251,10 @@ export function opportunitiesRoute(logger: ILogger) {
   router.get('/cv', guard, getCVData(logger));
   router.post('/', guard, saveCVData(logger));
 
-
-  router.get('/consent/', guard, getOpportunitiesConsent(logger));
+  router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent/:githubId', guard, setOpportunitiesConsent(logger));
+
+  router.post('/extend', guard, extendCV(logger))
 
   return router;
 }
