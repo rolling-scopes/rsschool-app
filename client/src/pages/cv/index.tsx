@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Switch, Typography } from 'antd';
+import { Layout, Switch, Typography, Result } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -73,10 +73,9 @@ class CVPage extends React.Component<Props, State> {
   render() {
 
     const { editMode, opportunitiesConsent, isLoading } = this.state;
+	
     const userGithubId = this.props.session.githubId;
-
     const ownerId = this.props.router.query.githubId;
-    console.log(ownerId);
 
     const isOwner = userGithubId === ownerId;
 
