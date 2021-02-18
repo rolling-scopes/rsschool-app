@@ -101,6 +101,9 @@ export class User {
   cvFullTime?: boolean;
 
   @Column({ nullable: true, type: 'text' })
+  cvExpires?: string | null;
+
+  @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
 
   @Column({ nullable: true, type: 'text' })

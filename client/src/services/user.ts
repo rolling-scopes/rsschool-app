@@ -141,6 +141,11 @@ export class UserService {
     return response.data.data;
   }
 
+  async extendCV() {
+    const response = await this.axios.post<{data: string}>('/api/opportunities/extend');
+    return response.data.data;
+  }
+
 
 }
 
