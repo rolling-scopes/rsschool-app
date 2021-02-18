@@ -4,7 +4,6 @@ import SectionCV from '../SectionCV';
 import ContactsListCV from '../ContactsListCV';
 import AvatarCV from '../AvatarCV';
 import { Contacts, MilitaryService, EnglishLevel } from '../../../../../common/models/cv';
-import { SmileOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -52,7 +51,7 @@ function MainSection(props: Props) {
       </Col>
     </Row>
   );
-  return <SectionCV title={'General info'} icon={<SmileOutlined />} content={sectionContent} className='hide-on-print' />;
+  return <SectionCV content={sectionContent} className='hide-on-print' />;
 }
 
 export default MainSection;
