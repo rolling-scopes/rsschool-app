@@ -1,7 +1,7 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
 import { useRouter } from 'next/router';
-import { isArray, isNull, isUndefined } from 'lodash';
+import { isArray, isUndefined } from 'lodash';
 import { GithubAvatar, Header, withSession } from 'components';
 import { dateRenderer, dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -10,8 +10,9 @@ import { CourseService, CourseTask, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
-import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
+import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
+import { getQueryParams, getQueryString } from '../../utils/queryParams-utils';
 
 const { Text } = Typography;
 
@@ -21,7 +22,7 @@ const getUrl = (id: number, params: string): string => {
 
 export function Page(props: CoursePageProps) {
   const router = useRouter();
-  const { cityName, ...newQuery } = router.query;
+  const { ['mentor.githubId']: mentor, cityName, ...currentQuery } = router.query;
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,9 @@ export function Page(props: CoursePageProps) {
       let filters = { activeOnly };
       if (!isUndefined(cityName)) {
         filters = { ...filters, cityName } as ScoreTableFilters;
+      }
+      if (!isUndefined(mentor)) {
+        filters = { ...filters, ['mentor.githubId']: mentor } as ScoreTableFilters;
       }
 
       const [courseScore, courseTasks] = await Promise.all([
@@ -76,12 +80,9 @@ export function Page(props: CoursePageProps) {
 
   const getCourseScore = useCallback(
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
-      const { cityName } = filters;
-      if (isNull(cityName)) {
-        setQueryParams(newQuery);
-      } else if (isArray(cityName) && cityName[0] !== '') {
-        setQueryParams({ ...newQuery, cityName: cityName[0] });
-      }
+      const { cityName, ['mentor.githubId']: mentor } = filters;
+      const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor }, currentQuery);
+      setQueryParams(newQueryParams);
       setLoading(true);
       try {
         const field = order.column?.sorter || 'rank';
@@ -97,7 +98,7 @@ export function Page(props: CoursePageProps) {
         setLoading(false);
       }
     },
-    [students, newQuery],
+    [students, currentQuery],
   );
 
   const handleActiveOnlyChange = useCallback(async () => {
@@ -144,7 +145,7 @@ export function Page(props: CoursePageProps) {
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
             {renderCsvExportButton(props, handleLoadCsv)}
           </Row>
-          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName)}
+          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName, mentor)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -179,6 +180,7 @@ function renderTable(
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
   cityName: string | string[] = '',
+  mentor: string | string[] = '',
 ) {
   if (!loaded) {
     return null;

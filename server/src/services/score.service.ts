@@ -57,8 +57,8 @@ export async function getStudentsScore(
   }
 
   if (filter.name) {
-    query = query.andWhere('("user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText)', {
-      searchText: `%${filter.name}%`,
+    query = query.andWhere('("user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchNameText)', {
+      searchNameText: `%${filter.name}%`,
     });
   }
 
