@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Switch, Typography, Result } from 'antd';
+import { Layout, Switch, Typography } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -73,7 +73,7 @@ class CVPage extends React.Component<Props, State> {
   render() {
 
     const { editMode, opportunitiesConsent, isLoading } = this.state;
-	
+
     const userGithubId = this.props.session.githubId;
     const ownerId = this.props.router.query.githubId;
 
@@ -105,7 +105,6 @@ class CVPage extends React.Component<Props, State> {
         }
       } else {
         if (opportunitiesConsent) {
-          console.log(1);
           content = <ViewCV ownerId={ownerId} />;
         } else {
           content = <NoConsentViewCV isOwner={false} />;
@@ -113,22 +112,20 @@ class CVPage extends React.Component<Props, State> {
       }
     }
 
-    
+
 
     return (
       <>
-      <LoadingScreen show={isLoading}>
-        <Header username={userGithubId} />
-        <Layout style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
-          <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-            {content}
-          </Content>
-
-        </Layout>
-        <FooterLayout />
-
-      </LoadingScreen>
-      <style jsx global>{`
+        <LoadingScreen show={isLoading}>
+          <Header username={userGithubId} />
+          <Layout style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
+            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
+              {content}
+            </Content>
+          </Layout>
+          <FooterLayout />
+        </LoadingScreen>
+        <style jsx global>{`
           @media print {
             .hide-on-print, .ant-avatar-icon, .profile, .footer {
               display: none !important;
