@@ -6,7 +6,7 @@ import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
-import { WarningTwoTone, SaveOutlined, ClearOutlined, DeleteOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { WarningTwoTone, SaveOutlined, ClearOutlined, DeleteOutlined, FieldTimeOutlined, CopyOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -255,22 +255,22 @@ class EditCV extends React.Component<Props, State> {
                 {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
                 {contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}
               </Space>
-              <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.fillFromProfile()}>
-                Get data from profile
+              <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
+                Save
               </Button>
               <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
-                  Save
-              </Button>
-                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
+                <Button style={{ ...buttonStyle, width: '33%' }} type="default" htmlType="button" onClick={() => this.fillFromProfile()} icon={<CopyOutlined />}>
+                  Get data from profile
+                </Button>
+                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
                   Reset fields
-              </Button>
-                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
+                </Button>
+                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
                   Extend CV
-              </Button>
-                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
+                </Button>
+                <Button style={{ ...buttonStyle, width: '21%' }} type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
                   Delete my CV
-              </Button>
+                </Button>
               </div>
             </Card>
           </Content>
