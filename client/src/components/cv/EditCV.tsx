@@ -233,7 +233,7 @@ class EditCV extends React.Component<Props, State> {
   private async extendCV() {
     const newExpirationDate = await this.userService.extendCV()
     this.setState({
-        expires: newExpirationDate
+      expires: newExpirationDate
     })
   }
 
@@ -259,19 +259,19 @@ class EditCV extends React.Component<Props, State> {
                 Get data from profile
               </Button>
               <div style={{ display: 'flex', justifyContent: "space-between" }}>
-              <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
-                Save
+                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
+                  Save
               </Button>
-              <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
-                Reset fields
+                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
+                  Reset fields
               </Button>
-			  <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
-                Extend CV
+                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
+                  Extend CV
               </Button>
-			  <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
-                Delete my CV
+                <Button style={{ ...buttonStyle, width: '23%' }} block type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
+                  Delete my CV
               </Button>
-              </div>              
+              </div>
             </Card>
           </Content>
         </Layout>
