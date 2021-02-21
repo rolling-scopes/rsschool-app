@@ -6,7 +6,6 @@ import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { UserService } from '../../services/user';
-import { mockCVInfo } from './mockData';
 import heroesBadges from '../../configs/heroes-badges';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -208,10 +207,8 @@ class Page extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    //const data = [mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo, mockCVInfo];
     await this.setState({ isLoading: true });
     const data = await this.fetchData();
-    console.log(data);
     await this.setState({ users: data })
     await this.setState({ isLoading: false });
   }
