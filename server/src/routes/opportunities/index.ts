@@ -11,12 +11,15 @@ import { Permissions } from '../profile/permissions';
 
 const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.state!.user as IUserSession;
+
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ where: { githubId } });
+
   if (user === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
+
   const {
     selfIntroLink,
     startFrom,
@@ -62,9 +65,7 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-
-  const users = await getRepository(User)
-    .find({ where: { opportunitiesConsent: true } })
+  const users = await getRepository(User).find({ where: { opportunitiesConsent: true } });
 
   let CVProfiles = users.map(item => {
     const { cvName, githubId, cvDesiredPosition, cvEnglishLevel, cvFullTime, cvLocation, cvStartFrom } = item;
@@ -80,13 +81,12 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   });
 
   if (CVProfiles.length) {
-    CVProfiles = await Promise.all(CVProfiles.map(async (profile: any) => {
-      const { githubId } = profile;
+    CVProfiles = await Promise.all(CVProfiles.map(async (user: any) => {
+      const { githubId } = user;
       const feedback = await getPublicFeedback(githubId);
       const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
-      console.log(courses);
       return {
-        ...profile,
+        ...user,
         feedback,
         courses
       };
@@ -99,10 +99,9 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.query;
 
-  const userRepository = getRepository(User);
-  const profile = await userRepository.findOne({ where: { githubId } });
+  const user = await getRepository(User).findOne({ where: { githubId } });
 
-  if (profile === undefined) {
+  if (user === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
@@ -126,7 +125,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     cvWebsite: website,
     cvNotes: notes,
     cvExpires: expires
-  } = profile;
+  } = user;
 
   const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
   const publicFeedback = await getPublicFeedback(githubId);
@@ -155,24 +154,24 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   };
 
   setResponse(ctx, OK, CVData);
-
 };
 
 export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.query;
 
   const userRepository = getRepository(User);
-  const profile = await userRepository.findOne({ where: { githubId } });
-  if (profile === undefined) {
+  const user = await userRepository.findOne({ where: { githubId } });
+
+  if (user === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
   const { opportunitiesConsent: reqConsent } = ctx.request.body;
-  const prevConsent = profile.opportunitiesConsent;
+  const prevConsent = user.opportunitiesConsent;
 
   if (reqConsent === prevConsent) {
-    setResponse(ctx, OK, profile.opportunitiesConsent);
+    setResponse(ctx, OK, user.opportunitiesConsent);
     return;
   }
 
@@ -196,50 +195,47 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
   };
 
   const userWithEmptyOpportunities = {
-    ...profile,
+    ...user,
     ...emptyOpportunitiesInfo,
     opportunitiesConsent: reqConsent
   };
 
-  const result = await userRepository.save({ ...profile, ...userWithEmptyOpportunities });
-  setResponse(ctx, OK, result.opportunitiesConsent);
+  const result = await userRepository.save({ ...user, ...userWithEmptyOpportunities });
 
+  setResponse(ctx, OK, result.opportunitiesConsent);
 };
 
 export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.query;
 
-  const profile = await getRepository(User).findOne({ where: { githubId } });
-  if (profile === undefined) {
+  const user = await getRepository(User).findOne({ where: { githubId } });
+
+  if (user === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  setResponse(ctx, OK, profile.opportunitiesConsent);
+  setResponse(ctx, OK, user.opportunitiesConsent);
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.state!.user as IUserSession;
-  const userRepository = getRepository(User);
 
-  const profile = await getRepository(User).findOne({ where: { githubId } });
-  
-  if (profile === undefined) {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({ where: { githubId } });
+
+  if (user === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
   const now = new Date();
-
   now.setDate(now.getDate() + 14);
-  
   const addZeroPadding = (num: number) => `0${num}`.slice(-2);
-
   const [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+  const newExpirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
+  const result = await userRepository.save({ ...user, cvExpires: newExpirationDateFormatted });
 
-  const newExpirationDateFormatted=`${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
-
-  const result = await userRepository.save({ ...profile, cvExpires: newExpirationDateFormatted});
   setResponse(ctx, OK, result.cvExpires);
 };
 
