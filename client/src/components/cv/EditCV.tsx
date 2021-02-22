@@ -201,8 +201,8 @@ class EditCV extends React.Component<Props, State> {
     const telegram = profile.contacts?.telegram ?? null;
     const linkedin = profile.contacts?.linkedIn ?? null;
 
-    const prevUserData = this.state.userData;
-    const prevContacts = this.state.contactsList;
+    const prevUserData = this.state.userData as UserData;
+    const prevContacts = this.state.contactsList as Contacts;
 
     const newUserData = {
       ...prevUserData,
@@ -221,8 +221,8 @@ class EditCV extends React.Component<Props, State> {
     };
 
     await this.setState({
-      userData: newUserData as UserData,
-      contactsList: newContacts as Contacts,
+      userData: newUserData,
+      contactsList: newContacts,
     });
   }
 
