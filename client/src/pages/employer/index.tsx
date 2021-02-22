@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Table, Button, List, Typography, Row, Col, Badge, Card, Popconfirm } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
@@ -198,13 +198,11 @@ class Page extends React.Component<Props, State> {
     await this.setState({ isLoading: false });
   }
 
-
-
-  private async setAdminMode() {
-    await this.setState({
-      adminMode: true
-    });
-  }
+  /*   private async setAdminMode() {
+      await this.setState({
+        adminMode: true
+      });
+    } */
 
   async componentDidMount() {
     await this.setState({ isLoading: true });
@@ -245,8 +243,7 @@ class Page extends React.Component<Props, State> {
         <LoadingScreen show={isLoading}>
           <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-              <Button htmlType='button' onClick={this.setAdminMode.bind(this)}>Set admin mode</Button>
-              <Button htmlType='button' onClick={this.fetchData.bind(this)}>Get profiles</Button>
+
               <Table style={{ minWidth: '99vw' }} columns={this.columns} dataSource={data}></Table>
             </Content>
           </Layout>
