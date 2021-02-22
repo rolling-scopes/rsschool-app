@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Switch, Typography } from 'antd';
+import { Layout, Switch, Typography, Result } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -11,7 +11,7 @@ import NoConsentViewCV from 'components/CV/NoConsentViewCV';
 import { UserService } from '../../services/user';
 
 const { Content } = Layout;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 type Props = {
   router: NextRouter;
@@ -22,13 +22,15 @@ type State = {
   isLoading: boolean;
   editMode: boolean;
   opportunitiesConsent: boolean | null;
+  errorOccured: boolean;
 };
 
 class CVPage extends React.Component<Props, State> {
   state: State = {
     isLoading: true,
     editMode: false,
-    opportunitiesConsent: null
+    opportunitiesConsent: null,
+    errorOccured: false
   };
 
   private userService = new UserService();
@@ -65,14 +67,19 @@ class CVPage extends React.Component<Props, State> {
 
   async componentDidMount() {
     await this.setState({ isLoading: true });
-    const opportunitiesConsent = await this.userService.getOpportunitiesConsent(this.props.router.query.githubId as string);
-    await this.setState({ opportunitiesConsent });
+    try {
+      const opportunitiesConsent = await this.userService.getOpportunitiesConsent(this.props.router.query.githubId as string);
+      await this.setState({ opportunitiesConsent });
+    } catch (e) {
+      await this.setState({
+        errorOccured: true
+      });
+    }
     await this.setState({ isLoading: false });
   }
 
   render() {
-
-    const { editMode, opportunitiesConsent, isLoading } = this.state;
+    const { editMode, opportunitiesConsent, isLoading, errorOccured } = this.state;
 
     const userGithubId = this.props.session.githubId;
     const ownerId = this.props.router.query.githubId;
@@ -81,8 +88,14 @@ class CVPage extends React.Component<Props, State> {
 
     let content;
 
+    if (errorOccured) {
+      return (
+        <Result status={404} title="User not found" />
+      );
+    }
+
     if (ownerId === undefined || ownerId instanceof Array) {
-      content = <Title>This page doesn't exist</Title>;
+      content = <Result status="warning" title="This page doesn't exist" />;
     } else {
       if (isOwner) {
         if (opportunitiesConsent) {
@@ -112,8 +125,6 @@ class CVPage extends React.Component<Props, State> {
       }
     }
 
-
-
     return (
       <>
         <LoadingScreen show={isLoading}>
@@ -139,7 +150,5 @@ class CVPage extends React.Component<Props, State> {
     );
   }
 }
-
-
 
 export default withRouter(withSession(CVPage));
