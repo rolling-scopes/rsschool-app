@@ -112,7 +112,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     cvAvatarLink: avatarLink,
     cvEnglishLevel: englishLevel,
     cvMilitaryService: militaryService,
-    cvEnglishLevel: selfIntroLink,
+    cvSelfIntroLink: selfIntroLink,
     cvFullTime: fullTime,
     cvStartFrom: startFrom,
     cvPhone: phone,
