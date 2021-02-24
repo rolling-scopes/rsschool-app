@@ -1,18 +1,28 @@
 import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
+import { useRouter } from 'next/router';
+import { isArray, isUndefined } from 'lodash';
 import { GithubAvatar, Header, withSession } from 'components';
-import { dateTimeRenderer, dateRenderer, getColumnSearchProps } from 'components/Table';
+import { dateRenderer, dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, StudentScore, CourseTask } from 'services/course';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { CourseService, CourseTask, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
-import { ScoreTableFilters, ScoreOrder } from '../../../../common/types/score';
+import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
+import { ParsedUrlQuery } from 'querystring';
+import { getQueryParams, getQueryString } from '../../utils/queryParams-utils';
 
 const { Text } = Typography;
 
+const getUrl = (id: number, params: string): string => {
+  return `/api/course/${id}/students/score/csv${params}`;
+};
+
 export function Page(props: CoursePageProps) {
+  const router = useRouter();
+  const { ['mentor.githubId']: mentor, cityName, ...currentQuery } = router.query;
   const courseService = useMemo(() => new CourseService(props.course.id), []);
 
   const [loading, setLoading] = useState(false);
@@ -31,8 +41,16 @@ export function Page(props: CoursePageProps) {
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
+      let filters = { activeOnly };
+      if (!isUndefined(cityName)) {
+        filters = { ...filters, cityName } as ScoreTableFilters;
+      }
+      if (!isUndefined(mentor)) {
+        filters = { ...filters, ['mentor.githubId']: mentor } as ScoreTableFilters;
+      }
+
       const [courseScore, courseTasks] = await Promise.all([
-        courseService.getCourseScore(students.pagination, { activeOnly }, students.orderBy),
+        courseService.getCourseScore(students.pagination, filters, students.orderBy),
         courseService.getCourseTasks(),
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
@@ -44,8 +62,27 @@ export function Page(props: CoursePageProps) {
     }
   }, []);
 
+  const setQueryParams = useCallback(
+    (query: ParsedUrlQuery) => {
+      router.push(
+        {
+          pathname: router.pathname,
+          query,
+        },
+        undefined,
+        {
+          shallow: true,
+        },
+      );
+    },
+    [router],
+  );
+
   const getCourseScore = useCallback(
     async (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => {
+      const { cityName, ['mentor.githubId']: mentor } = filters;
+      const newQueryParams = getQueryParams({ cityName, ['mentor.githubId']: mentor }, currentQuery);
+      setQueryParams(newQueryParams);
       setLoading(true);
       try {
         const field = order.column?.sorter || 'rank';
@@ -61,7 +98,7 @@ export function Page(props: CoursePageProps) {
         setLoading(false);
       }
     },
-    [students],
+    [students, currentQuery],
   );
 
   const handleActiveOnlyChange = useCallback(async () => {
@@ -83,6 +120,12 @@ export function Page(props: CoursePageProps) {
     }
   }, [activeOnly]);
 
+  const handleLoadCsv = useCallback(() => {
+    const queryParams = getQueryString(getQueryParams({ cityName, ['mentor.githubId']: mentor }));
+    const url = getUrl(props.course.id, queryParams);
+    window.location.href = url;
+  }, [cityName, mentor, props.course.id]);
+
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -100,9 +143,9 @@ export function Page(props: CoursePageProps) {
               <Switch checked={activeOnly} onChange={handleActiveOnlyChange} />
             </div>
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
-            {renderCsvExportButton(props)}
+            {renderCsvExportButton(props, handleLoadCsv)}
           </Row>
-          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore)}
+          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName, mentor)}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -110,7 +153,7 @@ export function Page(props: CoursePageProps) {
   );
 }
 
-function renderCsvExportButton(props: CoursePageProps) {
+function renderCsvExportButton(props: CoursePageProps, handleClick: () => void) {
   const { isAdmin, isHirer, roles, coursesRoles } = props.session;
   const courseId = props.course.id;
   const courseRole = coursesRoles?.[courseId];
@@ -124,10 +167,7 @@ function renderCsvExportButton(props: CoursePageProps) {
     return null;
   }
   return (
-    <Button
-      icon={<FileExcelOutlined />}
-      onClick={() => (window.location.href = `/api/course/${props.course.id}/students/score/csv`)}
-    >
+    <Button icon={<FileExcelOutlined />} onClick={handleClick}>
       Export CSV
     </Button>
   );
@@ -139,6 +179,8 @@ function renderTable(
   columns: any[],
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
+  cityName: string | string[] = '',
+  mentor: string | string[] = '',
 ) {
   if (!loaded) {
     return null;
@@ -196,6 +238,7 @@ function renderTable(
           dataIndex: 'cityName',
           width: 150,
           sorter: 'cityName',
+          defaultFilteredValue: isArray(cityName) ? cityName : [cityName],
           ...getColumnSearchProps('cityName'),
         },
         {
@@ -232,6 +275,7 @@ function renderTable(
           dataIndex: ['mentor', 'githubId'],
           width: 150,
           sorter: 'mentor',
+          defaultFilteredValue: isArray(mentor) ? mentor : [mentor],
           render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
           ...getColumnSearchProps('mentor.githubId'),
         },

@@ -127,11 +127,11 @@ const createSelfeducationVerification = async ({
     .reduce((sum, value) => sum + value, 0);
 
   const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
-  let score = rightAnswersPercent < tresholdPercentage ? 0 : maxScore;
+  let score = rightAnswersPercent < tresholdPercentage ? 0 : Math.floor(maxScore * rightAnswersPercent * 0.01);
   let details = `Accuracy: ${rightAnswersPercent}%`;
 
   if (verificationsNumber >= maxAttemptsNumber) {
-    score = score / 2;
+    score = Math.floor(score / 2);
     details += '. Attempts number was over, so score was divided by 2';
   }
 
