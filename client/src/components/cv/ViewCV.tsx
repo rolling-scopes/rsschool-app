@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/CV/sections';
+import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
 import { Contacts, UserData, CourseData, GetCVData } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
 import { UserService } from 'services/user';
