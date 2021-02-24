@@ -13,7 +13,10 @@ export async function renderMentorConfirmationText(preselectedCourseIds: number[
   const confirmLinks = preselectedCourses
     .map(({ alias, name }) => `${name}: https://app.rs.school/course/mentor/confirm?course=${alias}`)
     .join('\n');
-  return `Your participation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s):\n${confirmLinks}`;
+  const mentorChatLinks = preselectedCourses
+    .map(({ discordServer, name }) => `${name}: ${discordServer.mentorsChatUrl}`)
+    .join('\n');
+  return `Your participation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s):\n${confirmLinks}\nCome into mentor's chat(s):\n${mentorChatLinks}`;
 }
 
 export async function renderTaskResultText(courseTask: CourseTask, score: number) {
