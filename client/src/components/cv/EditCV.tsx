@@ -160,7 +160,7 @@ class EditCV extends React.Component<Props, State> {
       fullTime
     };
 
-    this.userService.saveCVData(CVData);
+    await this.userService.saveCVData(CVData);
   }
 
   private async handleSave(data: any) {
@@ -231,10 +231,16 @@ class EditCV extends React.Component<Props, State> {
   }
 
   private async extendCV() {
+    await this.setState({
+      isLoading: true
+    });
     const newExpirationDate = await this.userService.extendCV()
-    this.setState({
+    await this.setState({
       expires: newExpirationDate
-    })
+    });
+    await this.setState({
+      isLoading: false
+    });
   }
 
   render() {
