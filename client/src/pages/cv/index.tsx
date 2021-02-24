@@ -4,9 +4,9 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { Header, FooterLayout } from 'components';
-import FormCV from 'components/CV/EditCV';
-import ViewCV from 'components/CV/ViewCV';
-import NoConsentViewCV from 'components/CV/NoConsentViewCV';
+import FormCV from 'components/cv/EditCV';
+import ViewCV from 'components/cv/ViewCV';
+import NoConsentViewCV from 'components/cv/NoConsentViewCV';
 
 import { UserService } from '../../services/user';
 
