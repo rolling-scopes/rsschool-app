@@ -13,7 +13,7 @@ import {
   Upload,
   Spin,
 } from 'antd';
-import { ReloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
@@ -195,15 +195,18 @@ function Page(props: CoursePageProps) {
                 title: 'Date/Time',
                 dataIndex: 'createdDate',
                 render: shortDateTimeRenderer,
+                width: 100,
               },
               {
                 title: 'Status',
                 dataIndex: 'status',
+                width: 100,
               },
               {
                 title: 'Task Name',
                 dataIndex: ['courseTask', 'task', 'name'],
                 ellipsis: true,
+                width: 150,
               },
               {
                 title: 'Score',
@@ -213,8 +216,41 @@ function Page(props: CoursePageProps) {
               {
                 title: 'Details',
                 dataIndex: 'details',
-                render: (value: string) =>
-                  typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value,
+                render: (value: string, item) => {
+                  if (item?.courseTask?.type === 'codewars') {
+                    return (
+                      <>
+                        <Typography.Text>{value}</Typography.Text>
+                        <div>
+                          {item?.metadata?.map(
+                            (
+                              {
+                                id,
+                                url,
+                                name,
+                                completed,
+                              }: { id: string; url: string; name: string; completed: boolean },
+                              index: number,
+                            ) => (
+                              <div>
+                                <Typography.Link key={id} href={url} target="_blank">
+                                  {completed ? (
+                                    <CheckSquareTwoTone twoToneColor="#52c41a" />
+                                  ) : (
+                                    <CloseSquareTwoTone twoToneColor="#ff4d4f" />
+                                  )}{' '}
+                                  {index}. {name}
+                                </Typography.Link>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      </>
+                    );
+                  }
+
+                  return typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value;
+                },
               },
             ]}
             dataSource={verifications}
