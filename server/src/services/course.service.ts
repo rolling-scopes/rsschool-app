@@ -160,7 +160,11 @@ function studentQuery() {
 }
 
 export async function getCourses() {
-  const records = await getRepository(Course).createQueryBuilder('course').where('course.completed = false').getMany();
+  const records = await getRepository(Course)
+    .createQueryBuilder('course')
+    .leftJoinAndSelect('course.discordServer', 'discordServer')
+    .where('course.completed = false')
+    .getMany();
   return records;
 }
 

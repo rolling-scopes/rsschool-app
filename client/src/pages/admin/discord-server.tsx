@@ -98,6 +98,15 @@ function Page(props: Props) {
               <Input />
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <Form.Item
+              name="mentorsChatUrl"
+              label="Mentors chat URL"
+              rules={[{ required: true, message: `Please enter mentors chat URL` }]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
         </Row>
       </ModalForm>
     ),
@@ -132,6 +141,7 @@ function createRecord(values: any) {
   const record: Partial<DiscordServer> = {
     name: values.name,
     gratitudeUrl: values.gratitudeUrl,
+    mentorsChatUrl: values.mentorsChatUrl,
   };
   return record;
 }
@@ -151,6 +161,11 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
       title: 'Gratitude URL',
       dataIndex: 'gratitudeUrl',
       sorter: stringSorter<DiscordServer>('gratitudeUrl'),
+    },
+    {
+      title: 'Mentors chat URL',
+      dataIndex: 'mentorsChatUrl',
+      sorter: stringSorter<DiscordServer>('mentorsChatUrl'),
     },
     {
       title: 'Actions',
