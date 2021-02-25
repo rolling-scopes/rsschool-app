@@ -17,6 +17,9 @@ export class DiscordServer {
   @Column()
   gratitudeUrl: string;
 
+  @Column({ nullable: true, type: 'text' })
+  mentorsChatUrl: string | null;
+
   @OneToMany(_ => Course, (course: Course) => course.discordServer, { nullable: true })
   courses: Course[] | null;
 }
