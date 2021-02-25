@@ -29,22 +29,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
   let inputNode;
   let rules: Rule = { type: 'string', required: false };
 
-  const types =
-    record && record.isTask
-      ? TASK_TYPES.map(tag => {
-          return (
-            <Option key={tag} value={tag}>
-              {tag}
-            </Option>
-          );
-        })
-      : EVENT_TYPES.map(tag => {
-          return (
-            <Option key={tag} value={tag}>
-              {tag}
-            </Option>
-          );
-        });
+  const typesList = record && record.isTask ? TASK_TYPES : EVENT_TYPES;
+  const types = typesList.map((tag: string) => {
+    return (
+      <Option key={tag} value={tag}>
+        {tag}
+      </Option>
+    );
+  });
 
   switch (title) {
     case 'Date':

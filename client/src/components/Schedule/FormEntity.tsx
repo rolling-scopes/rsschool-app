@@ -76,22 +76,14 @@ const FormEntity: React.FC<Props> = ({
     return <Alert message={`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`} type="success" showIcon />;
   }
 
-  const entityTypes =
-    entityType === 'task'
-      ? TASK_TYPES.map(tag => {
-          return (
-            <Option key={tag} value={tag}>
-              {tag}
-            </Option>
-          );
-        })
-      : EVENT_TYPES.map(tag => {
-          return (
-            <Option key={tag} value={tag}>
-              {tag}
-            </Option>
-          );
-        });
+  const typesList = entityType === 'task' ? TASK_TYPES : EVENT_TYPES;
+  const entityTypes = typesList.map(tag => {
+    return (
+      <Option key={tag} value={tag}>
+        {tag}
+      </Option>
+    );
+  });
 
   return (
     <Form
