@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm, Result } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
@@ -13,7 +13,6 @@ const { Content } = Layout;
 const { Text } = Typography;
 const { Item } = List;
 
-
 type Props = {
   router: NextRouter;
   session: Session;
@@ -22,14 +21,12 @@ type Props = {
 type State = {
   isLoading: boolean;
   users: any;
-  adminMode: boolean;
 };
 
 class Page extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
-    users: null,
-    adminMode: false
+    users: null
   };
 
   private userService = new UserService();
@@ -53,12 +50,12 @@ class Page extends React.Component<Props, State> {
       key: 'complexData',
       render: (data: any) => {
         const { name, githubId } = data;
-        const { adminMode } = this.state;
+        const { isAdmin } = this.props.session;
 
         return (
           <>
             <a href={`/cv?githubId=${githubId}`}>{name}</a>
-            {adminMode && (
+            {isAdmin && (
               <Popconfirm
                 title='Are you sure you want to remove this user?'
                 onConfirm={() => this.removeJobSeeker(githubId)}
@@ -198,23 +195,21 @@ class Page extends React.Component<Props, State> {
     await this.setState({ isLoading: false });
   }
 
-  /*   private async setAdminMode() {
-      await this.setState({
-        adminMode: true
-      });
-    } */
-
   async componentDidMount() {
     await this.setState({ isLoading: true });
     const data = await this.fetchData();
-    await this.setState({ users: data })
+    await this.setState({ users: data });
     await this.setState({ isLoading: false });
   }
 
   render() {
+    const { isAdmin, isHirer, githubId: userGithubId } = this.props.session;
+
+    if (!(isAdmin || isHirer)) return (
+      <Result status="403" title="Sorry, but you don't have access to this page" />
+    )
 
     const { isLoading, users } = this.state;
-    const userGithubId = this.props.session.githubId;
 
     let data;
 
@@ -243,7 +238,6 @@ class Page extends React.Component<Props, State> {
         <LoadingScreen show={isLoading}>
           <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-
               <Table style={{ minWidth: '99vw' }} columns={this.columns} dataSource={data}></Table>
             </Content>
           </Layout>
