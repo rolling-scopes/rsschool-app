@@ -1,6 +1,6 @@
 import * as React from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography } from 'antd';
+import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
@@ -15,7 +15,7 @@ type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  expires: string | null;
+  expires: number | null;
 };
 
 type Props = {
@@ -111,7 +111,7 @@ class EditCV extends React.Component<Props, State> {
     await this.setState({
       contactsList: contactsList,
       userData: userData,
-      expires
+      expires: Number(expires)
     });
 
     await this.setState({
@@ -137,7 +137,7 @@ class EditCV extends React.Component<Props, State> {
       skype,
       startFrom,
       telegram,
-      website,
+      website
     } = data;
 
     const CVData: SaveCVData = {
@@ -166,6 +166,18 @@ class EditCV extends React.Component<Props, State> {
   private async handleSave(data: any) {
     await this.submitData(data);
     await this.fetchData();
+  }
+
+  private formatDate(expirationValue: number | null) {
+    if (expirationValue === null) {
+      return <Text strong>CV expiration date is not set</Text>;
+    } else {
+      const expirationDate = new Date(expirationValue);
+      const addZeroPadding = (num: number) => `0${num}`.slice(-2);
+      const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
+      const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
+      return <Text>Expiration date: <Text strong>{expirationDateFormatted}</Text></Text>;
+    }
   }
 
   private getDataFromRefs(refs: RefObject<any>[]) {
@@ -234,9 +246,9 @@ class EditCV extends React.Component<Props, State> {
     await this.setState({
       isLoading: true
     });
-    const newExpirationDate = await this.userService.extendCV()
+    const newExpirationDate = await this.userService.extendCV();
     await this.setState({
-      expires: newExpirationDate
+      expires: Number(newExpirationDate)
     });
     await this.setState({
       isLoading: false
@@ -244,7 +256,7 @@ class EditCV extends React.Component<Props, State> {
   }
 
   render() {
-    const { isLoading, contactsList, userData } = this.state;
+    const { isLoading, contactsList, userData, expires } = this.state;
 
     const buttonStyle = {
       borderRadius: '15px',
@@ -256,10 +268,13 @@ class EditCV extends React.Component<Props, State> {
         <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
           <Content>
             <Card>
-              <Text>CV expires <Text strong>{this.state.expires}</Text></Text>
               <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
-                {contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}
+                <Col>
+                  <Row>{contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}</Row>
+                  <br />
+                  <Row><Card size="small" style={{ width: '100%' }} title='CV expiration status'>{this.formatDate(expires)}</Card></Row>
+                </Col>
               </Space>
               <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
                 Save

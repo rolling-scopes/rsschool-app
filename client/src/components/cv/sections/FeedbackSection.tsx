@@ -66,9 +66,9 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
         style={feedbackStyle}
         size="small"
         title={(
-        <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
-          <span>{moment(feedbackDate).fromNow().toUpperCase()}</span>
-        </Tooltip>
+          <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
+            <span>{moment(feedbackDate).fromNow().toUpperCase()}</span>
+          </Tooltip>
         )}
       >
         <Paragraph ellipsis={{ rows: 2, expandable: true }}>{comment}</Paragraph>
