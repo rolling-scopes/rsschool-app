@@ -94,11 +94,11 @@ export interface ServerData {
   cvWebsite: string | null;
   cvStartFrom: string | null;
   cvFullTime: boolean | null;
-  cvExpires: string | null;
+  cvExpires: number | null;
 }
 
 export interface GetCVData extends SaveCVData {
-  expires: string | null;
+  expires: number | null;
   courses: StudentStats[];
   publicFeedback: PublicFeedback[];
 }
@@ -112,7 +112,8 @@ export interface JobSeekerData {
   cvlocation: string | null;
   startfrom: string | null;
   courses: StudentStats[];
-  publicfeedback: PublicFeedback[]
+  publicfeedback: PublicFeedback[];
+  cvExpires: number;
 }
 
 

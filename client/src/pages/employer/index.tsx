@@ -71,6 +71,19 @@ class Page extends React.Component<Props, State> {
       ...getColumnSearchProps('name')
     },
     {
+      title: 'CV expires',
+      dataIndex: 'expires',
+      key: 'expires',
+      render: (expirationTimestamp: number) => {
+        const expirationDate = new Date(expirationTimestamp);
+        const addZeroPadding = (num: number) => `0${num}`.slice(-2);
+        const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
+        const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
+        return <Text>{expirationDateFormatted}</Text>;
+      },
+      ...getColumnSearchProps('expires')
+    },
+    {
       title: 'Desired postion',
       dataIndex: 'desiredPosition',
       key: 'desiredPosition',
@@ -207,7 +220,7 @@ class Page extends React.Component<Props, State> {
 
     if (!(isAdmin || isHirer)) return (
       <Result status="403" title="Sorry, but you don't have access to this page" />
-    )
+    );
 
     const { isLoading, users } = this.state;
 
@@ -215,10 +228,11 @@ class Page extends React.Component<Props, State> {
 
     if (users) {
       data = users.map((item: any, index: any) => {
-        const { name, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, location } = item;
+        const { name, fullTime, githubId, startFrom, englishLevel, desiredPosition, courses, publicFeedback, location, expires } = item;
         return {
           key: index,
           complexData: { name, githubId },
+          expires: Number(expires),
           courses,
           publicFeedback,
           desiredPosition,
