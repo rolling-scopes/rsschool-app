@@ -129,7 +129,7 @@ class CVPage extends React.Component<Props, State> {
       <>
         <LoadingScreen show={isLoading}>
           <Header username={userGithubId} />
-          <Layout style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
+          <Layout className='cv-layout' style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
             <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
               {content}
             </Content>
@@ -141,8 +141,13 @@ class CVPage extends React.Component<Props, State> {
             .hide-on-print, .ant-avatar-icon, .profile, .footer {
               display: none !important;
             }
-            .hide-border-on-print {
-              border: none !important;
+            .black-on-print {
+              color: black !important;
+            }
+          }
+          @media (max-width: 959px) { 
+            .view-cv-layout {
+              width: 100% !important;
             }
           }
       `}</style>
