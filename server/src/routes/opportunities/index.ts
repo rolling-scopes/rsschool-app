@@ -3,7 +3,7 @@ import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { NOT_FOUND, OK } from 'http-status-codes';
 import { guard } from '../guards';
-import { getRepository } from 'typeorm';
+import { getRepository, MoreThan } from 'typeorm';
 import { User, IUserSession } from '../../models';
 import { getStudentStats } from '../profile/student-stats';
 import { getPublicFeedback } from '../profile/public-feedback';
@@ -65,10 +65,13 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const users = await getRepository(User).find({ where: { opportunitiesConsent: true } });
+
+  const currentTimestamp = new Date().getTime();
+
+  const users = await getRepository(User).find({ where: { opportunitiesConsent: true, cvExpires: MoreThan(currentTimestamp) } });
 
   let CVProfiles = users.map(item => {
-    const { cvName, githubId, cvDesiredPosition, cvEnglishLevel, cvFullTime, cvLocation, cvStartFrom } = item;
+    const { cvName, githubId, cvDesiredPosition, cvEnglishLevel, cvFullTime, cvLocation, cvStartFrom, cvExpires } = item;
     return {
       name: cvName,
       githubId,
@@ -76,7 +79,8 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
       englishLevel: cvEnglishLevel,
       fullTime: cvFullTime,
       location: cvLocation,
-      startFrom: cvStartFrom
+      startFrom: cvStartFrom,
+      expires: cvExpires
     };
   });
 
@@ -177,10 +181,12 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
 
   const emptyOpportunitiesInfo = {
     cvSelfIntroLink: null,
-    fullTime: false,
+    cvDesiredPosition: null,
+    cvFullTime: false,
     cvStartFrom: null,
     cvLink: null,
     cvMilitaryService: null,
+    cvEnglishLevel: null,
     cvAvatarLink: null,
     cvName: null,
     cvNotes: null,
@@ -191,7 +197,8 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
     cvLinkedin: null,
     cvLocation: null,
     cvGithub: null,
-    cvWebsite: null
+    cvWebsite: null,
+    cvExpires: null
   };
 
   const userWithEmptyOpportunities = {
@@ -229,12 +236,12 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
+  const EXPIRATION_DAYS_PROLONGATION = 14;
+
   const now = new Date();
-  now.setDate(now.getDate() + 14);
-  const addZeroPadding = (num: number) => `0${num}`.slice(-2);
-  const [year, month, date] = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
-  const newExpirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
-  const result = await userRepository.save({ ...user, cvExpires: newExpirationDateFormatted });
+  now.setDate(now.getDate() + EXPIRATION_DAYS_PROLONGATION);
+  const timestamp = now.getTime();
+  const result = await userRepository.save({ ...user, cvExpires: timestamp });
 
   setResponse(ctx, OK, result.cvExpires);
 };
