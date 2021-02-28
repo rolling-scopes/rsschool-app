@@ -3,24 +3,31 @@ import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
 import ContactsListCV from '../ContactsListCV';
 import AvatarCV from '../AvatarCV';
-import { Contacts, MilitaryService, EnglishLevel } from '../../../../../common/models/cv';
+import { Contacts, UserData } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
-interface Props {
-  avatarLink: string | null;
-  name: string | null;
-  desiredPosition: string | null;
-  selfIntroLink: string | null;
-  englishLevel: EnglishLevel | null; 
-  militaryService: MilitaryService;
-  startFrom: string | null;
-  fullTime: boolean | null;
+type Props = {
+  userData: UserData;
   contacts: Contacts;
+  expires: number | null;
+}
+
+function formatDate(expirationValue: number | null) {
+  if (expirationValue === null) {
+    return 'CV expiration date is not set';
+  } else {
+    const expirationDate = new Date(expirationValue);
+    const addZeroPadding = (num: number) => `0${num}`.slice(-2);
+    const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
+    const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
+    return `CV expiration date: ${expirationDateFormatted}`;
+  }
 }
 
 function MainSection(props: Props) {
-  const { avatarLink, name, desiredPosition, contacts, englishLevel, militaryService, selfIntroLink, startFrom, fullTime } = props;
+  const { userData, contacts, expires } = props;
+  const { avatarLink, name, desiredPosition, englishLevel, militaryService, selfIntroLink, startFrom, fullTime, } = userData;
 
   const sectionContent = (
     <Row>
@@ -34,8 +41,8 @@ function MainSection(props: Props) {
         <br />
         {selfIntroLink && (
           <>
-          <a className='hide-on-print' href={selfIntroLink}>Self introduction video</a>
-          <br className='hide-on-print' />
+            <a className='hide-on-print' href={selfIntroLink}>Self introduction video</a>
+            <br className='hide-on-print' />
           </>
         )}
         <Text>Ready to work full time: <Text strong>{fullTime ? 'yes' : 'no'}</Text></Text>
@@ -51,7 +58,7 @@ function MainSection(props: Props) {
       </Col>
     </Row>
   );
-  return <SectionCV content={sectionContent} className='hide-on-print' />;
+  return <SectionCV title={formatDate(expires)} content={sectionContent} />;
 }
 
 export default MainSection;
