@@ -15,7 +15,7 @@ function SectionCV(props: Props) {
 
   const avatar = icon ? <Avatar size={51} icon={icon} /> : null;
 
-  const complexTitle = title && <Title style={{display: 'inline-block'}} className={className}>{avatar} {title}</Title>;
+  const complexTitle = title && <Title style={{ display: 'inline-block' }} className={className}>{avatar} {title}</Title>;
 
   return (
     <Card title={complexTitle} bordered={false}>

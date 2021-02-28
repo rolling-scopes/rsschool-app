@@ -59,7 +59,7 @@ function CoursesSection(props: Props) {
                 {courseStatus}
               </Col>
               <Col span={3} >
-                <Text>Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
+                <Text>Mentor: <a className='black-on-print' href={`https://github.com/${mentorGithubId}`}>{mentorName}</a></Text>
               </Col>
               <Col span={3}>
                 <Text>{courseStats}</Text>
