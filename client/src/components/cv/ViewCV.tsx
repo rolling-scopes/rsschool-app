@@ -18,6 +18,7 @@ type State = {
   userData: UserData | null;
   coursesData: CourseData[] | null;
   publicFeedback: PublicFeedback[] | null;
+  expires: number | null;
 };
 
 class ViewCV extends React.Component<Props, State> {
@@ -27,6 +28,7 @@ class ViewCV extends React.Component<Props, State> {
     userData: null,
     coursesData: null,
     publicFeedback: null,
+    expires: null
   };
 
   private userService = new UserService();
@@ -39,7 +41,7 @@ class ViewCV extends React.Component<Props, State> {
 
     const CVData: GetCVData = await this.userService.getCVData(ownerId);
 
-    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses } = CVData;
+    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses, expires } = CVData;
 
     const userData = {
       notes,
@@ -71,6 +73,7 @@ class ViewCV extends React.Component<Props, State> {
       userData: userData as UserData,
       coursesData: coursesDataExtracted,
       publicFeedback,
+      expires: Number(expires)
     });
 
     await this.setState({
@@ -110,28 +113,22 @@ class ViewCV extends React.Component<Props, State> {
 
   render() {
 
-    const { isLoading, userData, contactsList, coursesData, publicFeedback } = this.state;
+    const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = this.state;
 
     return (
       <LoadingScreen show={isLoading}>
-        <Layout className="hide-border-on-print" style={{ marginBottom: '15px', maxWidth: '960px', backgroundColor: '#FFF'}}>
+        <Layout className='view-cv-layout' style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
           <Content>
             <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
               {userData && contactsList && (
-              <>
-              <MainSection
-                avatarLink={userData.avatarLink}
-                contacts={contactsList as Contacts}
-                name={userData.name}
-                desiredPosition={userData.desiredPosition}
-                selfIntroLink={userData.selfIntroLink}
-                englishLevel={userData.englishLevel}
-                militaryService={userData.militaryService}
-                startFrom={userData.startFrom}
-                fullTime={userData.fullTime}
-              />
-              {userData.notes &&<AboutSection notes={userData.notes} />}
-              </>)}
+                <>
+                  <MainSection
+                    userData={userData}
+                    contacts={contactsList}
+                    expires={expires}
+                  />
+                  {userData.notes && <AboutSection notes={userData.notes} />}
+                </>)}
               {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
               {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
             </Space>
