@@ -318,10 +318,7 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
           {renderSelfEducation(courseTask)}
         </>
       );
-    // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-    case 'codewars':
-    case 'codewars:stage1':
-    case 'codewars:stage2': {
+    case 'codewars': {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -437,11 +434,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
     task =>
       task.studentEndDate &&
-      (new Date(task.studentEndDate).getTime() > Date.now() ||
-        task.type === 'codewars' ||
-        // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-        task.type === 'codewars:stage1' ||
-        task.type === 'codewars:stage2') &&
+      (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
       (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
       task.type !== 'test',
@@ -464,10 +457,7 @@ function getSubmitData(task: CourseTask, values: any) {
           return { index: Number(index), value };
         });
       break;
-    // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
     case 'codewars':
-    case 'codewars:stage1':
-    case 'codewars:stage2':
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -476,8 +466,6 @@ function getSubmitData(task: CourseTask, values: any) {
       data = {
         codewars: values.codewars,
         deadline: task.studentEndDate,
-        // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-        variant: task.type !== 'codewars' ? task.type.split(':')[1] : undefined,
       };
       break;
 
