@@ -208,13 +208,12 @@ export class RepositoryService {
     } catch (e) {
       this.logger?.info(e);
       if (e.status === 404) {
-        const slug = await this.createTeam(github, owner, course.id);
-        this.logger?.info(`Created team. slug: ${slug}, name: ${teamName}`);
+        await this.createTeam(github, teamName, course.id);
         await github.teams.addOrUpdateRepoPermissionsInOrg({
           permission: 'push',
           owner,
           repo,
-          team_slug: slug,
+          team_slug: teamName,
           org,
         });
       } else {
