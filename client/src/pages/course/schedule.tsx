@@ -54,9 +54,6 @@ const EventTypeToName: Record<string, string> = {
   externaltask: 'external task',
   codewars: 'codewars',
   selfeducation: 'self education',
-  // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-  'codewars:stage1': 'codewars',
-  'codewars:stage2': 'codewars',
 };
 
 export function SchedulePage(props: CoursePageProps) {
