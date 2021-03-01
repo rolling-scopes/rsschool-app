@@ -187,6 +187,7 @@ export class RepositoryService {
     try {
       await github.teams.addOrUpdateRepoPermissionsInOrg({ permission: 'push', owner, repo, team_slug: teamName, org });
     } catch (e) {
+      this.logger?.info(e);
       if (e.status === 404) {
         await this.createTeam(github, owner, course.id);
         await github.teams.addOrUpdateRepoPermissionsInOrg({
@@ -253,6 +254,7 @@ export class RepositoryService {
     const { data: teams } = await github.teams.list({ org });
     const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
     let courseTeam = teams.find(d => d.name === teamName);
+    this.logger?.info('Creating team', teamName)
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
