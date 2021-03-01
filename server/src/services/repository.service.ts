@@ -273,7 +273,7 @@ export class RepositoryService {
     const { data: teams } = await github.teams.list({ org });
     const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
     let courseTeam = teams.find(d => d.name === teamName);
-    this.logger?.info('Creating team', teamName);
+    this.logger?.info('Creating team', teamName)
     if (!courseTeam) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
       courseTeam = response.data;
