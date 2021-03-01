@@ -91,7 +91,7 @@ function Page(props: Props) {
                 <Select.Option value="cv:html">CV HTML</Select.Option>
                 <Select.Option value="selfeducation">RSAPP Test</Select.Option>
                 <Select.Option value="codewars">Codewars</Select.Option>
-                <Select.Option value="test">Google Form Test</Select.Option>
+                <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
                 <Select.Option value="stage-interview">Technical Screening</Select.Option>

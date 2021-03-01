@@ -436,7 +436,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
     task =>
       task.studentEndDate &&
-      new Date(task.studentEndDate).getTime() > Date.now() &&
+      (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
       (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
       task.type !== 'test',
