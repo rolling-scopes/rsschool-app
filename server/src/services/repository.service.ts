@@ -60,11 +60,15 @@ export class RepositoryService {
 
   public async updateRepositories() {
     const course = await getRepository(Course).findOne(this.courseId);
+    if (!course) {
+      return;
+    }
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     for (const githubId of students) {
       const owner = config.github.org;
-      const repo = RepositoryService.getRepoName(githubId, course!);
+      const repo = RepositoryService.getRepoName(githubId, course);
       await this.inviteStudent(owner, repo, githubId);
+      await this.addTeamToRepository(this.github, course, githubId);
       await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
     }
   }
