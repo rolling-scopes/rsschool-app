@@ -60,22 +60,37 @@ export class RepositoryService {
 
   public async updateRepositories() {
     const course = await getRepository(Course).findOne(this.courseId);
+    if (!course) {
+      return;
+    }
     const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
     for (const githubId of students) {
       const owner = config.github.org;
-      const repo = RepositoryService.getRepoName(githubId, course!);
-      await this.inviteStudent(owner, repo, githubId);
-      await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
+      const repo = RepositoryService.getRepoName(githubId, course);
+      try {
+        await this.inviteStudent(owner, repo, githubId);
+        await this.addTeamToRepository(this.github, course, githubId);
+        await Promise.all([
+          this.enablePageSite(this.github, owner, repo),
+          this.updateWebhook(this.github, owner, repo),
+        ]);
+      } catch (e) {
+        this.logger?.error(`[${githubId}] Failed update student repository`, e);
+      }
     }
   }
 
   public async updateWebhook(github: Octokit, owner: string, repo: string) {
-    const hooks = await github.repos.listWebhooks({ owner, repo });
-    if (hooks.data.length > 0) {
-      this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
-      return;
+    try {
+      const hooks = await github.repos.listWebhooks({ owner, repo });
+      if (hooks.data.length > 0) {
+        this.logger?.info(`[${owner}/${repo}] webhook alredy exist`);
+        return;
+      }
+      await this.createWebhook(github, owner, repo);
+    } catch (e) {
+      this.logger?.error(`[${owner}/${repo}] failed to add webhoo`, e);
     }
-    await this.createWebhook(github, owner, repo);
   }
 
   public async createWebhook(github: Octokit, owner: string, repo: string) {
@@ -138,26 +153,30 @@ export class RepositoryService {
 
   private async enablePageSite(github: Octokit, owner: string, repo: string) {
     const ownerRepo = `${owner}/${repo}`;
-    this.logger?.info(`[${ownerRepo}] enabling Github Pages`);
-    const pages = await github.repos.getPages({ owner, repo }).catch(() => null);
-    if (pages?.data.source.branch === 'gh-pages') {
-      this.logger?.info(`[${ownerRepo}] pages already enabled`);
-      return;
-    }
-    const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
-    if (ghPagesRef === null) {
-      const mainRef = await github.git
-        .getRef({ owner, repo, ref: 'heads/main' })
-        // for backward compatibility
-        .catch(() => github.git.getRef({ owner, repo, ref: 'heads/master' }));
-      await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: mainRef.data.object.sha });
-    }
-    await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
-      if (response.status !== 409 && response.status !== 500) {
-        throw response;
+    try {
+      this.logger?.info(`[${ownerRepo}] enabling Github Pages`);
+      const pages = await github.repos.getPages({ owner, repo }).catch(() => null);
+      if (pages?.data.source.branch === 'gh-pages') {
+        this.logger?.info(`[${ownerRepo}] pages already enabled`);
+        return;
       }
-    });
-    this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
+      const ghPagesRef = await github.git.getRef({ owner, repo, ref: 'heads/gh-pages' }).catch(() => null);
+      if (ghPagesRef === null) {
+        const mainRef = await github.git
+          .getRef({ owner, repo, ref: 'heads/main' })
+          // for backward compatibility
+          .catch(() => github.git.getRef({ owner, repo, ref: 'heads/master' }));
+        await github.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: mainRef.data.object.sha });
+      }
+      await github.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
+        if (response.status !== 409 && response.status !== 500) {
+          throw response;
+        }
+      });
+      this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
+    } catch {
+      this.logger?.info(`[${ownerRepo}] failed to enable Github Pages`);
+    }
   }
 
   public static getRepoName(githubId: string, course: { alias: string }) {
