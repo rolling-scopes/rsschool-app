@@ -61,7 +61,6 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading],
   );
 
-  // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   const renderModal = useCallback(() => {
     const allTags = union(...data.map(d => d.tags || []));
     return (
@@ -92,8 +91,6 @@ function Page(props: Props) {
                 <Select.Option value="cv:html">CV HTML</Select.Option>
                 <Select.Option value="selfeducation">Self Education</Select.Option>
                 <Select.Option value="codewars">Codewars</Select.Option>
-                <Select.Option value="codewars:stage1">Codewars stage 1</Select.Option>
-                <Select.Option value="codewars:stage2">Codewars stage 2</Select.Option>
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
