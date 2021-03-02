@@ -13,7 +13,7 @@ import {
   Upload,
   Spin,
 } from 'antd';
-import { ReloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
@@ -195,15 +195,18 @@ function Page(props: CoursePageProps) {
                 title: 'Date/Time',
                 dataIndex: 'createdDate',
                 render: shortDateTimeRenderer,
+                width: 100,
               },
               {
                 title: 'Status',
                 dataIndex: 'status',
+                width: 100,
               },
               {
                 title: 'Task Name',
                 dataIndex: ['courseTask', 'task', 'name'],
                 ellipsis: true,
+                width: 150,
               },
               {
                 title: 'Score',
@@ -213,8 +216,41 @@ function Page(props: CoursePageProps) {
               {
                 title: 'Details',
                 dataIndex: 'details',
-                render: (value: string) =>
-                  typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value,
+                render: (value: string, item) => {
+                  if (item?.courseTask?.type === 'codewars') {
+                    return (
+                      <>
+                        <Typography.Text>{value}</Typography.Text>
+                        <div>
+                          {item?.metadata?.map(
+                            (
+                              {
+                                id,
+                                url,
+                                name,
+                                completed,
+                              }: { id: string; url: string; name: string; completed: boolean },
+                              index: number,
+                            ) => (
+                              <div>
+                                <Typography.Link key={id} href={url} target="_blank">
+                                  {completed ? (
+                                    <CheckSquareTwoTone twoToneColor="#52c41a" />
+                                  ) : (
+                                    <CloseSquareTwoTone twoToneColor="#ff4d4f" />
+                                  )}{' '}
+                                  {index}. {name}
+                                </Typography.Link>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      </>
+                    );
+                  }
+
+                  return typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value;
+                },
               },
             ]}
             dataSource={verifications}
@@ -282,10 +318,7 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
           {renderSelfEducation(courseTask)}
         </>
       );
-    // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-    case 'codewars':
-    case 'codewars:stage1':
-    case 'codewars:stage2': {
+    case 'codewars': {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -401,11 +434,7 @@ function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
     task =>
       task.studentEndDate &&
-      (new Date(task.studentEndDate).getTime() > Date.now() ||
-        task.type === 'codewars' ||
-        // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-        task.type === 'codewars:stage1' ||
-        task.type === 'codewars:stage2') &&
+      (new Date(task.studentEndDate).getTime() > Date.now() || task.type === 'codewars') &&
       (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
       task.type !== 'test',
@@ -428,10 +457,7 @@ function getSubmitData(task: CourseTask, values: any) {
           return { index: Number(index), value };
         });
       break;
-    // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
     case 'codewars':
-    case 'codewars:stage1':
-    case 'codewars:stage2':
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -440,8 +466,6 @@ function getSubmitData(task: CourseTask, values: any) {
       data = {
         codewars: values.codewars,
         deadline: task.studentEndDate,
-        // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
-        variant: task.type !== 'codewars' ? task.type.split(':')[1] : undefined,
       };
       break;
 

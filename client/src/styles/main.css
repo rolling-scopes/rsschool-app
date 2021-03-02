@@ -49,3 +49,7 @@ thead.ant-table-thead > tr > th {
 .crosscheck-submitted-link:focus {
   text-decoration: underline;
 }
+
+.rc-virtual-list-scrollbar {
+  display: block !important;
+}
