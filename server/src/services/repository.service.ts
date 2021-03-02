@@ -67,9 +67,16 @@ export class RepositoryService {
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = RepositoryService.getRepoName(githubId, course);
-      await this.inviteStudent(owner, repo, githubId);
-      await this.addTeamToRepository(this.github, course, githubId);
-      await Promise.all([this.enablePageSite(this.github, owner, repo), this.updateWebhook(this.github, owner, repo)]);
+      try {
+        await this.inviteStudent(owner, repo, githubId);
+        await this.addTeamToRepository(this.github, course, githubId);
+        await Promise.all([
+          this.enablePageSite(this.github, owner, repo),
+          this.updateWebhook(this.github, owner, repo),
+        ]);
+      } catch (e) {
+        this.logger?.error(`[${githubId}] Failed update student repository`, e);
+      }
     }
   }
 
