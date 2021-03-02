@@ -45,3 +45,7 @@ span.ant-table-filter-column-title {
 thead.ant-table-thead > tr > th {
   font-size: 12px;
 }
+
+.rc-virtual-list-scrollbar {
+  display: block !important;
+}
