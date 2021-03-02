@@ -11,6 +11,8 @@ import { onlyDefined } from '../../../utils/onlyDefined';
 import { HeroesFormData } from './types';
 
 const { Meta } = Card;
+const INITIAL_PAGINATION = 1;
+const INITIAL_PAGE_SIZE = 10;
 
 export const fields = {
   name: 'name',
@@ -19,18 +21,17 @@ export const fields = {
 } as const;
 
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
-  const initialPagination = 1;
   const [courses, setCourses] = useState<Course[]>([]);
   const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
-  const [heroesCount, setHeroesCount] = useState(initialPagination);
-  const [currentPagination, setCurrentPagination] = useState(initialPagination);
+  const [heroesCount, setHeroesCount] = useState(INITIAL_PAGINATION);
+  const [currentPagination, setCurrentPagination] = useState(INITIAL_PAGINATION);
   const gratitudeService = new GratitudeService();
   const [form] = Form.useForm();
 
   useEffect(() => {
     const getHeroes = async () => {
       setLoading(true);
-      const heroes = await gratitudeService.getGratitude();
+      const heroes = await gratitudeService.getGratitude({current: INITIAL_PAGINATION, pageSize: INITIAL_PAGE_SIZE});
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
       setLoading(false);
@@ -48,7 +49,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
       const heroes = await gratitudeService.getGratitude(data);
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
-      setCurrentPagination(initialPagination);
+      setCurrentPagination(INITIAL_PAGINATION);
       setLoading(false);
     },
     [heroesData],
@@ -57,7 +58,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
   const handleSubmit = useCallback(
     async (formData: HeroesFormData) => {
       const data = onlyDefined(formData) as Partial<HeroesFormData>;
-      setCurrentPagination(initialPagination);
+      setCurrentPagination(INITIAL_PAGINATION);
       await makeRequest(data);
     },
     [heroesData],
@@ -65,10 +66,10 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   const onClear = useCallback(async () => {
     setLoading(true);
-    const heroes = await gratitudeService.getGratitude();
+    const heroes = await gratitudeService.getGratitude({current: INITIAL_PAGINATION, pageSize: INITIAL_PAGE_SIZE});
     setHeroesData(heroes.content);
     setHeroesCount(heroes.count);
-    setCurrentPagination(initialPagination);
+    setCurrentPagination(INITIAL_PAGINATION);
     setLoading(false);
     form.resetFields();
   }, [heroesData]);
@@ -112,7 +113,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           <Col xs={24} sm={12} md={8} lg={4}>
             <Card
               hoverable
-              style={{ margin: '10 0' }}
+              style={{ margin: '12px 0' }}
               key={e.user_id}
               cover={
                 <div className="flex-column" style={{ marginTop: 20 }}>
