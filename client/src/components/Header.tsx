@@ -3,7 +3,7 @@ import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import css from 'styled-jsx/css';
 
-import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone, ExperimentOutlined } from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone, /* ExperimentOutlined */ } from '@ant-design/icons';
 
 type Props = {
   username: string;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export function Header(props: Props) {
-  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible, username } = props;
+  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible, /* username */ } = props;
 
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
@@ -42,7 +42,7 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+{/*       <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
           href={`/cv?githubId=${username}`}
@@ -50,7 +50,7 @@ export function Header(props: Props) {
         >
           <ExperimentOutlined /> My CV
         </Button>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Divider />
       <Menu.Item key="3">
         <Button type="link" href={'/api/auth/logout'} style={{ textAlign: 'left' }}>
