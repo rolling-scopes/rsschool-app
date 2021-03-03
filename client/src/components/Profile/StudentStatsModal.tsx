@@ -15,7 +15,16 @@ type Props = {
 class StudentStatsModal extends React.PureComponent<Props> {
   render() {
     const { stats, courseProgress, scoredTasks } = this.props;
-    const { tasks, courseFullName, mentor, totalScore, isExpelled, position, isCourseCompleted } = stats;
+    const {
+      tasks,
+      courseFullName,
+      mentor,
+      totalScore,
+      isExpelled,
+      expellingReason,
+      position,
+      isCourseCompleted,
+    } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore)
       ? tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur)
@@ -53,6 +62,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
               Total Score: <Text mark>{totalScore}</Text>
               {maxCourseScore && ` / ${maxCourseScore.toFixed(1)}`}
             </p>
+            {isExpelled && expellingReason && <p style={{ marginBottom: 5 }}>Expelling reason: {expellingReason}</p>}
             <p style={{ marginBottom: 30 }}>
               Course progress: {`${scoredTasks} / ${tasks.length} tasks were scored (${courseProgress}%)`}
             </p>
