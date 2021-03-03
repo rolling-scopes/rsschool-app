@@ -90,7 +90,7 @@ export interface StudentStats {
   locationName: string;
   courseFullName: string;
   isExpelled: boolean;
-  expellingReason: string;
+  expellingReason?: string;
   certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
