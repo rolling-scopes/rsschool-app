@@ -137,7 +137,10 @@ export class UserService {
   }
 
   async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/${githubId}`, { opportunitiesConsent });
+    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/`, { 
+      githubId,
+      opportunitiesConsent 
+    });
     return response.data.data;
   }
 
