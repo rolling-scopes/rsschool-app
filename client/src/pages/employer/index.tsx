@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm, Result } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm, /* Result */ } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
@@ -50,12 +50,12 @@ class Page extends React.Component<Props, State> {
       key: 'complexData',
       render: (data: any) => {
         const { name, githubId } = data;
-        const { isAdmin } = this.props.session;
+/*         const { isAdmin } = this.props.session; */
 
         return (
           <>
             <a href={`/cv?githubId=${githubId}`}>{name}</a>
-            {isAdmin && (
+{/*             {isAdmin && ( */}
               <Popconfirm
                 title='Are you sure you want to remove this user?'
                 onConfirm={() => this.removeJobSeeker(githubId)}
@@ -64,7 +64,7 @@ class Page extends React.Component<Props, State> {
               >
                 <DeleteOutlined />
               </Popconfirm>
-            )}
+            ){/* } */}
           </>
         );
       },
@@ -216,11 +216,11 @@ class Page extends React.Component<Props, State> {
   }
 
   render() {
-    const { isAdmin, isHirer, githubId: userGithubId } = this.props.session;
+    const { /* isAdmin, isHirer, */ githubId: userGithubId } = this.props.session;
 
-    if (!(isAdmin || isHirer)) return (
+/*     if (!(isAdmin || isHirer)) return (
       <Result status="403" title="Sorry, but you don't have access to this page" />
-    );
+    ); */
 
     const { isLoading, users } = this.state;
 
