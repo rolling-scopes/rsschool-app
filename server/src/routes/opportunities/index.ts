@@ -161,7 +161,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
+  const { githubId } = ctx.request.body;
 
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ where: { githubId } });
@@ -255,7 +255,7 @@ export function opportunitiesRoute(logger: ILogger) {
   router.post('/', guard, saveCVData(logger));
 
   router.get('/consent', guard, getOpportunitiesConsent(logger));
-  router.post('/consent/:githubId', guard, setOpportunitiesConsent(logger));
+  router.post('/consent/', guard, setOpportunitiesConsent(logger));
 
   router.post('/extend', guard, extendCV(logger))
 

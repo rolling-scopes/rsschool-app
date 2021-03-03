@@ -14,7 +14,7 @@ type Props = {
 }
 
 function formatDate(expirationValue: number | null) {
-  if (expirationValue === null) {
+  if (expirationValue === null || expirationValue === 0) {
     return 'CV expiration date is not set';
   } else {
     const expirationDate = new Date(expirationValue);
