@@ -64,7 +64,7 @@ class Page extends React.Component<Props, State> {
               >
                 <DeleteOutlined />
               </Popconfirm>
-            ){/* } */}
+            {/* )} */}
           </>
         );
       },
