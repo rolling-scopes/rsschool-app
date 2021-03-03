@@ -32,7 +32,7 @@ const getStudentPosition = async ({ totalScore, courseId }: StudentStats): Promi
   ).map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
 
 const getStudentStatsWithoutPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
-  const { isCoreJsFeedbackVisible } = permissions;
+  const { isCoreJsFeedbackVisible, isExpellingReasonVisible } = permissions;
 
   const query = await getRepository(Student)
     .createQueryBuilder('student')
@@ -41,7 +41,6 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
     .addSelect('"course"."locationName" AS "locationName"')
     .addSelect('"course"."fullName" AS "courseFullName"')
     .addSelect('"student"."isExpelled" AS "isExpelled"')
-    .addSelect('"student"."expellingReason" AS "expellingReason"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
     .addSelect('"student"."totalScore" AS "totalScore"')
     .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
@@ -53,6 +52,10 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
     .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
     .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
     .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
+
+  if (isExpellingReasonVisible) {
+    query.addSelect('"student"."expellingReason" AS "expellingReason"');
+  }
 
   if (isCoreJsFeedbackVisible) {
     query
