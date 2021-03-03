@@ -117,7 +117,7 @@ function renderTaskSolutionStatus(submittedSolution: TaskSolution | null) {
       message={
         <>
           Submitted{' '}
-          <a target="_blank" href={submittedSolution.url}>
+          <a className="crosscheck-submitted-link" target="_blank" href={submittedSolution.url}>
             {submittedSolution.url}
           </a>{' '}
           on {formatDate(submittedSolution.updatedDate)}.
