@@ -169,7 +169,7 @@ class EditCV extends React.Component<Props, State> {
   }
 
   private formatDate(expirationValue: number | null) {
-    if (expirationValue === null) {
+    if (expirationValue === null || expirationValue === 0) {
       return <Text strong>CV expiration date is not set</Text>;
     } else {
       const expirationDate = new Date(expirationValue);
