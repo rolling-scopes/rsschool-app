@@ -11,6 +11,8 @@ import { onlyDefined } from '../../../utils/onlyDefined';
 import { HeroesFormData } from './types';
 
 const { Meta } = Card;
+const initialPagination = 1;
+const initialPageSize = 10;
 
 export const fields = {
   name: 'name',
@@ -19,7 +21,6 @@ export const fields = {
 } as const;
 
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
-  const initialPagination = 1;
   const [courses, setCourses] = useState<Course[]>([]);
   const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
   const [heroesCount, setHeroesCount] = useState(initialPagination);
@@ -30,7 +31,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
   useEffect(() => {
     const getHeroes = async () => {
       setLoading(true);
-      const heroes = await gratitudeService.getGratitude();
+      const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
       setLoading(false);
@@ -65,7 +66,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   const onClear = useCallback(async () => {
     setLoading(true);
-    const heroes = await gratitudeService.getGratitude();
+    const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
     setHeroesData(heroes.content);
     setHeroesCount(heroes.count);
     setCurrentPagination(initialPagination);
@@ -112,7 +113,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           <Col xs={24} sm={12} md={8} lg={4}>
             <Card
               hoverable
-              style={{ margin: '10 0' }}
+              style={{ margin: '12px 0' }}
               key={e.user_id}
               cover={
                 <div className="flex-column" style={{ marginTop: 20 }}>
