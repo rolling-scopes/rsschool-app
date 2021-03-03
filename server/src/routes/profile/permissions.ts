@@ -53,6 +53,7 @@ export interface Permissions {
   isStageInterviewFeedbackVisible: boolean;
   isCoreJsFeedbackVisible: boolean;
   isConsentsVisible: boolean;
+  isExpellingReasonVisible: boolean;
 }
 
 export const getStudentCourses = async (githubId: string): Promise<{ courseId: number }[] | null> => {
@@ -190,6 +191,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
     isStageInterviewFeedbackVisible: false,
     isCoreJsFeedbackVisible: false,
     isConsentsVisible: false,
+    isExpellingReasonVisible: false,
   };
 
   const accessToContacts = (permission: string, role?: RelationRole) => {
@@ -224,6 +226,7 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
         'isStudentStatsVisible',
         'isCoreJsFeedbackVisible',
         'isProfileVisible',
+        'isExpellingReasonVisible',
       ].includes(permission) &&
       role &&
       ['mentor', 'coursementor', 'coursemanager'].includes(role)
@@ -250,7 +253,10 @@ export const getPermissions = ({ isAdmin, isProfileOwner, role, permissions }: P
       return true;
     }
     // do not show own feedbacks
-    if (isProfileOwner && !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible'].includes(permission)) {
+    if (
+      isProfileOwner &&
+      !['isStageInterviewFeedbackVisible', 'isCoreJsFeedbackVisible', 'isExpellingReasonVisible'].includes(permission)
+    ) {
       return true;
     }
     if (get(permissions, `${permission}.all`) || get(permissions, `${permission}.${role}`)) {
