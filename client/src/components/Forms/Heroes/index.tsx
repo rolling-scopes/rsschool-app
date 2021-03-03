@@ -11,10 +11,9 @@ import { HeroesFormData } from './types';
 import heroesBadges from '../../../configs/heroes-badges';
 import Masonry from 'react-masonry-css';
 
-const { Text, Link, Paragraph } = Typography;
-
-const initialPage = 1;
-const initialPageSize = 20;
+const { Meta } = Card;
+const initialPagination = 1;
+const initialPageSize = 10;
 
 export const fields = {
   name: 'name',
@@ -36,7 +35,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
   useEffect(() => {
     const getHeroes = async () => {
       setLoading(true);
-      const heroes = await gratitudeService.getGratitude({ current: initialPage, pageSize: initialPageSize });
+      const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
       setLoading(false);
@@ -71,7 +70,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   const onClear = useCallback(async () => {
     setLoading(true);
-    const heroes = await gratitudeService.getGratitude({ current: initialPage, pageSize: initialPageSize });
+    const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
     setHeroesData(heroes.content);
     setHeroesCount(heroes.count);
     setCurrentPage(initialPage);
@@ -115,40 +114,16 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           </Button>
         </div>
       </Form>
-      <Masonry
-        breakpointCols={{
-          default: 4,
-          1100: 3,
-          700: 2,
-          500: 1,
-        }}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
-      >
-        {heroesData.map(feedback => (
-          <div style={{ marginBottom: gapSize, overflow: 'hidden' }} key={`card-${feedback.id}`} className="card">
-            <Card style={{ position: 'relative', background: 'none' }}>
-              <div
-                className="badge-bg"
-                style={{ backgroundImage: `url(/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url})` }}
-              />
-              <div className="badge-note" style={{ marginBottom: 48 }}>
-                <Paragraph style={{ margin: 0 }}>
-                  <Text strong>From:</Text> {getFullName(feedback.from)} (
-                  <Link href={`/profile?githubId=${feedback.from.githubId}`}>@{feedback.from.githubId}</Link>)
-                </Paragraph>
-                <Paragraph style={{ margin: 0 }}>
-                  <Text strong>To:</Text> {getFullName(feedback)} (
-                  <Link href={`/profile?githubId=${feedback.githubId}`}>@{feedback.githubId}</Link>)
-                </Paragraph>
-              </div>
-              <div className="flex-center" style={{ marginBottom: 48 }}>
-                <div className="badge">
-                  <Avatar
-                    src={`/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url}`}
-                    alt={`${feedback.badgeId} badge`}
-                    size={128}
-                  />
+      <Row gutter={24}>
+        {heroesData.map(e => (
+          <Col xs={24} sm={12} md={8} lg={4}>
+            <Card
+              hoverable
+              style={{ margin: '12px 0' }}
+              key={e.user_id}
+              cover={
+                <div className="flex-column" style={{ marginTop: 20 }}>
+                  <GithubAvatar githubId={e.githubId} size={96} />
                 </div>
               </div>
               <div className="badge-note">
