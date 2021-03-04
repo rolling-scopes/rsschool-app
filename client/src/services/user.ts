@@ -119,7 +119,7 @@ export class UserService {
 
   async getCVData(githubId: string) {
     const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/cv`, {
-      params: { githubId }
+      params: { githubId },
     });
     return response.data.data;
   }
@@ -131,25 +131,23 @@ export class UserService {
 
   async getOpportunitiesConsent(githubId: string) {
     const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/`, {
-      params: { githubId }
+      params: { githubId },
     });
     return response.data.data;
   }
 
   async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/`, { 
+    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/`, {
       githubId,
-      opportunitiesConsent 
+      opportunitiesConsent,
     });
     return response.data.data;
   }
 
   async extendCV() {
-    const response = await this.axios.post<{data: string}>('/api/opportunities/extend');
+    const response = await this.axios.post<{ data: string }>('/api/opportunities/extend');
     return response.data.data;
   }
-
-
 }
 
 export type ResponseStudent = {

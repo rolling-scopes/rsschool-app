@@ -97,7 +97,7 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   cvStartFrom?: string | null;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   cvFullTime?: boolean;
 
   @Column({ nullable: true, type: 'text' })
@@ -115,7 +115,7 @@ export class User {
   @Column({ nullable: true })
   englishLevel?: EnglishLevel;
 
-  @Column({nullable: true, type: 'text'})
+  @Column({ nullable: true, type: 'text' })
   cvEnglishLevel?: EnglishLevel | null;
 
   @Column({ nullable: true, type: 'text' })
