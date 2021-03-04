@@ -6,7 +6,14 @@ import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
-import { WarningTwoTone, SaveOutlined, ClearOutlined, DeleteOutlined, FieldTimeOutlined, CopyOutlined } from '@ant-design/icons';
+import {
+  WarningTwoTone,
+  SaveOutlined,
+  ClearOutlined,
+  DeleteOutlined,
+  FieldTimeOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -28,7 +35,7 @@ class EditCV extends React.Component<Props, State> {
     isLoading: false,
     contactsList: null,
     userData: null,
-    expires: null
+    expires: null,
   };
 
   private userFormRef: RefObject<typeof UserDataForm> = React.createRef();
@@ -51,7 +58,7 @@ class EditCV extends React.Component<Props, State> {
     );
 
     const message =
-      "Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.";
+      'Are you sure you want to delete your CV? The information contained therein will be deleted and employers will not be able to access it.';
     const messageRu =
       'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
     const confirmationModalContent = (
@@ -71,10 +78,9 @@ class EditCV extends React.Component<Props, State> {
       centered: true,
       maskStyle: { backgroundColor: 'red' },
       maskClosable: true,
-      onOk: () => this.props.withdrawConsent()
+      onOk: () => this.props.withdrawConsent(),
     });
   }
-
 
   private async fetchData() {
     await this.setState({
@@ -83,7 +89,26 @@ class EditCV extends React.Component<Props, State> {
 
     const CVData: GetCVData = await this.userService.getCVData(this.props.ownerId);
 
-    const { notes, name, selfIntroLink, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, startFrom, fullTime, expires } = CVData;
+    const {
+      notes,
+      name,
+      selfIntroLink,
+      militaryService,
+      avatarLink,
+      desiredPosition,
+      englishLevel,
+      email,
+      github,
+      linkedin,
+      location,
+      phone,
+      skype,
+      telegram,
+      website,
+      startFrom,
+      fullTime,
+      expires,
+    } = CVData;
 
     const userData = {
       notes,
@@ -94,7 +119,7 @@ class EditCV extends React.Component<Props, State> {
       desiredPosition,
       englishLevel,
       startFrom,
-      fullTime
+      fullTime,
     };
 
     const contactsList = {
@@ -105,13 +130,13 @@ class EditCV extends React.Component<Props, State> {
       phone,
       skype,
       telegram,
-      website
+      website,
     };
 
     await this.setState({
       contactsList: contactsList,
       userData: userData,
-      expires: Number(expires)
+      expires: Number(expires),
     });
 
     await this.setState({
@@ -137,7 +162,7 @@ class EditCV extends React.Component<Props, State> {
       skype,
       startFrom,
       telegram,
-      website
+      website,
     } = data;
 
     const CVData: SaveCVData = {
@@ -157,7 +182,7 @@ class EditCV extends React.Component<Props, State> {
       github: this.nullifyConditional(github),
       website: this.nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
-      fullTime
+      fullTime,
     };
 
     await this.userService.saveCVData(CVData);
@@ -174,9 +199,17 @@ class EditCV extends React.Component<Props, State> {
     } else {
       const expirationDate = new Date(expirationValue);
       const addZeroPadding = (num: number) => `0${num}`.slice(-2);
-      const [year, month, date] = [expirationDate.getFullYear(), expirationDate.getMonth() + 1, expirationDate.getDate()];
+      const [year, month, date] = [
+        expirationDate.getFullYear(),
+        expirationDate.getMonth() + 1,
+        expirationDate.getDate(),
+      ];
       const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
-      return <Text>Expiration date: <Text strong>{expirationDateFormatted}</Text></Text>;
+      return (
+        <Text>
+          Expiration date: <Text strong>{expirationDateFormatted}</Text>
+        </Text>
+      );
     }
   }
 
@@ -185,8 +218,8 @@ class EditCV extends React.Component<Props, State> {
       .map(ref => {
         const data = ref.current!.getFieldsValue();
         return {
-          ...data
-        }
+          ...data,
+        };
       })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
     this.handleSave(values);
@@ -244,14 +277,14 @@ class EditCV extends React.Component<Props, State> {
 
   private async extendCV() {
     await this.setState({
-      isLoading: true
+      isLoading: true,
     });
     const newExpirationDate = await this.userService.extendCV();
     await this.setState({
-      expires: Number(newExpirationDate)
+      expires: Number(newExpirationDate),
     });
     await this.setState({
-      isLoading: false
+      isLoading: false,
     });
   }
 
@@ -260,7 +293,7 @@ class EditCV extends React.Component<Props, State> {
 
     const buttonStyle = {
       borderRadius: '15px',
-      margin: '5px 0'
+      margin: '5px 0',
     };
 
     return (
@@ -268,28 +301,68 @@ class EditCV extends React.Component<Props, State> {
         <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
           <Content>
             <Card>
-              <Space direction="horizontal" align="start" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <Space
+                direction="horizontal"
+                align="start"
+                style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
+              >
                 {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
                 <Col>
                   <Row>{contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}</Row>
                   <br />
-                  <Row><Card size="small" style={{ width: '100%' }} title='CV expiration status'>{this.formatDate(expires)}</Card></Row>
+                  <Row>
+                    <Card size="small" style={{ width: '100%' }} title="CV expiration status">
+                      {this.formatDate(expires)}
+                    </Card>
+                  </Row>
                 </Col>
               </Space>
-              <Button style={buttonStyle} block type="primary" htmlType="button" onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])} icon={<SaveOutlined />}>
+              <Button
+                style={buttonStyle}
+                block
+                type="primary"
+                htmlType="button"
+                onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])}
+                icon={<SaveOutlined />}
+              >
                 Save
               </Button>
-              <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                <Button style={{ ...buttonStyle, width: '33%' }} type="default" htmlType="button" onClick={() => this.fillFromProfile()} icon={<CopyOutlined />}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button
+                  style={{ ...buttonStyle, width: '33%' }}
+                  type="default"
+                  htmlType="button"
+                  onClick={() => this.fillFromProfile()}
+                  icon={<CopyOutlined />}
+                >
                   Get data from profile
                 </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.resetFields.bind(this)} icon={<ClearOutlined />}>
+                <Button
+                  style={{ ...buttonStyle, width: '21%' }}
+                  type="default"
+                  htmlType="button"
+                  onClick={this.resetFields.bind(this)}
+                  icon={<ClearOutlined />}
+                >
                   Reset fields
                 </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="default" htmlType="button" onClick={this.extendCV.bind(this)} icon={<FieldTimeOutlined />}>
+                <Button
+                  style={{ ...buttonStyle, width: '21%' }}
+                  type="default"
+                  htmlType="button"
+                  onClick={this.extendCV.bind(this)}
+                  icon={<FieldTimeOutlined />}
+                >
                   Extend CV
                 </Button>
-                <Button style={{ ...buttonStyle, width: '21%' }} type="primary" danger htmlType="button" onClick={this.showConfirmationModal.bind(this)} icon={<DeleteOutlined />}>
+                <Button
+                  style={{ ...buttonStyle, width: '21%' }}
+                  type="primary"
+                  danger
+                  htmlType="button"
+                  onClick={this.showConfirmationModal.bind(this)}
+                  icon={<DeleteOutlined />}
+                >
                   Delete my CV
                 </Button>
               </div>
