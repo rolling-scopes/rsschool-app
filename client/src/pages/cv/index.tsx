@@ -30,7 +30,7 @@ class CVPage extends React.Component<Props, State> {
     isLoading: true,
     editMode: false,
     opportunitiesConsent: null,
-    errorOccured: false
+    errorOccured: false,
   };
 
   private userService = new UserService();
@@ -51,7 +51,7 @@ class CVPage extends React.Component<Props, State> {
     await this.setState({ isLoading: true });
     const newConsent = await this.userService.changeOpportunitiesConsent(githubId, true);
     await this.setState({
-      opportunitiesConsent: newConsent
+      opportunitiesConsent: newConsent,
     });
     await this.setState({ isLoading: false });
   }
@@ -60,7 +60,7 @@ class CVPage extends React.Component<Props, State> {
     await this.setState({ isLoading: true });
     const newConsent = await this.userService.changeOpportunitiesConsent(githubId, false);
     await this.setState({
-      opportunitiesConsent: newConsent
+      opportunitiesConsent: newConsent,
     });
     await this.setState({ isLoading: false });
   }
@@ -68,11 +68,13 @@ class CVPage extends React.Component<Props, State> {
   async componentDidMount() {
     await this.setState({ isLoading: true });
     try {
-      const opportunitiesConsent = await this.userService.getOpportunitiesConsent(this.props.router.query.githubId as string);
+      const opportunitiesConsent = await this.userService.getOpportunitiesConsent(
+        this.props.router.query.githubId as string,
+      );
       await this.setState({ opportunitiesConsent });
     } catch (e) {
       await this.setState({
-        errorOccured: true
+        errorOccured: true,
       });
     }
     await this.setState({ isLoading: false });
@@ -89,9 +91,7 @@ class CVPage extends React.Component<Props, State> {
     let content;
 
     if (errorOccured) {
-      return (
-        <Result status={404} title="User not found" />
-      );
+      return <Result status={404} title="User not found" />;
     }
 
     if (ownerId === undefined || ownerId instanceof Array) {
@@ -101,16 +101,20 @@ class CVPage extends React.Component<Props, State> {
         if (opportunitiesConsent) {
           content = (
             <>
-              <Text className='hide-on-print'>Switch view:</Text>
+              <Text className="hide-on-print">Switch view:</Text>
               <Switch
-                className='hide-on-print'
+                className="hide-on-print"
                 style={{ marginLeft: '5px' }}
                 defaultChecked={!editMode}
                 onChange={this.switchView.bind(this)}
                 checkedChildren="CV view"
                 unCheckedChildren="Edit view"
               />
-              {editMode ? <FormCV ownerId={ownerId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} /> : <ViewCV ownerId={ownerId} />}
+              {editMode ? (
+                <FormCV ownerId={ownerId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} />
+              ) : (
+                <ViewCV ownerId={ownerId} />
+              )}
             </>
           );
         } else {
@@ -129,28 +133,29 @@ class CVPage extends React.Component<Props, State> {
       <>
         <LoadingScreen show={isLoading}>
           <Header username={userGithubId} />
-          <Layout className='cv-layout' style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
-            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-              {content}
-            </Content>
+          <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
+            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>{content}</Content>
           </Layout>
           <FooterLayout />
         </LoadingScreen>
         <style jsx global>{`
           @media print {
-            .hide-on-print, .ant-avatar-icon, .profile, .footer {
+            .hide-on-print,
+            .ant-avatar-icon,
+            .profile,
+            .footer {
               display: none !important;
             }
             .black-on-print {
               color: black !important;
             }
           }
-          @media (max-width: 959px) { 
+          @media (max-width: 959px) {
             .view-cv-layout {
               width: 100% !important;
             }
           }
-      `}</style>
+        `}</style>
       </>
     );
   }

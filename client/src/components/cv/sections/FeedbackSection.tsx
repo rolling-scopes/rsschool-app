@@ -25,7 +25,9 @@ function PublicFeedbackSection(props: Props) {
     </>
   );
 
-  return <SectionCV content={sectionContent} title="Public feedback" icon={<CommentOutlined className='hide-on-print' />} />;
+  return (
+    <SectionCV content={sectionContent} title="Public feedback" icon={<CommentOutlined className="hide-on-print" />} />
+  );
 }
 
 function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
@@ -35,7 +37,7 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
     padding: '2px',
     border: '1px solid black',
     borderRadius: '15px',
-    marginBottom: '8px'
+    marginBottom: '8px',
   };
 
   const feedbackPartial = feedback.slice(0, showCount);
@@ -55,21 +57,18 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
   };
 
   const feedbackElements = feedbackToShow.map((feedback, index) => {
-    const {
-      comment,
-      feedbackDate
-    } = feedback;
+    const { comment, feedbackDate } = feedback;
 
     return (
       <Card
         key={`feedback-${index}`}
         style={feedbackStyle}
         size="small"
-        title={(
+        title={
           <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
             <span>{moment(feedbackDate).fromNow().toUpperCase()}</span>
           </Tooltip>
-        )}
+        }
       >
         <Paragraph ellipsis={{ rows: 2, expandable: true }}>{comment}</Paragraph>
       </Card>
@@ -82,10 +81,14 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
       {feedbackElements}
       {expansionNeeded &&
         (allFeedbackVisible ? (
-          <Button className='hide-on-print' onClick={showFeedbackPartially}>Show partially</Button>
+          <Button className="hide-on-print" onClick={showFeedbackPartially}>
+            Show partially
+          </Button>
         ) : (
-            <Button className='hide-on-print' onClick={showAllFeedback}>Show all</Button>
-          ))}
+          <Button className="hide-on-print" onClick={showAllFeedback}>
+            Show all
+          </Button>
+        ))}
     </>
   );
 }

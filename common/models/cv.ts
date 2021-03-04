@@ -7,10 +7,10 @@ export interface CourseData {
   isCourseCompleted: boolean;
   totalScore: number;
   position: number | null;
-  mentor: { 
+  mentor: {
     githubId: string;
-    name: string; 
-  }
+    name: string;
+  };
 }
 
 export type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
@@ -23,7 +23,7 @@ export interface UserData {
   name: string | null;
   desiredPosition: string | null;
   selfIntroLink: string | null;
-  englishLevel: EnglishLevel | null; 
+  englishLevel: EnglishLevel | null;
   militaryService: MilitaryService;
   notes: string | null;
   startFrom: string | null;
@@ -115,6 +115,3 @@ export interface JobSeekerData {
   publicfeedback: PublicFeedback[];
   cvExpires: number;
 }
-
-
-
