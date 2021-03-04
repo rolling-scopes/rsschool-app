@@ -11,7 +11,7 @@ type Props = {
   userData: UserData;
   contacts: Contacts;
   expires: number | null;
-}
+};
 
 function formatDate(expirationValue: number | null) {
   if (expirationValue === null || expirationValue === 0) {
@@ -27,7 +27,16 @@ function formatDate(expirationValue: number | null) {
 
 function MainSection(props: Props) {
   const { userData, contacts, expires } = props;
-  const { avatarLink, name, desiredPosition, englishLevel, militaryService, selfIntroLink, startFrom, fullTime, } = userData;
+  const {
+    avatarLink,
+    name,
+    desiredPosition,
+    englishLevel,
+    militaryService,
+    selfIntroLink,
+    startFrom,
+    fullTime,
+  } = userData;
 
   const sectionContent = (
     <Row>
@@ -35,19 +44,33 @@ function MainSection(props: Props) {
         <AvatarCV src={avatarLink} />
         <br />
         <br />
-        <Text>English level: <Text strong>{englishLevel}</Text></Text>
+        <Text>
+          English level: <Text strong>{englishLevel}</Text>
+        </Text>
         <br />
-        {militaryService && <Text>Military service: <Text strong>{militaryService}</Text> </Text>}
+        {militaryService && (
+          <Text>
+            Military service: <Text strong>{militaryService}</Text>{' '}
+          </Text>
+        )}
         <br />
         {selfIntroLink && (
           <>
-            <a className='hide-on-print' href={selfIntroLink}>Self introduction video</a>
-            <br className='hide-on-print' />
+            <a className="hide-on-print" href={selfIntroLink}>
+              Self introduction video
+            </a>
+            <br className="hide-on-print" />
           </>
         )}
-        <Text>Ready to work full time: <Text strong>{fullTime ? 'yes' : 'no'}</Text></Text>
+        <Text>
+          Ready to work full time: <Text strong>{fullTime ? 'yes' : 'no'}</Text>
+        </Text>
         <br />
-        {startFrom && <time dateTime={startFrom}>Ready to work from <Text strong>{startFrom}</Text></time>}
+        {startFrom && (
+          <time dateTime={startFrom}>
+            Ready to work from <Text strong>{startFrom}</Text>
+          </time>
+        )}
       </Col>
       <Col flex={14}>
         <Title level={2}>{name}</Title>

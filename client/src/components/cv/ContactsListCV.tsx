@@ -27,30 +27,54 @@ const allowedContacts: AllowedContacts = {
   },
   email: {
     icon: <MailOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={`mailto:${contact}`}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={`mailto:${contact}`}>
+        {contact}
+      </a>
+    ),
   },
   skype: {
     icon: <SkypeOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={`skype:${contact}?chat`}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={`skype:${contact}?chat`}>
+        {contact}
+      </a>
+    ),
   },
   telegram: {
     icon: <PhoneOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={`https://t.me/${contact}`}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={`https://t.me/${contact}`}>
+        {contact}
+      </a>
+    ),
   },
   linkedin: {
     icon: <LinkedinOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={`https://www.linkedin.com/in/${contact}`}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={`https://www.linkedin.com/in/${contact}`}>
+        {contact}
+      </a>
+    ),
   },
   location: {
     icon: <AimOutlined />,
   },
   github: {
     icon: <GithubOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={`https://github.com/${contact}`}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={`https://github.com/${contact}`}>
+        {contact}
+      </a>
+    ),
   },
   website: {
     icon: <IdcardOutlined />,
-    transformFunc: contact => <a className='black-on-print' href={contact}>{contact}</a>,
+    transformFunc: contact => (
+      <a className="black-on-print" href={contact}>
+        {contact}
+      </a>
+    ),
   },
 };
 
@@ -68,7 +92,7 @@ function ContactsListCV(props: Props) {
     const renderContacts = contactsFiltered.filter((contact): contact is EntryOf<Contacts> => contact[1] !== null);
     res = (
       <List
-        size='small'
+        size="small"
         dataSource={renderContacts}
         renderItem={contact => {
           const contactType: ContactType = contact[0];
