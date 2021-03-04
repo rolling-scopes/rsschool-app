@@ -28,7 +28,7 @@ class ViewCV extends React.Component<Props, State> {
     userData: null,
     coursesData: null,
     publicFeedback: null,
-    expires: null
+    expires: null,
   };
 
   private userService = new UserService();
@@ -41,7 +41,28 @@ class ViewCV extends React.Component<Props, State> {
 
     const CVData: GetCVData = await this.userService.getCVData(ownerId);
 
-    const { notes, name, selfIntroLink, startFrom, militaryService, avatarLink, desiredPosition, englishLevel, email, github, linkedin, location, phone, skype, telegram, website, fullTime, publicFeedback, courses, expires } = CVData;
+    const {
+      notes,
+      name,
+      selfIntroLink,
+      startFrom,
+      militaryService,
+      avatarLink,
+      desiredPosition,
+      englishLevel,
+      email,
+      github,
+      linkedin,
+      location,
+      phone,
+      skype,
+      telegram,
+      website,
+      fullTime,
+      publicFeedback,
+      courses,
+      expires,
+    } = CVData;
 
     const userData = {
       notes,
@@ -52,7 +73,7 @@ class ViewCV extends React.Component<Props, State> {
       desiredPosition,
       englishLevel,
       startFrom,
-      fullTime
+      fullTime,
     };
 
     const contactsList = {
@@ -63,7 +84,7 @@ class ViewCV extends React.Component<Props, State> {
       phone,
       skype,
       telegram,
-      website
+      website,
     };
 
     const coursesDataExtracted = this.extractCoursesData(courses);
@@ -73,7 +94,7 @@ class ViewCV extends React.Component<Props, State> {
       userData: userData as UserData,
       coursesData: coursesDataExtracted,
       publicFeedback,
-      expires: Number(expires)
+      expires: Number(expires),
     });
 
     await this.setState({
@@ -91,7 +112,7 @@ class ViewCV extends React.Component<Props, State> {
         position,
         isCourseCompleted,
         totalScore,
-        mentor
+        mentor,
       } = course;
 
       return {
@@ -102,7 +123,7 @@ class ViewCV extends React.Component<Props, State> {
         position,
         isCourseCompleted,
         totalScore,
-        mentor
+        mentor,
       };
     });
   }
@@ -112,23 +133,19 @@ class ViewCV extends React.Component<Props, State> {
   }
 
   render() {
-
     const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = this.state;
 
     return (
       <LoadingScreen show={isLoading}>
-        <Layout className='view-cv-layout' style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
+        <Layout className="view-cv-layout" style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
           <Content>
             <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
               {userData && contactsList && (
                 <>
-                  <MainSection
-                    userData={userData}
-                    contacts={contactsList}
-                    expires={expires}
-                  />
+                  <MainSection userData={userData} contacts={contactsList} expires={expires} />
                   {userData.notes && <AboutSection notes={userData.notes} />}
-                </>)}
+                </>
+              )}
               {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
               {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
             </Space>
