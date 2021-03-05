@@ -166,7 +166,12 @@ function Page(props: Props) {
           <Collapse.Panel header="JSON Attributes" key="2" forceRender>
             <Form.Item
               name="attributes"
-              rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
+              rules={[
+                {
+                  validator: async (_, value: string) => (value ? JSON.parse(value) : Promise.resolve()),
+                  message: 'Invalid json',
+                },
+              ]}
             >
               <Input.TextArea rows={6} />
             </Form.Item>
