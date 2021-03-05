@@ -63,15 +63,21 @@ export async function getStudentsScore(
   }
 
   if (filter.cityName) {
-    query = query.andWhere('"user"."cityName" ILIKE :searchText', { searchText: `%${filter.cityName}%` });
+    query = query.andWhere('"user"."cityName" ILIKE :searchCityNameText', {
+      searchCityNameText: `%${filter.cityName}%`,
+    });
   }
 
   if (filter['mentor.githubId']) {
-    query = query.andWhere('"mu"."githubId" ILIKE :searchText', { searchText: `%${filter['mentor.githubId']}%` });
+    query = query.andWhere('"mu"."githubId" ILIKE :searchMentorGithubIdText', {
+      searchMentorGithubIdText: `%${filter['mentor.githubId']}%`,
+    });
   }
 
   if (filter.githubId) {
-    query = query.andWhere('("user"."githubId" ILIKE :searchText)', { searchText: `%${filter.githubId}%` });
+    query = query.andWhere('("user"."githubId" ILIKE :searchGithubIdText)', {
+      searchGithubIdText: `%${filter.githubId}%`,
+    });
   }
 
   const pagination = await paginate(

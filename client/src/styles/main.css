@@ -42,6 +42,20 @@ span.ant-table-filter-column-title {
   padding-bottom: 8px;
 }
 
+span.ant-radio+* {
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+}
+
 thead.ant-table-thead > tr > th {
   font-size: 12px;
+}
+
+.crosscheck-submitted-link:focus {
+  text-decoration: underline;
+}
+
+.rc-virtual-list-scrollbar {
+  display: block !important;
 }

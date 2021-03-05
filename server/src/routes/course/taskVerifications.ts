@@ -21,7 +21,7 @@ export const getStudentTaskVerifications = (_: ILogger) => async (ctx: Router.Ro
     .createQueryBuilder('v')
     .innerJoin('v.courseTask', 'courseTask')
     .innerJoin('courseTask.task', 'task')
-    .addSelect(['task.name', 'courseTask.id'])
+    .addSelect(['task.name', 'courseTask.id', 'courseTask.type'])
     .where('v.studentId = :id', { id: student.id })
     .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .orderBy('v.updatedDate', 'DESC')

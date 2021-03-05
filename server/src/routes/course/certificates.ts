@@ -19,12 +19,19 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
     return;
   }
 
+  const { courseTaskIds, minScore, minTotalScore } = data.criteria ?? {};
+  const emptyCriteria = !minScore && !minTotalScore && (!courseTaskIds || !courseTaskIds.length);
   const studentRepository = getCustomRepository(StudentRepository);
   const studentIds = await studentRepository.findByCriteria(courseId, {
-    courseTaskIds: data.criteria.courseTaskIds ?? [],
-    minScore: data.criteria.minScore != null ? Number(data.criteria.minScore) : null,
-    minTotalScore: data.criteria.minTotalScore != null ? Number(data.criteria.minTotalScore) : null,
+    courseTaskIds: courseTaskIds ?? [],
+    minScore: minScore != null ? Number(minScore) : null,
+    minTotalScore: minTotalScore != null ? Number(minTotalScore) : null,
   });
+
+  if (studentIds.length === 0 && !emptyCriteria) {
+    setResponse(ctx, OK, []);
+    return;
+  }
 
   let students: Student[] = [];
   const initialQuery = getRepository(Student)
@@ -39,7 +46,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       'course.name',
       'course.primarySkillName',
     ]);
-  if (Array.isArray(studentIds) && studentIds.length > 0) {
+  if (studentIds.length > 0) {
     students = await initialQuery.where('student."id" IN (:...ids)', { ids: studentIds }).getMany();
   } else {
     students = await initialQuery

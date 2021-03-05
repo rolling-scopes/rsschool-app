@@ -61,7 +61,6 @@ function Page(props: Props) {
     [modalData, modalAction, modalLoading],
   );
 
-  // TODO: Left hardcoded (codewars:stage1|codewars:stage2) configs only for backward compatibility. Delete them in the future.
   const renderModal = useCallback(() => {
     const allTags = union(...data.map(d => d.tags || []));
     return (
@@ -92,8 +91,6 @@ function Page(props: Props) {
                 <Select.Option value="cv:html">CV HTML</Select.Option>
                 <Select.Option value="selfeducation">Self Education</Select.Option>
                 <Select.Option value="codewars">Codewars</Select.Option>
-                <Select.Option value="codewars:stage1">Codewars stage 1</Select.Option>
-                <Select.Option value="codewars:stage2">Codewars stage 2</Select.Option>
                 <Select.Option value="test">Test</Select.Option>
                 <Select.Option value="codejam">Code Jam</Select.Option>
                 <Select.Option value="interview">Interview</Select.Option>
@@ -155,7 +152,7 @@ function Page(props: Props) {
           </Col>
         </Row>
         <Collapse>
-          <Collapse.Panel header="Github" key="1">
+          <Collapse.Panel header="Github" key="1" forceRender>
             <Form.Item name="githubPrRequired" label="" valuePropName="checked">
               <Checkbox>Pull Request required</Checkbox>
             </Form.Item>
@@ -166,10 +163,15 @@ function Page(props: Props) {
               <Input placeholder="task1" />
             </Form.Item>
           </Collapse.Panel>
-          <Collapse.Panel header="JSON Attributes" key="2">
+          <Collapse.Panel header="JSON Attributes" key="2" forceRender>
             <Form.Item
               name="attributes"
-              rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
+              rules={[
+                {
+                  validator: async (_, value: string) => (value ? JSON.parse(value) : Promise.resolve()),
+                  message: 'Invalid json',
+                },
+              ]}
             >
               <Input.TextArea rows={6} />
             </Form.Item>

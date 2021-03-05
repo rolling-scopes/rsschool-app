@@ -1,4 +1,5 @@
 import { BAD_REQUEST, OK } from 'http-status-codes';
+import { isUndefined } from 'lodash';
 import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
 import NodeCache from 'node-cache';
@@ -10,6 +11,7 @@ import { getCourseTasks, getStudentScore } from '../../services/course.service';
 import { getStudentsScore } from '../../services/score.service';
 
 import { setCsvResponse, setResponse } from '../utils';
+import { ScoreTableFilters } from '../../../../common/types/score';
 
 type ScoreInput = {
   score: number | string;
@@ -233,7 +235,23 @@ export const getScoreByStudent = (_: ILogger) => async (ctx: Router.RouterContex
 
 export const getScoreAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = ctx.params.courseId;
-  const students = await getStudentsScore(courseId);
+  const { cityName, ['mentor.githubId']: mentor } = ctx.query;
+  let filters: ScoreTableFilters = {
+    activeOnly: false,
+    githubId: '',
+    name: '',
+    'mentor.githubId': '',
+    cityName: '',
+  };
+
+  if (!isUndefined(cityName)) {
+    filters = { ...filters, cityName };
+  }
+  if (!isUndefined(mentor)) {
+    filters = { ...filters, ['mentor.githubId']: mentor };
+  }
+
+  const students = await getStudentsScore(courseId, undefined, filters);
   const courseTasks = await getCourseTasks(courseId);
 
   const result = students.content.map(student => {
