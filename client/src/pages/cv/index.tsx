@@ -52,8 +52,8 @@ class CVPage extends React.Component<Props, State> {
     const newConsent = await userService.changeOpportunitiesConsent(githubId, true);
     await this.setState({
       opportunitiesConsent: newConsent,
+      isLoading: false,
     });
-    await this.setState({ isLoading: false });
   }
 
   private async withdrawConsent(githubId: string) {
@@ -61,8 +61,8 @@ class CVPage extends React.Component<Props, State> {
     const newConsent = await userService.changeOpportunitiesConsent(githubId, false);
     await this.setState({
       opportunitiesConsent: newConsent,
+      isLoading: false,
     });
-    await this.setState({ isLoading: false });
   }
 
   async componentDidMount() {
@@ -71,13 +71,13 @@ class CVPage extends React.Component<Props, State> {
       const opportunitiesConsent = await userService.getOpportunitiesConsent(
         this.props.router.query.githubId as string,
       );
-      await this.setState({ opportunitiesConsent });
+      await this.setState({ opportunitiesConsent, isLoading: false });
     } catch (e) {
       await this.setState({
         errorOccured: true,
+        isLoading: false,
       });
     }
-    await this.setState({ isLoading: false });
   }
 
   render() {

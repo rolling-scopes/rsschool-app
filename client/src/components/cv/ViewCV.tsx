@@ -95,9 +95,6 @@ class ViewCV extends React.Component<Props, State> {
       coursesData: coursesDataExtracted,
       publicFeedback,
       expires: Number(expires),
-    });
-
-    await this.setState({
       isLoading: false,
     });
   }

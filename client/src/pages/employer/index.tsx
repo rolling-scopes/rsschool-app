@@ -221,8 +221,7 @@ class Page extends React.Component<Props, State> {
   async componentDidMount() {
     await this.setState({ isLoading: true });
     const data = await this.fetchData();
-    await this.setState({ users: data });
-    await this.setState({ isLoading: false });
+    await this.setState({ users: data, isLoading: false });
   }
 
   render() {
