@@ -94,5 +94,5 @@ export class CourseTask {
   special: string;
 
   @Column({ nullable: true, type: 'int' })
-  duration: number | null;
+  duration: number;
 }

@@ -66,5 +66,5 @@ export class CourseEvent {
   special: string;
 
   @Column({ nullable: true, type: 'int' })
-  duration: number | null;
+  duration: number;
 }
