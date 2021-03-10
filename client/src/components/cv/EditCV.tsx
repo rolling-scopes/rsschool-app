@@ -212,12 +212,7 @@ class EditCV extends React.Component<Props, State> {
 
   private getDataFromRefs(refs: RefObject<any>[]) {
     const values = refs
-      .map(ref => {
-        const data = ref.current!.getFieldsValue();
-        return {
-          ...data,
-        };
-      })
+      .map(ref => ref.current!.getFieldsValue())
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
     this.handleSave(values);
   }
