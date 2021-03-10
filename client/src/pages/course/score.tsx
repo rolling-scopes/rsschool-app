@@ -193,7 +193,10 @@ function renderTable(
       className="table-score"
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
-      pagination={pagination}
+      pagination={{
+        ...pagination,
+        showTotal: (total: number) => `Total ${total} items`,
+      }}
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
       dataSource={students}
