@@ -86,39 +86,35 @@ type EntryOf<T extends object> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
 function ContactsListCV(props: Props) {
   const { contacts } = props;
-  let res;
-  if (contacts !== null) {
-    const contactsFiltered = Object.entries(contacts);
-    const renderContacts = contactsFiltered.filter((contact): contact is EntryOf<Contacts> => contact[1] !== null);
-    res = (
-      <List
-        size="small"
-        dataSource={renderContacts}
-        renderItem={contact => {
-          const contactType: ContactType = contact[0];
-          const contactText = contact[1];
-          const icon = allowedContacts[contactType].icon;
-          let contactTextElem;
-          const transformFunction = allowedContacts[contactType].transformFunc;
-          if (transformFunction) {
-            contactTextElem = transformFunction(contactText as string);
-          } else {
-            contactTextElem = <Text>{contactText}</Text>;
-          }
-          return (
-            <Item>
-              {icon}
-              {contactTextElem}
-            </Item>
-          );
-        }}
-      />
-    );
-  } else {
-    res = null;
-  }
 
-  return res;
+  if (!contacts) return null;
+
+  const contactsEntries = Object.entries(contacts);
+  const contactsToRender = contactsEntries.filter((contact): contact is EntryOf<Contacts> => contact[1] !== null);
+
+  return (
+    <List
+      size="small"
+      dataSource={contactsToRender}
+      renderItem={contact => {
+        const [contactType, contactText] = contact;
+        const icon = allowedContacts[contactType].icon;
+
+        const transformFunction = allowedContacts[contactType].transformFunc;
+        const contactTextElem = transformFunction ? (
+          transformFunction(contactText as string)
+        ) : (
+          <Text>{contactText}</Text>
+        );
+        return (
+          <Item>
+            {icon}
+            {contactTextElem}
+          </Item>
+        );
+      }}
+    />
+  );
 }
 
 export default ContactsListCV;
