@@ -36,15 +36,9 @@ class CVPage extends React.Component<Props, State> {
   };
 
   private async switchView(checked: boolean) {
-    if (checked) {
-      await this.setState({
-        editMode: false,
-      });
-    } else {
-      await this.setState({
-        editMode: true,
-      });
-    }
+    await this.setState({
+      editMode: !checked,
+    });
   }
 
   private async giveConsent(githubId: string) {
