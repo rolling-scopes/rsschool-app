@@ -72,3 +72,5 @@ export const SPECIAL_ENTITY_TAGS = [
   'kotlin',
   'aws',
 ];
+
+export const COLUMNS_TYPES = ['Type', 'Special', 'Url', 'Duration', 'Organizer', 'Place'];
