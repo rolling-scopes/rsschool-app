@@ -87,7 +87,7 @@ class EditCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const CVData: GetCVData = await userService.getCVData(this.props.ownerId);
+    const cvData: GetCVData = await userService.getCVData(this.props.ownerId);
 
     const {
       notes,
@@ -108,7 +108,7 @@ class EditCV extends React.Component<Props, State> {
       startFrom,
       fullTime,
       expires,
-    } = CVData;
+    } = cvData;
 
     const userData = {
       notes,
@@ -165,7 +165,7 @@ class EditCV extends React.Component<Props, State> {
       website,
     } = data;
 
-    const CVData: SaveCVData = {
+    const cvData: SaveCVData = {
       selfIntroLink: this.nullifyConditional(selfIntroLink),
       militaryService,
       avatarLink,
@@ -185,7 +185,7 @@ class EditCV extends React.Component<Props, State> {
       fullTime,
     };
 
-    await userService.saveCVData(CVData);
+    await userService.saveCVData(cvData);
   }
 
   private async handleSave(data: any) {
