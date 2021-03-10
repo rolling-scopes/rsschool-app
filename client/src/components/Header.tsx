@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import css from 'styled-jsx/css';
-
+// TODO: ucnomment after testing
 import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone /* ExperimentOutlined */ } from '@ant-design/icons';
 
 type Props = {
@@ -47,6 +47,7 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
+      {/* TODO: uncomment after testing */}
       {/*       <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
         <Button
           type="link"
