@@ -21,6 +21,8 @@ type State = {
   expires: number | null;
 };
 
+const userService = new UserService();
+
 class ViewCV extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
@@ -31,15 +33,13 @@ class ViewCV extends React.Component<Props, State> {
     expires: null,
   };
 
-  private userService = new UserService();
-
   private async fetchData() {
     const { ownerId } = this.props;
     await this.setState({
       isLoading: true,
     });
 
-    const CVData: GetCVData = await this.userService.getCVData(ownerId);
+    const CVData: GetCVData = await userService.getCVData(ownerId);
 
     const {
       notes,
