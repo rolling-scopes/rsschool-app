@@ -137,9 +137,6 @@ class EditCV extends React.Component<Props, State> {
       contactsList: contactsList,
       userData: userData,
       expires: Number(expires),
-    });
-
-    await this.setState({
       isLoading: false,
     });
   }
@@ -282,8 +279,6 @@ class EditCV extends React.Component<Props, State> {
     const newExpirationDate = await userService.extendCV();
     await this.setState({
       expires: Number(newExpirationDate),
-    });
-    await this.setState({
       isLoading: false,
     });
   }
