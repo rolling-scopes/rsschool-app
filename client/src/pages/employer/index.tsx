@@ -50,11 +50,13 @@ class Page extends React.Component<Props, State> {
       key: 'complexData',
       render: (data: any) => {
         const { name, githubId } = data;
+        // TODO: ucnomment after testing
         /*         const { isAdmin } = this.props.session; */
 
         return (
           <>
             <a href={`/cv?githubId=${githubId}`}>{name}</a>
+            {/* TODO: ucnomment after testing */}
             {/*             {isAdmin && ( */}
             <Popconfirm
               title="Are you sure you want to remove this user?"
@@ -64,6 +66,7 @@ class Page extends React.Component<Props, State> {
             >
               <DeleteOutlined />
             </Popconfirm>
+            {/* TODO: ucnomment after testing */}
             {/* )} */}
           </>
         );
@@ -223,6 +226,7 @@ class Page extends React.Component<Props, State> {
   }
 
   render() {
+    // TODO: ucnomment after testing
     const { /* isAdmin, isHirer, */ githubId: userGithubId } = this.props.session;
 
     /*     if (!(isAdmin || isHirer)) return (
