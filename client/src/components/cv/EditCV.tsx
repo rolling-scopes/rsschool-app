@@ -30,6 +30,8 @@ type Props = {
   withdrawConsent: () => void;
 };
 
+const userService = new UserService();
+
 class EditCV extends React.Component<Props, State> {
   state: State = {
     isLoading: false,
@@ -40,8 +42,6 @@ class EditCV extends React.Component<Props, State> {
 
   private userFormRef: RefObject<typeof UserDataForm> = React.createRef();
   private contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
-
-  private userService = new UserService();
 
   private nullifyConditional(value: string | null) {
     return value === '' ? null : value;
@@ -87,7 +87,7 @@ class EditCV extends React.Component<Props, State> {
       isLoading: true,
     });
 
-    const CVData: GetCVData = await this.userService.getCVData(this.props.ownerId);
+    const CVData: GetCVData = await userService.getCVData(this.props.ownerId);
 
     const {
       notes,
@@ -185,7 +185,7 @@ class EditCV extends React.Component<Props, State> {
       fullTime,
     };
 
-    await this.userService.saveCVData(CVData);
+    await userService.saveCVData(CVData);
   }
 
   private async handleSave(data: any) {
@@ -232,7 +232,7 @@ class EditCV extends React.Component<Props, State> {
   private async fillFromProfile() {
     const id = this.props.ownerId;
 
-    const profile = await this.userService.getProfileInfo(id);
+    const profile = await userService.getProfileInfo(id);
 
     const name = profile.generalInfo?.name ?? null;
     const notes = profile.generalInfo?.aboutMyself ?? null;
@@ -279,7 +279,7 @@ class EditCV extends React.Component<Props, State> {
     await this.setState({
       isLoading: true,
     });
-    const newExpirationDate = await this.userService.extendCV();
+    const newExpirationDate = await userService.extendCV();
     await this.setState({
       expires: Number(newExpirationDate),
     });
