@@ -25,6 +25,8 @@ type State = {
   errorOccured: boolean;
 };
 
+const userService = new UserService();
+
 class CVPage extends React.Component<Props, State> {
   state: State = {
     isLoading: true,
@@ -32,8 +34,6 @@ class CVPage extends React.Component<Props, State> {
     opportunitiesConsent: null,
     errorOccured: false,
   };
-
-  private userService = new UserService();
 
   private async switchView(checked: boolean) {
     if (checked) {
@@ -49,7 +49,7 @@ class CVPage extends React.Component<Props, State> {
 
   private async giveConsent(githubId: string) {
     await this.setState({ isLoading: true });
-    const newConsent = await this.userService.changeOpportunitiesConsent(githubId, true);
+    const newConsent = await userService.changeOpportunitiesConsent(githubId, true);
     await this.setState({
       opportunitiesConsent: newConsent,
     });
@@ -58,7 +58,7 @@ class CVPage extends React.Component<Props, State> {
 
   private async withdrawConsent(githubId: string) {
     await this.setState({ isLoading: true });
-    const newConsent = await this.userService.changeOpportunitiesConsent(githubId, false);
+    const newConsent = await userService.changeOpportunitiesConsent(githubId, false);
     await this.setState({
       opportunitiesConsent: newConsent,
     });
@@ -68,7 +68,7 @@ class CVPage extends React.Component<Props, State> {
   async componentDidMount() {
     await this.setState({ isLoading: true });
     try {
-      const opportunitiesConsent = await this.userService.getOpportunitiesConsent(
+      const opportunitiesConsent = await userService.getOpportunitiesConsent(
         this.props.router.query.githubId as string,
       );
       await this.setState({ opportunitiesConsent });
