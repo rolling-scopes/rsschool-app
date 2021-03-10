@@ -21,6 +21,7 @@ export function Header(props: Props) {
     isProfilePage,
     onChangeProfilePageMode,
     isProfileEditingModeEnabled,
+    // TODO: uncomment after testing
     isSaveButtonVisible /* username */,
   } = props;
 
