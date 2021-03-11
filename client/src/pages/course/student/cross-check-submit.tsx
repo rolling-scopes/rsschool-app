@@ -1,14 +1,23 @@
-import { Button, Col, Alert, Form, Input, message, Row, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Row } from 'antd';
 import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
+import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { useMemo, useState } from 'react';
-import { CourseService, CourseTask, TaskSolution } from 'services/course';
+import {
+  CourseService,
+  CourseTask,
+  TaskSolution,
+  CrossCheckCriteria,
+  CrossCheckComment,
+  CrossCheckReview,
+} from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-import { formatDate } from 'services/formatter';
-import { CourseTaskSelect } from 'components/Forms';
+import { CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { DeadlineInfo } from 'components/CrossCheck/DeadlineInfo';
+import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -19,11 +28,12 @@ function Page(props: CoursePageProps) {
   const [feedback, setFeedback] = useState(null as any);
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
+  const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
+  const [reviewComments, setReviewComments] = useState([] as CrossCheckComment[]);
 
   useAsync(async () => {
-    const data = await courseService.getCourseTasks();
-    const courseTasks = data.filter(t => t.checker === 'crossCheck');
-    setCourseTasks(courseTasks);
+    const data = await courseService.getCourseCrossCheckTasks();
+    setCourseTasks(data);
   }, [props.course.id]);
 
   const handleSubmit = async (values: any) => {
@@ -31,9 +41,17 @@ function Page(props: CoursePageProps) {
       return;
     }
     try {
-      await courseService.postTaskSolution(props.session.githubId, courseTaskId, values.url);
+      await courseService.postTaskSolution(
+        props.session.githubId,
+        courseTaskId,
+        values.url,
+        values.review,
+        reviewComments,
+      );
       message.success('The task solution has been submitted');
       form.resetFields();
+      setReviewComments([]);
+      setCourseTaskId(null);
     } catch (e) {
       message.error('An error occured. Please try later.');
     }
@@ -46,13 +64,29 @@ function Page(props: CoursePageProps) {
     if (courseTask == null) {
       return;
     }
-    const [feedback, submittedSolution] = await Promise.all([
+    const [feedback, submittedSolution, taskDetails] = await Promise.all([
       courseService.getCrossCheckFeedback(props.session.githubId, courseTask.id),
       courseService.getTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
+      courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);
+
+    const review = submittedSolution?.review ?? [];
+    const criteria = taskDetails?.criteria ?? [];
+
+    form.setFieldsValue({ review });
+    form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
+    form.setFieldsValue({ url: submittedSolution?.url });
+
     setFeedback(feedback);
     setSubmittedSolution(submittedSolution);
     setCourseTaskId(courseTask.id);
+    setCriteria(criteria);
+    setReviewComments(submittedSolution?.comments ?? []);
+  };
+
+  const handleReviewChange = (review: CrossCheckReview[], comments: CrossCheckComment[]) => {
+    form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
+    setReviewComments(comments);
   };
 
   const comments = feedback?.comments ?? [];
@@ -60,6 +94,8 @@ function Page(props: CoursePageProps) {
   const studentEndDate = task?.studentEndDate ?? 0;
   const isSubmitDisabled = studentEndDate ? new Date(studentEndDate).getTime() < Date.now() : false;
   const submitAllowed = !isSubmitDisabled && task;
+  const newCrossCheck = criteria.length > 0;
+
   return (
     <PageLayout
       loading={false}
@@ -71,8 +107,9 @@ function Page(props: CoursePageProps) {
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
-            {renderDeadlineInfo(isSubmitDisabled)}
-            {renderTaskSolutionStatus(submittedSolution)}
+            <DeadlineInfo isSubmitDisabled={isSubmitDisabled} />
+            <SubmittedStatus solution={submittedSolution} />
+
             {submitAllowed && (
               <Form.Item
                 name="url"
@@ -82,6 +119,12 @@ function Page(props: CoursePageProps) {
                 <Input />
               </Form.Item>
             )}
+            {submitAllowed && newCrossCheck && (
+              <Form.Item name="review">
+                <CriteriaForm onChange={handleReviewChange} criteria={criteria} comments={reviewComments ?? []} />
+              </Form.Item>
+            )}
+            {submitAllowed && newCrossCheck && <ScoreInput courseTask={task} />}
             {submitAllowed && (
               <Button style={{ marginTop: 16 }} type="primary" htmlType="submit">
                 Submit
@@ -99,32 +142,9 @@ function Page(props: CoursePageProps) {
 
 export default withCourseData(withSession(Page, 'student'));
 
-function renderDeadlineInfo(isSubmitDisabled: boolean) {
-  return (
-    isSubmitDisabled && (
-      <div style={{ marginBottom: 16 }}>
-        <Typography.Text mark type="warning">
-          The deadline has passed already
-        </Typography.Text>
-      </div>
-    )
-  );
-}
-
-function renderTaskSolutionStatus(submittedSolution: TaskSolution | null) {
-  return submittedSolution ? (
-    <Alert
-      message={
-        <>
-          Submitted{' '}
-          <a className="crosscheck-submitted-link" target="_blank" href={submittedSolution.url}>
-            {submittedSolution.url}
-          </a>{' '}
-          on {formatDate(submittedSolution.updatedDate)}.
-        </>
-      }
-      type="success"
-      showIcon
-    />
-  ) : null;
+function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
+  return review?.reduce((acc, r) => {
+    const max = criteria.find(c => c.criteriaId === r.criteriaId)?.max ?? 0;
+    return acc + Math.round(max * r.percentage);
+  }, 0);
 }

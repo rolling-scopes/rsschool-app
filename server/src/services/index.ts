@@ -9,6 +9,7 @@ import * as studentService from './student.service';
 import * as interviewService from './interview.service';
 
 export { RepositoryService } from './repository.service';
+export { CrossCheckService } from './crossCheck.service';
 
 export * from './operationResult';
 export {
