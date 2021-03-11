@@ -13,6 +13,71 @@ import { UserService } from '../../services/user';
 const { Content } = Layout;
 const { Text } = Typography;
 
+const userService = new UserService();
+
+type CVInfoProps = {
+  ownerId?: string | string[];
+  isOwner: boolean;
+  errorOccured: boolean;
+  opportunitiesConsent: boolean | null;
+  editMode: boolean;
+  switchView: (checked: boolean) => Promise<void>;
+  withdrawConsent: (ownerId: string) => void;
+  giveConsent: (ownerId: string) => void;
+};
+
+function CVInfo(props: CVInfoProps) {
+  const {
+    ownerId,
+    isOwner,
+    errorOccured,
+    opportunitiesConsent,
+    editMode,
+    switchView,
+    withdrawConsent,
+    giveConsent,
+  } = props;
+
+  if (errorOccured) {
+    return <Result status={404} title="User not found" />;
+  }
+
+  if (ownerId === undefined || ownerId instanceof Array) {
+    return <Result status="warning" title="This page doesn't exist" />;
+  }
+
+  if (isOwner) {
+    if (opportunitiesConsent) {
+      return (
+        <>
+          <Text className="hide-on-print">Switch view:</Text>
+          <Switch
+            className="hide-on-print"
+            style={{ marginLeft: '5px' }}
+            defaultChecked={!editMode}
+            onChange={switchView}
+            checkedChildren="CV view"
+            unCheckedChildren="Edit view"
+          />
+          {editMode ? (
+            <FormCV ownerId={ownerId} withdrawConsent={() => withdrawConsent(ownerId as string)} />
+          ) : (
+            <ViewCV ownerId={ownerId} />
+          )}
+        </>
+      );
+    } else {
+      return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerId as string)} />;
+    }
+  } else {
+    if (opportunitiesConsent) {
+      return <ViewCV ownerId={ownerId} />;
+    } else {
+      return <NoConsentViewCV isOwner={false} />;
+    }
+  }
+}
+
 type Props = {
   router: NextRouter;
   session: Session;
@@ -24,8 +89,6 @@ type State = {
   opportunitiesConsent: boolean | null;
   errorOccured: boolean;
 };
-
-const userService = new UserService();
 
 class CVPage extends React.Component<Props, State> {
   state: State = {
@@ -82,53 +145,23 @@ class CVPage extends React.Component<Props, State> {
 
     const isOwner = userGithubId === ownerId;
 
-    let content;
-
-    if (errorOccured) {
-      return <Result status={404} title="User not found" />;
-    }
-
-    if (ownerId === undefined || ownerId instanceof Array) {
-      content = <Result status="warning" title="This page doesn't exist" />;
-    } else {
-      if (isOwner) {
-        if (opportunitiesConsent) {
-          content = (
-            <>
-              <Text className="hide-on-print">Switch view:</Text>
-              <Switch
-                className="hide-on-print"
-                style={{ marginLeft: '5px' }}
-                defaultChecked={!editMode}
-                onChange={this.switchView.bind(this)}
-                checkedChildren="CV view"
-                unCheckedChildren="Edit view"
-              />
-              {editMode ? (
-                <FormCV ownerId={ownerId} withdrawConsent={() => this.withdrawConsent(ownerId as string)} />
-              ) : (
-                <ViewCV ownerId={ownerId} />
-              )}
-            </>
-          );
-        } else {
-          content = <NoConsentViewCV isOwner={true} giveConsent={() => this.giveConsent(ownerId as string)} />;
-        }
-      } else {
-        if (opportunitiesConsent) {
-          content = <ViewCV ownerId={ownerId} />;
-        } else {
-          content = <NoConsentViewCV isOwner={false} />;
-        }
-      }
-    }
-
     return (
       <>
         <LoadingScreen show={isLoading}>
           <Header username={userGithubId} />
           <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
-            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>{content}</Content>
+            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
+              <CVInfo
+                ownerId={ownerId}
+                isOwner={isOwner}
+                errorOccured={errorOccured}
+                opportunitiesConsent={opportunitiesConsent}
+                editMode={editMode}
+                switchView={this.switchView.bind(this)}
+                withdrawConsent={this.withdrawConsent.bind(this)}
+                giveConsent={this.giveConsent.bind(this)}
+              />
+            </Content>
           </Layout>
           <FooterLayout />
         </LoadingScreen>
