@@ -1,4 +1,6 @@
 import { StudentStats, PublicFeedback } from './profile';
+import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
+
 export interface CourseData {
   locationName: string;
   courseFullName: string;
@@ -13,7 +15,7 @@ export interface CourseData {
   };
 }
 
-export type EnglishLevel = 'a0' | 'a1' | 'a1+' | 'a2' | 'a2+' | 'b1' | 'b1+' | 'b2' | 'b2+' | 'c1' | 'c1+' | 'c2';
+export type EnglishLevel = typeof ENGLISH_LEVELS[number];
 export type MilitaryService = 'served' | 'liable' | 'notLiable' | null;
 
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'location' | 'github' | 'website';
