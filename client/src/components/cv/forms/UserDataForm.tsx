@@ -2,6 +2,7 @@ import * as React from 'react';
 import moment from 'moment';
 import { Form, Input, Select, DatePicker, Checkbox, Card } from 'antd';
 import { UserData } from '../../../../../common/models/cv';
+import { ENGLISH_LEVELS } from '../../../services/reference-data/english';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -84,18 +85,9 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           rules={[{ required: true }]}
         >
           <Select placeholder="Not selected yet">
-            <Option value="a0">A0</Option>
-            <Option value="a1">A1</Option>
-            <Option value="a1+">A1+</Option>
-            <Option value="a2">A2</Option>
-            <Option value="a2+">A2+</Option>
-            <Option value="b1">B1</Option>
-            <Option value="b1+">B1+</Option>
-            <Option value="b2">B2</Option>
-            <Option value="b2+">B2+</Option>
-            <Option value="c1">C1</Option>
-            <Option value="c1+">C1+</Option>
-            <Option value="c2">C2</Option>
+            {ENGLISH_LEVELS.map(level => (
+              <Option value={level}>{level}</Option>
+            ))}
           </Select>
         </Item>
         <Item label="Military service" wrapperCol={{ span: 24 }} labelCol={{ span: 24 }} name="militaryService">
