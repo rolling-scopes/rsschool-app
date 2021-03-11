@@ -59,19 +59,19 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
 };
 
 export const setScheduleFromCsv = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  // const courseId = Number(ctx.params.courseId);
+  const courseId = Number(ctx.params.courseId);
   const data = ctx.request.body as EntityFromCSV[];
 
-  const tasksToUpdate = data.filter((entity: EntityFromCSV) => entity.entityType === 'task' && entity.id);
-  const eventsToUpdate = data.filter((entity: EntityFromCSV) => entity.entityType === 'event' && entity.id);
+  const tasks = data.filter((entity: EntityFromCSV) => entity.entityType === 'task');
+  const events = data.filter((entity: EntityFromCSV) => entity.entityType === 'event');
 
   const queryRunner = getConnection().createQueryRunner();
   let response = 'Import CSV file successfully finished.';
 
   await queryRunner.startTransaction();
   try {
-    await updateTasks(tasksToUpdate);
-    await updateEvents(eventsToUpdate);
+    await saveTasks(tasks, courseId);
+    await saveEvents(events, courseId);
     await queryRunner.commitTransaction();
   } catch (err) {
     logger.error(err.message);
@@ -84,7 +84,7 @@ export const setScheduleFromCsv = (logger: ILogger) => async (ctx: Router.Router
   }
 };
 
-const updateTasks = async (tasks: EntityFromCSV[]) => {
+const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
   for await (const task of tasks) {
     const taskData = {
       name: task.name,
@@ -93,18 +93,30 @@ const updateTasks = async (tasks: EntityFromCSV[]) => {
     } as Partial<Task>;
 
     const courseTaskData = {
+      courseId,
+      taskId: task.templateId,
       studentStartDate: task.startDate || null,
       studentEndDate: task.endDate || null,
       special: task.special,
       // taskOwnerId: task.githubId || null,
     } as Partial<CourseTask>;
 
-    await getRepository(Task).update(task.templateId, taskData);
-    await getRepository(CourseTask).update(task.id, courseTaskData);
+    if (task.templateId) {
+      await getRepository(Task).update(task.templateId, taskData);
+      await getRepository(CourseTask).update(task.id, courseTaskData);
+    } else {
+      const { id } = await getRepository(Task).save(taskData);
+
+      if (!id) {
+        throw new Error('Creating new task failed.');
+      }
+
+      await getRepository(CourseTask).save({ ...courseTaskData, taskId: id });
+    }
   }
 };
 
-const updateEvents = async (events: EntityFromCSV[]) => {
+const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
   for await (const event of events) {
     const eventData = {
       name: event.name,
@@ -113,13 +125,25 @@ const updateEvents = async (events: EntityFromCSV[]) => {
     } as Partial<Event>;
 
     const courseEventData = {
+      courseId,
+      eventId: event.templateId,
       dateTime: event.startDate || null,
       special: event.special,
       // organizer: event.githubId || null,
       place: event.place || null,
     } as Partial<CourseEvent>;
 
-    await getRepository(Event).update(event.templateId, eventData);
-    await getRepository(CourseEvent).update(event.id, courseEventData);
+    if (event.templateId) {
+      await getRepository(Event).update(event.templateId, eventData);
+      await getRepository(CourseEvent).update(event.id, courseEventData);
+    } else {
+      const { id } = await getRepository(Event).save(eventData);
+
+      if (!id) {
+        throw new Error('Creating new event failed.');
+      }
+
+      await getRepository(CourseEvent).save({ ...courseEventData, eventId: id });
+    }
   }
 };
