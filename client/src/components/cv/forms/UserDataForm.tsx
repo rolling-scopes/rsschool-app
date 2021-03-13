@@ -85,8 +85,8 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           rules={[{ required: true }]}
         >
           <Select placeholder="Not selected yet">
-            {ENGLISH_LEVELS.map(level => (
-              <Option value={level}>{level}</Option>
+            {ENGLISH_LEVELS.map((level, idx) => (
+              <Option value={level} key={idx}>{level}</Option>
             ))}
           </Select>
         </Item>
