@@ -100,7 +100,7 @@ export interface ServerData {
 }
 
 export interface GetCVData extends SaveCVData {
-  expires: number | null;
+  expires: string | null;
   courses: StudentStats[];
   publicFeedback: PublicFeedback[];
 }
