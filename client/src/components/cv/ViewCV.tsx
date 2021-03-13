@@ -50,14 +50,13 @@ const extractCoursesData = (coursesData: any) => {
 };
 
 function ViewCV(props: Props) {
-
   const [state, setState] = useState<State>({
     isLoading: false,
     contactsList: null,
     userData: null,
     coursesData: null,
     publicFeedback: null,
-    expires: null
+    expires: null,
   });
 
   const fetchData = useCallback(async () => {
@@ -65,7 +64,7 @@ function ViewCV(props: Props) {
 
     await setState({
       ...state,
-      isLoading: true
+      isLoading: true,
     });
 
     const cvData: GetCVData = await userService.getCVData(ownerId);
@@ -124,16 +123,13 @@ function ViewCV(props: Props) {
       coursesData: coursesDataExtracted,
       publicFeedback,
       expires: Number(expiresRaw),
-      isLoading: false
+      isLoading: false,
     });
-
   }, []);
-
-
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = state;
 
