@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
@@ -23,23 +23,52 @@ type State = {
 
 const userService = new UserService();
 
-class ViewCV extends React.Component<Props, State> {
-  state: State = {
+const extractCoursesData = (coursesData: any) => {
+  return coursesData.map((course: any) => {
+    const {
+      certificateId,
+      courseFullName,
+      isExpelled,
+      locationName,
+      position,
+      isCourseCompleted,
+      totalScore,
+      mentor,
+    } = course;
+
+    return {
+      certificateId,
+      courseFullName,
+      isExpelled,
+      locationName,
+      position,
+      isCourseCompleted,
+      totalScore,
+      mentor,
+    };
+  });
+};
+
+function ViewCV(props: Props) {
+
+  const [state, setState] = useState<State>({
     isLoading: false,
     contactsList: null,
     userData: null,
     coursesData: null,
     publicFeedback: null,
-    expires: null,
-  };
+    expires: null
+  });
 
-  private async fetchData() {
-    const { ownerId } = this.props;
-    await this.setState({
-      isLoading: true,
+  const fetchData = useCallback(async () => {
+    const { ownerId } = props;
+
+    await setState({
+      ...state,
+      isLoading: true
     });
 
-    const CVData: GetCVData = await userService.getCVData(ownerId);
+    const cvData: GetCVData = await userService.getCVData(ownerId);
 
     const {
       notes,
@@ -61,8 +90,8 @@ class ViewCV extends React.Component<Props, State> {
       fullTime,
       publicFeedback,
       courses,
-      expires,
-    } = CVData;
+      expires: expiresRaw,
+    } = cvData;
 
     const userData = {
       notes,
@@ -87,70 +116,45 @@ class ViewCV extends React.Component<Props, State> {
       website,
     };
 
-    const coursesDataExtracted = this.extractCoursesData(courses);
+    const coursesDataExtracted = extractCoursesData(courses);
 
-    await this.setState({
-      contactsList: contactsList as Contacts,
-      userData: userData as UserData,
+    await setState({
+      contactsList,
+      userData,
       coursesData: coursesDataExtracted,
       publicFeedback,
-      expires: Number(expires),
-      isLoading: false,
+      expires: Number(expiresRaw),
+      isLoading: false
     });
-  }
 
-  private extractCoursesData(coursesData: any) {
-    return coursesData.map((course: any) => {
-      const {
-        certificateId,
-        courseFullName,
-        isExpelled,
-        locationName,
-        position,
-        isCourseCompleted,
-        totalScore,
-        mentor,
-      } = course;
+  }, []);
 
-      return {
-        certificateId,
-        courseFullName,
-        isExpelled,
-        locationName,
-        position,
-        isCourseCompleted,
-        totalScore,
-        mentor,
-      };
-    });
-  }
 
-  async componentDidMount() {
-    await this.fetchData();
-  }
 
-  render() {
-    const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = this.state;
+  useEffect(() => {
+    fetchData();
+  }, [])
 
-    return (
-      <LoadingScreen show={isLoading}>
-        <Layout className="view-cv-layout" style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
-          <Content>
-            <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
-              {userData && contactsList && (
-                <>
-                  <MainSection userData={userData} contacts={contactsList} expires={expires} />
-                  {userData.notes && <AboutSection notes={userData.notes} />}
-                </>
-              )}
-              {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
-              {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
-            </Space>
-          </Content>
-        </Layout>
-      </LoadingScreen>
-    );
-  }
+  const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = state;
+
+  return (
+    <LoadingScreen show={isLoading}>
+      <Layout className="view-cv-layout" style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
+        <Content>
+          <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
+            {userData && contactsList && (
+              <>
+                <MainSection userData={userData} contacts={contactsList} expires={expires} />
+                {userData.notes && <AboutSection notes={userData.notes} />}
+              </>
+            )}
+            {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
+            {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
+          </Space>
+        </Content>
+      </Layout>
+    </LoadingScreen>
+  );
 }
 
 export default ViewCV;
