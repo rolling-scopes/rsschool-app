@@ -5,6 +5,7 @@ import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
 import { CrossCheckRepository } from '../repositories/crossCheck';
+import { UserRepository } from '../repositories/user';
 
 export interface CrossCheckSolution {
   url: string;
@@ -65,6 +66,7 @@ export class CrossCheckService {
       await getRepository(TaskSolution).save({
         ...existingResult,
         ...data,
+        comments: existingResult.comments.concat(data.comments ?? []),
       });
       return;
     }
@@ -84,6 +86,7 @@ export class CrossCheckService {
     data: {
       comments: TaskSolutionComment[];
       authorId: number;
+      authorGithubId: string;
       recipientId?: number;
     },
   ) {
@@ -145,6 +148,29 @@ export class CrossCheckService {
     if (reviewResult == null || solution == null) {
       return null;
     }
+    let comments =
+      solution.comments
+        ?.filter(c => c.recipientId == null || c.authorId === checkerId || c.recipientId === checkerId)
+        .map(c => ({
+          text: c.text,
+          timestamp: c.timestamp,
+          criteriaId: c.criteriaId,
+          authorId: c.authorId,
+        })) ?? [];
+
+    reviewResult.anonymous;
+
+    const data = await getCustomRepository(UserRepository).findByStudentIds(
+      comments.map(c => c.authorId).filter(c => c),
+    );
+
+    comments = comments.map(c => ({
+      ...c,
+      authorGithubId:
+        !reviewResult.anonymous || c.authorId === solution.studentId || c.authorId === checkerId
+          ? data.find(d => d.studentId === c.authorId)?.githubId
+          : null,
+    }));
     return {
       id: reviewResult.id,
       score: reviewResult.score,
@@ -153,16 +179,8 @@ export class CrossCheckService {
       review: reviewResult.review,
       checkerId,
       studentId,
+      comments,
       historicalScores: reviewResult.historicalScores ?? [],
-      comments:
-        solution.comments
-          ?.filter(c => c.recipientId === null || c.authorId === checkerId || c.recipientId === checkerId)
-          .map(c => ({
-            text: c.text,
-            timestamp: c.timestamp,
-            criteriaId: c.criteriaId,
-            authorId: c.authorId,
-          })) ?? [],
     };
   }
 }

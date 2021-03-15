@@ -5,10 +5,11 @@ import { CrossCheckAssignmentLink, AssignmentLink } from 'components/CrossCheck/
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask, CrossCheckComment, CrossCheckCriteria } from 'services/course';
+import { CourseService, CourseTask, CrossCheckComment, CrossCheckReview, CrossCheckCriteria } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { CrossCheckHistory } from 'components/CrossCheck/CrossCheckHistory';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -22,40 +23,33 @@ function Page(props: CoursePageProps) {
   const [assignments, setAssignments] = useState([] as AssignmentLink[]);
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
   const [comments, setComments] = useState([] as CrossCheckComment[]);
+  const [reviewComments, setReviewComments] = useState([] as CrossCheckComment[]);
+  const [selfReview, setSelfReview] = useState<CrossCheckReview[]>([]);
+  const [authorId, setAuthorId] = useState<number | null>(null);
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
 
-  const resultEffect = useCallback(() => {
-    const getResult = async () => {
-      if (!githubId || !courseTaskId) {
-        return;
-      }
-      const data = await courseService.getTaskSolutionResult(githubId, courseTaskId);
-      setComments((data as any).comments);
-      form.setFieldsValue({ review: (data as any).review ?? [] });
-    };
-    getResult();
-  }, [githubId, courseTaskId, courseService]);
-
   useAsync(async () => {
-    const data = await courseService.getCourseCrossCheckTasks();
-    setCourseTasks(data);
+    const courseTasks = await courseService.getCourseCrossCheckTasks();
+    setCourseTasks(courseTasks);
   }, [courseService]);
 
-  useEffect(resultEffect, [githubId, courseTaskId]);
-
-  useEffect(() => {
-    if (!courseTaskId) {
+  useAsync(async () => {
+    if (!githubId || !courseTaskId) {
       return;
     }
-    async function getData() {
-      const data = await courseService.getCrossCheckTaskDetails(courseTaskId!);
-      if (data) {
-        setCriteria(data.criteria);
-      }
-    }
-    getData();
-  }, [courseTaskId]);
+    const [taskSolutionResult, taskDetails, taskSolution] = await Promise.all([
+      courseService.getTaskSolutionResult(githubId, courseTaskId),
+      courseService.getCrossCheckTaskDetails(courseTaskId),
+      courseService.getCrossCheckTaskSolution(githubId, courseTaskId),
+    ]);
+
+    setComments(taskSolutionResult?.comments ?? taskSolution.comments ?? []);
+    form.setFieldsValue({ review: taskSolutionResult?.review ?? [] });
+    setCriteria(taskDetails?.criteria ?? []);
+    setSelfReview(taskSolution.review ?? []);
+    setAuthorId(taskSolutionResult?.checkerId ?? null);
+  }, [courseService, githubId, courseTaskId]);
 
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
@@ -69,10 +63,11 @@ function Page(props: CoursePageProps) {
         comment: values.comment,
         anonymous: values.visibleName !== true,
         review: values.review ?? [],
-        comments,
+        comments: reviewComments,
       });
       message.success('The review has been submitted. Thanks!');
       form.resetFields(['score', 'comment', 'githubId', 'visibleName']);
+      setGithubId(null);
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
@@ -121,10 +116,13 @@ function Page(props: CoursePageProps) {
                 <CriteriaForm
                   onChange={(review, comments) => {
                     form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
-                    setComments(comments);
+                    setReviewComments(comments);
                   }}
                   criteria={criteria}
-                  comments={comments ?? []}
+                  comments={comments}
+                  reviewComments={reviewComments}
+                  selfReview={selfReview}
+                  authorId={authorId ?? 0}
                 />
               </Form.Item>
             )}
@@ -139,6 +137,9 @@ function Page(props: CoursePageProps) {
               Submit
             </Button>
           </Form>
+        </Col>
+        <Col {...colSizes}>
+          <CrossCheckHistory githubId={githubId} courseId={props.course.id} courseTaskId={courseTaskId} />
         </Col>
       </Row>
     </PageLayout>
