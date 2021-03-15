@@ -18,7 +18,7 @@ export class Feedback {
   @Column({ nullable: true })
   comment: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 'Thank_you' })
   badgeId: string;
 
   @Column({ nullable: true })

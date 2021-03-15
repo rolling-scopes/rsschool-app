@@ -11,8 +11,8 @@ import { onlyDefined } from '../../../utils/onlyDefined';
 import { HeroesFormData } from './types';
 
 const { Meta } = Card;
-const initialPagination = 1;
-const initialPageSize = 10;
+const initialPage = 1;
+const initialPageSize = 20;
 
 export const fields = {
   name: 'name',
@@ -23,15 +23,15 @@ export const fields = {
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [heroesData, setHeroesData] = useState([] as IGratitudeGetResponse[]);
-  const [heroesCount, setHeroesCount] = useState(initialPagination);
-  const [currentPagination, setCurrentPagination] = useState(initialPagination);
+  const [heroesCount, setHeroesCount] = useState(initialPage);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const gratitudeService = new GratitudeService();
   const [form] = Form.useForm();
 
   useEffect(() => {
     const getHeroes = async () => {
       setLoading(true);
-      const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
+      const heroes = await gratitudeService.getGratitude({ current: initialPage, pageSize: initialPageSize });
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
       setLoading(false);
@@ -49,7 +49,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
       const heroes = await gratitudeService.getGratitude(data);
       setHeroesData(heroes.content);
       setHeroesCount(heroes.count);
-      setCurrentPagination(initialPagination);
+      setCurrentPage(initialPage);
       setLoading(false);
     },
     [heroesData],
@@ -58,7 +58,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
   const handleSubmit = useCallback(
     async (formData: HeroesFormData) => {
       const data = onlyDefined(formData) as Partial<HeroesFormData>;
-      setCurrentPagination(initialPagination);
+      setCurrentPage(initialPage);
       await makeRequest(data);
     },
     [heroesData],
@@ -66,10 +66,10 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   const onClear = useCallback(async () => {
     setLoading(true);
-    const heroes = await gratitudeService.getGratitude({ current: initialPagination, pageSize: initialPageSize });
+    const heroes = await gratitudeService.getGratitude({ current: initialPage, pageSize: initialPageSize });
     setHeroesData(heroes.content);
     setHeroesCount(heroes.count);
-    setCurrentPagination(initialPagination);
+    setCurrentPage(initialPage);
     setLoading(false);
     form.resetFields();
   }, [heroesData]);
@@ -78,9 +78,9 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
     async (current: number, pageSize?: number) => {
       const formData = form.getFieldsValue() as HeroesFormData;
       await makeRequest({ current, pageSize: pageSize!, ...formData });
-      setCurrentPagination(current);
+      setCurrentPage(current);
     },
-    [currentPagination],
+    [currentPage],
   );
 
   return (
@@ -146,7 +146,12 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
         ))}
       </Row>
       <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
-        <Pagination current={currentPagination} total={heroesCount} onChange={onClickPagination} />
+        <Pagination
+          current={currentPage}
+          total={heroesCount}
+          onChange={onClickPagination}
+          defaultPageSize={initialPageSize}
+        />
       </Row>
       <style jsx>{styles}</style>
     </>
