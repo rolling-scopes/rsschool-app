@@ -66,6 +66,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
   await crossCheckService.saveSolutionComments(taskChecker.studentId, courseTaskId, {
     comments: inputData.comments ?? [],
     authorId: taskChecker.checkerId,
+    authorGithubId: user.githubId,
     recipientId: taskChecker.studentId,
   });
 

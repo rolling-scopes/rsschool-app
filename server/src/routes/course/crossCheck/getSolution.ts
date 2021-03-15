@@ -31,6 +31,7 @@ export const getSolution = (_: ILogger) => async (ctx: Router.RouterContext) => 
     id,
     url,
     review,
+    studentId: student.id,
     comments: comments.filter(c => c.authorId == student.id && c.recipientId == null),
   });
 };

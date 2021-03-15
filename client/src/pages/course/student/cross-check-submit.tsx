@@ -29,7 +29,10 @@ function Page(props: CoursePageProps) {
   const [submittedSolution, setSubmittedSolution] = useState(null as TaskSolution | null);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
-  const [reviewComments, setReviewComments] = useState([] as CrossCheckComment[]);
+  const [comments, setComments] = useState([] as CrossCheckComment[]);
+  const [newComments, setNewComments] = useState([] as CrossCheckComment[]);
+
+  const [authorId, setAuthorId] = useState<number | null>(null);
 
   useAsync(async () => {
     const data = await courseService.getCourseCrossCheckTasks();
@@ -46,11 +49,11 @@ function Page(props: CoursePageProps) {
         courseTaskId,
         values.url,
         values.review,
-        reviewComments,
+        newComments,
       );
       message.success('The task solution has been submitted');
       form.resetFields();
-      setReviewComments([]);
+      setComments([]);
       setCourseTaskId(null);
     } catch (e) {
       message.error('An error occured. Please try later.');
@@ -66,7 +69,7 @@ function Page(props: CoursePageProps) {
     }
     const [feedback, submittedSolution, taskDetails] = await Promise.all([
       courseService.getCrossCheckFeedback(props.session.githubId, courseTask.id),
-      courseService.getTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
+      courseService.getCrossCheckTaskSolution(props.session.githubId, courseTask.id).catch(() => null),
       courseService.getCrossCheckTaskDetails(courseTask.id),
     ]);
 
@@ -81,15 +84,16 @@ function Page(props: CoursePageProps) {
     setSubmittedSolution(submittedSolution);
     setCourseTaskId(courseTask.id);
     setCriteria(criteria);
-    setReviewComments(submittedSolution?.comments ?? []);
+    setComments(submittedSolution?.comments ?? []);
+    setAuthorId(submittedSolution?.studentId ?? null);
   };
 
   const handleReviewChange = (review: CrossCheckReview[], comments: CrossCheckComment[]) => {
     form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
-    setReviewComments(comments);
+    setNewComments(comments);
   };
 
-  const comments = feedback?.comments ?? [];
+  const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
   const studentEndDate = task?.studentEndDate ?? 0;
   const isSubmitDisabled = studentEndDate ? new Date(studentEndDate).getTime() < Date.now() : false;
@@ -121,7 +125,13 @@ function Page(props: CoursePageProps) {
             )}
             {submitAllowed && newCrossCheck && (
               <Form.Item name="review">
-                <CriteriaForm onChange={handleReviewChange} criteria={criteria} comments={reviewComments ?? []} />
+                <CriteriaForm
+                  authorId={authorId ?? 0}
+                  onChange={handleReviewChange}
+                  criteria={criteria}
+                  comments={comments ?? []}
+                  reviewComments={newComments ?? []}
+                />
               </Form.Item>
             )}
             {submitAllowed && newCrossCheck && <ScoreInput courseTask={task} />}
@@ -134,7 +144,7 @@ function Page(props: CoursePageProps) {
         </Col>
       </Row>
       <Row>
-        <CrossCheckComments comments={comments} />
+        <CrossCheckComments comments={feedbackComments} />
       </Row>
     </PageLayout>
   );

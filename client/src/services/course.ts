@@ -101,6 +101,8 @@ export type CrossCheckComment = {
   text: string;
   criteriaId: string;
   timestamp: number;
+  authorId?: number;
+  authorGithubId?: string;
 };
 
 export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
@@ -301,7 +303,7 @@ export class CourseService {
     });
   }
 
-  async getTaskSolution(githubId: string, courseTaskId: number) {
+  async getCrossCheckTaskSolution(githubId: string, courseTaskId: number) {
     const apiUrl = `/student/${githubId}/task/${courseTaskId}/cross-check/solution`;
     const result = await this.axios.get(apiUrl);
     return result.data.data as TaskSolution;
@@ -323,7 +325,13 @@ export class CourseService {
 
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
     const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/result`);
-    return result.data.data as { historicalScores: { score: number; comment: string; dateTime: number }[] } | null;
+    return result.data.data as {
+      comments: CrossCheckComment[];
+      review: CrossCheckReview[];
+      studentId: number;
+      checkerId: number;
+      historicalScores: { score: number; comment: string; dateTime: number }[];
+    } | null;
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {
@@ -647,6 +655,7 @@ export interface TaskSolution {
   id: string;
   review?: CrossCheckReview[];
   comments?: CrossCheckComment[];
+  studentId: number;
 }
 
 export interface CrossCheckPairs {
