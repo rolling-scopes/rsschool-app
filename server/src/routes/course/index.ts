@@ -279,7 +279,7 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
     validateCrossCheckExpirationDate,
     crossCheck.createSolution(logger),
   );
-  router.get(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, crossCheck.getSolution(logger));
+  router.get(`${baseUrl}/cross-check/solution`, courseGuard, validateGithubId, crossCheck.getSolution(logger));
   router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.createResult(logger));
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, crossCheck.getFeedback(logger));
