@@ -98,7 +98,7 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
       studentStartDate: task.startDate || null,
       studentEndDate: task.endDate || null,
       special: task.special,
-      // taskOwnerId: task.githubId || null,
+      taskOwner: task.githubId ? { githubId: task.githubId } : null,
     } as Partial<CourseTask>;
 
     if (task.templateId) {
@@ -129,7 +129,7 @@ const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
       eventId: event.templateId,
       dateTime: event.startDate || null,
       special: event.special,
-      // organizer: event.githubId || null,
+      organizer: event.githubId ? { githubId: event.githubId } : null,
       place: event.place || null,
     } as Partial<CourseEvent>;
 
