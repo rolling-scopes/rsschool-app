@@ -152,7 +152,7 @@ function Page(props: Props) {
           </Col>
         </Row>
         <Collapse>
-          <Collapse.Panel header="Github" key="1">
+          <Collapse.Panel header="Github" key="1" forceRender>
             <Form.Item name="githubPrRequired" label="" valuePropName="checked">
               <Checkbox>Pull Request required</Checkbox>
             </Form.Item>
@@ -163,10 +163,15 @@ function Page(props: Props) {
               <Input placeholder="task1" />
             </Form.Item>
           </Collapse.Panel>
-          <Collapse.Panel header="JSON Attributes" key="2">
+          <Collapse.Panel header="JSON Attributes" key="2" forceRender>
             <Form.Item
               name="attributes"
-              rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
+              rules={[
+                {
+                  validator: async (_, value: string) => (value ? JSON.parse(value) : Promise.resolve()),
+                  message: 'Invalid json',
+                },
+              ]}
             >
               <Input.TextArea rows={6} />
             </Form.Item>

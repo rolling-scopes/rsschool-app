@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
+import { TaskSolutionReview } from './taskSolution';
 
 type ScoreRecord = {
   score: number;
@@ -61,4 +62,7 @@ export class TaskSolutionResult {
 
   @Column({ default: true, type: 'boolean' })
   anonymous: boolean;
+
+  @Column({ type: 'json', default: [] })
+  review: TaskSolutionReview[];
 }

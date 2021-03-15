@@ -178,35 +178,6 @@ const routes = [
     getLink: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, isStudent),
   },
-  // {
-  //   name: () => (
-  //     <>
-  //       <AudioTwoTone /> Interview: CoreJS
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/mentor/interview-corejs?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  // },
-  // {
-  //   name: () => (
-  //     <>
-  //       <InteractionTwoTone /> Stage Interviews
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/mentor/stage-interviews?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  //   newTab: false,
-  // },
-  // {
-  //   name: () => (
-  //     <>
-  //       <HighlightTwoTone twoToneColor="#7f00ff" /> Interview: Pre-Screening
-  //     </>
-  //   ),
-  //   getLink: (course: Course) => `/course/mentor/interview-technical-screening?course=${course.alias}`,
-  //   access: combineAnd(isCourseNotCompleted, isMentor),
-  //   newTab: false,
-  // },
   {
     name: () => (
       <>
@@ -216,13 +187,6 @@ const routes = [
     getLink: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
     access: combineAnd(isCourseNotCompleted, combineOr(isStudent, isCourseManager)),
   },
-
-  // {
-  //   name: `🎤 Interview Feedback`,
-  //   getLink: (course: Course) => `/course/mentor/interview-feedback?course=${course.alias}`,
-  //   access: combine(isCourseNotCompleted, isMentor),
-  //   newTab: false,
-  // },
   {
     name: () => (
       <>

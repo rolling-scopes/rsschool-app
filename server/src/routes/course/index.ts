@@ -144,6 +144,7 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
     courseManagerGuard,
     crossCheck.createDistribution(logger),
   );
+  router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));
   router.post('/task/:courseTaskId/cross-check/completion', courseManagerGuard, crossCheck.createCompletion(logger));
 }
 
@@ -274,11 +275,11 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   router.post(
     `${baseUrl}/cross-check/solution`,
     courseGuard,
-    validateGithubIdAndAccess,
+    ...validators,
     validateCrossCheckExpirationDate,
     crossCheck.createSolution(logger),
   );
-  router.get(`${baseUrl}/cross-check/solution`, courseGuard, ...validators, crossCheck.getSolution(logger));
+  router.get(`${baseUrl}/cross-check/solution`, courseGuard, validateGithubId, crossCheck.getSolution(logger));
   router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.createResult(logger));
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, crossCheck.getFeedback(logger));

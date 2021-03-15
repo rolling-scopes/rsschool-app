@@ -68,7 +68,7 @@
     "pino-pretty": "^3.6.1",
     "source-map-support": "~0.5.12",
     "ts-jest": "^25.3.1",
-    "ts-node-dev": "^1.1.1",
+    "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
   }
