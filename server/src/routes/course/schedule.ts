@@ -3,6 +3,7 @@ import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { getCourseTasks, getEvents } from '../../services/course.service';
+import { getUserByGithubId } from '../../services/user.service';
 import { setCsvResponse, setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { Task, CourseTask, Event, CourseEvent } from '../../models';
@@ -92,13 +93,16 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
       descriptionUrl: task.descriptionUrl || '',
     } as Partial<Task>;
 
+    const user = task.githubId ? await getUserByGithubId(task.githubId) : null;
+
     const courseTaskData = {
       courseId,
       taskId: task.templateId,
       studentStartDate: task.startDate || null,
       studentEndDate: task.endDate || null,
       special: task.special,
-      taskOwner: task.githubId ? { githubId: task.githubId } : null,
+      taskOwner: user,
+      taskOwnerId: user ? user.id : null,
     } as Partial<CourseTask>;
 
     if (task.templateId) {
@@ -124,12 +128,15 @@ const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
       descriptionUrl: event.descriptionUrl || '',
     } as Partial<Event>;
 
+    const user = event.githubId ? await getUserByGithubId(event.githubId) : null;
+
     const courseEventData = {
       courseId,
       eventId: event.templateId,
       dateTime: event.startDate || null,
       special: event.special,
-      organizer: event.githubId ? { githubId: event.githubId } : null,
+      organizer: user,
+      organizerId: user ? user.id : null,
       place: event.place || null,
     } as Partial<CourseEvent>;
 
