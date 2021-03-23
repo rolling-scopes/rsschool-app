@@ -14,7 +14,7 @@ export interface ScheduleRow {
   place: string;
   organizer: {
     githubId: string;
-  };
+  } | null;
   special?: [];
   duration?: number;
 }
