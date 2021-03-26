@@ -94,7 +94,16 @@ function Page(props: Props) {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="badgeId" label="Badge">
+        <Form.Item
+          initialValue="Thank_you"
+          name="badgeId"
+          label="Badge"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Select placeholder="Select a badge">
             {badges.map(badge => (
               <Select.Option key={badge.id} value={badge.id}>
