@@ -65,7 +65,7 @@ export const setScheduleFromCsv = (logger: ILogger) => async (ctx: Router.Router
 
   const tasks = data.filter((entity: EntityFromCSV) => entity.entityType === 'task');
   const events = data.filter((entity: EntityFromCSV) => entity.entityType === 'event');
-
+  
   const queryRunner = getConnection().createQueryRunner();
   let response = 'Import CSV file successfully finished.';
 
@@ -94,20 +94,19 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
     } as Partial<Task>;
 
     const user = task.githubId ? await getUserByGithubId(task.githubId) : null;
-
+    
     const courseTaskData = {
       courseId,
-      taskId: task.templateId,
+      taskId: task.id,
       studentStartDate: task.startDate || null,
       studentEndDate: task.endDate || null,
       special: task.special,
       taskOwner: user,
-      taskOwnerId: user ? user.id : null,
     } as Partial<CourseTask>;
-
+    
     if (task.templateId) {
-      await getRepository(Task).update(task.templateId, taskData);
-      await getRepository(CourseTask).update(task.id, courseTaskData);
+      await getRepository(Task).update({ id: task.id}, taskData);
+      await getRepository(CourseTask).update({id: task.templateId}, courseTaskData);
     } else {
       const { id } = await getRepository(Task).save(taskData);
 
@@ -122,27 +121,26 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
 
 const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
   for await (const event of events) {
-    const eventData = {
+    const eventData: Partial<Event> = {
       name: event.name,
       type: event.type,
       descriptionUrl: event.descriptionUrl || '',
-    } as Partial<Event>;
+    };
 
     const user = event.githubId ? await getUserByGithubId(event.githubId) : null;
 
-    const courseEventData = {
+    const courseEventData: Partial<CourseEvent> = {
       courseId,
-      eventId: event.templateId,
-      dateTime: event.startDate || null,
+      eventId: event.id,
+      dateTime: event.startDate || undefined,
       special: event.special,
-      organizer: user,
-      organizerId: user ? user.id : null,
-      place: event.place || null,
-    } as Partial<CourseEvent>;
+      organizer: user || undefined,
+      place: event.place || undefined,
+    };
 
     if (event.templateId) {
-      await getRepository(Event).update(event.templateId, eventData);
-      await getRepository(CourseEvent).update(event.id, courseEventData);
+      await getRepository(Event).update({id: event.id}, eventData);
+      await getRepository(CourseEvent).update({ id: event.templateId}, courseEventData);
     } else {
       const { id } = await getRepository(Event).save(eventData);
 
