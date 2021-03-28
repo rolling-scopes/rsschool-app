@@ -65,7 +65,6 @@ export const setScheduleFromCsv = (logger: ILogger) => async (ctx: Router.Router
 
   const tasks = data.filter((entity: EntityFromCSV) => entity.entityType === 'task');
   const events = data.filter((entity: EntityFromCSV) => entity.entityType === 'event');
-  
   const queryRunner = getConnection().createQueryRunner();
   let response = 'Import CSV file successfully finished.';
 
@@ -94,7 +93,7 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
     } as Partial<Task>;
 
     const user = task.githubId ? await getUserByGithubId(task.githubId) : null;
-    
+
     const courseTaskData = {
       courseId,
       taskId: task.id,
@@ -103,10 +102,10 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
       special: task.special,
       taskOwner: user,
     } as Partial<CourseTask>;
-    
+
     if (task.templateId) {
-      await getRepository(Task).update({ id: task.id}, taskData);
-      await getRepository(CourseTask).update({id: task.templateId}, courseTaskData);
+      await getRepository(Task).update({ id: task.id }, taskData);
+      await getRepository(CourseTask).update({ id: task.templateId }, courseTaskData);
     } else {
       const { id } = await getRepository(Task).save(taskData);
 
@@ -129,18 +128,18 @@ const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
 
     const user = event.githubId ? await getUserByGithubId(event.githubId) : null;
 
-    const courseEventData: Partial<CourseEvent> = {
+    const courseEventData = {
       courseId,
       eventId: event.id,
-      dateTime: event.startDate || undefined,
+      dateTime: event.startDate || null,
       special: event.special,
-      organizer: user || undefined,
-      place: event.place || undefined,
-    };
+      organizer: user,
+      place: event.place || null,
+    } as Partial<CourseEvent>;
 
     if (event.templateId) {
-      await getRepository(Event).update({id: event.id}, eventData);
-      await getRepository(CourseEvent).update({ id: event.templateId}, courseEventData);
+      await getRepository(Event).update({ id: event.id }, eventData);
+      await getRepository(CourseEvent).update({ id: event.templateId }, courseEventData);
     } else {
       const { id } = await getRepository(Event).save(eventData);
 

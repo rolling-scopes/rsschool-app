@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, Tooltip } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import TagColor from './TagColor';
 
@@ -19,12 +19,12 @@ const UserSettings: React.FC<Props> = ({ storedTagColors, setStoredTagColors, ty
   };
 
   return (
-    <>
+    <Tooltip title="User settings" mouseEnterDelay={1}>
       <Button icon={<SettingOutlined />} title="User settings" size="middle" type="primary" onClick={showDrawer} />
       <Drawer title="User Settings" placement="right" closable={false} onClose={onClose} visible={isOpen}>
         <TagColor tags={typesFromBase} setStoredTagColors={setStoredTagColors} storedTagColors={storedTagColors} />
       </Drawer>
-    </>
+    </Tooltip>
   );
 };
 
