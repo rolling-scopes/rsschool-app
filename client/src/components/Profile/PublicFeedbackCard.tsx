@@ -65,7 +65,8 @@ class PublicFeedbackCard extends React.Component<Props, State> {
       this.props.permissionsSettings?.isPublicFeedbackVisible,
     ) ||
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled) ||
-    !isEqual(nextState.isPublicFeedbackModalVisible, this.state.isPublicFeedbackModalVisible);
+    !(nextState.isPublicFeedbackModalVisible === this.state.isPublicFeedbackModalVisible) ||
+    !isEqual(nextState.badgesCount, this.state.badgesCount);
 
   componentDidMount() {
     const badgesCount = this.countBadges();
@@ -101,9 +102,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                     <Badge count={badgesCount[badgeId]}>
                       <Tooltip title={(heroesBadges as any)[badgeId].name}>
                         <Avatar
-                          src={`https://heroes.by/api/images/${
-                            (heroesBadges as any)[badgeId].pictureId
-                          }/content/original`}
+                          src={`/static/svg/badges/${(heroesBadges as any)[badgeId].url}`}
                           alt={`${badgeId} badge`}
                           size={48}
                         />
