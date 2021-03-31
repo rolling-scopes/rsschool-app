@@ -13,7 +13,8 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
           .subQuery()
           .from(Feedback, 'feedback')
           .select('"user"."id"', 'user_id')
-          .innerJoin('feedback.toUser', 'user');
+          .innerJoin('feedback.toUser', 'user')
+          .innerJoin('feedback.fromUser', 'fromUser');
 
         if (githubId) {
           query.andWhere('"user"."githubId" ILIKE :githubId', {
@@ -45,7 +46,10 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
     }
 
     const query = this.createQueryBuilder('feedback')
-      .select('COUNT("badgeId")', 'gratitudeCount')
+      .select('feedback.badgeId', 'badgeId')
+      .addSelect('feedback.updatedDate', 'date')
+      .addSelect('feedback.comment', 'comment')
+      .addSelect('feedback.id', 'id')
       .innerJoin('feedback.toUser', 'user')
       .addSelect('user.githubId', 'githubId')
       .addSelect('user.firstName', 'firstName')
@@ -54,32 +58,32 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
       .addSelect('user.cityName', 'cityName')
       .addSelect('user.activist', 'activist')
       .addSelect('user.id', 'user_id')
-      .addSelect('json_agg("feedback"."badgeId")', 'badges');
+      .innerJoin('feedback.fromUser', 'fromUser')
+      .addSelect(
+        'json_build_object(\'githubId\', "fromUser"."githubId", \'firstName\', "fromUser"."firstName", \'lastName\', "fromUser"."lastName")',
+        'from',
+      );
 
     if (githubId) {
-      query.andWhere('"githubId" ILIKE :githubId', {
+      query.andWhere('"user"."githubId" ILIKE :githubId', {
         githubId: `%${githubId}%`,
       });
     }
 
     if (name) {
-      query.andWhere('"firstName" ILIKE :searchText OR "lastName" ILIKE :searchText', {
+      query.andWhere('"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText', {
         searchText: `%${name}%`,
       });
     }
 
     if (courseId) {
-      query
-        .addSelect('"feedback"."courseId"', 'courseId')
-        .andWhere('"feedback"."courseId" = :courseId', {
-          courseId,
-        })
-        .addGroupBy('"courseId"');
+      query.addSelect('"feedback"."courseId"', 'courseId').andWhere('"feedback"."courseId" = :courseId', {
+        courseId,
+      });
     }
 
     query
-      .addGroupBy('"user_id"')
-      .orderBy('COUNT("user"."id")', 'DESC')
+      .orderBy('"feedback"."updatedDate"', 'DESC')
       .limit(pageSize)
       .offset((current - 1) * pageSize);
 

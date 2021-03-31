@@ -3,14 +3,21 @@ import { HeroesFormData } from '../../../client/src/components/Forms/Heroes/type
 
 export interface IGratitudeGetResponse {
   activist: boolean;
-  badges: string[];
   cityName: string;
   countryName: string;
+  comment: string;
+  badgeId: string;
+  date: string;
+  id: number;
   firstName: string;
   githubId: string;
   lastName: string;
-  gratitudeCount: string;
   user_id: number;
+  from: {
+    firstName: string;
+    githubId: string;
+    lastName: string;
+  };
 }
 
 export type IGratitudeGetRequest = HeroesFormData & Partial<IPaginationInfo>;
