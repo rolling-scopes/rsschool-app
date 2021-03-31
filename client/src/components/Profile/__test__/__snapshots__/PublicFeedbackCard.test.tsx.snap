@@ -101,7 +101,95 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
               "marginBottom": 30,
             }
           }
-        />
+        >
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={1}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Congratulations"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Congratulations badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/Congratulations.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={3}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Great speaker"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Great_speaker badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/GreatSpeaker.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={2}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Thank you"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Thank_you badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/ThankYou.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+        </div>
         <div
           style={
             Object {
@@ -282,7 +370,95 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
               "marginBottom": 30,
             }
           }
-        />
+        >
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={1}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Congratulations"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Congratulations badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/Congratulations.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={3}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Great speaker"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Great_speaker badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/GreatSpeaker.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            style={
+              Object {
+                "display": "inline-block",
+                "margin": 5,
+              }
+            }
+          >
+            <Badge
+              count={2}
+            >
+              <Tooltip
+                arrowPointAtCenter={false}
+                autoAdjustOverflow={true}
+                mouseEnterDelay={0.1}
+                mouseLeaveDelay={0.1}
+                placement="top"
+                title="Thank you"
+                transitionName="zoom-big-fast"
+              >
+                <Avatar
+                  alt="Thank_you badge"
+                  shape="circle"
+                  size={48}
+                  src="/static/svg/badges/ThankYou.svg"
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+        </div>
         <div
           style={
             Object {
