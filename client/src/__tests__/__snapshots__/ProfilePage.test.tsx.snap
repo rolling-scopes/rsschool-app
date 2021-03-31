@@ -35,8 +35,8 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               "default": 4,
             }
           }
-          className="jsx-26947602"
-          columnClassName="jsx-4039812238"
+          className="jsx-3803498300"
+          columnClassName="jsx-110195169"
         >
           <div
             key="card-0"
@@ -766,14 +766,14 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
           </div>
         </Masonry>
         <JSXStyle
-          id="26947602"
+          id="3803498300"
         >
-          div.jsx-26947602{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;margin-left:-16px;width:auto;}
+          div.jsx-3803498300{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;margin-left:-16px;width:auto;}
         </JSXStyle>
         <JSXStyle
-          id="4039812238"
+          id="110195169"
         >
-          div.jsx-4039812238{padding-left:16px;background-clip:padding-box;}
+          div.jsx-110195169{padding-left:16px;background-clip:padding-box;}
         </JSXStyle>
       </div>
     </Spin>
