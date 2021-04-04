@@ -59,6 +59,7 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
                 taskData={getEntityDataForPreview(entityType, entityData) as CourseTaskDetails}
                 alias={alias}
                 isPreview
+                isAdmin
               />
             )}
             {entityType === 'event' && entityData && (
@@ -96,7 +97,14 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       description: entityData.description,
       scoreWeight: entityData.scoreWeight,
       maxScore: entityData.maxScore,
-      taskOwner: { githubId: entityData.organizerId },
+      taskOwner: entityData.taskOwner,
+      verification: entityData.verification,
+      githubPrRequired: entityData.githubPrRequired,
+      sourceGithubRepoUrl: entityData.sourceGithubRepoUrl,
+      githubRepoName: entityData.githubRepoName,
+      // attributes: JSON.parse(entityData.attributes ?? '{}'),
+      checker: entityData.checker,
+      pairsCount: entityData.pairsCount,
     };
   }
 
@@ -108,7 +116,7 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       description: entityData.description,
     },
     dateTime: entityData.dateTime ? formatTimezoneToUTC(entityData.dateTime, entityData.timeZone) : null,
-    organizer: { githubId: entityData.organizerId },
+    organizer: entityData.organizer,
     place: entityData.place,
     special: entityData.special ? entityData.special.join(',') : '',
     duration: entityData.duration,

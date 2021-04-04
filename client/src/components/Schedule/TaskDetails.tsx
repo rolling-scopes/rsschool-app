@@ -1,23 +1,25 @@
 import React from 'react';
 import { useLocalStorage } from 'react-use';
 import Link from 'next/link';
-import { Row, Col, Typography, Tooltip, Button } from 'antd';
+import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
 import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
-import { renderTagWithStyle, tagsRenderer } from 'components/Table';
+import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
+import { CHECKER_TYPES } from './model';
 
 type Props = {
   taskData: CourseTaskDetails;
   alias: string;
+  isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
 };
 
-const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview, onEdit }) => {
+const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onEdit }) => {
   const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
   const { Title, Text } = Typography;
 
@@ -33,6 +35,13 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview, onEdit }) =>
     type,
     special,
     duration,
+    checker,
+    pairsCount,
+    verification,
+    githubRepoName,
+    sourceGithubRepoUrl,
+    githubPrRequired,
+    // publicAttributes,
   } = taskData;
 
   return (
@@ -119,6 +128,68 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isPreview, onEdit }) =>
               </Tooltip>
             </Col>
           </Row>
+        )}
+        {checker && (
+          <Row justify="center" align="middle" gutter={[16, 16]}>
+            <Col>
+              <Text>Checker: </Text>
+              <Text strong>{CHECKER_TYPES[checker]}</Text>
+            </Col>
+          </Row>
+        )}
+
+        {pairsCount && (
+          <Row justify="center" align="middle" gutter={[16, 16]}>
+            <Col>
+              <Text>Cross-Check Pairs Count: </Text>
+              <Text strong>{pairsCount}</Text>
+            </Col>
+          </Row>
+        )}
+
+        {isAdmin && (
+          <>
+            <Divider />
+            {verification && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
+                <Col>
+                  <Text>Verification: </Text>
+                  <Text strong>{verification} </Text>
+                </Col>
+              </Row>
+            )}
+            {githubPrRequired && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
+                <Col>
+                  <Checkbox checked>Pull Request required</Checkbox>
+                </Col>
+              </Row>
+            )}
+            {sourceGithubRepoUrl && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
+                <Col>
+                  <Text>Source Repo Url: </Text>
+                  {urlRenderer(sourceGithubRepoUrl)}
+                </Col>
+              </Row>
+            )}
+            {githubRepoName && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
+                <Col>
+                  <Text>Expected Repo Name: </Text>
+                  <Text strong>{githubRepoName} </Text>
+                </Col>
+              </Row>
+            )}
+            {/* {publicAttributes && (
+              <Row justify="center" align="middle" gutter={[16, 16]}>
+                <Col>
+                  <Text>JSON Attributes: </Text>
+                  <Text strong>{JSON.stringify(publicAttributes, null, 2)} </Text>
+                </Col>
+              </Row>
+            )} */}
+          </>
         )}
 
         {!isPreview && (

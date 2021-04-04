@@ -5,11 +5,28 @@ import { withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { formatTimezoneToUTC } from 'services/formatter';
-import { Form, Input, InputNumber, Button, DatePicker, Select, Alert, Row, Col, message } from 'antd';
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  DatePicker,
+  Select,
+  Alert,
+  Row,
+  Col,
+  message,
+  Divider,
+  Collapse,
+  Radio,
+  Checkbox,
+} from 'antd';
 import moment from 'moment-timezone';
 import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
 import { TIMEZONES } from '../../configs/timezones';
 import { Event, EventService } from 'services/event';
+import { times } from 'lodash';
+import { githubRepoUrl, urlPattern } from 'services/validators';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -49,7 +66,9 @@ const FormEntity: React.FC<Props> = ({
   editableRecord,
   refreshData,
 }) => {
+  const checker = editableRecord?.isTask && editableRecord.checker === 'crossCheck' ? true : false;
   const [isFormSubmitted, setFormSubmitted] = useState(false);
+  const [isCrossCheckChecker, setIsCrossCheckChecker] = useState(checker);
   const isUpdateMode = editableRecord ? true : false;
 
   const handleModalSubmit = async (values: any) => {
@@ -69,6 +88,11 @@ const FormEntity: React.FC<Props> = ({
   };
 
   const handleFormChange = (_changedValues: any, allValues: any) => {
+    if (_changedValues.checker) {
+      const checker = _changedValues.checker === 'crossCheck' ? true : false;
+      setIsCrossCheckChecker(checker);
+    }
+
     onFieldsChange(allValues);
   };
 
@@ -149,12 +173,26 @@ const FormEntity: React.FC<Props> = ({
         </Form.Item>
       )}
 
-      <Form.Item name="descriptionUrl" label="Link">
+      <Form.Item
+        name="descriptionUrl"
+        label="Description URL"
+        rules={[
+          {
+            required: true,
+            message: 'Please enter description URL',
+          },
+          {
+            message: 'Please enter valid URL',
+            pattern: urlPattern,
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
 
       <Form.Item name="organizerId" label="Organizer" rules={[{ required: false }]}>
-        <UserSearch searchFn={loadUsers} />
+        {/* <UserSearch searchFn={loadUsers} /> */}
+        <UserSearch defaultValues={getDefaultOrganizer(entityType, editableRecord)} searchFn={loadUsers} />
       </Form.Item>
 
       <Form.Item name="duration" rules={[{ type: 'number' }]} label="Duration">
@@ -177,6 +215,60 @@ const FormEntity: React.FC<Props> = ({
           >
             <InputNumber step={0.1} />
           </Form.Item>
+
+          <Form.Item name="checker" required label="Checker">
+            <Select placeholder="Please select who checks">
+              <Option value="auto-test">Auto-Test</Option>
+              <Option value="mentor">Mentor</Option>
+              <Option value="assigned">Cross-Mentor</Option>
+              <Option value="taskOwner">Task Owner</Option>
+              <Option value="crossCheck">Cross-Check</Option>
+              <Option value="jury">Jury</Option>
+            </Select>
+          </Form.Item>
+
+          {isCrossCheckChecker && (
+            <Form.Item name="pairsCount" label="Cross-Check Pairs Count">
+              <Select placeholder="Cross-Check Pairs Count">
+                {times(10, num => (
+                  <Option key={num} value={num + 1}>
+                    {num + 1}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+
+          <Divider />
+
+          <Form.Item name="verification" label="Verification (deprecated)">
+            <Radio.Group>
+              <Radio value="manual">Manual</Radio>
+              <Radio value="auto">Auto</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Collapse>
+            <Collapse.Panel header="Github" key="1">
+              <Form.Item name="githubPrRequired" label="" valuePropName="checked">
+                <Checkbox>Pull Request required</Checkbox>
+              </Form.Item>
+              <Form.Item name="sourceGithubRepoUrl" label="Source Repo Url" rules={[{ pattern: githubRepoUrl }]}>
+                <Input placeholder="https://github.com/rolling-scopes-school/task1" />
+              </Form.Item>
+              <Form.Item name="githubRepoName" label="Expected Repo Name">
+                <Input placeholder="task1" />
+              </Form.Item>
+            </Collapse.Panel>
+            <Collapse.Panel header="JSON Attributes" key="2">
+              <Form.Item
+                name="attributes"
+                rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
+              >
+                <Input.TextArea rows={6} />
+              </Form.Item>
+            </Collapse.Panel>
+          </Collapse>
         </>
       )}
       {entityType === 'event' && (
@@ -184,6 +276,9 @@ const FormEntity: React.FC<Props> = ({
           <Input style={{ minWidth: 250 }} />
         </Form.Item>
       )}
+
+      <Divider />
+
       <Row justify="center" align="middle" gutter={[16, 16]}>
         <Col>
           <Button type="primary" htmlType="submit" style={{ margin: '0 10px' }}>
@@ -198,6 +293,18 @@ const FormEntity: React.FC<Props> = ({
   );
 };
 
+const getDefaultOrganizer = (entityType: string, data: any) => {
+  if (!data) {
+    return [];
+  }
+
+  if (entityType === 'task') {
+    return data.taskOwner ? [data.taskOwner] : [];
+  }
+
+  return data.organizer ? [data.organizer] : [];
+};
+
 const getInitialValues = (entityType: string, data: any) => {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -207,6 +314,8 @@ const getInitialValues = (entityType: string, data: any) => {
       maxScore: 100,
       scoreWeight: 1,
       timeZone,
+      checker: 'mentor',
+      verification: 'manual',
     };
   }
 
@@ -215,11 +324,13 @@ const getInitialValues = (entityType: string, data: any) => {
       ...data,
       entityType,
       timeZone,
-      organizerId: data.taskOwner ? data.taskOwner.githubId : '',
+      organizerId: data.taskOwner ? data.taskOwner.id : undefined,
       special: data && data.special ? data.special.split(',') : [],
       maxScore: (data && data.maxScore) ?? 100,
       scoreWeight: (data && data.scoreWeight) ?? 1,
       description: data.description ? data.description : '',
+      checker: data.checker || 'mentor',
+      verification: data.verification || 'manual',
       range:
         data && data.studentStartDate && data.studentEndDate
           ? [
@@ -238,7 +349,8 @@ const getInitialValues = (entityType: string, data: any) => {
     description: data.event.description ? data.event.description : '',
     entityType,
     timeZone,
-    organizerId: data.organizer ? data.organizer.githubId : '',
+    // organizerId: data.organizer ? data.organizer.githubId : '',
+    organizerId: data.organizer ? data.organizer.id : undefined,
     special: data && data.special ? data.special.split(',') : [],
     dateTime: (data && moment(data.dateTime)) || null,
   };
@@ -257,8 +369,11 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     type: values.type,
     descriptionUrl: values.descriptionUrl || '',
     description: values.description || '',
-    verification: 'manual',
-    githubPrRequired: false,
+    verification: values.verification,
+    githubPrRequired: values.githubPrRequired,
+    sourceGithubRepoUrl: values.sourceGithubRepoUrl,
+    githubRepoName: values.githubRepoName,
+    attributes: JSON.parse(values.attributes ?? '{}'),
   } as Partial<Task>;
 
   let taskTemplateId;
@@ -283,6 +398,8 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     scoreWeight: values.scoreWeight ? values.scoreWeight : 1,
     maxScore: values.maxScore ? values.maxScore : 100,
     taskOwnerId: values.organizerId ? values.organizerId : null,
+    checker: values.checker,
+    pairsCount: values.pairsCount,
   };
 
   if (isUpdateMode && editableRecord) {

@@ -54,7 +54,12 @@ export function EntityDetailsPage(props: CoursePageProps) {
     <>
       <Header title={entityType === 'event' ? 'Event' : 'Task'} username={props.session.githubId} />
       {entityType === 'task' && (
-        <TaskDetails taskData={entityData as CourseTaskDetails} alias={alias} onEdit={handleFullEdit} />
+        <TaskDetails
+          taskData={entityData as CourseTaskDetails}
+          alias={alias}
+          onEdit={handleFullEdit}
+          isAdmin={props.session.isAdmin}
+        />
       )}
       {entityType === 'event' && (
         <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} />

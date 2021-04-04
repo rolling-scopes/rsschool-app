@@ -21,6 +21,8 @@ type EntityFromCSV = {
   descriptionUrl: string;
   githubId: string | null;
   place: string | null;
+  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury' | null;
+  pairsCount: number | null;
 };
 
 export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -30,8 +32,8 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
 
   const tasksToCsv = courseTasks.map(item => ({
     entityType: 'task',
-    templateId: item.id,
-    id: item.task.id,
+    templateId: item.taskId,
+    id: item.id,
     startDate: item.studentStartDate,
     endDate: item.studentEndDate,
     type: item.type || item.task.type,
@@ -40,11 +42,13 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
     descriptionUrl: item.task.descriptionUrl,
     githubId: item.taskOwner ? item.taskOwner.githubId : null,
     place: null,
+    checker: item.checker,
+    pairsCount: item.pairsCount,
   }));
   const eventsToCsv = courseEvents.map(item => ({
     entityType: 'event',
-    templateId: item.id,
-    id: item.eventId,
+    templateId: item.eventId,
+    id: item.id,
     startDate: item.dateTime,
     type: item.event.type,
     special: item.special,
@@ -52,6 +56,8 @@ export const getScheduleAsCsv = (_: ILogger) => async (ctx: Router.RouterContext
     descriptionUrl: item.event.descriptionUrl,
     githubId: item.organizer ? item.organizer.githubId : null,
     place: item.place,
+    checker: null,
+    pairsCount: null,
   }));
 
   const csv = await parseAsync([...tasksToCsv, ...eventsToCsv]);
@@ -96,24 +102,44 @@ const saveTasks = async (tasks: EntityFromCSV[], courseId: number) => {
 
     const courseTaskData = {
       courseId,
-      taskId: task.id,
+      taskId: task.templateId,
       studentStartDate: task.startDate || null,
       studentEndDate: task.endDate || null,
       special: task.special,
       taskOwner: user,
+      checker: task.checker,
+      pairsCount: task.pairsCount || null,
     } as Partial<CourseTask>;
 
-    if (task.templateId) {
-      await getRepository(Task).update({ id: task.id }, taskData);
-      await getRepository(CourseTask).update({ id: task.templateId }, courseTaskData);
-    } else {
+    // update task & courseTask
+    if (task.templateId && task.id) {
+      await getRepository(Task).update({ id: task.templateId }, taskData);
+      await getRepository(CourseTask).update({ id: task.id }, courseTaskData);
+    }
+
+    // create new courseTask
+    if (task.templateId && !task.id) {
+      await getRepository(Task).update({ id: task.templateId }, taskData);
+      const { id } = await getRepository(CourseTask).save(courseTaskData);
+
+      if (!id) {
+        throw new Error('Creating new course task failed.');
+      }
+    }
+
+    //create task & courseTask
+    if (!task.templateId) {
       const { id } = await getRepository(Task).save(taskData);
 
       if (!id) {
         throw new Error('Creating new task failed.');
       }
 
-      await getRepository(CourseTask).save({ ...courseTaskData, taskId: id });
+      const { id: courseId } = await getRepository(CourseTask).save({ ...courseTaskData, taskId: id });
+
+      if (!courseId) {
+        throw new Error('Creating new course task failed.');
+      }
     }
   }
 };
@@ -130,24 +156,42 @@ const saveEvents = async (events: EntityFromCSV[], courseId: number) => {
 
     const courseEventData = {
       courseId,
-      eventId: event.id,
+      eventId: event.templateId,
       dateTime: event.startDate || null,
       special: event.special,
       organizer: user,
       place: event.place || null,
     } as Partial<CourseEvent>;
 
-    if (event.templateId) {
-      await getRepository(Event).update({ id: event.id }, eventData);
-      await getRepository(CourseEvent).update({ id: event.templateId }, courseEventData);
-    } else {
+    // update event & courseEvent
+    if (event.templateId && event.id) {
+      await getRepository(Event).update({ id: event.templateId }, eventData);
+      await getRepository(CourseEvent).update({ id: event.id }, courseEventData);
+    }
+
+    // create new courseEvent
+    if (event.templateId && !event.id) {
+      await getRepository(Event).update({ id: event.templateId }, eventData);
+      const { id } = await getRepository(CourseEvent).save(courseEventData);
+
+      if (!id) {
+        throw new Error('Creating new course event failed.');
+      }
+    }
+
+    //create event & courseEvent
+    if (!event.templateId) {
       const { id } = await getRepository(Event).save(eventData);
 
       if (!id) {
         throw new Error('Creating new event failed.');
       }
 
-      await getRepository(CourseEvent).save({ ...courseEventData, eventId: id });
+      const { id: courseId } = await getRepository(CourseEvent).save({ ...courseEventData, eventId: id });
+
+      if (!courseId) {
+        throw new Error('Creating new course event failed.');
+      }
     }
   }
 };

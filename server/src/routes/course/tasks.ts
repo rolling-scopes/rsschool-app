@@ -7,7 +7,6 @@ import { setResponse } from '../utils';
 import { createCrossMentorPairs } from '../../rules/distribution';
 import { MentorRepository } from '../../repositories/mentor';
 
-
 export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
 

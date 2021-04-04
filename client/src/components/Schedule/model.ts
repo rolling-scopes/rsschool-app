@@ -74,3 +74,12 @@ export const SPECIAL_ENTITY_TAGS = [
 ];
 
 export const COLUMNS_TYPES = ['Type', 'Special', 'Url', 'Duration', 'Organizer', 'Place'];
+
+export const CHECKER_TYPES = {
+  'auto-test': 'Auto-Test',
+  mentor: 'Mentor',
+  assigned: 'Cross-Mentor',
+  taskOwner: 'Task Owner',
+  crossCheck: 'Cross-Check',
+  jury: 'Jury',
+};
