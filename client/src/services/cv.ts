@@ -57,7 +57,7 @@ export class CVService {
   }
 
   async extendCV() {
-    const response = await this.axios.post<{ data: number }>(`${CVService.baseRoute}/extend`);
+    const response = await this.axios.post<{ data: string }>(`${CVService.baseRoute}/extend`);
     return response.data.data;
   }
 }

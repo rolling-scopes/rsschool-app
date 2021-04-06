@@ -4,7 +4,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
 import { Contacts, UserData, CourseData, GetCVData } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
-import { UserService } from 'services/user';
+import { CVService } from '../../services/cv';
 
 const { Content } = Layout;
 
@@ -21,7 +21,7 @@ type State = {
   expires: number | null;
 };
 
-const userService = new UserService();
+const cvService = new CVService();
 
 const extractCoursesData = (coursesData: any) => {
   return coursesData.map((course: any) => {
@@ -67,7 +67,7 @@ function ViewCV(props: Props) {
       isLoading: true,
     });
 
-    const cvData: GetCVData = await userService.getCVData(ownerId);
+    const cvData: GetCVData = await cvService.getCVData(ownerId);
 
     const {
       notes,

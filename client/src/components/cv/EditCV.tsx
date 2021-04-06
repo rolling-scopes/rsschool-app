@@ -1,9 +1,10 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
+import { CVService } from 'services/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
 import {
@@ -30,24 +31,25 @@ type Props = {
   withdrawConsent: () => void;
 };
 
+const cvService = new CVService();
 const userService = new UserService();
 
-class EditCV extends React.Component<Props, State> {
-  state: State = {
+function EditCV(props: Props) {
+  const [state, setState] = useState<State>({
     isLoading: false,
     contactsList: null,
     userData: null,
     expires: null,
+  });
+
+  const userFormRef: RefObject<typeof UserDataForm> = React.createRef();
+  const contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
+
+  const nullifyConditional = (value: string | null) => {
+    return value === '' ? null : value;
   };
 
-  private userFormRef: RefObject<typeof UserDataForm> = React.createRef();
-  private contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
-
-  private nullifyConditional(value: string | null) {
-    return value === '' ? null : value;
-  }
-
-  private showConfirmationModal() {
+  const showConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
     const title = (
@@ -71,6 +73,7 @@ class EditCV extends React.Component<Props, State> {
         </Paragraph>
       </>
     );
+
     Modal.confirm({
       icon: null,
       title,
@@ -78,16 +81,17 @@ class EditCV extends React.Component<Props, State> {
       centered: true,
       maskStyle: { backgroundColor: 'red' },
       maskClosable: true,
-      onOk: () => this.props.withdrawConsent(),
+      onOk: () => props.withdrawConsent(),
     });
-  }
+  };
 
-  private async fetchData() {
-    await this.setState({
+  const fetchData = async () => {
+    await setState({
+      ...state,
       isLoading: true,
     });
 
-    const cvData: GetCVData = await userService.getCVData(this.props.ownerId);
+    const cvData: GetCVData = await cvService.getCVData(props.ownerId);
 
     const {
       notes,
@@ -133,15 +137,15 @@ class EditCV extends React.Component<Props, State> {
       website,
     };
 
-    await this.setState({
+    await setState({
       contactsList: contactsList,
       userData: userData,
       expires: Number(expires),
       isLoading: false,
     });
-  }
+  };
 
-  private async submitData(data: any) {
+  const submitData = async (data: any) => {
     const {
       avatarLink,
       desiredPosition,
@@ -163,34 +167,34 @@ class EditCV extends React.Component<Props, State> {
     } = data;
 
     const cvData: SaveCVData = {
-      selfIntroLink: this.nullifyConditional(selfIntroLink),
+      selfIntroLink: nullifyConditional(selfIntroLink),
       militaryService,
       avatarLink,
       desiredPosition,
       englishLevel,
-      name: this.nullifyConditional(name),
-      notes: this.nullifyConditional(notes),
-      phone: this.nullifyConditional(phone),
-      email: this.nullifyConditional(email),
-      skype: this.nullifyConditional(skype),
-      telegram: this.nullifyConditional(telegram),
-      linkedin: this.nullifyConditional(linkedin),
-      location: this.nullifyConditional(location),
-      github: this.nullifyConditional(github),
-      website: this.nullifyConditional(website),
+      name: nullifyConditional(name),
+      notes: nullifyConditional(notes),
+      phone: nullifyConditional(phone),
+      email: nullifyConditional(email),
+      skype: nullifyConditional(skype),
+      telegram: nullifyConditional(telegram),
+      linkedin: nullifyConditional(linkedin),
+      location: nullifyConditional(location),
+      github: nullifyConditional(github),
+      website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
     };
 
-    await userService.saveCVData(cvData);
-  }
+    await cvService.saveCVData(cvData);
+  };
 
-  private async handleSave(data: any) {
-    await this.submitData(data);
-    await this.fetchData();
-  }
+  const handleSave = async (data: any) => {
+    await submitData(data);
+    await fetchData();
+  };
 
-  private formatDate(expirationValue: number | null) {
+  const formatDate = (expirationValue: number | null) => {
     if (expirationValue === null || expirationValue === 0) {
       return <Text strong>CV expiration date is not set</Text>;
     } else {
@@ -208,21 +212,21 @@ class EditCV extends React.Component<Props, State> {
         </Text>
       );
     }
-  }
+  };
 
-  private getDataFromRefs(refs: RefObject<any>[]) {
+  const getDataFromRefs = (refs: RefObject<any>[]) => {
     const values = refs
       .map(ref => ref.current!.getFieldsValue())
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
-    this.handleSave(values);
-  }
+    handleSave(values);
+  };
 
-  async componentDidMount() {
-    await this.fetchData();
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  private async fillFromProfile() {
-    const id = this.props.ownerId;
+  const fillFromProfile = async () => {
+    const id = props.ownerId;
 
     const profile = await userService.getProfileInfo(id);
 
@@ -238,8 +242,8 @@ class EditCV extends React.Component<Props, State> {
     const telegram = profile.contacts?.telegram ?? null;
     const linkedin = profile.contacts?.linkedIn ?? null;
 
-    const prevUserData = this.state.userData as UserData;
-    const prevContacts = this.state.contactsList as Contacts;
+    const prevUserData = state.userData as UserData;
+    const prevContacts = state.contactsList as Contacts;
 
     const newUserData = {
       ...prevUserData,
@@ -257,111 +261,112 @@ class EditCV extends React.Component<Props, State> {
       location,
     };
 
-    await this.setState({
+    await setState({
+      ...state,
       userData: newUserData,
       contactsList: newContacts,
     });
-  }
+  };
 
-  private async resetFields() {
-    await this.fetchData();
-  }
+  const resetFields = async () => {
+    await fetchData();
+  };
 
-  private async extendCV() {
-    await this.setState({
+  const extendCV = async () => {
+    await setState({
+      ...state,
       isLoading: true,
     });
-    const newExpirationDate = await userService.extendCV();
-    await this.setState({
+    const newExpirationDate = await cvService.extendCV();
+    await setState({
+      ...state,
       expires: Number(newExpirationDate),
       isLoading: false,
     });
-  }
+  };
 
-  render() {
-    const { isLoading, contactsList, userData, expires } = this.state;
+  const { isLoading, contactsList, userData, expires } = state;
 
-    const buttonStyle = {
-      borderRadius: '15px',
-      margin: '5px 0',
-    };
+  const buttonStyle = {
+    borderRadius: '15px',
+    margin: '5px 0',
+  };
 
-    return (
-      <LoadingScreen show={isLoading}>
-        <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
-          <Content>
-            <Card>
-              <Space
-                direction="horizontal"
-                align="start"
-                style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
-              >
-                {userData && <UserDataForm ref={this.userFormRef} userData={userData} />}
-                <Col>
-                  <Row>{contactsList && <ContactsForm ref={this.contactsFormRef} contactsList={contactsList} />}</Row>
-                  <br />
-                  <Row>
-                    <Card size="small" style={{ width: '100%' }} title="CV expiration status">
-                      {this.formatDate(expires)}
-                    </Card>
-                  </Row>
-                </Col>
-              </Space>
+  return (
+    <LoadingScreen show={isLoading}>
+      <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
+        <Content>
+          <Card>
+            <Space
+              direction="horizontal"
+              align="start"
+              style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
+            >
+              {userData && <UserDataForm ref={userFormRef} userData={userData} />}
+              <Col>
+                <Row>{contactsList && <ContactsForm ref={contactsFormRef} contactsList={contactsList} />}</Row>
+                <br />
+                <Row>
+                  <Card size="small" style={{ width: '100%' }} title="CV expiration status">
+                    {formatDate(expires)}
+                  </Card>
+                </Row>
+              </Col>
+            </Space>
+            <Button
+              style={buttonStyle}
+              block
+              type="primary"
+              htmlType="button"
+              onClick={() => getDataFromRefs([userFormRef, contactsFormRef])}
+              icon={<SaveOutlined />}
+            >
+              Save
+            </Button>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button
-                style={buttonStyle}
-                block
-                type="primary"
+                style={{ ...buttonStyle, width: '33%' }}
+                type="default"
                 htmlType="button"
-                onClick={() => this.getDataFromRefs([this.userFormRef, this.contactsFormRef])}
-                icon={<SaveOutlined />}
+                onClick={() => fillFromProfile()}
+                icon={<CopyOutlined />}
               >
-                Save
+                Get data from profile
               </Button>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button
-                  style={{ ...buttonStyle, width: '33%' }}
-                  type="default"
-                  htmlType="button"
-                  onClick={() => this.fillFromProfile()}
-                  icon={<CopyOutlined />}
-                >
-                  Get data from profile
-                </Button>
-                <Button
-                  style={{ ...buttonStyle, width: '21%' }}
-                  type="default"
-                  htmlType="button"
-                  onClick={this.resetFields.bind(this)}
-                  icon={<ClearOutlined />}
-                >
-                  Reset fields
-                </Button>
-                <Button
-                  style={{ ...buttonStyle, width: '21%' }}
-                  type="default"
-                  htmlType="button"
-                  onClick={this.extendCV.bind(this)}
-                  icon={<FieldTimeOutlined />}
-                >
-                  Extend CV
-                </Button>
-                <Button
-                  style={{ ...buttonStyle, width: '21%' }}
-                  type="primary"
-                  danger
-                  htmlType="button"
-                  onClick={this.showConfirmationModal.bind(this)}
-                  icon={<DeleteOutlined />}
-                >
-                  Delete my CV
-                </Button>
-              </div>
-            </Card>
-          </Content>
-        </Layout>
-      </LoadingScreen>
-    );
-  }
+              <Button
+                style={{ ...buttonStyle, width: '21%' }}
+                type="default"
+                htmlType="button"
+                onClick={resetFields}
+                icon={<ClearOutlined />}
+              >
+                Reset fields
+              </Button>
+              <Button
+                style={{ ...buttonStyle, width: '21%' }}
+                type="default"
+                htmlType="button"
+                onClick={extendCV}
+                icon={<FieldTimeOutlined />}
+              >
+                Extend CV
+              </Button>
+              <Button
+                style={{ ...buttonStyle, width: '21%' }}
+                type="primary"
+                danger
+                htmlType="button"
+                onClick={showConfirmationModal}
+                icon={<DeleteOutlined />}
+              >
+                Delete my CV
+              </Button>
+            </div>
+          </Card>
+        </Content>
+      </Layout>
+    </LoadingScreen>
+  );
 }
 
 export default EditCV;
