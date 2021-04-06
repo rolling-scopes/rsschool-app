@@ -3,7 +3,6 @@ import { NextPageContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '../../../common/models';
 import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
-import { GetCVData, SaveCVData, JobSeekerData } from '../../../common/models/cv';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
@@ -109,43 +108,6 @@ export class UserService {
 
   async saveProfileInfo(profile: SaveProfileInfo) {
     const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
-    return response.data.data;
-  }
-
-  async getJobSeekers() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>('/api/opportunities');
-    return response.data.data;
-  }
-
-  async getCVData(githubId: string) {
-    const response = await this.axios.get<{ data: GetCVData }>(`/api/opportunities/cv`, {
-      params: { githubId },
-    });
-    return response.data.data;
-  }
-
-  async saveCVData(opportunitiesInfo: SaveCVData) {
-    const response = await this.axios.post<{ data: SaveCVData }>(`/api/opportunities`, opportunitiesInfo);
-    return response.data.data;
-  }
-
-  async getOpportunitiesConsent(githubId: string) {
-    const response = await this.axios.get<{ data: boolean }>(`/api/opportunities/consent/`, {
-      params: { githubId },
-    });
-    return response.data.data;
-  }
-
-  async changeOpportunitiesConsent(githubId: string, opportunitiesConsent: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`/api/opportunities/consent/`, {
-      githubId,
-      opportunitiesConsent,
-    });
-    return response.data.data;
-  }
-
-  async extendCV() {
-    const response = await this.axios.post<{ data: string }>('/api/opportunities/extend');
     return response.data.data;
   }
 }
