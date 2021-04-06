@@ -6,7 +6,7 @@ import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
-import { UserService } from '../../services/user';
+import { CVService } from '../../services/cv';
 import heroesBadges from '../../configs/heroes-badges';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -30,7 +30,7 @@ class Page extends React.Component<Props, State> {
     users: null,
   };
 
-  private userService = new UserService();
+  private cvService = new CVService();
 
   private countBadges = (badges: any) => {
     const badgesCount: any = {};
@@ -145,8 +145,13 @@ class Page extends React.Component<Props, State> {
               } = record;
               const title = `${courseFullName}${locationName ? locationName : ''}`;
               const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
-              const courseStats = `Score: ${totalScore}
-              Position: ${position}`;
+              const courseStats = (
+                <>
+                  <Text style={{ whiteSpace: 'nowrap' }}>Score: {totalScore}</Text>
+                  <br />
+                  <Text style={{ whiteSpace: 'nowrap' }}>Position: {position}</Text>
+                </>
+              );
               let courseStatus;
               if (isExpelled) {
                 courseStatus = <Text>Expelled</Text>;
@@ -210,12 +215,12 @@ class Page extends React.Component<Props, State> {
   ];
 
   private fetchData() {
-    return this.userService.getJobSeekers();
+    return this.cvService.getJobSeekersData();
   }
 
   private async removeJobSeeker(githubId: string) {
     await this.setState({ isLoading: true });
-    await this.userService.changeOpportunitiesConsent(githubId, false);
+    await this.cvService.changeOpportunitiesConsent(githubId, false);
     await this.setState({ isLoading: false });
   }
 
