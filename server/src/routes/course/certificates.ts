@@ -45,6 +45,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       'user.githubId',
       'course.name',
       'course.primarySkillName',
+      'course.certificateIssuer',
     ]);
   if (studentIds.length > 0) {
     students = await initialQuery.where('student."id" IN (:...ids)', { ids: studentIds }).getMany();
@@ -72,6 +73,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       courseId,
       courseName: course.name,
       coursePrimarySkill: course.primarySkillName,
+      certificateIssuer: course.certificateIssuer,
       studentId: student.id,
       studentName: `${user.firstName} ${user.lastName}`,
       timestamp: Date.now(),
