@@ -1,118 +1,192 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
-import { NOT_FOUND, OK } from 'http-status-codes';
+import { NOT_FOUND, OK, CREATED, CONFLICT } from 'http-status-codes';
 import { guard } from '../guards';
-import { getRepository, MoreThan } from 'typeorm';
-import { User, IUserSession } from '../../models';
-import { getStudentStats } from '../profile/student-stats';
-import { getPublicFeedback } from '../profile/public-feedback';
-import { Permissions } from '../profile/permissions';
+import { getRepository } from 'typeorm';
+import {
+  CV,
+  IUserSession,
+  User,
+  Feedback,
+  Student,
+  Certificate,
+  Mentor,
+  CourseTask,
+  Task,
+  Course,
+  TaskResult,
+  TaskInterviewResult,
+} from '../../models';
+import { getFullName } from '../../rules';
 
-const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
-
-  const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ where: { githubId } });
-
-  if (user === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const {
-    selfIntroLink,
-    startFrom,
-    fullTime,
-    militaryService,
-    avatarLink,
-    englishLevel,
-    desiredPosition,
-    name,
-    notes,
-    phone,
-    email,
-    skype,
-    telegram,
-    linkedin,
-    location,
-    github,
-    website,
-  } = ctx.request.body;
-
-  const result = await userRepository.save({
-    ...user,
-    cvSelfIntroLink: selfIntroLink,
-    cvStartFrom: startFrom,
-    cvFullTime: fullTime,
-    cvMilitaryService: militaryService,
-    cvAvatarLink: avatarLink,
-    cvEnglishLevel: englishLevel,
-    cvDesiredPosition: desiredPosition,
-    cvName: name,
-    cvNotes: notes,
-    cvPhone: phone,
-    cvEmail: email,
-    cvSkype: skype,
-    cvTelegram: telegram,
-    cvLinkedin: linkedin,
-    cvLocation: location,
-    cvGithub: github,
-    cvWebsite: website,
-  });
-
-  setResponse(ctx, OK, result);
+const getPublicFeedbackFull = async (ownerId: string) => {
+  return (
+    await getRepository(Feedback)
+      .createQueryBuilder('feedback')
+      .select('"feedback"."updatedDate" AS "feedbackDate"')
+      .addSelect('"feedback"."badgeId" AS "badgeId"')
+      .addSelect('"feedback"."comment" AS "comment"')
+      .addSelect('"feedback"."heroesUrl" AS "heroesUri"')
+      .addSelect('"fromUser"."firstName" AS "fromUserFirstName", "fromUser"."lastName" AS "fromUserLastName"')
+      .addSelect('"fromUser"."githubId" AS "fromUserGithubId"')
+      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+      .leftJoin(User, 'fromUser', '"fromUser"."id" = "feedback"."fromUserId"')
+      .where('"user"."githubId" = :ownerId', { ownerId })
+      .orderBy('"feedback"."updatedDate"', 'DESC')
+      .getRawMany()
+  ).map(
+    ({ feedbackDate, badgeId, comment, heroesUri, fromUserFirstName, fromUserLastName, fromUserGithubId }: any) => ({
+      feedbackDate,
+      badgeId,
+      comment,
+      heroesUri,
+      fromUser: {
+        name: getFullName(fromUserFirstName, fromUserLastName, fromUserGithubId),
+        githubId: fromUserGithubId,
+      },
+    }),
+  );
 };
 
-const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const currentTimestamp = new Date().getTime();
+const getPublicFeedbackShortened = async (ownerId: string) => {
+  return (
+    await getRepository(Feedback)
+      .createQueryBuilder('feedback')
+      .select('"feedback"."updatedDate" AS "feedbackDate"')
+      .addSelect('"feedback"."comment" AS "comment"')
+      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+      .where('"user"."githubId" = :ownerId', { ownerId })
+      .orderBy('"feedback"."updatedDate"', 'DESC')
+      .getRawMany()
+  ).map(({ feedbackDate, comment, heroesUri }: any) => ({
+    feedbackDate,
+    comment,
+    heroesUri,
+  }));
+};
 
-  const users = await getRepository(User).find({
-    where: { opportunitiesConsent: true, cvExpires: MoreThan(currentTimestamp) },
-  });
+const getStudentsStats = async (ownerId: string) => {
+  const query = await getRepository(Student)
+    .createQueryBuilder('student')
+    .select('"course"."id" AS "courseId"')
+    .addSelect('"course"."name" AS "courseName"')
+    .addSelect('"course"."locationName" AS "locationName"')
+    .addSelect('"course"."fullName" AS "courseFullName"')
+    .addSelect('"student"."isExpelled" AS "isExpelled"')
+    .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
+    .addSelect('"student"."totalScore" AS "totalScore"')
+    .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
+    .addSelect('"userMentor"."lastName" AS "mentorLastName"')
+    .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
+    .addSelect('"certificate"."publicId" AS "certificateId"')
+    .addSelect('ARRAY_AGG ("courseTask"."maxScore") AS "taskMaxScores"')
+    .addSelect('ARRAY_AGG ("courseTask"."scoreWeight") AS "taskScoreWeights"')
+    .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
+    .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
+    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
 
-  let CVProfiles = users.map(item => {
-    const {
-      cvName,
-      githubId,
-      cvDesiredPosition,
-      cvEnglishLevel,
-      cvFullTime,
-      cvLocation,
-      cvStartFrom,
-      cvExpires,
-    } = item;
-    return {
-      name: cvName,
-      githubId,
-      desiredPosition: cvDesiredPosition,
-      englishLevel: cvEnglishLevel,
-      fullTime: cvFullTime,
-      location: cvLocation,
-      startFrom: cvStartFrom,
-      expires: cvExpires,
-    };
-  });
+  query
+    .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
+    .addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
 
-  if (CVProfiles.length) {
-    CVProfiles = await Promise.all(
-      CVProfiles.map(async (user: any) => {
-        const { githubId } = user;
-        const feedback = await getPublicFeedback(githubId);
-        const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
-        return {
-          ...user,
-          feedback,
-          courses,
-        };
-      }),
+  query
+    .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
+    .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
+    .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"')
+    .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
+    .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
+    .leftJoin(CourseTask, 'courseTask', '"courseTask"."courseId" = "student"."courseId"')
+    .leftJoin(Task, 'task', '"courseTask"."taskId" = "task"."id"')
+    .leftJoin(
+      TaskResult,
+      'taskResult',
+      '"taskResult"."studentId" = "student"."id" AND "taskResult"."courseTaskId" = "courseTask"."id"',
+    )
+    .leftJoin(
+      TaskInterviewResult,
+      'taskInterview',
+      '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"',
     );
-  }
 
-  setResponse(ctx, OK, CVProfiles);
+  query
+    .where('"user"."githubId" = :ownerId', { ownerId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
+    .groupBy('"course"."id", "student"."id", "userMentor"."id", "certificate"."publicId"')
+    .orderBy('"course"."endDate"', 'DESC');
+
+  const rawStats = await query.getRawMany();
+
+  const studentStats = rawStats.map(
+    ({
+      courseId,
+      courseName,
+      locationName,
+      courseFullName,
+      isExpelled,
+      expellingReason,
+      isCourseCompleted,
+      totalScore,
+      mentorFirstName,
+      mentorLastName,
+      mentorGithubId,
+      taskMaxScores,
+      taskScoreWeights,
+      taskNames,
+      taskDescriptionUris,
+      taskGithubPrUris,
+      taskScores,
+      taskComments,
+      certificateId,
+    }: any) => {
+      const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
+        maxScore,
+        scoreWeight: taskScoreWeights[idx],
+        name: taskNames[idx],
+        descriptionUri: taskDescriptionUris[idx],
+        githubPrUri: taskGithubPrUris[idx],
+        score: taskScores[idx],
+        comment: taskComments[idx],
+      }));
+
+      return {
+        courseId,
+        courseName,
+        locationName,
+        courseFullName,
+        isExpelled,
+        expellingReason,
+        isCourseCompleted,
+        totalScore,
+        tasks,
+        certificateId,
+        position: null,
+        mentor: {
+          githubId: mentorGithubId,
+          name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
+        },
+      };
+    },
+  );
+
+  const studentPositions = await Promise.all(
+    studentStats.map(async ({ totalScore, courseId }: { totalScore: number; courseId: number }) => {
+      const rawPositions = await getRepository(Student)
+        .createQueryBuilder('student')
+        .select('"student"."courseId" AS "courseId"')
+        .addSelect('COUNT(*) AS "position"')
+        .where('"student"."courseId" = :courseId', { courseId })
+        .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
+        .groupBy('"student"."courseId"')
+        .getRawMany();
+      return rawPositions.map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
+    }),
+  );
+
+  return studentStats.map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
 };
 
-export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.query;
 
   const user = await getRepository(User).findOne({ where: { githubId } });
@@ -122,54 +196,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const {
-    cvName: name,
-    cvDesiredPosition: desiredPosition,
-    cvAvatarLink: avatarLink,
-    cvEnglishLevel: englishLevel,
-    cvMilitaryService: militaryService,
-    cvSelfIntroLink: selfIntroLink,
-    cvFullTime: fullTime,
-    cvStartFrom: startFrom,
-    cvPhone: phone,
-    cvEmail: email,
-    cvSkype: skype,
-    cvTelegram: telegram,
-    cvLinkedin: linkedin,
-    cvLocation: location,
-    cvGithub: github,
-    cvWebsite: website,
-    cvNotes: notes,
-    cvExpires: expires,
-  } = user;
-
-  const courses = await getStudentStats(githubId, { isCoreJsFeedbackVisible: false } as Permissions);
-  const publicFeedback = await getPublicFeedback(githubId);
-
-  const CVData = {
-    selfIntroLink,
-    startFrom,
-    fullTime,
-    militaryService,
-    avatarLink,
-    desiredPosition,
-    englishLevel,
-    name,
-    notes,
-    phone,
-    email,
-    skype,
-    telegram,
-    linkedin,
-    location,
-    github,
-    website,
-    courses,
-    publicFeedback,
-    expires,
-  };
-
-  setResponse(ctx, OK, CVData);
+  setResponse(ctx, OK, user.opportunitiesConsent);
 };
 
 export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -191,31 +218,8 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
     return;
   }
 
-  const emptyOpportunitiesInfo = {
-    cvSelfIntroLink: null,
-    cvDesiredPosition: null,
-    cvFullTime: false,
-    cvStartFrom: null,
-    cvLink: null,
-    cvMilitaryService: null,
-    cvEnglishLevel: null,
-    cvAvatarLink: null,
-    cvName: null,
-    cvNotes: null,
-    cvPhone: null,
-    cvEmail: null,
-    cvSkype: null,
-    cvTelegram: null,
-    cvLinkedin: null,
-    cvLocation: null,
-    cvGithub: null,
-    cvWebsite: null,
-    cvExpires: null,
-  };
-
   const userWithEmptyOpportunities = {
     ...user,
-    ...emptyOpportunitiesInfo,
     opportunitiesConsent: reqConsent,
   };
 
@@ -224,26 +228,118 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
   setResponse(ctx, OK, result.opportunitiesConsent);
 };
 
-export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
+const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const currentTimestamp = new Date().getTime();
 
-  const user = await getRepository(User).findOne({ where: { githubId } });
+  let CVProfiles = await getRepository(CV)
+    .createQueryBuilder('cv')
+    .select(
+      'cv.name, cv.ownerId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires',
+    )
+    .leftJoin(User, 'user', 'cv.ownerId = user.githubId')
+    .where('user.opportunitiesConsent = true')
+    .andWhere('cv.expires >= :currentTimestamp', { currentTimestamp })
+    .getRawMany();
 
-  if (user === undefined) {
+  if (CVProfiles.length) {
+    CVProfiles = await Promise.all(
+      CVProfiles.map(async (cv: any) => {
+        const { ownerId } = cv;
+
+        const feedback = await getPublicFeedbackFull(ownerId);
+
+        const courses = await getStudentsStats(ownerId);
+
+        return {
+          ...cv,
+          feedback,
+          courses,
+        };
+      }),
+    );
+  }
+
+  setResponse(ctx, OK, CVProfiles);
+};
+
+const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId: ownerId } = ctx.state!.user as IUserSession;
+
+  const cvRepository = getRepository(CV);
+  const cv = await cvRepository.findOne({ where: { ownerId } });
+
+  if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  setResponse(ctx, OK, user.opportunitiesConsent);
+  const data = ctx.request.body;
+
+  const result = await cvRepository.save({
+    ...cv,
+    ...data,
+  });
+
+  setResponse(ctx, OK, result);
+};
+
+export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId: ownerId } = ctx.state!.user as IUserSession;
+
+  const cvRepository = getRepository(CV);
+
+  const cv = await cvRepository.findOne({ where: { ownerId } });
+
+  if (cv != undefined) {
+    setResponse(ctx, CONFLICT);
+    return;
+  }
+
+  const data = ctx.request.body;
+
+  const newCV = await cvRepository.create({
+    ownerId,
+    ...data,
+  });
+
+  await cvRepository.save(newCV);
+
+  setResponse(ctx, CREATED, newCV);
+};
+
+export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId: ownerId } = ctx.query;
+
+  const cvRepository = getRepository(CV);
+
+  const cv = await cvRepository.findOne({ where: { ownerId } });
+
+  if (cv === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const feedback = await getPublicFeedbackShortened(ownerId);
+  const courses = await getStudentsStats(ownerId);
+
+  const { id, ownerId: omittedOwnerId, ...cvData } = cv;
+
+  const res = {
+    ...cvData,
+    feedback,
+    courses,
+  };
+
+  setResponse(ctx, OK, res);
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId: ownerId } = ctx.state!.user as IUserSession;
 
-  const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ where: { githubId } });
+  const cvRepository = getRepository(CV);
+  const cv = await cvRepository.findOne({ where: { ownerId } });
 
-  if (user === undefined) {
+  if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
@@ -253,7 +349,7 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const now = new Date();
   now.setDate(now.getDate() + EXPIRATION_DAYS_PROLONGATION);
   const timestamp = now.getTime();
-  const result = await userRepository.save({ ...user, cvExpires: timestamp });
+  const result = await cvRepository.save({ ...cv, cvExpires: timestamp });
 
   setResponse(ctx, OK, result.cvExpires);
 };
@@ -261,15 +357,13 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
 
-  router.get('/', guard, getJobSeekersData(logger));
-
-  router.get('/cv', guard, getCVData(logger));
-  router.post('/', guard, saveCVData(logger));
-
-  router.get('/consent', guard, getOpportunitiesConsent(logger));
-  router.post('/consent/', guard, setOpportunitiesConsent(logger));
-
   router.post('/extend', guard, extendCV(logger));
+  router.get('/consent', guard, getOpportunitiesConsent(logger));
+  router.post('/consent', guard, setOpportunitiesConsent(logger));
+  router.get('/', guard, getJobSeekersData(logger));
+  router.get('/cv', guard, getCVData(logger));
+  router.put('/cv', guard, createCV(logger));
+  router.post('/', guard, saveCVData(logger));
 
   return router;
 }
