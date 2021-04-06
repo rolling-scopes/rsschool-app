@@ -6,11 +6,11 @@ import withSession, { Session } from 'components/withSession';
 import { Header, FooterLayout } from 'components';
 import CVInfo from 'components/cv/CVInfo';
 
-import { UserService } from '../../services/user';
+import { CVService } from '../../services/cv';
 
 const { Content } = Layout;
 
-const userService = new UserService();
+const cvService = new CVService();
 
 type Props = {
   router: NextRouter;
@@ -44,7 +44,7 @@ function CVPage(props: Props) {
       ...state,
       isLoading: true,
     });
-    const newConsent = await userService.changeOpportunitiesConsent(githubId, true);
+    const newConsent = await cvService.changeOpportunitiesConsent(githubId, true);
     await setState({
       ...state,
       opportunitiesConsent: newConsent,
@@ -54,7 +54,7 @@ function CVPage(props: Props) {
 
   const withdrawConsent = async (githubId: string) => {
     await setState({ ...state, isLoading: true });
-    const newConsent = await userService.changeOpportunitiesConsent(githubId, false);
+    const newConsent = await cvService.changeOpportunitiesConsent(githubId, false);
     await setState({
       ...state,
       opportunitiesConsent: newConsent,
@@ -68,7 +68,7 @@ function CVPage(props: Props) {
       isLoading: true,
     });
     try {
-      const opportunitiesConsent = await userService.getOpportunitiesConsent(props.router.query.githubId as string);
+      const opportunitiesConsent = await cvService.getOpportunitiesConsent(props.router.query.githubId as string);
       await setState({
         ...state,
         opportunitiesConsent,

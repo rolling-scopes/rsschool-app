@@ -31,6 +31,7 @@ import { TaskVerification } from './taskVerification';
 import { ExternalAccount, User } from './user';
 import { Consent, ChannelType } from './consent';
 import { TaskInterviewStudent } from './taskInterviewStudent';
+import { CV } from './cv';
 
 export * from './session';
 export {
@@ -69,6 +70,7 @@ export {
   User,
   Consent,
   ChannelType,
+  CV,
 };
 
 export const models = [
@@ -105,6 +107,7 @@ export const models = [
   TaskVerification,
   User,
   Consent,
+  CV,
 ];
 
 export interface IApiResponse<T> {
