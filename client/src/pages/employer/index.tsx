@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 // TODO: uncomment after testing
-import { Layout, Table, List, Typography, Row, Col, Badge, Card, Popconfirm /* Result */ } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { Header, FooterLayout } from 'components';
@@ -24,15 +24,15 @@ type State = {
   users: any;
 };
 
-class Page extends React.Component<Props, State> {
-  state: State = {
+function Page(props: Props) {
+  const [state, setState] = useState<State>({
     isLoading: false,
     users: null,
-  };
+  });
 
-  private cvService = new CVService();
+  const cvService = new CVService();
 
-  private countBadges = (badges: any) => {
+  const countBadges = (badges: any) => {
     const badgesCount: any = {};
 
     badges.forEach(({ badgeId }: { badgeId: any }) => {
@@ -44,7 +44,7 @@ class Page extends React.Component<Props, State> {
     return badgesCount;
   };
 
-  private columns = [
+  const columns = [
     {
       title: 'Name',
       dataIndex: 'complexData',
@@ -52,7 +52,7 @@ class Page extends React.Component<Props, State> {
       render: (data: any) => {
         const { name, githubId } = data;
         // TODO: ucnomment after testing
-        /*         const { isAdmin } = this.props.session; */
+        /*         const { isAdmin } = props.session; */
 
         return (
           <>
@@ -61,7 +61,7 @@ class Page extends React.Component<Props, State> {
             {/*             {isAdmin && ( */}
             <Popconfirm
               title="Are you sure you want to remove this user?"
-              onConfirm={() => this.removeJobSeeker(githubId)}
+              onConfirm={() => removeJobSeeker(githubId)}
               okText="Yes"
               cancelText="No"
             >
@@ -198,95 +198,99 @@ class Page extends React.Component<Props, State> {
     },
     {
       title: 'Public feedback',
-      dataIndex: 'publicFeedback',
-      key: 'publicFeedback',
+      dataIndex: 'feedback',
+      key: 'feedback',
       render: (badges: any) => {
-        if (!badges) return 'No public feedback yet';
-        const badgesCount = this.countBadges(badges);
+        if (!badges.length) return 'No public feedback yet';
+        const badgesCount = countBadges(badges);
         return Object.keys(badgesCount).map(badgeId => (
           <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
-            <Badge.Ribbon text={badgesCount[badgeId]}>
-              <Card>{(heroesBadges as any)[badgeId].name}</Card>
-            </Badge.Ribbon>
+            <Tooltip title={`${(heroesBadges as any)[badgeId].name} badge`}>
+              <Badge count={badgesCount[badgeId]}>
+                <Avatar
+                  src={`/static/svg/badges/${(heroesBadges as any)[badgeId].url}`}
+                  alt={`${(heroesBadges as any)[badgeId].name} badge`}
+                  size={50}
+                />
+              </Badge>
+            </Tooltip>
           </div>
         ));
       },
     },
   ];
 
-  private fetchData() {
-    return this.cvService.getJobSeekersData();
+  const fetchData = useCallback(async () => {
+    await setState({ ...state, isLoading: true });
+    const data = await cvService.getJobSeekersData();
+    await setState({ ...state, users: data, isLoading: false });
+  }, []);
+
+  const removeJobSeeker = async (githubId: string) => {
+    await setState({ ...state, isLoading: true });
+    await cvService.changeOpportunitiesConsent(githubId, false);
+    await setState({ ...state, isLoading: false });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // TODO: ucnomment after testing
+  const { /* isAdmin, isHirer, */ githubId: userGithubId } = props.session;
+
+  /*     if (!(isAdmin || isHirer)) return (
+    <Result status="403" title="Sorry, but you don't have access to this page" />
+  ); */
+
+  const { isLoading, users } = state;
+
+  let data;
+
+  if (users) {
+    data = users.map((item: any, index: any) => {
+      const {
+        name,
+        fullTime,
+        githubId,
+        startFrom,
+        englishLevel,
+        desiredPosition,
+        courses,
+        feedback,
+        location,
+        expires,
+      } = item;
+      return {
+        key: index,
+        complexData: { name, githubId },
+        expires: Number(expires),
+        courses,
+        feedback,
+        desiredPosition,
+        fullTime: fullTime ? 'Yes' : 'No',
+        location,
+        startFrom,
+        englishLevel: englishLevel.toUpperCase(),
+      };
+    });
+  } else {
+    data = null;
   }
 
-  private async removeJobSeeker(githubId: string) {
-    await this.setState({ isLoading: true });
-    await this.cvService.changeOpportunitiesConsent(githubId, false);
-    await this.setState({ isLoading: false });
-  }
-
-  async componentDidMount() {
-    await this.setState({ isLoading: true });
-    const data = await this.fetchData();
-    await this.setState({ users: data, isLoading: false });
-  }
-
-  render() {
-    // TODO: ucnomment after testing
-    const { /* isAdmin, isHirer, */ githubId: userGithubId } = this.props.session;
-
-    /*     if (!(isAdmin || isHirer)) return (
-      <Result status="403" title="Sorry, but you don't have access to this page" />
-    ); */
-
-    const { isLoading, users } = this.state;
-
-    let data;
-
-    if (users) {
-      data = users.map((item: any, index: any) => {
-        const {
-          name,
-          fullTime,
-          githubId,
-          startFrom,
-          englishLevel,
-          desiredPosition,
-          courses,
-          publicFeedback,
-          location,
-          expires,
-        } = item;
-        return {
-          key: index,
-          complexData: { name, githubId },
-          expires: Number(expires),
-          courses,
-          publicFeedback,
-          desiredPosition,
-          fullTime: fullTime ? 'Yes' : 'No',
-          location,
-          startFrom,
-          englishLevel: englishLevel.toUpperCase(),
-        };
-      });
-    } else {
-      data = null;
-    }
-
-    return (
-      <>
-        <Header username={userGithubId} />
-        <LoadingScreen show={isLoading}>
-          <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
-            <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-              <Table style={{ minWidth: '99vw' }} columns={this.columns} dataSource={data}></Table>
-            </Content>
-          </Layout>
-        </LoadingScreen>
-        <FooterLayout />
-      </>
-    );
-  }
+  return (
+    <>
+      <Header username={userGithubId} />
+      <LoadingScreen show={isLoading}>
+        <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
+          <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
+            <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data}></Table>
+          </Content>
+        </Layout>
+      </LoadingScreen>
+      <FooterLayout />
+    </>
+  );
 }
 
 export default withRouter(withSession(Page));
