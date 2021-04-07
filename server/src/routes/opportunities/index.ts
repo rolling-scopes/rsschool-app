@@ -231,7 +231,7 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
 const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const currentTimestamp = new Date().getTime();
 
-  let CVProfiles = await getRepository(CV)
+  let cvProfiles = await getRepository(CV)
     .createQueryBuilder('cv')
     .select(
       'cv.name, cv.ownerId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires',
@@ -241,9 +241,9 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     .andWhere('cv.expires >= :currentTimestamp', { currentTimestamp })
     .getRawMany();
 
-  if (CVProfiles.length) {
-    CVProfiles = await Promise.all(
-      CVProfiles.map(async (cv: any) => {
+  if (cvProfiles.length) {
+    cvProfiles = await Promise.all(
+      cvProfiles.map(async (cv: any) => {
         const { ownerId } = cv;
 
         const feedback = await getPublicFeedbackFull(ownerId);
@@ -259,7 +259,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     );
   }
 
-  setResponse(ctx, OK, CVProfiles);
+  setResponse(ctx, OK, cvProfiles);
 };
 
 const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -349,9 +349,9 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const now = new Date();
   now.setDate(now.getDate() + EXPIRATION_DAYS_PROLONGATION);
   const timestamp = now.getTime();
-  const result = await cvRepository.save({ ...cv, cvExpires: timestamp });
+  const result = await cvRepository.save({ ...cv, expires: timestamp });
 
-  setResponse(ctx, OK, result.cvExpires);
+  setResponse(ctx, OK, Number(result.expires));
 };
 
 export function opportunitiesRoute(logger: ILogger) {

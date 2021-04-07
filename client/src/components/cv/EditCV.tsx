@@ -278,9 +278,10 @@ function EditCV(props: Props) {
       isLoading: true,
     });
     const newExpirationDate = await cvService.extendCV();
+
     await setState({
       ...state,
-      expires: Number(newExpirationDate),
+      expires: newExpirationDate,
       isLoading: false,
     });
   };
