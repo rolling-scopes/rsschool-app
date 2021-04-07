@@ -45,10 +45,6 @@ function EditCV(props: Props) {
   const userFormRef: RefObject<typeof UserDataForm> = React.createRef();
   const contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
 
-  const nullifyConditional = (value: string | null) => {
-    return value === '' ? null : value;
-  };
-
   const showConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
@@ -167,21 +163,21 @@ function EditCV(props: Props) {
     } = data;
 
     const cvData: SaveCVData = {
-      selfIntroLink: nullifyConditional(selfIntroLink),
+      selfIntroLink,
       militaryService,
       avatarLink,
       desiredPosition,
       englishLevel,
-      name: nullifyConditional(name),
-      notes: nullifyConditional(notes),
-      phone: nullifyConditional(phone),
-      email: nullifyConditional(email),
-      skype: nullifyConditional(skype),
-      telegram: nullifyConditional(telegram),
-      linkedin: nullifyConditional(linkedin),
-      location: nullifyConditional(location),
-      github: nullifyConditional(github),
-      website: nullifyConditional(website),
+      name,
+      notes,
+      phone,
+      email,
+      skype,
+      telegram,
+      linkedin,
+      location,
+      github,
+      website,
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
     };
