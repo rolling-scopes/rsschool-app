@@ -152,32 +152,9 @@ function Page(props: CoursePageProps) {
 
 export default withCourseData(withSession(Page, 'student'));
 
-function renderDeadlineInfo(isSubmitDisabled: boolean) {
-  return (
-    isSubmitDisabled && (
-      <div style={{ marginBottom: 16 }}>
-        <Typography.Text mark type="warning">
-          The deadline has passed already
-        </Typography.Text>
-      </div>
-    )
-  );
-}
-
-function renderTaskSolutionStatus(submittedSolution: TaskSolution | null) {
-  return submittedSolution ? (
-    <Alert
-      message={
-        <>
-          Submitted{' '}
-          <a className="crosscheck-submitted-link" target="_blank" href={submittedSolution.url}>
-            {submittedSolution.url}
-          </a>{' '}
-          on {formatDate(submittedSolution.updatedDate)}.
-        </>
-      }
-      type="success"
-      showIcon
-    />
-  ) : null;
+function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
+  return review?.reduce((acc, r) => {
+    const max = criteria.find(c => c.criteriaId === r.criteriaId)?.max ?? 0;
+    return acc + Math.round(max * r.percentage);
+  }, 0);
 }
