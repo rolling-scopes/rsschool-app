@@ -26,6 +26,7 @@ function Page(props: Props & { courseAlias?: string }) {
   const [submitted, setSubmitted] = useState(false);
   const [location, setLocation] = useState(null as Location | null);
   const [courses, setCourses] = useState([] as Course[]);
+  const [checkedList, setCheckedListCourse] = useState([] as number[]);
   const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
   const update = useUpdate();
 
@@ -38,10 +39,15 @@ function Page(props: Props & { courseAlias?: string }) {
       : courses
           .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
           .sort((a, b) => a.startDate.localeCompare(b.startDate));
+    const checkedListCourse = props.courseAlias
+      ? courses.filter((course: Course) => course.alias === props.courseAlias).map(({ id }: Course) => id)
+      : [];
 
-    setLoading(false);
     setInitialData(profile);
     setCourses(activeCourses);
+
+    setCheckedListCourse(checkedListCourse);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -155,7 +161,7 @@ function Page(props: Props & { courseAlias?: string }) {
             style={{ margin: 16 }}
             layout="vertical"
             form={form}
-            initialValues={getInitialValues(initialData)}
+            initialValues={getInitialValues(initialData, checkedList)}
             onChange={update}
             onFinish={handleSubmit}
             onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
@@ -188,6 +194,7 @@ function Page(props: Props & { courseAlias?: string }) {
               <Col {...defaultColumnSizes}>
                 <Form.Item name="preferedCourses" label="Preferred Courses">
                   <Checkbox.Group
+                    value={checkedList}
                     options={courses.map(c => ({
                       label: (
                         <>
@@ -401,7 +408,7 @@ const SuccessComponent = () => {
   return <Result status="info" title={titleCmp} />;
 };
 
-function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>) {
+function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, checkedList: number[]) {
   const location =
     countryName &&
     cityName &&
@@ -412,7 +419,7 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   return {
     ...initialData,
     location,
-    preferedCourses: [],
+    preferedCourses: checkedList,
     englishMentoring: false,
     technicalMentoring: [],
   };
