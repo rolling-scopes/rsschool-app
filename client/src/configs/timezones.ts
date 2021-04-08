@@ -1,4 +1,5 @@
 export const TIMEZONES = [
+  'UTC',
   'Europe/London',
   'Europe/Warsaw',
   'Europe/Kiev',
