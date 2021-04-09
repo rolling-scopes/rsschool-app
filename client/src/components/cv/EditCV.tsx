@@ -221,7 +221,7 @@ function EditCV(props: Props) {
     fetchData();
   }, []);
 
-  const fillFromProfile = useCallback(async () => {
+  const fillFromProfile = async () => {
     const id = props.ownerId;
 
     const profile = await userService.getProfileInfo(id);
@@ -262,13 +262,13 @@ function EditCV(props: Props) {
       userData: newUserData,
       contactsList: newContacts,
     });
-  }, []);
+  };
 
   const resetFields = async () => {
     await fetchData();
   };
 
-  const extendCV = useCallback(async () => {
+  const extendCV = async () => {
     await setState({
       ...state,
       isLoading: true,
@@ -280,7 +280,7 @@ function EditCV(props: Props) {
       expires: newExpirationDate,
       isLoading: false,
     });
-  }, []);
+  };
 
   const { isLoading, contactsList, userData, expires } = state;
 
