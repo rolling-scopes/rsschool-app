@@ -268,7 +268,7 @@ function EditCV(props: Props) {
     await fetchData();
   };
 
-  const extendCV = useCallback(async () => {
+  const extendCV = async () => {
     await setState({
       ...state,
       isLoading: true,
@@ -280,7 +280,7 @@ function EditCV(props: Props) {
       expires: newExpirationDate,
       isLoading: false,
     });
-  }, []);
+  };
 
   const { isLoading, contactsList, userData, expires } = state;
 
