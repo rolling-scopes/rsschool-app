@@ -1,5 +1,5 @@
 import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
-import { CheckboxChangeEvent } from "antd/lib/checkbox";
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
@@ -91,7 +91,7 @@ function Page(props: CoursePageProps) {
     setButtonDisabled(true);
   };
 
-  const cancellationChange = (e: CheckboxChangeEvent) => setButtonDisabled(!e.target.checked)
+  const cancellationChange = (e: CheckboxChangeEvent) => setButtonDisabled(!e.target.checked);
 
   const handleTaskChange = async (value: number) => {
     setFeedback(null);
@@ -169,14 +169,14 @@ function Page(props: CoursePageProps) {
             )}
             {submitAllowed && newCrossCheck && <ScoreInput courseTask={task} />}
             {submitAllowed && (
-              <Row style={{marginTop: 16}}>
+              <Row style={{ marginTop: 16 }}>
                 <Col span={12}>
                   <Button type="primary" htmlType="submit">
                     Submit
                   </Button>
                 </Col>
                 {submittedSolution && (
-                  <Col span={12} style={{display: 'flex', justifyContent: 'flex-end'}}>
+                  <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Button danger type="ghost" onClick={showModal}>
                       Cancel Submit
                     </Button>
@@ -185,7 +185,7 @@ function Page(props: CoursePageProps) {
                       visible={isModalVisible}
                       onOk={handleCancellation}
                       onCancel={cancelModal}
-                      okButtonProps={{ disabled:  buttonDisabled  }}
+                      okButtonProps={{ disabled: buttonDisabled }}
                     >
                       <Checkbox checked={!buttonDisabled} onChange={cancellationChange}>
                         Being of sound mind and body, do hereby declare that I want to cancel my submission
