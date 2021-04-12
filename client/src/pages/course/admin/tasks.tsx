@@ -13,7 +13,6 @@ import { formatTimezoneToUTC } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
 import { Task, TaskService } from 'services/task';
 import { UserService } from 'services/user';
-import { TIMEZONES } from 'configs/timezones';
 import { times } from 'lodash';
 
 const Option = Select.Option;
@@ -211,12 +210,8 @@ function Page(props: CoursePageProps) {
           <UserSearch defaultValues={modalData?.taskOwner ? [modalData.taskOwner] : []} searchFn={loadUsers} />
         </Form.Item>
         <Form.Item name="timeZone" label="TimeZone">
-          <Select placeholder="Please select a timezone">
-            {TIMEZONES.map(tz => (
-              <Option key={tz} value={tz}>
-                {tz}
-              </Option>
-            ))}
+          <Select defaultValue="UTC" placeholder="Please select a timezone">
+            <Option value="UTC">UTC</Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -337,7 +332,7 @@ function createRecord(values: any, courseId: number) {
 }
 
 function getInitialValues(modalData: Partial<CourseTaskDetails>) {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const timeZone = 'UTC';
   return {
     ...modalData,
     timeZone,
