@@ -28,7 +28,7 @@ import { jwtRoute } from './jwt';
 import { userRoute } from './user';
 import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
-import { opportunitiesRoute } from './opportunities';
+import { filesRoute } from './file';
 
 import { ILogger } from '../logger';
 import { userRolesMiddleware, courseMiddleware } from './middlewares';
@@ -75,7 +75,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, userRoute(logger));
   applyRouter(router, consentRoute(logger));
   applyRouter(router, repositoryRoute(logger));
-  applyRouter(router, opportunitiesRoute(logger));
+  applyRouter(router, filesRoute(logger));
 
   return { publicRouter: router };
 };
