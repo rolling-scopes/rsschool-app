@@ -7,19 +7,19 @@ import NoConsentViewCV from './NoConsentViewCV';
 const { Text } = Typography;
 
 type CVInfoProps = {
-  ownerId?: string | string[];
+  ownerGithubId?: string | string[];
   isOwner: boolean;
   errorOccured: boolean;
   opportunitiesConsent: boolean | null;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
-  withdrawConsent: (ownerId: string) => void;
-  giveConsent: (ownerId: string) => void;
+  withdrawConsent: (ownerGithubId: string) => void;
+  giveConsent: (ownerGithubId: string) => void;
 };
 
 function CVInfo(props: CVInfoProps) {
   const {
-    ownerId,
+    ownerGithubId,
     isOwner,
     errorOccured,
     opportunitiesConsent,
@@ -33,7 +33,7 @@ function CVInfo(props: CVInfoProps) {
     return <Result status={404} title="User not found" />;
   }
 
-  if (ownerId === undefined || ownerId instanceof Array) {
+  if (ownerGithubId === undefined || ownerGithubId instanceof Array) {
     return <Result status="warning" title="This page doesn't exist" />;
   }
 
@@ -51,18 +51,18 @@ function CVInfo(props: CVInfoProps) {
             unCheckedChildren="Edit view"
           />
           {editMode ? (
-            <EditCV ownerId={ownerId} withdrawConsent={() => withdrawConsent(ownerId as string)} />
+            <EditCV ownerGithubId={ownerGithubId} withdrawConsent={() => withdrawConsent(ownerGithubId as string)} />
           ) : (
-            <ViewCV ownerId={ownerId} />
+            <ViewCV ownerGithubId={ownerGithubId} />
           )}
         </>
       );
     } else {
-      return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerId as string)} />;
+      return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
     }
   } else {
     if (opportunitiesConsent) {
-      return <ViewCV ownerId={ownerId} />;
+      return <ViewCV ownerGithubId={ownerGithubId} />;
     } else {
       return <NoConsentViewCV isOwner={false} />;
     }

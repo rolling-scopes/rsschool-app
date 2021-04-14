@@ -8,7 +8,7 @@ export class CV {
   id: number;
 
   @Column({ type: 'text', unique: true })
-  ownerId: string;
+  githubId: string;
 
   @Column({ nullable: true, type: 'text' })
   name: string;
@@ -59,7 +59,7 @@ export class CV {
   location: string;
 
   @Column({ nullable: true, type: 'text' })
-  github: string;
+  githubUsername: string;
 
   @Column({ nullable: true, type: 'text' })
   website: string;
