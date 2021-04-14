@@ -27,7 +27,7 @@ type State = {
 };
 
 type Props = {
-  ownerId: string;
+  ownerGithubId: string;
   withdrawConsent: () => void;
 };
 
@@ -87,7 +87,7 @@ function EditCV(props: Props) {
       isLoading: true,
     });
 
-    const cvData: GetCVData = await cvService.getCVData(props.ownerId);
+    const cvData: GetCVData = await cvService.getCVData(props.ownerGithubId);
 
     const {
       notes,
@@ -98,7 +98,7 @@ function EditCV(props: Props) {
       desiredPosition,
       englishLevel,
       email,
-      github,
+      githubUsername,
       linkedin,
       location,
       phone,
@@ -124,7 +124,7 @@ function EditCV(props: Props) {
 
     const contactsList = {
       email,
-      github,
+      github: githubUsername,
       linkedin,
       location,
       phone,
@@ -176,7 +176,7 @@ function EditCV(props: Props) {
       telegram,
       linkedin,
       location,
-      github,
+      githubUsername: github,
       website,
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
@@ -222,7 +222,7 @@ function EditCV(props: Props) {
   }, []);
 
   const fillFromProfile = async () => {
-    const id = props.ownerId;
+    const id = props.ownerGithubId;
 
     const profile = await userService.getProfileInfo(id);
 

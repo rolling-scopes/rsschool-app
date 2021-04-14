@@ -20,7 +20,7 @@ import {
 } from '../../models';
 import { getFullName } from '../../rules';
 
-const getPublicFeedbackFull = async (ownerId: string) => {
+const getPublicFeedbackFull = async (githubId: string) => {
   return (
     await getRepository(Feedback)
       .createQueryBuilder('feedback')
@@ -32,7 +32,7 @@ const getPublicFeedbackFull = async (ownerId: string) => {
       .addSelect('"fromUser"."githubId" AS "fromUserGithubId"')
       .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
       .leftJoin(User, 'fromUser', '"fromUser"."id" = "feedback"."fromUserId"')
-      .where('"user"."githubId" = :ownerId', { ownerId })
+      .where('"user"."githubId" = :githubId', { githubId })
       .orderBy('"feedback"."updatedDate"', 'DESC')
       .getRawMany()
   ).map(
@@ -49,14 +49,14 @@ const getPublicFeedbackFull = async (ownerId: string) => {
   );
 };
 
-const getPublicFeedbackShortened = async (ownerId: string) => {
+const getPublicFeedbackShortened = async (githubId: string) => {
   return (
     await getRepository(Feedback)
       .createQueryBuilder('feedback')
       .select('"feedback"."updatedDate" AS "feedbackDate"')
       .addSelect('"feedback"."comment" AS "comment"')
       .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
-      .where('"user"."githubId" = :ownerId', { ownerId })
+      .where('"user"."githubId" = :githubId', { githubId })
       .orderBy('"feedback"."updatedDate"', 'DESC')
       .getRawMany()
   ).map(({ feedbackDate, comment, heroesUri }: any) => ({
@@ -66,7 +66,7 @@ const getPublicFeedbackShortened = async (ownerId: string) => {
   }));
 };
 
-const getStudentsStats = async (ownerId: string) => {
+const getStudentsStats = async (githubId: string) => {
   const query = await getRepository(Student)
     .createQueryBuilder('student')
     .select('"course"."id" AS "courseId"')
@@ -110,7 +110,7 @@ const getStudentsStats = async (ownerId: string) => {
     );
 
   query
-    .where('"user"."githubId" = :ownerId', { ownerId })
+    .where('"user"."githubId" = :githubId', { githubId })
     .andWhere('courseTask.disabled = :disabled', { disabled: false })
     .groupBy('"course"."id", "student"."id", "userMentor"."id", "certificate"."publicId"')
     .orderBy('"course"."endDate"', 'DESC');
@@ -234,9 +234,9 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   let cvProfiles = await getRepository(CV)
     .createQueryBuilder('cv')
     .select(
-      'cv.name, cv.ownerId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires',
+      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires',
     )
-    .leftJoin(User, 'user', 'cv.ownerId = user.githubId')
+    .leftJoin(User, 'user', 'cv.githubId = user.githubId')
     .where('user.opportunitiesConsent = true')
     .andWhere('cv.expires >= :currentTimestamp', { currentTimestamp })
     .getRawMany();
@@ -244,11 +244,11 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   if (cvProfiles.length) {
     cvProfiles = await Promise.all(
       cvProfiles.map(async (cv: any) => {
-        const { ownerId } = cv;
+        const { githubId } = cv;
 
-        const feedback = await getPublicFeedbackFull(ownerId);
+        const feedback = await getPublicFeedbackFull(githubId);
 
-        const courses = await getStudentsStats(ownerId);
+        const courses = await getStudentsStats(githubId);
 
         return {
           ...cv,
@@ -263,10 +263,10 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: ownerId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.state!.user as IUserSession;
 
   const cvRepository = getRepository(CV);
-  const cv = await cvRepository.findOne({ where: { ownerId } });
+  const cv = await cvRepository.findOne({ where: { githubId } });
 
   if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
@@ -284,11 +284,11 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: ownerId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.state!.user as IUserSession;
 
   const cvRepository = getRepository(CV);
 
-  const cv = await cvRepository.findOne({ where: { ownerId } });
+  const cv = await cvRepository.findOne({ where: { githubId } });
 
   if (cv != undefined) {
     setResponse(ctx, CONFLICT);
@@ -298,7 +298,7 @@ export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const data = ctx.request.body;
 
   const newCV = await cvRepository.create({
-    ownerId,
+    githubId,
     ...data,
   });
 
@@ -308,21 +308,21 @@ export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: ownerId } = ctx.query;
+  const { githubId } = ctx.query;
 
   const cvRepository = getRepository(CV);
 
-  const cv = await cvRepository.findOne({ where: { ownerId } });
+  const cv = await cvRepository.findOne({ where: { githubId } });
 
   if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  const feedback = await getPublicFeedbackShortened(ownerId);
-  const courses = await getStudentsStats(ownerId);
+  const feedback = await getPublicFeedbackShortened(githubId);
+  const courses = await getStudentsStats(githubId);
 
-  const { id, ownerId: omittedOwnerId, ...cvData } = cv;
+  const { id, githubId: omittedGithubId, ...cvData } = cv;
 
   const res = {
     ...cvData,
@@ -334,10 +334,10 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: ownerId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.state!.user as IUserSession;
 
   const cvRepository = getRepository(CV);
-  const cv = await cvRepository.findOne({ where: { ownerId } });
+  const cv = await cvRepository.findOne({ where: { githubId } });
 
   if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
