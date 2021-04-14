@@ -90,9 +90,9 @@ function CVPage(props: Props) {
   const { editMode, opportunitiesConsent, isLoading, errorOccured } = state;
 
   const userGithubId = props.session.githubId;
-  const ownerId = props.router.query.githubId;
+  const ownerGithubId = props.router.query.githubId;
 
-  const isOwner = userGithubId === ownerId;
+  const isOwner = userGithubId === ownerGithubId;
 
   return (
     <>
@@ -101,7 +101,7 @@ function CVPage(props: Props) {
         <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
             <CVInfo
-              ownerId={ownerId}
+              ownerGithubId={ownerGithubId}
               isOwner={isOwner}
               errorOccured={errorOccured}
               opportunitiesConsent={opportunitiesConsent}

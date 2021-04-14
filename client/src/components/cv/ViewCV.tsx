@@ -9,7 +9,7 @@ import { CVService } from '../../services/cv';
 const { Content } = Layout;
 
 type Props = {
-  ownerId: string;
+  ownerGithubId: string;
 };
 
 type State = {
@@ -60,14 +60,14 @@ function ViewCV(props: Props) {
   });
 
   const fetchData = useCallback(async () => {
-    const { ownerId } = props;
+    const { ownerGithubId } = props;
 
     await setState({
       ...state,
       isLoading: true,
     });
 
-    const cvData: GetCVData = await cvService.getCVData(ownerId);
+    const cvData: GetCVData = await cvService.getCVData(ownerGithubId);
 
     const {
       notes,
@@ -79,7 +79,7 @@ function ViewCV(props: Props) {
       desiredPosition,
       englishLevel,
       email,
-      github,
+      githubUsername,
       linkedin,
       location,
       phone,
@@ -106,7 +106,7 @@ function ViewCV(props: Props) {
 
     const contactsList = {
       email,
-      github,
+      github: githubUsername,
       linkedin,
       location,
       phone,

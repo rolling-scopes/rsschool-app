@@ -72,31 +72,10 @@ export interface SaveCVData {
   telegram: string | null;
   linkedin: string | null;
   location: string | null;
-  github: string | null;
+  githubUsername: string | null;
   website: string | null;
   startFrom: string | null;
   fullTime: boolean | null;
-}
-
-export interface ServerData {
-  cvSelfIntroLink: string | null;
-  cvMilitaryService: MilitaryService;
-  cvAvatarLink: string | null;
-  cvDesiredPosition: string | null;
-  cvEnglishLevel: EnglishLevel;
-  cvName: string | null;
-  cvNotes: string | null;
-  cvPhone: string | null;
-  cvEmail: string | null;
-  cvSkype: string | null;
-  cvTelegram: string | null;
-  cvLinkedin: string | null;
-  cvLocation: string | null;
-  cvGithub: string | null;
-  cvWebsite: string | null;
-  cvStartFrom: string | null;
-  cvFullTime: boolean | null;
-  cvExpires: number | null;
 }
 
 export interface GetCVData extends SaveCVData {
