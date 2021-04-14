@@ -296,11 +296,8 @@ export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const data = ctx.request.body;
-
   const newCV = await cvRepository.create({
     githubId,
-    ...data,
   });
 
   await cvRepository.save(newCV);
@@ -353,9 +350,18 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, Number(result.expires));
 };
 
+export const checkCVExistance = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId } = ctx.query;
+
+  const user = await getRepository(CV).findOne({ where: { githubId } });
+
+  setResponse(ctx, OK, user !== undefined);
+};
+
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
 
+  router.get('/exists', guard, checkCVExistance(logger));
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, setOpportunitiesConsent(logger));
