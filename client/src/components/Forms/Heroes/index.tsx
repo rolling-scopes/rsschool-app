@@ -1,5 +1,4 @@
-import { Button, Card, Col, Form, Input, Pagination, Row, Select, Tag } from 'antd';
-import { GithubAvatar } from '../../GithubAvatar';
+import { Button, Card, Form, Input, Pagination, Row, Select, Typography, Avatar } from 'antd';
 import css from 'styled-jsx/css';
 import { useCallback, useEffect, useState } from 'react';
 import { Course } from '../../../services/models';
@@ -9,8 +8,11 @@ import { useAsync } from 'react-use';
 import { CoursesService } from '../../../services/courses';
 import { onlyDefined } from '../../../utils/onlyDefined';
 import { HeroesFormData } from './types';
+import heroesBadges from '../../../configs/heroes-badges';
+import Masonry from 'react-masonry-css';
 
-const { Meta } = Card;
+const { Text, Link, Paragraph } = Typography;
+
 const initialPage = 1;
 const initialPageSize = 20;
 
@@ -19,6 +21,9 @@ export const fields = {
   githubId: 'githubId',
   courseId: 'courseId',
 } as const;
+
+const getFullName = (user: { firstName: string | null; lastName: string | null; githubId: string }) =>
+  user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : `${user.githubId}`;
 
 export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void }) => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -85,14 +90,14 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
 
   return (
     <>
-      <Form layout="inline" form={form} onFinish={handleSubmit}>
-        <Form.Item name={fields.name} label="Name">
+      <Form layout="inline" form={form} onFinish={handleSubmit} style={{ marginBottom: 24 }}>
+        <Form.Item name={fields.name} label="Name" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
-        <Form.Item name={fields.githubId} label="GithubId">
+        <Form.Item name={fields.githubId} label="GithubId" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
-        <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300 }}>
+        <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300, marginBottom: 16 }}>
           <Select>
             {courses.map(task => (
               <Select.Option key={task.id} value={task.id}>
@@ -101,50 +106,60 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
             ))}
           </Select>
         </Form.Item>
-        <Button size="middle" type="primary" htmlType="submit">
-          Submit
-        </Button>
-        <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
-          Clear
-        </Button>
+        <div>
+          <Button size="middle" type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button size="middle" type="primary" onClick={onClear} style={{ marginLeft: 20 }}>
+            Clear
+          </Button>
+        </div>
       </Form>
-      <Row gutter={24}>
-        {heroesData.map(e => (
-          <Col xs={24} sm={12} md={8} lg={4}>
-            <Card
-              hoverable
-              style={{ margin: '12px 0' }}
-              key={e.user_id}
-              cover={
-                <div className="flex-column" style={{ marginTop: 20 }}>
-                  <GithubAvatar githubId={e.githubId} size={96} />
+      <Masonry
+        breakpointCols={{
+          default: 4,
+          1100: 3,
+          700: 2,
+          500: 1,
+        }}
+        className={masonryClassName}
+        columnClassName={masonryColumnClassName}
+      >
+        {heroesData.map(feedback => (
+          <div style={{ marginBottom: gapSize, overflow: 'hidden' }} key={`card-${feedback.id}`} className="card">
+            <Card style={{ position: 'relative', background: 'none' }}>
+              <div
+                className="badge-bg"
+                style={{ backgroundImage: `url(/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url})` }}
+              />
+              <div className="badge-note" style={{ marginBottom: 48 }}>
+                <Paragraph style={{ margin: 0 }}>
+                  <Text strong>From:</Text> {getFullName(feedback.from)} (
+                  <Link href={`/profile?githubId=${feedback.from.githubId}`}>@{feedback.from.githubId}</Link>)
+                </Paragraph>
+                <Paragraph style={{ margin: 0 }}>
+                  <Text strong>To:</Text> {getFullName(feedback)} (
+                  <Link href={`/profile?githubId=${feedback.githubId}`}>@{feedback.githubId}</Link>)
+                </Paragraph>
+              </div>
+              <div className="flex-center" style={{ marginBottom: 48 }}>
+                <div className="badge">
+                  <Avatar
+                    src={`/static/svg/badges/${(heroesBadges as any)[feedback.badgeId].url}`}
+                    alt={`${feedback.badgeId} badge`}
+                    size={128}
+                  />
                 </div>
-              }
-            >
-              <div className="flex-column">
-                <Meta
-                  title={<div className="flex-column">{`${e.firstName} ${e.lastName}`}</div>}
-                  description={
-                    <>
-                      <div className="flex-column">{`Gratituded ${e.gratitudeCount} times`}</div>
-                      <div className="flex-column">
-                        <span className="text-wrap">
-                          {`${e.badges.length > 1 ? e.badges.join(', ') : e.badges[0]}`}
-                        </span>
-                      </div>
-                    </>
-                  }
-                />
-                {e.activist && (
-                  <Tag style={{ margin: 10 }} color="gold">
-                    Activist
-                  </Tag>
-                )}
+              </div>
+              <div className="badge-note">
+                <Paragraph style={{ margin: 0 }}>{feedback.comment}</Paragraph>
               </div>
             </Card>
-          </Col>
+          </div>
         ))}
-      </Row>
+      </Masonry>
+      {masonryStyles}
+      {masonryColumnStyles}
       <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
         <Pagination
           current={currentPage}
@@ -157,6 +172,21 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
     </>
   );
 };
+
+const gapSize = 16;
+const { className: masonryClassName, styles: masonryStyles } = css.resolve`
+  div {
+    display: flex;
+    margin-left: -${gapSize}px;
+    width: auto;
+  }
+`;
+const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
+  div {
+    padding-left: ${gapSize}px;
+    background-clip: padding-box;
+  }
+`;
 
 const styles = css`
   .flex-column {
@@ -171,5 +201,40 @@ const styles = css`
     width: 150px;
     overflow: hidden;
     white-space: nowrap;
+  }
+  .flex-center {
+    display: flex;
+    justify-content: center;
+  }
+  .badge-bg {
+    position: absolute;
+    background-position: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
+  .badge-note {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px rgba(24, 144, 255, 0.5) dashed;
+  }
+  .card:hover .badge {
+    transform: scale(6.2);
+    transition: all 1s ease;
+    opacity: 0;
+    z-index: -1;
+  }
+  .card:hover .badge-bg {
+    transition: all 2s ease;
+    opacity: 0.8;
+  }
+  .card:hover .badge-note {
+    transition: all 1s ease;
+    background: rgba(255, 255, 255, 1);
+    border: 2px rgba(24, 144, 255, 1) dashed;
   }
 `;

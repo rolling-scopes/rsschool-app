@@ -322,6 +322,7 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
+          {explanationsSubmissionTasks()}
           <Form.Item
             name="codewars"
             label="Codewars Account"
@@ -395,6 +396,7 @@ function renderJsTaskFields(repoUrl: string) {
       <Typography.Paragraph type="warning">
         IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
       </Typography.Paragraph>
+      {explanationsSubmissionTasks()}
     </Row>
   );
 }
@@ -489,4 +491,13 @@ function getSubmitData(task: CourseTask, values: any) {
   }
 
   return data;
+}
+
+function explanationsSubmissionTasks() {
+  return (
+    <Typography.Paragraph>
+      You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the
+      submission will be closed.
+    </Typography.Paragraph>
+  );
 }
