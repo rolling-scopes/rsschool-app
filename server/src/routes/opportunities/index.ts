@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import { DateTime } from 'luxon';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { NOT_FOUND, OK, CREATED, CONFLICT } from 'http-status-codes';
@@ -346,10 +347,8 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const EXPIRATION_DAYS_PROLONGATION = 14;
 
-  const now = new Date();
-  now.setDate(now.getDate() + EXPIRATION_DAYS_PROLONGATION);
-  const timestamp = now.getTime();
-  const result = await cvRepository.save({ ...cv, expires: timestamp });
+  const expirationTimestamp = DateTime.now().plus({ days: EXPIRATION_DAYS_PROLONGATION }).toMillis();
+  const result = await cvRepository.save({ ...cv, expires: expirationTimestamp });
 
   setResponse(ctx, OK, Number(result.expires));
 };
