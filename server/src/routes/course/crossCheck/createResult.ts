@@ -70,7 +70,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     recipientId: taskChecker.studentId,
   });
 
-  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score);
+  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, inputData.comment);
   await notificationService.sendNotification([githubId], taskResultText);
   setResponse(ctx, OK);
 };
