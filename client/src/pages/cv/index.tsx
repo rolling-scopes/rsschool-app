@@ -45,6 +45,8 @@ function CVPage(props: Props) {
       isLoading: true,
     });
     const newConsent = await cvService.changeOpportunitiesConsent(githubId, true);
+    const cvExists = await cvService.checkCVExistance(githubId);
+    if (!cvExists) await cvService.createEmptyCV();
     await setState({
       ...state,
       opportunitiesConsent: newConsent,
