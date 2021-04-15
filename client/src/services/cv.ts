@@ -39,8 +39,8 @@ export class CVService {
     return response.data.data;
   }
 
-  async createCVData(data: any) {
-    const response = await this.axios.put<{ data: any }>(`${CVService.baseRoute}/cv`, data);
+  async createEmptyCV() {
+    const response = await this.axios.put<{ data: any }>(`${CVService.baseRoute}/cv`);
     return response.data.data;
   }
 
@@ -58,6 +58,13 @@ export class CVService {
 
   async extendCV() {
     const response = await this.axios.post<{ data: number }>(`${CVService.baseRoute}/extend`);
+    return response.data.data;
+  }
+
+  async checkCVExistance(githubId: string) {
+    const response = await this.axios.get<{ data: boolean }>(`${CVService.baseRoute}/exists`, {
+      params: { githubId },
+    });
     return response.data.data;
   }
 }
