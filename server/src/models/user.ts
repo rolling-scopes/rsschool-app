@@ -92,9 +92,6 @@ export class User {
   opportunitiesConsent: boolean;
 
   @Column({ nullable: true, type: 'text' })
-  selfIntroLink?: string | null;
-
-  @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
 
   @Column({ nullable: true, type: 'text' })
