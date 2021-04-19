@@ -19,9 +19,13 @@ export async function renderMentorConfirmationText(preselectedCourseIds: number[
   return `Your participation as mentor in RSS course has been approved.\nCourse(s): ${names}.\nTo confirm the assignment for the course, click on the link(s):\n${confirmLinks}\nCome into mentor's chat(s):\n${mentorChatLinks}`;
 }
 
-export async function renderTaskResultText(courseTask: CourseTask, score: number) {
+export async function renderTaskResultText(courseTask: CourseTask, score: number, comment: string) {
   const { maxScore, scoreWeight, checker } = courseTask;
-  return `Your task has been reviewed by ${checker}.\nResult: ${score}/${maxScore}\nThe weight of this task = ${scoreWeight}.\nGood luck in further training!`;
+  return `Your task has been reviewed by ${checker}
+  Result: ${score}/${maxScore}
+  The weight of this task = ${scoreWeight}
+  Comment: ${comment}
+  Good luck in further training!`;
 }
 
 export type Notification = {

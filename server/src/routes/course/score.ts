@@ -116,7 +116,7 @@ export const postScore = (logger: ILogger) => async (ctx: Router.RouterContext) 
 
   const result = taskResultsService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
-  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score);
+  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
   await notificationService.sendNotification([githubId], taskResultText);
 };
 

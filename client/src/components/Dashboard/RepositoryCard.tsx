@@ -51,7 +51,7 @@ export function RepositoryCard(props: Props) {
                 </div>
               )}
               <Button style={{ marginBottom: 7 }} type="primary" onClick={handleSubmit}>
-                Send invite
+                {url ? 'Fix repo' : 'Create repo'}
               </Button>
             </Col>
           </Row>
