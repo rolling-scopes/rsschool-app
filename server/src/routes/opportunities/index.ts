@@ -344,7 +344,7 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const EXPIRATION_DAYS_PROLONGATION = 14;
 
-  const expirationTimestamp = DateTime.now().plus({ days: EXPIRATION_DAYS_PROLONGATION }).toMillis();
+  const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
   const result = await cvRepository.save({ ...cv, expires: expirationTimestamp });
 
   setResponse(ctx, OK, Number(result.expires));
