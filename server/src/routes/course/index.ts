@@ -24,7 +24,7 @@ import {
   postMentor,
 } from './mentor';
 import { getMentors, createMentors, getMentorsDetails, searchMentors } from './mentors';
-import { getScore, getScoreAsCsv, postScore, postMultipleScores, getScoreByStudent } from './score';
+import * as score from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates, postStudentCertificate } from './certificates';
 import {
@@ -100,7 +100,8 @@ export function courseRoute(logger: ILogger) {
 }
 
 function addScoreApi(router: Router<any, any>, logger: ILogger) {
-  router.post('/scores/:courseTaskId', taskOwnerGuard, postMultipleScores(logger));
+  router.post('/scores/total', adminGuard, score.recalculateScore(logger));
+  router.post('/scores/:courseTaskId', taskOwnerGuard, score.createMultipleScores(logger));
 }
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
@@ -241,7 +242,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
-  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, postScore(logger));
+  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post(
     '/student/:githubId/task/:courseTaskId/verification',
     courseGuard,
@@ -253,7 +254,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/repository', guard, ...validators, createRepository(logger));
   router.post('/student/:githubId/status', ...mentorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
-  router.get('/student/:githubId/score', courseGuard, getScoreByStudent(logger));
+  router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
   router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
@@ -262,8 +263,8 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/students/status', courseManagerGuard, updateStatuses(logger));
   router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/details', courseSupervisorGuard, getStudentsWithDetails(logger));
-  router.get('/students/score', courseGuard, getScore(logger));
-  router.get('/students/score/csv', courseSupervisorGuard, getScoreAsCsv(logger));
+  router.get('/students/score', courseGuard, score.getScore(logger));
+  router.get('/students/score/csv', courseSupervisorGuard, score.getScoreAsCsv(logger));
 
   router.get('/students/search/:searchText', guard, searchStudent(logger));
 }

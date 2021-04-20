@@ -45,7 +45,7 @@ export async function getAvailableStudents(courseId: number) {
         name: `${user.firstName} ${user.lastName}`.trim(),
         cityName: user.cityName,
         isGoodCandidate: isGoodCandidate(stageInterviews),
-        rating: getLastRating(stageInterviews),
+        rating: getStageInterviewRating(stageInterviews),
       };
     });
   return result;
@@ -70,7 +70,7 @@ export function getInterviewRatings({ skills, programmingTask }: StageInterviewF
 const isGoodCandidate = (stageInterviews: StageInterview[]) =>
   stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
 
-const getLastRating = (stageInterviews: StageInterview[]) => {
+export const getStageInterviewRating = (stageInterviews: StageInterview[]) => {
   const [lastInterview] = stageInterviews
     .filter((interview: StageInterview) => interview.isCompleted)
     .map(({ stageInterviewFeedbacks }: StageInterview) =>
