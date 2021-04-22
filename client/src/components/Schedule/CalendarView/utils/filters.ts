@@ -10,7 +10,13 @@ export function getListData(
 ) {
   return filterByDate(calendarCellDate, data, timeZone).map((el: CourseEvent) => {
     const tagColor = storedTagColors[el.event.type as keyof typeof storedTagColors];
-    return { color: tagColor || DEFAULT_COLOR, name: el.event.name, key: el.id };
+    return {
+      color: tagColor || DEFAULT_COLOR,
+      name: el.event.name,
+      key: el.id,
+      time: moment(el.dateTime).tz(timeZone).format('HH:mm'),
+      type: el.event.type,
+    };
   });
 }
 

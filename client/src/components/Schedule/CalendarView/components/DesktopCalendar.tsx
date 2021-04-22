@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Badge, Typography } from 'antd';
+import { Calendar, Badge, Typography, Tooltip } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
 import { Scrollbars } from 'react-custom-scrollbars';
 import ModalWindow from './ModalWindow';
@@ -12,9 +12,10 @@ type Props = {
   data: CourseEvent[];
   timeZone: string;
   storedTagColors?: object;
+  alias: string;
 };
 
-const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) => {
+const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
   const [modalWindowData, setModalWindowData] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
 
@@ -35,21 +36,23 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =
         <ul style={{ padding: '5px' }}>
           {getListData((date as unknown) as Moment, data, timeZone, storedTagColors).map(coloredEvent => {
             return (
-              <li
-                style={{
-                  border: `1px solid ${coloredEvent.color}`,
-                  borderRadius: '5px',
-                  backgroundColor: `${coloredEvent.color}10`,
-                  listStyleType: 'none',
-                  overflowWrap: 'anywhere',
-                  marginBottom: '5px',
-                  padding: '0px 2px 2px 2px',
-                }}
-                key={coloredEvent.key}
-                onClick={() => showModalWindow(coloredEvent.key)}
-              >
-                <Badge color={coloredEvent.color} text={coloredEvent.name} />
-              </li>
+              <Tooltip title={coloredEvent.time}>
+                <li
+                  style={{
+                    border: `1px solid ${coloredEvent.color}`,
+                    borderRadius: '5px',
+                    backgroundColor: `${coloredEvent.color}10`,
+                    listStyleType: 'none',
+                    overflowWrap: 'anywhere',
+                    marginBottom: '5px',
+                    padding: '0px 2px 2px',
+                  }}
+                  key={coloredEvent.key}
+                  onClick={() => showModalWindow(coloredEvent.key)}
+                >
+                  <Badge color={coloredEvent.color} text={coloredEvent.name} />
+                </li>
+              </Tooltip>
             );
           })}
         </ul>
@@ -68,10 +71,11 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =
       {modalWindowData && (
         <ModalWindow
           isOpen={showWindow}
-          dataEvent={modalWindowData}
+          data={modalWindowData}
           handleOnClose={handleOnClose}
           timeZone={timeZone}
           storedTagColors={storedTagColors}
+          alias={alias}
         />
       )}
       <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />

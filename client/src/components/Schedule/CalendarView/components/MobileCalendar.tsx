@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Calendar, Badge, List } from 'antd';
+import { Calendar, Badge, List, Typography, Row, Col, Button } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
 import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
-import { dateWithTimeZoneRenderer } from 'components/Table';
+import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import css from 'styled-jsx/css';
+
+const { Text } = Typography;
 
 const numberEventsStyle = css`
   section {
@@ -25,10 +27,13 @@ type Props = {
   data: CourseEvent[];
   timeZone: string;
   storedTagColors?: object;
+  alias: string;
 };
 
-const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) => {
-  const [modalWindowData, setModalWindowData] = useState<{ color: string; name: string; key: number }[] | undefined>();
+const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
+  const [modalWindowData, setModalWindowData] = useState<
+    { color: string; name: string; key: number; time: string; type: string }[] | undefined
+  >();
   const [currentItem, setCurrentItem] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
   const [calendarMode, setCalendarMode] = useState<string>('month');
@@ -94,11 +99,20 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =>
           if (!data.length) return null;
           const dateTime = data.filter(event => event.id === item.key)[0].dateTime;
           return (
-            <List.Item actions={[<a onClick={() => showModalWindow(item.key)}>more</a>]}>
-              <List.Item.Meta
-                title={<Badge style={{ paddingLeft: 8, paddingRight: 10 }} color={item.color} text={item.name} />}
-              />
-              <div>Time: {dateWithTimeZoneRenderer(timeZone, 'h:mm')(dateTime)}</div>
+            <List.Item
+              actions={[
+                <Button onClick={() => showModalWindow(item.key)} type="link">
+                  more
+                </Button>,
+              ]}
+            >
+              <Col>
+                <Text style={{ marginRight: '8px' }} strong>
+                  {dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}
+                </Text>
+                {renderTagWithStyle(item.type, storedTagColors)}
+                <Text strong>{item.name}</Text>
+              </Col>
             </List.Item>
           );
         }}
@@ -106,10 +120,11 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors }) =>
       {currentItem && (
         <ModalWindow
           isOpen={showWindow}
-          dataEvent={currentItem}
+          data={currentItem}
           handleOnClose={handleOnClose}
           timeZone={timeZone}
           storedTagColors={storedTagColors}
+          alias={alias}
         />
       )}
     </>

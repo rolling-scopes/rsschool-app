@@ -1,39 +1,56 @@
 import React from 'react';
-import { Modal, Space } from 'antd';
+import Link from 'next/link';
+import { Modal, Space, Typography } from 'antd';
 import moment from 'moment';
 import { GithubUserLink } from 'components';
 import { renderTagWithStyle, urlRenderer } from 'components/Table/renderers';
 import { CourseEvent } from 'services/course';
 
+const { Title, Text } = Typography;
+
 type Props = {
   isOpen: boolean;
-  dataEvent: CourseEvent;
+  data: CourseEvent;
   handleOnClose: Function;
   timeZone: string;
   storedTagColors?: object;
+  alias: string;
 };
 
-const ModalWindow: React.FC<Props> = ({ isOpen, dataEvent, handleOnClose, timeZone, storedTagColors }) => {
+const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, storedTagColors, alias }) => {
+  const typeHeader = data.isTask ? 'Task:' : 'Event:';
+  const title = (
+    <Link
+      href={`/course/entityDetails?course=${alias}&entityType=${data.isTask ? 'task' : 'event'}&entityId=${data.id}`}
+    >
+      <a>
+        <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
+          {`${typeHeader} ${data.event.name}`}
+        </Text>
+      </a>
+    </Link>
+  );
+
   return (
-    <>
+    <div>
       <Modal
-        title={dataEvent.event.name}
+        title={title}
         centered
         footer={null}
         onOk={() => handleOnClose()}
         onCancel={() => handleOnClose()}
         visible={isOpen}
       >
-        <div>Date: {moment(dataEvent.dateTime, 'YYYY-MM-DD HH:mmZ').tz(timeZone).format('LLL')}</div>
-        {dataEvent.event.description && <div>{dataEvent.event.description}</div>}
-        {dataEvent.organizer && dataEvent.organizer.githubId && (
+        <Title level={5}>{moment(data.dateTime).tz(timeZone).format('MMM Do YYYY HH:mm')}</Title>
+        {data.event.description && <div>{data.event.description}</div>}
+        {data.organizer && data.organizer.githubId && (
           <div>
-            Organizer: <GithubUserLink value={dataEvent.organizer.githubId} />
+            Organizer: <GithubUserLink value={data.organizer.githubId} />
           </div>
         )}
         <Space>
-          {dataEvent.event.descriptionUrl && <div>Url: {urlRenderer(dataEvent.event.descriptionUrl)}</div>}
-          <div>{renderTagWithStyle(dataEvent.event.type, storedTagColors)}</div>
+          {data.event.descriptionUrl && <div>Url: {urlRenderer(data.event.descriptionUrl)}</div>}
+          <div>{renderTagWithStyle(data.event.type, storedTagColors)}</div>
         </Space>
         <style jsx>{`
           div {
@@ -41,7 +58,7 @@ const ModalWindow: React.FC<Props> = ({ isOpen, dataEvent, handleOnClose, timeZo
           }
         `}</style>
       </Modal>
-    </>
+    </div>
   );
 };
 
