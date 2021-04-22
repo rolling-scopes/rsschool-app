@@ -174,8 +174,11 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postMultipleEntities(data: Partial<CourseTask | CourseEvent>) {
-    const result = await this.axios.post<{ data: Partial<CourseTask | CourseEvent> }>(`/schedule/csv`, data);
+  async postMultipleEntities(data: Partial<CourseTask | CourseEvent>, timeZone: string) {
+    const result = await this.axios.post<{ data: Partial<CourseTask | CourseEvent> }>(
+      `/schedule/csv/${timeZone.replace('/', '_')}`,
+      data,
+    );
     return result.data.data;
   }
 

@@ -75,13 +75,13 @@ export function SchedulePage(props: CoursePageProps) {
   };
 
   const exportToCsv = () => {
-    window.location.href = `/api/course/${props.course.id}/schedule/csv`;
+    window.location.href = `/api/course/${props.course.id}/schedule/csv/${timeZone.replace('/', '_')}`;
   };
 
   const handleSubmit = async (values: any) => {
     try {
       const results = await parseFiles(values.files);
-      const submitResults = await uploadResults(courseService, results);
+      const submitResults = await uploadResults(courseService, results, timeZone);
 
       if (submitResults.toString().includes('successfully')) {
         message.success(submitResults);
@@ -313,8 +313,9 @@ const uploadResults = async (
     githubId: string;
     place: string;
   }[],
+  timeZone: string,
 ) => {
-  const resultsNewTasks = await courseService.postMultipleEntities(data as Partial<CourseEvent & CourseTask>);
+  const resultsNewTasks = await courseService.postMultipleEntities(data as Partial<CourseEvent & CourseTask>, timeZone);
 
   return resultsNewTasks;
 };

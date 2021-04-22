@@ -416,6 +416,18 @@ export async function getCourseTasks(courseId: number) {
   return courseTasks;
 }
 
+export async function getCourseTasksWithOwner(courseId: number) {
+  const courseTasks = await getRepository(CourseTask)
+    .createQueryBuilder('courseTask')
+    .innerJoinAndSelect('courseTask.task', 'task')
+    .leftJoin('courseTask.taskOwner', 'taskOwner')
+    .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
+    .where('courseTask.courseId = :courseId', { courseId })
+    .andWhere('courseTask.disabled = :disabled', { disabled: false })
+    .getMany();
+  return courseTasks;
+}
+
 export async function updateScoreStudents(data: { id: number; totalScore: number }[]) {
   const result = await getRepository(Student).save(data);
   return result;

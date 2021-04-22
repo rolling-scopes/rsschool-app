@@ -298,8 +298,8 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addScheduleApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/schedule/csv', courseSupervisorGuard, getScheduleAsCsv(logger));
-  router.post('/schedule/csv', courseSupervisorGuard, setScheduleFromCsv(logger));
+  router.get('/schedule/csv/:timeZone', courseSupervisorGuard, getScheduleAsCsv(logger));
+  router.post('/schedule/csv/:timeZone', courseSupervisorGuard, setScheduleFromCsv(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {
