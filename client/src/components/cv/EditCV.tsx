@@ -349,7 +349,7 @@ function EditCV(props: Props) {
                 Extend CV
               </Button>
               <Button
-                style={{ ...buttonStyle, width: '21%' }}
+                style={{ ...buttonStyle, padding: '4px', width: '21%' }}
                 type="primary"
                 danger
                 htmlType="button"
