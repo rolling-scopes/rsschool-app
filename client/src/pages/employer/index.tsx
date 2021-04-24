@@ -283,7 +283,7 @@ function Page(props: Props) {
       <Header username={userGithubId} />
       <LoadingScreen show={isLoading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
-          <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
+          <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
             <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data}></Table>
           </Content>
         </Layout>

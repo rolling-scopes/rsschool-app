@@ -101,7 +101,7 @@ function CVPage(props: Props) {
       <LoadingScreen show={isLoading}>
         <Header username={userGithubId} />
         <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
-          <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
+          <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
             <CVInfo
               ownerGithubId={ownerGithubId}
               isOwner={isOwner}
