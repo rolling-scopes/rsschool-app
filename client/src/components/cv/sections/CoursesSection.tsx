@@ -7,9 +7,8 @@ import { CourseData } from '../../../../../common/models/cv';
 const { Text } = Typography;
 const { Item } = List;
 
-function StudentStatus(props: { isExpelled: boolean; certificateId: string | null; isCourseCompleted: boolean }) {
-  const { isExpelled, certificateId, isCourseCompleted } = props;
-  if (isExpelled) return <Text>Expelled</Text>;
+function StudentStatus(props: { certificateId: string | null; isCourseCompleted: boolean }) {
+  const { certificateId, isCourseCompleted } = props;
   const certificateLink = certificateId ? `https://app.rs.school/certificate/${certificateId}` : '';
 
   if (certificateId)
@@ -29,16 +28,14 @@ type Props = {
 
 function CoursesSection(props: Props) {
   const { coursesData } = props;
-  const coursesToShow = coursesData.filter(course => !course.isExpelled);
 
   const sectionContent = (
     <List
-      dataSource={coursesToShow}
+      dataSource={coursesData}
       renderItem={(record: CourseData) => {
         const {
           courseFullName,
           locationName,
-          isExpelled,
           certificateId,
           isCourseCompleted,
           totalScore,
@@ -55,11 +52,7 @@ function CoursesSection(props: Props) {
                 <Text strong>{title}</Text>
                 <br />
                 <Text>Course status: </Text>
-                <StudentStatus
-                  isExpelled={isExpelled}
-                  certificateId={certificateId}
-                  isCourseCompleted={isCourseCompleted}
-                />
+                <StudentStatus certificateId={certificateId} isCourseCompleted={isCourseCompleted} />
               </Col>
               <Col span={3}>
                 <Text>

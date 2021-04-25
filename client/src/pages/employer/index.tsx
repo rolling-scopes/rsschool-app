@@ -136,7 +136,6 @@ function Page(props: Props) {
                 courseFullName,
                 courseName,
                 locationName,
-                isExpelled,
                 certificateId,
                 isCourseCompleted,
                 totalScore,
@@ -153,9 +152,8 @@ function Page(props: Props) {
                 </>
               );
               let courseStatus;
-              if (isExpelled) {
-                courseStatus = <Text>Expelled</Text>;
-              } else if (certificateId) {
+
+              if (certificateId) {
                 courseStatus = (
                   <>
                     <Text>Completed with </Text>
