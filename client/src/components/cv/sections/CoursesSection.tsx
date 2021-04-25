@@ -23,15 +23,15 @@ function StudentStatus(props: { certificateId: string | null; isCourseCompleted:
 }
 
 type Props = {
-  coursesData: CVStudentStats[];
+  courses: CVStudentStats[];
 };
 
 function CoursesSection(props: Props) {
-  const { coursesData } = props;
+  const { courses } = props;
 
   const sectionContent = (
     <List
-      dataSource={coursesData}
+      dataSource={courses}
       renderItem={(record: CVStudentStats) => {
         const {
           courseFullName,

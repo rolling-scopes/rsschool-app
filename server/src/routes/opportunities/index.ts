@@ -9,57 +9,32 @@ import { getRepository } from 'typeorm';
 import { CV, IUserSession, User, Feedback, Student, Certificate, Mentor, Course } from '../../models';
 import { getFullName } from '../../rules';
 
-const getPublicFeedbackFull = async (githubId: string) => {
-  return (
-    await getRepository(Feedback)
-      .createQueryBuilder('feedback')
-      .select('"feedback"."updatedDate" AS "feedbackDate"')
-      .addSelect('"feedback"."badgeId" AS "badgeId"')
-      .addSelect('"feedback"."comment" AS "comment"')
-      .addSelect('"feedback"."heroesUrl" AS "heroesUri"')
-      .addSelect('"fromUser"."firstName" AS "fromUserFirstName", "fromUser"."lastName" AS "fromUserLastName"')
-      .addSelect('"fromUser"."githubId" AS "fromUserGithubId"')
-      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
-      .leftJoin(User, 'fromUser', '"fromUser"."id" = "feedback"."fromUserId"')
-      .where('"user"."githubId" = :githubId', { githubId })
-      .orderBy('"feedback"."updatedDate"', 'DESC')
-      .getRawMany()
-  ).map(
-    ({ feedbackDate, badgeId, comment, heroesUri, fromUserFirstName, fromUserLastName, fromUserGithubId }: any) => ({
-      feedbackDate,
-      badgeId,
-      comment,
-      heroesUri,
-      fromUser: {
-        name: getFullName(fromUserFirstName, fromUserLastName, fromUserGithubId),
-        githubId: fromUserGithubId,
-      },
-    }),
-  );
+const getFeedbackCV = async (githubId: string) => {
+  return await getRepository(Feedback)
+    .createQueryBuilder('feedback')
+    .select('"feedback"."updatedDate" AS "feedbackDate"')
+    .addSelect('"feedback"."comment" AS "comment"')
+    .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .orderBy('"feedback"."updatedDate"', 'DESC')
+    .getRawMany();
 };
 
-const getPublicFeedbackShortened = async (githubId: string) => {
-  return (
-    await getRepository(Feedback)
-      .createQueryBuilder('feedback')
-      .select('"feedback"."updatedDate" AS "feedbackDate"')
-      .addSelect('"feedback"."comment" AS "comment"')
-      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
-      .where('"user"."githubId" = :githubId', { githubId })
-      .orderBy('"feedback"."updatedDate"', 'DESC')
-      .getRawMany()
-  ).map(({ feedbackDate, comment, heroesUri }: any) => ({
-    feedbackDate,
-    comment,
-    heroesUri,
-  }));
+const getFeedbackJobSeeker = async (githubId: string) => {
+  return await getRepository(Feedback)
+    .createQueryBuilder('feedback')
+    .select('"feedback"."badgeId" AS "badgeId"')
+    .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .orderBy('"feedback"."updatedDate"', 'DESC')
+    .getRawMany();
 };
 
 const getStudentsStats = async (githubId: string) => {
   const query = await getRepository(Student)
     .createQueryBuilder('student')
-    .addSelect('"course"."id" AS "courseId"') // ?
-    .addSelect('"course"."name" AS "courseName"') // ?
+    .addSelect('"course"."id" AS "courseId"')
+    .addSelect('"course"."name" AS "courseName"')
     .addSelect('"course"."locationName" AS "locationName"')
     .addSelect('"course"."fullName" AS "courseFullName"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
@@ -191,7 +166,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
       cvProfiles.map(async (cv: any) => {
         const { githubId } = cv;
 
-        const feedback = await getPublicFeedbackFull(githubId);
+        const feedback = await getFeedbackJobSeeker(githubId);
 
         const courses = await getStudentsStats(githubId);
 
@@ -261,7 +236,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const feedback = await getPublicFeedbackShortened(githubId);
+  const feedback = await getFeedbackCV(githubId);
   const courses = await getStudentsStats(githubId);
 
   const { id, githubId: omittedGithubId, ...cvData } = cv;

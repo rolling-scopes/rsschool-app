@@ -1,4 +1,3 @@
-import { PublicFeedback } from './profile';
 import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
 
 export interface CourseData {
@@ -81,7 +80,7 @@ export interface SaveCVData {
 export interface GetCVData extends SaveCVData {
   expires: number | null;
   courses: CVStudentStats[];
-  publicFeedback: PublicFeedback[];
+  feedback: CVFeedback[];
 }
 
 export interface CVStudentStats {
@@ -111,6 +110,15 @@ export interface JobSeekerData {
   startFrom: string | null;
   englishLevel: EnglishLevel;
   courses: JobSeekerStudentStats[];
-  feedback: PublicFeedback[];
+  feedback: JobSeekerFeedback[];
   expires: number;
+}
+
+export interface CVFeedback {
+  comment: string;
+  feedbackDate: string;
+}
+
+export interface JobSeekerFeedback {
+  badgeId: string;
 }

@@ -2,8 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
-import { Contacts, UserData, GetCVData, CVStudentStats } from '../../../../common/models/cv';
-import { PublicFeedback } from '../../../../common/models/profile';
+import { Contacts, UserData, GetCVData, CVStudentStats, CVFeedback } from '../../../../common/models/cv';
 import { CVService } from '../../services/cv';
 
 const { Content } = Layout;
@@ -16,8 +15,8 @@ type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  coursesData: CVStudentStats[] | null;
-  publicFeedback: PublicFeedback[] | null;
+  courses: CVStudentStats[] | null;
+  feedback: CVFeedback[] | null;
   expires: number | null;
 };
 
@@ -28,8 +27,8 @@ function ViewCV(props: Props) {
     isLoading: false,
     contactsList: null,
     userData: null,
-    coursesData: null,
-    publicFeedback: null,
+    courses: null,
+    feedback: null,
     expires: null,
   });
 
@@ -61,8 +60,8 @@ function ViewCV(props: Props) {
       telegram,
       website,
       fullTime,
-      publicFeedback,
-      courses: coursesData,
+      feedback,
+      courses,
       expires: expiresRaw,
     } = cvData;
 
@@ -92,8 +91,8 @@ function ViewCV(props: Props) {
     await setState({
       contactsList,
       userData,
-      coursesData,
-      publicFeedback,
+      courses,
+      feedback,
       expires: Number(expiresRaw),
       isLoading: false,
     });
@@ -103,7 +102,7 @@ function ViewCV(props: Props) {
     fetchData();
   }, []);
 
-  const { isLoading, userData, contactsList, coursesData, publicFeedback, expires } = state;
+  const { isLoading, userData, contactsList, courses, feedback, expires } = state;
 
   return (
     <LoadingScreen show={isLoading}>
@@ -116,8 +115,8 @@ function ViewCV(props: Props) {
                 {userData.notes && <AboutSection notes={userData.notes} />}
               </>
             )}
-            {coursesData?.length ? <CoursesSection coursesData={coursesData} /> : ''}
-            {publicFeedback && <FeedbackSection feedback={publicFeedback} />}
+            {courses?.length ? <CoursesSection courses={courses} /> : ''}
+            {feedback && <FeedbackSection feedback={feedback} />}
           </Space>
         </Content>
       </Layout>

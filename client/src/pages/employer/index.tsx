@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
-import { JobSeekerData, JobSeekerStudentStats } from '../../../../common/models/cv';
+import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
 import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -33,10 +33,12 @@ function Page(props: Props) {
 
   const cvService = new CVService();
 
-  const countBadges = (badges: any) => {
-    const badgesCount: any = {};
+  const countBadges = (badges: JobSeekerFeedback[]) => {
+    const badgesCount: {
+      [index: string]: number;
+    } = {};
 
-    badges.forEach(({ badgeId }: { badgeId: any }) => {
+    badges.forEach(({ badgeId }) => {
       if (badgeId) {
         badgesCount[badgeId] ? (badgesCount[badgeId] += 1) : (badgesCount[badgeId] = 1);
       }
@@ -203,22 +205,21 @@ function Page(props: Props) {
       title: 'Public feedback',
       dataIndex: 'feedback',
       key: 'feedback',
-      render: (badges: any) => {
+      render: (badges: JobSeekerFeedback[]) => {
         if (!badges.length) return 'No public feedback yet';
         const badgesCount = countBadges(badges);
-        return Object.keys(badgesCount).map(badgeId => (
-          <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
-            <Tooltip title={`${(heroesBadges as any)[badgeId].name} badge`}>
-              <Badge count={badgesCount[badgeId]}>
-                <Avatar
-                  src={`/static/svg/badges/${(heroesBadges as any)[badgeId].url}`}
-                  alt={`${(heroesBadges as any)[badgeId].name} badge`}
-                  size={50}
-                />
-              </Badge>
-            </Tooltip>
-          </div>
-        ));
+        return Object.keys(badgesCount).map(badgeId => {
+          const heroesBadge = (heroesBadges as any)[badgeId];
+          return (
+            <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
+              <Tooltip title={`${heroesBadge.name} badge`}>
+                <Badge count={badgesCount[badgeId]}>
+                  <Avatar src={`/static/svg/badges/${heroesBadge.url}`} alt={`${heroesBadge.name} badge`} size={50} />
+                </Badge>
+              </Tooltip>
+            </div>
+          );
+        });
       },
     },
   ];
