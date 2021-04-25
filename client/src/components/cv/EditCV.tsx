@@ -343,7 +343,6 @@ function EditCV(props: Props) {
                   style={{ ...buttonStyle, width: '33%' }}
                   type="default"
                   htmlType="button"
-                  onClick={() => fillFromProfile()}
                   icon={<CopyOutlined />}
                 >
                   Get data from profile
