@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Button, Modal, List, Result, Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
+import { ExclamationCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+
+const { Paragraph, Title } = Typography;
 const { Item } = List;
 
 type Props = {
@@ -35,15 +37,21 @@ function NoConsentViewCV(props: Props) {
   const confirmationModalContent = (
     <List
       header={
-        <Tooltip placement="topLeft" title={confirmationModalInfo.ru.header}>
+        <Title level={4} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {confirmationModalInfo.en.header}
-        </Tooltip>
+          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.header}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </Title>
       }
       dataSource={confirmationModalInfo.en.availableDataList}
-      renderItem={(item, idx) => (
-        <Tooltip placement="topLeft" title={confirmationModalInfo.ru.availableDataList[idx]}>
-          <Item>{item}</Item>
-        </Tooltip>
+      renderItem={(text, idx) => (
+        <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Paragraph>{text}</Paragraph>
+          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.availableDataList[idx]}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </Item>
       )}
     />
   );
