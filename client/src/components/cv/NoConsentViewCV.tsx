@@ -20,7 +20,7 @@ function NoConsentViewCV(props: Props) {
         'Personal information (name, desired position, English level, military service, avatar, link to self-presentation, short self-description, etc.);',
         'Contact details (phone, email, skype, telegram, linkedIn, location to work, github, website link);',
         'Information about passed school courses (courses info, mentor, course status, score, position);',
-        'Public feedback information (grattitudes)',
+        'Public feedback information (gratitudes)',
       ],
     },
     ru: {
@@ -29,7 +29,7 @@ function NoConsentViewCV(props: Props) {
         'Личная информация (имя, желаемая позиция, уровень английского, отношение к военное службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.);',
         'Контактные данные (телефон, электронная почта, скайп, телеграм, linkedIn, локация, в которой хотите работать, гитхаб, ссылка на вебсайт);',
         'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре);',
-        'Информация о публичной обратной связи (grattitudes)',
+        'Информация о публичной обратной связи (gratitudes)',
       ],
     },
   };
