@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Form, Input, Select, DatePicker, Checkbox, Card } from 'antd';
 import { UserData } from '../../../../../common/models/cv';
 import { ENGLISH_LEVELS } from '../../../services/reference-data/english';
+import { Rule } from 'rc-field-form/lib/interface';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -42,6 +43,88 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
     maxWidth: '314px',
   };
 
+  const validationMessages = {
+    required: "Field can't be empty",
+    min: (length: number): string => `Mininal text length is ${length}`,
+    max: (length: number): string => `Maximal text length is ${length}`,
+    whitespace: "Field can't contain only whitespaces",
+  };
+
+  const validationRules: {
+    [key: string]: Rule[];
+  } = {
+    name: [
+      {
+        required: true,
+        message: validationMessages.required,
+      },
+      {
+        max: 100,
+        message: validationMessages.max(100),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    desiredPosition: [
+      {
+        max: 300,
+        message: validationMessages.max(300),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    selfIntroLink: [
+      {
+        max: 300,
+        message: validationMessages.max(300),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    avatarLink: [
+      {
+        max: 300,
+        message: validationMessages.max(300),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    englishLevel: [
+      {
+        required: true,
+        message: validationMessages.required,
+      },
+    ],
+    militaryService: [],
+    startFrom: [],
+    notes: [
+      {
+        required: true,
+        message: validationMessages.required,
+      },
+      {
+        max: 100,
+        message: validationMessages.max(100),
+      },
+      {
+        min: 30,
+        message: validationMessages.min(30),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+  };
+
   return (
     <Card title="General info">
       <Form form={form} ref={ref} name="userData">
@@ -51,7 +134,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="name"
-          rules={[{ required: true, max: 100, whitespace: false }]}
+          rules={[...validationRules['name']]}
         >
           <Input placeholder="Enter your name" />
         </Item>
@@ -61,7 +144,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="desiredPosition"
-          rules={[{ required: true, max: 100, whitespace: false }]}
+          rules={[...validationRules['desiredPosition']]}
         >
           <Input placeholder="Enter desired position" />
         </Item>
@@ -71,7 +154,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="selfIntroLink"
-          rules={[{ max: 300, whitespace: false }]}
+          rules={[...validationRules['selfIntroLink']]}
         >
           <Input placeholder="Link to video with self introduction" />
         </Item>
@@ -81,7 +164,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="avatarLink"
-          rules={[{ max: 300, whitespace: false }]}
+          rules={[...validationRules['avatarLink']]}
         >
           <Input placeholder="Link to image" />
         </Item>
@@ -91,7 +174,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="englishLevel"
-          rules={[{ required: true }]}
+          rules={[...validationRules['englishLevel']]}
         >
           <Select placeholder="Not selected yet">
             {ENGLISH_LEVELS.map((level, idx) => (
@@ -107,6 +190,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="militaryService"
+          rules={[...validationRules['militaryService']]}
         >
           <Select placeholder="Not selected yet">
             <Option value="served">Served</Option>
@@ -120,6 +204,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="startFrom"
+          rules={[...validationRules['startFrom']]}
         >
           <DatePicker
             placeholder="Not selected yet"
@@ -136,7 +221,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="notes"
-          rules={[{ required: true, max: 1000, min: 30, whitespace: false }]}
+          rules={[...validationRules['notes']]}
         >
           <TextArea rows={4} placeholder="Short info about you (30-1000 symbols)" />
         </Item>
