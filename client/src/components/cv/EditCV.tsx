@@ -333,15 +333,22 @@ function EditCV(props: Props) {
               Save
             </Button>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                style={{ ...buttonStyle, width: '33%' }}
-                type="default"
-                htmlType="button"
-                onClick={() => fillFromProfile()}
-                icon={<CopyOutlined />}
+              <Popconfirm
+                title="Are you sure? Unsaved fields data will be reaplced with profile data."
+                onConfirm={fillFromProfile}
+                okText="Yes"
+                cancelText="No"
               >
-                Get data from profile
-              </Button>
+                <Button
+                  style={{ ...buttonStyle, width: '33%' }}
+                  type="default"
+                  htmlType="button"
+                  onClick={() => fillFromProfile()}
+                  icon={<CopyOutlined />}
+                >
+                  Get data from profile
+                </Button>
+              </Popconfirm>
               <Popconfirm title="Are you sure to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
                 <Button
                   style={{ ...buttonStyle, width: '21%' }}
