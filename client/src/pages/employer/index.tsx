@@ -271,7 +271,7 @@ function Page(props: Props) {
         fullTime: fullTime ? 'Yes' : 'No',
         location,
         startFrom,
-        englishLevel: englishLevel.toUpperCase(),
+        englishLevel: englishLevel?.toUpperCase(),
       };
     });
   } else {
