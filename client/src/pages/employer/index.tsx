@@ -59,7 +59,7 @@ function Page(props: Props) {
 
         return (
           <>
-            <a href={`/cv?githubId=${githubId}`}>{name}</a>
+            <a href={`/cv?githubId=${githubId}`}>{name ?? 'Unknown'}</a>
             {/* TODO: ucnomment after testing */}
             {/*             {isAdmin && ( */}
             <Popconfirm
@@ -267,15 +267,15 @@ function Page(props: Props) {
       } = item;
       return {
         key: index,
-        complexData: { name, githubId },
+        complexData: { name: name ?? 'Not set', githubId },
         expires: Number(expires),
         courses,
         feedback,
-        desiredPosition,
+        desiredPosition: desiredPosition ?? 'Not set',
         fullTime: fullTime ? 'Yes' : 'No',
-        location,
-        startFrom,
-        englishLevel: englishLevel?.toUpperCase(),
+        location: location ?? 'Not set',
+        startFrom: startFrom ?? 'Not set',
+        englishLevel: englishLevel ? englishLevel?.toUpperCase() : 'Not set',
       };
     });
   } else {
