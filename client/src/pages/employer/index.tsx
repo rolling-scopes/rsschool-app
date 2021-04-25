@@ -267,15 +267,15 @@ function Page(props: Props) {
       } = item;
       return {
         key: index,
-        complexData: { name: name ?? 'Not set', githubId },
+        complexData: { name: name?.length ? name : '<Not set>', githubId },
         expires: Number(expires),
         courses,
         feedback,
-        desiredPosition: desiredPosition ?? 'Not set',
+        desiredPosition: desiredPosition?.length ? desiredPosition : '<Not set>',
         fullTime: fullTime ? 'Yes' : 'No',
-        location: location ?? 'Not set',
-        startFrom: startFrom ?? 'Not set',
-        englishLevel: englishLevel ? englishLevel?.toUpperCase() : 'Not set',
+        location: location?.length ? location : '<Not set>',
+        startFrom: startFrom?.length ? startFrom : '<Not set>',
+        englishLevel: englishLevel?.length ? englishLevel?.toUpperCase() : '<Not set>',
       };
     });
   } else {
