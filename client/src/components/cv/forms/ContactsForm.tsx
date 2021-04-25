@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Form, Input, Card } from 'antd';
 import { Contacts } from '../../../../../common/models/cv';
+import { Rule } from 'rc-field-form/lib/interface';
 
 const { Item } = Form;
 
@@ -17,78 +18,182 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
     form.setFieldsValue(contactsList);
   }, [contactsList]);
 
+  const itemStyle = {
+    maxWidth: '310px',
+  };
+
+  const validationMessages = {
+    required: "Field can't be empty",
+    min: (length: number): string => `Mininal text length is ${length}`,
+    max: (length: number): string => `Maximal text length is ${length}`,
+    whitespace: "Field can't contain only whitespaces",
+  };
+
+  const validationRules: {
+    [key: string]: Rule[];
+  } = {
+    phone: [
+      {
+        max: 15,
+        message: validationMessages.max(15),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    email: [
+      {
+        max: 50,
+        message: validationMessages.max(50),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    skype: [
+      {
+        max: 30,
+        message: validationMessages.max(30),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    telegram: [
+      {
+        max: 30,
+        message: validationMessages.max(30),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    linkedin: [
+      {
+        max: 30,
+        message: validationMessages.max(30),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    location: [
+      {
+        max: 100,
+        message: validationMessages.max(100),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    github: [
+      {
+        max: 30,
+        message: validationMessages.max(30),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+    website: [
+      {
+        max: 100,
+        message: validationMessages.max(100),
+      },
+      {
+        whitespace: true,
+        message: validationMessages.whitespace,
+      },
+    ],
+  };
+
   return (
     <Card title="Contacts">
       <Form form={form} ref={ref} name="contacts">
         <Item
+          style={itemStyle}
           label="Phone"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="phone"
-          rules={[{ max: 15, whitespace: false }]}
+          rules={[...validationRules['phone']]}
         >
           <Input placeholder="Phone number" />
         </Item>
         <Item
+          style={itemStyle}
           label="Email"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="email"
-          rules={[{ max: 50, whitespace: false }]}
+          rules={[...validationRules['email']]}
         >
           <Input placeholder="Email" />
         </Item>
         <Item
-          label="Skype"
+          style={itemStyle}
+          label="Skype id"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="skype"
-          rules={[{ max: 30, whitespace: false }]}
+          rules={[...validationRules['skype']]}
         >
-          <Input placeholder="Skype" />
+          <Input placeholder="Skype id" />
         </Item>
         <Item
-          label="Telegram"
+          style={itemStyle}
+          label="Telegram public name"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="telegram"
-          rules={[{ max: 30, whitespace: false }]}
+          rules={[...validationRules['telegram']]}
         >
-          <Input placeholder="Telegram username" />
+          <Input placeholder="Telegram public name" />
         </Item>
         <Item
-          label="LinkedIn"
+          style={itemStyle}
+          label="LinkedIn username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="linkedin"
-          rules={[{ max: 30, whitespace: false }]}
+          rules={[...validationRules['linkedin']]}
         >
           <Input placeholder="LinkedIn username" />
         </Item>
         <Item
+          style={itemStyle}
           label="Location"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="location"
-          rules={[{ max: 100, whitespace: false }]}
+          rules={[...validationRules['location']]}
         >
           <Input placeholder="The location in which you want to work" />
         </Item>
         <Item
-          label="Github"
+          style={itemStyle}
+          label="Github username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="github"
-          rules={[{ max: 30, whitespace: false }]}
+          rules={[...validationRules['github']]}
         >
           <Input placeholder="Github username" />
         </Item>
         <Item
+          style={itemStyle}
           label="Website"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="website"
-          rules={[{ max: 100, whitespace: false }]}
+          rules={[...validationRules['website']]}
         >
           <Input placeholder="For example, a link to a portfolio or something like that" />
         </Item>

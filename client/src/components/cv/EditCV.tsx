@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
+import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
@@ -15,6 +15,7 @@ import {
   FieldTimeOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
+import { FormInstance } from 'antd/lib/form';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -42,10 +43,10 @@ function EditCV(props: Props) {
     expires: null,
   });
 
-  const userFormRef: RefObject<typeof UserDataForm> = React.createRef();
-  const contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
+  const userFormRef: RefObject<FormInstance> = React.createRef();
+  const contactsFormRef: RefObject<FormInstance> = React.createRef();
 
-  const showConfirmationModal = () => {
+  const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
     const title = (
@@ -185,6 +186,10 @@ function EditCV(props: Props) {
     await cvService.saveCVData(cvData);
   };
 
+  const resetFields = async () => {
+    await fetchData();
+  };
+
   const handleSave = async (data: any) => {
     await submitData(data);
     await fetchData();
@@ -210,9 +215,20 @@ function EditCV(props: Props) {
     }
   };
 
-  const getDataFromRefs = (refs: RefObject<any>[]) => {
+  const getDataFromRefs = (refs: RefObject<FormInstance>[]) => {
+    const formsHaveErrors = refs.some(ref => {
+      const fieldsToCheck = ref.current?.getFieldsError();
+      if (fieldsToCheck?.some(field => field.errors.length > 0)) {
+        return true;
+      }
+    });
+
+    if (formsHaveErrors) return;
+
     const values = refs
-      .map(ref => ref.current!.getFieldsValue())
+      .map(ref => {
+        return ref.current?.getFieldsValue();
+      })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
     handleSave(values);
   };
@@ -262,10 +278,6 @@ function EditCV(props: Props) {
       userData: newUserData,
       contactsList: newContacts,
     });
-  };
-
-  const resetFields = async () => {
-    await fetchData();
   };
 
   const extendCV = async () => {
@@ -321,24 +333,32 @@ function EditCV(props: Props) {
               Save
             </Button>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                style={{ ...buttonStyle, width: '33%' }}
-                type="default"
-                htmlType="button"
-                onClick={() => fillFromProfile()}
-                icon={<CopyOutlined />}
+              <Popconfirm
+                title="Are you sure? Unsaved fields data will be reaplced with profile data."
+                onConfirm={fillFromProfile}
+                okText="Yes"
+                cancelText="No"
               >
-                Get data from profile
-              </Button>
-              <Button
-                style={{ ...buttonStyle, width: '21%' }}
-                type="default"
-                htmlType="button"
-                onClick={resetFields}
-                icon={<ClearOutlined />}
-              >
-                Reset fields
-              </Button>
+                <Button
+                  style={{ ...buttonStyle, width: '33%' }}
+                  type="default"
+                  htmlType="button"
+                  onClick={() => fillFromProfile()}
+                  icon={<CopyOutlined />}
+                >
+                  Get data from profile
+                </Button>
+              </Popconfirm>
+              <Popconfirm title="Are you sure to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
+                <Button
+                  style={{ ...buttonStyle, width: '21%' }}
+                  type="default"
+                  htmlType="button"
+                  icon={<ClearOutlined />}
+                >
+                  Reset fields
+                </Button>
+              </Popconfirm>
               <Button
                 style={{ ...buttonStyle, width: '21%' }}
                 type="default"
@@ -349,11 +369,11 @@ function EditCV(props: Props) {
                 Extend CV
               </Button>
               <Button
-                style={{ ...buttonStyle, width: '21%' }}
+                style={{ ...buttonStyle, padding: '4px', width: '21%' }}
                 type="primary"
                 danger
                 htmlType="button"
-                onClick={showConfirmationModal}
+                onClick={showDeletionConfirmationModal}
                 icon={<DeleteOutlined />}
               >
                 Delete my CV
