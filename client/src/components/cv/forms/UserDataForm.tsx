@@ -38,10 +38,15 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
     form.setFieldsValue(formValues);
   }, [formValues]);
 
+  const itemStyle = {
+    maxWidth: '314px',
+  };
+
   return (
     <Card title="General info">
       <Form form={form} ref={ref} name="userData">
         <Item
+          style={itemStyle}
           label="Name"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -51,6 +56,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Enter your name" />
         </Item>
         <Item
+          style={itemStyle}
           label="Desired position"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -60,6 +66,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Enter desired position" />
         </Item>
         <Item
+          style={itemStyle}
           label="Self introduction video"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -69,6 +76,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Link to video with self introduction" />
         </Item>
         <Item
+          style={itemStyle}
           label="Link to avatar"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -78,6 +86,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Link to image" />
         </Item>
         <Item
+          style={itemStyle}
           label="Select your English level"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -92,20 +101,33 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
             ))}
           </Select>
         </Item>
-        <Item label="Military service" wrapperCol={{ span: 24 }} labelCol={{ span: 24 }} name="militaryService">
+        <Item
+          style={itemStyle}
+          label="Military service"
+          wrapperCol={{ span: 24 }}
+          labelCol={{ span: 24 }}
+          name="militaryService"
+        >
           <Select placeholder="Not selected yet">
             <Option value="served">Served</Option>
             <Option value="liable">Liable</Option>
             <Option value="notLiable">Not liable</Option>
           </Select>
         </Item>
-        <Item label="Ready to start work from" wrapperCol={{ span: 24 }} labelCol={{ span: 24 }} name="startFrom">
+        <Item
+          style={itemStyle}
+          label="Ready to start work from"
+          wrapperCol={{ span: 24 }}
+          labelCol={{ span: 24 }}
+          name="startFrom"
+        >
           <DatePicker placeholder="Not selected yet" picker="date" />
         </Item>
-        <Item label="Ready to work full time" colon={false} name="fullTime" valuePropName="checked">
+        <Item style={itemStyle} label="Ready to work full time" colon={false} name="fullTime" valuePropName="checked">
           <Checkbox />
         </Item>
         <Item
+          style={itemStyle}
           label="About me"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}

@@ -17,10 +17,15 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
     form.setFieldsValue(contactsList);
   }, [contactsList]);
 
+  const itemStyle = {
+    maxWidth: '310px',
+  };
+
   return (
     <Card title="Contacts">
       <Form form={form} ref={ref} name="contacts">
         <Item
+          style={itemStyle}
           label="Phone"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -30,6 +35,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Phone number" />
         </Item>
         <Item
+          style={itemStyle}
           label="Email"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -39,6 +45,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Email" />
         </Item>
         <Item
+          style={itemStyle}
           label="Skype id"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -48,6 +55,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Skype id" />
         </Item>
         <Item
+          style={itemStyle}
           label="Telegram public name"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -57,6 +65,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Telegram public name" />
         </Item>
         <Item
+          style={itemStyle}
           label="LinkedIn username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -66,6 +75,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="LinkedIn username" />
         </Item>
         <Item
+          style={itemStyle}
           label="Location"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -75,6 +85,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="The location in which you want to work" />
         </Item>
         <Item
+          style={itemStyle}
           label="Github username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
@@ -84,6 +95,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Github username" />
         </Item>
         <Item
+          style={itemStyle}
           label="Website"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
