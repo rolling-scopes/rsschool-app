@@ -43,8 +43,13 @@ function CoursesSection(props: Props) {
           mentor: { name: mentorName, githubId: mentorGithubId },
         } = record;
         const title = `${courseFullName}${locationName ? locationName : ''}`;
-        const courseStats = `Score: ${totalScore}
-        Position: ${position}`;
+        const courseStats = (
+          <>
+            <Text style={{ whiteSpace: 'nowrap' }}>Score: {totalScore}</Text>
+            <br />
+            <Text style={{ whiteSpace: 'nowrap' }}>Position: {position}</Text>
+          </>
+        );
         return (
           <Item style={{ fontSize: '16px' }}>
             <Row justify="space-between" style={{ width: '100%' }}>
@@ -55,16 +60,17 @@ function CoursesSection(props: Props) {
                 <StudentStatus certificateId={certificateId} isCourseCompleted={isCourseCompleted} />
               </Col>
               <Col span={3}>
-                <Text>
-                  Mentor:{' '}
+                <Text>Mentor:</Text>
+                <br />
+                {mentorName ? (
                   <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
                     {mentorName}
                   </a>
-                </Text>
+                ) : (
+                  <Text>No mentor</Text>
+                )}
               </Col>
-              <Col span={3}>
-                <Text>{courseStats}</Text>
-              </Col>
+              <Col span={3}>{courseStats}</Col>
             </Row>
           </Item>
         );

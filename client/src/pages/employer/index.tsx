@@ -167,24 +167,28 @@ function Page(props: Props) {
               }
 
               return (
-                <Item style={{ fontSize: '14px' }}>
-                  <details>
-                    <summary>{courseName}</summary>
-                    <Row justify="space-between" style={{ width: '100%' }}>
-                      <Col span={12}>
+                <Item>
+                  <details style={{ fontSize: '12px' }}>
+                    <summary style={{ fontSize: '14px' }}>{courseName}</summary>
+                    <Row justify="space-between" style={{ width: '410px' }}>
+                      <Col span={10}>
                         <Text strong>{title}</Text>
                         <br />
                         <Text>Course status: </Text>
                         {courseStatus}
                       </Col>
                       <Col span={3}>
-                        <Text>
-                          Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a>
-                        </Text>
+                        <Text style={{ whiteSpace: 'nowrap' }}>Mentor:</Text>
+                        <br />
+                        {mentorName ? (
+                          <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
+                            {mentorName}
+                          </a>
+                        ) : (
+                          <Text>No mentor</Text>
+                        )}
                       </Col>
-                      <Col span={3}>
-                        <Text>{courseStats}</Text>
-                      </Col>
+                      <Col span={5}>{courseStats}</Col>
                     </Row>
                   </details>
                 </Item>
