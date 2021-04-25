@@ -39,25 +39,25 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="Email" />
         </Item>
         <Item
-          label="Skype"
+          label="Skype id"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="skype"
           rules={[{ max: 30, whitespace: false }]}
         >
-          <Input placeholder="Skype" />
+          <Input placeholder="Skype id" />
         </Item>
         <Item
-          label="Telegram"
+          label="Telegram public name"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="telegram"
           rules={[{ max: 30, whitespace: false }]}
         >
-          <Input placeholder="Telegram username" />
+          <Input placeholder="Telegram public name" />
         </Item>
         <Item
-          label="LinkedIn"
+          label="LinkedIn username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="linkedin"
@@ -75,7 +75,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           <Input placeholder="The location in which you want to work" />
         </Item>
         <Item
-          label="Github"
+          label="Github username"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="github"
