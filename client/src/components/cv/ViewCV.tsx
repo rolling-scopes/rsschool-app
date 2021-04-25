@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
-import { Contacts, UserData, CourseData, GetCVData } from '../../../../common/models/cv';
+import { Contacts, UserData, GetCVData, CVStudentStats } from '../../../../common/models/cv';
 import { PublicFeedback } from '../../../../common/models/profile';
 import { CVService } from '../../services/cv';
 
@@ -16,28 +16,12 @@ type State = {
   isLoading: boolean;
   contactsList: Contacts | null;
   userData: UserData | null;
-  coursesData: CourseData[] | null;
+  coursesData: CVStudentStats[] | null;
   publicFeedback: PublicFeedback[] | null;
   expires: number | null;
 };
 
 const cvService = new CVService();
-
-const extractCoursesData = (coursesData: any) => {
-  return coursesData.map((course: any) => {
-    const { certificateId, courseFullName, locationName, position, isCourseCompleted, totalScore, mentor } = course;
-
-    return {
-      certificateId,
-      courseFullName,
-      locationName,
-      position,
-      isCourseCompleted,
-      totalScore,
-      mentor,
-    };
-  });
-};
 
 function ViewCV(props: Props) {
   const [state, setState] = useState<State>({
@@ -78,7 +62,7 @@ function ViewCV(props: Props) {
       website,
       fullTime,
       publicFeedback,
-      courses,
+      courses: coursesData,
       expires: expiresRaw,
     } = cvData;
 
@@ -105,12 +89,10 @@ function ViewCV(props: Props) {
       website,
     };
 
-    const coursesDataExtracted = extractCoursesData(courses);
-
     await setState({
       contactsList,
       userData,
-      coursesData: coursesDataExtracted,
+      coursesData,
       publicFeedback,
       expires: Number(expiresRaw),
       isLoading: false,

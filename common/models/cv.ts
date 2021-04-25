@@ -1,4 +1,4 @@
-import { StudentStats, PublicFeedback } from './profile';
+import { PublicFeedback } from './profile';
 import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
 
 export interface CourseData {
@@ -80,19 +80,37 @@ export interface SaveCVData {
 
 export interface GetCVData extends SaveCVData {
   expires: number | null;
-  courses: StudentStats[];
+  courses: CVStudentStats[];
   publicFeedback: PublicFeedback[];
 }
 
+export interface CVStudentStats {
+  locationName: string;
+  courseFullName: string;
+  certificateId: string | null;
+  isCourseCompleted: boolean;
+  totalScore: number;
+  position: number | null;
+  mentor: {
+    githubId: string;
+    name: string;
+  };
+}
+
+export interface JobSeekerStudentStats extends CVStudentStats {
+  courseName: string;
+}
+
 export interface JobSeekerData {
-  cvname: string | null;
-  desiredposition: string | null;
-  githubid: string;
+  name: string | null;
+  desiredPosition: string | null;
+  githubId: string;
   englishlevel: EnglishLevel;
   fullTime: boolean;
-  cvlocation: string | null;
-  startfrom: string | null;
-  courses: StudentStats[];
-  publicfeedback: PublicFeedback[];
-  cvExpires: number;
+  location: string | null;
+  startFrom: string | null;
+  englishLevel: EnglishLevel;
+  courses: JobSeekerStudentStats[];
+  feedback: PublicFeedback[];
+  expires: number;
 }

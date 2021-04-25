@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
+import { JobSeekerData, JobSeekerStudentStats } from '../../../../common/models/cv';
 import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -21,7 +22,7 @@ type Props = {
 
 type State = {
   isLoading: boolean;
-  users: any;
+  users: JobSeekerData[] | null;
 };
 
 function Page(props: Props) {
@@ -49,7 +50,7 @@ function Page(props: Props) {
       title: 'Name',
       dataIndex: 'complexData',
       key: 'complexData',
-      render: (data: any) => {
+      render: (data: { name: string; githubId: string }) => {
         const { name, githubId } = data;
         // TODO: ucnomment after testing
         /*         const { isAdmin } = props.session; */
@@ -126,12 +127,12 @@ function Page(props: Props) {
       dataIndex: 'courses',
       key: 'courses',
       ...getColumnSearchProps('courses.courseFullName'),
-      render: (courses: any) => {
+      render: (courses: JobSeekerStudentStats[]) => {
         if (!courses) return 'No courses';
         return (
           <List
             dataSource={courses}
-            renderItem={(record: any) => {
+            renderItem={(record: JobSeekerStudentStats) => {
               const {
                 courseFullName,
                 courseName,
@@ -224,7 +225,7 @@ function Page(props: Props) {
 
   const fetchData = useCallback(async () => {
     await setState({ ...state, isLoading: true });
-    const data = await cvService.getJobSeekersData();
+    const data: JobSeekerData[] = await cvService.getJobSeekersData();
     await setState({ ...state, users: data, isLoading: false });
   }, []);
 
@@ -250,7 +251,7 @@ function Page(props: Props) {
   let data;
 
   if (users) {
-    data = users.map((item: any, index: any) => {
+    data = users.map((item: JobSeekerData, index) => {
       const {
         name,
         fullTime,
@@ -286,7 +287,7 @@ function Page(props: Props) {
       <LoadingScreen show={isLoading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
-            <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data}></Table>
+            <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data ?? undefined}></Table>
           </Content>
         </Layout>
       </LoadingScreen>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col, Typography, List } from 'antd';
 import SectionCV from '../SectionCV';
 import { SafetyOutlined } from '@ant-design/icons';
-import { CourseData } from '../../../../../common/models/cv';
+import { CVStudentStats } from '../../../../../common/models/cv';
 
 const { Text } = Typography;
 const { Item } = List;
@@ -23,7 +23,7 @@ function StudentStatus(props: { certificateId: string | null; isCourseCompleted:
 }
 
 type Props = {
-  coursesData: CourseData[];
+  coursesData: CVStudentStats[];
 };
 
 function CoursesSection(props: Props) {
@@ -32,7 +32,7 @@ function CoursesSection(props: Props) {
   const sectionContent = (
     <List
       dataSource={coursesData}
-      renderItem={(record: CourseData) => {
+      renderItem={(record: CVStudentStats) => {
         const {
           courseFullName,
           locationName,

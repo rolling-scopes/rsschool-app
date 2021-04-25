@@ -1,14 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
 import { NextPageContext } from 'next';
-
-/* export interface Stage {
-  id: number;
-  name: string;
-  courseId: number;
-  startDate: string | null;
-  endDate: string | null;
-} */
+import { JobSeekerData, GetCVData, SaveCVData } from '../../../common/models/cv';
 
 export class CVService {
   private axios: AxiosInstance;
@@ -35,7 +28,7 @@ export class CVService {
   }
 
   async getJobSeekersData() {
-    const response = await this.axios.get<{ data: any }>(`${CVService.baseRoute}`);
+    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}`);
     return response.data.data;
   }
 
@@ -45,14 +38,14 @@ export class CVService {
   }
 
   async getCVData(githubId: string) {
-    const response = await this.axios.get<{ data: any }>(`${CVService.baseRoute}/cv`, {
+    const response = await this.axios.get<{ data: GetCVData }>(`${CVService.baseRoute}/cv`, {
       params: { githubId },
     });
     return response.data.data;
   }
 
-  async saveCVData(opportunitiesInfo: any) {
-    const response = await this.axios.post<{ data: any }>(`${CVService.baseRoute}`, opportunitiesInfo);
+  async saveCVData(opportunitiesInfo: SaveCVData) {
+    const response = await this.axios.post<{ data: SaveCVData }>(`${CVService.baseRoute}`, opportunitiesInfo);
     return response.data.data;
   }
 
