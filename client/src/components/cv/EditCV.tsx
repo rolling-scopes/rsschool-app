@@ -15,6 +15,7 @@ import {
   FieldTimeOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
+import { FormInstance } from 'antd/lib/form';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
@@ -42,8 +43,8 @@ function EditCV(props: Props) {
     expires: null,
   });
 
-  const userFormRef: RefObject<typeof UserDataForm> = React.createRef();
-  const contactsFormRef: RefObject<typeof ContactsForm> = React.createRef();
+  const userFormRef: RefObject<FormInstance> = React.createRef();
+  const contactsFormRef: RefObject<FormInstance> = React.createRef();
 
   const showConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -210,9 +211,20 @@ function EditCV(props: Props) {
     }
   };
 
-  const getDataFromRefs = (refs: RefObject<any>[]) => {
+  const getDataFromRefs = (refs: RefObject<FormInstance>[]) => {
+    const formsHaveErrors = refs.some(ref => {
+      const fieldsToCheck = ref.current?.getFieldsError();
+      if (fieldsToCheck?.some(field => field.errors.length > 0)) {
+        return true;
+      }
+    });
+
+    if (formsHaveErrors) return;
+
     const values = refs
-      .map(ref => ref.current!.getFieldsValue())
+      .map(ref => {
+        return ref.current?.getFieldsValue();
+      })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
     handleSave(values);
   };
