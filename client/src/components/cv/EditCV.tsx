@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import moment from 'moment';
-import { Layout, Space, Button, Card, Modal, Typography, Row, Col } from 'antd';
+import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
@@ -46,7 +46,7 @@ function EditCV(props: Props) {
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
 
-  const showConfirmationModal = () => {
+  const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
     const title = (
@@ -186,6 +186,10 @@ function EditCV(props: Props) {
     await cvService.saveCVData(cvData);
   };
 
+  const resetFields = async () => {
+    await fetchData();
+  };
+
   const handleSave = async (data: any) => {
     await submitData(data);
     await fetchData();
@@ -276,10 +280,6 @@ function EditCV(props: Props) {
     });
   };
 
-  const resetFields = async () => {
-    await fetchData();
-  };
-
   const extendCV = async () => {
     await setState({
       ...state,
@@ -342,15 +342,16 @@ function EditCV(props: Props) {
               >
                 Get data from profile
               </Button>
-              <Button
-                style={{ ...buttonStyle, width: '21%' }}
-                type="default"
-                htmlType="button"
-                onClick={resetFields}
-                icon={<ClearOutlined />}
-              >
-                Reset fields
-              </Button>
+              <Popconfirm title="Are you sure to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
+                <Button
+                  style={{ ...buttonStyle, width: '21%' }}
+                  type="default"
+                  htmlType="button"
+                  icon={<ClearOutlined />}
+                >
+                  Reset fields
+                </Button>
+              </Popconfirm>
               <Button
                 style={{ ...buttonStyle, width: '21%' }}
                 type="default"
@@ -365,7 +366,7 @@ function EditCV(props: Props) {
                 type="primary"
                 danger
                 htmlType="button"
-                onClick={showConfirmationModal}
+                onClick={showDeletionConfirmationModal}
                 icon={<DeleteOutlined />}
               >
                 Delete my CV
