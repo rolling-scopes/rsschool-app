@@ -25,21 +25,11 @@ const cvService = new CVService();
 
 const extractCoursesData = (coursesData: any) => {
   return coursesData.map((course: any) => {
-    const {
-      certificateId,
-      courseFullName,
-      isExpelled,
-      locationName,
-      position,
-      isCourseCompleted,
-      totalScore,
-      mentor,
-    } = course;
+    const { certificateId, courseFullName, locationName, position, isCourseCompleted, totalScore, mentor } = course;
 
     return {
       certificateId,
       courseFullName,
-      isExpelled,
       locationName,
       position,
       isCourseCompleted,
