@@ -121,7 +121,11 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
           labelCol={{ span: 24 }}
           name="startFrom"
         >
-          <DatePicker placeholder="Not selected yet" picker="date" />
+          <DatePicker
+            placeholder="Not selected yet"
+            picker="date"
+            disabledDate={currDate => currDate.valueOf() < moment().subtract(1, 'days').valueOf()}
+          />
         </Item>
         <Item style={itemStyle} label="Ready to work full time" colon={false} name="fullTime" valuePropName="checked">
           <Checkbox />
