@@ -77,7 +77,6 @@ function Page(props: Props) {
         user,
         id,
         status,
-        comment,
         attributes: { maxStudentsLimit },
       } = registration;
       const { firstName, lastName, githubId, contactsEpamEmail, locationName: city } = user || {
@@ -91,7 +90,6 @@ function Page(props: Props) {
       return {
         id,
         status,
-        comment,
         githubId,
         maxStudentsLimit,
         user: { name: `${firstName} ${lastName}`, profileUrl: `/profile?githubId=${githubId}` },
@@ -228,7 +226,6 @@ function Page(props: Props) {
                       width: 30,
                       render: (value: boolean) => (value ? 'Y' : 'N'),
                     },
-                    { title: 'Comment', dataIndex: 'comment', key: 'comment', width: 100 },
                   ]}
                 />
               )}

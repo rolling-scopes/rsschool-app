@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
 import { PageLayout, LocationSelect } from 'components';
-import { CommentInput, GdprCheckbox } from 'components/Forms';
+import { GdprCheckbox } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import withSession from 'components/withSession';
 import { useCallback, useState, useEffect } from 'react';
@@ -55,8 +55,8 @@ function Page(props: Props & { courseAlias?: string }) {
         return;
       }
       setLoading(true);
-      const { comment, courseId, location, primaryEmail, firstName, lastName } = values;
-      const registryModel = { type: TYPES.STUDENT, courseId, comment };
+      const { courseId, location, primaryEmail, firstName, lastName } = values;
+      const registryModel = { type: TYPES.STUDENT, courseId };
       const userModel = {
         cityName: location.cityName,
         countryName: location.countryName,
@@ -176,11 +176,6 @@ function Page(props: Props & { courseAlias?: string }) {
               >
                 <LocationSelect onChange={setLocation} location={location} />
               </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={defaultRowGutter}>
-            <Col {...textColumnSizes}>
-              <CommentInput notRequired />
             </Col>
           </Row>
           <Row>

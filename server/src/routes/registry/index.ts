@@ -108,7 +108,7 @@ export function registryRouter(logger?: ILogger) {
 
   router.post('/', async (ctx: Router.RouterContext) => {
     const { githubId, id: userId } = ctx.state!.user as IUserSession;
-    const { courseId, comment, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
+    const { courseId, type, maxStudentsLimit, experienceInYears } = ctx.request.body;
 
     if (!githubId || !courseId || !type) {
       const errorMsg = 'Wrong payload: githubId courseId & type are required';
@@ -136,7 +136,6 @@ export function registryRouter(logger?: ILogger) {
       }
 
       let registryPayload: Partial<Registry> = {
-        comment,
         type,
         user,
         course,
