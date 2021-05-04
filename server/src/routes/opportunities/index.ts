@@ -1,118 +1,59 @@
 import Router from '@koa/router';
 import { DateTime } from 'luxon';
+import { omit } from 'lodash';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { NOT_FOUND, OK, CREATED, CONFLICT } from 'http-status-codes';
 import { guard } from '../guards';
 import { getRepository } from 'typeorm';
-import {
-  CV,
-  IUserSession,
-  User,
-  Feedback,
-  Student,
-  Certificate,
-  Mentor,
-  CourseTask,
-  Task,
-  Course,
-  TaskResult,
-  TaskInterviewResult,
-} from '../../models';
+import { CV, IUserSession, User, Feedback, Student, Certificate, Mentor, Course } from '../../models';
 import { getFullName } from '../../rules';
 
-const getPublicFeedbackFull = async (githubId: string) => {
-  return (
-    await getRepository(Feedback)
-      .createQueryBuilder('feedback')
-      .select('"feedback"."updatedDate" AS "feedbackDate"')
-      .addSelect('"feedback"."badgeId" AS "badgeId"')
-      .addSelect('"feedback"."comment" AS "comment"')
-      .addSelect('"feedback"."heroesUrl" AS "heroesUri"')
-      .addSelect('"fromUser"."firstName" AS "fromUserFirstName", "fromUser"."lastName" AS "fromUserLastName"')
-      .addSelect('"fromUser"."githubId" AS "fromUserGithubId"')
-      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
-      .leftJoin(User, 'fromUser', '"fromUser"."id" = "feedback"."fromUserId"')
-      .where('"user"."githubId" = :githubId', { githubId })
-      .orderBy('"feedback"."updatedDate"', 'DESC')
-      .getRawMany()
-  ).map(
-    ({ feedbackDate, badgeId, comment, heroesUri, fromUserFirstName, fromUserLastName, fromUserGithubId }: any) => ({
-      feedbackDate,
-      badgeId,
-      comment,
-      heroesUri,
-      fromUser: {
-        name: getFullName(fromUserFirstName, fromUserLastName, fromUserGithubId),
-        githubId: fromUserGithubId,
-      },
-    }),
-  );
+const getFeedbackCV = async (githubId: string) => {
+  return await getRepository(Feedback)
+    .createQueryBuilder('feedback')
+    .select('"feedback"."updatedDate" AS "feedbackDate"')
+    .addSelect('"feedback"."comment" AS "comment"')
+    .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .orderBy('"feedback"."updatedDate"', 'DESC')
+    .getRawMany();
 };
 
-const getPublicFeedbackShortened = async (githubId: string) => {
-  return (
-    await getRepository(Feedback)
-      .createQueryBuilder('feedback')
-      .select('"feedback"."updatedDate" AS "feedbackDate"')
-      .addSelect('"feedback"."comment" AS "comment"')
-      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
-      .where('"user"."githubId" = :githubId', { githubId })
-      .orderBy('"feedback"."updatedDate"', 'DESC')
-      .getRawMany()
-  ).map(({ feedbackDate, comment, heroesUri }: any) => ({
-    feedbackDate,
-    comment,
-    heroesUri,
-  }));
+const getFeedbackJobSeeker = async (githubId: string) => {
+  return await getRepository(Feedback)
+    .createQueryBuilder('feedback')
+    .select('"feedback"."badgeId" AS "badgeId"')
+    .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+    .where('"user"."githubId" = :githubId', { githubId })
+    .orderBy('"feedback"."updatedDate"', 'DESC')
+    .getRawMany();
 };
 
 const getStudentsStats = async (githubId: string) => {
   const query = await getRepository(Student)
     .createQueryBuilder('student')
-    .select('"course"."id" AS "courseId"')
+    .addSelect('"course"."id" AS "courseId"')
     .addSelect('"course"."name" AS "courseName"')
     .addSelect('"course"."locationName" AS "locationName"')
     .addSelect('"course"."fullName" AS "courseFullName"')
-    .addSelect('"student"."isExpelled" AS "isExpelled"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
     .addSelect('"student"."totalScore" AS "totalScore"')
     .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
     .addSelect('"userMentor"."lastName" AS "mentorLastName"')
     .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
-    .addSelect('"certificate"."publicId" AS "certificateId"')
-    .addSelect('ARRAY_AGG ("courseTask"."maxScore") AS "taskMaxScores"')
-    .addSelect('ARRAY_AGG ("courseTask"."scoreWeight") AS "taskScoreWeights"')
-    .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
-    .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
-    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
-
-  query
-    .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
-    .addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
+    .addSelect('"certificate"."publicId" AS "certificateId"');
 
   query
     .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
     .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
     .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"')
     .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
-    .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"')
-    .leftJoin(CourseTask, 'courseTask', '"courseTask"."courseId" = "student"."courseId"')
-    .leftJoin(Task, 'task', '"courseTask"."taskId" = "task"."id"')
-    .leftJoin(
-      TaskResult,
-      'taskResult',
-      '"taskResult"."studentId" = "student"."id" AND "taskResult"."courseTaskId" = "courseTask"."id"',
-    )
-    .leftJoin(
-      TaskInterviewResult,
-      'taskInterview',
-      '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"',
-    );
+    .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"');
 
   query
     .where('"user"."githubId" = :githubId', { githubId })
-    .andWhere('courseTask.disabled = :disabled', { disabled: false })
+    .andWhere('"student"."isExpelled" != :expelled', { expelled: true })
     .groupBy('"course"."id", "student"."id", "userMentor"."id", "certificate"."publicId"')
     .orderBy('"course"."endDate"', 'DESC');
 
@@ -124,42 +65,20 @@ const getStudentsStats = async (githubId: string) => {
       courseName,
       locationName,
       courseFullName,
-      isExpelled,
-      expellingReason,
       isCourseCompleted,
       totalScore,
       mentorFirstName,
       mentorLastName,
       mentorGithubId,
-      taskMaxScores,
-      taskScoreWeights,
-      taskNames,
-      taskDescriptionUris,
-      taskGithubPrUris,
-      taskScores,
-      taskComments,
       certificateId,
     }: any) => {
-      const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
-        maxScore,
-        scoreWeight: taskScoreWeights[idx],
-        name: taskNames[idx],
-        descriptionUri: taskDescriptionUris[idx],
-        githubPrUri: taskGithubPrUris[idx],
-        score: taskScores[idx],
-        comment: taskComments[idx],
-      }));
-
       return {
         courseId,
         courseName,
         locationName,
         courseFullName,
-        isExpelled,
-        expellingReason,
         isCourseCompleted,
         totalScore,
-        tasks,
         certificateId,
         position: null,
         mentor: {
@@ -180,11 +99,11 @@ const getStudentsStats = async (githubId: string) => {
         .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
         .groupBy('"student"."courseId"')
         .getRawMany();
-      return rawPositions.map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
+      return rawPositions.map(({ position }) => ({ position: Number(position) }))[0];
     }),
   );
 
-  return studentStats.map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
+  return studentStats.map((stats, idx) => ({ ...omit(stats, ['courseId']), ...studentPositions[idx] }));
 };
 
 export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -247,7 +166,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
       cvProfiles.map(async (cv: any) => {
         const { githubId } = cv;
 
-        const feedback = await getPublicFeedbackFull(githubId);
+        const feedback = await getFeedbackJobSeeker(githubId);
 
         const courses = await getStudentsStats(githubId);
 
@@ -317,7 +236,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     return;
   }
 
-  const feedback = await getPublicFeedbackShortened(githubId);
+  const feedback = await getFeedbackCV(githubId);
   const courses = await getStudentsStats(githubId);
 
   const { id, githubId: omittedGithubId, ...cvData } = cv;
@@ -344,7 +263,7 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   const EXPIRATION_DAYS_PROLONGATION = 14;
 
-  const expirationTimestamp = DateTime.now().plus({ days: EXPIRATION_DAYS_PROLONGATION }).toMillis();
+  const expirationTimestamp = DateTime.local().plus({ days: EXPIRATION_DAYS_PROLONGATION }).valueOf();
   const result = await cvRepository.save({ ...cv, expires: expirationTimestamp });
 
   setResponse(ctx, OK, Number(result.expires));

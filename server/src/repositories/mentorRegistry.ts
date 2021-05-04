@@ -32,7 +32,6 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
       return;
     }
     const {
-      comment,
       maxStudentsLimit,
       technicalMentoring,
       preferedStudentsLocation,
@@ -41,7 +40,6 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     } = updateData;
 
     const mentorData: Partial<MentorRegistry> = {
-      comment,
       maxStudentsLimit,
       preferedStudentsLocation,
       englishMentoring,
@@ -92,7 +90,6 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
   const user = mentorRegistry.user;
   return {
     id: mentorRegistry.id,
-    comment: mentorRegistry.comment,
     englishMentoring: mentorRegistry.englishMentoring,
     githubId: user.githubId,
     primaryEmail: user.primaryEmail,

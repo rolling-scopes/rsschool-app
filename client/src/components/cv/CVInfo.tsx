@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Result, Switch, Typography } from 'antd';
+import { Result, Switch, Typography, Divider } from 'antd';
 import EditCV from './EditCV';
 import ViewCV from './ViewCV';
 import NoConsentViewCV from './NoConsentViewCV';
@@ -41,15 +41,16 @@ function CVInfo(props: CVInfoProps) {
     if (opportunitiesConsent) {
       return (
         <>
-          <Text className="hide-on-print">Switch view:</Text>
-          <Switch
-            className="hide-on-print"
-            style={{ marginLeft: '5px' }}
-            defaultChecked={!editMode}
-            onChange={switchView}
-            checkedChildren="CV view"
-            unCheckedChildren="Edit view"
-          />
+          <Divider className="hide-on-print" plain>
+            <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
+            <Switch
+              style={{ marginLeft: '5px' }}
+              defaultChecked={!editMode}
+              onChange={switchView}
+              checkedChildren="CV view"
+              unCheckedChildren="Edit view"
+            />
+          </Divider>
           {editMode ? (
             <EditCV ownerGithubId={ownerGithubId} withdrawConsent={() => withdrawConsent(ownerGithubId as string)} />
           ) : (

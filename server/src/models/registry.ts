@@ -28,9 +28,6 @@ export class Registry {
   @Column({ name: 'status', default: 'pending' })
   status: RegistryStatus;
 
-  @Column({ nullable: true })
-  comment: string;
-
   @Column({ type: 'json', default: {} })
   attributes: {
     maxStudentsLimit: number;

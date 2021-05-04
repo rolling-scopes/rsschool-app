@@ -37,9 +37,6 @@ export class MentorRegistry {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @Column({ nullable: true })
-  comment: string;
-
   @Column({ default: false, type: 'boolean' })
   canceled: boolean;
 }
