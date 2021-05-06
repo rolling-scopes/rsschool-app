@@ -88,6 +88,11 @@ function renderItem(course: Course, showMentorModal: (id: number) => void) {
             ) : null
           }
         />
+        {item.completed && isTechnicalScreening(item) && (
+          <Button href={getURL(item, course)} type="link" size="small">
+            Edit Feedback
+          </Button>
+        )}
         {!item.completed && (
           <Button href={getURL(item, course)} type="link" size="small">
             Provide Feedback
