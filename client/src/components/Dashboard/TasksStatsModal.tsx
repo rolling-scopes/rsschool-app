@@ -17,6 +17,9 @@ type Props = {
 export function TasksStatsModal(props: Props) {
   const { tableName, tasks, courseName } = props;
   const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
+  const columnWidth = 150;
+  // where 500 is approximate sum of columns
+  const tableWidth = 2 * columnWidth + 500;
 
   return (
     <Modal
@@ -24,17 +27,19 @@ export function TasksStatsModal(props: Props) {
       visible={props.isVisible}
       onCancel={props.onHide}
       footer={null}
-      width={'80%'}
+      width={'90%'}
     >
       <p style={{ textAlign: 'center', fontWeight: 700 }}>{tableName.toUpperCase()}</p>
       <Table
         dataSource={courseTasks}
         size="small"
         rowKey="key"
+        scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
         pagination={false}
         columns={[
           {
             title: 'Task',
+            fixed: 'left',
             dataIndex: 'name',
             render: (task: string, { descriptionUrl }: any) =>
               descriptionUrl ? (
@@ -47,6 +52,7 @@ export function TasksStatsModal(props: Props) {
           },
           {
             title: 'Score / Max',
+            width: 70,
             dataIndex: 'score',
             render: (score: string, { maxScore }: any) => (
               <>
@@ -56,6 +62,7 @@ export function TasksStatsModal(props: Props) {
           },
           {
             title: '*Weight',
+            width: 70,
             dataIndex: 'scoreWeight',
             render: (scoreWeight: number, { score }: any) => (
               <Text>
@@ -73,11 +80,13 @@ export function TasksStatsModal(props: Props) {
           },
           {
             title: '*Start date',
+            width: 140,
             dataIndex: 'studentStartDate',
             render: (startDate: string) => <Text>{dateRenderer(startDate)}</Text>,
           },
           {
             title: '*Deadline',
+            width: 140,
             dataIndex: 'studentEndDate',
             render: (endDate: string) => <Text>{dateTimeRenderer(endDate)}</Text>,
           },
