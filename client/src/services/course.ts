@@ -303,6 +303,10 @@ export class CourseService {
     });
   }
 
+  async deleteTaskSolution(githubId: string, courseTaskId: number) {
+    await this.axios.delete(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`);
+  }
+
   async getCrossCheckTaskSolution(githubId: string, courseTaskId: number) {
     const apiUrl = `/student/${githubId}/task/${courseTaskId}/cross-check/solution`;
     const result = await this.axios.get(apiUrl);
