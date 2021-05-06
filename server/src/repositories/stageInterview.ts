@@ -73,7 +73,9 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
   }
 
   public async create(courseId: number, studentGithubId: string, interviewerGithubId: string) {
-    const courseTask = await getRepository(CourseTask).findOne({ where: { courseId, type: 'stage-interview' } });
+    const courseTask = await getRepository(CourseTask).findOne({
+      where: { courseId, type: 'stage-interview', disabled: false },
+    });
 
     const [student, interviewer] = await Promise.all([
       courseService.queryStudentByGithubId(courseId, studentGithubId),

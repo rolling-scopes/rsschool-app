@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
+import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
 import { Header, FooterLayout } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
@@ -21,7 +22,7 @@ type Props = {
 
 type State = {
   isLoading: boolean;
-  users: any;
+  users: JobSeekerData[] | null;
 };
 
 function Page(props: Props) {
@@ -32,10 +33,12 @@ function Page(props: Props) {
 
   const cvService = new CVService();
 
-  const countBadges = (badges: any) => {
-    const badgesCount: any = {};
+  const countBadges = (badges: JobSeekerFeedback[]) => {
+    const badgesCount: {
+      [index: string]: number;
+    } = {};
 
-    badges.forEach(({ badgeId }: { badgeId: any }) => {
+    badges.forEach(({ badgeId }) => {
       if (badgeId) {
         badgesCount[badgeId] ? (badgesCount[badgeId] += 1) : (badgesCount[badgeId] = 1);
       }
@@ -49,14 +52,14 @@ function Page(props: Props) {
       title: 'Name',
       dataIndex: 'complexData',
       key: 'complexData',
-      render: (data: any) => {
+      render: (data: { name: string; githubId: string }) => {
         const { name, githubId } = data;
         // TODO: ucnomment after testing
         /*         const { isAdmin } = props.session; */
 
         return (
           <>
-            <a href={`/cv?githubId=${githubId}`}>{name}</a>
+            <a href={`/cv?githubId=${githubId}`}>{name ?? 'Unknown'}</a>
             {/* TODO: ucnomment after testing */}
             {/*             {isAdmin && ( */}
             <Popconfirm
@@ -126,17 +129,16 @@ function Page(props: Props) {
       dataIndex: 'courses',
       key: 'courses',
       ...getColumnSearchProps('courses.courseFullName'),
-      render: (courses: any) => {
+      render: (courses: JobSeekerStudentStats[]) => {
         if (!courses) return 'No courses';
         return (
           <List
             dataSource={courses}
-            renderItem={(record: any) => {
+            renderItem={(record: JobSeekerStudentStats) => {
               const {
                 courseFullName,
                 courseName,
                 locationName,
-                isExpelled,
                 certificateId,
                 isCourseCompleted,
                 totalScore,
@@ -153,9 +155,8 @@ function Page(props: Props) {
                 </>
               );
               let courseStatus;
-              if (isExpelled) {
-                courseStatus = <Text>Expelled</Text>;
-              } else if (certificateId) {
+
+              if (certificateId) {
                 courseStatus = (
                   <>
                     <Text>Completed with </Text>
@@ -169,24 +170,28 @@ function Page(props: Props) {
               }
 
               return (
-                <Item style={{ fontSize: '14px' }}>
-                  <details>
-                    <summary>{courseName}</summary>
-                    <Row justify="space-between" style={{ width: '100%' }}>
-                      <Col span={12}>
+                <Item>
+                  <details style={{ fontSize: '12px' }}>
+                    <summary style={{ fontSize: '14px' }}>{courseName}</summary>
+                    <Row justify="space-between" style={{ width: '410px' }}>
+                      <Col span={10}>
                         <Text strong>{title}</Text>
                         <br />
                         <Text>Course status: </Text>
                         {courseStatus}
                       </Col>
                       <Col span={3}>
-                        <Text>
-                          Mentor: <a href={`https://github.com/${mentorGithubId}`}>{mentorName}</a>
-                        </Text>
+                        <Text style={{ whiteSpace: 'nowrap' }}>Mentor:</Text>
+                        <br />
+                        {mentorName ? (
+                          <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
+                            {mentorName}
+                          </a>
+                        ) : (
+                          <Text>No mentor</Text>
+                        )}
                       </Col>
-                      <Col span={3}>
-                        <Text>{courseStats}</Text>
-                      </Col>
+                      <Col span={5}>{courseStats}</Col>
                     </Row>
                   </details>
                 </Item>
@@ -200,29 +205,28 @@ function Page(props: Props) {
       title: 'Public feedback',
       dataIndex: 'feedback',
       key: 'feedback',
-      render: (badges: any) => {
+      render: (badges: JobSeekerFeedback[]) => {
         if (!badges.length) return 'No public feedback yet';
         const badgesCount = countBadges(badges);
-        return Object.keys(badgesCount).map(badgeId => (
-          <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
-            <Tooltip title={`${(heroesBadges as any)[badgeId].name} badge`}>
-              <Badge count={badgesCount[badgeId]}>
-                <Avatar
-                  src={`/static/svg/badges/${(heroesBadges as any)[badgeId].url}`}
-                  alt={`${(heroesBadges as any)[badgeId].name} badge`}
-                  size={50}
-                />
-              </Badge>
-            </Tooltip>
-          </div>
-        ));
+        return Object.keys(badgesCount).map(badgeId => {
+          const heroesBadge = (heroesBadges as any)[badgeId];
+          return (
+            <div style={{ margin: 5, display: 'inline-block' }} key={`badge-${badgeId}`}>
+              <Tooltip title={`${heroesBadge.name} badge`}>
+                <Badge count={badgesCount[badgeId]}>
+                  <Avatar src={`/static/svg/badges/${heroesBadge.url}`} alt={`${heroesBadge.name} badge`} size={50} />
+                </Badge>
+              </Tooltip>
+            </div>
+          );
+        });
       },
     },
   ];
 
   const fetchData = useCallback(async () => {
     await setState({ ...state, isLoading: true });
-    const data = await cvService.getJobSeekersData();
+    const data: JobSeekerData[] = await cvService.getJobSeekersData();
     await setState({ ...state, users: data, isLoading: false });
   }, []);
 
@@ -248,7 +252,7 @@ function Page(props: Props) {
   let data;
 
   if (users) {
-    data = users.map((item: any, index: any) => {
+    data = users.map((item: JobSeekerData, index) => {
       const {
         name,
         fullTime,
@@ -263,15 +267,15 @@ function Page(props: Props) {
       } = item;
       return {
         key: index,
-        complexData: { name, githubId },
+        complexData: { name: name?.length ? name : '<Not set>', githubId },
         expires: Number(expires),
         courses,
         feedback,
-        desiredPosition,
+        desiredPosition: desiredPosition?.length ? desiredPosition : '<Not set>',
         fullTime: fullTime ? 'Yes' : 'No',
-        location,
-        startFrom,
-        englishLevel: englishLevel.toUpperCase(),
+        location: location?.length ? location : '<Not set>',
+        startFrom: startFrom?.length ? startFrom : '<Not set>',
+        englishLevel: englishLevel?.length ? englishLevel?.toUpperCase() : '<Not set>',
       };
     });
   } else {
@@ -283,8 +287,8 @@ function Page(props: Props) {
       <Header username={userGithubId} />
       <LoadingScreen show={isLoading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
-          <Content style={{ backgroundColor: '#FFF', minHeight: '500px', margin: 'auto' }}>
-            <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data}></Table>
+          <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
+            <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data ?? undefined}></Table>
           </Content>
         </Layout>
       </LoadingScreen>

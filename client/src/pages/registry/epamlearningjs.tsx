@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
 import { LocationSelect, PageLayout } from 'components';
-import { CommentInput, GdprCheckbox } from 'components/Forms';
+import { GdprCheckbox } from 'components/Forms';
 import withSession from 'components/withSession';
 import { useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
@@ -13,7 +13,6 @@ import { Props, TYPES } from './../../configs/registry';
 import { Location } from '../../../../common/models/profile';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
-const textColumnSizes = { xs: 22, sm: 14, md: 12, lg: 10 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
@@ -44,11 +43,10 @@ function Page(props: Props & { courseAlias?: string }) {
   }, [initialData]);
 
   const handleSubmit = async (model: any) => {
-    const { comment, location } = model;
+    const { location } = model;
     const registryModel = {
       type: TYPES.STUDENT,
       courseId: activeCourse!.id,
-      comment,
     };
     const userModel = {
       cityName: location.cityName,
@@ -145,11 +143,6 @@ function Page(props: Props & { courseAlias?: string }) {
               >
                 <Input placeholder="user@example.com" />
               </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={defaultRowGutter}>
-            <Col {...textColumnSizes}>
-              <CommentInput notRequired />
             </Col>
           </Row>
           <Row>

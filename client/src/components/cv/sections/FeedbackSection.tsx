@@ -3,15 +3,15 @@ import { Typography, Card, Tooltip, Button } from 'antd';
 import moment from 'moment';
 import SectionCV from '../SectionCV';
 import { CommentOutlined } from '@ant-design/icons';
-import { PublicFeedback } from '../../../../../common/models/profile';
+import { CVFeedback } from '../../../../../common/models/cv';
 
 const { Text, Paragraph } = Typography;
 
 type Props = {
-  feedback: PublicFeedback[] | null;
+  feedback: CVFeedback[] | null;
 };
 
-function PublicFeedbackSection(props: Props) {
+function FeedbackSection(props: Props) {
   const { feedback } = props;
 
   const feedbackAvailable = feedback !== null && feedback.length !== 0;
@@ -21,7 +21,7 @@ function PublicFeedbackSection(props: Props) {
     <>
       <Text>{title}</Text>
       <br />
-      {feedbackAvailable && <Feedback feedback={feedback as PublicFeedback[]} showCount={5} />}
+      {feedbackAvailable && <FeedbackContent feedback={feedback as CVFeedback[]} showCount={5} />}
     </>
   );
 
@@ -30,7 +30,7 @@ function PublicFeedbackSection(props: Props) {
   );
 }
 
-function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
+function FeedbackContent(props: { feedback: CVFeedback[]; showCount: number }) {
   const { feedback, showCount } = props;
 
   const feedbackStyle = {
@@ -93,4 +93,4 @@ function Feedback(props: { feedback: PublicFeedback[]; showCount: number }) {
   );
 }
 
-export default PublicFeedbackSection;
+export default FeedbackSection;

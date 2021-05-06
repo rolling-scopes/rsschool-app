@@ -19,6 +19,8 @@ export class RepositoryService {
       return;
     }
 
+    await this.createTeam(this.github, this.getTeamName(course), course.id);
+
     const studentRepo = getCustomRepository(StudentRepository);
     const students = await studentRepo.findActiveByCourseId(this.courseId);
 
@@ -31,8 +33,8 @@ export class RepositoryService {
         if (mentorGithubId) {
           await this.inviteMentor(mentorGithubId, course);
         }
-        await this.addTeamToRepository(this.github, course, student.githubId);
       }
+      await this.addTeamToRepository(this.github, course, student.githubId);
       if (record?.repository) {
         result.push({ repository: record.repository });
       }

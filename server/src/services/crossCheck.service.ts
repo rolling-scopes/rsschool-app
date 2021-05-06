@@ -80,6 +80,10 @@ export class CrossCheckService {
     });
   }
 
+  public async deleteSolution(studentId: number) {
+    await getRepository(TaskSolution).delete({ studentId, courseTaskId: this.courseTaskId });
+  }
+
   public async saveSolutionComments(
     studentId: number,
     courseTaskId: number,

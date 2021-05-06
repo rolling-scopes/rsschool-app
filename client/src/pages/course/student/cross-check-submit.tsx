@@ -1,4 +1,5 @@
-import { Button, Col, Form, Input, message, Row } from 'antd';
+import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
@@ -31,6 +32,8 @@ function Page(props: CoursePageProps) {
   const [criteria, setCriteria] = useState([] as CrossCheckCriteria[]);
   const [comments, setComments] = useState([] as CrossCheckComment[]);
   const [newComments, setNewComments] = useState([] as CrossCheckComment[]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
@@ -59,6 +62,36 @@ function Page(props: CoursePageProps) {
       message.error('An error occured. Please try later.');
     }
   };
+
+  const handleCancellation = async () => {
+    if (!courseTaskId) {
+      return;
+    }
+
+    try {
+      await courseService.deleteTaskSolution(props.session.githubId, courseTaskId);
+      message.success('The task submission has been canceled');
+      setIsModalVisible(false);
+      form.resetFields();
+      setSubmittedSolution(null);
+      setCourseTaskId(null);
+    } catch (e) {
+      message.error('An error occurred. Please try later.');
+    }
+
+    setButtonDisabled(true);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const cancelModal = () => {
+    setIsModalVisible(false);
+    setButtonDisabled(true);
+  };
+
+  const cancellationChange = (e: CheckboxChangeEvent) => setButtonDisabled(!e.target.checked);
 
   const handleTaskChange = async (value: number) => {
     setFeedback(null);
@@ -136,9 +169,31 @@ function Page(props: CoursePageProps) {
             )}
             {submitAllowed && newCrossCheck && <ScoreInput courseTask={task} />}
             {submitAllowed && (
-              <Button style={{ marginTop: 16 }} type="primary" htmlType="submit">
-                Submit
-              </Button>
+              <Row style={{ marginTop: 16 }}>
+                <Col span={12}>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Col>
+                {submittedSolution && (
+                  <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button danger type="ghost" onClick={showModal}>
+                      Cancel Submit
+                    </Button>
+                    <Modal
+                      title="Cancel submission"
+                      visible={isModalVisible}
+                      onOk={handleCancellation}
+                      onCancel={cancelModal}
+                      okButtonProps={{ disabled: buttonDisabled }}
+                    >
+                      <Checkbox checked={!buttonDisabled} onChange={cancellationChange}>
+                        Being of sound mind and body, do hereby declare that I want to cancel my submission
+                      </Checkbox>
+                    </Modal>
+                  </Col>
+                )}
+              </Row>
             )}
           </Form>
         </Col>
