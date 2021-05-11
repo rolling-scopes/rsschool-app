@@ -238,7 +238,7 @@ function renderSettingsModal(
             style={{ marginBottom: '0', overflow: 'hidden' }}
             valuePropName="checked"
             labelCol={{ span: 21 }}
-            wrapperCol= {{ span: 1 }}
+            wrapperCol={{ span: 1 }}
           >
             <Checkbox />
           </Form.Item>
