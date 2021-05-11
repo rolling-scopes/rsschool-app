@@ -1,5 +1,5 @@
-import { FileExcelOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography } from 'antd';
+import { FileExcelOutlined, QuestionCircleOutlined, SettingFilled } from '@ant-design/icons';
+import { Button, Layout, Popover, Row, Spin, Switch, Table, Typography, Form, Modal, Checkbox } from 'antd';
 import { useRouter } from 'next/router';
 import { isArray, isUndefined } from 'lodash';
 import { GithubAvatar, Header, withSession } from 'components';
@@ -13,6 +13,8 @@ import { IPaginationInfo } from '../../../../common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
 import { getQueryParams, getQueryString } from '../../utils/queryParams-utils';
+import { useLocalStorage } from 'react-use';
+import { Store } from 'rc-field-form/lib/interface';
 
 const { Text } = Typography;
 
@@ -37,6 +39,11 @@ export function Page(props: CoursePageProps) {
   });
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
   const [loaded, setLoaded] = useState(false);
+  const [isVisibleSetting, setIsVisibleSettings] = useState(false);
+  const [notVisibleColumns, setIsNotVisibleColumns] = useLocalStorage(
+    'notVisibleColumns',
+    JSON.stringify([]) as string,
+  );
 
   const loadInitialData = useCallback(async () => {
     try {
@@ -130,6 +137,31 @@ export function Page(props: CoursePageProps) {
     loadInitialData();
   }, []);
 
+  const handleSettings = () => {
+    setIsVisibleSettings(!isVisibleSetting);
+  };
+
+  const handleModalCancel = () => {
+    setIsVisibleSettings(!isVisibleSetting);
+  };
+
+  const handleModalOk = (values: Store) => {
+    setIsNotVisibleColumns(JSON.stringify(Object.keys(values).filter((value: string) => values[value] === false)));
+    setIsVisibleSettings(!isVisibleSetting);
+  };
+
+  const getVisibleTasks = (tasks: CourseTask[]) => {
+    return tasks.map(task => {
+      notVisibleColumns?.includes(task.name) ? (task.isVisible = false) : (task.isVisible = true);
+      return task;
+    });
+  };
+
+  const getVisibleColumns = (columns: any) => {
+    const visibleColumns = columns.filter((column: any) => !notVisibleColumns?.includes(column.name));
+    return visibleColumns;
+  };
+
   const columns = useMemo(() => getColumns(courseTasks), [courseTasks, students]);
 
   return (
@@ -145,11 +177,71 @@ export function Page(props: CoursePageProps) {
             <Text mark>Total score and position is updated every day at 04:00 GMT+3</Text>
             {renderCsvExportButton(props, handleLoadCsv)}
           </Row>
-          {renderTable(loaded, students.content, columns, students.pagination, getCourseScore, cityName, mentor)}
+          {renderTable(
+            loaded,
+            students.content,
+            getVisibleColumns(columns),
+            students.pagination,
+            getCourseScore,
+            cityName,
+            mentor,
+            handleSettings,
+          )}
         </Spin>
+        {renderSettingsModal(getVisibleTasks(courseTasks), isVisibleSetting, handleModalCancel, handleModalOk)}
       </Layout.Content>
       <style jsx>{styles}</style>
     </>
+  );
+}
+
+function renderSettingsModal(
+  courseTasks: any[],
+  isVisibleSetting: boolean,
+  handleModalCancel: () => void,
+  handleModalOk: (values: any) => void,
+) {
+  const [form] = Form.useForm();
+  const onOkHandle = async () => {
+    const values = await form.validateFields().catch(() => null);
+    if (values == null) {
+      return;
+    }
+    handleModalOk(values);
+  };
+  const initialValues = courseTasks.reduce((acc, curr) => {
+    acc[curr.name] = curr.isVisible;
+    return acc;
+  }, {});
+  return (
+    <Modal title="Columns settings" visible={isVisibleSetting} onOk={onOkHandle} onCancel={handleModalCancel}>
+      <Form
+        size="small"
+        layout="horizontal"
+        form={form}
+        initialValues={initialValues}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          overflowY: 'scroll',
+          maxHeight: '60vh',
+          gap: '12px',
+        }}
+      >
+        {courseTasks.map(el => (
+          <Form.Item
+            key={el.id}
+            name={el.name}
+            label={el.name}
+            labelAlign="left"
+            style={{ marginBottom: '0' }}
+            valuePropName="checked"
+          >
+            <Checkbox />
+          </Form.Item>
+        ))}
+      </Form>
+    </Modal>
   );
 }
 
@@ -181,6 +273,7 @@ function renderTable(
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
   cityName: string | string[] = '',
   mentor: string | string[] = '',
+  handleSettings: () => void,
 ) {
   if (!loaded) {
     return null;
@@ -282,6 +375,13 @@ function renderTable(
           render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
           ...getColumnSearchProps('mentor.githubId'),
         },
+        {
+          title: () => <SettingFilled onClick={handleSettings} />,
+          fixed: 'right',
+          width: 30,
+          align: 'center',
+          render: () => '',
+        },
       ]}
     />
   );
@@ -323,6 +423,7 @@ function getColumns(courseTasks: CourseTask[]) {
       const currentTask = d.taskResults.find(taskResult => taskResult.courseTaskId === courseTask.id);
       return currentTask ? <div>{currentTask.score}</div> : 0;
     },
+    name: courseTask.name,
   }));
   return columns;
 }

@@ -27,6 +27,7 @@ export interface CourseTask {
   checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
   taskOwnerId: number | null;
   publicAttributes?: SelfEducationPublicAttributes;
+  isVisible?: boolean;
 }
 
 export interface SelfEducationPublicAttributes {
