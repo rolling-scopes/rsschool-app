@@ -297,6 +297,7 @@ function getColumns(courseTasks: CourseTask[]) {
             <ul>
               <li>Coefficient: {courseTask.scoreWeight}</li>
               <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
+              <li>Max. score: {courseTask.maxScore}</li>
             </ul>
           }
           trigger="click"
