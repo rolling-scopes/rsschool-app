@@ -214,7 +214,7 @@ function renderSettingsModal(
     return acc;
   }, {});
   return (
-    <Modal title="Columns settings" visible={isVisibleSetting} onOk={onOkHandle} onCancel={handleModalCancel}>
+    <Modal title="Columns visibility" visible={isVisibleSetting} onOk={onOkHandle} onCancel={handleModalCancel}>
       <Form
         size="small"
         layout="horizontal"
@@ -226,6 +226,7 @@ function renderSettingsModal(
           overflowY: 'scroll',
           maxHeight: '60vh',
           gap: '12px',
+          maxWidth: '472px',
         }}
       >
         {courseTasks.map(el => (
@@ -234,8 +235,10 @@ function renderSettingsModal(
             name={el.name}
             label={el.name}
             labelAlign="left"
-            style={{ marginBottom: '0' }}
+            style={{ marginBottom: '0', overflow: 'hidden' }}
             valuePropName="checked"
+            labelCol={{ span: 21 }}
+            wrapperCol= {{ span: 1 }}
           >
             <Checkbox />
           </Form.Item>
