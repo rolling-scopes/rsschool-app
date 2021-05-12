@@ -19,7 +19,9 @@ interface IGratitude {
 
 type Badge = { id: string; name: string };
 
-const heroBadges = [
+const OUTSTANDING_WORK_ID = 'Outstanding_work';
+
+const heroBadges: Badge[] = [
   { id: 'Congratulations', name: 'Congratulations' },
   { id: 'Expert_help', name: 'Expert help' },
   { id: 'Great_speaker', name: 'Great speaker' },
@@ -27,10 +29,24 @@ const heroBadges = [
   { id: 'Helping_hand', name: 'Helping hand' },
   { id: 'Hero', name: 'Hero' },
   { id: 'Thank_you', name: 'Thank you' },
+  { id: OUTSTANDING_WORK_ID, name: 'Outstanding work' },
 ];
 
+const rolesForSpecialBadges = ['coursemanager', 'manager', 'supervisor'];
+
+const getAvailableBadges = ({ coursesRoles }: Session, id: number) => {
+  const userCourseRoles = coursesRoles ? coursesRoles[id] : [];
+  const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
+
+  return heroBadges.filter((badge: Badge) =>
+    badge.id !== OUTSTANDING_WORK_ID ? true : isAvailableSpecialBadges ? true : false,
+  );
+};
+
 function Page(props: Props) {
-  const [badges] = useState(heroBadges as Badge[]);
+  const [badges, setBadges] = useState(
+    getAvailableBadges(props.session, Number(localStorage.getItem('activeCourseId'))) as Badge[],
+  );
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [courses, setCourses] = useState([] as Course[]);
@@ -72,6 +88,11 @@ function Page(props: Props) {
     }
   };
 
+  const onCourseChange = (value: number) => {
+    const badges = getAvailableBadges(props.session, value);
+    setBadges(badges);
+  };
+
   return (
     <PageLayoutSimple loading={loading} title="#gratitude" githubId={props.session.githubId}>
       <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
@@ -86,7 +107,7 @@ function Page(props: Props) {
           initialValue={Number(localStorage.getItem('activeCourseId'))}
           rules={[{ required: true, message: 'Please select a course' }]}
         >
-          <Select placeholder="Select a course">
+          <Select placeholder="Select a course" onChange={onCourseChange}>
             {courses.map(course => (
               <Select.Option key={course.id} value={course.id}>
                 {course.name}
