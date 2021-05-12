@@ -34,7 +34,6 @@ export function createCrossCheckPairs(
   const shuffledStudentsIds = shuffle(studentIds);
   const studentsNumber = studentIds.length;
   const shifts = createShifts(checkersNumber, Math.floor((studentsNumber - 1) / 2));
-  console.log(shifts);
 
   shuffledStudentsIds.forEach((studentId, index) => {
     for (let i = 0; i < checkersNumber; i++) {
