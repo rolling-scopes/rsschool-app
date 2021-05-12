@@ -150,7 +150,7 @@ export function Page(props: CoursePageProps) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
-  const getVisibleTasks = (tasks: CourseTask[]) =>
+  const addVisibilityPropForTask = (tasks: CourseTask[]) =>
     tasks.map(task => ({
       ...task,
       isVisible: !notVisibleColumns?.includes(task.name),
@@ -185,7 +185,7 @@ export function Page(props: CoursePageProps) {
             handleSettings,
           )}
         </Spin>
-        {renderSettingsModal(getVisibleTasks(courseTasks), isVisibleSetting, handleModalCancel, handleModalOk)}
+        {renderSettingsModal(addVisibilityPropForTask(courseTasks), isVisibleSetting, handleModalCancel, handleModalOk)}
       </Layout.Content>
       <style jsx>{styles}</style>
     </>
