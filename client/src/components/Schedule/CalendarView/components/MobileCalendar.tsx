@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Badge, List, Typography, Row, Col, Button } from 'antd';
+import { Calendar, List, Typography, Col, Button } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
 import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
