@@ -34,4 +34,9 @@ export default {
     pictureId: 12,
     url: 'ThankYou.svg',
   },
+  Outstanding_work: {
+    name: 'Outstanding work',
+    pictureId: 33,
+    url: 'OutstandingWork.svg',
+  },
 };
