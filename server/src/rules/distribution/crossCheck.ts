@@ -37,7 +37,7 @@ export function createCrossCheckPairs(
 
   shuffledStudentsIds.forEach((studentId, index) => {
     for (let i = 0; i < checkersNumber; i++) {
-      const checkerId = shuffledStudentsIds[(index + studentsNumber + shifts[i]) % studentsNumber];
+      const checkerId = shuffledStudentsIds[(index + shifts[i]) % studentsNumber];
       pairs.push({ checkerId, studentId });
     }
   });
