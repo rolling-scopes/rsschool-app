@@ -424,6 +424,10 @@ export class CourseService {
     return result.data.data as { repository: string }[];
   }
 
+  async postSyncRepositoriesMentors() {
+    await this.axios.post(`/repositories/mentors`);
+  }
+
   async expelMentor(githubId: string) {
     await this.axios.post(`/mentor/${githubId}/status/expelled`);
   }

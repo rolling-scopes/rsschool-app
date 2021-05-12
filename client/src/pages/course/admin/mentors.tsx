@@ -1,4 +1,4 @@
-import { Button, Divider, message, Statistic, Table } from 'antd';
+import { Button, Divider, message, Row, Statistic, Table } from 'antd';
 import { PageLayout, withSession } from 'components';
 import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
@@ -8,6 +8,7 @@ import { useAsync } from 'react-use';
 import { CourseService, MentorDetails } from 'services/course';
 import { relativeDays } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
+import { SyncOutlined } from '@ant-design/icons';
 
 type Stats = {
   recordCount: number;
@@ -74,6 +75,17 @@ function Page(props: CoursePageProps) {
     }
   };
 
+  const syncWithGitHubTeams = async () => {
+    try {
+      setLoading(true);
+      await service.postSyncRepositoriesMentors();
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <PageLayout
       loading={loading}
@@ -118,6 +130,15 @@ function Page(props: CoursePageProps) {
         </div>
       </div>
       <Divider dashed />
+      <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>
+        <Button
+          icon={<SyncOutlined />}
+          style={{ marginRight: 8 }}
+          onClick={syncWithGitHubTeams}
+        >
+          Sync with GitHub Teams
+        </Button>
+      </Row>
       <Table<MentorDetails>
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
