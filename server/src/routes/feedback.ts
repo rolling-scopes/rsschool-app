@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { DiscordService, HeroesService } from '../integrations';
 import { ILogger } from '../logger';
-import { Feedback, PrivateFeedback, User } from '../models';
+import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
 import { guard } from './guards';
 import { setResponse } from './utils';
 import { FeedbackRepository } from '../repositories/feedback';
@@ -57,16 +57,33 @@ const getUserDisplayName = (data: User) => {
 
 const postGratitudeFeedback = (logger: ILogger) => {
   const heroesService = new HeroesService(logger);
-  const SUPPORTED_BADGE_IDS = [
-    'Congratulations',
-    'Expert_help',
-    'Great_speaker',
-    'Good_job',
-    'Helping_hand',
-    'Hero',
-    'Thank_you',
-  ];
   const discordService = new DiscordService(logger);
+
+  type Badge = { id: string; name: string };
+
+  const OUTSTANDING_WORK_ID = 'Outstanding_work';
+
+  const heroBadges: Badge[] = [
+    { id: 'Congratulations', name: 'Congratulations' },
+    { id: 'Expert_help', name: 'Expert help' },
+    { id: 'Great_speaker', name: 'Great speaker' },
+    { id: 'Good_job', name: 'Good job' },
+    { id: 'Helping_hand', name: 'Helping hand' },
+    { id: 'Hero', name: 'Hero' },
+    { id: 'Thank_you', name: 'Thank you' },
+    { id: OUTSTANDING_WORK_ID, name: 'Outstanding work' },
+  ];
+
+  const rolesForSpecialBadges = ['manager', 'supervisor'];
+
+  const getAvailableBadges = ({ coursesRoles }: IUserSession, id: number) => {
+    const userCourseRoles = coursesRoles ? coursesRoles[id] : [];
+    const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
+
+    return heroBadges.filter((badge: Badge) =>
+      badge.id !== OUTSTANDING_WORK_ID ? true : isAvailableSpecialBadges ? true : false,
+    );
+  };
 
   const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: GratitudeInput) => {
     if (
@@ -112,7 +129,9 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const data: GratitudeInput = ctx.request.body;
     const id = ctx.state.user.id;
 
-    if (isNaN(data.toUserId) || (data.badgeId && !SUPPORTED_BADGE_IDS.includes(data.badgeId)) || data.toUserId === id) {
+    const supportedBadgesIds = getAvailableBadges(ctx.state.user, data.courseId).map(({ id }) => id);
+
+    if (isNaN(data.toUserId) || (data.badgeId && !supportedBadgesIds.includes(data.badgeId)) || data.toUserId === id) {
       setResponse(ctx, BAD_REQUEST);
       return;
     }
