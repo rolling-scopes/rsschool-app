@@ -62,7 +62,12 @@ export function Page(props: CoursePageProps) {
       ]);
       const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
-      setCourseTasks(sortedTasks);
+      setCourseTasks(
+        sortedTasks.map(task => ({
+          ...task,
+          isVisible: !notVisibleColumns?.includes(task.name),
+        })),
+      );
       setLoaded(true);
     } finally {
       setLoading(false);
@@ -150,12 +155,6 @@ export function Page(props: CoursePageProps) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
-  const addVisibilityPropForTask = (tasks: CourseTask[]) =>
-    tasks.map(task => ({
-      ...task,
-      isVisible: !notVisibleColumns?.includes(task.name),
-    }));
-
   const getVisibleColumns = (columns: IColumn[]) =>
     columns.filter((column: IColumn) => !notVisibleColumns?.includes(column.name));
 
@@ -185,7 +184,7 @@ export function Page(props: CoursePageProps) {
             handleSettings,
           )}
         </Spin>
-        {renderSettingsModal(addVisibilityPropForTask(courseTasks), isVisibleSetting, handleModalCancel, handleModalOk)}
+        {renderSettingsModal(courseTasks, isVisibleSetting, handleModalCancel, handleModalOk)}
       </Layout.Content>
       <style jsx>{styles}</style>
     </>
