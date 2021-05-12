@@ -6,7 +6,7 @@ import { GithubAvatar, Header, withSession } from 'components';
 import { dateRenderer, dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTask, StudentScore } from 'services/course';
+import { CourseService, CourseTask, StudentScore, IColumn } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
@@ -150,17 +150,14 @@ export function Page(props: CoursePageProps) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
-  const getVisibleTasks = (tasks: CourseTask[]) => {
-    return tasks.map(task => {
-      notVisibleColumns?.includes(task.name) ? (task.isVisible = false) : (task.isVisible = true);
-      return task;
-    });
-  };
+  const getVisibleTasks = (tasks: CourseTask[]) =>
+    tasks.map(task => ({
+      ...task,
+      isVisible: !notVisibleColumns?.includes(task.name),
+    }));
 
-  const getVisibleColumns = (columns: any) => {
-    const visibleColumns = columns.filter((column: any) => !notVisibleColumns?.includes(column.name));
-    return visibleColumns;
-  };
+  const getVisibleColumns = (columns: IColumn[]) =>
+    columns.filter((column: IColumn) => !notVisibleColumns?.includes(column.name));
 
   const columns = useMemo(() => getColumns(courseTasks), [courseTasks, students]);
 
@@ -196,23 +193,24 @@ export function Page(props: CoursePageProps) {
 }
 
 function renderSettingsModal(
-  courseTasks: any[],
+  courseTasks: CourseTask[],
   isVisibleSetting: boolean,
   handleModalCancel: () => void,
-  handleModalOk: (values: any) => void,
+  handleModalOk: (values: Store) => void,
 ) {
   const [form] = Form.useForm();
   const onOkHandle = async () => {
     const values = await form.validateFields().catch(() => null);
-    if (values == null) {
+    if (!values) {
       return;
     }
     handleModalOk(values);
   };
-  const initialValues = courseTasks.reduce((acc, curr) => {
+  const initialValues: { [key: string]: boolean | undefined } = {};
+  courseTasks.reduce((acc, curr) => {
     acc[curr.name] = curr.isVisible;
     return acc;
-  }, {});
+  }, initialValues);
   return (
     <Modal title="Columns visibility" visible={isVisibleSetting} onOk={onOkHandle} onCancel={handleModalCancel}>
       <Form

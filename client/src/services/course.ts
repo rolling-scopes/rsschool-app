@@ -30,6 +30,15 @@ export interface CourseTask {
   isVisible?: boolean;
 }
 
+export interface IColumn {
+  dataIndex: string;
+  title: () => JSX.Element;
+  width: number;
+  className: string;
+  render: (_: any, d: StudentScore) => JSX.Element | 0;
+  name: string;
+}
+
 export interface SelfEducationPublicAttributes {
   maxAttemptsNumber: number;
   numberOfQuestions: number;
