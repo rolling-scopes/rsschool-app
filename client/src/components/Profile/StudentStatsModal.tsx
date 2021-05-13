@@ -15,16 +15,8 @@ type Props = {
 class StudentStatsModal extends React.PureComponent<Props> {
   render() {
     const { stats, courseProgress, scoredTasks } = this.props;
-    const {
-      tasks,
-      courseFullName,
-      mentor,
-      totalScore,
-      isExpelled,
-      expellingReason,
-      position,
-      isCourseCompleted,
-    } = stats;
+    const { tasks, courseFullName, mentor, totalScore, isExpelled, expellingReason, position, isCourseCompleted } =
+      stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore)
       ? tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur)

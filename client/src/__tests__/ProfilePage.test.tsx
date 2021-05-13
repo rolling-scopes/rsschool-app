@@ -80,12 +80,12 @@ const session = {
     13: ['manager'],
   },
 } as Session;
-const router = ({
+const router = {
   query: {
     githubId: 'petrov',
   },
   asPath: '/#edit/',
-} as unknown) as NextRouter;
+} as unknown as NextRouter;
 const state = {
   profile,
   isInitialPermissionsSettingsChanged: false,

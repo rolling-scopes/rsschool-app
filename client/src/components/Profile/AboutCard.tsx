@@ -31,12 +31,8 @@ class AboutCard extends React.Component<Props> {
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
-    const {
-      isEditingModeEnabled,
-      permissionsSettings,
-      onPermissionsSettingsChange,
-      onProfileSettingsChange,
-    } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
+      this.props;
     const { aboutMyself } = this.props.data;
 
     return (

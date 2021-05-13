@@ -60,12 +60,8 @@ class MainCard extends React.Component<Props, State> {
   });
 
   render() {
-    const {
-      isEditingModeEnabled,
-      permissionsSettings,
-      onPermissionsSettingsChange,
-      onProfileSettingsChange,
-    } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
+      this.props;
     const { githubId, name, location } = this.props.data;
     const { isProfileSettingsVisible, isVisibilitySettingsVisible } = this.state;
 
