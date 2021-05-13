@@ -20,9 +20,9 @@ export const getCrossCheckPairs = (_: ILogger) => async (ctx: Router.RouterConte
   const { content, pagination: paginationResult } = await getCrossCheckData(
     filter,
     pagination,
+    courseId,
     orderBy,
     orderDirection,
-    courseId,
   );
 
   setResponse(ctx, OK, {
