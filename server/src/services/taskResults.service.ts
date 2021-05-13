@@ -86,7 +86,6 @@ export async function getCrossCheckData(
     .addSelect(['tsr.score'])
     .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
     .addSelect(['courseTask.id', 'courseTask.courseId'])
-    .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
     .leftJoin('courseTask.task', 'task')
     .addSelect(['task.id', 'task.name'])
     .leftJoin(Student, 'st', '"tsr"."studentId" = "st"."id"')
