@@ -65,12 +65,8 @@ class ContactsCard extends React.Component<Props> {
   };
 
   render() {
-    const {
-      isEditingModeEnabled,
-      permissionsSettings,
-      onPermissionsSettingsChange,
-      onProfileSettingsChange,
-    } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
+      this.props;
     const { email, telegram, phone, skype, notes, linkedIn } = this.props.data;
     const contacts = [
       {

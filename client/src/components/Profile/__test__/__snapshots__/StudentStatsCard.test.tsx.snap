@@ -163,15 +163,13 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
     <Modal
       confirmLoading={false}
       footer={null}
-      maskTransitionName="fade"
       okType="primary"
       onCancel={[Function]}
       title="Rolling Scopes School 2018 Q1 statistics"
-      transitionName="zoom"
       visible={false}
       width="80%"
     >
-      <_default
+      <Dialog
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -182,14 +180,15 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           </span>
         }
         confirmLoading={false}
+        focusTriggerAfterClose={true}
         footer={null}
-        maskTransitionName="fade"
+        maskTransitionName="ant-fade"
         okType="primary"
         onCancel={[Function]}
         onClose={[Function]}
         prefixCls="ant-modal"
         title="Rolling Scopes School 2018 Q1 statistics"
-        transitionName="zoom"
+        transitionName="ant-zoom"
         visible={false}
         width="80%"
         wrapClassName=""
@@ -197,7 +196,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </_default>
+      </Dialog>
     </Modal>
   </StudentStatsModal>
   <CommonCard
@@ -376,7 +375,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -386,7 +385,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -422,7 +421,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -447,7 +445,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="book"
                                     fill="currentColor"
                                     focusable="false"
@@ -639,7 +636,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -654,7 +650,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -662,7 +658,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -759,7 +755,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -784,7 +779,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="check-circle"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -836,7 +830,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -851,7 +844,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -859,7 +852,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -887,7 +880,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   mark={true}
                                 >
                                   <LocaleReceiver
@@ -902,7 +894,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -910,7 +902,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -926,10 +918,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -990,7 +978,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -1015,7 +1002,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
@@ -1074,7 +1060,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -1089,7 +1074,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -1097,7 +1082,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -1194,7 +1179,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -1219,7 +1203,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="close-circle"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -1271,7 +1254,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -1286,7 +1268,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -1294,7 +1276,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -1322,7 +1304,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   mark={true}
                                 >
                                   <LocaleReceiver
@@ -1337,7 +1318,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -1345,7 +1326,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -1361,10 +1342,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -1425,7 +1402,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -1450,7 +1426,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
@@ -1649,15 +1624,13 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
     <Modal
       confirmLoading={false}
       footer={null}
-      maskTransitionName="fade"
       okType="primary"
       onCancel={[Function]}
       title="Rolling Scopes School 2018 Q1 statistics"
-      transitionName="zoom"
       visible={false}
       width="80%"
     >
-      <_default
+      <Dialog
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -1668,14 +1641,15 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           </span>
         }
         confirmLoading={false}
+        focusTriggerAfterClose={true}
         footer={null}
-        maskTransitionName="fade"
+        maskTransitionName="ant-fade"
         okType="primary"
         onCancel={[Function]}
         onClose={[Function]}
         prefixCls="ant-modal"
         title="Rolling Scopes School 2018 Q1 statistics"
-        transitionName="zoom"
+        transitionName="ant-zoom"
         visible={false}
         width="80%"
         wrapClassName=""
@@ -1683,7 +1657,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </_default>
+      </Dialog>
     </Modal>
   </StudentStatsModal>
   <CommonCard
@@ -1863,7 +1837,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -1873,7 +1847,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -1909,7 +1883,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -1934,7 +1907,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="book"
                                     fill="currentColor"
                                     focusable="false"
@@ -2126,7 +2098,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -2141,7 +2112,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2149,7 +2120,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2246,7 +2217,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -2271,7 +2241,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="check-circle"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -2323,7 +2292,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -2338,7 +2306,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2346,7 +2314,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2374,7 +2342,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   mark={true}
                                 >
                                   <LocaleReceiver
@@ -2389,7 +2356,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2397,7 +2364,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2413,10 +2380,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -2477,7 +2440,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -2502,7 +2464,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
@@ -2561,7 +2522,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -2576,7 +2536,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2584,7 +2544,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2681,7 +2641,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -2706,7 +2665,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="close-circle"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -2758,7 +2716,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -2773,7 +2730,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2781,7 +2738,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2809,7 +2766,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   mark={true}
                                 >
                                   <LocaleReceiver
@@ -2824,7 +2780,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2832,7 +2788,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -2848,10 +2804,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -2912,7 +2864,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -2937,7 +2888,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
@@ -2971,7 +2921,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
             isSettingsVisible={false}
             onPermissionsSettingsChange={[MockFunction]}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -2990,21 +2940,9 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -3013,7 +2951,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 }
                 title="Visibility settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -3075,7 +3012,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -3131,6 +3067,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -3162,7 +3099,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -3187,7 +3123,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -3281,11 +3216,11 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                                       </svg>
                                                     </Simple>
                                                   </div>
-                                                  <p
+                                                  <div
                                                     className="ant-empty-description"
                                                   >
                                                     No Data
-                                                  </p>
+                                                  </div>
                                                 </div>
                                               </LocaleReceiver>
                                             </Empty>
@@ -3307,7 +3242,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </PermissionsSettingsDrawer>
         </div>
       </div>

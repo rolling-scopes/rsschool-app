@@ -29,42 +29,41 @@ export interface ILogger {
   child(options: { module: string; userId?: string }): ILogger;
 }
 
-export const loggerMiddleware = (externalLogger: ILogger) => async (
-  ctx: Router.RouterContext<any, { logger: ILogger }>,
-  next: () => Promise<any>,
-) => {
-  const logger = externalLogger;
+export const loggerMiddleware =
+  (externalLogger: ILogger) =>
+  async (ctx: Router.RouterContext<any, { logger: ILogger }>, next: () => Promise<any>) => {
+    const logger = externalLogger;
 
-  const data: Partial<ILog> = {
-    status: ctx.status,
-    method: ctx.method,
-    url: ctx.url,
-    query: ctx.query,
-  };
-  const start = Date.now();
-  try {
-    ctx.logger = logger;
-    await next();
-    data.status = ctx.status;
-  } catch (e) {
-    if ((e as AxiosError).isAxiosError) {
-      const error = e as AxiosError;
-      logger.error(error.message, {
-        data: error.response?.data,
-        status: error.response?.status,
-      });
-    } else {
-      logger.error(e);
+    const data: Partial<ILog> = {
+      status: ctx.status,
+      method: ctx.method,
+      url: ctx.url,
+      query: ctx.query,
+    };
+    const start = Date.now();
+    try {
+      ctx.logger = logger;
+      await next();
+      data.status = ctx.status;
+    } catch (e) {
+      if ((e as AxiosError).isAxiosError) {
+        const error = e as AxiosError;
+        logger.error(error.message, {
+          data: error.response?.data,
+          status: error.response?.status,
+        });
+      } else {
+        logger.error(e);
+      }
+      data.status = e.status;
     }
-    data.status = e.status;
-  }
-  logger.info({
-    msg: 'Processed request',
-    duration: Date.now() - start,
-    ...data,
-    userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
-  });
-};
+    logger.info({
+      msg: 'Processed request',
+      duration: Date.now() - start,
+      ...data,
+      userId: ctx.state && ctx.state.user ? ctx.state.user.id : undefined,
+    });
+  };
 
 export function createDefaultLogger() {
   const streams = [{ stream: process.stdout }];

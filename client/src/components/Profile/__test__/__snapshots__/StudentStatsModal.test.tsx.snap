@@ -4,11 +4,9 @@ exports[`StudentStatsModal Should render correctly 1`] = `
 <Modal
   confirmLoading={false}
   footer={null}
-  maskTransitionName="fade"
   okType="primary"
   onCancel={[MockFunction]}
   title="Rolling Scopes School 2018 Q1 statistics"
-  transitionName="zoom"
   visible={true}
   width="80%"
 >

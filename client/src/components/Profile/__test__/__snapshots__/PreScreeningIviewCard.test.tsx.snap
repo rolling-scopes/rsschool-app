@@ -91,15 +91,13 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
     <Modal
       confirmLoading={false}
       footer={null}
-      maskTransitionName="fade"
       okType="primary"
       onCancel={[Function]}
       title="Rolling Scopes School 2018 Q1 Pre-Screening Interview Feedback"
-      transitionName="zoom"
       visible={false}
       width="80%"
     >
-      <_default
+      <Dialog
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -110,14 +108,15 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
           </span>
         }
         confirmLoading={false}
+        focusTriggerAfterClose={true}
         footer={null}
-        maskTransitionName="fade"
+        maskTransitionName="ant-fade"
         okType="primary"
         onCancel={[Function]}
         onClose={[Function]}
         prefixCls="ant-modal"
         title="Rolling Scopes School 2018 Q1 Pre-Screening Interview Feedback"
-        transitionName="zoom"
+        transitionName="ant-zoom"
         visible={false}
         width="80%"
         wrapClassName=""
@@ -125,7 +124,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </_default>
+      </Dialog>
     </Modal>
   </PreScreeningIviewModal>
   <CommonCard
@@ -255,7 +254,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -265,7 +264,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -307,7 +306,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -338,7 +336,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="question-circle"
                                     fill="currentColor"
                                     focusable="false"
@@ -487,7 +484,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -502,7 +498,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -510,7 +506,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -632,7 +628,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -657,7 +652,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -709,7 +703,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -734,7 +727,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -816,7 +808,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -841,7 +832,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -893,7 +883,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -918,7 +907,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1000,7 +988,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1025,7 +1012,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1077,7 +1063,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1102,7 +1087,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1184,7 +1168,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1209,7 +1192,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1261,7 +1243,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1286,7 +1267,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1368,7 +1348,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1393,7 +1372,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1445,7 +1423,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1470,7 +1447,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1506,7 +1482,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 <Base
                                   className="ant-rate-text"
                                   component="span"
-                                  ellipsis={false}
                                   style={
                                     Object {
                                       "fontWeight": "bold",
@@ -1525,7 +1500,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                             "fontWeight": "bold",
                                           }
                                         }
@@ -1534,7 +1509,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                           className="ant-typography ant-rate-text"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                               "fontWeight": "bold",
                                             }
                                           }
@@ -1599,10 +1574,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -1663,7 +1634,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -1688,7 +1658,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
@@ -1747,7 +1716,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -1762,7 +1730,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -1770,7 +1738,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -1892,7 +1860,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1917,7 +1884,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -1969,7 +1935,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -1994,7 +1959,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2076,7 +2040,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2101,7 +2064,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2153,7 +2115,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2178,7 +2139,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2260,7 +2220,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2285,7 +2244,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2337,7 +2295,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2362,7 +2319,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2444,7 +2400,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2469,7 +2424,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2521,7 +2475,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2546,7 +2499,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2628,7 +2580,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2653,7 +2604,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2705,7 +2655,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   role="img"
                                                 >
                                                   <IconReact
-                                                    className=""
                                                     icon={
                                                       Object {
                                                         "icon": Object {
@@ -2730,7 +2679,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                                   >
                                                     <svg
                                                       aria-hidden="true"
-                                                      className=""
                                                       data-icon="star"
                                                       fill="currentColor"
                                                       focusable="false"
@@ -2766,7 +2714,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                 <Base
                                   className="ant-rate-text"
                                   component="span"
-                                  ellipsis={false}
                                   style={
                                     Object {
                                       "fontWeight": "bold",
@@ -2785,7 +2732,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                             "fontWeight": "bold",
                                           }
                                         }
@@ -2794,7 +2741,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                           className="ant-typography ant-rate-text"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                               "fontWeight": "bold",
                                             }
                                           }
@@ -2859,10 +2806,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -2923,7 +2866,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -2948,7 +2890,6 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
