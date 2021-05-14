@@ -1,5 +1,5 @@
 import * as React from 'react';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { Spin } from 'antd';
 
 // const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;

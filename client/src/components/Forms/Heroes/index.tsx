@@ -1,5 +1,5 @@
 import { Button, Card, Form, Input, Pagination, Row, Select, Typography, Avatar } from 'antd';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { useCallback, useEffect, useState } from 'react';
 import { Course } from '../../../services/models';
 import { IGratitudeGetResponse, IGratitudeGetRequest } from '../../../../../common/interfaces/gratitude';

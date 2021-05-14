@@ -1,7 +1,7 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
 import * as React from 'react';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 
 const { Meta } = Card;
 

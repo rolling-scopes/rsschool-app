@@ -4,7 +4,7 @@ import { ConfigurableProfilePermissions } from '../../../../common/models/profil
 import { Drawer, Checkbox, List, Typography } from 'antd';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 
 const { Text } = Typography;
 

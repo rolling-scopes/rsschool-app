@@ -62,11 +62,15 @@ const isJuryActivist = (course: Course, _: Role, session: Session) =>
 const isAdminRole = (_1: Course, _2: Role, session: Session) => session.isAdmin;
 const isCourseNotCompleted = (course: Course) => !course.completed;
 
-const combineAnd = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
-  checks.every(check => check(course, role, session));
+const combineAnd =
+  (...checks: any[]) =>
+  (course: Course, role: Role, session: Session) =>
+    checks.every(check => check(course, role, session));
 
-const combineOr = (...checks: any[]) => (course: Course, role: Role, session: Session) =>
-  checks.some(check => check(course, role, session));
+const combineOr =
+  (...checks: any[]) =>
+  (course: Course, role: Role, session: Session) =>
+    checks.some(check => check(course, role, session));
 
 const routes = [
   {

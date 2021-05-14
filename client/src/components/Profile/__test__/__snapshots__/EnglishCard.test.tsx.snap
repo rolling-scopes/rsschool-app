@@ -29,9 +29,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
           }
         }
       >
-        <Select
-          bordered={true}
-          choiceTransitionName=""
+        <ForwardRef(InternalSelect)
           defaultValue="a0"
           onChange={[Function]}
           style={
@@ -39,7 +37,6 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
               "width": "100%",
             }
           }
-          transitionName="slide-up"
         >
           <Option
             value="a0"
@@ -101,7 +98,7 @@ exports[`EnglishCard Should render correctly if "aboutMyself" is not present 1`]
           >
             C2
           </Option>
-        </Select>
+        </ForwardRef(InternalSelect)>
       </div>
     </div>
   }
@@ -150,9 +147,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
           }
         }
       >
-        <Select
-          bordered={true}
-          choiceTransitionName=""
+        <ForwardRef(InternalSelect)
           defaultValue="a2"
           onChange={[Function]}
           style={
@@ -160,7 +155,6 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
               "width": "100%",
             }
           }
-          transitionName="slide-up"
         >
           <Option
             value="a0"
@@ -222,7 +216,7 @@ exports[`EnglishCard Should render correctly if "englishLevel" is present 1`] = 
           >
             C2
           </Option>
-        </Select>
+        </ForwardRef(InternalSelect)>
       </div>
     </div>
   }

@@ -30,12 +30,8 @@ class EducationCard extends React.Component<Props> {
     !isEqual(nextProps.isEditingModeEnabled, this.props.isEditingModeEnabled);
 
   render() {
-    const {
-      isEditingModeEnabled,
-      permissionsSettings,
-      onPermissionsSettingsChange,
-      onProfileSettingsChange,
-    } = this.props;
+    const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
+      this.props;
     const { educationHistory } = this.props.data;
     return (
       <CommonCard
