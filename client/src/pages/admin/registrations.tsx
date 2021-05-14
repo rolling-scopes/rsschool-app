@@ -79,7 +79,13 @@ function Page(props: Props) {
         status,
         attributes: { maxStudentsLimit },
       } = registration;
-      const { firstName, lastName, githubId, contactsEpamEmail, locationName: city } = user || {
+      const {
+        firstName,
+        lastName,
+        githubId,
+        contactsEpamEmail,
+        locationName: city,
+      } = user || {
         firstName: '',
         lastName: '',
         githubId: '',

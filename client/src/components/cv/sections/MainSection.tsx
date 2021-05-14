@@ -27,16 +27,8 @@ function formatDate(expirationValue: number | null) {
 
 function MainSection(props: Props) {
   const { userData, contacts, expires } = props;
-  const {
-    avatarLink,
-    name,
-    desiredPosition,
-    englishLevel,
-    militaryService,
-    selfIntroLink,
-    startFrom,
-    fullTime,
-  } = userData;
+  const { avatarLink, name, desiredPosition, englishLevel, militaryService, selfIntroLink, startFrom, fullTime } =
+    userData;
 
   const sectionContent = (
     <Row>

@@ -564,15 +564,8 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
   }
 
   const students = taskCheckers.map(record => {
-    const {
-      githubId,
-      primaryEmail,
-      contactsNotes,
-      contactsPhone,
-      contactsSkype,
-      contactsTelegram,
-      cityName,
-    } = record.mentor.user;
+    const { githubId, primaryEmail, contactsNotes, contactsPhone, contactsSkype, contactsTelegram, cityName } =
+      record.mentor.user;
     return {
       name: record.courseTask.task.name,
       mentor: {

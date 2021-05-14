@@ -8,7 +8,7 @@ import withCourseData from 'components/withCourseData';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask, StudentScore, IColumn } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
@@ -397,6 +397,7 @@ function getColumns(courseTasks: CourseTask[]) {
             <ul>
               <li>Coefficient: {courseTask.scoreWeight}</li>
               <li>Deadline: {dateTimeRenderer(courseTask.studentEndDate)}</li>
+              <li>Max. score: {courseTask.maxScore}</li>
             </ul>
           }
           trigger="click"

@@ -7,7 +7,7 @@ import mapValues from 'lodash/mapValues';
 import clone from 'lodash/clone';
 import pullAt from 'lodash/pullAt';
 import { Result, Spin, message } from 'antd';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';

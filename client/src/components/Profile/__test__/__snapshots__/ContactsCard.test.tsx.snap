@@ -166,7 +166,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -176,7 +176,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -212,7 +212,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -237,7 +236,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="contacts"
                                     fill="currentColor"
                                     focusable="false"
@@ -335,7 +333,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -350,7 +347,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -358,7 +355,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -385,7 +382,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -400,7 +396,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -408,7 +404,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -435,7 +431,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -450,7 +445,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -458,7 +453,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -485,7 +480,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -500,7 +494,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -508,7 +502,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -535,7 +529,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -550,7 +543,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -558,7 +551,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -585,7 +578,6 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -600,7 +592,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -608,7 +600,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -802,7 +794,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -812,7 +804,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -848,7 +840,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -873,7 +864,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="contacts"
                                     fill="currentColor"
                                     focusable="false"
@@ -956,7 +946,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -971,7 +960,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -979,7 +968,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -1006,7 +995,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -1021,7 +1009,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -1029,7 +1017,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -1056,7 +1044,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           >
                             <Base
                               component="span"
-                              ellipsis={false}
                               strong={true}
                             >
                               <LocaleReceiver
@@ -1071,7 +1058,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     component="span"
                                     style={
                                       Object {
-                                        "WebkitLineClamp": null,
+                                        "WebkitLineClamp": undefined,
                                       }
                                     }
                                   >
@@ -1079,7 +1066,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       className="ant-typography"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -1108,7 +1095,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             isSettingsVisible={false}
             onPermissionsSettingsChange={[MockFunction]}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -1127,21 +1114,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -1150,7 +1125,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 }
                 title="Visibility settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -1212,7 +1186,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -1268,6 +1241,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -1299,7 +1273,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -1324,7 +1297,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -1418,11 +1390,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                       </svg>
                                                     </Simple>
                                                   </div>
-                                                  <p
+                                                  <div
                                                     className="ant-empty-description"
                                                   >
                                                     No Data
-                                                  </p>
+                                                  </div>
                                                 </div>
                                               </LocaleReceiver>
                                             </Empty>
@@ -1444,7 +1416,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -1490,7 +1462,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             hideSettings={[Function]}
             isSettingsVisible={false}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -1509,21 +1481,9 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -1532,7 +1492,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 }
                 title="Profile settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -1594,7 +1553,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -1650,6 +1608,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -1681,7 +1640,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -1706,7 +1664,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -1809,7 +1766,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -1824,7 +1780,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -1832,7 +1788,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -1932,7 +1888,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -1947,7 +1902,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -1955,7 +1910,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -2055,7 +2010,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -2070,7 +2024,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -2078,7 +2032,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -2178,7 +2132,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -2193,7 +2146,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -2201,7 +2154,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -2301,7 +2254,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -2316,7 +2268,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -2324,7 +2276,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -2424,7 +2376,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -2439,7 +2390,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -2447,7 +2398,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -2541,7 +2492,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </ProfileSettingsDrawer>
         </div>
         <ul
@@ -2592,7 +2543,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     tabIndex={-1}
                   >
                     <IconReact
-                      className=""
                       icon={
                         Object {
                           "icon": Object {
@@ -2617,7 +2567,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     >
                       <svg
                         aria-hidden="true"
-                        className=""
                         data-icon="edit"
                         fill="currentColor"
                         focusable="false"

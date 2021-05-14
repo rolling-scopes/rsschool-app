@@ -53,10 +53,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
           renderItem={[Function]}
         />
         <Button
-          block={false}
-          ghost={false}
-          htmlType="button"
-          loading={false}
           onClick={[Function]}
           style={
             Object {
@@ -142,7 +138,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -152,7 +148,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -188,7 +184,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -213,7 +208,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="read"
                                     fill="currentColor"
                                     focusable="false"
@@ -297,7 +291,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             isSettingsVisible={false}
             onPermissionsSettingsChange={[MockFunction]}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -316,21 +310,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -339,7 +321,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 }
                 title="Visibility settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -401,7 +382,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -457,6 +437,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -488,7 +469,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -513,7 +493,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -607,11 +586,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       </svg>
                                                     </Simple>
                                                   </div>
-                                                  <p
+                                                  <div
                                                     className="ant-empty-description"
                                                   >
                                                     No Data
-                                                  </p>
+                                                  </div>
                                                 </div>
                                               </LocaleReceiver>
                                             </Empty>
@@ -633,7 +612,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -652,10 +631,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   renderItem={[Function]}
                 />
                 <Button
-                  block={false}
-                  ghost={false}
-                  htmlType="button"
-                  loading={false}
                   onClick={[Function]}
                   style={
                     Object {
@@ -672,7 +647,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             hideSettings={[Function]}
             isSettingsVisible={false}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -691,21 +666,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -714,7 +677,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 }
                 title="Profile settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -776,7 +738,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -832,6 +793,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -863,7 +825,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -888,7 +849,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -970,10 +930,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     }
                                                   >
                                                     <Button
-                                                      block={false}
-                                                      ghost={false}
-                                                      htmlType="button"
-                                                      loading={false}
                                                       onClick={[Function]}
                                                       size="small"
                                                       type="dashed"
@@ -1035,7 +991,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                 role="img"
                                                               >
                                                                 <IconReact
-                                                                  className=""
                                                                   icon={
                                                                     Object {
                                                                       "icon": Object {
@@ -1060,7 +1015,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                 >
                                                                   <svg
                                                                     aria-hidden="true"
-                                                                    className=""
                                                                     data-icon="delete"
                                                                     fill="currentColor"
                                                                     focusable="false"
@@ -1100,7 +1054,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -1115,7 +1068,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -1123,7 +1076,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -1217,7 +1170,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -1232,7 +1184,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -1240,7 +1192,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -1334,7 +1286,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -1349,7 +1300,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -1357,7 +1308,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -1448,10 +1399,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                   </div>
                                 </List>
                                 <Button
-                                  block={false}
-                                  ghost={false}
-                                  htmlType="button"
-                                  loading={false}
                                   onClick={[Function]}
                                   style={
                                     Object {
@@ -1522,7 +1469,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -1547,7 +1493,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="file-add"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -1585,7 +1530,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </ProfileSettingsDrawer>
         </div>
         <ul
@@ -1636,7 +1581,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                     tabIndex={-1}
                   >
                     <IconReact
-                      className=""
                       icon={
                         Object {
                           "icon": Object {
@@ -1661,7 +1605,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                     >
                       <svg
                         aria-hidden="true"
-                        className=""
                         data-icon="edit"
                         fill="currentColor"
                         focusable="false"
@@ -1702,10 +1645,6 @@ exports[`EducationCard Should render correctly if "educationHistory" is empty 1`
         renderItem={[Function]}
       />
       <Button
-        block={false}
-        ghost={false}
-        htmlType="button"
-        loading={false}
         onClick={[Function]}
         style={
           Object {
@@ -1776,10 +1715,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
           renderItem={[Function]}
         />
         <Button
-          block={false}
-          ghost={false}
-          htmlType="button"
-          loading={false}
           onClick={[Function]}
           style={
             Object {
@@ -1858,7 +1793,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -1868,7 +1803,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -1904,7 +1839,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -1929,7 +1863,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="read"
                                     fill="currentColor"
                                     focusable="false"
@@ -2003,7 +1936,6 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                             >
                               <Base
                                 component="span"
-                                ellipsis={false}
                                 strong={true}
                               >
                                 <LocaleReceiver
@@ -2018,7 +1950,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                       component="span"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -2026,7 +1958,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                         className="ant-typography"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2110,10 +2042,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           renderItem={[Function]}
         />
         <Button
-          block={false}
-          ghost={false}
-          htmlType="button"
-          loading={false}
           onClick={[Function]}
           style={
             Object {
@@ -2199,7 +2127,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -2209,7 +2137,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -2245,7 +2173,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -2270,7 +2197,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="read"
                                     fill="currentColor"
                                     focusable="false"
@@ -2344,7 +2270,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                             >
                               <Base
                                 component="span"
-                                ellipsis={false}
                                 strong={true}
                               >
                                 <LocaleReceiver
@@ -2359,7 +2284,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                       component="span"
                                       style={
                                         Object {
-                                          "WebkitLineClamp": null,
+                                          "WebkitLineClamp": undefined,
                                         }
                                       }
                                     >
@@ -2367,7 +2292,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         className="ant-typography"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -2396,7 +2321,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             isSettingsVisible={false}
             onPermissionsSettingsChange={[MockFunction]}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -2415,21 +2340,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -2438,7 +2351,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 }
                 title="Visibility settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -2500,7 +2412,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -2556,6 +2467,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -2587,7 +2499,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -2612,7 +2523,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -2706,11 +2616,11 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       </svg>
                                                     </Simple>
                                                   </div>
-                                                  <p
+                                                  <div
                                                     className="ant-empty-description"
                                                   >
                                                     No Data
-                                                  </p>
+                                                  </div>
                                                 </div>
                                               </LocaleReceiver>
                                             </Empty>
@@ -2732,7 +2642,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -2751,10 +2661,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   renderItem={[Function]}
                 />
                 <Button
-                  block={false}
-                  ghost={false}
-                  htmlType="button"
-                  loading={false}
                   onClick={[Function]}
                   style={
                     Object {
@@ -2771,7 +2677,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             hideSettings={[Function]}
             isSettingsVisible={false}
           >
-            <withConfigConsumer(Drawer)
+            <DrawerWrapper
               className="jsx-2583821679"
               closable={true}
               getContainer={false}
@@ -2790,21 +2696,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
-                getPrefixCls={[Function]}
-                height={256}
-                keyboard={true}
-                level={null}
-                mask={true}
-                maskClosable={true}
                 onClose={[Function]}
                 placement="top"
                 prefixCls="ant-drawer"
-                push={
-                  Object {
-                    "distance": 180,
-                  }
-                }
-                renderEmpty={[Function]}
                 style={
                   Object {
                     "display": "none",
@@ -2813,7 +2707,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 }
                 title="Profile settings"
                 visible={false}
-                width={256}
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
@@ -2875,7 +2768,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                           "zIndex": undefined,
                         }
                       }
-                      switchScrollingEffect={[Function]}
                     >
                       <div
                         className="ant-drawer ant-drawer-top jsx-2583821679"
@@ -2931,6 +2823,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                       "--scroll-bar": "0px",
                                     }
                                   }
+                                  type="button"
                                 >
                                   <ForwardRef(CloseOutlined)>
                                     <AntdIcon
@@ -2962,7 +2855,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         role="img"
                                       >
                                         <IconReact
-                                          className=""
                                           icon={
                                             Object {
                                               "icon": Object {
@@ -2987,7 +2879,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                         >
                                           <svg
                                             aria-hidden="true"
-                                            className=""
                                             data-icon="close"
                                             fill="currentColor"
                                             focusable="false"
@@ -3064,7 +2955,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -3079,7 +2969,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -3087,7 +2977,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -3111,10 +3001,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     }
                                                   >
                                                     <Button
-                                                      block={false}
-                                                      ghost={false}
-                                                      htmlType="button"
-                                                      loading={false}
                                                       onClick={[Function]}
                                                       size="small"
                                                       type="dashed"
@@ -3176,7 +3062,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 role="img"
                                                               >
                                                                 <IconReact
-                                                                  className=""
                                                                   icon={
                                                                     Object {
                                                                       "icon": Object {
@@ -3201,7 +3086,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 >
                                                                   <svg
                                                                     aria-hidden="true"
-                                                                    className=""
                                                                     data-icon="delete"
                                                                     fill="currentColor"
                                                                     focusable="false"
@@ -3241,7 +3125,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -3256,7 +3139,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -3264,7 +3147,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -3358,7 +3241,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -3373,7 +3255,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -3381,7 +3263,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -3475,7 +3357,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                     >
                                                       <Base
                                                         component="span"
-                                                        ellipsis={false}
                                                         strong={true}
                                                       >
                                                         <LocaleReceiver
@@ -3490,7 +3371,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               component="span"
                                                               style={
                                                                 Object {
-                                                                  "WebkitLineClamp": null,
+                                                                  "WebkitLineClamp": undefined,
                                                                 }
                                                               }
                                                             >
@@ -3498,7 +3379,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                                 className="ant-typography"
                                                                 style={
                                                                   Object {
-                                                                    "WebkitLineClamp": null,
+                                                                    "WebkitLineClamp": undefined,
                                                                   }
                                                                 }
                                                               >
@@ -3589,10 +3470,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                   </div>
                                 </List>
                                 <Button
-                                  block={false}
-                                  ghost={false}
-                                  htmlType="button"
-                                  loading={false}
                                   onClick={[Function]}
                                   style={
                                     Object {
@@ -3663,7 +3540,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                             role="img"
                                           >
                                             <IconReact
-                                              className=""
                                               icon={
                                                 Object {
                                                   "icon": Object {
@@ -3688,7 +3564,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                             >
                                               <svg
                                                 aria-hidden="true"
-                                                className=""
                                                 data-icon="file-add"
                                                 fill="currentColor"
                                                 focusable="false"
@@ -3726,7 +3601,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   </div>
                 </DrawerWrapper>
               </Drawer>
-            </withConfigConsumer(Drawer)>
+            </DrawerWrapper>
           </ProfileSettingsDrawer>
         </div>
         <ul
@@ -3777,7 +3652,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                     tabIndex={-1}
                   >
                     <IconReact
-                      className=""
                       icon={
                         Object {
                           "icon": Object {
@@ -3802,7 +3676,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                     >
                       <svg
                         aria-hidden="true"
-                        className=""
                         data-icon="edit"
                         fill="currentColor"
                         focusable="false"

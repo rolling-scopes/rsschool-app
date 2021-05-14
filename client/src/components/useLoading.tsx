@@ -6,17 +6,17 @@ export function useLoading(
   catchHandler = (_: Error) => message.error('An unexpected error occured. Please try later.'),
 ) {
   const [loading, setLoading] = useState(value);
-  const wrapper = <T extends any[], K = any>(action: (...args: T) => Promise<K>) => async (
-    ...args: Parameters<typeof action>
-  ) => {
-    try {
-      setLoading(true);
-      return await action(...args);
-    } catch (e) {
-      catchHandler(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const wrapper =
+    <T extends any[], K = any>(action: (...args: T) => Promise<K>) =>
+    async (...args: Parameters<typeof action>) => {
+      try {
+        setLoading(true);
+        return await action(...args);
+      } catch (e) {
+        catchHandler(e);
+      } finally {
+        setLoading(false);
+      }
+    };
   return [loading, wrapper] as const;
 }
