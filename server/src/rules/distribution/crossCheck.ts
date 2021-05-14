@@ -18,6 +18,10 @@ function shuffle<T>(array: T[]): T[] {
 }
 
 function createShifts(numberOfShifts: number, maxShiftValue: number): number[] {
+  if (numberOfShifts > maxShiftValue) {
+    throw new Error('It is impossible to distribute crosscheckers');
+  }
+
   const shifts = new Set<number>();
 
   while (shifts.size < numberOfShifts) {
@@ -26,10 +30,7 @@ function createShifts(numberOfShifts: number, maxShiftValue: number): number[] {
   return Array.from(shifts);
 }
 
-export function createCrossCheckPairs(
-  studentIds: number[],
-  checkersNumber: number,
-): CrossCheckPair[] {
+export function createCrossCheckPairs(studentIds: number[], checkersNumber: number): CrossCheckPair[] {
   const pairs: CrossCheckPair[] = [];
   const shuffledStudentsIds = shuffle(studentIds);
   const studentsNumber = studentIds.length;
