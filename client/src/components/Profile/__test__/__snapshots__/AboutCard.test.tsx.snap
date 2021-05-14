@@ -23,7 +23,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is not present 1`] =
           About myself:
         </Text>
       </p>
-      <TextArea
+      <ForwardRef
         onChange={[Function]}
         rows={4}
         value=""
@@ -68,7 +68,7 @@ exports[`AboutCard Should render correctly if "aboutMyself" is present 1`] = `
           About myself:
         </Text>
       </p>
-      <TextArea
+      <ForwardRef
         onChange={[Function]}
         rows={4}
         value="Top contributor of Rolling Scopes"

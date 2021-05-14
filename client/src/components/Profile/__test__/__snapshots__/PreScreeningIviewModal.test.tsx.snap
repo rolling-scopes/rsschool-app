@@ -4,11 +4,9 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
 <Modal
   confirmLoading={false}
   footer={null}
-  maskTransitionName="fade"
   okType="primary"
   onCancel={[MockFunction]}
   title="Rolling Scopes School 2019 Q1 Pre-Screening Interview Feedback"
-  transitionName="zoom"
   visible={true}
   width="80%"
 >

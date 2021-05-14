@@ -1,7 +1,7 @@
 import { message, Result } from 'antd';
 import moment from 'moment';
 import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { useAsync } from 'react-use';
 import { useMemo, useState } from 'react';
 

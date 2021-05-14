@@ -340,8 +340,11 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
 
 function renderSelfEducation(courseTask: CourseTask) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
-  const { maxAttemptsNumber = 0, tresholdPercentage = 0, strictAttemptsMode = true } =
-    courseTask?.publicAttributes ?? {};
+  const {
+    maxAttemptsNumber = 0,
+    tresholdPercentage = 0,
+    strictAttemptsMode = true,
+  } = courseTask?.publicAttributes ?? {};
 
   return (
     <>

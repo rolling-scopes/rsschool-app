@@ -1,5 +1,5 @@
 import { GithubFilled } from '@ant-design/icons';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 
 export function GithubUserLink(props: { value: string }) {
   const imgProps: any = { loading: 'lazy' };

@@ -31,13 +31,8 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     if (user == null) {
       return;
     }
-    const {
-      maxStudentsLimit,
-      technicalMentoring,
-      preferedStudentsLocation,
-      preferedCourses,
-      englishMentoring,
-    } = updateData;
+    const { maxStudentsLimit, technicalMentoring, preferedStudentsLocation, preferedCourses, englishMentoring } =
+      updateData;
 
     const mentorData: Partial<MentorRegistry> = {
       maxStudentsLimit,

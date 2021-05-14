@@ -5,7 +5,7 @@ import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
 import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import moment from 'moment-timezone';
 import { TIMEZONES } from '../../configs/timezones';
 import { useAsync } from 'react-use';

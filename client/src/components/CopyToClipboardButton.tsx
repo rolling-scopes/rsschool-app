@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { Button } from 'antd';
 import { CopyTwoTone } from '@ant-design/icons';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 
 type Props = {
   value: string;
