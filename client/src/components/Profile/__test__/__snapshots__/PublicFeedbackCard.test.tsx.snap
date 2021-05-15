@@ -120,7 +120,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Congratulations"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Congratulations badge"
@@ -149,7 +148,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Great speaker"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Great_speaker badge"
@@ -178,7 +176,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Thank you"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Thank_you badge"
@@ -251,7 +248,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
               mouseLeaveDelay={0.1}
               placement="top"
               title="2018-12-01T12:12:01.000Z"
-              transitionName="zoom-big-fast"
             >
               <span>
                 fromNow
@@ -389,7 +385,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Congratulations"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Congratulations badge"
@@ -418,7 +413,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Great speaker"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Great_speaker badge"
@@ -447,7 +441,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
                 mouseLeaveDelay={0.1}
                 placement="top"
                 title="Thank you"
-                transitionName="zoom-big-fast"
               >
                 <Avatar
                   alt="Thank_you badge"
@@ -520,7 +513,6 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
               mouseLeaveDelay={0.1}
               placement="top"
               title="2018-12-01T12:12:01.000Z"
-              transitionName="zoom-big-fast"
             >
               <span>
                 fromNow

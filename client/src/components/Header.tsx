@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Menu, Dropdown } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 // TODO: ucnomment after testing
 import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone /* ExperimentOutlined */ } from '@ant-design/icons';
 

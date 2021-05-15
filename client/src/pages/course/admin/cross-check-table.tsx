@@ -6,7 +6,7 @@ import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { CourseService, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../../common/types/pagination';
 import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score';
 

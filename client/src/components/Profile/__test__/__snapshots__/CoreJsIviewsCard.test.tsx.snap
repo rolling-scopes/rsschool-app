@@ -66,15 +66,13 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
     <Modal
       confirmLoading={false}
       footer={null}
-      maskTransitionName="fade"
       okType="primary"
       onCancel={[Function]}
       title="rs-2019 CoreJS Interview Feedback"
-      transitionName="zoom"
       visible={false}
       width="80%"
     >
-      <_default
+      <Dialog
         closeIcon={
           <span
             className="ant-modal-close-x"
@@ -85,14 +83,15 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
           </span>
         }
         confirmLoading={false}
+        focusTriggerAfterClose={true}
         footer={null}
-        maskTransitionName="fade"
+        maskTransitionName="ant-fade"
         okType="primary"
         onCancel={[Function]}
         onClose={[Function]}
         prefixCls="ant-modal"
         title="rs-2019 CoreJS Interview Feedback"
-        transitionName="zoom"
+        transitionName="ant-zoom"
         visible={false}
         width="80%"
         wrapClassName=""
@@ -100,7 +99,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
         <PortalWrapper
           visible={false}
         />
-      </_default>
+      </Dialog>
     </Modal>
   </CoreJsIviewsModal>
   <CommonCard
@@ -205,7 +204,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                         component="h2"
                         style={
                           Object {
-                            "WebkitLineClamp": null,
+                            "WebkitLineClamp": undefined,
                             "fontSize": 16,
                             "marginBottom": 0,
                           }
@@ -215,7 +214,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                           className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
                           style={
                             Object {
-                              "WebkitLineClamp": null,
+                              "WebkitLineClamp": undefined,
                               "fontSize": 16,
                               "marginBottom": 0,
                             }
@@ -257,7 +256,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                 role="img"
                               >
                                 <IconReact
-                                  className=""
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -288,7 +286,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                 >
                                   <svg
                                     aria-hidden="true"
-                                    className=""
                                     data-icon="question-circle"
                                     fill="currentColor"
                                     focusable="false"
@@ -412,7 +409,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   strong={true}
                                 >
                                   <LocaleReceiver
@@ -427,7 +423,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -435,7 +431,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -464,7 +460,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                               >
                                 <Base
                                   component="span"
-                                  ellipsis={false}
                                   mark={true}
                                 >
                                   <LocaleReceiver
@@ -479,7 +474,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                         component="span"
                                         style={
                                           Object {
-                                            "WebkitLineClamp": null,
+                                            "WebkitLineClamp": undefined,
                                           }
                                         }
                                       >
@@ -487,7 +482,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                           className="ant-typography"
                                           style={
                                             Object {
-                                              "WebkitLineClamp": null,
+                                              "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
@@ -518,10 +513,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                             </p>
                           </div>
                           <Button
-                            block={false}
-                            ghost={false}
-                            htmlType="button"
-                            loading={false}
                             onClick={[Function]}
                             type="dashed"
                           >
@@ -582,7 +573,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                       role="img"
                                     >
                                       <IconReact
-                                        className=""
                                         icon={
                                           Object {
                                             "icon": Object {
@@ -607,7 +597,6 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                       >
                                         <svg
                                           aria-hidden="true"
-                                          className=""
                                           data-icon="fullscreen"
                                           fill="currentColor"
                                           focusable="false"
