@@ -210,8 +210,49 @@ function renderSettingsModal(
     acc[curr.name] = curr.isVisible;
     return acc;
   }, initialValues);
+
+  const fillAllFields = (value: boolean) => {
+    const newValues: { [key: string]: boolean | undefined } = {};
+    courseTasks.reduce((acc, curr) => {
+      acc[curr.name] = value;
+      return acc;
+    }, newValues);
+    form.setFieldsValue(newValues);
+  };
+
   return (
-    <Modal title="Columns visibility" visible={isVisibleSetting} onOk={onOkHandle} onCancel={handleModalCancel}>
+    <Modal
+      title="Columns visibility"
+      visible={isVisibleSetting}
+      onOk={onOkHandle}
+      onCancel={handleModalCancel}
+      footer={[
+        <Button
+          key="Select all"
+          onClick={() => {
+            fillAllFields(true);
+          }}
+          type="text"
+        >
+          Select all
+        </Button>,
+        <Button
+          key="Deselect all"
+          onClick={() => {
+            fillAllFields(false);
+          }}
+          type="text"
+        >
+          Deselect all
+        </Button>,
+        <Button key="Cancel" onClick={handleModalCancel}>
+          Cancel
+        </Button>,
+        <Button key="Submit" type="primary" onClick={onOkHandle}>
+          Submit
+        </Button>,
+      ]}
+    >
       <Form
         size="small"
         layout="horizontal"
