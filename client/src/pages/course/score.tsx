@@ -8,7 +8,7 @@ import withCourseData from 'components/withCourseData';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask, StudentScore, IColumn } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from '../../../../common/types/score';
 import { ParsedUrlQuery } from 'querystring';
@@ -288,7 +288,7 @@ function renderTable(
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={{
         ...pagination,
-        showTotal: (total: number) => `Total ${total} items`,
+        showTotal: (total: number) => `Total ${total} students`,
       }}
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
