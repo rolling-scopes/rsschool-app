@@ -227,22 +227,10 @@ function renderSettingsModal(
       onOk={onOkHandle}
       onCancel={handleModalCancel}
       footer={[
-        <Button
-          key="Select all"
-          onClick={() => {
-            fillAllFields(true);
-          }}
-          type="text"
-        >
+        <Button key="Select all" onClick={() => fillAllFields(true)} type="text">
           Select all
         </Button>,
-        <Button
-          key="Deselect all"
-          onClick={() => {
-            fillAllFields(false);
-          }}
-          type="text"
-        >
+        <Button key="Deselect all" onClick={() => fillAllFields(false)} type="text">
           Deselect all
         </Button>,
         <Button key="Cancel" onClick={handleModalCancel}>
