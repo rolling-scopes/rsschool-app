@@ -22,6 +22,7 @@ const defaultRowGutter = 24;
 
 function Page(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
+  const [isAvailableContact, setIsAvailableContact] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [location, setLocation] = useState(null as Location | null);
@@ -56,6 +57,11 @@ function Page(props: Props & { courseAlias?: string }) {
       cityName: initialData?.cityName,
     } as Location);
   }, [initialData]);
+
+  const checkKeyMatch = (e: any) => {
+    // The length of the nickname in telegrams or skype must be more than 2 or more characters
+    setIsAvailableContact(e.target.value.length >= 2);
+  };
 
   const handleSubmit = useCallback(async (model: any) => {
     setLoading(true);
@@ -303,33 +309,39 @@ function Page(props: Props & { courseAlias?: string }) {
                 </Form.Item>
               </Col>
             </Row>
-
             <Row>
               <Typography.Title level={4}>Contacts</Typography.Title>
             </Row>
             <Row>
-              <Typography.Paragraph type="warning">
-                Your contacts will be shared with your students.
-              </Typography.Paragraph>
+              <Col {...defaultColumnSizes}>
+                <Typography.Paragraph type="warning">
+                  Your contacts will be shared with your students.
+                </Typography.Paragraph>
+                <Typography.Paragraph mark>
+                  Enter one of the contacts below to be able to contact you!
+                </Typography.Paragraph>
+              </Col>
             </Row>
             <Row gutter={defaultRowGutter}>
               <Col {...defaultColumnSizes}>
-                <Form.Item name="contactsTelegram" label="Telegram">
-                  <Input addonBefore="@" placeholder="durov" />
+                <Form.Item name="contactsTelegram" label="Telegram" rules={[{ required: !isAvailableContact }]}>
+                  <Input addonBefore="@" placeholder="durov" onChange={checkKeyMatch} />
                 </Form.Item>
               </Col>
               <Col {...defaultColumnSizes}>
-                <Form.Item name="contactsSkype" label="Skype">
-                  <Input placeholder="johnsmith" />
+                <Form.Item name="contactsSkype" label="Skype" rules={[{ required: !isAvailableContact }]}>
+                  <Input placeholder="johnsmith" onChange={checkKeyMatch} />
                 </Form.Item>
               </Col>
               <Col {...defaultColumnSizes}>
                 <Form.Item
                   name="contactsPhone"
                   label="Phone"
-                  rules={[{ pattern: phonePattern, message: 'Please enter a valid phone' }]}
+                  rules={[
+                    { required: !isAvailableContact, pattern: phonePattern, message: 'Please enter a valid phone' },
+                  ]}
                 >
-                  <Input placeholder="+375297775533" />
+                  <Input placeholder="+375297775533" onChange={checkKeyMatch} />
                 </Form.Item>
               </Col>
             </Row>
