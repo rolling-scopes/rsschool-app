@@ -317,7 +317,7 @@ function renderTable(
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={{
         ...pagination,
-        showTotal: (total: number) => `Total ${total} items`,
+        showTotal: (total: number) => `Total ${total} students`,
       }}
       rowKey="githubId"
       rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
