@@ -1,53 +1,46 @@
-import { times } from 'lodash';
-import { shuffleRec } from './shuffle';
-
 type CrossCheckPair = {
   checkerId: number;
   studentId: number;
 };
 
-export function createCrossCheckPairs(students: number[], minPairsPerPerson = 3, tryNum = 0): CrossCheckPair[] {
-  let allPersons: number[] = [];
+function randomInteger(min: number, max: number): number {
+  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
+}
 
-  times(minPairsPerPerson, () => {
-    allPersons = allPersons.concat(shuffleRec(students));
+function shuffle<T>(array: T[]): T[] {
+  const arrcopy = [...array];
+
+  for (let i = arrcopy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arrcopy[i], arrcopy[j]] = [arrcopy[j], arrcopy[i]];
+  }
+  return arrcopy;
+}
+
+function createShifts(numberOfShifts: number, maxShiftValue: number): number[] {
+  if (numberOfShifts > maxShiftValue) {
+    throw new Error('It is impossible to distribute crosscheckers');
+  }
+
+  const shifts = new Set<number>();
+
+  while (shifts.size < numberOfShifts) {
+    shifts.add(randomInteger(1, maxShiftValue));
+  }
+  return Array.from(shifts);
+}
+
+export function createCrossCheckPairs(studentIds: number[], checkersNumber: number): CrossCheckPair[] {
+  const pairs: CrossCheckPair[] = [];
+  const shuffledStudentsIds = shuffle(studentIds);
+  const studentsNumber = studentIds.length;
+  const shifts = createShifts(checkersNumber, Math.floor((studentsNumber - 1) / 2));
+
+  shuffledStudentsIds.forEach((studentId, index) => {
+    for (let i = 0; i < checkersNumber; i++) {
+      const checkerId = shuffledStudentsIds[(index + shifts[i]) % studentsNumber];
+      pairs.push({ checkerId, studentId });
+    }
   });
-
-  const randomStudents = shuffleRec(allPersons);
-  const createPair = (pairs: CrossCheckPair[], checkerId: number): CrossCheckPair[] => {
-    if (randomStudents.length > 0) {
-      const randomStudentId = randomStudents.shift();
-      const isInvalidPair =
-        randomStudentId === checkerId || pairs.find(p => p.studentId === randomStudentId && p.checkerId === checkerId);
-      if (isInvalidPair) {
-        if (randomStudents.length > 0 && randomStudents.some(s => s !== checkerId)) {
-          randomStudents.push(randomStudentId!);
-          return createPair(pairs, checkerId);
-        }
-        return pairs;
-      }
-      if (randomStudentId) {
-        pairs.push({ checkerId, studentId: randomStudentId });
-      }
-      return pairs;
-    }
-
-    return pairs;
-  };
-
-  let pairs: CrossCheckPair[] = [];
-
-  for (const studentId of students) {
-    times(minPairsPerPerson, () => {
-      pairs = createPair(pairs, studentId);
-    });
-  }
-
-  if (pairs.length < students.length * minPairsPerPerson) {
-    // not able to distribute all students. try again (3 attempts total);
-    if (tryNum < 3) {
-      return createCrossCheckPairs(students, minPairsPerPerson, tryNum + 1);
-    }
-  }
   return pairs;
 }
