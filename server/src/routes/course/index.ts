@@ -153,7 +153,7 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addCrossCheckApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/cross-check/pairs', adminGuard, crossCheck.getCrossCheckPairs(logger));
+  router.get('/cross-check/pairs', courseManagerGuard, crossCheck.getCrossCheckPairs(logger));
 }
 
 function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
