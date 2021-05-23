@@ -37,13 +37,13 @@ import {
 } from './students';
 import { postTaskArtefact } from './taskArtefact';
 import { createTaskVerification } from './taskVerification';
-import { getCourseEvents, getCourseEventsCalendar } from './events';
+import { getCourseEvent, getCourseEvents, getCourseEventsCalendar } from './events';
 import { getStudentTaskVerifications, getCourseTasksVerifications } from './taskVerifications';
 import * as stageInterview from './stageInterview';
 
 import * as interviews from './interviews';
 
-import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks } from './tasks';
+import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks, getCourseTask } from './tasks';
 import {
   createRepository,
   createRepositories,
@@ -65,6 +65,7 @@ import {
 import * as crossCheck from './crossCheck';
 import { getUsers, postUser, putUser } from './user';
 import { postCopyCourse } from './template';
+import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 
 const validateId = async (ctx: Router.RouterContext, next: Next) => {
   const id = Number(ctx.params.id);
@@ -95,7 +96,7 @@ export function courseRoute(logger: ILogger) {
   addStudentCrossCheckApi(router, logger);
   addCourseUserApi(router, logger);
   addCrossCheckApi(router, logger);
-
+  addScheduleApi(router, logger);
   return router;
 }
 
@@ -122,6 +123,7 @@ function addStageApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
+  router.get('/event/:id', courseGuard, getCourseEvent(logger));
   router.put('/event/:id', courseManagerGuard, createPutRoute(CourseEvent, logger));
   router.post('/event', courseManagerGuard, createPostRoute(CourseEvent, logger));
   router.delete('/event/:id', courseManagerGuard, createDeleteRoute(CourseEvent, logger));
@@ -131,6 +133,7 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
+  router.get('/task/:id', courseGuard, getCourseTask(logger));
   router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
   router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
@@ -292,6 +295,11 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
   router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/feedback`, courseGuard, ...validators, crossCheck.getFeedback(logger));
   router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, crossCheck.getAssignments(logger));
+}
+
+function addScheduleApi(router: Router<any, any>, logger: ILogger) {
+  router.get('/schedule/csv/:timeZone', courseSupervisorGuard, getScheduleAsCsv(logger));
+  router.post('/schedule/csv/:timeZone', courseSupervisorGuard, setScheduleFromCsv(logger));
 }
 
 export function courseCrudRoute(logger: ILogger) {

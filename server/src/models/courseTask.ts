@@ -89,4 +89,10 @@ export class CourseTask {
 
   @Column({ default: false, type: 'boolean' })
   disabled: boolean;
+
+  @Column({ default: '' })
+  special: string;
+
+  @Column({ nullable: true, type: 'int' })
+  duration: number;
 }

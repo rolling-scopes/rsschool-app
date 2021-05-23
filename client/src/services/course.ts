@@ -28,6 +28,8 @@ export interface CourseTask {
   taskOwnerId: number | null;
   publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
+  special?: string;
+  duration?: number;
 }
 
 export interface IColumn {
@@ -62,6 +64,7 @@ export interface CourseTaskDetails extends CourseTask {
   description: string | null;
   taskResultCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
+  pairsCount?: number;
 }
 
 export interface CourseEvent {
@@ -80,6 +83,10 @@ export interface CourseEvent {
   organizer: UserBasic;
   detailsUrl: string;
   broadcastUrl: string;
+  special?: string;
+  duration?: number;
+  isTask?: boolean;
+  checker?: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
 }
 
 export interface CourseUser {
@@ -124,6 +131,12 @@ export class CourseService {
     this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
   }
 
+  async getCourseTask(taskId: string) {
+    type Response = { data: CourseTaskDetails };
+    const result = await this.axios.get<Response>(`/task/${taskId}`);
+    return result.data.data;
+  }
+
   async getCourseTasks() {
     type Response = { data: CourseTask[] };
     const result = await this.axios.get<Response>('/tasks');
@@ -141,6 +154,11 @@ export class CourseService {
     return result.data.data.sort(sortTasksByEndDate);
   }
 
+  async getEventById(id: string) {
+    const result = await this.axios.get<{ data: CourseEvent }>(`/event/${id}`);
+    return result.data.data;
+  }
+
   async getCourseEvents() {
     const result = await this.axios.get<{ data: CourseEvent[] }>(`/events`);
     return result.data.data;
@@ -153,6 +171,14 @@ export class CourseService {
 
   async updateCourseEvent(courseTaskId: number, data: any) {
     const result = await this.axios.put<{ data: CourseEvent }>(`/event/${courseTaskId}`, data);
+    return result.data.data;
+  }
+
+  async postMultipleEntities(data: Partial<CourseTask | CourseEvent>, timeZone: string) {
+    const result = await this.axios.post<{ data: Partial<CourseTask | CourseEvent> }>(
+      `/schedule/csv/${timeZone.replace('/', '_')}`,
+      data,
+    );
     return result.data.data;
   }
 
