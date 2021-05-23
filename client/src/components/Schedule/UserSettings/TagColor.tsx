@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import TagColorIcon from './TagColorIcon';
 import { Collapse, Tag } from 'antd';
-import { GithubPicker } from 'react-color';
+import { GithubPicker, ColorState as IColorState } from 'react-color';
 import { pickerColors, setTagColor, getTagStyle } from './userSettingsHandlers';
-import { ColorState as IColorState } from 'react-color';
 
 type Props = {
   tags: string[];
