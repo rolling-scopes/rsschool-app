@@ -15,7 +15,8 @@ export class RepositoryService {
   public async createMany() {
     const result = [];
     const course = await getRepository(Course).findOne(this.courseId);
-    if (course == null) {
+
+    if (course == null || !course.usePrivateRepositories) {
       return;
     }
 

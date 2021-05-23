@@ -92,4 +92,7 @@ export class Course {
 
   @Column({ nullable: true })
   certificateIssuer: string;
+
+  @Column({ default: true })
+  usePrivateRepositories: boolean;
 }

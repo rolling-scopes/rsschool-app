@@ -19,7 +19,7 @@ const TECHNICAL_SCRINING_TASK_NAME = 'Technical Screening';
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
-  const { fullName } = props.course;
+  const { fullName, usePrivateRepositories } = props.course;
 
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const userService = useMemo(() => new UserService(), [props.course.id]);
@@ -32,14 +32,9 @@ function Page(props: CoursePageProps) {
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
   const [loading, setLoading] = useState(false);
 
-  const getRepository = async () => {
-    const { repository } = await courseService.getStudentSummary(githubId);
-    return repository ? repository : '';
-  };
-
   const updateUrl = async () => {
-    const newUrl = await getRepository();
-    setRepositoryUrl(newUrl);
+    const { repository } = await courseService.getStudentSummary(githubId);
+    setRepositoryUrl(repository ? repository : '');
   };
 
   const changeCountEvents = (value: number) => {
@@ -142,12 +137,14 @@ function Page(props: CoursePageProps) {
         maxCourseScore={maxCourseScore}
       />
     ),
-    <RepositoryCard
-      githubId={githubId}
-      url={repositoryUrl}
-      onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
-      updateUrl={updateUrl}
-    />,
+    usePrivateRepositories && (
+      <RepositoryCard
+        githubId={githubId}
+        url={repositoryUrl}
+        onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
+        updateUrl={updateUrl}
+      />
+    ),
     studentSummary?.mentor && <MentorCard mentor={studentSummary?.mentor} />,
     courseTasks.length && <TasksStatsCard tasks={taskStatistics} courseName={fullName} />,
     <NextEventCard nextEvents={nextEvents} showCountEvents={countEvents} setShowCountEvents={changeCountEvents} />,

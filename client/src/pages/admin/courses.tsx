@@ -170,17 +170,22 @@ function Page(props: Props) {
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="range"
-          label="Start Date - End Date"
-          rules={[{ required: true, type: 'array', message: 'Please enter course date range' }]}
-        >
-          <DatePicker.RangePicker />
-        </Form.Item>
-
-        <Form.Item name="registrationEndDate" label="Registration End Date">
-          <DatePicker />
-        </Form.Item>
+        <Row justify="space-between">
+          <Col>
+            <Form.Item
+              name="range"
+              label="Start Date - End Date"
+              rules={[{ required: true, type: 'array', message: 'Please enter course date range' }]}
+            >
+              <DatePicker.RangePicker />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item name="registrationEndDate" label="Registration End Date">
+              <DatePicker />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item name="state" label="State">
           <Radio.Group>
@@ -188,6 +193,10 @@ function Page(props: Props) {
             <Radio value="planned">Planned</Radio>
             <Radio value="completed">Completed</Radio>
           </Radio.Group>
+        </Form.Item>
+
+        <Form.Item name="usePrivateRepositories" label="Repositories" valuePropName="checked">
+          <Checkbox>Use Private Repositories</Checkbox>
         </Form.Item>
 
         <Form.Item name="inviteOnly" label="Invite Only" valuePropName="checked">
@@ -238,6 +247,7 @@ function createRecord(values: any) {
     primarySkillName: (PRIMARY_SKILLS.find(skill => skill.id === values.primarySkillId) || { name: '' }).name,
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
+    usePrivateRepositories: values.usePrivateRepositories,
   };
   return record;
 }
