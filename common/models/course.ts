@@ -14,4 +14,5 @@ export interface Course {
   startDate: string;
   certificateIssuer: string;
   discordServerId: number;
+  usePrivateRepositories: boolean;
 }

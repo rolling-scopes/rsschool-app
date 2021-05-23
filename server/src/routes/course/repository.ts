@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { OK } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { ILogger } from '../../logger';
 import { RepositoryService } from '../../services';
 import { setResponse } from '../utils';
@@ -10,7 +10,7 @@ export const createRepositories = (logger: ILogger) => async (ctx: Router.Router
   const github = await GithubService.initGithub();
   const repositoryService = new RepositoryService(courseId, github, logger);
   repositoryService.createMany();
-  setResponse(ctx, OK);
+  setResponse(ctx, StatusCodes.OK);
 };
 
 export const updateRepositories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -18,7 +18,7 @@ export const updateRepositories = (logger: ILogger) => async (ctx: Router.Router
   const github = await GithubService.initGithub();
   const repositoryService = new RepositoryService(courseId, github, logger);
   repositoryService.updateRepositories();
-  setResponse(ctx, OK);
+  setResponse(ctx, StatusCodes.OK);
 };
 
 export const createRepository = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -26,7 +26,7 @@ export const createRepository = (logger: ILogger) => async (ctx: Router.RouterCo
   const github = await GithubService.initGithub();
   const repositoryService = new RepositoryService(courseId, github, logger);
   const result = await repositoryService.createSingle(githubId);
-  setResponse(ctx, OK, { repository: result?.repository });
+  setResponse(ctx, StatusCodes.OK, { repository: result?.repository });
 };
 
 export const inviteMentorToTeam = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -34,7 +34,7 @@ export const inviteMentorToTeam = (logger: ILogger) => async (ctx: Router.Router
   const github = await GithubService.initGithub();
   const repositoryService = new RepositoryService(courseId, github, logger);
   await repositoryService.inviteMentor(githubId);
-  setResponse(ctx, OK);
+  setResponse(ctx, StatusCodes.OK);
 };
 
 export const inviteAllMentorsToTeam = (logger: ILogger) => async (ctx: Router.RouterContext) => {
@@ -42,5 +42,5 @@ export const inviteAllMentorsToTeam = (logger: ILogger) => async (ctx: Router.Ro
   const github = await GithubService.initGithub();
   const repositoryService = new RepositoryService(courseId, github, logger);
   await repositoryService.inviteAllMentors();
-  setResponse(ctx, OK);
+  setResponse(ctx, StatusCodes.OK);
 };
