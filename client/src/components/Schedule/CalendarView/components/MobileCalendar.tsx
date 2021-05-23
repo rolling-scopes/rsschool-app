@@ -5,7 +5,7 @@ import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 
 const { Text } = Typography;
 
@@ -31,9 +31,8 @@ type Props = {
 };
 
 const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
-  const [modalWindowData, setModalWindowData] = useState<
-    { color: string; name: string; key: number; time: string; type: string }[] | undefined
-  >();
+  const [modalWindowData, setModalWindowData] =
+    useState<{ color: string; name: string; key: number; time: string; type: string }[] | undefined>();
   const [currentItem, setCurrentItem] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
   const [calendarMode, setCalendarMode] = useState<string>('month');
@@ -51,7 +50,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
 
   function onSelect(date: unknown | Moment) {
     if (calendarMode === 'month') {
-      setModalWindowData(getListData((date as unknown) as Moment, data, timeZone, storedTagColors));
+      setModalWindowData(getListData(date as unknown as Moment, data, timeZone, storedTagColors));
     }
   }
 
@@ -61,7 +60,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
   }
 
   function dateCellRender(date: unknown | Moment) {
-    const numberEvents = getListData((date as unknown) as Moment, data, timeZone, storedTagColors).length;
+    const numberEvents = getListData(date as unknown as Moment, data, timeZone, storedTagColors).length;
     return (
       !!(numberEvents > 0) && (
         <>
@@ -73,7 +72,7 @@ const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alia
   }
 
   const monthCellRender = (date: unknown | Moment) => {
-    const numberEvents = getMonthValue((date as unknown) as Moment, data, timeZone);
+    const numberEvents = getMonthValue(date as unknown as Moment, data, timeZone);
     return (
       !!numberEvents && (
         <>

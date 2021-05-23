@@ -72,10 +72,12 @@ export function stringTrimRenderer(value: string) {
   return value && value.length > 20 ? `${value.slice(0, 20)}...` : value;
 }
 
-export const idFromArrayRenderer = <T extends { id: number; name: string }>(data: T[]) => (value: number) => {
-  const item = data.find(d => d.id === value);
-  return item ? item.name : '(Empty)';
-};
+export const idFromArrayRenderer =
+  <T extends { id: number; name: string }>(data: T[]) =>
+  (value: number) => {
+    const item = data.find(d => d.id === value);
+    return item ? item.name : '(Empty)';
+  };
 
 const getUrlIcon = (url: string) => {
   const lowerUrl = url.toLowerCase();

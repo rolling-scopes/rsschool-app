@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Collapse, Badge, Button, Row, Typography, Col, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import moment from 'moment-timezone';
 import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';

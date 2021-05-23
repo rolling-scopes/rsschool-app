@@ -28,6 +28,8 @@ export interface CourseTask {
   taskOwnerId: number | null;
   publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
+  special?: string;
+  duration?: number;
 }
 
 export interface IColumn {
@@ -37,8 +39,6 @@ export interface IColumn {
   className: string;
   render: (_: any, d: StudentScore) => JSX.Element | 0;
   name: string;
-  special?: string;
-  duration?: number;
 }
 
 export interface SelfEducationPublicAttributes {

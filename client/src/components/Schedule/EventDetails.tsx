@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Row, Col, Typography, Tooltip, Button } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
-import css from 'styled-jsx/css';
+import { css } from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';

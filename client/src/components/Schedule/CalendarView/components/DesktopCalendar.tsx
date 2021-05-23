@@ -34,7 +34,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
     return (
       <Scrollbars autoHide autoHideTimeout={500} autoHideDuration={200}>
         <ul style={{ padding: '5px' }}>
-          {getListData((date as unknown) as Moment, data, timeZone, storedTagColors).map(coloredEvent => {
+          {getListData(date as unknown as Moment, data, timeZone, storedTagColors).map(coloredEvent => {
             return (
               <Tooltip title={coloredEvent.time}>
                 <li
@@ -61,7 +61,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
   };
 
   const monthCellRender = (date: unknown | Moment) => {
-    const num = getMonthValue((date as unknown) as Moment, data, timeZone);
+    const num = getMonthValue(date as unknown as Moment, data, timeZone);
 
     return !!num && <Title level={5} style={{ textAlign: 'center' }}>{`Events & tasks: ${num}.`}</Title>;
   };
