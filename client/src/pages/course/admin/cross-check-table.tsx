@@ -1,4 +1,4 @@
-import { Layout, Spin, Table, Typography } from 'antd';
+import { Modal, Layout, Spin, Table, Typography, Button } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
 import { omit } from 'lodash';
 import { getColumnSearchProps } from 'components/Table';
@@ -29,6 +29,7 @@ export const fields = {
 };
 
 export function Page(props: CoursePageProps) {
+  const [modal, contextHolder] = Modal.useModal();
   const courseService = useMemo(() => new CourseService(props.course?.id), [props.course]);
 
   const [loading, setLoading] = useState(false);
@@ -89,9 +90,22 @@ export function Page(props: CoursePageProps) {
   return (
     <>
       <Header title="Cross-Check" username={props.session.githubId} courseName={props.course.name} />
+      {contextHolder}
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
-          {renderTable(loaded, crossCheckList.content, crossCheckList.pagination, getCourseScore)}
+          {renderTable(
+            loaded,
+            crossCheckList.content,
+            crossCheckList.pagination,
+            getCourseScore,
+            ({ comment, checkerStudent }) => {
+              modal.info({
+                width: 600,
+                title: `Comment from ${checkerStudent.githubId}`,
+                content: comment.split('\n').map(text => <p>{text}</p>),
+              });
+            },
+          )}
         </Spin>
       </Layout.Content>
       <style jsx>{styles}</style>
@@ -104,6 +118,7 @@ function renderTable(
   crossCheckPairs: CrossCheckPairs[],
   pagination: IPaginationInfo,
   handleChange: (pagination: IPaginationInfo, filters: ScoreTableFilters, order: ScoreOrder) => void,
+  viewComment: (value: CrossCheckPairs) => void,
 ) {
   if (!loaded) {
     return null;
@@ -186,6 +201,17 @@ function renderTable(
           width: 80,
           sorter: true,
           render: value => <Text strong>{value}</Text>,
+        },
+        {
+          title: 'Comment',
+          dataIndex: 'comment',
+          key: 'comment',
+          width: 60,
+          render: (_, record) => (
+            <Button onClick={() => viewComment(record)} type="link" size="small">
+              Show
+            </Button>
+          ),
         },
       ]}
     />

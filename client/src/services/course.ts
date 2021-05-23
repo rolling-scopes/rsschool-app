@@ -720,5 +720,6 @@ export interface CrossCheckPairs {
     id: number;
   };
   url: string;
+  comment: string;
   score: number;
 }

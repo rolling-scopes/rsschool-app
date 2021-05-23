@@ -83,7 +83,7 @@ export async function getCrossCheckData(
 
   const query = getRepository(TaskSolutionResult)
     .createQueryBuilder('tsr')
-    .addSelect(['tsr.score'])
+    .addSelect(['tsr.score', 'tsr.comment'])
     .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
     .addSelect(['courseTask.id', 'courseTask.courseId'])
     .leftJoin('courseTask.task', 'task')
@@ -154,6 +154,7 @@ export async function getCrossCheckData(
     },
     url: e.taskSolution_url,
     score: e.tsr_score,
+    comment: e.tsr_comment,
   }));
 
   return {
