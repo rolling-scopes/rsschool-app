@@ -133,7 +133,7 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
         'student.mentorId',
         ...courseService.getPrimaryUserFields('user'),
       ])
-      .where('sis.courseId = :courseId AND student.isExpelled = false', { courseId })
+      .where('sis.courseId = :courseId AND student.isExpelled = false AND student.mentorId IS NULL', { courseId })
       .getMany();
 
     return records.map(record => ({
