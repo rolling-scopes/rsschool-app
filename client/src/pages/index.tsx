@@ -231,7 +231,7 @@ const courseManagementRoutes = [
   {
     name: () => `Cross-Сheck Table`,
     getLink: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
-    access: isAdminRole,
+    access: combineOr(isAdminRole, isCourseManager),
   },
   {
     name: () => `Technical Screening`,
