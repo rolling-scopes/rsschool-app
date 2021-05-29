@@ -38,10 +38,8 @@ export class ConsentRepository extends AbstractRepository<Consent> {
 
   public async findByGithubIds(githubIds: string[]): Promise<Consent[]> {
     const users = await userService.getUsersByGithubIds(githubIds);
-    const emails = users.filter(user => user.contactsEmail).map(user => user.contactsEmail!);
     const tgUsernames = users.filter(user => user.contactsTelegram).map(user => user.contactsTelegram!);
-    const emailsConsents = await this.findByChannelValues(emails);
     const tgConsents = await this.findBytgUsernames(tgUsernames);
-    return [...emailsConsents, ...tgConsents];
+    return [...tgConsents];
   }
 }

@@ -16,7 +16,6 @@ type Props = {
 };
 
 type State = {
-  emailOptIn: boolean;
   tgOptIn: boolean;
   isTgConsentExist: boolean;
 };
@@ -25,10 +24,8 @@ class ConsentsCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { data } = props;
-    const [emailConsent] = data.filter(consent => consent.channelType === 'email');
     const [tgConsent] = data.filter(consent => consent.channelType === 'tg');
     this.state = {
-      emailOptIn: emailConsent && emailConsent.optIn,
       tgOptIn: tgConsent && tgConsent.optIn,
       isTgConsentExist: Boolean(tgConsent),
     };
@@ -36,26 +33,17 @@ class ConsentsCard extends React.Component<Props, State> {
 
   private onConsentChanged = (e: CheckboxChangeEvent) => {
     const { id, checked } = e.target;
-    switch (id) {
-      case 'tg':
-        this.setState({ tgOptIn: checked });
-        break;
-      case 'email':
-        this.setState({ emailOptIn: checked });
-        break;
+    if (id === 'tg') {
+      this.setState({ tgOptIn: checked });
     }
     this.props.onProfileSettingsChange(e.target, 'consent');
   };
 
   render() {
-    const { emailOptIn, tgOptIn, isTgConsentExist } = this.state;
+    const { tgOptIn, isTgConsentExist } = this.state;
     const { isEditingModeEnabled } = this.props;
 
     const listItems: any[] = [
-      <List.Item>
-        <Text>E-Mail notifications</Text>
-        {emailOptIn ? <CheckSquareTwoTone twoToneColor="#52c41a" /> : <CloseSquareTwoTone twoToneColor="#ff4d4f" />}
-      </List.Item>,
       <List.Item>
         <Text>Telegram notifications</Text>
         {tgOptIn ? <CheckSquareTwoTone twoToneColor="#52c41a" /> : <CloseSquareTwoTone twoToneColor="#ff4d4f" />}
@@ -63,10 +51,6 @@ class ConsentsCard extends React.Component<Props, State> {
     ];
 
     const settingsListItems: any[] = [
-      <List.Item title={`You ${emailOptIn ? 'are' : "aren't"} subscribed to email notifications`}>
-        <label htmlFor={'email'}>E-Mail notifications</label>
-        <Checkbox id={'email'} checked={emailOptIn} onChange={this.onConsentChanged} />
-      </List.Item>,
       <List.Item
         style={{ borderBottom: 'none' }}
         title={`You ${tgOptIn ? 'are' : "aren't"} subscribed to telegram notifications`}
