@@ -40,6 +40,7 @@ interface StageInterviewFeedback {
   resume: {
     verdict: StageInterviewFeedbackVerdict;
     comment: string | null;
+    score: number;
   };
 }
 

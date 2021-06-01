@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, message, Divider } from 'antd';
+import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
 import withCourseData from 'components/withCourseData';
 import { withSession, UserSearch, PageLayoutSimple } from 'components';
 import { CoursePageProps, StudentBasic } from 'services/models';
@@ -8,6 +8,8 @@ import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
 import _ from 'lodash';
 import { useLoading } from 'components/useLoading';
+
+type HandleChangeValue = (skillName: string) => (value: any) => void;
 
 const SKILLS_LEVELS = [
   `Doesn't know`,
@@ -52,6 +54,7 @@ const defaultInitialValues = {
   'english-comment': '',
   'resume-verdict': null,
   'resume-comment': '',
+  'resume-score': 0,
 };
 
 const SKILLS = [
@@ -128,7 +131,7 @@ const SKILLS = [
 
 const radioStyle = { display: 'block', height: '30px', lineHeight: '30px' };
 
-const renderSkills = () => (
+const renderSkills = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Skills</Typography.Title>
     {SKILLS.map(category => (
@@ -139,7 +142,7 @@ const renderSkills = () => (
         {category.comment && <Typography.Paragraph>{category.comment}</Typography.Paragraph>}
         {category.skills.map((skill: { name: string; label: string }) => (
           <Form.Item name={`skills-${category.name}-${skill.name}`} label={skill.label} key={skill.name}>
-            <Rate tooltips={SKILLS_LEVELS} />
+            <Rate onChange={handleSkillChange(`skills-${category.name}-${skill.name}`)} tooltips={SKILLS_LEVELS} />
           </Form.Item>
         ))}
       </div>
@@ -150,7 +153,7 @@ const renderSkills = () => (
   </>
 );
 
-const renderProgrammingTask = () => (
+const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Code writing level</Typography.Title>
     <Form.Item label="What tasks did the student have to solve?" name="programmingTask-task">
@@ -170,7 +173,7 @@ const renderProgrammingTask = () => (
       </Radio.Group>
     </Form.Item>
     <Form.Item label="Code writing confidence" name="programmingTask-codeWritingLevel">
-      <Rate tooltips={CODING_LEVELS} />
+      <Rate onChange={handleSkillChange('programmingTask-codeWritingLevel')} tooltips={CODING_LEVELS} />
     </Form.Item>
     <Form.Item label="Comment" name="programmingTask-comment" style={{ marginBottom: 40 }}>
       <Input.TextArea placeholder="Comments about student's code writing level" autoSize={{ minRows: 3, maxRows: 5 }} />
@@ -228,6 +231,9 @@ const renderResume = () => (
         </Radio>
       </Radio.Group>
     </Form.Item>
+    <Form.Item name="resume-score" label="Score (Max 50 points)">
+      <InputNumber min={0} max={50} />
+    </Form.Item>
     <Form.Item
       label="Comment"
       name="resume-comment"
@@ -248,6 +254,8 @@ function Page(props: CoursePageProps) {
   const [loading, withLoading] = useLoading(false);
   const [students, setStudents] = useState([] as StudentBasic[]);
   const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
+
+  const [resume, setResume] = useState(defaultInitialValues);
 
   const loadData = async () => {
     const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
@@ -279,6 +287,24 @@ function Page(props: CoursePageProps) {
     }
   };
 
+  const calculateResult = (result: any) => {
+    const { skills, programmingTask } = result;
+    const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
+    const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
+    const htmlCss = skills.htmlCss.level;
+
+    const common = commonSkills.length ? commonSkills.reduce((acc, cur) => acc + cur, 0) / commonSkills.length : 0;
+    const dataStructures = dataStructuresSkills.length
+      ? dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length
+      : 0;
+
+    const ratingsCount = 4;
+    const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
+
+    const rating = ratings.reduce((sum, num) => sum + num, 0) / ratingsCount;
+    return Math.floor(rating * 10 ?? 0);
+  };
+
   const handleSubmit = withLoading(async (values: any) => {
     if (!values.githubId || !values['resume-verdict'] || loading) {
       return;
@@ -307,6 +333,13 @@ function Page(props: CoursePageProps) {
     }
   });
 
+  const handleTotalScoreChange = (skillName: string) => (value: number) => {
+    const result = calculateResult(serializeToJson({ ...resume, [skillName]: value }));
+    const newResult = { ...resume, [skillName]: value, 'resume-score': result };
+    setResume(newResult);
+    form.setFieldsValue(newResult);
+  };
+
   return (
     <PageLayoutSimple
       loading={loading}
@@ -316,7 +349,7 @@ function Page(props: CoursePageProps) {
     >
       <Form
         form={form}
-        initialValues={defaultInitialValues}
+        initialValues={resume}
         layout="vertical"
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
@@ -325,7 +358,7 @@ function Page(props: CoursePageProps) {
         <Form.Item
           name="githubId"
           label="Student"
-          rules={[{ required: true, message: 'Please select a student' }]}
+          rules={[{ required: false, message: 'Please select a student' }]}
           style={{ marginBottom: '40px' }}
         >
           <UserSearch
@@ -335,9 +368,9 @@ function Page(props: CoursePageProps) {
             searchFn={filterStudents}
           />
         </Form.Item>
-        {renderSkills()}
+        {renderSkills(handleTotalScoreChange)}
         <Divider dashed />
-        {renderProgrammingTask()}
+        {renderProgrammingTask(handleTotalScoreChange)}
         <Divider dashed style={{ height: 2 }} />
         {renderEnglishLevel()}
         <Divider dashed />
