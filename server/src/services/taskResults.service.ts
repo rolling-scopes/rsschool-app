@@ -67,7 +67,13 @@ export async function getTaskSolutionResult(studentId: number, checkerId: number
 }
 
 export async function getCrossCheckData(
-  filter: { checkerStudent?: string; student?: string; task?: string; url?: string; score?: string },
+  filter: {
+    checkerStudent?: string;
+    student?: string;
+    task?: string;
+    url?: string;
+    score?: string;
+  },
   pagination: { current: number; pageSize: number },
   courseId: number,
   orderBy: string,
@@ -79,11 +85,13 @@ export async function getCrossCheckData(
     'task,name': '"task"."name"',
     url: 'taskSolution.url',
     score: 'tsr.score',
+    reviewedDate: 'tsr.updatedDate',
+    submittedDate: 'taskSolution.updatedDate',
   };
 
   const query = getRepository(TaskSolutionResult)
     .createQueryBuilder('tsr')
-    .addSelect(['tsr.score', 'tsr.comment'])
+    .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate'])
     .leftJoin(CourseTask, 'courseTask', '"tsr"."courseTaskId" = "courseTask"."id"')
     .addSelect(['courseTask.id', 'courseTask.courseId'])
     .leftJoin('courseTask.task', 'task')
@@ -99,7 +107,7 @@ export async function getCrossCheckData(
       'taskSolution',
       '"taskSolution"."courseTaskId" = "courseTask"."id" AND "taskSolution"."studentId" = "st"."id"',
     )
-    .addSelect(['taskSolution.url'])
+    .addSelect(['taskSolution.url', 'taskSolution.updatedDate'])
     .where(`courseTask.courseId = :courseId`, { courseId })
     .andWhere('courseTask.checker = :checker', { checker: 'crossCheck' });
 
@@ -155,6 +163,8 @@ export async function getCrossCheckData(
     url: e.taskSolution_url,
     score: e.tsr_score,
     comment: e.tsr_comment,
+    submittedDate: e.taskSolution_updatedDate,
+    reviewedDate: e.tsr_updatedDate,
   }));
 
   return {
