@@ -56,6 +56,6 @@ thead.ant-table-thead > tr > th {
   text-decoration: underline;
 }
 
-.rc-virtual-list-scrollbar {
+/* .rc-virtual-list-scrollbar {
   display: block !important;
-}
+} */
