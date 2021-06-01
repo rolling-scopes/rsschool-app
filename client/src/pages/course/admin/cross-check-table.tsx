@@ -1,7 +1,7 @@
 import { Modal, Layout, Spin, Table, Typography, Button } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
 import { omit } from 'lodash';
-import { getColumnSearchProps } from 'components/Table';
+import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { CourseService, CrossCheckPairs } from 'services/course';
@@ -26,6 +26,8 @@ export const fields = {
   student: 'student',
   url: 'url',
   score: 'score',
+  submittedDate: 'submittedDate',
+  reviewedDate: 'reviewedDate',
 };
 
 export function Page(props: CoursePageProps) {
@@ -201,6 +203,22 @@ function renderTable(
           width: 80,
           sorter: true,
           render: value => <Text strong>{value}</Text>,
+        },
+        {
+          title: 'Submitted Date',
+          dataIndex: 'submittedDate',
+          key: fields.submittedDate,
+          width: 80,
+          sorter: true,
+          render: dateTimeRenderer,
+        },
+        {
+          title: 'Reviewed Date',
+          dataIndex: 'reviewedDate',
+          key: fields.reviewedDate,
+          width: 80,
+          sorter: true,
+          render: dateTimeRenderer,
         },
         {
           title: 'Comment',
