@@ -246,11 +246,11 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                     componentName="Text"
                   >
                     <ResizeObserver
-                      disabled={false}
+                      disabled={true}
                       onResize={[Function]}
                     >
                       <Typography
-                        className="ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                         component="h2"
                         style={
                           Object {
@@ -261,7 +261,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                         }
                       >
                         <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line"
+                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                           style={
                             Object {
                               "WebkitLineClamp": undefined,

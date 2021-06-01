@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "algolia-places-react": "^1.5.1",
-    "antd": "~4.15.5",
+    "antd": "~4.16.1",
     "axios": "~0.21.1",
     "chart.js": "^2.9.4",
     "csvtojson": "~2.0.10",
