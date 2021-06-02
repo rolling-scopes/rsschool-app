@@ -157,13 +157,6 @@ export class ProfilePage extends React.Component<Props, State> {
             const newConsent = cloneDeep(existingConsent);
             newConsent.optIn = checked;
             newConsents.push(newConsent);
-          } else if (id === 'email' && initialProfileSettings?.contacts?.email) {
-            const newConsent = {
-              optIn: checked,
-              channelType: id,
-              channelValue: initialProfileSettings?.contacts?.email,
-            };
-            newConsents.push(newConsent);
           }
           newProfile.consents = newConsents;
           const initialConsents = initialProfileSettings?.consents;
