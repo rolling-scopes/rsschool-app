@@ -51,7 +51,7 @@ export async function getAvailableStudents(courseId: number) {
   return result;
 }
 
-export function getInterviewRatings({ skills, programmingTask }: StageInterviewFeedbackJson) {
+export function getInterviewRatings({ skills, programmingTask, resume }: StageInterviewFeedbackJson) {
   const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
   const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
 
@@ -59,9 +59,13 @@ export function getInterviewRatings({ skills, programmingTask }: StageInterviewF
   const common = commonSkills.reduce((acc, cur) => acc + cur, 0) / commonSkills.length;
   const dataStructures = dataStructuresSkills.reduce((acc, cur) => acc + cur, 0) / dataStructuresSkills.length;
 
+  if (resume?.score !== undefined) {
+    const rating = resume.score / 10;
+    return { rating, htmlCss, common, dataStructures };
+  }
+
   const ratingsCount = 4;
   const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
-
   const rating = ratings.length === ratingsCount ? ratings.reduce((sum, num) => sum + num) / ratingsCount : 0;
 
   return { rating, htmlCss, common, dataStructures };
