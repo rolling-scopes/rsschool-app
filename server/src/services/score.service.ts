@@ -161,12 +161,16 @@ export class ScoreService {
         .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
         .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
 
-      const taskResults =
+      let taskResults =
         student.taskResults
           ?.filter(({ courseTask: { disabled } }) => !disabled)
           .map(({ courseTaskId, score }) => ({ courseTaskId, score }))
-          .concat(interviews)
-          .concat(preScreningInterviews) ?? [];
+          .concat(interviews) ?? [];
+
+      // we have a case when technical screening score are set as task result.
+      taskResults = taskResults.concat(
+        preScreningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
+      );
 
       const mentor = student.mentor ? convertToMentorBasic(student.mentor) : undefined;
       return {
