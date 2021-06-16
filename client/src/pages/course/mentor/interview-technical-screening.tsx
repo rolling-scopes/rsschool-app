@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useAsync } from 'react-use';
 import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
 import withCourseData from 'components/withCourseData';
@@ -148,7 +148,11 @@ const renderSkills = (handleSkillChange: HandleChangeValue) => (
       </div>
     ))}
     <Form.Item label="Comment" name="skills-comment" style={{ marginBottom: 40 }}>
-      <Input.TextArea placeholder="Comments about student's skills" autoSize={{ minRows: 3, maxRows: 5 }} />
+      <Input.TextArea
+        onChange={handleSkillChange('skills-comment')}
+        placeholder="Comments about student's skills"
+        autoSize={{ minRows: 3, maxRows: 5 }}
+      />
     </Form.Item>
   </>
 );
@@ -157,10 +161,14 @@ const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Code writing level</Typography.Title>
     <Form.Item label="What tasks did the student have to solve?" name="programmingTask-task">
-      <Input.TextArea placeholder="aaabbcc = 3a2b2c" autoSize={{ minRows: 3, maxRows: 5 }} />
+      <Input.TextArea
+        onChange={handleSkillChange('programmingTask-task')}
+        placeholder="aaabbcc = 3a2b2c"
+        autoSize={{ minRows: 3, maxRows: 5 }}
+      />
     </Form.Item>
     <Form.Item label="Has the student solved the task(s)?" name="programmingTask-resolved">
-      <Radio.Group>
+      <Radio.Group onChange={handleSkillChange('programmingTask-resolved')}>
         <Radio style={radioStyle} value={1}>
           Yes, he/she has
         </Radio>
@@ -176,19 +184,26 @@ const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
       <Rate onChange={handleSkillChange('programmingTask-codeWritingLevel')} tooltips={CODING_LEVELS} />
     </Form.Item>
     <Form.Item label="Comment" name="programmingTask-comment" style={{ marginBottom: 40 }}>
-      <Input.TextArea placeholder="Comments about student's code writing level" autoSize={{ minRows: 3, maxRows: 5 }} />
+      <Input.TextArea
+        onChange={handleSkillChange('programmingTask-comment')}
+        placeholder="Comments about student's code writing level"
+        autoSize={{ minRows: 3, maxRows: 5 }}
+      />
     </Form.Item>
   </>
 );
 
-const renderEnglishLevel = () => (
+const renderEnglishLevel = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>English level</Typography.Title>
     <Form.Item label="English level by student's opinion" name="english-levelStudentOpinion">
-      <Rate tooltips={ENGLISH_LEVELS} count={12} />
+      <Rate onChange={handleSkillChange('english-levelStudentOpinion')} tooltips={ENGLISH_LEVELS} count={12} />
     </Form.Item>
     <Form.Item label="Where and when learned English?" name="english-whereAndWhenLearned">
-      <Input placeholder="Example: Self-education / International House 2019" />
+      <Input
+        placeholder="Example: Self-education / International House 2019"
+        onChange={handleSkillChange('english-whereAndWhenLearned')}
+      />
     </Form.Item>
     <Typography.Paragraph>
       Ask the student to tell about himself, hobby, favorite book or film, etc. (2-3 minutes). Use{' '}
@@ -201,10 +216,11 @@ const renderEnglishLevel = () => (
       in order to define the estimated English level
     </Typography.Paragraph>
     <Form.Item label="English level by mentor's opinion" name="english-levelMentorOpinion">
-      <Rate tooltips={ENGLISH_LEVELS} count={12} />
+      <Rate onChange={handleSkillChange('english-levelMentorOpinion')} tooltips={ENGLISH_LEVELS} count={12} />
     </Form.Item>
     <Form.Item label="Comment" name="english-comment" style={{ marginBottom: 40 }}>
       <Input.TextArea
+        onChange={handleSkillChange('english-comment')}
         placeholder="Comments / impressions about student's english level"
         autoSize={{ minRows: 3, maxRows: 5 }}
       />
@@ -212,11 +228,11 @@ const renderEnglishLevel = () => (
   </>
 );
 
-const renderResume = () => (
+const renderResume = (handleSkillChange: HandleChangeValue) => (
   <>
     <Typography.Title level={3}>Resume</Typography.Title>
     <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict">
-      <Radio.Group>
+      <Radio.Group onChange={handleSkillChange('resume-verdict')}>
         <Radio style={radioStyle} value={'yes'}>
           Yes, I do.
         </Radio>
@@ -240,7 +256,11 @@ const renderResume = () => (
       rules={[{ required: true, message: 'Please choose your verdict' }]}
       style={{ marginBottom: '20px' }}
     >
-      <Input.TextArea placeholder="Resume" autoSize={{ minRows: 3, maxRows: 5 }} />
+      <Input.TextArea
+        onChange={handleSkillChange('resume-comment')}
+        placeholder="Resume"
+        autoSize={{ minRows: 3, maxRows: 5 }}
+      />
     </Form.Item>
   </>
 );
@@ -252,6 +272,7 @@ function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, withLoading] = useLoading(false);
+  const [studentGitHubId, setStudentGitHubId] = useState<string>();
   const [students, setStudents] = useState([] as StudentBasic[]);
   const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
 
@@ -259,7 +280,11 @@ function Page(props: CoursePageProps) {
 
   const loadData = async () => {
     const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
-    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
+    const students = [
+      { id: 1, githubId: 'pulya10c', name: 'Aleh Serhienya', isActive: true, mentor: null, discord: '' },
+    ];
+    // setStudents(interviews.filter(i => !i.completed).map(i => i.student));
+    setStudents(students);
     setInterviews(interviews);
   };
 
@@ -280,6 +305,8 @@ function Page(props: CoursePageProps) {
   };
 
   const handleStudentSelect = async (githubId: string) => {
+    setStudentGitHubId(githubId);
+
     const interview = interviews.find(i => i.student.githubId === githubId);
     if (interview != null) {
       const feedback = await courseService.getStageInterviewFeedback(interview.id);
@@ -309,7 +336,6 @@ function Page(props: CoursePageProps) {
     if (!values.githubId || !values['resume-verdict'] || loading) {
       return;
     }
-
     const interview = interviews.find(i => i.student.githubId === values.githubId);
     if (interview == null) {
       return;
@@ -333,11 +359,17 @@ function Page(props: CoursePageProps) {
     }
   });
 
-  const handleTotalScoreChange = (skillName: string) => (value: number) => {
-    const result = calculateResult(serializeToJson({ ...resume, [skillName]: value }));
-    const newResult = { ...resume, [skillName]: value, 'resume-score': result };
+  const handleTotalScoreChange = (skillName: string) => (value: ChangeEvent<HTMLInputElement> | number) => {
+    const comment = (value as ChangeEvent<HTMLInputElement>)?.target?.value;
+    let newResult;
+    if (comment !== undefined) {
+      newResult = { ...resume, [skillName]: comment };
+    } else {
+      const result = calculateResult(serializeToJson({ ...resume, [skillName]: value }));
+      newResult = { ...resume, [skillName]: value, 'resume-score': result };
+    }
     setResume(newResult);
-    form.setFieldsValue(newResult);
+    form.setFieldsValue({ ...newResult, githubId: studentGitHubId });
   };
 
   return (
@@ -372,9 +404,9 @@ function Page(props: CoursePageProps) {
         <Divider dashed />
         {renderProgrammingTask(handleTotalScoreChange)}
         <Divider dashed style={{ height: 2 }} />
-        {renderEnglishLevel()}
+        {renderEnglishLevel(handleTotalScoreChange)}
         <Divider dashed />
-        {renderResume()}
+        {renderResume(handleTotalScoreChange)}
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
