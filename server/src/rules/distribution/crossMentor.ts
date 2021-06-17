@@ -26,7 +26,7 @@ export function createCrossMentorPairs(
   if (students.length < maxStudentsTotal && registeredStudentsIds) {
     students = students.concat(
       registeredStudentsIds
-        .filter(id => !existingPairs.find(p => p.studentId === id))
+        .filter(id => !existingPairs.find(p => p.studentId === id) && !students.find(st => st.id === id))
         .slice(0, maxStudentsTotal - students.length)
         .map(id => ({ id })),
     );
