@@ -90,6 +90,7 @@ function Page(props: Props) {
             <Select.Option value="info">Info (additional announcements)</Select.Option>
             <Select.Option value="workshop">Workshop</Select.Option>
             <Select.Option value="meetup">Meetup</Select.Option>
+            <Select.Option value="Cross-Check deadline">Cross-Check deadline</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="discipline" label="Discipline">

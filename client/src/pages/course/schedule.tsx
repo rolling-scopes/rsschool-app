@@ -31,6 +31,7 @@ enum EventTypeColor {
   meetup = '#bde04a',
   workshop = '#bde04a',
   interview = '#63ab91',
+  'Cross-Check deadline' = 'red',
 }
 
 const TaskTypes = {
