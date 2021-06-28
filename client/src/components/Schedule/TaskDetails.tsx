@@ -189,22 +189,20 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
                 </Col>
               </Row>
             )} */}
-          </>
-        )}
-
-        {!isPreview && (
-          <>
-            <div className="button__close">
-              <Link href={`/course/schedule?course=${alias}`}>
-                <a>
-                  <Button icon={<CloseOutlined />} />
-                </a>
-              </Link>
-            </div>
             <div className="button__edit">
               <Button icon={<EditOutlined />} onClick={() => onEdit && onEdit(true)} />
             </div>
           </>
+        )}
+
+        {!isPreview && (
+          <div className="button__close">
+            <Link href={`/course/schedule?course=${alias}`}>
+              <a>
+                <Button icon={<CloseOutlined />} />
+              </a>
+            </Link>
+          </div>
         )}
       </div>
       <style jsx>{styles}</style>

@@ -50,6 +50,7 @@ export const DEFAULT_COLORS = {
   'Warm-up': '#ffa940',
   Webinar: '#004dcf',
   Workshop: DEFAULT_COLOR,
+  'Jupyter Notebook': '#fa28ff',
   deadline: DEADLINE_COLOR,
   default: DEFAULT_COLOR,
 };
