@@ -19,7 +19,6 @@
     "coverage": "jest --coverage --config=./src/jest.config.js"
   },
   "dependencies": {
-    "algolia-places-react": "^1.5.1",
     "antd": "~4.16.1",
     "axios": "~0.21.1",
     "chart.js": "^2.9.4",
@@ -39,7 +38,8 @@
     "react-gauge-chart": "git+https://github.com/BossBele/react-gauge-chart.git",
     "react-masonry-css": "~1.0.16",
     "react-use": "~17.2.4",
-    "styled-jsx": "~3.4.4"
+    "styled-jsx": "~3.4.4",
+    "use-places-autocomplete": "^1.9.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.10.5",
@@ -51,13 +51,14 @@
     "@types/moment-timezone": "^0.5.13",
     "@types/node": "^10.17.18",
     "@types/qs": "^6.9.4",
+    "@types/react": "~17.0.5",
     "@types/react-color": "^2.17.4",
     "@types/react-custom-scrollbars": "^4.0.7",
     "@types/react-dom": "^16.9.6",
     "@types/react-gauge-chart": "^0.2.0",
-    "@types/react": "~17.0.5",
     "@types/styled-jsx": "~2.2.8",
     "@wojtekmaj/enzyme-adapter-react-17": "~0.6.1",
+    "dotenv": "^10.0.0",
     "enzyme": "~3.11.0",
     "enzyme-to-json": "~3.6.2",
     "express": "~4.17.1",

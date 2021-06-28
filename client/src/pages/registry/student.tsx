@@ -1,9 +1,10 @@
 import { Button, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
 import axios from 'axios';
-import { PageLayout, LocationSelect } from 'components';
-import { GdprCheckbox } from 'components/Forms';
+import { PageLayout } from 'components';
+import { GdprCheckbox, LocationSelect } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import withSession from 'components/withSession';
+import { withGoogleMaps } from 'components/withGoogleMaps';
 import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
@@ -231,7 +232,7 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   };
 }
 
-const RegistryStudentPage: any = withSession(Page);
+const RegistryStudentPage: any = withGoogleMaps(withSession(Page));
 RegistryStudentPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
