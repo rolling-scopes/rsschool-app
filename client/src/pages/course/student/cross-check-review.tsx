@@ -85,7 +85,10 @@ function CrossCheckAssignmentLink({ assignment }: { assignment?: Assignment }) {
         )}
       </Typography.Paragraph>
       <Typography.Paragraph>
-        Solution: <a href={assignment.url}>{assignment.url}</a>
+        Solution:{' '}
+        <a target="_blank" href={assignment.url}>
+          {assignment.url}
+        </a>
       </Typography.Paragraph>
     </div>
   );
