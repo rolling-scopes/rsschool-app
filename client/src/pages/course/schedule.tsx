@@ -12,7 +12,7 @@ import { useAsync } from 'react-use';
 import { useLoading } from 'components/useLoading';
 
 enum EventTypeColor {
-  deadline = 'red',
+  deadline = '#ff0000',
   test = '#63ab91',
   jstask = 'green',
   htmltask = 'green',
@@ -31,7 +31,7 @@ enum EventTypeColor {
   meetup = '#bde04a',
   workshop = '#bde04a',
   interview = '#63ab91',
-  'Cross-Check deadline' = 'red',
+  'Cross-Check deadline' = '#ff0000',
 }
 
 const TaskTypes = {
