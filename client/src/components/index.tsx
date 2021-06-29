@@ -5,7 +5,6 @@ export * from './GithubAvatar';
 export * from './GithubUserLink';
 export * from './Header';
 export * from './LoadingScreen';
-export * from './LocationSelect';
 export { MentorSearch } from './MentorSearch';
 export * from './PageLayout';
 export * from './Rating';
