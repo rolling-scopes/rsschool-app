@@ -1,8 +1,9 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
-import { LocationSelect, PageLayout } from 'components';
-import { GdprCheckbox } from 'components/Forms';
+import { PageLayout } from 'components';
+import { GdprCheckbox, LocationSelect } from 'components/Forms';
 import withSession from 'components/withSession';
+import { withGoogleMaps } from 'components/withGoogleMaps';
 import { useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from 'services/courses';
@@ -177,4 +178,4 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   };
 }
 
-export default withSession(Page);
+export default withGoogleMaps(withSession(Page));

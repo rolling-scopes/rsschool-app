@@ -4,3 +4,4 @@ export * from './CommentInput';
 export * from './GithubPrInput';
 export * from './CourseTaskSelect';
 export * from './ModalForm';
+export * from './LocationSelect';
