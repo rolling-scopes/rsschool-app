@@ -5,9 +5,9 @@ import { Card, Typography, Input } from 'antd';
 import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { LocationSelect } from 'components/Forms';
 import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
-import { LocationSelect } from '../LocationSelect';
 
 const { Title, Paragraph, Text } = Typography;
 

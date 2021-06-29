@@ -151,9 +151,15 @@ function Page(props: CoursePageProps) {
               <Form.Item
                 name="url"
                 label="Solution URL"
-                rules={[{ required: true, pattern: urlWithIpPattern, message: 'Please provide a valid link' }]}
+                rules={[
+                  {
+                    required: true,
+                    pattern: urlWithIpPattern,
+                    message: 'Please provide a valid link (must start with `http://` or `https://`)',
+                  },
+                ]}
               >
-                <Input />
+                <Input placeholder="link in the form of https://www.google.com" />
               </Form.Item>
             )}
             {submitAllowed && newCrossCheck && (

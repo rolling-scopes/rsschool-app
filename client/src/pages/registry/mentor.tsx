@@ -2,8 +2,9 @@ import { Button, Checkbox, Tabs, Col, Form, Input, message, Result, Row, Select,
 import { HeartTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 import { NextPageContext } from 'next';
-import { LocationSelect, PageLayout } from 'components';
-import { GdprCheckbox } from 'components/Forms';
+import { PageLayout } from 'components';
+import { withGoogleMaps } from 'components/withGoogleMaps';
+import { GdprCheckbox, LocationSelect } from 'components/Forms';
 import withSession from 'components/withSession';
 import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
@@ -428,7 +429,7 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
   };
 }
 
-const RegistryPage: any = withSession(Page);
+const RegistryPage: any = withGoogleMaps(withSession(Page));
 RegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
