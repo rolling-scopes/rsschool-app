@@ -28,7 +28,7 @@ export class TaskVerification {
   details: string;
 
   @Column({ default: 'pending' })
-  status: 'completed' | 'error' | 'pending';
+  status: 'completed' | 'error' | 'pending' | 'cancelled';
 
   @Column()
   score: number;
