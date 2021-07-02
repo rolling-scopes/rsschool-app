@@ -21,6 +21,7 @@ import {
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview';
 import { MentorRepository } from '../repositories/mentor';
+import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -374,6 +375,9 @@ export async function getStudentScore(studentId: number) {
     .leftJoin('taskResults.courseTask', 'courseTask')
     .addSelect(['courseTask.disabled', 'courseTask.id'])
     .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
+    .leftJoin('student.stageInterviews', 'si')
+    .leftJoin('si.stageInterviewFeedbacks', 'sif')
+    .addSelect(['sif.stageInterviewId', 'sif.json', 'si.isCompleted', 'si.id', 'si.courseTaskId'])
     .where('student.id = :studentId', { studentId })
     .getOne();
 
@@ -381,13 +385,24 @@ export async function getStudentScore(studentId: number) {
     student?.taskResults
       ?.filter(({ courseTask: { disabled } }) => !disabled)
       .map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+
+  const preScreeningScore = Math.floor((getStageInterviewRating(student?.stageInterviews ?? []) ?? 0) * 10);
+  const preScreeningInterviews = student?.stageInterviews?.length
+    ? [{ score: preScreeningScore, courseTaskId: student?.stageInterviews[0].courseTaskId }]
+    : [];
+
   const interviewResults =
     student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
       courseTaskId,
       score,
     })) ?? [];
 
-  const results = taskResults.concat(interviewResults);
+  let results = taskResults.concat(interviewResults);
+
+  // we have a case when technical screening score are set as task result.
+  results = taskResults.concat(
+    preScreeningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
+  );
 
   return {
     totalScore: student?.totalScore ?? 0,
