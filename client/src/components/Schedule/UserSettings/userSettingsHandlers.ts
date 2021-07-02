@@ -52,6 +52,7 @@ export const DEFAULT_COLORS = {
   Workshop: DEFAULT_COLOR,
   deadline: DEADLINE_COLOR,
   default: DEFAULT_COLOR,
+  'Cross-Check deadline': DEADLINE_COLOR,
 };
 
 export const getDefaultColors = () => {

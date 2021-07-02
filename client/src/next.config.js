@@ -8,6 +8,7 @@ const nextConfig = {
   env: {
     BUILD_VERSION: process.env.BUILD_VERSION || '0.0.0.0.0',
     APP_VERSION: process.env.APP_VERSION,
+    RSSHCOOL_UI_GCP_MAPS_API_KEY: process.env.RSSHCOOL_UI_GCP_MAPS_API_KEY,
   },
   webpack: config => {
     config.resolve.alias['configs'] = path.join(__dirname, 'configs');

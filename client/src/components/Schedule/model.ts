@@ -31,6 +31,7 @@ export const EVENT_TYPES = [
   'Webinar',
   'Special',
   'Code review',
+  'Cross-Check deadline',
 ];
 
 export const TASK_TYPES = [
