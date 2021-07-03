@@ -45,7 +45,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
 
   const validationMessages = {
     required: "Field can't be empty",
-    min: (length: number): string => `Mininal text length is ${length}`,
+    min: (length: number): string => `Minimal text length is ${length}`,
     max: (length: number): string => `Maximal text length is ${length}`,
     whitespace: "Field can't contain only whitespaces",
   };
