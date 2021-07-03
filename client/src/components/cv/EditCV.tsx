@@ -51,7 +51,7 @@ function EditCV(props: Props) {
 
     const title = (
       <Title level={3} style={{ textAlign: 'center' }}>
-        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong style={{fontSize: '26px'}}>Are you sure?</Text>
+        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
         <WarningTwoTone twoToneColor="#fcbe03" />
       </Title>
     );
