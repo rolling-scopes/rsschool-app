@@ -70,7 +70,8 @@ function CVPage(props: Props) {
       isLoading: true,
     });
     try {
-      const opportunitiesConsent = await cvService.getOpportunitiesConsent(props.router.query.githubId as string);
+      const opportunitiesConsent = await cvService.getOpportunitiesConsent(props.router.query.githubid as string);
+
       await setState({
         ...state,
         opportunitiesConsent,
@@ -92,7 +93,7 @@ function CVPage(props: Props) {
   const { editMode, opportunitiesConsent, isLoading, errorOccured } = state;
 
   const userGithubId = props.session.githubId;
-  const ownerGithubId = props.router.query.githubId;
+  const ownerGithubId = props.router.query.githubid;
 
   const isOwner = userGithubId === ownerGithubId;
 
