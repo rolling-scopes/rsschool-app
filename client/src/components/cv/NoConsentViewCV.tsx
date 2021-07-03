@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
-import { ExclamationCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const { Paragraph, Title } = Typography;
 const { Item } = List;
@@ -58,8 +58,7 @@ function NoConsentViewCV(props: Props) {
 
   const showConfirmationModal = () => {
     Modal.confirm({
-      icon: <ExclamationCircleOutlined />,
-      title: 'Are you sure?',
+      icon: null,
       content: confirmationModalContent,
       maskClosable: true,
       onOk() {
