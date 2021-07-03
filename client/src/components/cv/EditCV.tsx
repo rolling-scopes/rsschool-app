@@ -348,7 +348,7 @@ function EditCV(props: Props) {
                   Get data from profile
                 </Button>
               </Popconfirm>
-              <Popconfirm title="Are you sure to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
+              <Popconfirm title="Are you sure you want to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
                 <Button
                   style={{ ...buttonStyle, width: '21%' }}
                   type="default"
