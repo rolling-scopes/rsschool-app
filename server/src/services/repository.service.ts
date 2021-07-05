@@ -245,7 +245,7 @@ export class RepositoryService {
       if (e.status === 422) {
         // if repository exists
         repository = `https://github.com/${owner}/${repo}`;
-        this.logger?.info(e.errors[0].message);
+        this.logger?.info(e);
       } else {
         throw e;
       }
