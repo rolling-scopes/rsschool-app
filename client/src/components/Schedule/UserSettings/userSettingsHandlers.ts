@@ -53,6 +53,7 @@ export const DEFAULT_COLORS = {
   'Jupyter Notebook': '#fa28ff',
   deadline: DEADLINE_COLOR,
   default: DEFAULT_COLOR,
+  'Cross-Check deadline': DEADLINE_COLOR,
 };
 
 export const getDefaultColors = () => {
