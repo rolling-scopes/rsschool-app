@@ -67,6 +67,7 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
                 eventData={getEntityDataForPreview(entityType, entityData) as CourseEvent}
                 alias={alias}
                 isPreview
+                isAdmin
               />
             )}
           </TabPane>
