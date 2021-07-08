@@ -53,6 +53,8 @@ export interface SelfEducationQuestion {
   question: string;
   answers: string[];
   multiple: boolean;
+  questionImage?: string;
+  answersType?: 'image';
 }
 
 export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
