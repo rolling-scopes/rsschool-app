@@ -20,16 +20,9 @@ type Props = {
   session: Session;
 };
 
-type State = {
-  isLoading: boolean;
-  users: JobSeekerData[] | null;
-};
-
 function Page(props: Props) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    users: null,
-  });
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [users, setUsers] = useState<JobSeekerData[] | null>(null);
 
   const cvService = new CVService();
 
@@ -225,15 +218,16 @@ function Page(props: Props) {
   ];
 
   const fetchData = useCallback(async () => {
-    await setState({ ...state, isLoading: true });
+    setLoading(true);
     const data: JobSeekerData[] = await cvService.getJobSeekersData();
-    await setState({ ...state, users: data, isLoading: false });
+    setUsers(data);
+    setLoading(false);
   }, []);
 
   const removeJobSeeker = async (githubId: string) => {
-    await setState({ ...state, isLoading: true });
+    setLoading(true)
     await cvService.changeOpportunitiesConsent(githubId, false);
-    await setState({ ...state, isLoading: false });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -246,8 +240,6 @@ function Page(props: Props) {
   /*     if (!(isAdmin || isHirer)) return (
     <Result status="403" title="Sorry, but you don't have access to this page" />
   ); */
-
-  const { isLoading, users } = state;
 
   let data;
 
