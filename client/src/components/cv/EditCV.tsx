@@ -20,13 +20,6 @@ import { FormInstance } from 'antd/lib/form';
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
 
-type State = {
-  isLoading: boolean;
-  contactsList: Contacts | null;
-  userData: UserData | null;
-  expires: number | null;
-};
-
 type Props = {
   ownerGithubId: string;
   withdrawConsent: () => void;
@@ -36,12 +29,10 @@ const cvService = new CVService();
 const userService = new UserService();
 
 function EditCV(props: Props) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    contactsList: null,
-    userData: null,
-    expires: null,
-  });
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [contactsList, setContactsList] = useState<Contacts | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [expires, setExpires] = useState<number | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
@@ -83,10 +74,7 @@ function EditCV(props: Props) {
   };
 
   const fetchData = useCallback(async () => {
-    await setState({
-      ...state,
-      isLoading: true,
-    });
+    setLoading(true);
 
     const cvData: GetCVData = await cvService.getCVData(props.ownerGithubId);
 
@@ -134,12 +122,10 @@ function EditCV(props: Props) {
       website,
     };
 
-    await setState({
-      contactsList: contactsList,
-      userData: userData,
-      expires: Number(expires),
-      isLoading: false,
-    });
+    setContactsList(contactsList);
+    setUserData(userData);
+    setExpires(Number(expires));
+    setLoading(false);
   }, []);
 
   const submitData = async (data: any) => {
@@ -238,6 +224,8 @@ function EditCV(props: Props) {
   }, []);
 
   const fillFromProfile = async () => {
+    setLoading(true);
+
     const id = props.ownerGithubId;
 
     const profile = await userService.getProfileInfo(id);
@@ -254,8 +242,8 @@ function EditCV(props: Props) {
     const telegram = profile.contacts?.telegram ?? null;
     const linkedin = profile.contacts?.linkedIn ?? null;
 
-    const prevUserData = state.userData as UserData;
-    const prevContacts = state.contactsList as Contacts;
+    const prevUserData = userData as UserData;
+    const prevContacts = contactsList as Contacts;
 
     const newUserData = {
       ...prevUserData,
@@ -273,28 +261,18 @@ function EditCV(props: Props) {
       location,
     };
 
-    await setState({
-      ...state,
-      userData: newUserData,
-      contactsList: newContacts,
-    });
+    setUserData(newUserData);
+    setContactsList(newContacts);
+    setLoading(false);
   };
 
   const extendCV = async () => {
-    await setState({
-      ...state,
-      isLoading: true,
-    });
+    setLoading(true);
     const newExpirationDate = await cvService.extendCV();
 
-    await setState({
-      ...state,
-      expires: newExpirationDate,
-      isLoading: false,
-    });
+    setLoading(false);
+    setExpires(newExpirationDate);
   };
-
-  const { isLoading, contactsList, userData, expires } = state;
 
   const buttonStyle = {
     borderRadius: '15px',

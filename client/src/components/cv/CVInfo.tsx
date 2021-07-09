@@ -9,7 +9,7 @@ const { Text } = Typography;
 type CVInfoProps = {
   ownerGithubId?: string | string[];
   isOwner: boolean;
-  errorOccured: boolean;
+  notFound: boolean;
   opportunitiesConsent: boolean | null;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
@@ -21,7 +21,7 @@ function CVInfo(props: CVInfoProps) {
   const {
     ownerGithubId,
     isOwner,
-    errorOccured,
+    notFound,
     opportunitiesConsent,
     editMode,
     switchView,
@@ -29,7 +29,7 @@ function CVInfo(props: CVInfoProps) {
     giveConsent,
   } = props;
 
-  if (errorOccured) {
+  if (notFound) {
     return <Result status={404} title="User not found" />;
   }
 
