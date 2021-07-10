@@ -15,7 +15,7 @@ export interface CourseData {
 }
 
 export type EnglishLevel = typeof ENGLISH_LEVELS[number];
-export type MilitaryService = 'served' | 'liable' | 'notLiable' | null;
+export type MilitaryService = 'served' | 'liable' | 'notLiable';
 
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'location' | 'github' | 'website';
 
@@ -25,10 +25,10 @@ export interface UserData {
   desiredPosition: string | null;
   selfIntroLink: string | null;
   englishLevel: EnglishLevel | null;
-  militaryService: MilitaryService;
+  militaryService: MilitaryService | null;
   notes: string | null;
   startFrom: string | null;
-  fullTime: boolean | null;
+  fullTime: boolean;
 }
 
 export type Contacts = {
@@ -74,7 +74,7 @@ export interface SaveCVData {
   githubUsername: string | null;
   website: string | null;
   startFrom: string | null;
-  fullTime: boolean | null;
+  fullTime: boolean;
 }
 
 export interface GetCVData extends SaveCVData {
@@ -104,7 +104,7 @@ export interface JobSeekerData {
   name: string | null;
   desiredPosition: string | null;
   githubId: string;
-  englishlevel: EnglishLevel;
+  englishlevel: EnglishLevel | null;
   fullTime: boolean;
   location: string | null;
   startFrom: string | null;
