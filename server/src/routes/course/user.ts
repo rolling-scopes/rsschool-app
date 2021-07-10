@@ -6,21 +6,41 @@ import { userService, courseService } from '../../services';
 import { CourseUser } from '../../models';
 import { RouterContext } from '../guards';
 
-type PostInput = {
+interface Roles {
   isManager: boolean;
   isJuryActivist: boolean;
   isSupervisor: boolean;
-};
+}
+interface User extends Roles {
+  userId: number;
+}
 
-export const postUser = (_?: ILogger) => async (ctx: RouterContext) => {
-  const { githubId, courseId } = ctx.params;
-  const user = await userService.getUserByGithubId(githubId);
-  if (user == null) {
-    setResponse(ctx, NOT_FOUND);
-    return;
+export const putUsers = (_?: ILogger) => async (ctx: RouterContext) => {
+  const { courseId } = ctx.params;
+  const body: User[] = ctx.request.body;
+
+  const allUsers = body.map(user => ({ ...user, courseId }));
+  const foundUsers = await getRepository(CourseUser)
+    .createQueryBuilder('user')
+    .where({ courseId })
+    .andWhere('"userId" = ANY(:users)', { users: allUsers.map(user => user.userId) })
+    .getMany();
+
+  const usersToInsert = allUsers.filter(user => !foundUsers.find(({ userId }) => user.userId === userId));
+  const usersToUpdate = allUsers.filter(user => foundUsers.find(({ userId }) => user.userId === userId));
+
+  if (usersToInsert.length) {
+    await getRepository(CourseUser).insert(usersToInsert);
   }
-  const { isJuryActivist, isManager, isSupervisor }: PostInput = ctx.request.body;
-  await getRepository(CourseUser).insert({ courseId, userId: user.id, isJuryActivist, isManager, isSupervisor });
+
+  if (usersToUpdate.length) {
+    await Promise.all(
+      usersToUpdate.map(({ userId, isJuryActivist, isManager, isSupervisor }) =>
+        getRepository(CourseUser).update({ userId }, { isJuryActivist, isManager, isSupervisor }),
+      ),
+    );
+  }
+
   setResponse(ctx, OK);
 };
 
@@ -41,12 +61,13 @@ export const putUser = (_?: ILogger) => async (ctx: RouterContext) => {
     setResponse(ctx, BAD_REQUEST);
     return;
   }
+  const { isJuryActivist = false, isManager = false, isSupervisor = false }: Roles = ctx.request.body;
   const existing = await getRepository(CourseUser).findOne({ where: { courseId, userId: user.id } });
   if (existing == null) {
-    setResponse(ctx, BAD_REQUEST);
-    return;
+    await getRepository(CourseUser).insert({ courseId, userId: user.id, isJuryActivist, isManager, isSupervisor });
+  } else {
+    await getRepository(CourseUser).update(existing.id, { isJuryActivist, isManager, isSupervisor });
   }
-  const { isJuryActivist, isManager, isSupervisor }: PostInput = ctx.request.body;
-  await getRepository(CourseUser).update(existing.id, { isJuryActivist, isManager, isSupervisor });
+
   setResponse(ctx, OK);
 };
