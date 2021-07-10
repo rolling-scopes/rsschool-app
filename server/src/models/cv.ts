@@ -19,7 +19,7 @@ export class CV {
   @Column({ nullable: true, type: 'text' })
   startFrom: string;
 
-  @Column({ nullable: true })
+  @Column({ default: false })
   fullTime: boolean;
 
   @Column({ nullable: true, type: 'numeric' })
