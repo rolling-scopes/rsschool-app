@@ -189,12 +189,12 @@ const userDataValidationRules: {
       message: validationMessages.required,
     },
     {
-      max: 100,
-      message: validationMessages.max(300),
+      max: 1500,
+      message: validationMessages.max(1500),
     },
     {
-      min: 30,
-      message: validationMessages.min(30),
+      min: 50,
+      message: validationMessages.min(50),
     },
     {
       whitespace: true,
