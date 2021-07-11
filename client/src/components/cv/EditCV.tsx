@@ -125,10 +125,13 @@ function EditCV(props: Props) {
     setContactsList(contactsList);
     setUserData(userData);
     setExpires(Number(expires));
+
     setLoading(false);
   }, []);
 
   const submitData = async (data: any) => {
+    setLoading(true);
+
     const {
       avatarLink,
       desiredPosition,
@@ -150,26 +153,28 @@ function EditCV(props: Props) {
     } = data;
 
     const cvData: SaveCVData = {
-      selfIntroLink,
+      selfIntroLink: nullifyConditional(selfIntroLink),
       militaryService,
-      avatarLink,
-      desiredPosition,
+      avatarLink: nullifyConditional(avatarLink),
+      desiredPosition: nullifyConditional(desiredPosition),
       englishLevel,
-      name,
-      notes,
-      phone,
-      email,
-      skype,
-      telegram,
-      linkedin,
-      location,
-      githubUsername: github,
-      website,
+      name: nullifyConditional(name),
+      notes: nullifyConditional(notes),
+      phone: nullifyConditional(phone),
+      email: nullifyConditional(email),
+      skype: nullifyConditional(skype),
+      telegram: nullifyConditional(telegram),
+      linkedin: nullifyConditional(linkedin),
+      location: nullifyConditional(location),
+      githubUsername: nullifyConditional(github),
+      website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
     };
 
     await cvService.saveCVData(cvData);
+
+    setLoading(false);
   };
 
   const resetFields = async () => {
@@ -179,6 +184,11 @@ function EditCV(props: Props) {
   const handleSave = async (data: any) => {
     await submitData(data);
     await fetchData();
+  };
+
+  const nullifyConditional = (str: string | null) => {
+    if (typeof str === 'string') return str.replace(/\s/g, '') === '' ? null : str;
+    return str;
   };
 
   const formatDate = (expirationValue: number | null) => {
@@ -201,22 +211,32 @@ function EditCV(props: Props) {
     }
   };
 
-  const getDataFromRefs = (refs: RefObject<FormInstance>[]) => {
-    const formsHaveErrors = refs.some(ref => {
+  const getDataFromRefs = async (refs: RefObject<FormInstance>[]) => {
+    const hasErrors = refs.some(ref => {
       const fieldsToCheck = ref.current?.getFieldsError();
-      if (fieldsToCheck?.some(field => field.errors.length > 0)) {
-        return true;
-      }
+      if (fieldsToCheck?.some(field => field.errors.length > 0)) return true;
     });
 
-    if (formsHaveErrors) return;
+    if (hasErrors) {
+      Modal.info({
+        icon: null,
+        content: `Following fields are invalid:`,
+        maskClosable: true,
+      });
+      return;
+    }
 
     const values = refs
       .map(ref => {
         return ref.current?.getFieldsValue();
       })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
-    handleSave(values);
+
+    setLoading(true);
+
+    await handleSave(values);
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -263,15 +283,18 @@ function EditCV(props: Props) {
 
     setUserData(newUserData);
     setContactsList(newContacts);
+
     setLoading(false);
   };
 
   const extendCV = async () => {
     setLoading(true);
+
     const newExpirationDate = await cvService.extendCV();
 
-    setLoading(false);
     setExpires(newExpirationDate);
+
+    setLoading(false);
   };
 
   const buttonStyle = {
@@ -326,7 +349,12 @@ function EditCV(props: Props) {
                   Get data from profile
                 </Button>
               </Popconfirm>
-              <Popconfirm title="Are you sure you want to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
+              <Popconfirm
+                title="Are you sure you want to reset fields?"
+                onConfirm={resetFields}
+                okText="Yes"
+                cancelText="No"
+              >
                 <Button
                   style={{ ...buttonStyle, width: '21%' }}
                   type="default"
