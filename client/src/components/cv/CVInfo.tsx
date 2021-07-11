@@ -18,16 +18,8 @@ type CVInfoProps = {
 };
 
 function CVInfo(props: CVInfoProps) {
-  const {
-    ownerGithubId,
-    isOwner,
-    notFound,
-    opportunitiesConsent,
-    editMode,
-    switchView,
-    withdrawConsent,
-    giveConsent,
-  } = props;
+  const { ownerGithubId, isOwner, notFound, opportunitiesConsent, editMode, switchView, withdrawConsent, giveConsent } =
+    props;
 
   if (notFound) {
     return <Result status={404} title="User not found" />;
