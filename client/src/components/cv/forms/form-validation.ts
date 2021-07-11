@@ -18,7 +18,7 @@ const contactsValidationRules: {
     },
     () => ({
       validator(_, value) {
-        if (value === '') return Promise.resolve();
+        if (value === '' || value === null) return Promise.resolve();
         if (/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g.test(value)) {
           return Promise.resolve();
         }
