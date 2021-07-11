@@ -225,7 +225,7 @@ function Page(props: Props) {
   }, []);
 
   const removeJobSeeker = async (githubId: string) => {
-    setLoading(true)
+    setLoading(true);
     await cvService.changeOpportunitiesConsent(githubId, false);
     setLoading(false);
   };

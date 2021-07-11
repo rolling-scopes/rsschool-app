@@ -39,32 +39,41 @@ function CVPage(props: Props) {
     // @ts-ignore
     const queryObj = Object.fromEntries(new URLSearchParams(queryString).entries());
     return queryObj?.githubid;
-  }
+  };
 
   const giveConsent = async (githubId: string) => {
     setLoading(true);
+
     const newConsent = await cvService.changeOpportunitiesConsent(githubId, true);
+
     setOpportunitiesConsent(newConsent);
+
     setLoading(false);
   };
 
   const withdrawConsent = async (githubId: string) => {
     setLoading(true);
+
     const newConsent = await cvService.changeOpportunitiesConsent(githubId, false);
+
     setOpportunitiesConsent(newConsent);
+
     setLoading(false);
   };
 
   const getConsent = async () => {
     setLoading(true);
+
     try {
       const ownerGithubId = getGithubIdFromQuery(props.router);
       const opportunitiesConsent = await cvService.getOpportunitiesConsent(ownerGithubId);
       setOpportunitiesConsent(opportunitiesConsent);
+
       setLoading(false);
     } catch (e) {
       if (e.message === 'Request failed with status code 404') {
         setNotFound(true);
+
         setLoading(false);
       } else {
         throw e;
@@ -75,7 +84,6 @@ function CVPage(props: Props) {
   useEffect(() => {
     getConsent();
   }, []);
-
 
   const userGithubId = props.session.githubId;
   const ownerGithubId = getGithubIdFromQuery(props.router);
