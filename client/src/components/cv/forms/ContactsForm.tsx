@@ -16,6 +16,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
 
   React.useEffect(() => {
     form.setFieldsValue(contactsList);
+    form.validateFields();
   }, [contactsList]);
 
   const itemStyle = {
