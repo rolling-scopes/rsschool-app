@@ -3,11 +3,13 @@ import { DateTime } from 'luxon';
 import { omit } from 'lodash';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
-import { NOT_FOUND, OK, CREATED, CONFLICT } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { guard } from '../guards';
 import { getRepository } from 'typeorm';
-import { CV, IUserSession, User, Feedback, Student, Certificate, Mentor, Course } from '../../models';
+import { CV, User, Feedback, Student, Certificate, Mentor, Course } from '../../models';
 import { getFullName } from '../../rules';
+
+const { NOT_FOUND, OK, INTERNAL_SERVER_ERROR, CONFLICT } = StatusCodes;
 
 const getFeedbackCV = async (githubId: string) => {
   return await getRepository(Feedback)
@@ -106,8 +108,34 @@ const getStudentsStats = async (githubId: string) => {
   return studentStats.map((stats, idx) => ({ ...omit(stats, ['courseId']), ...studentPositions[idx] }));
 };
 
-export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
+const giveOpportunitiesConsent = async (ctx: Router.RouterContext, githubId: string) => {
+  const userRepository = getRepository(User);
+
+  const creationResult = await createCV(githubId);
+
+  if (creationResult === 'ALREADY_EXISTS') {
+    setResponse(ctx, CONFLICT, { message: 'CV already exists' });
+    return;
+  }
+
+  if (creationResult === 'CREATED') {
+    const result = await userRepository.update({ githubId }, { opportunitiesConsent: true });
+    setResponse(ctx, OK, result.raw.opportunitiesConsent);
+    return;
+  }
+
+  setResponse(ctx, INTERNAL_SERVER_ERROR, { message: 'CV creation failed' });
+};
+
+const withdrawOpportunitiesConsent = async (ctx: Router.RouterContext, githubId: string) => {
+  await deleteCV(githubId);
+  const userRepository = getRepository(User);
+  const result = await userRepository.update({ githubId }, { opportunitiesConsent: false });
+  setResponse(ctx, OK, result.raw.opportunitiesConsent);
+};
+
+export const manageOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, opportunitiesConsent: reqConsent } = ctx.request.body;
 
   const user = await getRepository(User).findOne({ where: { githubId } });
 
@@ -116,21 +144,6 @@ export const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
     return;
   }
 
-  setResponse(ctx, OK, user.opportunitiesConsent);
-};
-
-export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.request.body;
-
-  const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ where: { githubId } });
-
-  if (user === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const { opportunitiesConsent: reqConsent } = ctx.request.body;
   const prevConsent = user.opportunitiesConsent;
 
   if (reqConsent === prevConsent) {
@@ -138,14 +151,11 @@ export const setOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Router
     return;
   }
 
-  const userWithEmptyOpportunities = {
-    ...user,
-    opportunitiesConsent: reqConsent,
-  };
-
-  const result = await userRepository.save({ ...user, ...userWithEmptyOpportunities });
-
-  setResponse(ctx, OK, result.opportunitiesConsent);
+  if (reqConsent === true) {
+    await giveOpportunitiesConsent(ctx, githubId);
+  } else {
+    await withdrawOpportunitiesConsent(ctx, githubId);
+  }
 };
 
 const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -183,7 +193,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.state.user;
 
   const cvRepository = getRepository(CV);
   const cv = await cvRepository.findOne({ where: { githubId } });
@@ -203,25 +213,37 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, result);
 };
 
-export const createCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId } = ctx.request.query;
 
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({ where: { githubId } });
+
+  if (user === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  setResponse(ctx, OK, user.opportunitiesConsent);
+};
+
+const createCV = async (githubId: string) => {
   const cvRepository = getRepository(CV);
 
   const cv = await cvRepository.findOne({ where: { githubId } });
 
-  if (cv != undefined) {
-    setResponse(ctx, CONFLICT);
-    return;
+  if (cv !== undefined) {
+    return 'ALREADY_EXISTS';
   }
 
-  const newCV = await cvRepository.create({
-    githubId,
-  });
+  const newCV = await cvRepository.create({ githubId });
+  const savingResult = await cvRepository.save(newCV);
+  if (savingResult) return 'CREATED';
+};
 
-  await cvRepository.save(newCV);
-
-  setResponse(ctx, CREATED, newCV);
+export const deleteCV = async (githubId: string) => {
+  const cvRepository = getRepository(CV);
+  await cvRepository.delete({ githubId });
 };
 
 export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -251,7 +273,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state!.user as IUserSession;
+  const { githubId } = ctx.state.user;
 
   const cvRepository = getRepository(CV);
   const cv = await cvRepository.findOne({ where: { githubId } });
@@ -283,10 +305,9 @@ export function opportunitiesRoute(logger: ILogger) {
   router.get('/exists', guard, checkCVExistance(logger));
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
-  router.post('/consent', guard, setOpportunitiesConsent(logger));
+  router.post('/consent', guard, manageOpportunitiesConsent(logger));
   router.get('/', guard, getJobSeekersData(logger));
   router.get('/cv', guard, getCVData(logger));
-  router.put('/cv', guard, createCV(logger));
   router.post('/', guard, saveCVData(logger));
 
   return router;
