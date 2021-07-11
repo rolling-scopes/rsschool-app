@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form, Input, Card } from 'antd';
 import { Contacts } from '../../../../../common/models/cv';
-import { Rule } from 'rc-field-form/lib/interface';
+import { contactsValidationRules as validationRules } from './form-validation';
 
 const { Item } = Form;
 
@@ -20,98 +20,6 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
 
   const itemStyle = {
     maxWidth: '310px',
-  };
-
-  const validationMessages = {
-    required: "Field can't be empty",
-    min: (length: number): string => `Minimal text length is ${length} symbols`,
-    max: (length: number): string => `Maximal text length is ${length} symbols`,
-    whitespace: "Field can't contain only whitespaces",
-  };
-
-  const validationRules: {
-    [key: string]: Rule[];
-  } = {
-    phone: [
-      {
-        max: 15,
-        message: validationMessages.max(15),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    email: [
-      {
-        max: 50,
-        message: validationMessages.max(50),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    skype: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    telegram: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    linkedin: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    location: [
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    github: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    website: [
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
   };
 
   return (
