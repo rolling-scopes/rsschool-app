@@ -291,14 +291,6 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, Number(result.expires));
 };
 
-export const checkCVExistance = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
-
-  const user = await getRepository(CV).findOne({ where: { githubId } });
-
-  setResponse(ctx, OK, user !== undefined);
-};
-
 export const manageHiddenStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, isHidden: reqHiddenStatus } = ctx.request.body;
 
@@ -323,8 +315,6 @@ export const manageHiddenStatus = (_: ILogger) => async (ctx: Router.RouterConte
 
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
-
-  router.get('/exists', guard, checkCVExistance(logger));
   router.post('/hide', guard, manageHiddenStatus(logger));
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
