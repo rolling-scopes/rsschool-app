@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -37,6 +37,8 @@ function EditCV(props: Props) {
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
 
+  const currentRefs: RefObject<FormInstance>[] = [userFormRef, contactsFormRef];
+
   const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
 
@@ -73,6 +75,14 @@ function EditCV(props: Props) {
     });
   };
 
+  const showWarningModal = ({ title, content }: { title: string; content: ReactNode }) => {
+    Modal.warn({
+      title,
+      content,
+      maskClosable: true,
+    });
+  };
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
@@ -89,7 +99,7 @@ function EditCV(props: Props) {
       email,
       githubUsername,
       linkedin,
-      location,
+      locations,
       phone,
       skype,
       telegram,
@@ -115,7 +125,7 @@ function EditCV(props: Props) {
       email,
       github: githubUsername,
       linkedin,
-      location,
+      locations,
       phone,
       skype,
       telegram,
@@ -140,7 +150,7 @@ function EditCV(props: Props) {
       fullTime,
       github,
       linkedin,
-      location,
+      locations,
       militaryService,
       name,
       notes,
@@ -165,7 +175,7 @@ function EditCV(props: Props) {
       skype: nullifyConditional(skype),
       telegram: nullifyConditional(telegram),
       linkedin: nullifyConditional(linkedin),
-      location: nullifyConditional(location),
+      locations: nullifyConditional(transformLocationsString(locations)),
       githubUsername: nullifyConditional(github),
       website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
@@ -181,9 +191,17 @@ function EditCV(props: Props) {
     await fetchData();
   };
 
-  const handleSave = async (data: any) => {
+  const saveData = async (data: any) => {
     await submitData(data);
     await fetchData();
+  };
+
+  const transformLocationsString = (locationsRaw: string) => {
+    const locations = locationsRaw.split(';');
+    const firstThreeLocations = locations.slice(0, 3);
+    const locationsTrimmed = firstThreeLocations.map(location => location.trim());
+    const locationsStringified = locationsTrimmed.join(';');
+    return locationsStringified;
   };
 
   const nullifyConditional = (str: string | null) => {
@@ -211,30 +229,54 @@ function EditCV(props: Props) {
     }
   };
 
-  const getDataFromRefs = async (refs: RefObject<FormInstance>[]) => {
-    const hasErrors = refs.some(ref => {
+  const checkFormsForValidationErrors = () => {
+    const hasErrors = currentRefs.some(ref => {
       const fieldsToCheck = ref.current?.getFieldsError();
       if (fieldsToCheck?.some(field => field.errors.length > 0)) return true;
     });
 
-    if (hasErrors) {
-      Modal.warn({
-        title: 'Some form fields do not meet validation criteria',
-        content: 'Please fill it correctly and try again',
-        maskClosable: true,
-      });
-      return;
-    }
+    return hasErrors;
+  };
 
-    const values = refs
+  const checkNecessaryDataBeforeExtension = () => {
+    if (userData && contactsList) {
+      const dataToBeFilled = [
+        userData.name,
+        userData.desiredPosition,
+        userData.englishLevel,
+        userData.startFrom,
+        contactsList.locations,
+      ];
+      return dataToBeFilled.some(field => field === null);
+    }
+    return true;
+  };
+
+  const getDataFromForms = () => {
+    const values = currentRefs
       .map(ref => {
         return ref.current?.getFieldsValue();
       })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
+    return values;
+  };
+
+  const handleSave = async () => {
+    const hasErrors = checkFormsForValidationErrors();
+
+    if (hasErrors) {
+      showWarningModal({
+        title: 'Some form fields do not meet validation criteria',
+        content: 'Please fill it correctly and try again',
+      });
+      return;
+    }
+
+    const values = getDataFromForms();
 
     setLoading(true);
 
-    await handleSave(values);
+    await saveData(values);
 
     setLoading(false);
   };
@@ -288,6 +330,22 @@ function EditCV(props: Props) {
   };
 
   const extendCV = async () => {
+    const hasEmpty = checkNecessaryDataBeforeExtension();
+
+    if (hasEmpty) {
+      showWarningModal({
+        title: 'You have to fill some field before extend CV',
+        content: (
+          <Text>
+            Folliwing saved data <Text strong>must be filled</Text> to extend your CV: <Text strong>name</Text>,{' '}
+            <Text strong>desired position</Text>, <Text strong>English level</Text>, <Text strong>work start date</Text>
+            , <Text strong>location</Text>
+          </Text>
+        ),
+      });
+      return;
+    }
+
     setLoading(true);
 
     const newExpirationDate = await cvService.extendCV();
@@ -328,7 +386,7 @@ function EditCV(props: Props) {
               block
               type="primary"
               htmlType="button"
-              onClick={() => getDataFromRefs([userFormRef, contactsFormRef])}
+              onClick={() => handleSave()}
               icon={<SaveOutlined />}
             >
               Save

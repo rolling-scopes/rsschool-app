@@ -83,7 +83,7 @@ function CVPage(props: Props) {
 
   useEffect(() => {
     getConsent();
-  }, []);
+  }, [opportunitiesConsent]);
 
   const userGithubId = props.session.githubId;
   const ownerGithubId = getGithubIdFromQuery(props.router);
