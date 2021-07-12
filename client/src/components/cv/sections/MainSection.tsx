@@ -3,7 +3,7 @@ import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
 import ContactsListCV from '../ContactsListCV';
 import AvatarCV from '../AvatarCV';
-import { Contacts, UserData } from '../../../../../common/models/cv';
+import { Contacts, MilitaryService, UserData } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
@@ -13,7 +13,7 @@ type Props = {
   expires: number | null;
 };
 
-function formatDate(expirationValue: number | null) {
+const formatDate = (expirationValue: number | null) => {
   if (expirationValue === null || expirationValue === 0) {
     return 'CV expiration date is not set';
   } else {
@@ -23,7 +23,15 @@ function formatDate(expirationValue: number | null) {
     const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
     return `CV expiration date: ${expirationDateFormatted}`;
   }
-}
+};
+
+const militaryServiceDictionary: {
+  [key in MilitaryService]: string;
+} = {
+  served: 'served',
+  notLiable: 'not liable',
+  liable: 'liable',
+};
 
 function MainSection(props: Props) {
   const { userData, contacts, expires } = props;
@@ -42,7 +50,7 @@ function MainSection(props: Props) {
         <br />
         {militaryService && (
           <Text>
-            Military service: <Text strong>{militaryService}</Text>{' '}
+            Military service: <Text strong>{militaryServiceDictionary[militaryService]}</Text>
           </Text>
         )}
         <br />
