@@ -212,7 +212,6 @@ function EditCV(props: Props) {
   };
 
   const getDataFromRefs = async (refs: RefObject<FormInstance>[]) => {
-    
     const hasErrors = refs.some(ref => {
       const fieldsToCheck = ref.current?.getFieldsError();
       if (fieldsToCheck?.some(field => field.errors.length > 0)) return true;
