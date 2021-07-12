@@ -76,8 +76,12 @@ const contactsValidationRules: {
   ],
   location: [
     {
-      max: 100,
-      message: validationMessages.max(100),
+      required: true,
+      message: validationMessages.required,
+    },
+    {
+      max: 300,
+      message: validationMessages.max(300),
     },
     {
       whitespace: true,
@@ -128,6 +132,10 @@ const userDataValidationRules: {
     },
   ],
   desiredPosition: [
+    {
+      required: true,
+      message: validationMessages.required,
+    },
     {
       max: 300,
       message: validationMessages.max(300),
