@@ -4,6 +4,7 @@ import { Contacts } from '../../../../../common/models/cv';
 import { contactsValidationRules as validationRules } from './form-validation';
 
 const { Item } = Form;
+const { TextArea } = Input;
 
 type Props = {
   contactsList: Contacts;
@@ -78,13 +79,16 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
         </Item>
         <Item
           style={itemStyle}
-          label="Location"
+          label="Locations"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="location"
           rules={[...validationRules['location']]}
         >
-          <Input placeholder="The location in which you want to work" />
+          <TextArea
+            rows={4}
+            placeholder="The locations in which you want to work (maximum 3, separated by semicolons)"
+          />
         </Item>
         <Item
           style={itemStyle}
