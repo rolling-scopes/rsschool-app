@@ -54,13 +54,6 @@ export class CVService {
     return response.data.data;
   }
 
-  async checkCVExistance(githubId: string) {
-    const response = await this.axios.get<{ data: boolean }>(`${CVService.baseRoute}/exists`, {
-      params: { githubId },
-    });
-    return response.data.data;
-  }
-
   async changeCVVisibility(githubId: string, isHidden: boolean) {
     const response = await this.axios.post<{ data: boolean }>(`${CVService.baseRoute}/hide/`, {
       githubId,
