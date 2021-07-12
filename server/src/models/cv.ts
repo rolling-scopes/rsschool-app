@@ -63,4 +63,7 @@ export class CV {
 
   @Column({ nullable: true, type: 'text' })
   website: string;
+
+  @Column({ default: false })
+  isHidden: boolean;
 }
