@@ -113,10 +113,15 @@ function Page(props: Props) {
       ...getColumnSearchProps('desiredPosition'),
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      ...getColumnSearchProps('location'),
+      title: 'Locations',
+      dataIndex: 'locations',
+      key: 'locations',
+      ...getColumnSearchProps('locations'),
+      render: (locationsRaw: string) => {
+        const locations = locationsRaw.split(';');
+        const locationsItems = locations.map(location => <li>{location}</li>);
+        return <ol>{locationsItems}</ol>;
+      },
     },
     {
       title: 'English level',
@@ -281,7 +286,7 @@ function Page(props: Props) {
         desiredPosition,
         courses,
         feedback,
-        location,
+        locations,
         expires,
         isHidden,
       } = item;
@@ -293,7 +298,7 @@ function Page(props: Props) {
         feedback,
         desiredPosition: desiredPosition?.length ? desiredPosition : '<Not set>',
         fullTime: fullTime ? 'Yes' : 'No',
-        location: location?.length ? location : '<Not set>',
+        locations: locations?.length ? locations : '<Not set>',
         startFrom: startFrom?.length ? startFrom : '<Not set>',
         englishLevel: englishLevel?.length ? englishLevel?.toUpperCase() : '<Not set>',
         isHidden,
