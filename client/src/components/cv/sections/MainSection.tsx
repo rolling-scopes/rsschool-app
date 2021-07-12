@@ -44,10 +44,14 @@ function MainSection(props: Props) {
         <AvatarCV src={avatarLink} />
         <br />
         <br />
-        <Text>
-          English level: <Text strong>{englishLevel}</Text>
-        </Text>
-        <br />
+        {englishLevel && (
+          <>
+            <Text>
+              English level: <Text strong>{englishLevel}</Text>
+            </Text>
+            <br />
+          </>
+        )}
         {militaryService && (
           <Text>
             Military service: <Text strong>{militaryServiceDictionary[militaryService]}</Text>
