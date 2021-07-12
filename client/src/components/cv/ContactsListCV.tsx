@@ -59,6 +59,13 @@ const allowedContacts: AllowedContacts = {
   },
   locations: {
     icon: <AimOutlined />,
+    transformFunc: locations => (
+      <ol>
+        {locations.split(';').map(location => (
+          <li>{location}</li>
+        ))}
+      </ol>
+    ),
   },
   github: {
     icon: <GithubOutlined />,
