@@ -60,4 +60,12 @@ export class CVService {
     });
     return response.data.data;
   }
+
+  async changeCVVisibility(githubId: string, isHidden: boolean) {
+    const response = await this.axios.post<{ data: boolean }>(`${CVService.baseRoute}/hide/`, {
+      githubId,
+      isHidden,
+    });
+    return response.data.data;
+  }
 }

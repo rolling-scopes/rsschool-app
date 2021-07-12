@@ -9,7 +9,7 @@ import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { CVService } from '../../services/cv';
 import heroesBadges from '../../configs/heroes-badges';
-import { DeleteOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -45,19 +45,38 @@ function Page(props: Props) {
       title: 'Name',
       dataIndex: 'complexData',
       key: 'complexData',
-      render: (data: { name: string; githubId: string }) => {
-        const { name, githubId } = data;
+      render: (data: { name: string; githubId: string; isHidden: boolean }) => {
+        const { name, githubId, isHidden } = data;
         // TODO: ucnomment after testing
         /*         const { isAdmin } = props.session; */
 
         return (
           <>
-            <a href={`/cv?githubId=${githubId}`}>{name ?? 'Unknown'}</a>
+            <a href={`/cv?githubid=${githubId}`}>{name ?? 'Unknown'}</a>
             {/* TODO: ucnomment after testing */}
             {/*             {isAdmin && ( */}
+            {isHidden ? (
+              <Popconfirm
+                title="This CV is currently hidden. Make it visible?"
+                onConfirm={() => changeHiddenStatus(githubId, false)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <EyeOutlined />
+              </Popconfirm>
+            ) : (
+              <Popconfirm
+                title="This CV is currently visible. Make it hidden?"
+                onConfirm={() => changeHiddenStatus(githubId, true)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <EyeInvisibleOutlined />
+              </Popconfirm>
+            )}
             <Popconfirm
-              title="Are you sure you want to remove this user?"
-              onConfirm={() => removeJobSeeker(githubId)}
+              title="Are you sure you want to delete this user's CV?"
+              onConfirm={() => deleteJobSeeker(githubId)}
               okText="Yes"
               cancelText="No"
             >
@@ -224,9 +243,17 @@ function Page(props: Props) {
     setLoading(false);
   }, []);
 
-  const removeJobSeeker = async (githubId: string) => {
+  const deleteJobSeeker = async (githubId: string) => {
     setLoading(true);
     await cvService.changeOpportunitiesConsent(githubId, false);
+    await fetchData();
+    setLoading(false);
+  };
+
+  const changeHiddenStatus = async (githubId: string, hiddenStatus: boolean) => {
+    setLoading(true);
+    await cvService.changeCVVisibility(githubId, hiddenStatus);
+    await fetchData();
     setLoading(false);
   };
 
@@ -256,10 +283,11 @@ function Page(props: Props) {
         feedback,
         location,
         expires,
+        isHidden,
       } = item;
       return {
         key: index,
-        complexData: { name: name?.length ? name : '<Not set>', githubId },
+        complexData: { name: name?.length ? name : '<Not set>', githubId, isHidden },
         expires: Number(expires),
         courses,
         feedback,
@@ -268,6 +296,7 @@ function Page(props: Props) {
         location: location?.length ? location : '<Not set>',
         startFrom: startFrom?.length ? startFrom : '<Not set>',
         englishLevel: englishLevel?.length ? englishLevel?.toUpperCase() : '<Not set>',
+        isHidden,
       };
     });
   } else {

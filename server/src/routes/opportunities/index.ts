@@ -164,7 +164,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   let cvProfiles = await getRepository(CV)
     .createQueryBuilder('cv')
     .select(
-      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires',
+      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires, cv.isHidden',
     )
     .leftJoin(User, 'user', 'cv.githubId = user.githubId')
     .where('user.opportunitiesConsent = true')
@@ -299,10 +299,33 @@ export const checkCVExistance = (_: ILogger) => async (ctx: Router.RouterContext
   setResponse(ctx, OK, user !== undefined);
 };
 
+export const manageHiddenStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, isHidden: reqHiddenStatus } = ctx.request.body;
+
+  const cvRepository = getRepository(CV);
+  const cv = await cvRepository.findOne({ where: { githubId } });
+
+  if (cv === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const prevHiddenStatus = cv.isHidden;
+
+  if (reqHiddenStatus === prevHiddenStatus) {
+    setResponse(ctx, OK, cv.isHidden);
+    return;
+  }
+
+  const result = await cvRepository.update({ githubId }, { isHidden: reqHiddenStatus });
+  setResponse(ctx, OK, result.raw.isHidden);
+};
+
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
 
   router.get('/exists', guard, checkCVExistance(logger));
+  router.post('/hide', guard, manageHiddenStatus(logger));
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));

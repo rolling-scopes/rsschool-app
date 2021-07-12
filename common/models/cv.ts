@@ -112,6 +112,7 @@ export interface JobSeekerData {
   courses: JobSeekerStudentStats[];
   feedback: JobSeekerFeedback[];
   expires: number;
+  isHidden: boolean;
 }
 
 export interface CVFeedback {
