@@ -82,8 +82,8 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           label="Locations"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
-          name="location"
-          rules={[...validationRules['location']]}
+          name="locations"
+          rules={[...validationRules['locations']]}
         >
           <TextArea
             rows={4}

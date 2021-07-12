@@ -56,7 +56,7 @@ export class CV {
   linkedin: string;
 
   @Column({ nullable: true, type: 'text' })
-  location: string;
+  locations: string;
 
   @Column({ nullable: true, type: 'text' })
   githubUsername: string;

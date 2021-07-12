@@ -57,7 +57,7 @@ const allowedContacts: AllowedContacts = {
       </a>
     ),
   },
-  location: {
+  locations: {
     icon: <AimOutlined />,
   },
   github: {

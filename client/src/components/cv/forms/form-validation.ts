@@ -74,7 +74,7 @@ const contactsValidationRules: {
       message: validationMessages.whitespace,
     },
   ],
-  location: [
+  locations: [
     {
       required: true,
       message: validationMessages.required,
