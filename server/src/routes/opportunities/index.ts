@@ -164,7 +164,7 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   let cvProfiles = await getRepository(CV)
     .createQueryBuilder('cv')
     .select(
-      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.location, cv.startFrom, cv.expires, cv.isHidden',
+      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.locations, cv.startFrom, cv.expires, cv.isHidden',
     )
     .leftJoin(User, 'user', 'cv.githubId = user.githubId')
     .where('user.opportunitiesConsent = true')
