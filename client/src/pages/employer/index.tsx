@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-// TODO: uncomment after testing
-import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm, Result, Tooltip, Switch } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
@@ -10,6 +9,7 @@ import withSession, { Session } from 'components/withSession';
 import { CVService } from '../../services/cv';
 import heroesBadges from '../../configs/heroes-badges';
 import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SwitchChangeEventHandler } from 'antd/lib/switch';
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -22,7 +22,8 @@ type Props = {
 
 function Page(props: Props) {
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [users, setUsers] = useState<JobSeekerData[] | null>(null);
+  const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
+  const [areHiddenJobSeekersShown, setHiddenJobSeekersShown] = useState<boolean>(false);
 
   const cvService = new CVService();
 
@@ -47,43 +48,41 @@ function Page(props: Props) {
       key: 'complexData',
       render: (data: { name: string; githubId: string; isHidden: boolean }) => {
         const { name, githubId, isHidden } = data;
-        // TODO: ucnomment after testing
-        /*         const { isAdmin } = props.session; */
 
         return (
           <>
             <a href={`/cv?githubid=${githubId}`}>{name ?? 'Unknown'}</a>
-            {/* TODO: ucnomment after testing */}
-            {/*             {isAdmin && ( */}
-            {isHidden ? (
-              <Popconfirm
-                title="This CV is currently hidden. Make it visible?"
-                onConfirm={() => changeHiddenStatus(githubId, false)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <EyeOutlined />
-              </Popconfirm>
-            ) : (
-              <Popconfirm
-                title="This CV is currently visible. Make it hidden?"
-                onConfirm={() => changeHiddenStatus(githubId, true)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <EyeInvisibleOutlined />
-              </Popconfirm>
+            {isAdmin && (
+              <>
+                {isHidden ? (
+                  <Popconfirm
+                    title="This CV is currently hidden. Make it visible?"
+                    onConfirm={() => changeHiddenStatus(githubId, false)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <EyeOutlined />
+                  </Popconfirm>
+                ) : (
+                  <Popconfirm
+                    title="This CV is currently visible. Make it hidden?"
+                    onConfirm={() => changeHiddenStatus(githubId, true)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <EyeInvisibleOutlined />
+                  </Popconfirm>
+                )}
+                <Popconfirm
+                  title="Are you sure you want to delete this user's CV?"
+                  onConfirm={() => deleteJobSeeker(githubId)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <DeleteOutlined />
+                </Popconfirm>
+              </>
             )}
-            <Popconfirm
-              title="Are you sure you want to delete this user's CV?"
-              onConfirm={() => deleteJobSeeker(githubId)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <DeleteOutlined />
-            </Popconfirm>
-            {/* TODO: ucnomment after testing */}
-            {/* )} */}
           </>
         );
       },
@@ -243,8 +242,13 @@ function Page(props: Props) {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const data: JobSeekerData[] = await cvService.getJobSeekersData();
-    setUsers(data);
+    let data: JobSeekerData[];
+    if (isAdmin) {
+      data = await cvService.getAllJobSeekersData();
+    } else {
+      data = await cvService.getVisibleJobSeekersData();
+    }
+    setJobSeekers(data);
     setLoading(false);
   }, []);
 
@@ -262,21 +266,17 @@ function Page(props: Props) {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const handleVisibilitySwitch: SwitchChangeEventHandler = checked => {
+    setHiddenJobSeekersShown(checked);
+  };
 
-  // TODO: ucnomment after testing
-  const { /* isAdmin, isHirer, */ githubId: userGithubId } = props.session;
+  const filterJobSeekersByVisibility = (jobSeekers: JobSeekerData[], showHidden: boolean) => {
+    if (showHidden) return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === true);
+    return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === false);
+  };
 
-  /*     if (!(isAdmin || isHirer)) return (
-    <Result status="403" title="Sorry, but you don't have access to this page" />
-  ); */
-
-  let data;
-
-  if (users) {
-    data = users.map((item: JobSeekerData, index) => {
+  const transformJobSeekersData = (data: JobSeekerData[]) => {
+    return data.map((item, index) => {
       const {
         name,
         fullTime,
@@ -304,6 +304,26 @@ function Page(props: Props) {
         isHidden,
       };
     });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
+
+  if (!(isAdmin || isHirer)) return <Result status="403" title="Sorry, but you don't have access to this page" />;
+
+  let data;
+
+  if (jobSeekers) {
+    if (areHiddenJobSeekersShown) {
+      const hiddenJobSeekers = filterJobSeekersByVisibility(jobSeekers, true);
+      data = transformJobSeekersData(hiddenJobSeekers);
+    } else {
+      const visibleJobSeekers = filterJobSeekersByVisibility(jobSeekers, false);
+      data = transformJobSeekersData(visibleJobSeekers);
+    }
   } else {
     data = null;
   }
@@ -314,6 +334,14 @@ function Page(props: Props) {
       <LoadingScreen show={isLoading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
+            {isAdmin && (
+              <Switch
+                checked={areHiddenJobSeekersShown}
+                onChange={handleVisibilitySwitch}
+                checkedChildren="Hidden"
+                unCheckedChildren="Visible"
+              />
+            )}
             <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data ?? undefined}></Table>
           </Content>
         </Layout>

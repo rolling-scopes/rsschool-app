@@ -158,7 +158,7 @@ export const manageOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Rou
   }
 };
 
-const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+const getAllJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const currentTimestamp = new Date().getTime();
 
   let cvProfiles = await getRepository(CV)
@@ -169,6 +169,41 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     .leftJoin(User, 'user', 'cv.githubId = user.githubId')
     .where('user.opportunitiesConsent = true')
     .andWhere('cv.expires >= :currentTimestamp', { currentTimestamp })
+    .getRawMany();
+
+  if (cvProfiles.length) {
+    cvProfiles = await Promise.all(
+      cvProfiles.map(async (cv: any) => {
+        const { githubId } = cv;
+
+        const feedback = await getFeedbackJobSeeker(githubId);
+
+        const courses = await getStudentsStats(githubId);
+
+        return {
+          ...cv,
+          feedback,
+          courses,
+        };
+      }),
+    );
+  }
+
+  setResponse(ctx, OK, cvProfiles);
+};
+
+const getVisibleJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const currentTimestamp = new Date().getTime();
+
+  let cvProfiles = await getRepository(CV)
+    .createQueryBuilder('cv')
+    .select(
+      'cv.name, cv.githubId, cv.desiredPosition, cv.englishLevel, cv.fullTime, cv.locations, cv.startFrom, cv.expires, cv.isHidden',
+    )
+    .leftJoin(User, 'user', 'cv.githubId = user.githubId')
+    .where('user.opportunitiesConsent = true')
+    .andWhere('cv.expires >= :currentTimestamp', { currentTimestamp })
+    .andWhere('cv.isHidden = false')
     .getRawMany();
 
   if (cvProfiles.length) {
@@ -338,7 +373,8 @@ export function opportunitiesRoute(logger: ILogger) {
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));
-  router.get('/', guard, getJobSeekersData(logger));
+  router.get('/jobseekers', guard, getVisibleJobSeekersData(logger));
+  router.get('/jobseekers-all', guard, getAllJobSeekersData(logger));
   router.get('/cv-edit', guard, getEditCVData(logger));
   router.get('/cv-view', guard, getViewCVData(logger));
   router.post('/', guard, saveCVData(logger));
