@@ -85,10 +85,12 @@ function CVPage(props: Props) {
     getConsent();
   }, [opportunitiesConsent]);
 
-  const userGithubId = props.session.githubId;
+  const { githubId: userGithubId, isAdmin, isHirer } = props.session;
   const ownerGithubId = getGithubIdFromQuery(props.router);
 
   const isOwner = userGithubId === ownerGithubId;
+
+  const hasPriorityRole = [isAdmin, isHirer].some(hasRole => hasRole === true);
 
   return (
     <>
@@ -97,6 +99,7 @@ function CVPage(props: Props) {
         <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
             <CVInfo
+              hasPriorityRole={hasPriorityRole}
               ownerGithubId={ownerGithubId}
               isOwner={isOwner}
               notFound={notFound}
