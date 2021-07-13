@@ -7,6 +7,7 @@ import NoConsentViewCV from './NoConsentViewCV';
 const { Text } = Typography;
 
 type CVInfoProps = {
+  hasPriorityRole: boolean;
   ownerGithubId?: string;
   isOwner: boolean;
   notFound: boolean;
@@ -18,11 +19,24 @@ type CVInfoProps = {
 };
 
 function CVInfo(props: CVInfoProps) {
-  const { ownerGithubId, isOwner, notFound, opportunitiesConsent, editMode, switchView, withdrawConsent, giveConsent } =
-    props;
+  const {
+    hasPriorityRole,
+    ownerGithubId,
+    isOwner,
+    notFound,
+    opportunitiesConsent,
+    editMode,
+    switchView,
+    withdrawConsent,
+    giveConsent,
+  } = props;
 
   if (ownerGithubId === undefined) {
     return <Result status="warning" title="This page doesn't exist" />;
+  }
+
+  if (!isOwner && !hasPriorityRole) {
+    return <Result status="403" title="Sorry, but you don't have access to this page" />;
   }
 
   if (notFound) {
