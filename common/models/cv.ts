@@ -57,28 +57,15 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface SaveCVData {
-  selfIntroLink: string | null;
-  militaryService: MilitaryService | null;
-  avatarLink: string | null;
-  desiredPosition: string | null;
-  englishLevel: EnglishLevel | null;
-  name: string | null;
-  notes: string | null;
-  phone: string | null;
-  email: string | null;
-  skype: string | null;
-  telegram: string | null;
-  linkedin: string | null;
-  locations: string | null;
+export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
   githubUsername: string | null;
-  website: string | null;
-  startFrom: string | null;
-  fullTime: boolean;
 }
 
-export interface GetCVData extends SaveCVData {
+export interface EditCVData extends AllUserCVData {
   expires: number | null;
+}
+
+export interface GetFullCVData extends EditCVData {
   courses: CVStudentStats[];
   feedback: CVFeedback[];
 }

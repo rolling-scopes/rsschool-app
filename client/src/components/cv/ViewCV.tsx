@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
-import { Contacts, UserData, GetCVData, CVStudentStats, CVFeedback } from '../../../../common/models/cv';
+import { Contacts, UserData, CVStudentStats, CVFeedback } from '../../../../common/models/cv';
 import { CVService } from '../../services/cv';
 
 const { Content } = Layout;
@@ -26,7 +26,7 @@ function ViewCV(props: Props) {
 
     const { ownerGithubId } = props;
 
-    const cvData: GetCVData = await cvService.getCVData(ownerGithubId);
+    const cvData = await cvService.getFullCVData(ownerGithubId);
 
     const {
       notes,

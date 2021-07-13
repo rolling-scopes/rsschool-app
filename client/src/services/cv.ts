@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
 import { NextPageContext } from 'next';
-import { JobSeekerData, GetCVData, SaveCVData } from '../../../common/models/cv';
+import { JobSeekerData, GetFullCVData, AllUserCVData, EditCVData } from '../../../common/models/cv';
 
 export class CVService {
   private axios: AxiosInstance;
@@ -37,15 +37,22 @@ export class CVService {
     return response.data.data;
   }
 
-  async getCVData(githubId: string) {
-    const response = await this.axios.get<{ data: GetCVData }>(`${CVService.baseRoute}/cv`, {
+  async getEditCVData(githubId: string) {
+    const response = await this.axios.get<{ data: EditCVData }>(`${CVService.baseRoute}/cv-edit`, {
       params: { githubId },
     });
     return response.data.data;
   }
 
-  async saveCVData(opportunitiesInfo: SaveCVData) {
-    const response = await this.axios.post<{ data: SaveCVData }>(`${CVService.baseRoute}`, opportunitiesInfo);
+  async getFullCVData(githubId: string) {
+    const response = await this.axios.get<{ data: GetFullCVData }>(`${CVService.baseRoute}/cv-view`, {
+      params: { githubId },
+    });
+    return response.data.data;
+  }
+
+  async saveCVData(opportunitiesInfo: AllUserCVData) {
+    const response = await this.axios.post<{ data: AllUserCVData }>(`${CVService.baseRoute}`, opportunitiesInfo);
     return response.data.data;
   }
 
