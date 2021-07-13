@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
+import { Contacts, UserData, AllUserCVData } from '../../../../common/models/cv';
 import { CVService } from 'services/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -32,7 +32,7 @@ function EditCV(props: Props) {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [expires, setExpires] = useState<number | null>(null);
+  const [expires, setExpiration] = useState<number | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
@@ -86,7 +86,7 @@ function EditCV(props: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const cvData: GetCVData = await cvService.getCVData(props.ownerGithubId);
+    const cvData = await cvService.getEditCVData(props.ownerGithubId);
 
     const {
       notes,
@@ -134,7 +134,7 @@ function EditCV(props: Props) {
 
     setContactsList(contactsList);
     setUserData(userData);
-    setExpires(Number(expires));
+    setExpiration(Number(expires));
 
     setLoading(false);
   }, []);
@@ -162,7 +162,7 @@ function EditCV(props: Props) {
       website,
     } = data;
 
-    const cvData: SaveCVData = {
+    const cvData: AllUserCVData = {
       selfIntroLink: nullifyConditional(selfIntroLink),
       militaryService,
       avatarLink: nullifyConditional(avatarLink),
@@ -182,7 +182,53 @@ function EditCV(props: Props) {
       fullTime,
     };
 
-    await cvService.saveCVData(cvData);
+    const newCVData = await cvService.saveCVData(cvData);
+
+    const {
+      selfIntroLink: newSelfIntroLink,
+      militaryService: newMilitaryService,
+      avatarLink: newAvatarLink,
+      desiredPosition: newDesiredPosition,
+      englishLevel: newEnglishLevel,
+      name: newName,
+      notes: newNotes,
+      startFrom: newStartFrom,
+      fullTime: newFullTime,
+      phone: newPhone,
+      email: newEmail,
+      skype: newSkype,
+      telegram: newTelegram,
+      linkedin: newLinkedin,
+      locations: newLocations,
+      githubUsername: newGithub,
+      website: newWebsite,
+    } = newCVData;
+
+    const newUserData: UserData = {
+      selfIntroLink: newSelfIntroLink,
+      militaryService: newMilitaryService,
+      avatarLink: newAvatarLink,
+      desiredPosition: newDesiredPosition,
+      englishLevel: newEnglishLevel,
+      name: newName,
+      notes: newNotes,
+      startFrom: newStartFrom,
+      fullTime: newFullTime,
+    };
+
+    const newContacts: Contacts = {
+      phone: newPhone,
+      email: newEmail,
+      skype: newSkype,
+      telegram: newTelegram,
+      linkedin: newLinkedin,
+      locations: newLocations,
+      github: newGithub,
+      website: newWebsite,
+    };
+
+    setUserData(newUserData);
+    setContactsList(newContacts);
 
     setLoading(false);
   };
@@ -193,7 +239,6 @@ function EditCV(props: Props) {
 
   const saveData = async (data: any) => {
     await submitData(data);
-    await fetchData();
   };
 
   const transformLocationsString = (locationsRaw: string) => {
@@ -330,9 +375,9 @@ function EditCV(props: Props) {
   };
 
   const extendCV = async () => {
-    const hasEmpty = checkNecessaryDataBeforeExtension();
+    const hasEmptyMandatoryFields = checkNecessaryDataBeforeExtension();
 
-    if (hasEmpty) {
+    if (hasEmptyMandatoryFields) {
       showWarningModal({
         title: 'You have to fill some field before extend CV',
         content: (
@@ -350,7 +395,7 @@ function EditCV(props: Props) {
 
     const newExpirationDate = await cvService.extendCV();
 
-    setExpires(newExpirationDate);
+    setExpiration(newExpirationDate);
 
     setLoading(false);
   };

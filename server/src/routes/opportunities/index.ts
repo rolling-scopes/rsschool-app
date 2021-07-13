@@ -210,7 +210,9 @@ const saveCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
     ...data,
   });
 
-  setResponse(ctx, OK, result);
+  const { id, expires, githubId: omittedGithubId, isHidden, ...dataToSend } = result;
+
+  setResponse(ctx, OK, dataToSend);
 };
 
 const getOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -246,7 +248,7 @@ export const deleteCV = async (githubId: string) => {
   await cvRepository.delete({ githubId });
 };
 
-export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const getViewCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.query;
 
   const cvRepository = getRepository(CV);
@@ -261,7 +263,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const feedback = await getFeedbackCV(githubId);
   const courses = await getStudentsStats(githubId);
 
-  const { id, githubId: omittedGithubId, ...cvData } = cv;
+  const { id, githubId: omittedGithubId, isHidden, ...cvData } = cv;
 
   const res = {
     ...cvData,
@@ -270,6 +272,23 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   };
 
   setResponse(ctx, OK, res);
+};
+
+export const getEditCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId } = ctx.query;
+
+  const cvRepository = getRepository(CV);
+
+  const cv = await cvRepository.findOne({ where: { githubId } });
+
+  if (cv === undefined) {
+    setResponse(ctx, NOT_FOUND);
+    return;
+  }
+
+  const { id, githubId: omittedGithubId, isHidden, ...cvData } = cv;
+
+  setResponse(ctx, OK, cvData);
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -320,7 +339,8 @@ export function opportunitiesRoute(logger: ILogger) {
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));
   router.get('/', guard, getJobSeekersData(logger));
-  router.get('/cv', guard, getCVData(logger));
+  router.get('/cv-edit', guard, getEditCVData(logger));
+  router.get('/cv-view', guard, getViewCVData(logger));
   router.post('/', guard, saveCVData(logger));
 
   return router;
