@@ -7,7 +7,7 @@ import NoConsentViewCV from './NoConsentViewCV';
 const { Text } = Typography;
 
 type CVInfoProps = {
-  ownerGithubId?: string | string[];
+  ownerGithubId?: string;
   isOwner: boolean;
   notFound: boolean;
   opportunitiesConsent: boolean | null;
@@ -25,7 +25,7 @@ function CVInfo(props: CVInfoProps) {
     return <Result status={404} title="User not found" />;
   }
 
-  if (ownerGithubId === undefined || ownerGithubId instanceof Array) {
+  if (ownerGithubId === undefined) {
     return <Result status="warning" title="This page doesn't exist" />;
   }
 
