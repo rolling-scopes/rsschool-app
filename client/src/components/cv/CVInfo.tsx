@@ -10,7 +10,7 @@ type CVInfoProps = {
   ownerGithubId?: string;
   isOwner: boolean;
   notFound: boolean;
-  opportunitiesConsent: boolean | null;
+  opportunitiesConsent: boolean;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
   withdrawConsent: (ownerGithubId: string) => void;
