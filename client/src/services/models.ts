@@ -1,9 +1,15 @@
 import { Session } from 'components/withSession';
-import { Course as CommonCourse, StudentBasic as CommonStudentBasic, DiscordServer } from '../../../common/models';
+import {
+  Course as CommonCourse,
+  StudentBasic as CommonStudentBasic,
+  DiscordServer,
+  UserGroup,
+} from '../../../common/models';
 
 export interface Course extends CommonCourse {}
 export interface StudentBasic extends CommonStudentBasic {}
 export type { DiscordServer };
+export type { UserGroup };
 
 export interface Mentor {
   lastName: string;

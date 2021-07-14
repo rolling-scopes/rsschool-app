@@ -5,6 +5,7 @@ import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
 import { DiscordServer } from './discordServer';
+import { UserGroup } from './userGroup';
 import { Event } from './event';
 import { Feedback } from './feedback';
 import { Mentor } from './mentor';
@@ -42,6 +43,7 @@ export {
   CourseTask,
   CourseUser,
   DiscordServer,
+  UserGroup,
   Event,
   ExternalAccount,
   Feedback,
@@ -81,6 +83,7 @@ export const models = [
   CourseTask,
   CourseUser,
   DiscordServer,
+  UserGroup,
   Event,
   Feedback,
   Mentor,
