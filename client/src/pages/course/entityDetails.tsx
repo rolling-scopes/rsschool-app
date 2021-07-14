@@ -7,6 +7,7 @@ import { withSession } from 'components';
 import { useLoading } from 'components/useLoading';
 import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
 import { CoursePageProps } from 'services/models';
+import { isCourseManager } from 'domain/user';
 import TaskDetails from 'components/Schedule/TaskDetails';
 import EventDetails from 'components/Schedule/EventDetails';
 import ModalFormEntity from 'components/Schedule/ModalFormEntity';
@@ -20,6 +21,10 @@ export function EntityDetailsPage(props: CoursePageProps) {
   const [editableRecord, setEditableRecord] = useState<CourseTaskDetails | CourseEvent | null>(null);
   const [, withLoading] = useLoading(false);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const isAdmin = useMemo(
+    () => isCourseManager(props.session, props.course.id),
+    [props.session, props.course.id],
+  ) as boolean;
 
   const loadData = async () => {
     if (entityType === 'task') {
@@ -58,11 +63,11 @@ export function EntityDetailsPage(props: CoursePageProps) {
           taskData={entityData as CourseTaskDetails}
           alias={alias}
           onEdit={handleFullEdit}
-          isAdmin={props.session.isAdmin}
+          isAdmin={isAdmin}
         />
       )}
       {entityType === 'event' && (
-        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} />
+        <EventDetails eventData={entityData as CourseEvent} alias={alias} onEdit={handleFullEdit} isAdmin={isAdmin} />
       )}
       {isModalOpen && (
         <ModalFormEntity

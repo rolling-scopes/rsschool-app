@@ -355,32 +355,62 @@ function renderSelfEducation(courseTask: CourseTask) {
           attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
         </Typography.Text>
       </Typography.Paragraph>
-      {questions.map(({ question, answers, multiple, index: questionIndex }) => (
-        <Form.Item
-          key={questionIndex}
-          label={question}
-          name={`answer-${questionIndex}`}
-          rules={[{ required: true, message: 'Please answer the question' }]}
-        >
-          {multiple ? (
-            <Checkbox.Group>
-              {answers.map((answer, index) => (
-                <Row key={index}>
-                  <Checkbox value={index}>{answer}</Checkbox>
-                </Row>
-              ))}
-            </Checkbox.Group>
-          ) : (
-            <Radio.Group>
-              {answers.map((answer, index) => (
-                <Row key={index}>
-                  <Radio value={index}>{answer}</Radio>
-                </Row>
-              ))}
-            </Radio.Group>
-          )}
-        </Form.Item>
-      ))}
+      {questions.map(({ question, answers, multiple, index: questionIndex, questionImage, answersType }) => {
+        return (
+          <Form.Item
+            key={questionIndex}
+            label={question}
+            name={`answer-${questionIndex}`}
+            rules={[{ required: true, message: 'Please answer the question' }]}
+          >
+            {questionImage && (
+              <Row>
+                <img
+                  src={questionImage}
+                  style={{
+                    width: '100%',
+                    maxWidth: '700px',
+                    marginBottom: '10px',
+                  }}
+                />
+              </Row>
+            )}
+            {multiple ? (
+              <Checkbox.Group>
+                {answers.map((answer, index) => (
+                  <Row key={index}>
+                    <Checkbox value={index}>{answer}</Checkbox>
+                  </Row>
+                ))}
+              </Checkbox.Group>
+            ) : (
+              <Radio.Group>
+                {answers.map((answer, index) => (
+                  <Row key={index}>
+                    <Radio value={index}>
+                      {answersType === 'image' ? (
+                        <>
+                          ({index + 1}){' '}
+                          <img
+                            src={answer}
+                            style={{
+                              width: '100%',
+                              maxWidth: '400px',
+                              marginBottom: '10px',
+                            }}
+                          />
+                        </>
+                      ) : (
+                        answer
+                      )}
+                    </Radio>
+                  </Row>
+                ))}
+              </Radio.Group>
+            )}
+          </Form.Item>
+        );
+      })}
     </>
   );
 }
@@ -397,7 +427,7 @@ function renderJsTaskFields(repoUrl: string) {
         </a>
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
-        IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
+        IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
       </Typography.Paragraph>
       {explanationsSubmissionTasks()}
     </Row>

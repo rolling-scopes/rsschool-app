@@ -8,6 +8,7 @@ import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
 import { CourseEvent, CourseService, CourseTask, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { isCourseManager } from 'domain/user';
 import { TIMEZONES } from '../../configs/timezones';
 import { useAsync, useLocalStorage } from 'react-use';
 import { useLoading } from 'components/useLoading';
@@ -37,6 +38,10 @@ export function SchedulePage(props: CoursePageProps) {
   const [editableRecord, setEditableRecord] = useState(null);
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
+  const isAdmin = useMemo(
+    () => isCourseManager(props.session, props.course.id),
+    [props.session, props.course.id],
+  ) as boolean;
   const relevantEvents = useMemo(() => {
     const yesterday = moment.utc().subtract(1, 'day');
 
@@ -112,7 +117,7 @@ export function SchedulePage(props: CoursePageProps) {
 
   return (
     <PageLayout loading={loading} title="Schedule" githubId={props.session.githubId}>
-      <Row justify="start" gutter={[16, 16]}>
+      <Row justify="start" gutter={[16, 16]} style={{ marginBottom: '24px' }}>
         <Col>
           <Select style={{ width: 100 }} defaultValue={scheduleViewMode} onChange={setScheduleViewMode}>
             <Option value={ViewMode.TABLE}>Table</Option>
@@ -134,7 +139,7 @@ export function SchedulePage(props: CoursePageProps) {
             ))}
           </Select>
         </Col>
-        {props.session.isAdmin && (
+        {isAdmin && (
           <>
             <Col>
               <Tooltip title="Export schedule" mouseEnterDelay={1}>
@@ -192,7 +197,7 @@ export function SchedulePage(props: CoursePageProps) {
       <ScheduleView
         data={filteredData}
         timeZone={timeZone}
-        isAdmin={props.session.isAdmin}
+        isAdmin={isAdmin}
         courseId={props.course.id}
         refreshData={loadData}
         storedTagColors={storedTagColors}

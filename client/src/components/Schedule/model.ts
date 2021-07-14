@@ -39,6 +39,7 @@ export const TASK_TYPES = [
   'Kotlin task',
   'ObjC task',
   'HTML task',
+  'Jupyter Notebook',
   'CV Markdown',
   'CV HTML',
   'Codewars',
@@ -72,6 +73,7 @@ export const SPECIAL_ENTITY_TAGS = [
   'mobile',
   'kotlin',
   'aws',
+  'jupyter',
 ];
 
 export const COLUMNS_TYPES = ['Type', 'Special', 'Url', 'Duration', 'Organizer', 'Place'];
