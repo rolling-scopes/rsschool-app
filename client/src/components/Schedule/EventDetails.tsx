@@ -15,11 +15,12 @@ const { Title, Text } = Typography;
 type Props = {
   eventData: CourseEvent;
   alias: string;
+  isAdmin: boolean;
   isPreview?: boolean;
   onEdit?: (isTask?: boolean) => void;
 };
 
-const EventDetails: React.FC<Props> = ({ eventData, alias, isPreview, onEdit }) => {
+const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, onEdit }) => {
   const [storedTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
   const { event, dateTime, place, organizer, special, duration } = eventData;
 
@@ -92,19 +93,20 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isPreview, onEdit }) 
           </Row>
         )}
 
+        {isAdmin && (
+          <div className="button__edit">
+            <Button icon={<EditOutlined />} onClick={() => onEdit && onEdit(false)} />
+          </div>
+        )}
+
         {!isPreview && (
-          <>
-            <div className="button__close">
-              <Link href={`/course/schedule?course=${alias}`}>
-                <a>
-                  <Button icon={<CloseOutlined />} />
-                </a>
-              </Link>
-            </div>
-            <div className="button__edit">
-              <Button icon={<EditOutlined />} onClick={() => onEdit && onEdit(false)} />
-            </div>
-          </>
+          <div className="button__close">
+            <Link href={`/course/schedule?course=${alias}`}>
+              <a>
+                <Button icon={<CloseOutlined />} />
+              </a>
+            </Link>
+          </div>
         )}
       </div>
 

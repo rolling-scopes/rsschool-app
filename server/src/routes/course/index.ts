@@ -63,7 +63,7 @@ import {
   postFeedback,
 } from './student';
 import * as crossCheck from './crossCheck';
-import { getUsers, postUser, putUser } from './user';
+import { getUsers, putUsers, putUser } from './user';
 import { postCopyCourse } from './template';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 
@@ -181,7 +181,7 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
 
 function addCourseUserApi(router: Router<any, any>, logger: ILogger) {
   router.get('/users', courseManagerGuard, getUsers(logger));
-  router.post('/user/:githubId', courseManagerGuard, validateGithubId, postUser(logger));
+  router.put('/users', courseManagerGuard, putUsers(logger));
   router.put('/user/:githubId', courseManagerGuard, validateGithubId, putUser(logger));
 }
 

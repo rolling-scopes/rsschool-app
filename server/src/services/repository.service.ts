@@ -113,7 +113,7 @@ export class RepositoryService {
     } catch (e) {
       if (e.status === 422) {
         // hook exists already
-        this.logger?.info(e.errors[0].message);
+        this.logger?.info(e?.response?.data?.message ?? e);
         return;
       }
       throw e;
@@ -245,7 +245,7 @@ export class RepositoryService {
       if (e.status === 422) {
         // if repository exists
         repository = `https://github.com/${owner}/${repo}`;
-        this.logger?.info(e.errors[0].message);
+        this.logger?.info(e?.response?.data?.message ?? e);
       } else {
         throw e;
       }
