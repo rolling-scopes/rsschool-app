@@ -128,7 +128,7 @@ function Page(props: Props & { courseAlias?: string }) {
           <div className="student-registration-content">
             <Col>
               <Row>
-                <Typography.Title level={3} style={{ margin: '8px 0 40px'}}>
+                <Typography.Title level={3} style={{ margin: '8px 0 40px' }}>
                   Welcome to RS School!
                 </Typography.Title>
               </Row>
@@ -294,7 +294,7 @@ RegistryStudentPage.getInitialProps = async (context: NextPageContext) => {
 const getInfoCircle = (text: string) => {
   return (
     <Tooltip title={text} color="#000000bf">
-      <InfoCircleOutlined  style={{fontSize: 13}} />
+      <InfoCircleOutlined style={{ fontSize: 13 }} />
     </Tooltip>
   );
 };
