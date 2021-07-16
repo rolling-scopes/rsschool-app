@@ -107,7 +107,7 @@ function Page(props: Props & { courseAlias?: string }) {
     content = (
       <Form
         layout="vertical"
-        style={{ margin: '104px 10px', height: '100%' }}
+        style={{ margin: '10px', height: '100%' }}
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
