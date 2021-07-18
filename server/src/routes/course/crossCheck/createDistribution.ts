@@ -28,7 +28,7 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
 
   if (students.length === 0) {
     setResponse(ctx, OK, { crossCheckPairs: [] });
-    return
+    return;
   }
 
   const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
