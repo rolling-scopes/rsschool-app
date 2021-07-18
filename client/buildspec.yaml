@@ -15,6 +15,7 @@ phases:
       - npm test
       - npm run build
       - npm ci --production --no-optional
+      - aws s3 cp .next s3://cdn.rs.school/app/ --recursive
       - cp -a ./src/.next/cache/. /tmp/.next/cache/
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - docker build -t rsschool/ui:latest .
