@@ -134,7 +134,8 @@ export function SchedulePage(props: CoursePageProps) {
           >
             {TIMEZONES.map(tz => (
               <Option key={tz} value={tz}>
-                {tz}
+                {/* there is no 'Europe / Kyiv' time zone at the moment */}
+                {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
               </Option>
             ))}
           </Select>
