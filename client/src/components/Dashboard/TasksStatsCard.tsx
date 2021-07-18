@@ -140,7 +140,7 @@ export function TasksStatsCard(props: Props) {
         icon={<AuditOutlined />}
         content={
           <div style={{ minHeight: 220, minWidth: 220, maxWidth: 250, margin: 'auto' }}>
-            <Doughnut width={50} height={50} data={dataForChart} options={options} />
+            <Doughnut type="doughnut" width={50} height={50} data={dataForChart} options={options} />
           </div>
         }
       />
