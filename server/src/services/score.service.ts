@@ -94,8 +94,8 @@ export class ScoreService {
       cityName: '',
     },
     orderBy: { field: keyof typeof orderByFieldMapping; direction: 'ASC' | 'DESC' } = {
-      field: 'totalScore',
-      direction: 'DESC',
+      field: 'rank',
+      direction: 'ASC',
     },
   ) {
     let query = getRepository(Student)
