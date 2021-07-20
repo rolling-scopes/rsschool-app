@@ -520,7 +520,7 @@ export class CourseService {
     return result.data;
   }
 
-  async getStudentSummary(githubId: string) {
+  async getStudentSummary(githubId: string | 'me') {
     const result = await this.axios.get(`/student/${githubId}/summary`);
     return result.data.data as StudentSummary;
   }

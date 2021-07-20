@@ -71,6 +71,6 @@
     "ts-jest": "~26.5.6",
     "ts-node-dev": "~1.1.6",
     "tsconfig-paths": "~3.9.0",
-    "typescript": "~4.2.4"
+    "typescript": "~4.3.5"
   }
 }

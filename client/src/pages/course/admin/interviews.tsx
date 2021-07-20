@@ -97,7 +97,7 @@ function Page(props: CoursePageProps) {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (isCourseManager(props.session, props.course.id)) {
+              if (isCourseManager(props.session, props.course)) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel

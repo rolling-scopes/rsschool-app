@@ -13,18 +13,17 @@ import EventDetails from 'components/Schedule/EventDetails';
 import ModalFormEntity from 'components/Schedule/ModalFormEntity';
 
 export function EntityDetailsPage(props: CoursePageProps) {
+  const { session, course } = props;
+
   const router = useRouter();
-  const { entityType, entityId, course } = router.query;
+  const { entityType, entityId } = router.query;
   const alias = Array.isArray(course) ? course[0] : course;
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
   const [isModalOpen, setModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState<CourseTaskDetails | CourseEvent | null>(null);
   const [, withLoading] = useLoading(false);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const isAdmin = useMemo(
-    () => isCourseManager(props.session, props.course.id),
-    [props.session, props.course.id],
-  ) as boolean;
+  const isAdmin = useMemo(() => isCourseManager(session, course), [session, course]);
 
   const loadData = async () => {
     if (entityType === 'task') {
