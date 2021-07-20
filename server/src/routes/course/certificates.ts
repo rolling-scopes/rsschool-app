@@ -20,7 +20,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
   }
 
   const { courseTaskIds, minScore, minTotalScore } = data.criteria ?? {};
-  const emptyCriteria = !minScore && !minTotalScore && (!courseTaskIds || !courseTaskIds.length);
+  const emptyCriteria = !minScore && !minTotalScore && (!courseTaskIds || !courseTaskIds?.length);
   const studentRepository = getCustomRepository(StudentRepository);
   const studentIds = await studentRepository.findByCriteria(courseId, {
     courseTaskIds: courseTaskIds ?? [],
