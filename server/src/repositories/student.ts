@@ -277,9 +277,11 @@ export class StudentRepository extends AbstractRepository<Student> {
       minTotalScore: number | null;
     },
   ): Promise<number[]> {
+    const tasksCount = criteria.courseTaskIds.length;
+
     let query = await getRepository(Student).createQueryBuilder('student').select(['student.id']);
 
-    if (criteria.courseTaskIds.length > 0) {
+    if (tasksCount > 0) {
       query = query
         .leftJoin(
           'student.taskResults',
@@ -301,7 +303,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       });
     }
 
-    if (criteria.courseTaskIds.length > 0) {
+    if (tasksCount > 0) {
       query = query.andWhere('tr.id IS NOT NULL');
     }
     query = query.groupBy('"student"."id"');
@@ -309,7 +311,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     const rawCertificates = await query.getRawMany();
 
     return rawCertificates
-      .map(({ student_id, tasks }) => (tasks.length === criteria.courseTaskIds.length ? student_id : undefined))
+      .map(({ student_id, tasks }) => (!tasksCount || tasks?.length === tasksCount ? student_id : undefined))
       .filter(Boolean);
   }
 }

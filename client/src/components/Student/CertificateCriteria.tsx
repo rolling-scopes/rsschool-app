@@ -31,15 +31,11 @@ export function CertificateCriteria(props: Props) {
         <Form
           layout="vertical"
           form={form}
-          onValuesChange={(changes: any, values: any) => {
+          onValuesChange={(_: any, values: any) => {
             const { minScore, courseTaskIds, minTotalScore } = values as FormValues;
-            const formChanges = changes as FormValues;
-            if (formChanges.minScore === undefined && formChanges.courseTaskIds === undefined) {
-              return;
-            }
-            setApplyEnabled(
-              !!minScore || (Array.isArray(courseTaskIds) && courseTaskIds.length > 0) || !!minTotalScore,
-            );
+            const tasksCriteriaValid =
+              !courseTaskIds || !courseTaskIds.length || (courseTaskIds.length > 0 && !!minScore);
+            setApplyEnabled(tasksCriteriaValid && !!minTotalScore);
           }}
           onFinish={values => {
             const { minScore, courseTaskIds, minTotalScore } = values;
