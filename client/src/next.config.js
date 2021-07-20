@@ -21,5 +21,8 @@ const nextConfig = {
     config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
     return config;
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 module.exports = nextConfig;
