@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   serverRuntimeConfig: {
