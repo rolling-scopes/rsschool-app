@@ -3,12 +3,13 @@ import pinoLogger from 'pino-multi-stream';
 const cloudwatch = require('pino-cloudwatch'); //tslint:disable-line
 import { config } from './config';
 import { AxiosError } from 'axios';
+import { ParsedUrlQuery } from 'querystring';
 
 export interface ILog {
   data?: any;
   host: string;
   method: string;
-  query: string;
+  query: ParsedUrlQuery;
   remoteAddress: string;
   status: number;
   url: string;

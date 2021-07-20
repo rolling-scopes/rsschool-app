@@ -159,7 +159,7 @@ export class RepositoryService {
     try {
       this.logger?.info(`[${ownerRepo}] enabling Github Pages`);
       const pages = await github.repos.getPages({ owner, repo }).catch(() => null);
-      if (pages?.data.source.branch === 'gh-pages') {
+      if (pages?.data.source?.branch === 'gh-pages') {
         this.logger?.info(`[${ownerRepo}] pages already enabled`);
         return;
       }
@@ -275,16 +275,16 @@ export class RepositoryService {
     const { org } = config.github;
     const { data: teams } = await github.teams.list({ org });
     const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
-    let courseTeam = teams.find(d => d.name === teamName);
+    let courseTeamSlug = teams.find(d => d.name === teamName)?.slug;
     this.logger?.info('Creating team', teamName);
-    if (!courseTeam) {
+    if (!courseTeamSlug) {
       const response = await github.teams.create({ privacy: 'secret', name: teamName, org });
-      courseTeam = response.data;
+      courseTeamSlug = response.data?.slug;
       for (const maintainer of mentors) {
         this.logger?.info(`Inviting ${maintainer.githubId}`);
         await github.teams.addOrUpdateMembershipForUserInOrg({
           org,
-          team_slug: courseTeam.slug,
+          team_slug: courseTeamSlug,
           username: maintainer.githubId,
         });
         await this.timeout(1000);

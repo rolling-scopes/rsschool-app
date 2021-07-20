@@ -143,7 +143,7 @@ export function HomePage(props: Props) {
                 )}
               />
 
-              {courseManagementLinks.length ? (
+              {adminLinks.length ? (
                 <List
                   size="small"
                   style={{ marginTop: 16 }}
