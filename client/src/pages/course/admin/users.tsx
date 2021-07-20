@@ -28,13 +28,16 @@ function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
-  const [userGroups, setUserGroups] = useState([] as UserGroup[]);
+  const [userGroups, setUserGroups] = useState<UserGroup[] | null>(null);
   const [userModalData, setUserModalData] = useState(null as Partial<CourseUser> | null);
   const [groupModalData, setGroupModalData] = useState(null as UserGroup[] | null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [users, groups] = await Promise.all([courseService.getUsers(), userGroupService.getUserGroups()]);
+    const [users, groups] = await Promise.all([
+      courseService.getUsers(),
+      props.session.isAdmin ? userGroupService.getUserGroups() : null,
+    ]);
     setLoading(false);
     setCourseUsers(users);
     setUserGroups(groups);
@@ -172,9 +175,11 @@ function Page(props: Props) {
       <Header username={props.session.githubId} />
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
-          <Button type="primary" onClick={handleAddGroup}>
-            Add Group
-          </Button>
+          {props.session.isAdmin && (
+            <Button type="primary" onClick={handleAddGroup}>
+              Add Group
+            </Button>
+          )}
           <Button type="link" onClick={handleAddUser}>
             Add User
           </Button>
