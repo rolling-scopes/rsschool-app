@@ -50,6 +50,10 @@ function Page(props: Props & { courseAlias?: string }) {
 
     setCheckedListCourse(checkedListCourse);
     setLoading(false);
+
+    setIsAvailableContact(
+      !!profile.contactsSkype.trim() || !!profile.contactsPhone.trim() || !!profile.contactsTelegram.trim(),
+    );
   }, []);
 
   useEffect(() => {
