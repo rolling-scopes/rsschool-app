@@ -19,6 +19,7 @@ import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
 import { Alert as AlertType } from 'domain/alerts';
+import { isAdmin } from 'domain/user';
 
 const { Content } = Layout;
 
@@ -38,8 +39,10 @@ export function HomePage(props: Props) {
     wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.roles[course.id] == null);
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
 
-  const { isAdmin } = props.session;
+  const isAdminUser = isAdmin(props.session);
   const isCoursePowerUser = isAnyCoursePowerUserManager(props.session);
+  const isPowerUser = isAdminUser || isCoursePowerUser;
+
   const courses = getCourses(props.session, props.courses ?? []);
   const [activeCourse, saveActiveCouseId] = useActiveCourse(courses);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
@@ -48,21 +51,19 @@ export function HomePage(props: Props) {
   const [alerts, setAlerts] = useState<AlertType[]>([]);
   const courseLinks = activeCourse
     ? links
-        .filter(route => route.access(props.session, activeCourse))
+        .filter(route => isAdminUser || route.access(props.session, activeCourse))
         .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
     : [];
   const adminLinks = activeCourse
     ? courseManagementLinks
-        .filter(route => route.access(props.session, activeCourse))
+        .filter(route => isAdminUser || route.access(props.session, activeCourse))
         .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
     : [];
 
   const [approvedCourse] = preselectedCourses.filter(course => !props.session.roles?.[course.id]);
-  const isPowerUser = isAdmin || isCoursePowerUser;
 
   const handleChange = async (courseId: number) => {
     saveActiveCouseId(courseId);
-    await loadCourseData();
   };
 
   const loadCourseData = async () => {
@@ -70,18 +71,19 @@ export function HomePage(props: Props) {
       return;
     }
     const data = await loadHomeData(activeCourse.id, props.session);
-    if (data) {
-      setStudentSummary(data.studentSummary);
+    setStudentSummary(data?.studentSummary ?? null);
+
+    if (data?.courseTasks) {
       setCourseTasks(data.courseTasks);
     }
   };
 
   useAsync(async () => {
-    const [allCourses, alerts] = await Promise.all([
-      new CoursesService().getCourses(),
-      new AlertsService().getAll(),
-      loadCourseData(),
-    ]);
+    await loadCourseData();
+  }, [activeCourse]);
+
+  useAsync(async () => {
+    const [allCourses, alerts] = await Promise.all([new CoursesService().getCourses(), new AlertsService().getAll()]);
     setAllCourses(allCourses);
     setAlerts(alerts);
 
@@ -92,7 +94,7 @@ export function HomePage(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {isPowerUser && <AdminSider isAdmin={isAdmin} isCoursePowerUser={isCoursePowerUser} />}
+      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isCoursePowerUser} />}
 
       <Layout style={{ background: '#fff' }}>
         <Header username={props.session.githubId} />
