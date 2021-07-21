@@ -37,7 +37,7 @@ function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [isManager] = useState(isCourseManager(props.session, props.course.id));
+  const [courseManagerRole] = useState(isCourseManager(props.session, props.course));
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);
@@ -150,7 +150,7 @@ function Page(props: Props) {
   function renderToolbar() {
     return (
       <>
-        {isManager ? (
+        {courseManagerRole ? (
           <>
             <Button icon={<BranchesOutlined />} style={{ marginRight: 8 }} onClick={createRepositories}>
               Create Repos

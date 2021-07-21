@@ -359,22 +359,24 @@ function renderSelfEducation(courseTask: CourseTask) {
         return (
           <Form.Item
             key={questionIndex}
-            label={question}
+            label={
+              <Row>
+                {question}
+                {questionImage && (
+                  <img
+                    src={questionImage}
+                    style={{
+                      width: '100%',
+                      maxWidth: '700px',
+                      marginBottom: '10px',
+                    }}
+                  />
+                )}
+              </Row>
+            }
             name={`answer-${questionIndex}`}
             rules={[{ required: true, message: 'Please answer the question' }]}
           >
-            {questionImage && (
-              <Row>
-                <img
-                  src={questionImage}
-                  style={{
-                    width: '100%',
-                    maxWidth: '700px',
-                    marginBottom: '10px',
-                  }}
-                />
-              </Row>
-            )}
             {multiple ? (
               <Checkbox.Group>
                 {answers.map((answer, index) => (

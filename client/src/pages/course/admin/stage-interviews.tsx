@@ -10,18 +10,18 @@ import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 
 function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+  const { session, course } = props;
+  const courseId = course.id;
 
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState([] as any[]);
   const [modal, setModal] = useState(false);
   const [noRegistration, setNoRegistration] = useState(false);
-  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const loadInterviews = async () => {
-    const records = await courseService.getStageInterviews();
-    setInterviews(records);
-  };
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const courseManagerRole = useMemo(() => isCourseManager(props.session, props.course), [course, session]);
+
+  const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
 
   const createInterviews = () => {
     Modal.confirm({
@@ -58,7 +58,7 @@ function Page(props: CoursePageProps) {
         <Button type="primary" onClick={() => setModal(true)}>
           Create
         </Button>
-        {isCourseManager(props.session, props.course.id) ? (
+        {courseManagerRole ? (
           <div>
             <Checkbox checked={noRegistration} onChange={e => setNoRegistration(e.target.checked)}>
               No Registration
@@ -114,7 +114,7 @@ function Page(props: CoursePageProps) {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (isCourseManager(props.session, props.course.id)) {
+              if (courseManagerRole) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel

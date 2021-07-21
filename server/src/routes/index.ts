@@ -7,6 +7,7 @@ import { publicMeRouter } from './me';
 import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
 import { discordServerRoute } from './discordServer';
+import { userGroupRoute } from './userGroup';
 import { stageRoute } from './stage';
 import { stagesRoute } from './stages';
 import { authRoute } from './auth';
@@ -29,6 +30,7 @@ import { userRoute } from './user';
 import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
 import { opportunitiesRoute } from './opportunities';
+import { alertsRoute } from './alerts';
 
 import { ILogger } from '../logger';
 import { userRolesMiddleware, courseMiddleware } from './middlewares';
@@ -49,6 +51,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   // public routes
   applyRouter(router, certificateRoute(logger));
   applyRouter(router, authRoute());
+  applyRouter(router, alertsRoute());
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
@@ -57,6 +60,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
   applyRouter(router, discordServerRoute(logger));
+  applyRouter(router, userGroupRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, taskResultRoute(logger));

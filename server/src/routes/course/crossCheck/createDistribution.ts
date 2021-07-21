@@ -25,8 +25,13 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
   }
 
   const students = Array.from(solutionsMap.keys());
-  const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
 
+  if (students.length === 0) {
+    setResponse(ctx, OK, { crossCheckPairs: [] });
+    return;
+  }
+
+  const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
   const crossCheckPairs = pairs
     .filter(pair => solutionsMap.has(pair.studentId))
     .map(pair => ({

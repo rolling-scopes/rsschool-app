@@ -117,7 +117,8 @@ function Page(props: Props) {
           <Select placeholder="Please select a timezone">
             {TIMEZONES.map(tz => (
               <Select.Option key={tz} value={tz}>
-                {tz}
+                {/* there is no 'Europe / Kyiv' time zone at the moment */}
+                {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
               </Select.Option>
             ))}
           </Select>
@@ -160,7 +161,7 @@ function Page(props: Props) {
       >
         {TIMEZONES.map(tz => (
           <Select.Option key={tz} value={tz}>
-            {tz}
+            {tz === 'Europe/Kiev' ? 'Europe/Kyiv' : tz}
           </Select.Option>
         ))}
       </Select>

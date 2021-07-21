@@ -510,17 +510,17 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createUser(githubId: string, data: any) {
-    const result = await this.axios.post(`/user/${githubId}`, data);
+  async upsertUsers(data: any) {
+    const result = await this.axios.put(`/users`, data);
     return result.data;
   }
 
-  async updateUser(githubId: string, data: any) {
+  async upsertUser(githubId: string, data: any) {
     const result = await this.axios.put(`/user/${githubId}`, data);
     return result.data;
   }
 
-  async getStudentSummary(githubId: string) {
+  async getStudentSummary(githubId: string | 'me') {
     const result = await this.axios.get(`/student/${githubId}/summary`);
     return result.data.data as StudentSummary;
   }

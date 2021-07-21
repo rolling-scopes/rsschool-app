@@ -19,7 +19,9 @@ function shuffle<T>(array: T[]): T[] {
 
 function createShifts(numberOfShifts: number, maxShiftValue: number): number[] {
   if (numberOfShifts > maxShiftValue) {
-    throw new Error('It is impossible to distribute crosscheckers');
+    throw new Error(
+      `It is impossible to distribute crosscheckers. NumberOfShifts: ${numberOfShifts}. MaxShiftValue: ${maxShiftValue}`,
+    );
   }
 
   const shifts = new Set<number>();

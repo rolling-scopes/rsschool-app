@@ -31,8 +31,9 @@ type Props = {
 };
 
 const MobileCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
-  const [modalWindowData, setModalWindowData] =
-    useState<{ color: string; name: string; key: number; time: string; type: string }[] | undefined>();
+  const [modalWindowData, setModalWindowData] = useState<
+    { color: string; name: string; key: number; time: string; type: string }[] | undefined
+  >();
   const [currentItem, setCurrentItem] = useState<CourseEvent | null>(null);
   const [showWindow, setShowWindow] = useState<boolean>(false);
   const [calendarMode, setCalendarMode] = useState<string>('month');

@@ -1,4 +1,4 @@
-import { BAD_REQUEST } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { Next } from 'koa';
 import { ILogger } from '../../logger';
@@ -63,14 +63,14 @@ import {
   postFeedback,
 } from './student';
 import * as crossCheck from './crossCheck';
-import { getUsers, postUser, putUser } from './user';
+import { getUsers, putUsers, putUser } from './user';
 import { postCopyCourse } from './template';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 
-const validateId = async (ctx: Router.RouterContext, next: Next) => {
+const validateId = async (ctx: Router.RouterContext<any, any>, next: Next) => {
   const id = Number(ctx.params.id);
   if (isNaN(id)) {
-    setResponse(ctx, BAD_REQUEST, 'Incorrect [Id]');
+    setResponse(ctx, StatusCodes.BAD_REQUEST, 'Incorrect [Id]');
     return;
   }
   ctx.params.id = id;
@@ -181,7 +181,7 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
 
 function addCourseUserApi(router: Router<any, any>, logger: ILogger) {
   router.get('/users', courseManagerGuard, getUsers(logger));
-  router.post('/user/:githubId', courseManagerGuard, validateGithubId, postUser(logger));
+  router.put('/users', courseManagerGuard, putUsers(logger));
   router.put('/user/:githubId', courseManagerGuard, validateGithubId, putUser(logger));
 }
 
