@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, SaveCVData, GetCVData } from '../../../../common/models/cv';
+import { Contacts, UserData, AllUserCVData } from '../../../../common/models/cv';
 import { CVService } from 'services/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -20,13 +20,6 @@ import { FormInstance } from 'antd/lib/form';
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
 
-type State = {
-  isLoading: boolean;
-  contactsList: Contacts | null;
-  userData: UserData | null;
-  expires: number | null;
-};
-
 type Props = {
   ownerGithubId: string;
   withdrawConsent: () => void;
@@ -36,15 +29,15 @@ const cvService = new CVService();
 const userService = new UserService();
 
 function EditCV(props: Props) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    contactsList: null,
-    userData: null,
-    expires: null,
-  });
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [contactsList, setContactsList] = useState<Contacts | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [expires, setExpiration] = useState<number | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
+
+  const currentRefs: RefObject<FormInstance>[] = [userFormRef, contactsFormRef];
 
   const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -82,13 +75,18 @@ function EditCV(props: Props) {
     });
   };
 
-  const fetchData = useCallback(async () => {
-    await setState({
-      ...state,
-      isLoading: true,
+  const showWarningModal = ({ title, content }: { title: string; content: ReactNode }) => {
+    Modal.warn({
+      title,
+      content,
+      maskClosable: true,
     });
+  };
 
-    const cvData: GetCVData = await cvService.getCVData(props.ownerGithubId);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+
+    const cvData = await cvService.getEditCVData(props.ownerGithubId);
 
     const {
       notes,
@@ -101,7 +99,7 @@ function EditCV(props: Props) {
       email,
       githubUsername,
       linkedin,
-      location,
+      locations,
       phone,
       skype,
       telegram,
@@ -127,22 +125,23 @@ function EditCV(props: Props) {
       email,
       github: githubUsername,
       linkedin,
-      location,
+      locations,
       phone,
       skype,
       telegram,
       website,
     };
 
-    await setState({
-      contactsList: contactsList,
-      userData: userData,
-      expires: Number(expires),
-      isLoading: false,
-    });
+    setContactsList(contactsList);
+    setUserData(userData);
+    setExpiration(Number(expires));
+
+    setLoading(false);
   }, []);
 
   const submitData = async (data: any) => {
+    setLoading(true);
+
     const {
       avatarLink,
       desiredPosition,
@@ -151,7 +150,7 @@ function EditCV(props: Props) {
       fullTime,
       github,
       linkedin,
-      location,
+      locations,
       militaryService,
       name,
       notes,
@@ -163,36 +162,96 @@ function EditCV(props: Props) {
       website,
     } = data;
 
-    const cvData: SaveCVData = {
-      selfIntroLink,
+    const cvData: AllUserCVData = {
+      selfIntroLink: nullifyConditional(selfIntroLink),
       militaryService,
-      avatarLink,
-      desiredPosition,
+      avatarLink: nullifyConditional(avatarLink),
+      desiredPosition: nullifyConditional(desiredPosition),
       englishLevel,
-      name,
-      notes,
-      phone,
-      email,
-      skype,
-      telegram,
-      linkedin,
-      location,
-      githubUsername: github,
-      website,
+      name: nullifyConditional(name),
+      notes: nullifyConditional(notes),
+      phone: nullifyConditional(phone),
+      email: nullifyConditional(email),
+      skype: nullifyConditional(skype),
+      telegram: nullifyConditional(telegram),
+      linkedin: nullifyConditional(linkedin),
+      locations: nullifyConditional(transformLocationsString(locations)),
+      githubUsername: nullifyConditional(github),
+      website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
     };
 
-    await cvService.saveCVData(cvData);
+    const newCVData = await cvService.saveCVData(cvData);
+
+    const {
+      selfIntroLink: newSelfIntroLink,
+      militaryService: newMilitaryService,
+      avatarLink: newAvatarLink,
+      desiredPosition: newDesiredPosition,
+      englishLevel: newEnglishLevel,
+      name: newName,
+      notes: newNotes,
+      startFrom: newStartFrom,
+      fullTime: newFullTime,
+      phone: newPhone,
+      email: newEmail,
+      skype: newSkype,
+      telegram: newTelegram,
+      linkedin: newLinkedin,
+      locations: newLocations,
+      githubUsername: newGithub,
+      website: newWebsite,
+    } = newCVData;
+
+    const newUserData: UserData = {
+      selfIntroLink: newSelfIntroLink,
+      militaryService: newMilitaryService,
+      avatarLink: newAvatarLink,
+      desiredPosition: newDesiredPosition,
+      englishLevel: newEnglishLevel,
+      name: newName,
+      notes: newNotes,
+      startFrom: newStartFrom,
+      fullTime: newFullTime,
+    };
+
+    const newContacts: Contacts = {
+      phone: newPhone,
+      email: newEmail,
+      skype: newSkype,
+      telegram: newTelegram,
+      linkedin: newLinkedin,
+      locations: newLocations,
+      github: newGithub,
+      website: newWebsite,
+    };
+
+    setUserData(newUserData);
+    setContactsList(newContacts);
+
+    setLoading(false);
   };
 
   const resetFields = async () => {
     await fetchData();
   };
 
-  const handleSave = async (data: any) => {
+  const saveData = async (data: any) => {
     await submitData(data);
-    await fetchData();
+  };
+
+  const transformLocationsString = (locationsRaw: string) => {
+    const locations = locationsRaw.split(';');
+    const firstThreeLocations = locations.slice(0, 3);
+    const locationsTrimmed = firstThreeLocations.map(location => location.trim());
+    const locationsStringified = locationsTrimmed.join(';');
+    return locationsStringified;
+  };
+
+  const nullifyConditional = (str: string | null) => {
+    if (typeof str === 'string') return str.replace(/\s/g, '') === '' ? null : str;
+    return str;
   };
 
   const formatDate = (expirationValue: number | null) => {
@@ -215,22 +274,56 @@ function EditCV(props: Props) {
     }
   };
 
-  const getDataFromRefs = (refs: RefObject<FormInstance>[]) => {
-    const formsHaveErrors = refs.some(ref => {
+  const checkFormsForValidationErrors = () => {
+    const hasErrors = currentRefs.some(ref => {
       const fieldsToCheck = ref.current?.getFieldsError();
-      if (fieldsToCheck?.some(field => field.errors.length > 0)) {
-        return true;
-      }
+      if (fieldsToCheck?.some(field => field.errors.length > 0)) return true;
     });
 
-    if (formsHaveErrors) return;
+    return hasErrors;
+  };
 
-    const values = refs
+  const checkNecessaryDataBeforeExtension = () => {
+    if (userData && contactsList) {
+      const dataToBeFilled = [
+        userData.name,
+        userData.desiredPosition,
+        userData.englishLevel,
+        userData.startFrom,
+        contactsList.locations,
+      ];
+      return dataToBeFilled.some(field => field === null);
+    }
+    return true;
+  };
+
+  const getDataFromForms = () => {
+    const values = currentRefs
       .map(ref => {
         return ref.current?.getFieldsValue();
       })
       .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
-    handleSave(values);
+    return values;
+  };
+
+  const handleSave = async () => {
+    const hasErrors = checkFormsForValidationErrors();
+
+    if (hasErrors) {
+      showWarningModal({
+        title: 'Some form fields do not meet validation criteria',
+        content: 'Please fill it correctly and try again',
+      });
+      return;
+    }
+
+    const values = getDataFromForms();
+
+    setLoading(true);
+
+    await saveData(values);
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -238,6 +331,8 @@ function EditCV(props: Props) {
   }, []);
 
   const fillFromProfile = async () => {
+    setLoading(true);
+
     const id = props.ownerGithubId;
 
     const profile = await userService.getProfileInfo(id);
@@ -254,8 +349,8 @@ function EditCV(props: Props) {
     const telegram = profile.contacts?.telegram ?? null;
     const linkedin = profile.contacts?.linkedIn ?? null;
 
-    const prevUserData = state.userData as UserData;
-    const prevContacts = state.contactsList as Contacts;
+    const prevUserData = userData as UserData;
+    const prevContacts = contactsList as Contacts;
 
     const newUserData = {
       ...prevUserData,
@@ -273,28 +368,37 @@ function EditCV(props: Props) {
       location,
     };
 
-    await setState({
-      ...state,
-      userData: newUserData,
-      contactsList: newContacts,
-    });
+    setUserData(newUserData);
+    setContactsList(newContacts);
+
+    setLoading(false);
   };
 
   const extendCV = async () => {
-    await setState({
-      ...state,
-      isLoading: true,
-    });
+    const hasEmptyMandatoryFields = checkNecessaryDataBeforeExtension();
+
+    if (hasEmptyMandatoryFields) {
+      showWarningModal({
+        title: 'You have to fill some field before extend CV',
+        content: (
+          <Text>
+            Folliwing saved data <Text strong>must be filled</Text> to extend your CV: <Text strong>name</Text>,{' '}
+            <Text strong>desired position</Text>, <Text strong>English level</Text>, <Text strong>work start date</Text>
+            , <Text strong>location</Text>
+          </Text>
+        ),
+      });
+      return;
+    }
+
+    setLoading(true);
+
     const newExpirationDate = await cvService.extendCV();
 
-    await setState({
-      ...state,
-      expires: newExpirationDate,
-      isLoading: false,
-    });
-  };
+    setExpiration(newExpirationDate);
 
-  const { isLoading, contactsList, userData, expires } = state;
+    setLoading(false);
+  };
 
   const buttonStyle = {
     borderRadius: '15px',
@@ -327,7 +431,7 @@ function EditCV(props: Props) {
               block
               type="primary"
               htmlType="button"
-              onClick={() => getDataFromRefs([userFormRef, contactsFormRef])}
+              onClick={() => handleSave()}
               icon={<SaveOutlined />}
             >
               Save
@@ -348,7 +452,12 @@ function EditCV(props: Props) {
                   Get data from profile
                 </Button>
               </Popconfirm>
-              <Popconfirm title="Are you sure to reset fields?" onConfirm={resetFields} okText="Yes" cancelText="No">
+              <Popconfirm
+                title="Are you sure you want to reset fields?"
+                onConfirm={resetFields}
+                okText="Yes"
+                cancelText="No"
+              >
                 <Button
                   style={{ ...buttonStyle, width: '21%' }}
                   type="default"

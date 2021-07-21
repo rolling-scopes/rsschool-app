@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Form, Input, Select, DatePicker, Checkbox, Card } from 'antd';
 import { UserData } from '../../../../../common/models/cv';
 import { ENGLISH_LEVELS } from '../../../services/reference-data/english';
-import { Rule } from 'rc-field-form/lib/interface';
+import { userDataValidationRules as validationRules } from './form-validation';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -37,92 +37,11 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
 
   React.useEffect(() => {
     form.setFieldsValue(formValues);
+    form.validateFields();
   }, [formValues]);
 
   const itemStyle = {
     maxWidth: '314px',
-  };
-
-  const validationMessages = {
-    required: "Field can't be empty",
-    min: (length: number): string => `Mininal text length is ${length}`,
-    max: (length: number): string => `Maximal text length is ${length}`,
-    whitespace: "Field can't contain only whitespaces",
-  };
-
-  const validationRules: {
-    [key: string]: Rule[];
-  } = {
-    name: [
-      {
-        required: true,
-        message: validationMessages.required,
-      },
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    desiredPosition: [
-      {
-        max: 300,
-        message: validationMessages.max(300),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    selfIntroLink: [
-      {
-        max: 300,
-        message: validationMessages.max(300),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    avatarLink: [
-      {
-        max: 300,
-        message: validationMessages.max(300),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    englishLevel: [
-      {
-        required: true,
-        message: validationMessages.required,
-      },
-    ],
-    militaryService: [],
-    startFrom: [],
-    notes: [
-      {
-        required: true,
-        message: validationMessages.required,
-      },
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        min: 30,
-        message: validationMessages.min(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
   };
 
   return (

@@ -7,10 +7,11 @@ import NoConsentViewCV from './NoConsentViewCV';
 const { Text } = Typography;
 
 type CVInfoProps = {
-  ownerGithubId?: string | string[];
+  hasPriorityRole: boolean;
+  ownerGithubId?: string;
   isOwner: boolean;
-  errorOccured: boolean;
-  opportunitiesConsent: boolean | null;
+  notFound: boolean;
+  opportunitiesConsent: boolean;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
   withdrawConsent: (ownerGithubId: string) => void;
@@ -19,9 +20,10 @@ type CVInfoProps = {
 
 function CVInfo(props: CVInfoProps) {
   const {
+    hasPriorityRole,
     ownerGithubId,
     isOwner,
-    errorOccured,
+    notFound,
     opportunitiesConsent,
     editMode,
     switchView,
@@ -29,12 +31,16 @@ function CVInfo(props: CVInfoProps) {
     giveConsent,
   } = props;
 
-  if (errorOccured) {
-    return <Result status={404} title="User not found" />;
+  if (ownerGithubId === undefined) {
+    return <Result status="warning" title="This page doesn't exist" />;
   }
 
-  if (ownerGithubId === undefined || ownerGithubId instanceof Array) {
-    return <Result status="warning" title="This page doesn't exist" />;
+  if (!isOwner && !hasPriorityRole) {
+    return <Result status="403" title="Sorry, but you don't have access to this page" />;
+  }
+
+  if (notFound) {
+    return <Result status={404} title="User not found" />;
   }
 
   if (isOwner) {

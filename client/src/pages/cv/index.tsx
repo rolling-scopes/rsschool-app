@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
@@ -17,84 +17,80 @@ type Props = {
   session: Session;
 };
 
-type State = {
-  isLoading: boolean;
-  editMode: boolean;
-  opportunitiesConsent: boolean | null;
-  errorOccured: boolean;
-};
-
 function CVPage(props: Props) {
-  const [state, setState] = useState<State>({
-    isLoading: true,
-    editMode: false,
-    opportunitiesConsent: null,
-    errorOccured: false,
-  });
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [opportunitiesConsent, setOpportunitiesConsent] = useState<boolean>(false);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   const switchView = async (checked: boolean) => {
-    await setState({
-      ...state,
-      editMode: !checked,
-    });
+    setEditMode(!checked);
+  };
+
+  // This is to fix an issue with empty query params
+  // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
+  // Hack with setTimeout didn't work.
+  //
+  // >> After hydration, Next.js will trigger an update to your application
+  // >> to provide the route parameters in the query object.
+  const getGithubIdFromQuery = (router: NextRouter) => {
+    const queryString = router.asPath.slice(props.router.asPath.indexOf('?') + 1);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const queryObj = Object.fromEntries(new URLSearchParams(queryString).entries());
+    return queryObj?.githubid;
   };
 
   const giveConsent = async (githubId: string) => {
-    await setState({
-      ...state,
-      isLoading: true,
-    });
+    setLoading(true);
+
     const newConsent = await cvService.changeOpportunitiesConsent(githubId, true);
-    const cvExists = await cvService.checkCVExistance(githubId);
-    if (!cvExists) await cvService.createEmptyCV();
-    await setState({
-      ...state,
-      opportunitiesConsent: newConsent,
-      isLoading: false,
-    });
+
+    setOpportunitiesConsent(newConsent);
+
+    setLoading(false);
   };
 
   const withdrawConsent = async (githubId: string) => {
-    await setState({ ...state, isLoading: true });
+    setLoading(true);
+
     const newConsent = await cvService.changeOpportunitiesConsent(githubId, false);
-    await setState({
-      ...state,
-      opportunitiesConsent: newConsent,
-      isLoading: false,
-    });
+
+    setOpportunitiesConsent(newConsent);
+
+    setLoading(false);
   };
 
-  const getConsent = useCallback(async () => {
-    await setState({
-      ...state,
-      isLoading: true,
-    });
+  const getConsent = async () => {
+    setLoading(true);
+
     try {
-      const opportunitiesConsent = await cvService.getOpportunitiesConsent(props.router.query.githubId as string);
-      await setState({
-        ...state,
-        opportunitiesConsent,
-        isLoading: false,
-      });
+      const ownerGithubId = getGithubIdFromQuery(props.router);
+      const opportunitiesConsent = await cvService.getOpportunitiesConsent(ownerGithubId);
+      setOpportunitiesConsent(opportunitiesConsent);
+
+      setLoading(false);
     } catch (e) {
-      await setState({
-        ...state,
-        errorOccured: true,
-        isLoading: false,
-      });
+      if (e.message === 'Request failed with status code 404') {
+        setNotFound(true);
+
+        setLoading(false);
+      } else {
+        throw e;
+      }
     }
-  }, []);
+  };
 
   useEffect(() => {
     getConsent();
-  }, []);
+  }, [opportunitiesConsent]);
 
-  const { editMode, opportunitiesConsent, isLoading, errorOccured } = state;
-
-  const userGithubId = props.session.githubId;
-  const ownerGithubId = props.router.query.githubId;
+  const { githubId: userGithubId, isAdmin, isHirer } = props.session;
+  const ownerGithubId = getGithubIdFromQuery(props.router);
 
   const isOwner = userGithubId === ownerGithubId;
+
+  const hasPriorityRole = [isAdmin, isHirer].some(hasRole => hasRole === true);
 
   return (
     <>
@@ -103,9 +99,10 @@ function CVPage(props: Props) {
         <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
             <CVInfo
+              hasPriorityRole={hasPriorityRole}
               ownerGithubId={ownerGithubId}
               isOwner={isOwner}
-              errorOccured={errorOccured}
+              notFound={notFound}
               opportunitiesConsent={opportunitiesConsent}
               editMode={editMode}
               switchView={switchView}

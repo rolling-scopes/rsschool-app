@@ -15,9 +15,9 @@ export interface CourseData {
 }
 
 export type EnglishLevel = typeof ENGLISH_LEVELS[number];
-export type MilitaryService = 'served' | 'liable' | 'notLiable' | null;
+export type MilitaryService = 'served' | 'liable' | 'notLiable';
 
-export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'location' | 'github' | 'website';
+export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
 
 export interface UserData {
   avatarLink: string | null;
@@ -25,10 +25,10 @@ export interface UserData {
   desiredPosition: string | null;
   selfIntroLink: string | null;
   englishLevel: EnglishLevel | null;
-  militaryService: MilitaryService;
+  militaryService: MilitaryService | null;
   notes: string | null;
   startFrom: string | null;
-  fullTime: boolean | null;
+  fullTime: boolean;
 }
 
 export type Contacts = {
@@ -41,7 +41,7 @@ export interface ContactsFromProfile {
   skype: string | null;
   telegram: string | null;
   linkedin: string | null;
-  location: string | null;
+  locations: string | null;
 }
 
 export interface CVDataFromProfile extends ContactsFromProfile {
@@ -57,28 +57,15 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface SaveCVData {
-  selfIntroLink: string | null;
-  militaryService: MilitaryService | null;
-  avatarLink: string | null;
-  desiredPosition: string | null;
-  englishLevel: EnglishLevel | null;
-  name: string | null;
-  notes: string | null;
-  phone: string | null;
-  email: string | null;
-  skype: string | null;
-  telegram: string | null;
-  linkedin: string | null;
-  location: string | null;
+export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
   githubUsername: string | null;
-  website: string | null;
-  startFrom: string | null;
-  fullTime: boolean | null;
 }
 
-export interface GetCVData extends SaveCVData {
+export interface EditCVData extends AllUserCVData {
   expires: number | null;
+}
+
+export interface GetFullCVData extends EditCVData {
   courses: CVStudentStats[];
   feedback: CVFeedback[];
 }
@@ -104,14 +91,15 @@ export interface JobSeekerData {
   name: string | null;
   desiredPosition: string | null;
   githubId: string;
-  englishlevel: EnglishLevel;
+  englishlevel: EnglishLevel | null;
   fullTime: boolean;
-  location: string | null;
+  locations: string | null;
   startFrom: string | null;
   englishLevel: EnglishLevel;
   courses: JobSeekerStudentStats[];
   feedback: JobSeekerFeedback[];
   expires: number;
+  isHidden: boolean;
 }
 
 export interface CVFeedback {

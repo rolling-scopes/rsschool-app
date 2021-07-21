@@ -19,7 +19,7 @@ export class CV {
   @Column({ nullable: true, type: 'text' })
   startFrom: string;
 
-  @Column({ nullable: true })
+  @Column({ default: false })
   fullTime: boolean;
 
   @Column({ nullable: true, type: 'numeric' })
@@ -56,11 +56,14 @@ export class CV {
   linkedin: string;
 
   @Column({ nullable: true, type: 'text' })
-  location: string;
+  locations: string;
 
   @Column({ nullable: true, type: 'text' })
   githubUsername: string;
 
   @Column({ nullable: true, type: 'text' })
   website: string;
+
+  @Column({ default: false })
+  isHidden: boolean;
 }

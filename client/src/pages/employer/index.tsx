@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-// TODO: uncomment after testing
-import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm /* Result */, Tooltip } from 'antd';
+import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm, Result, Tooltip, Switch } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
@@ -9,7 +8,8 @@ import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { CVService } from '../../services/cv';
 import heroesBadges from '../../configs/heroes-badges';
-import { DeleteOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SwitchChangeEventHandler } from 'antd/lib/switch';
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -20,16 +20,10 @@ type Props = {
   session: Session;
 };
 
-type State = {
-  isLoading: boolean;
-  users: JobSeekerData[] | null;
-};
-
 function Page(props: Props) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    users: null,
-  });
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
+  const [areHiddenJobSeekersShown, setHiddenJobSeekersShown] = useState<boolean>(false);
 
   const cvService = new CVService();
 
@@ -52,26 +46,43 @@ function Page(props: Props) {
       title: 'Name',
       dataIndex: 'complexData',
       key: 'complexData',
-      render: (data: { name: string; githubId: string }) => {
-        const { name, githubId } = data;
-        // TODO: ucnomment after testing
-        /*         const { isAdmin } = props.session; */
+      render: (data: { name: string; githubId: string; isHidden: boolean }) => {
+        const { name, githubId, isHidden } = data;
 
         return (
           <>
-            <a href={`/cv?githubId=${githubId}`}>{name ?? 'Unknown'}</a>
-            {/* TODO: ucnomment after testing */}
-            {/*             {isAdmin && ( */}
-            <Popconfirm
-              title="Are you sure you want to remove this user?"
-              onConfirm={() => removeJobSeeker(githubId)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <DeleteOutlined />
-            </Popconfirm>
-            {/* TODO: ucnomment after testing */}
-            {/* )} */}
+            <a href={`/cv?githubid=${githubId}`}>{name ?? 'Unknown'}</a>
+            {isAdmin && (
+              <>
+                {isHidden ? (
+                  <Popconfirm
+                    title="This CV is currently hidden. Make it visible?"
+                    onConfirm={() => changeHiddenStatus(githubId, false)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <EyeOutlined />
+                  </Popconfirm>
+                ) : (
+                  <Popconfirm
+                    title="This CV is currently visible. Make it hidden?"
+                    onConfirm={() => changeHiddenStatus(githubId, true)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <EyeInvisibleOutlined />
+                  </Popconfirm>
+                )}
+                <Popconfirm
+                  title="Are you sure you want to delete this user's CV?"
+                  onConfirm={() => deleteJobSeeker(githubId)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <DeleteOutlined />
+                </Popconfirm>
+              </>
+            )}
           </>
         );
       },
@@ -101,10 +112,15 @@ function Page(props: Props) {
       ...getColumnSearchProps('desiredPosition'),
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      ...getColumnSearchProps('location'),
+      title: 'Locations',
+      dataIndex: 'locations',
+      key: 'locations',
+      ...getColumnSearchProps('locations'),
+      render: (locationsRaw: string) => {
+        const locations = locationsRaw.split(';');
+        const locationsItems = locations.map((location, index) => <li key={index}>{location}</li>);
+        return <ol>{locationsItems}</ol>;
+      },
     },
     {
       title: 'English level',
@@ -225,34 +241,42 @@ function Page(props: Props) {
   ];
 
   const fetchData = useCallback(async () => {
-    await setState({ ...state, isLoading: true });
-    const data: JobSeekerData[] = await cvService.getJobSeekersData();
-    await setState({ ...state, users: data, isLoading: false });
+    setLoading(true);
+    let data: JobSeekerData[];
+    if (isAdmin) {
+      data = await cvService.getAllJobSeekersData();
+    } else {
+      data = await cvService.getVisibleJobSeekersData();
+    }
+    setJobSeekers(data);
+    setLoading(false);
   }, []);
 
-  const removeJobSeeker = async (githubId: string) => {
-    await setState({ ...state, isLoading: true });
+  const deleteJobSeeker = async (githubId: string) => {
+    setLoading(true);
     await cvService.changeOpportunitiesConsent(githubId, false);
-    await setState({ ...state, isLoading: false });
+    await fetchData();
+    setLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const changeHiddenStatus = async (githubId: string, hiddenStatus: boolean) => {
+    setLoading(true);
+    await cvService.changeCVVisibility(githubId, hiddenStatus);
+    await fetchData();
+    setLoading(false);
+  };
 
-  // TODO: ucnomment after testing
-  const { /* isAdmin, isHirer, */ githubId: userGithubId } = props.session;
+  const handleVisibilitySwitch: SwitchChangeEventHandler = checked => {
+    setHiddenJobSeekersShown(checked);
+  };
 
-  /*     if (!(isAdmin || isHirer)) return (
-    <Result status="403" title="Sorry, but you don't have access to this page" />
-  ); */
+  const filterJobSeekersByVisibility = (jobSeekers: JobSeekerData[], showHidden: boolean) => {
+    if (showHidden) return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === true);
+    return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === false);
+  };
 
-  const { isLoading, users } = state;
-
-  let data;
-
-  if (users) {
-    data = users.map((item: JobSeekerData, index) => {
+  const transformJobSeekersData = (data: JobSeekerData[]) => {
+    return data.map((item, index) => {
       const {
         name,
         fullTime,
@@ -262,22 +286,44 @@ function Page(props: Props) {
         desiredPosition,
         courses,
         feedback,
-        location,
+        locations,
         expires,
+        isHidden,
       } = item;
       return {
         key: index,
-        complexData: { name: name?.length ? name : '<Not set>', githubId },
+        complexData: { name: name?.length ? name : '<Not set>', githubId, isHidden },
         expires: Number(expires),
         courses,
         feedback,
         desiredPosition: desiredPosition?.length ? desiredPosition : '<Not set>',
         fullTime: fullTime ? 'Yes' : 'No',
-        location: location?.length ? location : '<Not set>',
+        locations: locations?.length ? locations : '<Not set>',
         startFrom: startFrom?.length ? startFrom : '<Not set>',
         englishLevel: englishLevel?.length ? englishLevel?.toUpperCase() : '<Not set>',
+        isHidden,
       };
     });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
+
+  if (!(isAdmin || isHirer)) return <Result status="403" title="Sorry, but you don't have access to this page" />;
+
+  let data;
+
+  if (jobSeekers) {
+    if (areHiddenJobSeekersShown) {
+      const hiddenJobSeekers = filterJobSeekersByVisibility(jobSeekers, true);
+      data = transformJobSeekersData(hiddenJobSeekers);
+    } else {
+      const visibleJobSeekers = filterJobSeekersByVisibility(jobSeekers, false);
+      data = transformJobSeekersData(visibleJobSeekers);
+    }
   } else {
     data = null;
   }
@@ -288,6 +334,14 @@ function Page(props: Props) {
       <LoadingScreen show={isLoading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
+            {isAdmin && (
+              <Switch
+                checked={areHiddenJobSeekersShown}
+                onChange={handleVisibilitySwitch}
+                checkedChildren="Hidden"
+                unCheckedChildren="Visible"
+              />
+            )}
             <Table style={{ minWidth: '99vw' }} columns={columns} dataSource={data ?? undefined}></Table>
           </Content>
         </Layout>
