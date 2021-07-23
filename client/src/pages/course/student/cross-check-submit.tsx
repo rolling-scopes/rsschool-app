@@ -37,7 +37,7 @@ function Page(props: CoursePageProps) {
   const [authorId, setAuthorId] = useState<number | null>(null);
 
   useAsync(async () => {
-    const data = await courseService.getCourseCrossCheckTasks('inprogress');
+    const data = await courseService.getCourseCrossCheckTasks('started');
     setCourseTasks(data);
   }, [props.course.id]);
 
