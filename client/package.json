@@ -21,7 +21,7 @@
   "dependencies": {
     "antd": "~4.16.7",
     "axios": "~0.21.1",
-    "chart.js": "~3.4.1",
+    "chart.js": "2.9.4",
     "csvtojson": "~2.0.10",
     "lodash": "~4.17.21",
     "mobile-device-detect": "^0.4.3",
@@ -31,7 +31,7 @@
     "next-transpile-modules": "~8.0.0",
     "qs": "^6.9.4",
     "react": "~17.0.2",
-    "react-chartjs-2": "~3.0.3",
+    "react-chartjs-2": "2.9.0",
     "react-color": "^2.19.3",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "~17.0.2",
