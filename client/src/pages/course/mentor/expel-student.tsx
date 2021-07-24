@@ -1,11 +1,11 @@
-import { Button, Form, Input, message, Typography } from 'antd';
+import { Button, Form, Input, message, Typography, Radio } from 'antd';
 import { PageLayoutSimple, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps, StudentBasic } from 'services/models';
+import { CoursePageProps, StudentBasic, Action } from 'services/models';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -16,6 +16,7 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([] as StudentBasic[]);
+  const [action, setAction] = useState<Action>('expel');
 
   useAsync(async () => {
     if (roles[courseId] === 'student') {
@@ -36,22 +37,36 @@ function Page(props: CoursePageProps) {
     }
   }, [courseId]);
 
+  const expelStudent = async (githubId: string, comment: string) => {
+    if (githubId === userGithubId) {
+      await courseService.selfExpel(githubId, comment);
+    } else {
+      await courseService.expelStudent(githubId, comment);
+    }
+  };
+
+  const unassignStudent = async (githubId: string, comment: string) => {
+    const data = { mentorGithuId: null, unassigningComment: comment };
+    await courseService.unassignStudentFromMentor(githubId, data);
+  };
+
   const handleSubmit = async (values: any) => {
     if (!values.githubId || loading) {
       return;
     }
     try {
       setLoading(true);
-      if (values.githubId === userGithubId) {
-        await courseService.selfExpel(values.githubId, values.comment);
-      } else {
-        await courseService.expelStudent(values.githubId, values.comment);
+      switch (action) {
+        case 'expel':
+          await expelStudent(values.githubId, values.comment);
+          break;
+        case 'unassign':
+          await unassignStudent(values.githubId, values.comment);
       }
-
       const activeStudents = students.filter(s => s.githubId !== values.githubId);
       setStudents(activeStudents);
       form.resetFields();
-      message.success('The student has been expelled');
+      message.success(actionMessages[action].success);
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
@@ -61,15 +76,38 @@ function Page(props: CoursePageProps) {
 
   const noData = !students.length;
 
+  const actionMessages: {
+    [key in Action]: {
+      [key: string]: string;
+    };
+  } = {
+    expel: {
+      description: 'Selected student will be expelled from this course',
+      reasonPhrase: 'Reason for expelling:',
+      success: 'The student has been expelled',
+    },
+    unassign: {
+      description: 'Selected student will no longer be your mentee',
+      reasonPhrase: 'Reason for unassigning:',
+      success: 'The student has been unassigned',
+    },
+  };
+
   return (
     <PageLayoutSimple
       loading={loading}
-      title="Expel Student"
+      title="Expel or unassign Student"
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
-      <Typography.Paragraph type="warning">This page allows to expel a student from the course</Typography.Paragraph>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form.Item initialValue={action} name="action" label="Action">
+          <Radio.Group onChange={e => setAction(e.target.value)}>
+            <Radio value="expel">Expell</Radio>
+            <Radio value="unassign">Unassign</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Typography.Paragraph type="warning">{actionMessages[action].description}</Typography.Paragraph>
         <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
           <UserSearch
             keyField="githubId"
@@ -78,15 +116,13 @@ function Page(props: CoursePageProps) {
             placeholder={noData ? 'No Students' : undefined}
           />
         </Form.Item>
-
         <Form.Item
           name="comment"
-          label="Reason for expelling"
+          label={actionMessages[action].reasonPhrase}
           rules={[{ required: true, message: 'Please give us a couple words why you are expelling the student' }]}
         >
           <Input.TextArea rows={5} />
         </Form.Item>
-
         <Button size="large" type="primary" htmlType="submit">
           Submit
         </Button>

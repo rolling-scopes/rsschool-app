@@ -123,6 +123,9 @@ export class Student {
   @Column({ type: 'timestamptz', nullable: true })
   endDate: Date | null;
 
+  @Column({ type: 'text', nullable: true })
+  unassigningComment: string;
+
   @OneToOne(() => Certificate, certificate => certificate.student)
   certificate: Certificate | null;
 }

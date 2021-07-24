@@ -31,3 +31,5 @@ export interface CoursePageProps {
   session: Session;
   course: Course;
 }
+
+export type Action = 'expel' | 'unassign';
