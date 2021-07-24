@@ -139,14 +139,14 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getCourseTasks() {
+  async getCourseTasks(status?: 'started' | 'inprogress' | 'finished') {
     type Response = { data: CourseTask[] };
-    const result = await this.axios.get<Response>('/tasks');
-    return result.data.data.sort(sortTasksByEndDate);
+    const result = await this.axios.get<Response>('/tasks', { params: { status } });
+    return result.data.data;
   }
 
-  async getCourseCrossCheckTasks() {
-    const data = await this.getCourseTasks();
+  async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
+    const data = await this.getCourseTasks(status);
     return data.filter(t => t.checker === 'crossCheck');
   }
 

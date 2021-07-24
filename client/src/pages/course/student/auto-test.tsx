@@ -62,7 +62,7 @@ function Page(props: CoursePageProps) {
     try {
       setLoading(true);
       loadVerifications();
-      const tasks = await courseService.getCourseTasks();
+      const tasks = await courseService.getCourseTasks('inprogress');
       const courseTasks = filterAutoTestTasks(tasks);
       setCourseTasks(courseTasks);
     } catch {
@@ -470,8 +470,6 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 function filterAutoTestTasks(tasks: CourseTask[]) {
   return tasks.filter(
     task =>
-      task.studentEndDate &&
-      new Date(task.studentEndDate).getTime() > Date.now() &&
       (task.verification === 'auto' || task.checker === 'auto-test') &&
       task.checker !== 'taskOwner' &&
       task.type !== 'test',
