@@ -17,7 +17,6 @@ import { CoursePageProps } from 'services/models';
 import { urlWithIpPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
-import { DeadlineInfo } from 'components/CrossCheck/DeadlineInfo';
 import { SubmittedStatus } from 'components/CrossCheck/SubmittedStatus';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
@@ -38,7 +37,7 @@ function Page(props: CoursePageProps) {
   const [authorId, setAuthorId] = useState<number | null>(null);
 
   useAsync(async () => {
-    const data = await courseService.getCourseCrossCheckTasks();
+    const data = await courseService.getCourseCrossCheckTasks('started');
     setCourseTasks(data);
   }, [props.course.id]);
 
@@ -128,9 +127,7 @@ function Page(props: CoursePageProps) {
 
   const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
-  const studentEndDate = task?.studentEndDate ?? 0;
-  const isSubmitDisabled = studentEndDate ? new Date(studentEndDate).getTime() < Date.now() : false;
-  const submitAllowed = !isSubmitDisabled && task;
+  const submitAllowed = !!task;
   const newCrossCheck = criteria.length > 0;
 
   return (
@@ -144,7 +141,6 @@ function Page(props: CoursePageProps) {
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
-            <DeadlineInfo isSubmitDisabled={isSubmitDisabled} />
             <SubmittedStatus solution={submittedSolution} />
 
             {submitAllowed && (
