@@ -34,6 +34,7 @@ import { alertsRoute } from './alerts';
 
 import { ILogger } from '../logger';
 import { userRolesMiddleware, courseMiddleware } from './middlewares';
+import { checksRoute } from './checks';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -72,6 +73,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, stageRoute(logger));
   applyRouter(router, stagesRoute(logger));
+  applyRouter(router, checksRoute(logger));
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
