@@ -6,7 +6,7 @@ import { ILogger } from '../../logger';
 export function checksRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/checks' });
 
-  router.get('/', getBadReview(logger));
+  router.get('/:taskId', getBadReview(logger));
 
   return router;
 }
