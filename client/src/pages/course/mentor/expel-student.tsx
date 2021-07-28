@@ -96,14 +96,14 @@ function Page(props: CoursePageProps) {
   return (
     <PageLayoutSimple
       loading={loading}
-      title="Expel or unassign Student"
+      title="Expel/Unassign Student"
       githubId={props.session.githubId}
       courseName={props.course.name}
     >
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item initialValue={action} name="action" label="Action">
           <Radio.Group onChange={e => setAction(e.target.value)}>
-            <Radio value="expel">Expell</Radio>
+            <Radio value="expel">Expel</Radio>
             <Radio value="unassign">Unassign</Radio>
           </Radio.Group>
         </Form.Item>

@@ -126,7 +126,7 @@ export const links: LinkData[] = [
     access: every(isCourseNotCompleted, some(isStudent, isCourseManager)),
   },
   {
-    name: 'Expel or unassign Student',
+    name: 'Expel/Unassign Student',
     icon: <StopTwoTone twoToneColor="red" />,
     getUrl: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: every(isCourseNotCompleted, isMentor),
