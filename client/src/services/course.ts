@@ -724,4 +724,5 @@ export interface CrossCheckPairs {
   url: string;
   comment: string;
   score: number;
+  key: string;
 }

@@ -1,4 +1,4 @@
-import { Modal, Layout, Spin, Table, Typography, Button, Select } from 'antd';
+import { Modal, Layout, Spin, Table, Typography, Button } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
 import { omit } from 'lodash';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
@@ -9,6 +9,7 @@ import { CoursePageProps } from 'services/models';
 import { css } from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../../common/types/pagination';
 import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score';
+import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 
 const { Text } = Typography;
 
@@ -96,7 +97,7 @@ export function Page(props: CoursePageProps) {
       {contextHolder}
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
-          {renderSelector(courseTasks)}
+          <BadReviewControllers courseTasks={courseTasks} />
           {renderTable(
             loaded,
             crossCheckList.content,
@@ -114,20 +115,6 @@ export function Page(props: CoursePageProps) {
       </Layout.Content>
       <style jsx>{styles}</style>
     </>
-  );
-}
-
-function renderSelector(courseTasks: CourseTaskDetails[]) {
-  const { Option } = Select;
-
-  return (
-    <Select placeholder="Select task" style={{ width: 200 }} onChange={value => console.log(value)}>
-      {courseTasks.map(task => (
-        <Option key={task.id} value={task.id}>
-          {task.name}
-        </Option>
-      ))}
-    </Select>
   );
 }
 

@@ -165,6 +165,7 @@ export async function getCrossCheckData(
     comment: e.tsr_comment,
     submittedDate: e.taskSolution_updatedDate,
     reviewedDate: e.tsr_updatedDate,
+    key: `${e.checkerStudent_id}${e.courseTask_id}${e.student_id}${e.task_id}`,
   }));
 
   return {
