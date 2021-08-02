@@ -66,13 +66,13 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
                 dataFromService = await checkService.getBadComments(taskId);
                 break;
               case 'Did not check':
-                dataFromService = await checkService.getBadComments(taskId);
+                dataFromService = await checkService.getMaxScoreCheckers(taskId);
                 break;
             }
           } catch (error) {
             message.error('Something went wrong');
           }
-          cache.current[taskId] = { [checkType]: dataFromService };
+          cache.current = { ...cache.current, [taskId]: { ...cache.current[taskId], [checkType]: dataFromService } };
           setIsLoading(false);
           setData(dataFromService);
         }
