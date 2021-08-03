@@ -3,6 +3,7 @@ import { CourseTask, Student, Task, TaskSolutionResult, User } from '../models';
 
 const LOW_ERROR_RATE = 0.9;
 const HIGH_ERROR_RATE = 1.1;
+const TASK_REVIEW_COUNT = 4;
 const MIN_LENGTH_MESSAGE = 70;
 
 /* Get checkers who passed max score for everyone and maybe didn't review task*/
@@ -43,7 +44,8 @@ export async function getCheckersWithMaxScore(taskId: number) {
             .addSelect('AVG(score)', 'avg')
             .from(TaskSolutionResult, 'ts')
             .groupBy('ts."checkerId"')
-            .addGroupBy('ts."score"');
+            .addGroupBy('ts."score"')
+            .having(`COUNT(score) = ${TASK_REVIEW_COUNT}`);
         }, 'checkers')
         .groupBy('checkers."checkerId"')
         .having('COUNT(checkers."checkerId") = 1')

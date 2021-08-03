@@ -14,15 +14,15 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
 
   const columns = [
     {
-      title: 'Task',
-      dataIndex: 'taskName',
-      key: 'taskName',
-    },
-    {
       title: 'Checker',
       dataIndex: 'checkerGithubId',
       key: 'checkerGithubId',
       render: (id: string) => <GithubUserLink value={id} />,
+    },
+    {
+      title: 'Task',
+      dataIndex: 'taskName',
+      key: 'taskName',
     },
     {
       title: 'Student',
@@ -48,7 +48,6 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
         <Button
           onClick={() =>
             modal.info({
-              width: 600,
               title: 'Comment',
               content: comment.split('\n').map((text, id) => <p key={id}>{text}</p>),
             })
@@ -74,7 +73,7 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
   return (
     <>
       {contextHolder}
-      {data.length ? <Table columns={columnsType} dataSource={data} /> : <Text>No data</Text>}
+      {data.length ? <Table columns={columnsType} dataSource={data} scroll={{ x: true }} /> : <Text>No data</Text>}
     </>
   );
 };
