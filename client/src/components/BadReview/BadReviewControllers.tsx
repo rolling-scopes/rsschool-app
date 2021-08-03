@@ -17,17 +17,11 @@ export interface IBadReview {
   studentAvgScore?: number;
 }
 
-interface ICache {
-  [x: number]: {
-    [x: string]: IBadReview[];
-  };
-}
-
 export type checkType = 'Bad comment' | 'Did not check';
 
 export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps) {
   const { Option } = Select;
-  const cache = useRef<ICache>({});
+  const cache = useRef<Record<number, Record<checkType, IBadReview[]>>>({});
   const [taskId, setTaskId] = useState<number>();
   const [data, setData] = useState<IBadReview[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
