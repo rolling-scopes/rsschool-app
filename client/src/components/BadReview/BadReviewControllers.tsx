@@ -104,7 +104,13 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
           </Button>
         </Col>
       </Row>
-      <Modal title={`💩 in ${checkType}`} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
+      <Modal
+        title={`Bad checkers in ${checkType}`}
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={1000}
+      >
         {isLoading || !data ? <Spin /> : <BadReviewTable data={data} type={checkType!} />}
       </Modal>
     </>
