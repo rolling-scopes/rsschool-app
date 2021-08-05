@@ -16,14 +16,13 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .addSelect('"studentAvg"."avg"', 'studentAvgScore')
     .addSelect('ts.score', 'checkerScore')
     .innerJoin(
-      qb => {
-        return qb
+      qb =>
+        qb
           .subQuery()
           .select('tsr."studentId"')
           .addSelect('AVG(tsr.score)', 'avg')
           .from(TaskSolutionResult, 'tsr')
-          .groupBy('tsr."studentId"');
-      },
+          .groupBy('tsr."studentId"'),
       'studentAvg',
       'ts."studentId" = "studentAvg"."studentId"',
     )

@@ -1,5 +1,5 @@
 import { Select, Row, Button, Col, Modal, message, Spin } from 'antd';
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { CheckService } from 'services/check';
 import { CourseTaskDetails } from 'services/course';
 import { BadReviewTable } from './BadReviewTable';
@@ -21,7 +21,6 @@ export type checkType = 'Bad comment' | 'Did not check';
 
 export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps) {
   const { Option } = Select;
-  const cache = useRef<Record<number, Record<checkType, IBadReview[]>>>({});
   const [taskId, setTaskId] = useState<number>();
   const [data, setData] = useState<IBadReview[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -48,28 +47,23 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
 
   useEffect(() => {
     async function getData(): Promise<void> {
-      if (taskId && checkType) {
-        if (cache.current?.[taskId]?.[checkType]) {
-          setData(cache.current[taskId][checkType]);
-        } else {
-          setIsLoading(true);
-          let dataFromService: IBadReview[] = [];
-          try {
-            switch (checkType) {
-              case 'Bad comment':
-                dataFromService = await checkService.getBadComments(taskId);
-                break;
-              case 'Did not check':
-                dataFromService = await checkService.getMaxScoreCheckers(taskId);
-                break;
-            }
-          } catch (error) {
-            message.error('Something went wrong');
+      if (taskId) {
+        setIsLoading(true);
+        let dataFromService: IBadReview[] = [];
+        try {
+          switch (checkType) {
+            case 'Bad comment':
+              dataFromService = await checkService.getBadComments(taskId, checkType);
+              break;
+            case 'Did not check':
+              dataFromService = await checkService.getMaxScoreCheckers(taskId, checkType);
+              break;
           }
-          cache.current = { ...cache.current, [taskId]: { ...cache.current[taskId], [checkType]: dataFromService } };
-          setIsLoading(false);
-          setData(dataFromService);
+        } catch (error) {
+          message.error('Something went wrong');
         }
+        setData(dataFromService);
+        setIsLoading(false);
       }
     }
     getData();
