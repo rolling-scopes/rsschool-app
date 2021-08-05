@@ -17,7 +17,7 @@ export interface IBadReview {
   studentAvgScore?: number;
 }
 
-export type checkType = 'Bad comment' | 'Did not check';
+export type checkType = 'Bad comment' | 'Did not check' | 'No type';
 
 export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps) {
   const { Option } = Select;
@@ -45,6 +45,8 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
     showModal();
   };
 
+  useEffect(() => setCheckType('No type'), [taskId]);
+
   useEffect(() => {
     async function getData(): Promise<void> {
       if (taskId) {
@@ -58,6 +60,8 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
             case 'Did not check':
               dataFromService = await checkService.getMaxScoreCheckers(taskId, checkType);
               break;
+            case 'No type':
+              return;
           }
         } catch (error) {
           message.error('Something went wrong');
