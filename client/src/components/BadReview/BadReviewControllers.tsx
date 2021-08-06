@@ -49,23 +49,9 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
 
   useEffect(() => {
     async function getData(): Promise<void> {
-      if (taskId) {
+      if (taskId && checkType) {
         setIsLoading(true);
-        let dataFromService: IBadReview[] = [];
-        try {
-          switch (checkType) {
-            case 'Bad comment':
-              dataFromService = await checkService.getBadComments(taskId, checkType);
-              break;
-            case 'Did not check':
-              dataFromService = await checkService.getMaxScoreCheckers(taskId, checkType);
-              break;
-            case 'No type':
-              return;
-          }
-        } catch (error) {
-          message.error('Something went wrong');
-        }
+        const dataFromService = await checkService.getData(taskId, checkType);
         setData(dataFromService);
         setIsLoading(false);
       }
