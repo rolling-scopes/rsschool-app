@@ -22,6 +22,7 @@ export async function getCheckersWithMaxScore(taskId: number) {
           .select('tsr."studentId"')
           .addSelect('AVG(tsr.score)', 'avg')
           .from(TaskSolutionResult, 'tsr')
+          .where('tsr."courseTaskId" = :taskId', { taskId })
           .groupBy('tsr."studentId"'),
       'studentAvg',
       'ts."studentId" = "studentAvg"."studentId"',
@@ -42,18 +43,20 @@ export async function getCheckersWithMaxScore(taskId: number) {
             .addSelect('COUNT(score)', 'count')
             .addSelect('AVG(score)', 'avg')
             .from(TaskSolutionResult, 'ts')
+            .where('ts."courseTaskId" = :taskId', { taskId })
             .groupBy('ts."checkerId"')
             .addGroupBy('ts."score"')
-            .having(`COUNT(score) = ${TASK_REVIEW_COUNT}`);
+            .having('COUNT(score) = :count', { count: TASK_REVIEW_COUNT });
         }, 'checkers')
         .groupBy('checkers."checkerId"')
         .having('COUNT(checkers."checkerId") = 1')
         .getQuery();
-      return `ts."checkerId" in ${subQuery}`;
+      return `ts."checkerId" IN ${subQuery}`;
     })
-    .andWhere(
-      `ts."score" NOT BETWEEN "studentAvg"."avg" * ${LOW_ERROR_RATE} AND "studentAvg"."avg" * ${HIGH_ERROR_RATE}`,
-    )
+    .andWhere('ts."score" NOT BETWEEN "studentAvg"."avg" * :low AND "studentAvg"."avg" * :high', {
+      low: LOW_ERROR_RATE,
+      high: HIGH_ERROR_RATE,
+    })
     .andWhere('ts."courseTaskId" = :taskId', { taskId })
     .orderBy('"checkerUser"."githubId"')
     .getRawMany();
