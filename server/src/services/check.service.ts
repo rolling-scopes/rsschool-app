@@ -36,20 +36,12 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .where(qb => {
       const subQuery = qb
         .subQuery()
-        .select('checkers."checkerId"')
-        .from(qb => {
-          return qb
-            .select('ts."checkerId"')
-            .addSelect('COUNT(score)', 'count')
-            .addSelect('AVG(score)', 'avg')
-            .from(TaskSolutionResult, 'ts')
-            .where('ts."courseTaskId" = :taskId', { taskId })
-            .groupBy('ts."checkerId"')
-            .addGroupBy('ts."score"')
-            .having('COUNT(score) = :count', { count: TASK_REVIEW_COUNT });
-        }, 'checkers')
-        .groupBy('checkers."checkerId"')
-        .having('COUNT(checkers."checkerId") = 1')
+        .select('ts."checkerId"')
+        .from(TaskSolutionResult, 'ts')
+        .where('ts."courseTaskId" = :taskId', { taskId })
+        .groupBy('ts."checkerId"')
+        .addGroupBy('ts."score"')
+        .having('COUNT(score) = :count', { count: TASK_REVIEW_COUNT })
         .getQuery();
       return `ts."checkerId" IN ${subQuery}`;
     })
