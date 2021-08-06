@@ -77,7 +77,7 @@ export async function getCheckersWithoutComments(taskId: number) {
     .innerJoin(User, 'checkerUser', 'checker."userId" = "checkerUser".id')
     .innerJoin(Student, 'student', 'ts."studentId" = student.id ')
     .innerJoin(User, 'studentUser', 'student."userId" = "studentUser".id')
-    .where(`LENGTH(ts.comment) < ${MIN_LENGTH_MESSAGE}`)
+    .where('LENGTH(ts.comment) < :length', { length: MIN_LENGTH_MESSAGE })
     .andWhere('ts.score < ct."maxScore"')
     .andWhere('ts."courseTaskId" = :taskId', { taskId })
     .andWhere('json_array_length(ts."historicalScores") < 2')
