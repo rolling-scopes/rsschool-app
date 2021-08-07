@@ -27,12 +27,11 @@ function CVPage(props: Props) {
     setEditMode(!checked);
   };
 
-  // This is to fix an issue with empty query params
-  // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
-  // Hack with setTimeout didn't work.
-  //
-  // >> After hydration, Next.js will trigger an update to your application
-  // >> to provide the route parameters in the query object.
+  /* This is to fix an issue with empty query params
+  see: https://nextjs.org/docs/routing/dynamic-routes#caveats
+  Hack with setTimeout didn't work.
+  >> After hydration, Next.js will trigger an update to your application
+  >> to provide the route parameters in the query object. */
   const getGithubIdFromQuery = (router: NextRouter) => {
     const queryString = router.asPath.slice(props.router.asPath.indexOf('?') + 1);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
