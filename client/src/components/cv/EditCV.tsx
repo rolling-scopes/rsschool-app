@@ -29,7 +29,7 @@ const cvService = new CVService();
 const userService = new UserService();
 
 function EditCV(props: Props) {
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
@@ -403,7 +403,7 @@ function EditCV(props: Props) {
   };
 
   return (
-    <LoadingScreen show={isLoading}>
+    <LoadingScreen show={loading}>
       <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
         <Content>
           <Card>
