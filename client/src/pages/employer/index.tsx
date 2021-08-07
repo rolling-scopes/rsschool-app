@@ -118,7 +118,7 @@ function Page(props: Props) {
       ...getColumnSearchProps('locations'),
       render: (locationsRaw: string) => {
         const locations = locationsRaw.split(';');
-        const locationsItems = locations.map((location, index) => <li key={index}>{location}</li>);
+        const locationsItems = locations.map(location => <li key={location}>{location}</li>);
         return <ol>{locationsItems}</ol>;
       },
     },
