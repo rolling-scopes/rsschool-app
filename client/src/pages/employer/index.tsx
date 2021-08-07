@@ -21,7 +21,7 @@ type Props = {
 };
 
 function Page(props: Props) {
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
   const [areHiddenJobSeekersShown, setHiddenJobSeekersShown] = useState<boolean>(false);
 
@@ -328,7 +328,7 @@ function Page(props: Props) {
   return (
     <>
       <Header username={userGithubId} />
-      <LoadingScreen show={isLoading}>
+      <LoadingScreen show={loading}>
         <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
             {isAdmin && (

@@ -14,7 +14,7 @@ type Props = {
 const cvService = new CVService();
 
 function ViewCV(props: Props) {
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [courses, setCourses] = useState<CVStudentStats[] | null>(null);
@@ -87,7 +87,7 @@ function ViewCV(props: Props) {
   }, []);
 
   return (
-    <LoadingScreen show={isLoading}>
+    <LoadingScreen show={loading}>
       <Layout className="view-cv-layout" style={{ marginBottom: '15px', width: '960px', backgroundColor: '#FFF' }}>
         <Content>
           <Space direction="vertical" style={{ width: '100%', backgroundColor: '#FFF' }}>
