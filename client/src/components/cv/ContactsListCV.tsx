@@ -61,8 +61,8 @@ const allowedContacts: AllowedContacts = {
     icon: <AimOutlined />,
     transformFunc: locations => (
       <ol>
-        {locations.split(';').map((location, index) => (
-          <li key={index}>{location}</li>
+        {locations.split(';').map(location => (
+          <li key={location}>{location}</li>
         ))}
       </ol>
     ),
