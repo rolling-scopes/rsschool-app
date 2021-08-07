@@ -5,7 +5,9 @@ import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { CoursePageProps, StudentBasic, Action } from 'services/models';
+import { CoursePageProps, StudentBasic } from 'services/models';
+
+type ActionOnStudent = 'expel' | 'unassign';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -16,7 +18,7 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([] as StudentBasic[]);
-  const [action, setAction] = useState<Action>('expel');
+  const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
     if (roles[courseId] === 'student') {
@@ -37,13 +39,10 @@ function Page(props: CoursePageProps) {
     }
   }, [courseId]);
 
-  const expelStudent = async (githubId: string, comment: string) => {
-    if (githubId === userGithubId) {
-      await courseService.selfExpel(githubId, comment);
-    } else {
-      await courseService.expelStudent(githubId, comment);
-    }
-  };
+  const expelStudent = async (githubId: string, comment: string) =>
+    githubId === userGithubId
+      ? await courseService.selfExpel(githubId, comment)
+      : await courseService.expelStudent(githubId, comment);
 
   const unassignStudent = async (githubId: string, comment: string) => {
     const data = { mentorGithuId: null, unassigningComment: comment };
@@ -51,9 +50,7 @@ function Page(props: CoursePageProps) {
   };
 
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
-      return;
-    }
+    if (!values.githubId || loading) return;
     try {
       setLoading(true);
       switch (action) {
@@ -62,6 +59,9 @@ function Page(props: CoursePageProps) {
           break;
         case 'unassign':
           await unassignStudent(values.githubId, values.comment);
+          break;
+        default:
+          throw new Error(`Wrong action on student type: ${action}`);
       }
       const activeStudents = students.filter(s => s.githubId !== values.githubId);
       setStudents(activeStudents);
@@ -77,7 +77,7 @@ function Page(props: CoursePageProps) {
   const noData = !students.length;
 
   const actionMessages: {
-    [key in Action]: {
+    [key in ActionOnStudent]: {
       [key: string]: string;
     };
   } = {
