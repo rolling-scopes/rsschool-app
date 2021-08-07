@@ -162,6 +162,10 @@ function EditCV(props: Props) {
       website,
     } = data;
 
+    const LOCATIONS_COUNT = 3;
+
+    const locationsTransformed = transformLocations(locations, LOCATIONS_COUNT);
+
     const cvData: AllUserCVData = {
       selfIntroLink: nullifyConditional(selfIntroLink),
       militaryService,
@@ -175,7 +179,7 @@ function EditCV(props: Props) {
       skype: nullifyConditional(skype),
       telegram: nullifyConditional(telegram),
       linkedin: nullifyConditional(linkedin),
-      locations: nullifyConditional(transformLocationsString(locations)),
+      locations: locationsTransformed,
       githubUsername: nullifyConditional(github),
       website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
@@ -241,14 +245,14 @@ function EditCV(props: Props) {
     await submitData(data);
   };
 
-  const transformLocationsString = (locationsRaw: string | null) => {
-    if (locationsRaw === null) return locationsRaw;
-    const locations = locationsRaw.split(';');
-    const firstThreeLocations = locations.slice(0, 3);
-    const locationsTrimmed = firstThreeLocations.map(location => location.trim());
-    const locationsStringified = locationsTrimmed.join(';');
-    return locationsStringified;
-  };
+  const transformLocations = (locationsRaw: string | null, length: number) =>
+    locationsRaw === null
+      ? null
+      : locationsRaw
+          .split(';')
+          .slice(0, length)
+          .map(location => location.trim())
+          .join(';');
 
   const nullifyConditional = (str: string | null) => (str?.trim() === '' ? null : str);
 
