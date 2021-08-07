@@ -67,7 +67,7 @@ export class CVService {
   }
 
   async changeCVVisibility(githubId: string, isHidden: boolean) {
-    const response = await this.axios.post<{ data: boolean }>(`${CVService.baseRoute}/hide/`, {
+    const response = await this.axios.post<{ data: boolean }>(`${CVService.baseRoute}/visibility/`, {
       githubId,
       isHidden,
     });
