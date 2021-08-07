@@ -3,7 +3,7 @@ import { Row, Col, Typography } from 'antd';
 import SectionCV from '../SectionCV';
 import ContactsListCV from '../ContactsListCV';
 import AvatarCV from '../AvatarCV';
-import { Contacts, MilitaryService, UserData } from '../../../../../common/models/cv';
+import { Contacts, MilitaryServiceStatus, UserData } from '../../../../../common/models/cv';
 
 const { Title, Text } = Typography;
 
@@ -26,7 +26,7 @@ const formatDate = (expirationValue: number | null) => {
 };
 
 const militaryServiceDictionary: {
-  [key in MilitaryService]: string;
+  [key in MilitaryServiceStatus]: string;
 } = {
   served: 'served',
   notLiable: 'not liable',

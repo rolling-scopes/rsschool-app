@@ -15,7 +15,7 @@ export interface CourseData {
 }
 
 export type EnglishLevel = typeof ENGLISH_LEVELS[number];
-export type MilitaryService = 'served' | 'liable' | 'notLiable';
+export type MilitaryServiceStatus = 'served' | 'liable' | 'notLiable';
 
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
 
@@ -25,7 +25,7 @@ export interface UserData {
   desiredPosition: string | null;
   selfIntroLink: string | null;
   englishLevel: EnglishLevel | null;
-  militaryService: MilitaryService | null;
+  militaryService: MilitaryServiceStatus | null;
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
