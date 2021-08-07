@@ -43,14 +43,14 @@ export class CVService {
   }
 
   async getEditCVData(githubId: string) {
-    const response = await this.axios.get<{ data: EditCVData }>(`${CVService.baseRoute}/cv-edit`, {
+    const response = await this.axios.get<{ data: EditCVData }>(`${CVService.baseRoute}/cv`, {
       params: { githubId },
     });
     return response.data.data;
   }
 
   async getFullCVData(githubId: string) {
-    const response = await this.axios.get<{ data: GetFullCVData }>(`${CVService.baseRoute}/cv-view`, {
+    const response = await this.axios.get<{ data: GetFullCVData }>(`${CVService.baseRoute}/cv?mod=all`, {
       params: { githubId },
     });
     return response.data.data;
