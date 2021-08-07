@@ -249,10 +249,7 @@ function EditCV(props: Props) {
     return locationsStringified;
   };
 
-  const nullifyConditional = (str: string | null) => {
-    if (typeof str === 'string') return str.replace(/\s/g, '') === '' ? null : str;
-    return str;
-  };
+  const nullifyConditional = (str: string | null) => (str?.trim() === '' ? null : str);
 
   const formatDate = (expirationValue: number | null) => {
     if (expirationValue === null || expirationValue === 0) {
