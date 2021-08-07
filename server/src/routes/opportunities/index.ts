@@ -252,47 +252,51 @@ export const deleteCV = async (githubId: string) => {
   await cvRepository.delete({ githubId });
 };
 
-export const getViewCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
+export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { githubId, mod } = ctx.query;
+  const isFullDataNeeded = mod === 'all';
 
-  const cvRepository = getRepository(CV);
-
-  const cv = await cvRepository.findOne({ where: { githubId } });
-
-  if (cv === undefined) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-
-  const feedback = await getFeedbackCV(githubId);
-  const courses = await getStudentsStats(githubId);
-
-  const { id, githubId: omittedGithubId, isHidden, ...cvData } = cv;
-
-  const res = {
-    ...cvData,
-    feedback,
-    courses,
-  };
-
-  setResponse(ctx, OK, res);
-};
-
-export const getEditCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.query;
-
-  const cvRepository = getRepository(CV);
-
-  const cv = await cvRepository.findOne({ where: { githubId } });
+  const cv = await getRepository(CV)
+    .createQueryBuilder('cv')
+    .select('"cv"."name" AS "name"')
+    .addSelect('"cv"."selfIntroLink" AS "selfIntroLink"')
+    .addSelect('"cv"."startFrom" AS "startFrom"')
+    .addSelect('"cv"."fullTime" AS "fullTime"')
+    .addSelect('"cv"."expires" AS "expires"')
+    .addSelect('"cv"."militaryService" AS "militaryService"')
+    .addSelect('"cv"."englishLevel" AS "englishLevel"')
+    .addSelect('"cv"."avatarLink" AS "avatarLink"')
+    .addSelect('"cv"."desiredPosition" AS "desiredPosition"')
+    .addSelect('"cv"."notes" AS "notes"')
+    .addSelect('"cv"."phone" AS "phone"')
+    .addSelect('"cv"."email" AS "email"')
+    .addSelect('"cv"."skype" AS "skype"')
+    .addSelect('"cv"."telegram" AS "telegram"')
+    .addSelect('"cv"."linkedin" AS "linkedin"')
+    .addSelect('"cv"."githubUsername" AS "githubUsername"')
+    .addSelect('"cv"."website" AS "website"')
+    .addSelect('"cv"."locations" AS "locations"')
+    .where('"cv"."githubId" = :githubId', { githubId })
+    .getRawOne();
 
   if (cv === undefined) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
 
-  const { id, githubId: omittedGithubId, isHidden, ...cvData } = cv;
+  if (isFullDataNeeded) {
+    const feedback = await getFeedbackCV(githubId);
+    const courses = await getStudentsStats(githubId);
+    const cvWithFeedbackAndCourses = {
+      ...cv,
+      feedback,
+      courses,
+    };
+    setResponse(ctx, OK, cvWithFeedbackAndCourses);
+    return;
+  }
 
-  setResponse(ctx, OK, cvData);
+  setResponse(ctx, OK, cv);
 };
 
 export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -343,8 +347,7 @@ export function opportunitiesRoute(logger: ILogger) {
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));
   router.get('/jobseekers', guard, getJobSeekersData(logger));
-  router.get('/cv-edit', guard, getEditCVData(logger));
-  router.get('/cv-view', guard, getViewCVData(logger));
+  router.get('/cv', guard, getCVData(logger));
   router.post('/', guard, saveCVData(logger));
 
   return router;
