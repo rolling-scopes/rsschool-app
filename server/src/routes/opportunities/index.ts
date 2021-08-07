@@ -339,7 +339,7 @@ export const manageVisibility = (_: ILogger) => async (ctx: Router.RouterContext
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
   router.post('/visibility', guard, manageVisibility(logger));
-  router.post('/extend', guard, extendCV(logger));
+  router.post('/status', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));
   router.get('/jobseekers', guard, getJobSeekersData(logger));
