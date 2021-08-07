@@ -28,12 +28,12 @@ export class CVService {
   }
 
   async getAllJobSeekersData() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers-all`);
+    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers`);
     return response.data.data;
   }
 
   async getVisibleJobSeekersData() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers`);
+    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers?mod=visible`);
     return response.data.data;
   }
 
