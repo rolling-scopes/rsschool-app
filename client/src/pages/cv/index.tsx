@@ -18,7 +18,7 @@ type Props = {
 };
 
 function CVPage(props: Props) {
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [opportunitiesConsent, setOpportunitiesConsent] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<boolean>(false);
@@ -93,7 +93,7 @@ function CVPage(props: Props) {
 
   return (
     <>
-      <LoadingScreen show={isLoading}>
+      <LoadingScreen show={loading}>
         <Header username={userGithubId} />
         <Layout className="cv-layout" style={{ margin: 'auto', maxWidth: '960px', backgroundColor: '#FFF' }}>
           <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
