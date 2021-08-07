@@ -314,7 +314,7 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
   setResponse(ctx, OK, Number(result.expires));
 };
 
-export const manageHiddenStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
+export const manageVisibility = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, isHidden: reqHiddenStatus } = ctx.request.body;
 
   const cvRepository = getRepository(CV);
@@ -338,7 +338,7 @@ export const manageHiddenStatus = (_: ILogger) => async (ctx: Router.RouterConte
 
 export function opportunitiesRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/opportunities' });
-  router.post('/hide', guard, manageHiddenStatus(logger));
+  router.post('/visibility', guard, manageVisibility(logger));
   router.post('/extend', guard, extendCV(logger));
   router.get('/consent', guard, getOpportunitiesConsent(logger));
   router.post('/consent', guard, manageOpportunitiesConsent(logger));
