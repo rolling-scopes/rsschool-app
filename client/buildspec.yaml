@@ -14,7 +14,7 @@ phases:
       - npm i
       - npm test
       - NODE_ENV=production npm run build
-      - aws s3 cp src/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control max-age=2592000
+      - aws s3 cp src/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
       - npm ci --production --no-optional
       - cp -a ./src/.next/cache/. /tmp/.next/cache/
       - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
