@@ -1,3 +1,4 @@
+import { Moment } from '../../client/node_modules/moment-timezone';
 import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
 
 export interface CourseData {
@@ -59,6 +60,10 @@ export interface FieldData {
 
 export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
   githubUsername: string | null;
+}
+
+export interface DataToSubmit extends Omit<UserData, 'startFrom'>, Contacts {
+  startFrom: Moment;
 }
 
 export interface EditCVData extends AllUserCVData {

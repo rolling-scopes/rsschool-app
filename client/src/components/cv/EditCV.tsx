@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, AllUserCVData } from '../../../../common/models/cv';
+import { Contacts, UserData, AllUserCVData, DataToSubmit } from '../../../../common/models/cv';
 import { CVService } from 'services/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -139,7 +139,7 @@ function EditCV(props: Props) {
     setLoading(false);
   }, []);
 
-  const submitData = async (data: any) => {
+  const submitData = async (data: DataToSubmit) => {
     setLoading(true);
 
     const {
@@ -237,11 +237,12 @@ function EditCV(props: Props) {
     await fetchData();
   };
 
-  const saveData = async (data: any) => {
+  const saveData = async (data: DataToSubmit) => {
     await submitData(data);
   };
 
-  const transformLocationsString = (locationsRaw: string) => {
+  const transformLocationsString = (locationsRaw: string | null) => {
+    if (locationsRaw === null) return locationsRaw;
     const locations = locationsRaw.split(';');
     const firstThreeLocations = locations.slice(0, 3);
     const locationsTrimmed = firstThreeLocations.map(location => location.trim());
