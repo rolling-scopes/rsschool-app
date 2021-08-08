@@ -8,21 +8,22 @@ const validationMessages = {
   invalid: (fieldName: string): string => `This is not a valid ${fieldName}`,
 };
 
+const PHONE_NUMBER_REGEXP = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+
 const contactsValidationRules: {
   [key: string]: Rule[];
 } = {
   phone: [
     {
-      max: 15,
-      message: validationMessages.max(15),
+      max: 25,
+      message: validationMessages.max(25),
     },
     () => ({
       validator(_, value) {
+        return !value || PHONE_NUMBER_REGEXP.test(value)
+          ? Promise.resolve()
+          : Promise.reject(new Error(validationMessages.invalid('phone number')));
         if (value === '' || value === null) return Promise.resolve();
-        if (/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g.test(value)) {
-          return Promise.resolve();
-        }
-        return Promise.reject(new Error(validationMessages.invalid('phone number')));
       },
     }),
     {
