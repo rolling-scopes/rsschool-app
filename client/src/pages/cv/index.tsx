@@ -89,7 +89,7 @@ function CVPage(props: Props) {
 
   const isOwner = userGithubId === ownerGithubId;
 
-  const hasPriorityRole = [isAdmin, isHirer].some(hasRole => hasRole === true);
+  const hasPriorityRole = isAdmin || isHirer;
 
   return (
     <>
