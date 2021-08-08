@@ -27,13 +27,11 @@ export class CVService {
     return response.data.data;
   }
 
-  async getAllJobSeekersData() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers`);
-    return response.data.data;
-  }
-
-  async getVisibleJobSeekersData() {
-    const response = await this.axios.get<{ data: JobSeekerData[] }>(`${CVService.baseRoute}/jobseekers?mod=visible`);
+  async getJobSeekersData(isAdmin: boolean) {
+    const visibilityModifierQueryParam = isAdmin ? '' : '?mod=visible';
+    const response = await this.axios.get<{ data: JobSeekerData[] }>(
+      `${CVService.baseRoute}/jobseekers${visibilityModifierQueryParam}`,
+    );
     return response.data.data;
   }
 

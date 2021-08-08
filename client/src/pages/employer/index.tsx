@@ -242,9 +242,7 @@ function Page(props: Props) {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const data: JobSeekerData[] = isAdmin
-      ? await cvService.getAllJobSeekersData()
-      : await cvService.getVisibleJobSeekersData();
+    const data: JobSeekerData[] = await cvService.getJobSeekersData(isAdmin);
     setJobSeekers(data);
     setLoading(false);
   }, []);
