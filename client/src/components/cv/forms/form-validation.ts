@@ -23,7 +23,6 @@ const contactsValidationRules: {
         return !value || PHONE_NUMBER_REGEXP.test(value)
           ? Promise.resolve()
           : Promise.reject(new Error(validationMessages.invalid('phone number')));
-        if (value === '' || value === null) return Promise.resolve();
       },
     }),
     {
