@@ -35,7 +35,7 @@ function CVPage(props: Props) {
   const getGithubIdFromQuery = (router: NextRouter) => {
     const queryString = router.asPath.slice(props.router.asPath.indexOf('?') + 1);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-ignore ts(2550) Property 'fromEntries' does not exist on type 'ObjectConstructor'; ts(2339) Property 'entries' does not exist on type 'URLSearchParams' 
     const queryObj = Object.fromEntries(new URLSearchParams(queryString).entries());
     return queryObj?.githubid;
   };
