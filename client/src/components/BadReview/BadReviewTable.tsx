@@ -1,4 +1,4 @@
-import { Button, Modal, Table, Typography } from 'antd';
+import { Button, message, Modal, Table, Typography } from 'antd';
 import { GithubUserLink } from 'components';
 import React from 'react';
 import { checkType, IBadReview } from './BadReviewControllers';
@@ -62,6 +62,7 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
   ];
 
   let columnsType;
+
   switch (type) {
     case 'Bad comment':
       columnsType = columns.filter(c => c.dataIndex !== 'studentAvgScore');
@@ -69,7 +70,10 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
     case 'Did not check':
       columnsType = columns.filter(c => c.dataIndex !== 'comment');
       break;
+    default:
+      message.error('Something went wrong');
   }
+
   return (
     <>
       {contextHolder}
