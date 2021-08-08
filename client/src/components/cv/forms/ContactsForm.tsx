@@ -79,7 +79,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
         </Item>
         <Item
           style={itemStyle}
-          label="Locations"
+          label="Locations (each from new line)"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
           name="locations"

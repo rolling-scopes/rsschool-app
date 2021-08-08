@@ -162,7 +162,7 @@ function EditCV(props: Props) {
 
     const LOCATIONS_COUNT = 3;
 
-    const locationsTransformed = transformLocations(locations, LOCATIONS_COUNT);
+    const topLocations = getTopLocations(locations, LOCATIONS_COUNT);
 
     const cvData: AllUserCVData = {
       selfIntroLink: nullifyConditional(selfIntroLink),
@@ -177,7 +177,7 @@ function EditCV(props: Props) {
       skype: nullifyConditional(skype),
       telegram: nullifyConditional(telegram),
       linkedin: nullifyConditional(linkedin),
-      locations: locationsTransformed,
+      locations: topLocations,
       githubUsername: nullifyConditional(github),
       website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
@@ -243,14 +243,14 @@ function EditCV(props: Props) {
     await submitData(data);
   };
 
-  const transformLocations = (locationsRaw: string | null, length: number) =>
+  const getTopLocations = (locationsRaw: string | null, length: number) =>
     locationsRaw === null
       ? null
       : locationsRaw
-          .split(';')
+          .split('\n')
           .slice(0, length)
           .map(location => location.trim())
-          .join(';');
+          .join('\n');
 
   const nullifyConditional = (str: string | null) => str?.trim() || null;
 
