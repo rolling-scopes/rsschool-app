@@ -29,7 +29,7 @@ export class CheckService {
           dataFromService = await this.getDataFromServer(taskId, type);
           break;
         case 'No type':
-          return;
+          break;
         default:
           throw new Error('Unsupported type');
       }
