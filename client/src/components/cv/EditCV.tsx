@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, AllUserCVData, DataToSubmit } from '../../../../common/models/cv';
+import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from '../../../../common/models/cv';
 import { CVService } from 'services/cv';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -36,8 +36,6 @@ function EditCV(props: Props) {
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
-
-  const currentRefs: RefObject<FormInstance>[] = [userFormRef, contactsFormRef];
 
   const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -139,7 +137,7 @@ function EditCV(props: Props) {
     setLoading(false);
   }, []);
 
-  const submitData = async (data: DataToSubmit) => {
+  const submitData = async (data: AllDataToSubmit) => {
     setLoading(true);
 
     const {
@@ -241,7 +239,7 @@ function EditCV(props: Props) {
     await fetchData();
   };
 
-  const saveData = async (data: DataToSubmit) => {
+  const saveData = async (data: AllDataToSubmit) => {
     await submitData(data);
   };
 
@@ -254,7 +252,7 @@ function EditCV(props: Props) {
           .map(location => location.trim())
           .join(';');
 
-  const nullifyConditional = (str: string | null) => (str?.trim() === '' ? null : str);
+  const nullifyConditional = (str: string | null) => str?.trim() || null;
 
   const formatDate = (expirationValue: number | null) => {
     if (expirationValue === null || expirationValue === 0) {
@@ -276,42 +274,27 @@ function EditCV(props: Props) {
     }
   };
 
-  const checkFormsForValidationErrors = () => {
-    const hasErrors = currentRefs.some(ref => {
-      const fieldsToCheck = ref.current?.getFieldsError();
-      if (fieldsToCheck?.some(field => field.errors.length > 0)) return true;
-    });
+  const hasInvalidFields = (form: FormInstance | null) =>
+    !form ? false : form.getFieldsError().some(field => field.errors.length > 0);
 
-    return hasErrors;
-  };
-
-  const checkNecessaryDataBeforeExtension = () => {
-    if (userData && contactsList) {
-      const dataToBeFilled = [
-        userData.name,
-        userData.desiredPosition,
-        userData.englishLevel,
-        userData.startFrom,
-        contactsList.locations,
-      ];
-      return dataToBeFilled.some(field => field === null);
-    }
-    return true;
+  const areRequiredFieldsEmpty = () => {
+    if (!userData || !contactsList) return true;
+    const { name, desiredPosition, englishLevel, startFrom } = userData;
+    const { locations } = contactsList;
+    return !name || !desiredPosition || !englishLevel || !startFrom || !locations;
   };
 
   const getDataFromForms = () => {
-    const values = currentRefs
-      .map(ref => {
-        return ref.current?.getFieldsValue();
-      })
-      .reduce((resObj, dataObj) => Object.assign(resObj, dataObj), {});
-    return values;
+    const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
+    const contactsFormData: Contacts = contactsFormRef?.current?.getFieldsValue();
+    return {
+      ...userFormData,
+      ...contactsFormData,
+    };
   };
 
   const handleSave = async () => {
-    const hasErrors = checkFormsForValidationErrors();
-
-    if (hasErrors) {
+    if (hasInvalidFields(userFormRef.current) || hasInvalidFields(contactsFormRef.current)) {
       showWarningModal({
         title: 'Some form fields do not meet validation criteria',
         content: 'Please fill it correctly and try again',
@@ -377,9 +360,7 @@ function EditCV(props: Props) {
   };
 
   const extendCV = async () => {
-    const hasEmptyMandatoryFields = checkNecessaryDataBeforeExtension();
-
-    if (hasEmptyMandatoryFields) {
+    if (areRequiredFieldsEmpty()) {
       showWarningModal({
         title: 'You have to fill some field before extend CV',
         content: (

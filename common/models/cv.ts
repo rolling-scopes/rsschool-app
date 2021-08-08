@@ -62,9 +62,11 @@ export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
   githubUsername: string | null;
 }
 
-export interface DataToSubmit extends Omit<UserData, 'startFrom'>, Contacts {
+export interface UserDataToSubmit extends Omit<UserData, 'startFrom'> {
   startFrom: Moment;
 }
+
+export interface AllDataToSubmit extends UserDataToSubmit, Contacts {}
 
 export interface EditCVData extends AllUserCVData {
   expires: number | null;
