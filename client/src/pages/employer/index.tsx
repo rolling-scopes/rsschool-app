@@ -20,6 +20,8 @@ type Props = {
   session: Session;
 };
 
+type OmitByVisibility = (obj: { isHidden: boolean }) => boolean;
+
 function Page(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
@@ -265,11 +267,6 @@ function Page(props: Props) {
     setHiddenJobSeekersShown(checked);
   };
 
-  const filterJobSeekersByVisibility = (jobSeekers: JobSeekerData[], showHidden: boolean) => {
-    if (showHidden) return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === true);
-    return jobSeekers.filter(jobSeeker => jobSeeker.isHidden === false);
-  };
-
   const transformJobSeekersData = (data: JobSeekerData[]) => {
     return data.map((item, index) => {
       const {
@@ -309,18 +306,13 @@ function Page(props: Props) {
 
   if (!(isAdmin || isHirer)) return <Result status="403" title="Sorry, but you don't have access to this page" />;
 
-  let data;
+  let data = null;
 
   if (jobSeekers) {
-    if (areHiddenJobSeekersShown) {
-      const hiddenJobSeekers = filterJobSeekersByVisibility(jobSeekers, true);
-      data = transformJobSeekersData(hiddenJobSeekers);
-    } else {
-      const visibleJobSeekers = filterJobSeekersByVisibility(jobSeekers, false);
-      data = transformJobSeekersData(visibleJobSeekers);
-    }
-  } else {
-    data = null;
+    const omitHidden: OmitByVisibility = ({ isHidden }) => !isHidden;
+    const omitVisible: OmitByVisibility = ({ isHidden }) => isHidden;
+    const filteredJobSeekers = jobSeekers.filter(areHiddenJobSeekersShown ? omitVisible : omitHidden);
+    data = transformJobSeekersData(filteredJobSeekers);
   }
 
   return (
