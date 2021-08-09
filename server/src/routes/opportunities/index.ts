@@ -135,7 +135,7 @@ const withdrawOpportunitiesConsent = async (ctx: Router.RouterContext, githubId:
 };
 
 export const manageOpportunitiesConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, opportunitiesConsent: reqConsent } = ctx.request.body;
+  const { githubId, opportunitiesConsent: isConsentRecieved } = ctx.request.body;
 
   const user = await getRepository(User).findOne({ where: { githubId } });
 
@@ -144,18 +144,7 @@ export const manageOpportunitiesConsent = (_: ILogger) => async (ctx: Router.Rou
     return;
   }
 
-  const prevConsent = user.opportunitiesConsent;
-
-  if (reqConsent === prevConsent) {
-    setResponse(ctx, OK, user.opportunitiesConsent);
-    return;
-  }
-
-  if (reqConsent === true) {
-    await giveOpportunitiesConsent(ctx, githubId);
-  } else {
-    await withdrawOpportunitiesConsent(ctx, githubId);
-  }
+  isConsentRecieved ? await giveOpportunitiesConsent(ctx, githubId) : await withdrawOpportunitiesConsent(ctx, githubId);
 };
 
 const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
