@@ -1,24 +1,23 @@
 import * as React from 'react';
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
+
+const enableGA = process.env.NODE_ENV === 'production';
 
 export default class extends Document {
-  enableGA = process.env.NODE_ENV === 'production';
-
   render() {
     return (
-      <html lang="en">
+      <Html lang="en">
         <Head>
           <link rel="shortcut icon" href="https://rs.school/favicon.ico" />
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-          {this.enableGA && <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55428637-3" />}
-          {this.enableGA && <script dangerouslySetInnerHTML={{ __html: gaJsCode }} />}
+          {enableGA && <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55428637-3" />}
+          {enableGA && <script dangerouslySetInnerHTML={{ __html: gaJsCode }} />}
         </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
