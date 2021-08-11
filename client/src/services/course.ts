@@ -579,6 +579,11 @@ export class CourseService {
     return result.data.data as StudentBasic;
   }
 
+  async unassignStudentFromMentor(githubId: string, data: { mentorGithuId: null; unassigningComment: string }) {
+    const result = await this.axios.put(`/student/${githubId}`, data);
+    return result.data.data;
+  }
+
   async createInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.post(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data;
