@@ -85,7 +85,6 @@ function Page(props: Props & { courseAlias?: string }) {
     setCheckedListCourse(checkedListCourse);
     if (initialData) {
       setResume(getInitialValues(initialData, checkedList));
-
     }
 
     setLoading(false);
@@ -102,63 +101,66 @@ function Page(props: Props & { courseAlias?: string }) {
     if (initialData) {
       setResume(getInitialValues(initialData, checkedList));
     }
-  }, [initialData]);
+  }, [initialData, checkedList]);
 
   const checkKeyMatch = (e: any) => {
     // The length of the nickname in telegrams or skype must be more than 2 or more characters
     setIsAvailableContact(e.target.value.length >= 2);
   };
 
-  const handleSubmit = useCallback(async (model: any) => {
-    if (!currentStep) {
-      setCurrentSteps(currentStep + 1);
-      setResume({ ...resume, ...model });
-    } else {
-      setLoading(true);
-      setResume({ ...resume, ...model });
-      const {
-        technicalMentoring,
-        preferedCourses,
-        preferedStudentsLocation,
-        maxStudentsLimit,
-        englishMentoring,
-        location,
-      } = resume;
+  const handleSubmit = useCallback(
+    async (model: any) => {
+      const data = { ...resume, ...model };
+      setResume(data);
+      if (!currentStep) {
+        setCurrentSteps(currentStep + 1);
+      } else {
+        setLoading(true);
+        const {
+          technicalMentoring,
+          preferedCourses,
+          preferedStudentsLocation,
+          maxStudentsLimit,
+          languagesMentoring,
+          location,
+        } = data;
 
-      const registryModel = {
-        preferedCourses,
-        maxStudentsLimit,
-        englishMentoring,
-        preferedStudentsLocation,
-        technicalMentoring,
-      };
+        const registryModel = {
+          preferedCourses,
+          maxStudentsLimit,
+          preferedStudentsLocation,
+          languagesMentoring,
+          technicalMentoring,
+        };
 
-      const userModel = {
-        cityName: location.cityName,
-        countryName: location.countryName,
-        firstName: resume.firstName,
-        lastName: resume.lastName,
+        const userModel = {
+          cityName: location.cityName,
+          countryName: location.countryName,
+          firstName: resume.firstName,
+          lastName: resume.lastName,
 
-        primaryEmail: resume.primaryEmail,
-        contactsTelegram: resume.contactsTelegram,
-        contactsSkype: resume.contactsSkype,
-        contactsEpamEmail: resume.contactsEpamEmail,
-        contactsNotes: resume.contactsNotes,
-        aboutMyself: resume.aboutMyself,
-      };
+          primaryEmail: resume.primaryEmail,
+          contactsTelegram: resume.contactsTelegram,
+          contactsSkype: resume.contactsSkype,
+          contactsEpamEmail: resume.contactsEpamEmail,
+          contactsNotes: resume.contactsNotes,
+          aboutMyself: resume.aboutMyself,
+        };
 
-      const requests = [axios.post('/api/profile/me', userModel), axios.post('/api/registry/mentor', registryModel)];
+        const requests = [axios.post('/api/profile/me', userModel), axios.post('/api/registry/mentor', registryModel)];
 
-      try {
-        await Promise.all(requests);
-        setSubmitted(true);
-      } catch (e) {
-        message.error('An error occured. Please try later');
-      } finally {
-        setLoading(false);
+        try {
+          await Promise.all(requests);
+          setSubmitted(true);
+        } catch (e) {
+          message.error('An error occured. Please try later');
+        } finally {
+          setLoading(false);
+        }
       }
-    }
-  }, []);
+    },
+    [resume, currentStep],
+  );
 
   const prev = () => {
     if (!currentStep) {
@@ -182,7 +184,8 @@ function Page(props: Props & { courseAlias?: string }) {
             <Typography.Title level={5}>Preferred Courses</Typography.Title>
           </Row>
           <Form.Item name="preferedCourses">
-            <Checkbox.Group
+            <Select
+              mode="multiple"
               value={checkedList}
               options={courses.map(c => ({
                 label: (
@@ -410,10 +413,13 @@ function Page(props: Props & { courseAlias?: string }) {
       <Row gutter={defaultRowGutter}>
         <Col {...defaultColumnSizes}>
           <Row>
-            <Typography.Title level={5}>Are you ready to mentor in ENGLISH?</Typography.Title>
+            <Typography.Title level={5}>Which language are you able to mentor?</Typography.Title>
           </Row>
-          <Form.Item name="englishMentoring" valuePropName="checked">
-            <Checkbox>Yes, I am ready</Checkbox>
+          <Form.Item name="languagesMentoring">
+            <Select mode="multiple" placeholder="Select languages...">
+              <Select.Option value={'english'}>English</Select.Option>
+              <Select.Option value={'russian'}>Russian</Select.Option>
+            </Select>
           </Form.Item>
         </Col>
       </Row>
