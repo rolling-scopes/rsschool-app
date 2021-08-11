@@ -7,9 +7,17 @@ import { StatusCodes } from 'http-status-codes';
 import { guard } from '../guards';
 import { getRepository } from 'typeorm';
 import { CV, User, Feedback, Student, Certificate, Mentor, Course } from '../../models';
+import {} from '../../models';
 import { getFullName } from '../../rules';
 
 const { NOT_FOUND, OK, INTERNAL_SERVER_ERROR, CONFLICT } = StatusCodes;
+
+enum RESULTS {
+  EXISTS = 'ALREADY_EXISTS',
+  CREATED = 'CREATED',
+}
+
+const { EXISTS, CREATED } = RESULTS;
 
 const getFeedbackCV = async (githubId: string) => {
   return await getRepository(Feedback)
@@ -113,12 +121,12 @@ const giveOpportunitiesConsent = async (ctx: Router.RouterContext, githubId: str
 
   const creationResult = await createCV(githubId);
 
-  if (creationResult === 'ALREADY_EXISTS') {
+  if (creationResult === EXISTS) {
     setResponse(ctx, CONFLICT, { message: 'CV already exists' });
     return;
   }
 
-  if (creationResult === 'CREATED') {
+  if (creationResult === CREATED) {
     const result = await userRepository.update({ githubId }, { opportunitiesConsent: true });
     setResponse(ctx, OK, result.raw.opportunitiesConsent);
     return;
@@ -166,12 +174,10 @@ const getJobSeekersData = (_: ILogger) => async (ctx: Router.RouterContext) => {
 
   if (cvProfiles.length) {
     cvProfiles = await Promise.all(
-      cvProfiles.map(async (cv: any) => {
+      cvProfiles.map(async (cv: CV) => {
         const { githubId } = cv;
 
-        const feedback = await getFeedbackJobSeeker(githubId);
-
-        const courses = await getStudentsStats(githubId);
+        const [feedback, courses] = await Promise.all([getFeedbackJobSeeker(githubId), getStudentsStats(githubId)]);
 
         return {
           ...cv,
@@ -228,12 +234,12 @@ const createCV = async (githubId: string) => {
   const cv = await cvRepository.findOne({ where: { githubId } });
 
   if (cv !== undefined) {
-    return 'ALREADY_EXISTS';
+    return EXISTS;
   }
 
   const newCV = await cvRepository.create({ githubId });
   const savingResult = await cvRepository.save(newCV);
-  if (savingResult) return 'CREATED';
+  if (savingResult) return CREATED;
 };
 
 export const deleteCV = async (githubId: string) => {
@@ -274,8 +280,7 @@ export const getCVData = (_: ILogger) => async (ctx: Router.RouterContext) => {
   }
 
   if (isFullDataNeeded) {
-    const feedback = await getFeedbackCV(githubId);
-    const courses = await getStudentsStats(githubId);
+    const [feedback, courses] = await Promise.all([getFeedbackCV(githubId), getStudentsStats(githubId)]);
     const cvWithFeedbackAndCourses = {
       ...cv,
       feedback,
@@ -308,7 +313,7 @@ export const extendCV = (_: ILogger) => async (ctx: Router.RouterContext) => {
 };
 
 export const manageVisibility = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, isHidden: reqHiddenStatus } = ctx.request.body;
+  const { githubId, isHidden } = ctx.request.body;
 
   const cvRepository = getRepository(CV);
   const cv = await cvRepository.findOne({ where: { githubId } });
@@ -318,14 +323,7 @@ export const manageVisibility = (_: ILogger) => async (ctx: Router.RouterContext
     return;
   }
 
-  const prevHiddenStatus = cv.isHidden;
-
-  if (reqHiddenStatus === prevHiddenStatus) {
-    setResponse(ctx, OK, cv.isHidden);
-    return;
-  }
-
-  const result = await cvRepository.update({ githubId }, { isHidden: reqHiddenStatus });
+  const result = await cvRepository.update({ githubId }, { isHidden });
   setResponse(ctx, OK, result.raw.isHidden);
 };
 
