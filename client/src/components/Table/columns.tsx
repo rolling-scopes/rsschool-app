@@ -8,6 +8,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
       <div style={{ padding: 8 }}>
         <Input
+          autoFocus
           ref={node => (searchInput = node)}
           onKeyDown={e => (e.keyCode === 13 ? confirm() : undefined)}
           placeholder={`Search ${label || dataIndex}`}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components';
-import { Card, Typography, Input } from 'antd';
+import { Card, Typography, Input, Row, Col } from 'antd';
 import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -103,29 +103,31 @@ class MainCard extends React.Component<Props, State> {
                 isSettingsVisible={isProfileSettingsVisible}
                 hideSettings={this.hideProfileSettings}
                 content={
-                  <div>
-                    <p style={{ fontSize: 18, marginBottom: 5 }}>
-                      <Text strong>Name:</Text>
-                    </p>
-                    <p style={{ marginBottom: 20 }}>
-                      <Input
-                        value={name}
-                        placeholder="Firstname Lastname"
-                        onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.name')}
-                      />
-                    </p>
-                    <p style={{ fontSize: 18, marginBottom: 5 }}>
-                      <Text strong>Location:</Text>
-                    </p>
-                    <div style={{ marginBottom: 5 }}>
-                      <LocationSelect
-                        onChange={location => {
-                          onProfileSettingsChange(location, 'generalInfo.location');
-                        }}
-                        location={location}
-                      />
-                    </div>
-                  </div>
+                  <Row>
+                    <Col>
+                      <Row>
+                        <Text strong>Name</Text>
+                      </Row>
+                      <Row style={{ marginTop: 4 }}>
+                        <Input
+                          value={name}
+                          placeholder="Firstname Lastname"
+                          onChange={(event: any) => onProfileSettingsChange(event, 'generalInfo.name')}
+                        />
+                      </Row>
+
+                      <Row style={{ marginTop: 24 }}>
+                        <Text strong>Location</Text>
+                      </Row>
+                      <Row style={{ marginTop: 4 }}>
+                        <LocationSelect
+                          style={{ flex: 1 }}
+                          onChange={location => onProfileSettingsChange(location, 'generalInfo.location')}
+                          location={location}
+                        />
+                      </Row>
+                    </Col>
+                  </Row>
                 }
               />
             </>
