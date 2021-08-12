@@ -55,6 +55,8 @@ const getColumns = (
   storedTagColors: object,
   distinctTags: Array<string>,
   alias: string,
+  handleSplitByWeek: (event: CheckboxChangeEvent) => void,
+  isSplitedByWeek: boolean | undefined,
 ) => [
   {
     title: (
@@ -66,6 +68,8 @@ const getColumns = (
             hidenColumnsAndTypes={hidenColumnsAndTypes}
             handleFilter={handleFilter}
             setHidenColumnsAndTypes={setHidenColumnsAndTypes}
+            handleSplitByWeek={handleSplitByWeek}
+            isSplitedByWeek={isSplitedByWeek}
           />
         )}
         placement="bottomRight"
@@ -74,44 +78,39 @@ const getColumns = (
         <SettingOutlined />
       </Dropdown>
     ),
-    width: 20,
     dataIndex: '#',
     render: (_text: string, _record: CourseEvent, index: number) => index + 1,
   },
   {
     title: 'Date',
-    width: 120,
     dataIndex: 'dateTime',
-    render: dateWithTimeZoneRenderer(timeZone, 'MMM Do YYYY'),
+    render: isSplitedByWeek
+      ? dateWithTimeZoneRenderer(timeZone, 'ddd - MMM Do YYYY')
+      : dateWithTimeZoneRenderer(timeZone, 'MMM Do YYYY'),
     sorter: dateSorter('dateTime'),
     sortDirections: ['descend', 'ascend'],
-    defaultSortOrder: 'descend',
     editable: true,
   },
   {
     title: 'Time',
-    width: 60,
     dataIndex: 'dateTime',
     render: dateWithTimeZoneRenderer(timeZone, 'HH:mm'),
     editable: true,
   },
   {
     title: 'Type',
-    width: 120,
     dataIndex: ['event', 'type'],
     render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors),
     editable: true,
   },
   {
     title: 'Special',
-    width: 150,
     dataIndex: ['special'],
     render: (tags: string) => !!tags && tagsRenderer(tags.split(',')),
     editable: true,
   },
   {
     title: 'Name',
-    width: 150,
     dataIndex: ['event', 'name'],
     render: (value: string, row: any) => {
       return (
@@ -131,7 +130,6 @@ const getColumns = (
   },
   {
     title: 'Url',
-    width: 30,
     dataIndex: ['event', 'descriptionUrl'],
     render: urlRenderer,
     editable: true,
@@ -139,7 +137,6 @@ const getColumns = (
   { title: 'Duration', width: 60, dataIndex: 'duration', editable: true },
   {
     title: 'Organizer',
-    width: 140,
     dataIndex: ['organizer', 'githubId'],
     render: (value: string) => !!value && <GithubUserLink value={value} />,
     ...getColumnSearchProps('organizer.githubId'),
@@ -174,6 +171,7 @@ export function TableView({
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const [hidenColumnsAndTypes, setHidenColumnsAndTypes] = useLocalStorage<string[]>('settingsTypesAndColumns', []);
+  const [isSplitedByWeek, setIsSplitedByWeek] = useLocalStorage<boolean>('scheduleSplitedByWeek', false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const distinctTags = Array.from(new Set(data.map(element => element.event.type)));
 
@@ -213,6 +211,10 @@ export function TableView({
     if (!checked && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(value)) {
       setHidenColumnsAndTypes([...hidenColumnsAndTypes, value]);
     }
+  };
+
+  const handleSplitByWeek = ({ target: { checked } }: CheckboxChangeEvent) => {
+    setIsSplitedByWeek(checked);
   };
 
   const cancel = () => {
@@ -318,6 +320,8 @@ export function TableView({
     storedTagColors,
     distinctTags,
     alias,
+    handleSplitByWeek,
+    isSplitedByWeek,
   ).filter(
     element => element?.title && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(element.title.toString()),
   );
@@ -351,7 +355,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName="editable-row"
+        rowClassName={record => getTableRowClass(record, isSplitedByWeek)}
       />
     </Form>
   );
@@ -395,6 +399,18 @@ const getNewDataForUpdate = (entity: CourseEvent) => {
   }
 
   return dataForUpdate;
+};
+
+const getTableRowClass = (record: CourseEvent, isSplitedByWeek: boolean | undefined): string => {
+  if (!isSplitedByWeek) {
+    return '';
+  }
+
+  if (moment(record.dateTime).week() === moment().week()) {
+    return 'table-row-current';
+  }
+
+  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-dark';
 };
 
 export default TableView;

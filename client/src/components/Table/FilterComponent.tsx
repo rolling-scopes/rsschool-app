@@ -9,6 +9,8 @@ type Props = {
   hidenColumnsAndTypes: Array<string>;
   eventTypes: Array<string>;
   setHidenColumnsAndTypes: (event: Array<string>) => void;
+  handleSplitByWeek: (event: CheckboxChangeEvent) => void;
+  isSplitedByWeek: boolean | undefined;
 };
 
 const FilterComponent: React.FC<Props> = ({
@@ -16,6 +18,8 @@ const FilterComponent: React.FC<Props> = ({
   eventTypes,
   handleFilter,
   setHidenColumnsAndTypes,
+  handleSplitByWeek,
+  isSplitedByWeek,
 }) => {
   const renderColumns = COLUMNS_TYPES.map((el, ind) => {
     return (
@@ -55,6 +59,9 @@ const FilterComponent: React.FC<Props> = ({
       >
         Select all
       </Button>
+      <Checkbox value="By week" checked={isSplitedByWeek} onChange={handleSplitByWeek}>
+        Splitted by week
+      </Checkbox>
     </Space>
   );
 };
