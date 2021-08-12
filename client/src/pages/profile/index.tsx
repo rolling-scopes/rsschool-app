@@ -38,6 +38,7 @@ import MentorStatsCard from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
+import { withGoogleMaps } from 'components/withGoogleMaps';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { checkIsProfileOwner } from 'utils/profile-check';
@@ -491,4 +492,4 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
   }
 `;
 
-export default withRouter(withSession(ProfilePage));
+export default withGoogleMaps(withRouter(withSession(ProfilePage)));

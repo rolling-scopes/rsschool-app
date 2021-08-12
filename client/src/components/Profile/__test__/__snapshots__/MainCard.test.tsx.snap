@@ -158,67 +158,66 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
     />
     <ProfileSettingsDrawer
       content={
-        <div>
-          <p
-            style={
-              Object {
-                "fontSize": 18,
-                "marginBottom": 5,
-              }
-            }
-          >
-            <Text
-              strong={true}
-            >
-              Name:
-            </Text>
-          </p>
-          <p
-            style={
-              Object {
-                "marginBottom": 20,
-              }
-            }
-          >
-            <Input
-              onChange={[Function]}
-              placeholder="Firstname Lastname"
-              type="text"
-              value="Petr Pervyi"
-            />
-          </p>
-          <p
-            style={
-              Object {
-                "fontSize": 18,
-                "marginBottom": 5,
-              }
-            }
-          >
-            <Text
-              strong={true}
-            >
-              Location:
-            </Text>
-          </p>
-          <div
-            style={
-              Object {
-                "marginBottom": 5,
-              }
-            }
-          >
-            <LocationSelect
-              location={
+        <Row>
+          <Col>
+            <Row>
+              <Text
+                strong={true}
+              >
+                Name
+              </Text>
+            </Row>
+            <Row
+              style={
                 Object {
-                  "cityName": "Minsk",
-                  "countryName": "Belarus",
+                  "marginTop": 4,
                 }
               }
-              onChange={[Function]}
-            />
-          </div>
-        </div>
+            >
+              <Input
+                onChange={[Function]}
+                placeholder="Firstname Lastname"
+                type="text"
+                value="Petr Pervyi"
+              />
+            </Row>
+            <Row
+              style={
+                Object {
+                  "marginTop": 24,
+                }
+              }
+            >
+              <Text
+                strong={true}
+              >
+                Location
+              </Text>
+            </Row>
+            <Row
+              style={
+                Object {
+                  "marginTop": 4,
+                }
+              }
+            >
+              <LocationSelect
+                location={
+                  Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  }
+                }
+                onChange={[Function]}
+                style={
+                  Object {
+                    "flex": 1,
+                  }
+                }
+              />
+            </Row>
+          </Col>
+        </Row>
       }
       hideSettings={[Function]}
       isSettingsVisible={false}
