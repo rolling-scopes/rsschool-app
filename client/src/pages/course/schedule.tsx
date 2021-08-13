@@ -248,6 +248,7 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
     isTask: true,
     special: task.special,
     duration: task.duration,
+    score: task.score,
   } as CourseEvent;
 };
 

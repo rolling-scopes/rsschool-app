@@ -157,6 +157,11 @@ const getColumns = (
     },
     editable: true,
   },
+  {
+    title: 'Score',
+    dataIndex: 'score',
+    render: (value: number) => <Text strong>{value}</Text>,
+  },
 ];
 
 export function TableView({
