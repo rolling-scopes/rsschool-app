@@ -6,6 +6,7 @@ import { Location } from '../../../../common/models/profile';
 type Props = {
   onChange: (arg: Location | null) => void;
   location: Location | null;
+  style?: React.CSSProperties;
 };
 
 export function LocationSelect(props: Props) {
@@ -47,14 +48,8 @@ export function LocationSelect(props: Props) {
       value={value}
       placeholder="Select users"
       options={data.map(({ description }) => ({ value: description }))}
+      style={props.style}
     />
-    // <AutoComplete
-    //   value={value}
-
-    //   onChange={handleInput}
-    //   onSelect={handleSelect}
-    //   options={data.map(({ description }) => description)}
-    // />
   );
 }
 
