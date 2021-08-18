@@ -1,4 +1,4 @@
-import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
+import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
 import { Button, Col, Form, message, Row, Spin, Timeline, Typography, Checkbox } from 'antd';
 import { PageLayout, UserSearch } from 'components';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
@@ -12,7 +12,7 @@ import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { useAsync } from 'react-use';
 
 type Assignment = { student: StudentBasic; url: string };
-type HistoryItem = { comment: string; score: number; dateTime: number };
+type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
@@ -51,6 +51,20 @@ function CrossCheckHistory(props: { githubId: string | null; courseId: number; c
             <div>
               <StarTwoTone twoToneColor={i === 0 ? '#52c41a' : 'gray'} />{' '}
               <Typography.Text>{historyItem.score}</Typography.Text>
+            </div>
+            <div>
+              {historyItem.anonymous ? (
+                <>
+                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
+                  <Typography.Text>Your name is hidden</Typography.Text>
+                </>
+              ) : (
+                <>
+                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
+                  <Typography.Text>Your name is visible</Typography.Text>
+                </>
+              )}
+              <Typography.Text>{}</Typography.Text>
             </div>
             <div>
               <Typography.Text>
