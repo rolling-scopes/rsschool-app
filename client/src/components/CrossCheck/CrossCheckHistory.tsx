@@ -1,10 +1,10 @@
-import { ClockCircleOutlined, StarTwoTone } from '@ant-design/icons';
+import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
 import { Spin, Timeline, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 
-type HistoryItem = { comment: string; score: number; dateTime: number };
+type HistoryItem = { comment: string; score: number; dateTime: number; anonymous: boolean };
 
 export function CrossCheckHistory(props: { githubId: string | null; courseId: number; courseTaskId: number | null }) {
   if (props.githubId == null || props.courseTaskId == null) {
@@ -42,6 +42,20 @@ export function CrossCheckHistory(props: { githubId: string | null; courseId: nu
             <div>
               <StarTwoTone twoToneColor={i === 0 ? '#52c41a' : 'gray'} />{' '}
               <Typography.Text>{historyItem.score}</Typography.Text>
+            </div>
+            <div>
+              {historyItem.anonymous ? (
+                <>
+                  <EyeInvisibleTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
+                  <Typography.Text>Your name is hidden</Typography.Text>
+                </>
+              ) : (
+                <>
+                  <EyeTwoTone twoToneColor={i === 0 ? '#1890ff' : 'gray'} />{' '}
+                  <Typography.Text>Your name is visible</Typography.Text>
+                </>
+              )}
+              <Typography.Text>{}</Typography.Text>
             </div>
             <div>
               <Typography.Text>
