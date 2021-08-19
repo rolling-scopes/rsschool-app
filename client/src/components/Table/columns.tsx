@@ -32,6 +32,9 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     ),
     filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
+      if (value == null) {
+        return false;
+      }
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
       return fields.some(field =>
         (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),

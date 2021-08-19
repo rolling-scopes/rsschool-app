@@ -42,8 +42,8 @@ export class ScoreService {
 
       const calculateScore = (t: { courseTaskId: number; score: number }) => t.score * (weightMap[t.courseTaskId] ?? 1);
 
-      const scores = students.content
-        .map(({ id, rank, taskResults, totalScore, crossCheckScore, totalScoreChangeDate }) => {
+      const sortedScores = students.content
+        .map<ScoreRecord>(({ id, rank, taskResults, totalScore, crossCheckScore, totalScoreChangeDate }) => {
           const score = sum(taskResults.map(calculateScore));
 
           const newCrossCheckScore = round(
@@ -61,12 +61,15 @@ export class ScoreService {
             totalScoreChangeDate: scoreChanged ? new Date() : totalScoreChangeDate,
           };
         })
-        .sort((a, b) => b.totalScore - a.totalScore) // ['desc'] by totalScore
-        .map((it, i) => ({
-          ...it,
-          rank: i + 1,
-          changed: it.changed || it.rank != i + 1,
-        }))
+        .sort((a, b) => b.totalScore - a.totalScore); // ['desc'] by totalScore
+
+      const uniqueScores = sortedScores.map(s => s.totalScore).filter((s, i, arr) => arr.indexOf(s) === i);
+
+      const scores = sortedScores
+        .map(it => {
+          const rank = uniqueScores.indexOf(it.totalScore) + 1;
+          return { ...it, rank, changed: it.changed || it.rank != rank };
+        })
         .filter(it => it.changed)
         .map(({ changed, ...value }) => value);
 
@@ -196,3 +199,12 @@ export class ScoreService {
     };
   }
 }
+
+type ScoreRecord = {
+  id: number;
+  rank: number;
+  changed: boolean;
+  crossCheckScore: number;
+  totalScore: number;
+  totalScoreChangeDate: Date;
+};
