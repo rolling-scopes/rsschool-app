@@ -63,15 +63,15 @@ export class ScoreService {
         })
         .sort((a, b) => b.totalScore - a.totalScore); // ['desc'] by totalScore
 
-      const uniqueScores = sortedScores.map(s => s.totalScore).filter((s, i, arr) => arr.indexOf(s) === i);
+      const result: ScoreRecord[] = [];
 
-      const scores = sortedScores
-        .map(it => {
-          const rank = uniqueScores.indexOf(it.totalScore) + 1;
-          return { ...it, rank, changed: it.changed || it.rank != rank };
-        })
-        .filter(it => it.changed)
-        .map(({ changed, ...value }) => value);
+      sortedScores.forEach((it, index) => {
+        const prev = result[index - 1];
+        const rank = prev?.totalScore === it.totalScore ? prev.rank : index + 1;
+        result.push({ ...it, rank, changed: it.changed || it.rank != rank });
+      });
+
+      const scores = result.filter(it => it.changed).map(({ changed, ...value }) => value);
 
       await updateScoreStudents(scores);
 
