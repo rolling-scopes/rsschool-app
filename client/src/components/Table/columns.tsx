@@ -8,6 +8,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
       <div style={{ padding: 8 }}>
         <Input
+          autoFocus
           ref={node => (searchInput = node)}
           onKeyDown={e => (e.keyCode === 13 ? confirm() : undefined)}
           placeholder={`Search ${label || dataIndex}`}
@@ -31,6 +32,9 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
     ),
     filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     onFilter: (value: any, record: any) => {
+      if (value == null) {
+        return false;
+      }
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
       return fields.some(field =>
         (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),

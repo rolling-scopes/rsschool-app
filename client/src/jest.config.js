@@ -4,6 +4,7 @@ module.exports = {
     '^components(.*)$': '<rootDir>/components/$1',
     '^services(.*)$': '<rootDir>/services/$1',
     '^utils(.*)$': '<rootDir>/utils/$1',
+    '^configs(.*)$': '<rootDir>/configs/$1',
   },
   verbose: true,
 };
