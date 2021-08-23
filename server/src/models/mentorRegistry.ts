@@ -28,6 +28,9 @@ export class MentorRegistry {
   @Column()
   englishMentoring: boolean;
 
+  @Column({ type: 'simple-array', default: '' })
+  languagesMentoring: string[];
+
   @Column('varchar')
   preferedStudentsLocation: PreferredStudentsLocation;
 
