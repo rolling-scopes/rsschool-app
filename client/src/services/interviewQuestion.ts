@@ -12,6 +12,11 @@ export class InterviewQuestionService {
     return result.data.data;
   }
 
+  async updateInterviewQuestion(id: number, data: Partial<InterviewQuestion>) {
+    const result = await axios.put<InterviewQuestionResponse>(`/api/interview-question/${id}`, data);
+    return result.data.data;
+  }
+
   async getInterviewQuestions() {
     const result = await axios.get<InterviewQuestionsResponse>(`/api/interview-question`);
     return result.data.data;

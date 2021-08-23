@@ -53,7 +53,11 @@ export function QuestionsModalForm(props: Props) {
     try {
       const values = await form.validateFields().catch(() => null);
       const record = createRecord(values);
-      await interviewQuestionService.createInterviewQuestion(record);
+      if (question?.id) {
+        await interviewQuestionService.updateInterviewQuestion(question.id, record);
+      } else {
+        await interviewQuestionService.createInterviewQuestion(record);
+      }
       await loadData();
     } catch (error) {
       message.error('Something went wrong. Please try again later.');

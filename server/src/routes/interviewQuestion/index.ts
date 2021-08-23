@@ -5,6 +5,17 @@ import { ILogger } from '../../logger';
 import { InterviewQuestion } from '../../models';
 import { adminGuard } from '../guards';
 import { setResponse } from '../utils';
+import { Next } from 'koa';
+
+const validateId = async (ctx: Router.RouterContext, next: Next) => {
+  const id = Number(ctx.params.id);
+  if (isNaN(id)) {
+    setResponse(ctx, BAD_REQUEST, 'Incorrect [Id]');
+    return;
+  }
+  ctx.params.id = id;
+  await next();
+};
 
 const getInterviewQuestions = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
@@ -30,11 +41,27 @@ const createInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterCo
   }
 };
 
+const updateInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+  try {
+    const id: number = Number(ctx.params.id);
+    const question = ctx.request.body;
+    const interviewQuestion = await getRepository(InterviewQuestion).findOne(id);
+    const updatedQuestions = await getRepository(InterviewQuestion).save({ ...interviewQuestion, ...question });
+    setResponse(ctx, OK, updatedQuestions);
+  } catch (error) {
+    if (logger) {
+      logger.error(error.message);
+    }
+    setResponse(ctx, BAD_REQUEST, { message: error.message });
+  }
+};
+
 export function interviewQuestionRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/interview-question' });
 
   router.get('/', adminGuard, getInterviewQuestions(logger));
   router.post('/', adminGuard, createInterviewQuestion(logger));
+  router.put('/:id', adminGuard, validateId, updateInterviewQuestion(logger));
 
   return router;
 }

@@ -5,12 +5,6 @@ import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 export function getColumns(editQuestionHandler: (question: InterviewQuestion) => void) {
   return [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
-      width: 50,
-    },
-    {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
