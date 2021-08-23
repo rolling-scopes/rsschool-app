@@ -1,7 +1,8 @@
-import { Button, Col, Layout, message, Row, Spin } from 'antd';
+import { Col, Layout, message, Row, Spin } from 'antd';
 import { AdminSider, Header, Session } from 'components';
 import { AddCategoryButton } from 'modules/InterviewQuestions/components/AddCategoryButton';
 import { AddQuestionButton } from 'modules/InterviewQuestions/components/AddQuestionButton';
+import { QuestionsModalForm } from 'modules/InterviewQuestions/components/QuestionModalForm';
 import { QuestionsTable } from 'modules/InterviewQuestions/components/QuestionsTable';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
@@ -13,9 +14,11 @@ type Props = { session: Session };
 
 export function InterviewQuestionsPage(props: Props) {
   const [questions, setQuestions] = useState([] as InterviewQuestion[]);
-  console.log('🚀 ~ file: index.tsx ~ line 13 ~ Page ~ questions', questions);
   const [categories, setCategories] = useState([] as InterviewQuestionCategory[]);
-  console.log('🚀 ~ file: index.tsx ~ line 15 ~ Page ~ categories', categories);
+  const [modalQuestionData, setModalQuestionData] = useState(null as InterviewQuestion | null);
+  const [modalQuestionIsVisible, setModalQuestionIsVisible] = useState(false);
+  const [modalCategoryData, setModalCategoryData] = useState(null as InterviewQuestionCategory | null);
+  const [modalCategoryIsVisible, setModalCategoryIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const interviewQuestionService = new InterviewQuestionService();
@@ -39,16 +42,23 @@ export function InterviewQuestionsPage(props: Props) {
 
   useAsync(loadData, []);
 
-  const addQuestionHandler = () => {
-    console.log('s');
+  const handleAddQuestion = () => {
+    setModalQuestionData(null);
+    setModalQuestionIsVisible(true);
   };
 
-  const addCategoryHandler = () => {
-    console.log('s');
+  const handleEditQuestion = (question: InterviewQuestion) => {
+    setModalQuestionData(question);
+    setModalQuestionIsVisible(true);
   };
 
-  const editQuestionHandler = (question: InterviewQuestion) => {
-    console.log(question);
+  const handleModalQuestionCancel = () => {
+    setModalQuestionIsVisible(false);
+  };
+
+  const handleAddCategory = () => {
+    setModalCategoryData(null);
+    setModalCategoryIsVisible(true);
   };
 
   return (
@@ -59,19 +69,26 @@ export function InterviewQuestionsPage(props: Props) {
         <Content style={{ margin: 8 }}>
           <Row gutter={16} justify="start">
             <Col>
-              <AddQuestionButton onClick={addQuestionHandler} />
+              <AddQuestionButton onClick={handleAddQuestion} />
             </Col>
             <Col>
-              <AddCategoryButton onClick={addCategoryHandler} />
+              <AddCategoryButton onClick={handleAddCategory} />
             </Col>
           </Row>
         </Content>
         <Content>
           <Spin spinning={loading}>
-            <QuestionsTable data={questions} editQuestionHandler={editQuestionHandler} />
+            <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} />
           </Spin>
         </Content>
       </Layout>
+      <QuestionsModalForm
+        categories={categories}
+        question={modalQuestionData}
+        isVisible={modalQuestionIsVisible}
+        onCancel={handleModalQuestionCancel}
+        loadData={loadData}
+      />
     </Layout>
   );
 }

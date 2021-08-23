@@ -4,11 +4,11 @@ import { InterviewQuestion } from 'services/models';
 
 type Props = {
   data: InterviewQuestion[];
-  editQuestionHandler: (question: InterviewQuestion) => void;
+  handleEditQuestion: (question: InterviewQuestion) => void;
 };
 
 export function QuestionsTable(props: Props) {
   return (
-    <Table pagination={{ pageSize: 100 }} dataSource={props.data} columns={getColumns(props.editQuestionHandler)} />
+    <Table pagination={{ pageSize: 100 }} dataSource={props.data} columns={getColumns(props.handleEditQuestion)} />
   );
 }
