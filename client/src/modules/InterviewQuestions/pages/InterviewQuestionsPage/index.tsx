@@ -1,15 +1,18 @@
-import { Col, Layout, message, Row, Spin } from 'antd';
+import { Col, Layout, message, Row, Spin, Tabs } from 'antd';
 import { AdminSider, Header, Session } from 'components';
 import { AddCategoryButton } from 'modules/InterviewQuestions/components/Buttons/AddCategoryButton';
 import { AddQuestionButton } from 'modules/InterviewQuestions/components/Buttons/AddQuestionButton';
-import { QuestionsModalForm } from 'modules/InterviewQuestions/components/QuestionModalForm';
-import { QuestionsTable } from 'modules/InterviewQuestions/components/QuestionsTable';
+import { CategoryModalForm } from 'modules/InterviewQuestions/components/Modals/CategoryModalForm';
+import { QuestionsModalForm } from 'modules/InterviewQuestions/components/Modals/QuestionModalForm';
+import { CategoriesTable } from 'modules/InterviewQuestions/components/Tables/CategoriesTable';
+import { QuestionsTable } from 'modules/InterviewQuestions/components/Tables/QuestionsTable';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { InterviewQuestionCategoryService, InterviewQuestionService } from 'services/interviewQuestion';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
 const { Content } = Layout;
+const { TabPane } = Tabs;
 type Props = { session: Session };
 
 export function InterviewQuestionsPage(props: Props) {
@@ -61,6 +64,15 @@ export function InterviewQuestionsPage(props: Props) {
     setModalCategoryIsVisible(true);
   };
 
+  const handleEditCategory = (category: InterviewQuestionCategory) => {
+    setModalCategoryData(category);
+    setModalCategoryIsVisible(true);
+  };
+
+  const handleModalCategoryCancel = () => {
+    setModalCategoryIsVisible(false);
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <AdminSider isAdmin={props.session.isAdmin} />
@@ -75,10 +87,15 @@ export function InterviewQuestionsPage(props: Props) {
               <AddCategoryButton onClick={handleAddCategory} />
             </Col>
           </Row>
-        </Content>
-        <Content>
           <Spin spinning={loading}>
-            <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} loadData={loadData} />
+            <Tabs defaultActiveKey="QuestionsTable">
+              <TabPane tab="Questions Table" key="QuestionsTable">
+                <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} loadData={loadData} />
+              </TabPane>
+              <TabPane tab="Categories Table" key="CategoriesTable">
+                <CategoriesTable data={categories} handleEditCategory={handleEditCategory} />
+              </TabPane>
+            </Tabs>
           </Spin>
         </Content>
       </Layout>
@@ -88,6 +105,13 @@ export function InterviewQuestionsPage(props: Props) {
         isVisible={modalQuestionIsVisible}
         onCancel={handleModalQuestionCancel}
         loadData={loadData}
+      />
+      <CategoryModalForm
+        questions={questions}
+        loadData={loadData}
+        isVisible={modalCategoryIsVisible}
+        category={modalCategoryData}
+        onCancel={handleModalCategoryCancel}
       />
     </Layout>
   );

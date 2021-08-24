@@ -1,5 +1,5 @@
 import { message, Table } from 'antd';
-import { getColumns } from 'modules/InterviewQuestions/data/getColumns';
+import { getQuestionsColumns } from 'modules/InterviewQuestions/data/getColumns';
 import { InterviewQuestionService } from 'services/interviewQuestion';
 import { InterviewQuestion } from 'services/models';
 
@@ -24,9 +24,10 @@ export function QuestionsTable(props: Props) {
 
   return (
     <Table
-      pagination={{ pageSize: 100 }}
+      pagination={{ pageSize: 50 }}
+      style={{ margin: 8 }}
       dataSource={data}
-      columns={getColumns(handleEditQuestion, handleDeleteQuestion)}
+      columns={getQuestionsColumns(handleEditQuestion, handleDeleteQuestion)}
     />
   );
 }

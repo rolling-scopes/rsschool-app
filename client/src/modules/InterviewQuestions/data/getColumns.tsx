@@ -1,8 +1,8 @@
-import { Button, Popconfirm, Space, Tag } from 'antd';
+import { Button, Popconfirm, Popover, Space, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
-export function getColumns(
+export function getQuestionsColumns(
   handleEditQuestion: (question: InterviewQuestion) => void,
   handleDeleteQuestion: (id: number) => Promise<void>,
 ) {
@@ -37,9 +37,47 @@ export function getColumns(
       key: 'actions',
       render: (_: InterviewQuestion) => (
         <Space size="middle">
-          <Button icon={<EditOutlined />} onClick={() => handleEditQuestion(_)} />
+          <Button icon={<EditOutlined size={12} />} onClick={() => handleEditQuestion(_)} />
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(_.id)}>
-            <Button icon={<DeleteOutlined />} danger />
+            <Button icon={<DeleteOutlined size={12} />} danger />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+}
+
+export function getCategoriesColumns(handleEditCategory: (category: InterviewQuestionCategory) => void) {
+  return [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: 200,
+    },
+    {
+      title: 'Questions',
+      dataIndex: 'questions',
+      key: 'questions',
+      render: (questions: InterviewQuestion[]) => (
+        <>
+          {questions.map(question => (
+            <Popover content={question.question} title={question.title} trigger="hover">
+              <Tag>{question.title}</Tag>
+            </Popover>
+          ))}
+        </>
+      ),
+    },
+    {
+      title: 'Actions',
+      width: 150,
+      key: 'actions',
+      render: (_: InterviewQuestionCategory) => (
+        <Space size="middle">
+          <Button icon={<EditOutlined size={12} onClick={() => handleEditCategory(_)} />} />
+          <Popconfirm title="Sure to delete?">
+            <Button icon={<DeleteOutlined size={12} />} danger />
           </Popconfirm>
         </Space>
       ),

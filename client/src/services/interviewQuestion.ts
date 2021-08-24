@@ -30,12 +30,17 @@ export class InterviewQuestionService {
 
 export class InterviewQuestionCategoryService {
   async createInterviewQuestionCategory(data: Partial<InterviewQuestionCategory>) {
-    const result = await axios.post<InterviewQuestionCategoryResponse>(`/api/interview-question`, data);
+    const result = await axios.post<InterviewQuestionCategoryResponse>(`/api/interview-question-category`, data);
     return result.data.data;
   }
 
   async getInterviewQuestionCategories() {
     const result = await axios.get<InterviewQuestionCategoriesResponse>(`/api/interview-question-category`);
+    return result.data.data;
+  }
+
+  async updateInterviewQuestionCategory(id: number, data: Partial<InterviewQuestionCategory>) {
+    const result = await axios.put<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`, data);
     return result.data.data;
   }
 }
