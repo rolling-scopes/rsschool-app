@@ -2,7 +2,10 @@ import { Button, Popconfirm, Space, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
-export function getColumns(editQuestionHandler: (question: InterviewQuestion) => void) {
+export function getColumns(
+  handleEditQuestion: (question: InterviewQuestion) => void,
+  handleDeleteQuestion: (id: number) => Promise<void>,
+) {
   return [
     {
       title: 'Title',
@@ -34,8 +37,8 @@ export function getColumns(editQuestionHandler: (question: InterviewQuestion) =>
       key: 'actions',
       render: (_: InterviewQuestion) => (
         <Space size="middle">
-          <Button icon={<EditOutlined />} onClick={() => editQuestionHandler(_)} />
-          <Popconfirm title="Sure to delete?">
+          <Button icon={<EditOutlined />} onClick={() => handleEditQuestion(_)} />
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(_.id)}>
             <Button icon={<DeleteOutlined />} danger />
           </Popconfirm>
         </Space>

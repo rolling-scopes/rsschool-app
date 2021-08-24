@@ -2,7 +2,7 @@ import { Form, Input, message, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { Option } from 'antd/lib/mentions';
 import Modal from 'antd/lib/modal/Modal';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { InterviewQuestionService } from 'services/interviewQuestion';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 

@@ -17,6 +17,11 @@ export class InterviewQuestionService {
     return result.data.data;
   }
 
+  async deleteInterviewQuestion(id: number) {
+    const result = await axios.delete<InterviewQuestionResponse>(`/api/interview-question/${id}`);
+    return result.data.data;
+  }
+
   async getInterviewQuestions() {
     const result = await axios.get<InterviewQuestionsResponse>(`/api/interview-question`);
     return result.data.data;

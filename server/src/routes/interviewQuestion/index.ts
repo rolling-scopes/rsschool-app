@@ -6,6 +6,7 @@ import { InterviewQuestion } from '../../models';
 import { adminGuard } from '../guards';
 import { setResponse } from '../utils';
 import { Next } from 'koa';
+import { createDeleteRoute } from '../common';
 
 const validateId = async (ctx: Router.RouterContext, next: Next) => {
   const id = Number(ctx.params.id);
@@ -62,6 +63,7 @@ export function interviewQuestionRoute(logger: ILogger) {
   router.get('/', adminGuard, getInterviewQuestions(logger));
   router.post('/', adminGuard, createInterviewQuestion(logger));
   router.put('/:id', adminGuard, validateId, updateInterviewQuestion(logger));
+  router.delete('/:id', adminGuard, validateId, createDeleteRoute(InterviewQuestion, logger));
 
   return router;
 }

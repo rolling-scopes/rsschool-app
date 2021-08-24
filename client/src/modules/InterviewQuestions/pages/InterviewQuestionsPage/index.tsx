@@ -1,7 +1,7 @@
 import { Col, Layout, message, Row, Spin } from 'antd';
 import { AdminSider, Header, Session } from 'components';
-import { AddCategoryButton } from 'modules/InterviewQuestions/components/AddCategoryButton';
-import { AddQuestionButton } from 'modules/InterviewQuestions/components/AddQuestionButton';
+import { AddCategoryButton } from 'modules/InterviewQuestions/components/Buttons/AddCategoryButton';
+import { AddQuestionButton } from 'modules/InterviewQuestions/components/Buttons/AddQuestionButton';
 import { QuestionsModalForm } from 'modules/InterviewQuestions/components/QuestionModalForm';
 import { QuestionsTable } from 'modules/InterviewQuestions/components/QuestionsTable';
 import { useState } from 'react';
@@ -78,7 +78,7 @@ export function InterviewQuestionsPage(props: Props) {
         </Content>
         <Content>
           <Spin spinning={loading}>
-            <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} />
+            <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} loadData={loadData} />
           </Spin>
         </Content>
       </Layout>
