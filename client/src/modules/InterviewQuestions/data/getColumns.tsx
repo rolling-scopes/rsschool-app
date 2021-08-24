@@ -37,9 +37,9 @@ export function getQuestionsColumns(
       key: 'actions',
       render: (_: InterviewQuestion) => (
         <Space size="middle">
-          <Button icon={<EditOutlined size={12} />} onClick={() => handleEditQuestion(_)} />
+          <Button size="small" icon={<EditOutlined size={8} />} onClick={() => handleEditQuestion(_)} />
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(_.id)}>
-            <Button icon={<DeleteOutlined size={12} />} danger />
+            <Button size="small" icon={<DeleteOutlined size={8} />} danger />
           </Popconfirm>
         </Space>
       ),
@@ -78,9 +78,9 @@ export function getCategoriesColumns(
       key: 'actions',
       render: (_: InterviewQuestionCategory) => (
         <Space size="middle">
-          <Button icon={<EditOutlined size={12} onClick={() => handleEditCategory(_)} />} />
+          <Button size="small" icon={<EditOutlined size={8} onClick={() => handleEditCategory(_)} />} />
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteCategory(_.id)}>
-            <Button icon={<DeleteOutlined size={12} />} danger />
+            <Button size="small" icon={<DeleteOutlined size={8} />} danger />
           </Popconfirm>
         </Space>
       ),
