@@ -40,7 +40,8 @@ export function getQuestionsColumns(
           return acc;
         }, [] as { text: string; value: string }[]),
       ],
-      onFilter: (value: string, record: InterviewQuestion) => record.categories.filter(el => el.name === value).length > 0,
+      onFilter: (value: string, record: InterviewQuestion) =>
+        record.categories.filter(el => el.name === value).length > 0,
     },
     {
       title: 'Actions',
