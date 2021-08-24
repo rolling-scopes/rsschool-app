@@ -1,10 +1,9 @@
-export * from './logging';
-
+import { bestWorksRoute } from './bestWorks';
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseRoute, courseCrudRoute } from './course';
+import { courseCrudRoute, courseRoute } from './course';
 import { coursesRoute } from './courses';
 import { discordServerRoute } from './discordServer';
 import { userGroupRoute } from './userGroup';
@@ -33,7 +32,9 @@ import { opportunitiesRoute } from './opportunities';
 import { alertsRoute } from './alerts';
 
 import { ILogger } from '../logger';
-import { userRolesMiddleware, courseMiddleware } from './middlewares';
+import { courseMiddleware, userRolesMiddleware } from './middlewares';
+
+export * from './logging';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -72,6 +73,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, stageRoute(logger));
   applyRouter(router, stagesRoute(logger));
+  applyRouter(router, bestWorksRoute(logger));
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));

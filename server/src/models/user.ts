@@ -4,12 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  OneToMany,
-  OneToOne,
   Index,
   JoinColumn,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Student } from './student';
 import { Mentor } from './mentor';
@@ -18,6 +19,7 @@ import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { CourseManager } from './courseManager';
 import { Discord } from '../../../common/models/profile';
+import { BestWork } from './index';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -187,6 +189,9 @@ export class User {
 
   @OneToMany(_ => CourseManager, (courseManager: CourseManager) => courseManager.user, { nullable: true })
   courseManagers: CourseManager[] | null;
+
+  @ManyToMany(_ => BestWork)
+  bestWorks: BestWork[];
 
   @BeforeInsert()
   beforeInsert?() {

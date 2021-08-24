@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { flatMap } from 'lodash';
 import { config } from '../config';
-import { Course, IUserSession, CourseRoles, User, CourseTask, CourseUser, CourseRole } from '../models';
+import { Course, CourseRole, CourseRoles, CourseTask, CourseUser, IUserSession, User } from '../models';
 import { userService } from '../services';
 
 const hirers: string[] = config.roles.hirers;
@@ -48,6 +48,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       courseManagers: [],
       profilePermissions: null,
       opportunitiesConsent: false,
+      bestWorks: [],
     };
     const createdUser = await getRepository(User).save(user);
     const userId = createdUser.id!;

@@ -1,6 +1,7 @@
 import { Alert, AlertTypes } from './alert';
+import { BestWork } from './bestWork';
 import { Certificate } from './certificate';
-import { Consent, ChannelType } from './consent';
+import { ChannelType, Consent } from './consent';
 import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
@@ -39,6 +40,7 @@ export * from './session';
 export {
   Alert,
   AlertTypes,
+  BestWork,
   Certificate,
   Course,
   CourseEvent,
@@ -80,6 +82,7 @@ export {
 
 export const models = [
   Alert,
+  BestWork,
   Certificate,
   Course,
   CourseEvent,
