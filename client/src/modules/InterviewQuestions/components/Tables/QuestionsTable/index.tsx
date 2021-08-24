@@ -1,16 +1,17 @@
 import { message, Table } from 'antd';
 import { getQuestionsColumns } from 'modules/InterviewQuestions/data/getColumns';
 import { InterviewQuestionService } from 'services/interviewQuestion';
-import { InterviewQuestion } from 'services/models';
+import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
 type Props = {
   data: InterviewQuestion[];
   handleEditQuestion: (question: InterviewQuestion) => void;
   loadData: () => Promise<void>;
+  categories: InterviewQuestionCategory[];
 };
 
 export function QuestionsTable(props: Props) {
-  const { data, handleEditQuestion, loadData } = props;
+  const { data, handleEditQuestion, loadData, categories } = props;
   const interviewQuestionService = new InterviewQuestionService();
 
   const handleDeleteQuestion = async (id: number) => {
@@ -27,7 +28,7 @@ export function QuestionsTable(props: Props) {
       pagination={{ pageSize: 50 }}
       style={{ margin: 8 }}
       dataSource={data}
-      columns={getQuestionsColumns(handleEditQuestion, handleDeleteQuestion)}
+      columns={getQuestionsColumns(handleEditQuestion, handleDeleteQuestion, categories)}
     />
   );
 }

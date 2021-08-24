@@ -90,7 +90,12 @@ export function InterviewQuestionsPage(props: Props) {
           <Spin spinning={loading}>
             <Tabs defaultActiveKey="QuestionsTable">
               <TabPane tab="Questions Table" key="QuestionsTable">
-                <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} loadData={loadData} />
+                <QuestionsTable
+                  data={questions}
+                  handleEditQuestion={handleEditQuestion}
+                  loadData={loadData}
+                  categories={categories}
+                />
               </TabPane>
               <TabPane tab="Categories Table" key="CategoriesTable">
                 <CategoriesTable data={categories} handleEditCategory={handleEditCategory} loadData={loadData} />

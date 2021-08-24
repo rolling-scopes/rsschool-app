@@ -6,6 +6,7 @@ import { getColumnSearchProps, stringSorter } from 'components/Table';
 export function getQuestionsColumns(
   handleEditQuestion: (question: InterviewQuestion) => void,
   handleDeleteQuestion: (id: number) => Promise<void>,
+  questionCategories: InterviewQuestionCategory[],
 ) {
   return [
     {
@@ -33,6 +34,13 @@ export function getQuestionsColumns(
         </>
       ),
       width: 200,
+      filters: [
+        ...questionCategories.reduce((acc, el) => {
+          acc.push({ text: el.name, value: el.name });
+          return acc;
+        }, [] as { text: string; value: string }[]),
+      ],
+      onFilter: (value: any, record: InterviewQuestion) => record.categories.filter(el => el.name === value).length > 0,
     },
     {
       title: 'Actions',
