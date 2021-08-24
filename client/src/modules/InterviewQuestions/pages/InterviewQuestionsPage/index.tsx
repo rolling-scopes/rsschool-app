@@ -93,7 +93,7 @@ export function InterviewQuestionsPage(props: Props) {
                 <QuestionsTable data={questions} handleEditQuestion={handleEditQuestion} loadData={loadData} />
               </TabPane>
               <TabPane tab="Categories Table" key="CategoriesTable">
-                <CategoriesTable data={categories} handleEditCategory={handleEditCategory} />
+                <CategoriesTable data={categories} handleEditCategory={handleEditCategory} loadData={loadData} />
               </TabPane>
             </Tabs>
           </Spin>

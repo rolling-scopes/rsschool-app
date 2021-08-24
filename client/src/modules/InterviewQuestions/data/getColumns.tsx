@@ -47,7 +47,10 @@ export function getQuestionsColumns(
   ];
 }
 
-export function getCategoriesColumns(handleEditCategory: (category: InterviewQuestionCategory) => void) {
+export function getCategoriesColumns(
+  handleEditCategory: (category: InterviewQuestionCategory) => void,
+  handleDeleteCategory: (id: number) => Promise<void>,
+) {
   return [
     {
       title: 'Name',
@@ -76,7 +79,7 @@ export function getCategoriesColumns(handleEditCategory: (category: InterviewQue
       render: (_: InterviewQuestionCategory) => (
         <Space size="middle">
           <Button icon={<EditOutlined size={12} onClick={() => handleEditCategory(_)} />} />
-          <Popconfirm title="Sure to delete?">
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteCategory(_.id)}>
             <Button icon={<DeleteOutlined size={12} />} danger />
           </Popconfirm>
         </Space>

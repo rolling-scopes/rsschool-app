@@ -43,4 +43,9 @@ export class InterviewQuestionCategoryService {
     const result = await axios.put<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`, data);
     return result.data.data;
   }
+
+  async deleteInterviewQuestionCategory(id: number) {
+    const result = await axios.delete<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`);
+    return result.data.data;
+  }
 }
