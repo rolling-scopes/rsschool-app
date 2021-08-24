@@ -2,7 +2,7 @@ import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { adminGuard } from '../guards';
+import { anyCoursePowerUserGuard } from '../guards';
 import { setResponse } from '../utils';
 import { InterviewQuestionCategory } from '../../models/interviewQuestionCategory';
 import { Next } from 'koa';
@@ -60,10 +60,10 @@ const updateInterviewQuestionCategory = (logger: ILogger) => async (ctx: Router.
 export function interviewQuestionCategoryRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/interview-question-category' });
 
-  router.get('/', adminGuard, getInterviewQuestionCategories(logger));
-  router.post('/', adminGuard, createInterviewQuestionCategory(logger));
-  router.put('/:id', adminGuard, validateId, updateInterviewQuestionCategory(logger));
-  router.delete('/:id', adminGuard, validateId, createDeleteRoute(InterviewQuestionCategory, logger));
+  router.get('/', anyCoursePowerUserGuard, getInterviewQuestionCategories(logger));
+  router.post('/', anyCoursePowerUserGuard, createInterviewQuestionCategory(logger));
+  router.put('/:id', anyCoursePowerUserGuard, validateId, updateInterviewQuestionCategory(logger));
+  router.delete('/:id', anyCoursePowerUserGuard, validateId, createDeleteRoute(InterviewQuestionCategory, logger));
 
   return router;
 }

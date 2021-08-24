@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { InterviewQuestion } from '../../models';
-import { adminGuard } from '../guards';
+import { anyCoursePowerUserGuard } from '../guards';
 import { setResponse } from '../utils';
 import { Next } from 'koa';
 import { createDeleteRoute } from '../common';
@@ -60,10 +60,10 @@ const updateInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterCo
 export function interviewQuestionRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/interview-question' });
 
-  router.get('/', adminGuard, getInterviewQuestions(logger));
-  router.post('/', adminGuard, createInterviewQuestion(logger));
-  router.put('/:id', adminGuard, validateId, updateInterviewQuestion(logger));
-  router.delete('/:id', adminGuard, validateId, createDeleteRoute(InterviewQuestion, logger));
+  router.get('/', anyCoursePowerUserGuard, getInterviewQuestions(logger));
+  router.post('/', anyCoursePowerUserGuard, createInterviewQuestion(logger));
+  router.put('/:id', anyCoursePowerUserGuard, validateId, updateInterviewQuestion(logger));
+  router.delete('/:id', anyCoursePowerUserGuard, validateId, createDeleteRoute(InterviewQuestion, logger));
 
   return router;
 }
