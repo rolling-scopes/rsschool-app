@@ -1,6 +1,7 @@
 import { Button, Popconfirm, Popover, Space, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
+import { stringSorter } from 'components/Table';
 
 export function getQuestionsColumns(
   handleEditQuestion: (question: InterviewQuestion) => void,
@@ -11,6 +12,7 @@ export function getQuestionsColumns(
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      sorter: stringSorter<InterviewQuestion>('title'),
       width: 200,
     },
     {
@@ -56,6 +58,7 @@ export function getCategoriesColumns(
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: stringSorter<InterviewQuestionCategory>('name'),
       width: 200,
     },
     {
