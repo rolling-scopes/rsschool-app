@@ -1,8 +1,18 @@
-import globalAxios, { AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance, AxiosResponse } from 'axios';
 import { IForm } from '../components/BestWorks/AddBestWork';
 
 interface IPostBestWork extends IForm {
   course: number;
+}
+
+export interface ICourse {
+  courseId: number;
+  courseName: string;
+}
+
+export interface ITask {
+  taskId: number;
+  taskName: string;
 }
 
 export class BestWorkService {
@@ -13,8 +23,17 @@ export class BestWorkService {
   }
 
   async postBestWork(data: IPostBestWork) {
-    console.log(data);
-    const result = this.axios.post<Response>('/', data);
+    const result = await this.axios.post('/', data);
     return result;
+  }
+
+  async getCourseList(): Promise<ICourse[]> {
+    const courses = await this.axios.get<AxiosResponse<ICourse[]>>('/course/');
+    return courses.data.data;
+  }
+
+  async getTaskList(id: number): Promise<ITask[]> {
+    const tasks = await this.axios.get<AxiosResponse<ITask[]>>(`/course/${id}`);
+    return tasks.data.data;
   }
 }

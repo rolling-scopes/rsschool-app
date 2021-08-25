@@ -5,9 +5,7 @@ import { AddBestWork } from '../components/BestWorks/AddBestWork';
 import withCourseData from '../components/withCourseData';
 import { CoursePageProps } from '../services/models';
 import { CourseService, CourseTask } from '../services/course';
-import { Col, Row, Select } from 'antd';
-
-const { Option } = Select;
+import { SelectBestWork } from '../components/BestWorks/SelectBestWork';
 
 type Props = CoursePageProps;
 
@@ -37,26 +35,7 @@ function Page(props: Props) {
   return (
     <PageLayoutSimple loading={false} githubId={props.session.githubId} title="Best works">
       {isAvailableAddButton && <AddBestWork course={props.course.id} tasks={tasks} />}
-      <Row>
-        <Col span={12}>
-          <Select placeholder="Please select course">
-            {tasks.map(e => (
-              <Option value={e.taskId} key={e.id}>
-                {e.name}
-              </Option>
-            ))}
-          </Select>
-        </Col>
-        <Col span={12}>
-          <Select placeholder="Please select task">
-            {tasks.map(e => (
-              <Option value={e.taskId} key={e.id}>
-                {e.name}
-              </Option>
-            ))}
-          </Select>
-        </Col>
-      </Row>
+      <SelectBestWork />
     </PageLayoutSimple>
   );
 }
