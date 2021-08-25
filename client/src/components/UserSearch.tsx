@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Select } from 'antd';
 import { GithubAvatar } from 'components';
 import { get } from 'lodash';
@@ -10,11 +10,12 @@ export type UserProps = SelectProps<string> & {
   searchFn?: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
   keyField?: 'id' | 'githubId';
+  selectType?: 'multiple' | 'tags';
 };
 
 export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
-  const { searchFn = defaultSearch, defaultValues, keyField, ...otherProps } = props;
+  const { searchFn = defaultSearch, defaultValues, keyField, selectType, ...otherProps } = props;
 
   useEffect(() => {
     setData(defaultValues ?? []);
@@ -41,6 +42,7 @@ export function UserSearch(props: UserProps) {
       onSearch={handleSearch}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
+      mode={selectType}
     >
       {data.map(person => {
         const key = keyField ? get(person, keyField) : person.id;

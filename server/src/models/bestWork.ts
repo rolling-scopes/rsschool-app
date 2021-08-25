@@ -23,9 +23,6 @@ export class BestWork {
   @Column()
   imageUrl: string;
 
-  @Column()
-  description: string;
-
   @Column({ type: 'simple-array', default: [] })
   tags: string[];
 
