@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Typography, Row, Col, Button, message } from 'antd';
+import { Typography, Row, Col, Button, message, Modal } from 'antd';
 import CommonCard from './CommonDashboardCard';
-import { GithubFilled } from '@ant-design/icons';
+import { GithubFilled, WarningOutlined } from '@ant-design/icons';
 
 type Props = {
   url?: string;
@@ -17,11 +17,32 @@ export function RepositoryCard(props: Props) {
   const { url, githubId, onSendInviteRepository, updateUrl } = props;
   const nameGithubRepository = getNameGithubRepository(url);
 
+  const showInformation = () => {
+    Modal.info({
+      icon: <WarningOutlined style={{ color: 'red', fontWeight: 700, fontSize: 24 }} />,
+      title: <h3 style={{ color: 'red', fontWeight: 800 }}>ATTENTION</h3>,
+      content: (
+        <div style={{ fontSize: 16, fontWeight: 700 }}>
+          <p>
+            GitHub will automatically send you an invite to access the repository. The invite comes to the mail you
+            specified when registering on GitHub (<span style={{ color: 'red', fontWeight: 700 }}>ATTENTION:</span> not
+            to the mail you specified in the RS APP)
+          </p>
+          <p style={{ fontSize: 18, fontWeight: 800, color: 'red' }}>
+            After creating a private school repository, you must go to your mail, find an invitation EMAIL and accept
+            it!
+          </p>
+        </div>
+      ),
+    });
+  };
+
   const handleSubmit = async () => {
     try {
       await onSendInviteRepository(githubId);
       updateUrl();
       message.success('Your request has been submitted.');
+      showInformation();
     } catch (e) {
       message.error('An error occurred. Please try later.');
     }
