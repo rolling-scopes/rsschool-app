@@ -41,7 +41,7 @@ export function QuestionsModalForm(props: Props) {
     return {
       title: values.title,
       question: values.question,
-      categories: values.categories.reduce((acc, el) => {
+      categories: values.categories?.reduce((acc, el) => {
         const category = categories.find(category => category.name === el);
         if (category) acc.push(category);
         return acc;

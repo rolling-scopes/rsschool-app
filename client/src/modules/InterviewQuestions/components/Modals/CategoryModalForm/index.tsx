@@ -37,7 +37,7 @@ export function CategoryModalForm(props: Props) {
   const createRecord = (values: IValues) => {
     return {
       name: values.name,
-      questions: values.questions.reduce((acc, el) => {
+      questions: values.questions?.reduce((acc, el) => {
         const question = questions.find(question => question.title === el);
         if (question) acc.push(question);
         return acc;
