@@ -4,7 +4,11 @@ import { BestWorkService, ICourse, ITask } from '../../services/bestWork';
 
 const { Option } = Select;
 
-export function SelectBestWork() {
+interface ISelectBestWorkProps {
+  taskSelectOnChange: (id: number) => Promise<void>;
+}
+
+export function SelectBestWork({ taskSelectOnChange }: ISelectBestWorkProps) {
   const [isTaskSelectDisabled, setIsTaskSelectDisabled] = useState(true);
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -26,8 +30,8 @@ export function SelectBestWork() {
   }, []);
 
   return (
-    <Row>
-      <Col span={12}>
+    <Row gutter={24}>
+      <Col>
         <Select placeholder="Please select course" onChange={getCourseTaskList}>
           {courses.map(e => (
             <Option value={e.courseId} key={e.courseId}>
@@ -36,8 +40,8 @@ export function SelectBestWork() {
           ))}
         </Select>
       </Col>
-      <Col span={12}>
-        <Select placeholder="Please select task" disabled={isTaskSelectDisabled}>
+      <Col>
+        <Select placeholder="Please select task" disabled={isTaskSelectDisabled} onChange={taskSelectOnChange}>
           {tasks.map(e => (
             <Option value={e.taskId} key={e.taskId}>
               {e.taskName}

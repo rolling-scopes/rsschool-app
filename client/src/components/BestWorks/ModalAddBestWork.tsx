@@ -78,6 +78,13 @@ export function ModalAddBestWork({ visible, handleCancel, tasks, onFinish, form 
             ))}
           </Select>
         </Form.Item>
+        <Form.Item
+          name="projectUrl"
+          label="Project URL"
+          rules={[{ required: true, message: 'Please enter project url' }]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item name="imageUrl" label="Image URL" rules={[{ required: true, message: 'Please enter image url' }]}>
           <Input />
         </Form.Item>

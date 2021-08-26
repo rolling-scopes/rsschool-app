@@ -21,12 +21,15 @@ export class BestWork {
   updatedDate: number;
 
   @Column()
+  projectUrl: string;
+
+  @Column()
   imageUrl: string;
 
   @Column({ type: 'simple-array', default: [] })
   tags: string[];
 
-  @ManyToMany(_ => User)
+  @ManyToMany(_ => User, user => user.bestWorks)
   @JoinTable()
   users: User[];
 

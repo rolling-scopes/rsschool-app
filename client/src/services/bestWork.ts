@@ -24,7 +24,7 @@ export class BestWorkService {
 
   async postBestWork(data: IPostBestWork) {
     const result = await this.axios.post('/', data);
-    return result;
+    return result.data.data;
   }
 
   async getCourseList(): Promise<ICourse[]> {
@@ -35,5 +35,10 @@ export class BestWorkService {
   async getTaskList(id: number): Promise<ITask[]> {
     const tasks = await this.axios.get<AxiosResponse<ITask[]>>(`/course/${id}`);
     return tasks.data.data;
+  }
+
+  async getWorkListByTask(id: number) {
+    const works = await this.axios.get(`/task/${id}`);
+    return works.data.data;
   }
 }

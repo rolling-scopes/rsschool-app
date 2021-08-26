@@ -2,11 +2,22 @@ import { getRepository } from 'typeorm';
 import { BestWork, Course, Task, User } from '../models';
 
 interface IPostBestWork {
-  users: string[];
+  id?: number;
+  users: number[];
   task: Task;
+  projectUrl: string;
   imageUrl: string;
   tags: string[];
   course: Course;
+}
+
+async function changeToResponse(values: BestWork[]) {
+  const result = values.map(e => {
+    const { users: usersFromDB, course, task, createdDate, updatedDate, ...data } = e;
+    const users = usersFromDB.map(u => u.githubId);
+    return { users, ...data };
+  });
+  return result;
 }
 
 export async function getAllBestWorks() {
@@ -23,7 +34,7 @@ export async function getBestWorksByTaskId(id: number) {
     relations: ['users', 'task', 'course'],
     where: { task: { id } },
   });
-  return result;
+  return changeToResponse(result);
 }
 
 export async function postBestWork(data: IPostBestWork) {
@@ -31,13 +42,34 @@ export async function postBestWork(data: IPostBestWork) {
   const userRepository = getRepository(User);
   const usersFromDB = await userRepository
     .createQueryBuilder('user')
-    .where('user.githubId IN (:...id)', { id: users })
+    .where('user.id IN (:...id)', { id: users })
     .getMany();
-
   const bestWorkRepository = getRepository(BestWork);
-  const result = await bestWorkRepository.save({ ...toSave, usersFromDB });
+  const result = await bestWorkRepository.save({ ...toSave, users: usersFromDB });
+  return changeToResponse([result]);
+}
 
-  return result;
+export async function changeBestWork(data: BestWork) {
+  try {
+    const bestWorkRepository = getRepository(BestWork);
+    const bestWorkFormDB = await bestWorkRepository.findOne({ where: { id: data.id } });
+    if (!bestWorkFormDB) throw new Error('Best work not found');
+    let { users } = data;
+    if (users) {
+      const userRepository = getRepository(User);
+      users = await userRepository
+        .createQueryBuilder('user')
+        .where('user.id IN (:...id)', { id: data.users })
+        .getMany();
+    }
+    const updatedBestWork = { ...bestWorkFormDB, ...data };
+    const result = await bestWorkRepository.save(updatedBestWork);
+    return changeToResponse([result]);
+  } catch (e) {
+    return {
+      message: e.message,
+    };
+  }
 }
 
 export async function getCourseListWithBestWorks() {

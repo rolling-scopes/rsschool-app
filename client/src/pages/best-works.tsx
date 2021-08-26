@@ -1,13 +1,23 @@
-import { PageLayoutSimple } from '../components';
+import { PageLayout } from '../components';
 import withSession, { Session } from 'components/withSession';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AddBestWork } from '../components/BestWorks/AddBestWork';
 import withCourseData from '../components/withCourseData';
 import { CoursePageProps } from '../services/models';
-import { CourseService, CourseTask } from '../services/course';
 import { SelectBestWork } from '../components/BestWorks/SelectBestWork';
+import { BestWorkCard } from '../components/BestWorks/BestWorkCard/BestWorkCard';
+import { Row } from 'antd';
+import { BestWorkService } from '../services/bestWork';
 
 type Props = CoursePageProps;
+
+export interface IBestWorks {
+  id: number;
+  users: string[];
+  projectUrl: string;
+  imageUrl: string;
+  tags: string[];
+}
 
 const rolesForSpecialBadges = ['coursemanager', 'manager', 'supervisor'];
 
@@ -18,25 +28,23 @@ const getIsAvailableButton = ({ coursesRoles }: Session, id: number): boolean =>
 };
 
 function Page(props: Props) {
-  const [tasks, setTasks] = useState<CourseTask[]>([]);
-  const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-
+  const [works, setWorks] = useState<IBestWorks[]>([]);
+  const bestWorkService = useMemo(() => new BestWorkService(), []);
   const isAvailableAddButton = getIsAvailableButton(props.session, Number(localStorage.getItem('activeCourseId')));
 
-  async function getTasks() {
-    const courseTasks = await courseService.getCourseTasks('finished');
-    setTasks(courseTasks);
+  async function selectTaskHandler(id: number) {
+    const res = await bestWorkService.getWorkListByTask(id);
+    setWorks(res);
   }
 
-  useEffect(() => {
-    getTasks();
-  }, [props.course.id]);
-
   return (
-    <PageLayoutSimple loading={false} githubId={props.session.githubId} title="Best works">
-      {isAvailableAddButton && <AddBestWork course={props.course.id} tasks={tasks} />}
-      <SelectBestWork />
-    </PageLayoutSimple>
+    <PageLayout loading={false} githubId={props.session.githubId} title="Best works">
+      {isAvailableAddButton && <AddBestWork course={props.course.id} />}
+      <SelectBestWork taskSelectOnChange={selectTaskHandler} />
+      <Row style={{ marginTop: '30px' }} gutter={24}>
+        <BestWorkCard works={works} isManageAccess={isAvailableAddButton} />
+      </Row>
+    </PageLayout>
   );
 }
 

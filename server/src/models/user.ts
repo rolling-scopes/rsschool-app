@@ -190,7 +190,7 @@ export class User {
   @OneToMany(_ => CourseManager, (courseManager: CourseManager) => courseManager.user, { nullable: true })
   courseManagers: CourseManager[] | null;
 
-  @ManyToMany(_ => BestWork)
+  @ManyToMany(_ => BestWork, bestWork => bestWork.users)
   bestWorks: BestWork[];
 
   @BeforeInsert()

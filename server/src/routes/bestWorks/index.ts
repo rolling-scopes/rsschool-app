@@ -4,22 +4,24 @@ import { createDeleteRoute } from '../common';
 import { BestWork } from '../../models';
 import { getBestWorksByTask } from './getBestWorksByTask';
 import { addBestWork } from './addBestWork';
-import { adminGuard } from '../guards';
+import { courseManagerGuard } from '../guards';
 import { getBestWorks } from './getBestWorks';
 import { getCourseList } from './getCourseList';
 import { getTaskList } from './getTaskList';
+import { putBestWork } from './putBestWork';
 
 export function bestWorksRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/bestWorks' });
 
-  router.get('/', adminGuard, getBestWorks(logger));
-  router.post('/', adminGuard, addBestWork(logger));
-  router.delete('/:id', adminGuard, createDeleteRoute(BestWork, logger));
+  router.get('/', courseManagerGuard, getBestWorks(logger));
+  router.post('/', courseManagerGuard, addBestWork(logger));
+  router.put('/:id', courseManagerGuard, putBestWork(logger));
+  router.delete('/:id', courseManagerGuard, createDeleteRoute(BestWork, logger));
 
-  router.get('/course', adminGuard, getCourseList(logger));
-  router.get('/course/:id', adminGuard, getTaskList(logger));
+  router.get('/course', courseManagerGuard, getCourseList(logger));
+  router.get('/course/:id', courseManagerGuard, getTaskList(logger));
 
-  router.get('/task/:taskId', adminGuard, getBestWorksByTask(logger));
+  router.get('/task/:taskId', courseManagerGuard, getBestWorksByTask(logger));
 
   return router;
 }

@@ -1,27 +1,38 @@
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BestWorkService } from '../../services/bestWork';
-import { CourseTask } from '../../services/course';
+import { CourseService, CourseTask } from '../../services/course';
 import { ModalAddBestWork } from './ModalAddBestWork';
 
 interface IAddBestWorkProps {
   course: number;
-  tasks: CourseTask[];
 }
 
 export interface IForm {
   githubId: string[];
   task: number;
+  projectUrl: string;
   imageUrl: string;
   tags: string[];
 }
 
-export function AddBestWork({ course, tasks }: IAddBestWorkProps) {
+export function AddBestWork({ course }: IAddBestWorkProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const bestWorkService = useMemo(() => new BestWorkService(), []);
+  const [tasks, setTasks] = useState<CourseTask[]>([]);
+  const courseService = useMemo(() => new CourseService(course), [course]);
 
   const [form] = Form.useForm();
+
+  async function getTasks() {
+    const courseTasks = await courseService.getCourseTasks('finished');
+    setTasks(courseTasks);
+  }
+
+  useEffect(() => {
+    getTasks();
+  }, [course]);
 
   const onFinish = async (values: IForm) => {
     const result = await bestWorkService.postBestWork({ ...values, course });
