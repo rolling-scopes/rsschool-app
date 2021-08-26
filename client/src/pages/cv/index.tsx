@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
-import { Header, FooterLayout } from 'components';
+import { Header } from 'components';
 import CVInfo from 'components/cv/CVInfo';
 
 import { CVService } from '../../services/cv';
@@ -110,7 +110,6 @@ function CVPage(props: Props) {
             />
           </Content>
         </Layout>
-        <FooterLayout />
       </LoadingScreen>
       <style jsx global>{`
         @media print {

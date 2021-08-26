@@ -3,7 +3,7 @@ import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm, R
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
-import { Header, FooterLayout } from 'components';
+import { Header } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
 import { CVService } from '../../services/cv';
@@ -333,7 +333,6 @@ function Page(props: Props) {
           </Content>
         </Layout>
       </LoadingScreen>
-      <FooterLayout />
     </>
   );
 }
