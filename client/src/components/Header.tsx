@@ -48,7 +48,7 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+      <Menu.Item key="2">
         <Button type="link" href={`/cv?githubid=${username}`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
         </Button>
