@@ -1,16 +1,15 @@
-import * as React from 'react';
-import { Button, Menu, Dropdown, Tooltip } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { css } from 'styled-jsx/css';
-// TODO: ucnomment after testing
+import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import {
-  EyeOutlined,
   EditOutlined,
+  EyeOutlined,
   LogoutOutlined,
+  QuestionCircleFilled,
   SaveTwoTone,
-  QuestionCircleFilled /* ExperimentOutlined */,
+  SolutionOutlined,
 } from '@ant-design/icons';
-import Link from 'next/link';
+import { css } from 'styled-jsx/css';
+import { GithubAvatar } from 'components/GithubAvatar';
+import * as React from 'react';
 
 type Props = {
   username: string;
@@ -24,13 +23,7 @@ type Props = {
 };
 
 export function Header(props: Props) {
-  const {
-    isProfilePage,
-    onChangeProfilePageMode,
-    isProfileEditingModeEnabled,
-    // TODO: uncomment after testing
-    isSaveButtonVisible /* username */,
-  } = props;
+  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible, username } = props;
 
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
@@ -55,16 +48,11 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      {/* TODO: uncomment after testing */}
-      {/*       <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
-        <Button
-          type="link"
-          href={`/cv?githubId=${username}`}
-          style={{ textAlign: 'left' }}
-        >
-          <ExperimentOutlined /> My CV
+      <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+        <Button type="link" href={`/cv?githubid=${username}`} style={{ textAlign: 'left' }}>
+          <SolutionOutlined /> My CV
         </Button>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3">
         <Button type="link" href={'/api/auth/logout'} style={{ textAlign: 'left' }}>
