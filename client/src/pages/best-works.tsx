@@ -6,8 +6,8 @@ import withCourseData from '../components/withCourseData';
 import { CoursePageProps } from '../services/models';
 import { SelectBestWork } from '../components/BestWorks/SelectBestWork';
 import { BestWorkCard } from '../components/BestWorks/BestWorkCard/BestWorkCard';
-import { Row } from 'antd';
-import { BestWorkService } from '../services/bestWork';
+import { Modal, Row } from 'antd';
+import { BestWorkService, IPostBestWork } from '../services/bestWork';
 
 type Props = CoursePageProps;
 
@@ -37,12 +37,26 @@ function Page(props: Props) {
     setWorks(res);
   }
 
+  function deleteCardHandler(id: number) {
+    Modal.confirm({ content: 'Are you really want to delete this work?', onOk: () => deleteWork(id) });
+  }
+
+  async function deleteWork(id: number) {
+    await bestWorkService.deleteBestWork(id);
+    setWorks(works.filter(w => w.id !== id));
+  }
+
+  async function finishHandler(values: IPostBestWork) {
+    const result = await bestWorkService.postBestWork(values);
+    setWorks([...works, ...result]);
+  }
+
   return (
     <PageLayout loading={false} githubId={props.session.githubId} title="Best works">
-      {isAvailableAddButton && <AddBestWork course={props.course.id} />}
+      {isAvailableAddButton && <AddBestWork course={props.course.id} finishHandler={finishHandler} />}
       <SelectBestWork taskSelectOnChange={selectTaskHandler} />
       <Row style={{ marginTop: '30px' }} gutter={24}>
-        <BestWorkCard works={works} isManageAccess={isAvailableAddButton} />
+        <BestWorkCard works={works} isManageAccess={isAvailableAddButton} deleteCardHandler={deleteCardHandler} />
       </Row>
     </PageLayout>
   );

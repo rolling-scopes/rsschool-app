@@ -1,12 +1,13 @@
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
-import { BestWorkService } from '../../services/bestWork';
+import { IPostBestWork } from '../../services/bestWork';
 import { CourseService, CourseTask } from '../../services/course';
 import { ModalAddBestWork } from './ModalAddBestWork';
 
 interface IAddBestWorkProps {
   course: number;
+  finishHandler: (values: IPostBestWork) => Promise<void>;
 }
 
 export interface IForm {
@@ -17,9 +18,8 @@ export interface IForm {
   tags: string[];
 }
 
-export function AddBestWork({ course }: IAddBestWorkProps) {
+export function AddBestWork({ course, finishHandler }: IAddBestWorkProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const bestWorkService = useMemo(() => new BestWorkService(), []);
   const [tasks, setTasks] = useState<CourseTask[]>([]);
   const courseService = useMemo(() => new CourseService(course), [course]);
 
@@ -35,7 +35,7 @@ export function AddBestWork({ course }: IAddBestWorkProps) {
   }, [course]);
 
   const onFinish = async (values: IForm) => {
-    const result = await bestWorkService.postBestWork({ ...values, course });
+    await finishHandler({ ...values, course });
     form.resetFields();
     setIsModalVisible(false);
   };

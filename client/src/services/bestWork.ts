@@ -1,7 +1,7 @@
 import globalAxios, { AxiosInstance, AxiosResponse } from 'axios';
 import { IForm } from '../components/BestWorks/AddBestWork';
 
-interface IPostBestWork extends IForm {
+export interface IPostBestWork extends IForm {
   course: number;
 }
 
@@ -24,6 +24,11 @@ export class BestWorkService {
 
   async postBestWork(data: IPostBestWork) {
     const result = await this.axios.post('/', data);
+    return result.data.data;
+  }
+
+  async deleteBestWork(id: number) {
+    const result = await this.axios.delete(`/${id}`);
     return result.data.data;
   }
 
