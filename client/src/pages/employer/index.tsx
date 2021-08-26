@@ -304,7 +304,13 @@ function Page(props: Props) {
 
   const { isAdmin, isHirer, githubId: userGithubId } = props.session;
 
-  if (!(isAdmin || isHirer)) return <Result status="403" title="Sorry, but you don't have access to this page" />;
+  if (!(isAdmin || isHirer))
+    return (
+      <>
+        <Header username={userGithubId} />
+        <Result status="403" title="Sorry, but you don't have access to this page" />
+      </>
+    );
 
   let data = null;
 
