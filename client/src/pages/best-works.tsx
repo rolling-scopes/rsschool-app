@@ -11,7 +11,7 @@ import { BestWorkService, IPostBestWork } from '../services/bestWork';
 
 type Props = CoursePageProps;
 
-export interface IBestWorks {
+export interface IBestWork {
   id: number;
   users: string[];
   projectUrl: string;
@@ -28,7 +28,7 @@ const getIsAvailableButton = ({ coursesRoles }: Session, id: number): boolean =>
 };
 
 function Page(props: Props) {
-  const [works, setWorks] = useState<IBestWorks[]>([]);
+  const [works, setWorks] = useState<IBestWork[]>([]);
   const bestWorkService = useMemo(() => new BestWorkService(), []);
   const isAvailableAddButton = getIsAvailableButton(props.session, Number(localStorage.getItem('activeCourseId')));
 
@@ -51,12 +51,21 @@ function Page(props: Props) {
     setWorks([...works, ...result]);
   }
 
+  async function editHandler(id: number, values: IBestWork) {
+    console.log(id, values);
+  }
+
   return (
     <PageLayout loading={false} githubId={props.session.githubId} title="Best works">
       {isAvailableAddButton && <AddBestWork course={props.course.id} finishHandler={finishHandler} />}
       <SelectBestWork taskSelectOnChange={selectTaskHandler} />
       <Row style={{ marginTop: '30px' }} gutter={24}>
-        <BestWorkCard works={works} isManageAccess={isAvailableAddButton} deleteCardHandler={deleteCardHandler} />
+        <BestWorkCard
+          works={works}
+          isManageAccess={isAvailableAddButton}
+          deleteCardHandler={deleteCardHandler}
+          editHandler={editHandler}
+        />
       </Row>
     </PageLayout>
   );

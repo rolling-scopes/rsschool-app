@@ -27,6 +27,11 @@ export class BestWorkService {
     return result.data.data;
   }
 
+  async putBestWork(id: number, data: IPostBestWork) {
+    const result = await this.axios.put(`/${id}`, data);
+    return result.data.data;
+  }
+
   async deleteBestWork(id: number) {
     const result = await this.axios.delete(`/${id}`);
     return result.data.data;
