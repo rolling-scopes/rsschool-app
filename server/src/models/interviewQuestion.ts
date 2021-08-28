@@ -19,9 +19,7 @@ export class InterviewQuestion {
   @UpdateDateColumn()
   updatedDate: number;
 
-  @Column({
-    unique: true,
-  })
+  @Column()
   title: string;
 
   @Column()

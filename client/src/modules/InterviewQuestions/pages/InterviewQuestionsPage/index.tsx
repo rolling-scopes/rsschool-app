@@ -7,17 +7,16 @@ import { QuestionsModalForm } from 'modules/InterviewQuestions/components/Modals
 import { CategoriesTable } from 'modules/InterviewQuestions/components/Tables/CategoriesTable';
 import { QuestionsTable } from 'modules/InterviewQuestions/components/Tables/QuestionsTable';
 import { useState } from 'react';
-import { useAsync } from 'react-use';
 import { InterviewQuestionCategoryService, InterviewQuestionService } from 'services/interviewQuestion';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
-type Props = { session: Session };
+type Props = { session: Session; questions: InterviewQuestion[]; categories: InterviewQuestionCategory[] };
 
 export function InterviewQuestionsPage(props: Props) {
-  const [questions, setQuestions] = useState([] as InterviewQuestion[]);
-  const [categories, setCategories] = useState([] as InterviewQuestionCategory[]);
+  const [questions, setQuestions] = useState(props.questions);
+  const [categories, setCategories] = useState(props.categories);
   const [modalQuestionData, setModalQuestionData] = useState(null as InterviewQuestion | null);
   const [modalQuestionIsVisible, setModalQuestionIsVisible] = useState(false);
   const [modalCategoryData, setModalCategoryData] = useState(null as InterviewQuestionCategory | null);
@@ -42,8 +41,6 @@ export function InterviewQuestionsPage(props: Props) {
       setLoading(false);
     }
   };
-
-  useAsync(loadData, []);
 
   const handleAddQuestion = () => {
     setModalQuestionData(null);

@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
+import { NextPageContext, GetServerSidePropsContext } from 'next';
+import { getServerAxiosProps } from 'utils/axios';
 import { InterviewQuestion, InterviewQuestionCategory } from './models';
 
 type InterviewQuestionResponse = { data: InterviewQuestion };
@@ -7,45 +9,60 @@ type InterviewQuestionCategoryResponse = { data: InterviewQuestionCategory };
 type InterviewQuestionCategoriesResponse = { data: InterviewQuestionCategory[] };
 
 export class InterviewQuestionService {
+  private axios: AxiosInstance;
+
+  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
+  }
+
   async createInterviewQuestion(data: Partial<InterviewQuestion>) {
-    const result = await axios.post<InterviewQuestionResponse>(`/api/interview-question`, data);
+    const result = await this.axios.post<InterviewQuestionResponse>(`/api/interview-question`, data);
     return result.data.data;
   }
 
   async updateInterviewQuestion(id: number, data: Partial<InterviewQuestion>) {
-    const result = await axios.put<InterviewQuestionResponse>(`/api/interview-question/${id}`, data);
+    const result = await this.axios.put<InterviewQuestionResponse>(`/api/interview-question/${id}`, data);
     return result.data.data;
   }
 
   async deleteInterviewQuestion(id: number) {
-    const result = await axios.delete<InterviewQuestionResponse>(`/api/interview-question/${id}`);
+    const result = await this.axios.delete<InterviewQuestionResponse>(`/api/interview-question/${id}`);
     return result.data.data;
   }
 
   async getInterviewQuestions() {
-    const result = await axios.get<InterviewQuestionsResponse>(`/api/interview-question`);
+    const result = await this.axios.get<InterviewQuestionsResponse>(`/api/interview-question`);
     return result.data.data;
   }
 }
 
 export class InterviewQuestionCategoryService {
+  private axios: AxiosInstance;
+
+  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
+  }
+
   async createInterviewQuestionCategory(data: Partial<InterviewQuestionCategory>) {
-    const result = await axios.post<InterviewQuestionCategoryResponse>(`/api/interview-question-category`, data);
+    const result = await this.axios.post<InterviewQuestionCategoryResponse>(`/api/interview-question-category`, data);
     return result.data.data;
   }
 
   async getInterviewQuestionCategories() {
-    const result = await axios.get<InterviewQuestionCategoriesResponse>(`/api/interview-question-category`);
+    const result = await this.axios.get<InterviewQuestionCategoriesResponse>(`/api/interview-question-category`);
     return result.data.data;
   }
 
   async updateInterviewQuestionCategory(id: number, data: Partial<InterviewQuestionCategory>) {
-    const result = await axios.put<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`, data);
+    const result = await this.axios.put<InterviewQuestionCategoryResponse>(
+      `/api/interview-question-category/${id}`,
+      data,
+    );
     return result.data.data;
   }
 
   async deleteInterviewQuestionCategory(id: number) {
-    const result = await axios.delete<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`);
+    const result = await this.axios.delete<InterviewQuestionCategoryResponse>(`/api/interview-question-category/${id}`);
     return result.data.data;
   }
 }

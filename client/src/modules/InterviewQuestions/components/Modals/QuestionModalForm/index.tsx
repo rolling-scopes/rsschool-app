@@ -72,7 +72,7 @@ export function QuestionsModalForm(props: Props) {
       onOk={submitQuestion}
     >
       <Form size="middle" layout="vertical" form={form} initialValues={initialValues}>
-        <Form.Item key="title" name="title" label="title" labelAlign="left" rules={[{ required: true }]}>
+        <Form.Item key="title" name="title" label="title" labelAlign="left">
           <Input />
         </Form.Item>
         <Form.Item key="question" name="question" label="question" labelAlign="left" rules={[{ required: true }]}>
