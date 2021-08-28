@@ -21,6 +21,7 @@ export function getQuestionsColumns(
       title: 'Question',
       dataIndex: 'question',
       key: 'question',
+      ...getColumnSearchProps('question'),
     },
     {
       title: 'Categories',
@@ -79,7 +80,7 @@ export function getCategoriesColumns(
         <>
           {questions.map(question => (
             <Popover content={question.question} title={question.title} trigger="hover">
-              <Tag>{question.title}</Tag>
+              <Tag style={{maxWidth: "200px", overflow:"hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{question.title || question.question}</Tag>
             </Popover>
           ))}
         </>

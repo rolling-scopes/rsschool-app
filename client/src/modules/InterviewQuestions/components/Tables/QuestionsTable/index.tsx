@@ -25,7 +25,7 @@ export function QuestionsTable(props: Props) {
 
   return (
     <Table
-      pagination={{ pageSize: 50 }}
+      scroll={{ x: 'calc(100vw - 200px)', y: 'calc(100vh - 300px)' }}
       style={{ margin: 8 }}
       dataSource={data}
       columns={getQuestionsColumns(handleEditQuestion, handleDeleteQuestion, categories)}

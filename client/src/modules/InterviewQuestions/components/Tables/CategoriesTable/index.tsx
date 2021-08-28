@@ -25,7 +25,7 @@ export function CategoriesTable(props: Props) {
 
   return (
     <Table
-      pagination={{ pageSize: 50 }}
+      scroll={{ x: 'calc(100vw - 200px)', y: 'calc(100vh - 250px)' }}
       dataSource={data}
       style={{ margin: 8 }}
       columns={getCategoriesColumns(handleEditCategory, handleDeleteQuestion)}
