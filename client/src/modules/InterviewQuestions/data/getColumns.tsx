@@ -80,7 +80,9 @@ export function getCategoriesColumns(
         <>
           {questions.map(question => (
             <Popover content={question.question} title={question.title} trigger="hover">
-              <Tag style={{maxWidth: "200px", overflow:"hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{question.title || question.question}</Tag>
+              <Tag style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {question.title || question.question}
+              </Tag>
             </Popover>
           ))}
         </>
