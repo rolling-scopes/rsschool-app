@@ -1,4 +1,4 @@
-import { GithubUserLink } from '../../GithubUserLink';
+import { GithubUserLink } from '../../../../components';
 import { Button, Col, Row, Tag } from 'antd';
 import React from 'react';
 
@@ -23,7 +23,7 @@ function CustomTag({ children }: ICustomTagProps) {
 }
 
 export function BestWorkCardDescription({ users, projectUrl, tags }: IProps) {
-  if (!projectUrl.match('^https://')) projectUrl = `https://${projectUrl}`;
+  if (!projectUrl.match('^http://')) projectUrl = `https://${projectUrl}`;
   return (
     <>
       <Row gutter={8}>

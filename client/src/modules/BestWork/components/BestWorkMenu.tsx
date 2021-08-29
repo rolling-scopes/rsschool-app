@@ -1,6 +1,6 @@
 import { Col, Row, Select } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { BestWorkService, ICourse, ITask } from '../../services/bestWork';
+import { BestWorkService, ICourse, ITask } from '../../../services/bestWork';
 
 const { Option } = Select;
 
@@ -8,7 +8,7 @@ interface ISelectBestWorkProps {
   taskSelectOnChange: (id: number) => Promise<void>;
 }
 
-export function SelectBestWork({ taskSelectOnChange }: ISelectBestWorkProps) {
+export function BestWorkMenu({ taskSelectOnChange }: ISelectBestWorkProps) {
   const [isTaskSelectDisabled, setIsTaskSelectDisabled] = useState(true);
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [tasks, setTasks] = useState<ITask[]>([]);

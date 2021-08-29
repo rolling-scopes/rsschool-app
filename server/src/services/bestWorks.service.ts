@@ -13,7 +13,7 @@ interface IPostBestWork {
 
 async function changeToResponse(values: BestWork[]) {
   const result = values.map(e => {
-    const { users: usersFromDB, course, task: taskFromDB, createdDate, updatedDate, ...data } = e;
+    const { users: usersFromDB, course, task, createdDate, updatedDate, ...data } = e;
     const users = usersFromDB.map(u => {
       const { id, githubId, firstName, lastName } = u;
       const name = [];
@@ -21,8 +21,7 @@ async function changeToResponse(values: BestWork[]) {
       if (lastName) name.push(lastName);
       return { id, githubId, name: name.join(' ') };
     });
-    const task = taskFromDB.id;
-    return { users, task, ...data };
+    return { users, task: task.id, course: course.id, ...data };
   });
   return result;
 }
@@ -64,10 +63,7 @@ export async function changeBestWork(data: BestWork) {
     let { users } = data;
     if (users) {
       const userRepository = getRepository(User);
-      users = await userRepository
-        .createQueryBuilder('user')
-        .where('user.id IN (:...id)', { id: data.users })
-        .getMany();
+      users = await userRepository.createQueryBuilder('user').where('user.id IN (:...id)', { id: users }).getMany();
     }
     const updatedBestWork = { ...bestWorkFormDB, ...data, users };
     const result = await bestWorkRepository.save(updatedBestWork);

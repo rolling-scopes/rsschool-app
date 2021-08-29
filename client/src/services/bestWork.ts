@@ -1,4 +1,5 @@
 import globalAxios, { AxiosInstance, AxiosResponse } from 'axios';
+import { IBestWork } from '../modules/BestWork/pages/BestWork';
 
 export interface IForm {
   users: number[];
@@ -36,9 +37,7 @@ export class BestWorkService {
   }
 
   async putBestWork(id: number, data: IPostBestWork) {
-    console.log(data, id);
     const result = await this.axios.put(`/${id}`, data);
-    console.log(result.data.data);
     return result.data.data;
   }
 
@@ -57,7 +56,7 @@ export class BestWorkService {
     return tasks.data.data;
   }
 
-  async getWorkListByTask(id: number) {
+  async getWorkListByTask(id: number): Promise<IBestWork[]> {
     const works = await this.axios.get(`/task/${id}`);
     return works.data.data;
   }

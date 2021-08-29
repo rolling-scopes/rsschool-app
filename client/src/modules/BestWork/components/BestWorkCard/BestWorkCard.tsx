@@ -1,7 +1,7 @@
 import { Button, Card, Col, Image } from 'antd';
 import { BestWorkCardDescription } from './BestWorkCardDescription';
-import { IBestWork } from '../../../pages/best-works';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IBestWork } from '../../pages/BestWork';
 
 interface IBestWorkCardProps {
   works: IBestWork[];

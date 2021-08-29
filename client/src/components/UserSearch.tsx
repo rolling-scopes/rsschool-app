@@ -6,7 +6,7 @@ import { SelectProps } from 'antd/lib/select';
 
 type Person = { id: number; githubId: string; name: string };
 
-export type UserProps = SelectProps<any> & {
+export type UserProps = SelectProps<string> & {
   searchFn?: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
   defaultValue?: string | string[];

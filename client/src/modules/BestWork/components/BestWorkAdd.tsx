@@ -1,15 +1,16 @@
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { IPostBestWork } from '../../services/bestWork';
-import { ModalBestWork } from './ModalBestWork';
+import { IPostBestWork } from '../../../services/bestWork';
+import { BestWorkModal } from './BestWorkModal';
+import { Course } from '../../../services/models';
 
 interface IAddBestWorkProps {
-  course: number;
+  courses: Course[];
   finishHandler: (values: IPostBestWork, updateWork?: boolean) => Promise<void>;
 }
 
-export function AddBestWork({ course, finishHandler }: IAddBestWorkProps) {
+export function BestWorkAdd({ courses, finishHandler }: IAddBestWorkProps) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const showModal = () => {
@@ -26,8 +27,8 @@ export function AddBestWork({ course, finishHandler }: IAddBestWorkProps) {
         size={'large'}
         onClick={showModal}
       />
-      <ModalBestWork
-        course={course}
+      <BestWorkModal
+        courses={courses}
         finishHandler={finishHandler}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
