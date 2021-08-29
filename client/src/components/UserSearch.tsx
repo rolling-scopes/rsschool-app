@@ -6,16 +6,16 @@ import { SelectProps } from 'antd/lib/select';
 
 type Person = { id: number; githubId: string; name: string };
 
-export type UserProps = SelectProps<string> & {
+export type UserProps = SelectProps<any> & {
   searchFn?: (value: string) => Promise<Person[]>;
   defaultValues?: Person[];
+  defaultValue?: string | string[];
   keyField?: 'id' | 'githubId';
-  selectType?: 'multiple' | 'tags';
 };
 
 export function UserSearch(props: UserProps) {
   const [data, setData] = useState<Person[]>([]);
-  const { searchFn = defaultSearch, defaultValues, keyField, selectType, ...otherProps } = props;
+  const { searchFn = defaultSearch, defaultValues, keyField, ...otherProps } = props;
 
   useEffect(() => {
     setData(defaultValues ?? []);
@@ -35,14 +35,13 @@ export function UserSearch(props: UserProps) {
       {...otherProps}
       showSearch
       allowClear
-      defaultValue={undefined}
+      defaultValue={props.defaultValue}
       defaultActiveFirstOption={false}
       showArrow={defaultValues ? Boolean(defaultValues.length) : false}
       filterOption={false}
       onSearch={handleSearch}
       placeholder={defaultValues?.length ?? 0 > 0 ? 'Select...' : 'Search...'}
       notFoundContent={null}
-      mode={selectType}
     >
       {data.map(person => {
         const key = keyField ? get(person, keyField) : person.id;

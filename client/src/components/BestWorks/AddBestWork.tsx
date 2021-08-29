@@ -22,7 +22,7 @@ export function AddBestWork({ course, finishHandler }: IAddBestWorkProps) {
         type="primary"
         shape="circle"
         icon={<PlusOutlined />}
-        style={{ position: 'fixed', bottom: '50px', right: '50px' }}
+        style={{ position: 'fixed', bottom: '50px', right: '50px', zIndex: 10 }}
         size={'large'}
         onClick={showModal}
       />

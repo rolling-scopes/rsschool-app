@@ -9,6 +9,7 @@ interface ICustomTagProps {
 export interface IUser {
   id: number;
   githubId: string;
+  name: string;
 }
 
 interface IProps {

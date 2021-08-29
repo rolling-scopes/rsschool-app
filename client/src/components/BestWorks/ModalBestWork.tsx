@@ -1,19 +1,19 @@
 import { Button, Form, Input, Modal, Select } from 'antd';
-import { UserSearch } from '../UserSearch';
-import { useMemo } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { UserService } from '../../services/user';
-import { CourseTask } from '../../services/course';
-import { IForm } from './AddBestWork';
-import { FormInstance } from 'antd/es';
+import { CourseService, CourseTask } from '../../services/course';
+import { IForm, IPostBestWork } from '../../services/bestWork';
+import { IBestWork } from '../../pages/best-works';
+import { UserSearch } from '../UserSearch';
 
 const { Option } = Select;
 
 interface IModalAddBestWork {
-  tasks: CourseTask[];
-  visible: boolean;
-  handleCancel: () => void;
-  onFinish: (values: IForm) => Promise<void>;
-  form: FormInstance;
+  course: number;
+  isModalVisible: boolean;
+  finishHandler: (values: IPostBestWork) => Promise<void>;
+  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+  work?: IBestWork;
 }
 
 type tagsType = {
@@ -48,13 +48,45 @@ const formItemLayout = {
   },
 };
 
-export function ModalAddBestWork({ visible, handleCancel, tasks, onFinish, form }: IModalAddBestWork) {
-  const loadUsers = async (searchText: string) => userService.searchUser(searchText);
+export function ModalBestWork({ course, finishHandler, isModalVisible, setIsModalVisible, work }: IModalAddBestWork) {
+  const [tasks, setTasks] = useState<CourseTask[]>([]);
   const userService = useMemo(() => new UserService(), []);
+  const courseService = useMemo(() => new CourseService(course), [course]);
+
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: IForm) => {
+    await finishHandler({ ...values, course });
+    form.resetFields();
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  async function getTasks() {
+    const courseTasks = await courseService.getCourseTasks('finished');
+    setTasks(courseTasks);
+  }
+
+  useEffect(() => {
+    if (work) {
+      const fields = { ...work, users: work.users.map(u => u.id) };
+      form.setFieldsValue(fields);
+    }
+  }, [work]);
+
+  useEffect(() => {
+    getTasks();
+  }, [course]);
+
+  const loadUsers = async (searchText: string) => userService.searchUser(searchText);
+
   return (
     <Modal
       title="Basic Modal"
-      visible={visible}
+      visible={isModalVisible}
       onCancel={handleCancel}
       footer={[
         <Button onClick={handleCancel} key="cancel">
@@ -67,7 +99,7 @@ export function ModalAddBestWork({ visible, handleCancel, tasks, onFinish, form 
     >
       <Form {...formItemLayout} id="addBestWorkForm" form={form} onFinish={onFinish}>
         <Form.Item name="users" label="Users" rules={[{ required: true, message: 'Please select an user' }]}>
-          <UserSearch keyField="id" searchFn={loadUsers} selectType="multiple" />
+          <UserSearch defaultValues={work?.users} keyField="id" searchFn={loadUsers} mode="multiple" />
         </Form.Item>
         <Form.Item name="task" label="Task" rules={[{ required: true, message: 'Please select an task' }]}>
           <Select>

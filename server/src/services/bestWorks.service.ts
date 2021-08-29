@@ -15,8 +15,11 @@ async function changeToResponse(values: BestWork[]) {
   const result = values.map(e => {
     const { users: usersFromDB, course, task: taskFromDB, createdDate, updatedDate, ...data } = e;
     const users = usersFromDB.map(u => {
-      const { id, githubId } = u;
-      return { id, githubId };
+      const { id, githubId, firstName, lastName } = u;
+      const name = [];
+      if (firstName) name.push(firstName);
+      if (lastName) name.push(lastName);
+      return { id, githubId, name: name.join(' ') };
     });
     const task = taskFromDB.id;
     return { users, task, ...data };
@@ -68,7 +71,6 @@ export async function changeBestWork(data: BestWork) {
     }
     const updatedBestWork = { ...bestWorkFormDB, ...data, users };
     const result = await bestWorkRepository.save(updatedBestWork);
-    console.log(result);
     return changeToResponse([result]);
   } catch (e) {
     return {
