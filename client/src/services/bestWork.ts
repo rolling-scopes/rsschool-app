@@ -1,7 +1,15 @@
 import globalAxios, { AxiosInstance, AxiosResponse } from 'axios';
-import { IForm } from '../components/BestWorks/AddBestWork';
+
+export interface IForm {
+  users: number[];
+  task: number;
+  projectUrl: string;
+  imageUrl: string;
+  tags: string[];
+}
 
 export interface IPostBestWork extends IForm {
+  id?: number;
   course: number;
 }
 
@@ -28,7 +36,9 @@ export class BestWorkService {
   }
 
   async putBestWork(id: number, data: IPostBestWork) {
+    console.log(data, id);
     const result = await this.axios.put(`/${id}`, data);
+    console.log(result.data.data);
     return result.data.data;
   }
 

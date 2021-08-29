@@ -7,7 +7,7 @@ interface IBestWorkCardProps {
   works: IBestWork[];
   isManageAccess: boolean;
   deleteCardHandler: (id: number) => void;
-  editHandler: (id: number, values: IBestWork) => void;
+  editHandler: (work: IBestWork) => void;
 }
 
 export function BestWorkCard({ works, isManageAccess, deleteCardHandler, editHandler }: IBestWorkCardProps) {
@@ -25,7 +25,7 @@ export function BestWorkCard({ works, isManageAccess, deleteCardHandler, editHan
                       shape="circle"
                       icon={<EditOutlined />}
                       key={w.id}
-                      onClick={() => editHandler(w.id, w)}
+                      onClick={() => editHandler(w)}
                     />,
                     <Button
                       type="link"

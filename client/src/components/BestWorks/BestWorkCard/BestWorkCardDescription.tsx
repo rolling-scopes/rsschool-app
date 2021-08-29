@@ -6,8 +6,13 @@ interface ICustomTagProps {
   children: React.ReactNode;
 }
 
+export interface IUser {
+  id: number;
+  githubId: string;
+}
+
 interface IProps {
-  users: string[];
+  users: IUser[];
   projectUrl: string;
   tags: string[];
 }
@@ -22,8 +27,8 @@ export function BestWorkCardDescription({ users, projectUrl, tags }: IProps) {
     <>
       <Row gutter={8}>
         {users.map(u => (
-          <Col key={u}>
-            <GithubUserLink value={u} key={u} />
+          <Col key={u.id}>
+            <GithubUserLink value={u.githubId} key={u.githubId} />
           </Col>
         ))}
       </Row>

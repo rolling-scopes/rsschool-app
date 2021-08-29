@@ -13,9 +13,13 @@ interface IPostBestWork {
 
 async function changeToResponse(values: BestWork[]) {
   const result = values.map(e => {
-    const { users: usersFromDB, course, task, createdDate, updatedDate, ...data } = e;
-    const users = usersFromDB.map(u => u.githubId);
-    return { users, ...data };
+    const { users: usersFromDB, course, task: taskFromDB, createdDate, updatedDate, ...data } = e;
+    const users = usersFromDB.map(u => {
+      const { id, githubId } = u;
+      return { id, githubId };
+    });
+    const task = taskFromDB.id;
+    return { users, task, ...data };
   });
   return result;
 }
@@ -62,8 +66,9 @@ export async function changeBestWork(data: BestWork) {
         .where('user.id IN (:...id)', { id: data.users })
         .getMany();
     }
-    const updatedBestWork = { ...bestWorkFormDB, ...data };
+    const updatedBestWork = { ...bestWorkFormDB, ...data, users };
     const result = await bestWorkRepository.save(updatedBestWork);
+    console.log(result);
     return changeToResponse([result]);
   } catch (e) {
     return {
