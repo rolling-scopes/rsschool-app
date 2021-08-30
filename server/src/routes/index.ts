@@ -1,4 +1,3 @@
-import { bestWorksRoute } from './bestWorks';
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
@@ -31,12 +30,12 @@ import { repositoryRoute } from './repository';
 import { opportunitiesRoute } from './opportunities';
 import { alertsRoute } from './alerts';
 import { interviewQuestionRoute } from './interviewQuestion';
-
-import { ILogger } from '../logger';
-import { userRolesMiddleware, courseMiddleware } from './middlewares';
-import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
+import { bestWorksRoute } from './bestWorks';
 import { checksRoute } from './checks';
 
+import { ILogger } from '../logger';
+import { courseMiddleware, userRolesMiddleware } from './middlewares';
+import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -79,7 +78,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, interviewQuestionRoute(logger));
   applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));
-
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
