@@ -23,7 +23,7 @@ import {
   deleteMentor as postMentorStatusExpelled,
   postMentor,
 } from './mentor';
-import { getMentors, createMentors, getMentorsDetails, searchMentors } from './mentors';
+import * as mentors from './mentors';
 import * as score from './score';
 import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates, postStudentCertificate } from './certificates';
@@ -187,23 +187,27 @@ function addCourseUserApi(router: Router<any, any>, logger: ILogger) {
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
-  router.get('/mentors', courseSupervisorGuard, getMentors(logger));
-  router.post('/mentors', adminGuard, createMentors(logger));
-  router.get('/mentors/details', courseSupervisorGuard, getMentorsDetails(logger));
-  router.get('/mentors/search/:searchText', courseGuard, searchMentors(logger));
 
-  router.post('/mentor/:githubId', guard, ...validators, postMentor(logger));
-  router.post('/repositories/mentor/:githubId', courseManagerGuard, ...validators, inviteMentorToTeam(logger));
-  router.post('/repositories/mentors', courseManagerGuard, inviteAllMentorsToTeam(logger));
-  router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(logger));
-  router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(logger));
-  router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(logger));
-  router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(logger));
+  const mentorsLogger = logger.child({ module: 'course/mentors' });
+  router.get('/mentors', courseSupervisorGuard, mentors.getMentors(mentorsLogger));
+  router.post('/mentors', adminGuard, mentors.createMentors(mentorsLogger));
+  router.post('/mentors/students', courseSupervisorGuard, mentors.assignStudents(mentorsLogger));
+  router.get('/mentors/details', courseSupervisorGuard, mentors.getMentorsDetails(mentorsLogger));
+  router.get('/mentors/search/:searchText', courseGuard, mentors.searchMentors(mentorsLogger));
+
+  const mentorLogger = logger.child({ module: 'course/mentor' });
+  router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
+  router.post('/repositories/mentor/:githubId', courseManagerGuard, ...validators, inviteMentorToTeam(mentorLogger));
+  router.post('/repositories/mentors', courseManagerGuard, inviteAllMentorsToTeam(mentorLogger));
+  router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
+  router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
+  router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
+  router.get('/mentor/:githubId/students/all', guard, ...validators, getAllMentorStudents(mentorLogger));
   router.post(
     '/mentor/:githubId/status/expelled',
     courseManagerGuard,
     validateGithubId,
-    postMentorStatusExpelled(logger),
+    postMentorStatusExpelled(mentorLogger),
   );
 }
 
