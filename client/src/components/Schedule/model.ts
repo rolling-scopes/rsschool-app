@@ -76,7 +76,7 @@ export const SPECIAL_ENTITY_TAGS = [
   'jupyter',
 ];
 
-export const COLUMNS_TYPES = ['Type', 'Special', 'Url', 'Duration', 'Organizer', 'Place'];
+export const COLUMNS_TYPES = ['Type', 'Special', 'Url', 'Duration', 'Organizer', 'Place', 'Score'];
 
 export const CHECKER_TYPES = {
   'auto-test': 'Auto-Test',
