@@ -111,6 +111,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
     discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : '',
+    totalScore: student.totalScore,
   };
 }
 
