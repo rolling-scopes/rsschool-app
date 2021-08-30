@@ -20,6 +20,7 @@ import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
 import { Alert as AlertType } from 'domain/alerts';
 import { isAdmin } from 'domain/user';
+import Link from 'next/link';
 
 const { Content } = Layout;
 
@@ -138,9 +139,11 @@ export function HomePage(props: Props) {
                 dataSource={courseLinks}
                 renderItem={(linkInfo: LinkRenderData) => (
                   <List.Item key={linkInfo.url}>
-                    <a href={linkInfo.url}>
-                      {linkInfo.icon} {linkInfo.name}
-                    </a>
+                    <Link href={linkInfo.url}>
+                      <a>
+                        {linkInfo.icon} {linkInfo.name}
+                      </a>
+                    </Link>
                   </List.Item>
                 )}
               />
@@ -158,9 +161,11 @@ export function HomePage(props: Props) {
                   dataSource={adminLinks}
                   renderItem={(linkInfo: LinkRenderData) => (
                     <List.Item key={linkInfo.url}>
-                      <a href={linkInfo.url}>
-                        {linkInfo.icon} {linkInfo.name}
-                      </a>
+                      <Link href={linkInfo.url}>
+                        <a>
+                          {linkInfo.icon} {linkInfo.name}
+                        </a>
+                      </Link>
                     </List.Item>
                   )}
                 />

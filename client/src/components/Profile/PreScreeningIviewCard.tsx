@@ -9,6 +9,7 @@ import PreScreeningIviewModal from './PreScreeningIviewModal';
 const { Text } = Typography;
 
 import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 type Props = {
   data: StageInterviewDetailedFeedback[];
@@ -65,7 +66,10 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
                       </p>
                     ) : null}
                     <p style={{ fontSize: 12, marginBottom: 5 }}>
-                      Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
+                      Interviewer:{' '}
+                      <Link href={`/profile?githubId=${interviewer.githubId}`}>
+                        <a>{interviewer.name}</a>
+                      </Link>
                     </p>
                   </div>
                   <Button type="dashed" onClick={this.showPreScreeningIviewModal.bind(null, idx)}>
