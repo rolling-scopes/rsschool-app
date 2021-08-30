@@ -9,5 +9,7 @@ export class TaskResult1630341383942 implements MigrationInterface {
     `);
   }
 
-  public async down(_: QueryRunner): Promise<void> {}
+  public async down(_: QueryRunner): Promise<void> {
+    // do nothing
+  }
 }
