@@ -32,8 +32,8 @@ const getInterviewQuestions = (logger: ILogger) => async (ctx: Router.RouterCont
 
 const createInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
-    const interviewQuestions = await getRepository(InterviewQuestion).save(ctx.request.body);
-    setResponse(ctx, OK, interviewQuestions);
+    const interviewQuestion = await getRepository(InterviewQuestion).save(ctx.request.body);
+    setResponse(ctx, OK, interviewQuestion);
   } catch (error) {
     if (logger) {
       logger.error(error.message);
@@ -44,11 +44,9 @@ const createInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterCo
 
 const updateInterviewQuestion = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
-    const id: number = Number(ctx.params.id);
     const question = ctx.request.body;
-    const interviewQuestion = await getRepository(InterviewQuestion).findOne(id);
-    const updatedQuestions = await getRepository(InterviewQuestion).save({ ...interviewQuestion, ...question });
-    setResponse(ctx, OK, updatedQuestions);
+    const updatedQuestion = await getRepository(InterviewQuestion).save(question);
+    setResponse(ctx, OK, updatedQuestion);
   } catch (error) {
     if (logger) {
       logger.error(error.message);

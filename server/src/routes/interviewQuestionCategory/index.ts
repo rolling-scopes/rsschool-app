@@ -20,8 +20,10 @@ const validateId = async (ctx: Router.RouterContext, next: Next) => {
 
 const getInterviewQuestionCategories = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
-    const interviewQuestions = await getRepository(InterviewQuestionCategory).find({ relations: ['questions'] });
-    setResponse(ctx, OK, interviewQuestions);
+    const interviewQuestionCategories = await getRepository(InterviewQuestionCategory).find({
+      relations: ['questions'],
+    });
+    setResponse(ctx, OK, interviewQuestionCategories);
   } catch (error) {
     if (logger) {
       logger.error(error.message);
@@ -32,8 +34,8 @@ const getInterviewQuestionCategories = (logger: ILogger) => async (ctx: Router.R
 
 const createInterviewQuestionCategory = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
-    const interviewQuestions = await getRepository(InterviewQuestionCategory).save(ctx.request.body);
-    setResponse(ctx, OK, interviewQuestions);
+    const interviewQuestionCategory = await getRepository(InterviewQuestionCategory).save(ctx.request.body);
+    setResponse(ctx, OK, interviewQuestionCategory);
   } catch (error) {
     if (logger) {
       logger.error(error.message);
@@ -44,10 +46,8 @@ const createInterviewQuestionCategory = (logger: ILogger) => async (ctx: Router.
 
 const updateInterviewQuestionCategory = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   try {
-    const id: number = Number(ctx.params.id);
     const category = ctx.request.body;
-    const interviewCategory = await getRepository(InterviewQuestionCategory).findOne(id);
-    const updatedCategory = await getRepository(InterviewQuestionCategory).save({ ...interviewCategory, ...category });
+    const updatedCategory = await getRepository(InterviewQuestionCategory).save(category);
     setResponse(ctx, OK, updatedCategory);
   } catch (error) {
     if (logger) {

@@ -17,9 +17,9 @@ type Props = { session: Session; questions: InterviewQuestion[]; categories: Int
 export function InterviewQuestionsPage(props: Props) {
   const [questions, setQuestions] = useState(props.questions);
   const [categories, setCategories] = useState(props.categories);
-  const [modalQuestionData, setModalQuestionData] = useState(null as InterviewQuestion | null);
+  const [modalQuestionData, setModalQuestionData] = useState<InterviewQuestion | null>(null);
   const [modalQuestionIsVisible, setModalQuestionIsVisible] = useState(false);
-  const [modalCategoryData, setModalCategoryData] = useState(null as InterviewQuestionCategory | null);
+  const [modalCategoryData, setModalCategoryData] = useState<InterviewQuestionCategory | null>(null);
   const [modalCategoryIsVisible, setModalCategoryIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 

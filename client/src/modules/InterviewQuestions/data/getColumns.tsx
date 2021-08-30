@@ -47,10 +47,10 @@ export function getQuestionsColumns(
       title: 'Actions',
       width: 150,
       key: 'actions',
-      render: (_: InterviewQuestion) => (
+      render: (question: InterviewQuestion) => (
         <Space size="middle">
-          <Button size="small" icon={<EditOutlined size={8} />} onClick={() => handleEditQuestion(_)} />
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(_.id)}>
+          <Button size="small" icon={<EditOutlined size={8} />} onClick={() => handleEditQuestion(question)} />
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(question.id)}>
             <Button size="small" icon={<DeleteOutlined size={8} />} danger />
           </Popconfirm>
         </Space>
@@ -92,10 +92,10 @@ export function getCategoriesColumns(
       title: 'Actions',
       width: 150,
       key: 'actions',
-      render: (_: InterviewQuestionCategory) => (
+      render: (category: InterviewQuestionCategory) => (
         <Space size="middle">
-          <Button size="small" icon={<EditOutlined size={8} onClick={() => handleEditCategory(_)} />} />
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteCategory(_.id)}>
+          <Button size="small" icon={<EditOutlined size={8} onClick={() => handleEditCategory(category)} />} />
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteCategory(category.id)}>
             <Button size="small" icon={<DeleteOutlined size={8} />} danger />
           </Popconfirm>
         </Space>

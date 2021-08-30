@@ -34,27 +34,26 @@ export function CategoryModalForm(props: Props) {
     questions: category?.questions.map(el => el.title),
   };
 
-  const createRecord = (values: IValues) => {
-    return {
-      name: values.name,
-      questions: values.questions?.reduce((acc, el) => {
-        const question = questions.find(question => question.title === el);
-        if (question) acc.push(question);
-        return acc;
-      }, [] as InterviewQuestion[]),
-    };
-  };
+  const createRecord = (values: IValues) => ({
+    name: values.name,
+    questions: values.questions?.reduce((acc, el) => {
+      const question = questions.find(question => question.title === el);
+      if (question) acc.push(question);
+      return acc;
+    }, [] as InterviewQuestion[]),
+  });
 
   const submitCategory = async () => {
     try {
-      const values = await form.validateFields().catch(() => null);
+      const values = await form.validateFields();
       const record = createRecord(values);
       if (category?.id) {
-        await interviewQuestionCategoryService.updateInterviewQuestionCategory(category.id, record);
+        await interviewQuestionCategoryService.updateInterviewQuestionCategory(category.id, { ...category, ...record });
       } else {
         await interviewQuestionCategoryService.createInterviewQuestionCategory(record);
       }
       await loadData();
+      message.success(category ? 'Category has been updated' : 'Category has been added');
     } catch (error) {
       message.error('Something went wrong. Please try again later.');
     }
