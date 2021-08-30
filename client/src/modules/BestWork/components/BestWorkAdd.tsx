@@ -1,9 +1,9 @@
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { IPostBestWork } from '../../../services/bestWork';
 import { BestWorkModal } from './BestWorkModal';
 import { Course } from '../../../services/models';
+import { IPostBestWork } from '../interfaces';
 
 interface IAddBestWorkProps {
   courses: Course[];

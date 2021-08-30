@@ -11,7 +11,7 @@ interface IPostBestWork {
   course: Course;
 }
 
-async function changeToResponse(values: BestWork[]) {
+async function changeToResponse(values: BestWork[], isUpdate: boolean = false) {
   const result = values.map(e => {
     const { users: usersFromDB, course, task, createdDate, updatedDate, ...data } = e;
     const users = usersFromDB.map(u => {
@@ -21,7 +21,7 @@ async function changeToResponse(values: BestWork[]) {
       if (lastName) name.push(lastName);
       return { id, githubId, name: name.join(' ') };
     });
-    return { users, task: task.id, course: course.id, ...data };
+    return { users, task: isUpdate ? task : task.id, course: isUpdate ? course : course.id, ...data };
   });
   return result;
 }
@@ -67,7 +67,8 @@ export async function changeBestWork(data: BestWork) {
     }
     const updatedBestWork = { ...bestWorkFormDB, ...data, users };
     const result = await bestWorkRepository.save(updatedBestWork);
-    return changeToResponse([result]);
+    const isUpdate = true;
+    return changeToResponse([result], isUpdate);
   } catch (e) {
     return {
       message: e.message,

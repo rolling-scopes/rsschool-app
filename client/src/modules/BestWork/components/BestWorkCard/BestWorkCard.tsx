@@ -1,12 +1,12 @@
 import { Button, Card, Col, Image } from 'antd';
 import { BestWorkCardDescription } from './BestWorkCardDescription';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { IBestWork } from '../../pages/BestWork';
+import { IBestWork } from '../../interfaces';
 
 interface IBestWorkCardProps {
   works: IBestWork[];
   isManageAccess: boolean;
-  deleteCardHandler: (id: number) => void;
+  deleteCardHandler: (w: IBestWork) => void;
   editHandler: (work: IBestWork) => void;
 }
 
@@ -31,7 +31,7 @@ export function BestWorkCard({ works, isManageAccess, deleteCardHandler, editHan
                       type="link"
                       shape="circle"
                       icon={<DeleteOutlined />}
-                      onClick={() => deleteCardHandler(w.id)}
+                      onClick={() => deleteCardHandler(w)}
                     />,
                   ]
                 : []

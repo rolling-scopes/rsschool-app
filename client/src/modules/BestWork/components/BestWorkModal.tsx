@@ -1,10 +1,8 @@
 import { Button, Modal } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
-import { IPostBestWork } from '../../../services/bestWork';
-
 import { Course } from '../../../services/models';
-import { IBestWork } from '../pages/BestWork';
 import { BestWorkForm } from './BestWorkForm';
+import { IBestWork, IPostBestWork } from '../interfaces';
 
 export interface IModalAddBestWorkProps {
   courses: Course[];

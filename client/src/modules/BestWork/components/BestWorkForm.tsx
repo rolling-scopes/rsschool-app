@@ -3,9 +3,9 @@ import { Form, Input, Select } from 'antd';
 import { UserSearch } from '../../../components';
 import { tags } from '../data/tags';
 import { UserService } from '../../../services/user';
-import { IForm } from '../../../services/bestWork';
 import { CourseService, CourseTask } from '../../../services/course';
 import { IModalAddBestWorkProps } from './BestWorkModal';
+import { IPostBestWork } from '../interfaces';
 
 type BestWorkFormProps = Omit<IModalAddBestWorkProps, 'isModalVisible'>;
 
@@ -54,8 +54,8 @@ export function BestWorkForm({ work, courses, finishHandler, setIsModalVisible }
     if (course || work?.course) getTasks();
   }, [course, work]);
 
-  const onFinish = async (values: IForm) => {
-    await finishHandler({ ...values, course: course! });
+  const onFinish = async (values: IPostBestWork) => {
+    await finishHandler(values);
     form.resetFields();
     setIsModalVisible(false);
   };

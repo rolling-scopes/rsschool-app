@@ -1,17 +1,18 @@
-import { Col, Row, Select } from 'antd';
+import { Layout, Menu } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { BestWorkService, ICourse, ITask } from '../../../services/bestWork';
+import { BestWorkService } from '../../../services/bestWork/bestWork';
+import { StarOutlined } from '@ant-design/icons';
+import { ICourse } from '../interfaces';
 
-const { Option } = Select;
+const { Sider } = Layout;
 
 interface ISelectBestWorkProps {
-  taskSelectOnChange: (id: number) => Promise<void>;
+  getCourseTaskList: (id: number) => Promise<void>;
 }
 
-export function BestWorkMenu({ taskSelectOnChange }: ISelectBestWorkProps) {
-  const [isTaskSelectDisabled, setIsTaskSelectDisabled] = useState(true);
+export function BestWorkMenu({ getCourseTaskList }: ISelectBestWorkProps) {
   const [courses, setCourses] = useState<ICourse[]>([]);
-  const [tasks, setTasks] = useState<ITask[]>([]);
+
   const bestWorkService = useMemo(() => new BestWorkService(), []);
 
   async function getCourses() {
@@ -19,36 +20,21 @@ export function BestWorkMenu({ taskSelectOnChange }: ISelectBestWorkProps) {
     setCourses(coursesList);
   }
 
-  async function getCourseTaskList(id: number) {
-    const taskList = await bestWorkService.getTaskList(id);
-    setTasks(taskList);
-    setIsTaskSelectDisabled(false);
-  }
-
   useEffect(() => {
     getCourses();
   }, []);
 
   return (
-    <Row gutter={24}>
-      <Col>
-        <Select placeholder="Please select course" onChange={getCourseTaskList}>
-          {courses.map(e => (
-            <Option value={e.courseId} key={e.courseId}>
-              {e.courseName}
-            </Option>
-          ))}
-        </Select>
-      </Col>
-      <Col>
-        <Select placeholder="Please select task" disabled={isTaskSelectDisabled} onChange={taskSelectOnChange}>
-          {tasks.map(e => (
-            <Option value={e.taskId} key={e.taskId}>
-              {e.taskName}
-            </Option>
-          ))}
-        </Select>
-      </Col>
-    </Row>
+    <Sider style={{ backgroundColor: 'white' }}>
+      <Menu onClick={e => getCourseTaskList(Number(e.key))}>
+        {courses.map(c => {
+          return (
+            <Menu.Item key={c.courseId} icon={<StarOutlined />}>
+              {c.courseName}
+            </Menu.Item>
+          );
+        })}
+      </Menu>
+    </Sider>
   );
 }

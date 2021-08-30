@@ -1,16 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Modal, Row } from 'antd';
+import { Layout, Modal } from 'antd';
 import { flattenDeep } from 'lodash';
 import { Session } from 'components/withSession';
-import { BestWorkService, IPostBestWork } from '../../../services/bestWork';
+import { BestWorkService } from '../../../services/bestWork/bestWork';
 import { PageLayout } from '../../../components';
 import { BestWorkModal } from '../components/BestWorkModal';
-import { BestWorkCard } from '../components/BestWorkCard/BestWorkCard';
-import { IUser } from '../components/BestWorkCard/BestWorkCardDescription';
 import { CoursesService } from '../../../services/courses';
 import { BestWorkMenu } from '../components/BestWorkMenu';
 import { BestWorkAdd } from '../components/BestWorkAdd';
 import { Course } from '../../../services/models';
+import { BestWorkTabs } from '../components/BestWorkTabs';
+import { IBestWork, IPostBestWork, ITask, IUser } from '../interfaces';
+
+const { Content } = Layout;
 
 export type Props = {
   session: Session;
@@ -18,16 +20,6 @@ export type Props = {
 };
 
 type UpdateBestWorkType = Omit<IPostBestWork, 'githubId'> & { users: IUser[] | number[] };
-
-export interface IBestWork {
-  id: number;
-  users: IUser[];
-  projectUrl: string;
-  imageUrl: string;
-  tags: string[];
-  task: number;
-  course: number;
-}
 
 const rolesForBestWork = ['coursemanager', 'manager', 'supervisor'];
 
@@ -41,6 +33,7 @@ export function BestWork(props: Props) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [works, setWorks] = useState<IBestWork[]>([]);
   const [work, setWork] = useState<IBestWork | undefined>();
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [taskId, setTaskId] = useState<number>();
   const bestWorkService = useMemo(() => new BestWorkService(), []);
@@ -51,6 +44,12 @@ export function BestWork(props: Props) {
   }, []);
 
   const isAvailableAddButton = getIsAvailableButton(props.session);
+
+  async function getCourseTaskList(id: number) {
+    const taskList = await bestWorkService.getTaskList(id);
+    setWorks([]);
+    setTasks(taskList);
+  }
 
   async function loadCourses() {
     const courses = await coursesService.getCourses();
@@ -63,8 +62,8 @@ export function BestWork(props: Props) {
     setWorks(res.sort((r1, r2) => r1.id - r2.id));
   }
 
-  function deleteCardHandler(id: number) {
-    Modal.confirm({ content: 'Are you really want to delete this work?', onOk: () => deleteWork(id) });
+  function deleteCardHandler(w: IBestWork) {
+    Modal.confirm({ content: 'Are you really want to delete this work?', onOk: () => deleteWork(w) });
   }
 
   async function finishHandler(bestWork: IPostBestWork, updateWork = false) {
@@ -75,10 +74,7 @@ export function BestWork(props: Props) {
       setWorks(works.filter(w => w.id !== bestWork.id));
     }
     if (taskId === bestWork.task) {
-      //don't change position of updated work
       setWorks([...works.filter(w => w.id !== result[0].id), ...result].sort((r1, r2) => r1.id - r2.id));
-    } else {
-      //TODO: add to cash
     }
   }
 
@@ -86,6 +82,8 @@ export function BestWork(props: Props) {
     const dataForSave = {
       id: work?.id,
       ...bestWork,
+      task: bestWork.task ? bestWork.task : work!.task,
+      course: bestWork.course ? bestWork.course : work!.course,
     };
     const isUpdate = true;
     await finishHandler(dataForSave, isUpdate);
@@ -96,23 +94,27 @@ export function BestWork(props: Props) {
     setIsModalVisible(true);
   }
 
-  async function deleteWork(id: number) {
-    await bestWorkService.deleteBestWork(id);
-    setWorks(works.filter(w => w.id !== id));
+  async function deleteWork(w: IBestWork) {
+    await bestWorkService.deleteBestWork(w);
+    setWorks(works.filter(work => work.id !== w.id));
   }
 
   return (
     <PageLayout loading={false} githubId={props.session.githubId} title="Best works">
       {isAvailableAddButton && <BestWorkAdd courses={courses} finishHandler={finishHandler} />}
-      <BestWorkMenu taskSelectOnChange={selectTaskHandler} />
-      <Row style={{ marginTop: '30px' }} gutter={24}>
-        <BestWorkCard
-          works={works}
-          isManageAccess={isAvailableAddButton}
-          deleteCardHandler={deleteCardHandler}
-          editHandler={editHandler}
-        />
-      </Row>
+      <Layout>
+        <BestWorkMenu getCourseTaskList={getCourseTaskList} />
+        <Content style={{ backgroundColor: 'white' }}>
+          <BestWorkTabs
+            tasks={tasks}
+            selectTaskHandler={selectTaskHandler}
+            works={works}
+            isAvailableAddButton={isAvailableAddButton}
+            deleteCardHandler={deleteCardHandler}
+            editHandler={editHandler}
+          />
+        </Content>
+      </Layout>
       <BestWorkModal
         courses={courses}
         isModalVisible={isModalVisible}

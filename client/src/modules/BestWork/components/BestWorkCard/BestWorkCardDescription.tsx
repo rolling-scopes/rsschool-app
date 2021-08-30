@@ -1,15 +1,10 @@
 import { GithubUserLink } from '../../../../components';
 import { Button, Col, Row, Tag } from 'antd';
 import React from 'react';
+import { IUser } from '../../interfaces';
 
 interface ICustomTagProps {
   children: React.ReactNode;
-}
-
-export interface IUser {
-  id: number;
-  githubId: string;
-  name: string;
 }
 
 interface IProps {
