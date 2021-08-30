@@ -13,6 +13,8 @@ import { UserGroup } from './userGroup';
 import { Event } from './event';
 import { ExternalAccount, User } from './user';
 import { Feedback } from './feedback';
+import { InterviewQuestion } from './interviewQuestion';
+import { InterviewQuestionCategory } from './interviewQuestionCategory';
 import { Mentor } from './mentor';
 import { MentorRegistry } from './mentorRegistry';
 import { PrivateFeedback } from './privateFeedback';
@@ -52,6 +54,8 @@ export {
   Event,
   ExternalAccount,
   Feedback,
+  InterviewQuestion,
+  InterviewQuestionCategory,
   Mentor,
   MentorRegistry,
   PrivateFeedback,
@@ -93,6 +97,8 @@ export const models = [
   UserGroup,
   Event,
   Feedback,
+  InterviewQuestion,
+  InterviewQuestionCategory,
   Mentor,
   MentorRegistry,
   PrivateFeedback,

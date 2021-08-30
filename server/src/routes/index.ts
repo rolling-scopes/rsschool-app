@@ -30,11 +30,13 @@ import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
 import { opportunitiesRoute } from './opportunities';
 import { alertsRoute } from './alerts';
+import { interviewQuestionRoute } from './interviewQuestion';
 
 import { ILogger } from '../logger';
-import { courseMiddleware, userRolesMiddleware } from './middlewares';
+import { userRolesMiddleware, courseMiddleware } from './middlewares';
+import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
+import { checksRoute } from './checks';
 
-export * from './logging';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -74,6 +76,10 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, stageRoute(logger));
   applyRouter(router, stagesRoute(logger));
   applyRouter(router, bestWorksRoute(logger));
+  applyRouter(router, interviewQuestionRoute(logger));
+  applyRouter(router, interviewQuestionCategoryRoute(logger));
+  applyRouter(router, checksRoute(logger));
+
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
