@@ -1,7 +1,8 @@
 import { BAD_REQUEST, LOCKED, OK, TOO_MANY_REQUESTS, FORBIDDEN } from 'http-status-codes';
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { awsTaskService, courseService, taskService, taskResultsService } from '../../services';
+import { awsTaskService, courseService, taskService } from '../../services';
+import { ScoreService } from '../../services/score';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
 import { CourseTask, TaskVerification } from '../../models';
@@ -147,8 +148,8 @@ const createSelfeducationVerification = async ({
 
   const result = (await getRepository(TaskVerification).findOne(identifier.id))!;
 
-  await taskResultsService.saveScore(result.studentId, result.courseTaskId, {
-    authorId: 0,
+  const service = new ScoreService();
+  await service.saveScore(result.studentId, result.courseTaskId, {
     comment: result.details,
     score: result.score,
   });

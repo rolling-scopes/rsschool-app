@@ -1,8 +1,8 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import { MentorBasic } from '../../../common/models';
-import { Mentor, CourseTask } from '../models';
+import { Mentor, CourseTask, TaskResult } from '../models';
 import { userService } from '../services';
-import { flatMap, max } from 'lodash';
+import { createQueryBuilder } from 'typeorm';
 
 @EntityRepository(Mentor)
 export class MentorRepository extends AbstractRepository<Mentor> {
@@ -37,15 +37,15 @@ export class MentorRepository extends AbstractRepository<Mentor> {
 
   public async findExtended(courseId: number) {
     const courseTaskQuery = getRepository(CourseTask)
-      .createQueryBuilder('courseTask')
-      .select(['courseTask.id'])
-      .leftJoin('courseTask.task', 'task')
-      .where('task.verification = :manual', { manual: 'manual' })
-      .andWhere('"courseTask".checker = :mentor', { mentor: 'mentor' })
-      .andWhere('"courseTask"."courseId" = :courseId', { courseId })
-      .andWhere('"courseTask"."studentEndDate" < NOW()');
+      .createQueryBuilder('c')
+      .select('c.id')
+      .leftJoin('c.task', 't')
+      .where('t.verification = :manual', { manual: 'manual' })
+      .andWhere({ checker: 'mentor', courseId, disabled: false })
+      .andWhere('c.studentEndDate < NOW()')
+      .andWhere("c.type <> 'interview'");
 
-    const courseTasks = await courseTaskQuery.getMany();
+    const tasks = await courseTaskQuery.getMany();
 
     const query = getRepository(Mentor)
       .createQueryBuilder('mentor')
@@ -53,38 +53,32 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .addSelect(this.getPrimaryUserFields())
       .leftJoin('mentor.students', 'students')
       .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
-      .leftJoin('students.taskResults', 'taskResults', `taskResults.courseTaskId IN (:...taskIds)`, {
-        taskIds: courseTasks.length > 0 ? courseTasks.map(t => t.id) : [null],
-      })
       .leftJoin('mentor.stageInterviews', 'si')
       .leftJoin('mentor.taskChecker', 'taskChecker')
       .leftJoin('taskChecker.courseTask', 'courseTask', 'courseTask.type = :type', { type: 'interview' })
-      .addSelect([
-        'si.id',
-        'taskResults.id',
-        'taskResults.score',
-        'taskResults.courseTaskId',
-        'taskResults.updatedDate',
-        'taskChecker.id',
-        'taskChecker.courseTaskId',
-        'courseTask.id',
-        'courseTask.type',
-      ])
+      .addSelect(['si.id', 'taskChecker.id', 'taskChecker.courseTaskId', 'courseTask.id', 'courseTask.type'])
       .where(`"mentor"."courseId" = :courseId`, { courseId })
       .orderBy('mentor.createdDate');
 
-    const records = await query.getMany();
+    const [records, checkedCountByMentor, lastCheckedDateByMentor] = await Promise.all([
+      query.getMany(),
+      this.getCheckedTasksCount(courseId),
+      this.getLastCheckedDates(courseId),
+    ]);
 
-    const count = courseTasks.length;
-    const mentors = records.map(mentor => {
+    const count = tasks.length;
+    const mentors = [];
+    for (const mentor of records) {
       const mentorBasic = transformMentor(mentor);
+
       const user = mentor.user;
       const activeStudents = mentor.students?.filter(s => !s.isExpelled && !s.isFailed) ?? [];
       const totalToCheck = activeStudents.length * count;
-      const lastUpdatedDate = max(
-        flatMap(mentor.students ?? [], s => s.taskResults?.map(r => new Date(r.updatedDate).getTime()) ?? []),
-      );
-      return {
+
+      const lastCheckedDate = lastCheckedDateByMentor.find(m => m.id === mentor.id)?.value ?? null;
+      const checkedCount = checkedCountByMentor.find(m => m.id === mentor.id)?.value ?? 0;
+
+      mentors.push({
         ...mentorBasic,
         cityName: user.cityName ?? '',
         countryName: user.countryName ?? '',
@@ -96,13 +90,67 @@ export class MentorRepository extends AbstractRepository<Mentor> {
           interviewsCount: mentor.taskChecker?.filter(tc => tc.courseTask.type === 'interview').length,
         },
         taskResultsStats: {
-          lastUpdatedDate,
+          lastUpdatedDate: lastCheckedDate,
           total: totalToCheck,
-          checked: activeStudents.reduce((acc, student) => acc + (student.taskResults?.length ?? 0), 0) ?? 0,
+          checked: checkedCount,
         },
-      };
-    });
+      });
+    }
     return mentors;
+  }
+
+  private async getLastCheckedDates(courseId: number) {
+    const query = createQueryBuilder()
+      .select('m.id', 'id')
+      .addSelect('tr."updatedDate"', 'value')
+      .from(Mentor, 'm')
+      .leftJoin('user', 'u', 'u."id" = m."userId"')
+      .leftJoin(
+        qb =>
+          qb
+            .select('t.lastCheckerId', 'lastCheckerId')
+            .addSelect('MAX(t."updatedDate")', 'updatedDate')
+            .from(TaskResult, 't')
+            .innerJoin(CourseTask, 'ct', 'ct.id = t."courseTaskId" AND ct."courseId" = :courseId', { courseId })
+            .groupBy('t.lastCheckerId'),
+        'tr',
+        'tr."lastCheckerId" = u.id',
+      )
+      .where('m."courseId" = :courseId', { courseId });
+
+    const result = await query.getRawMany();
+
+    return result.map<{ id: number; value: string }>(({ id, value }) => ({
+      id,
+      value,
+    }));
+  }
+
+  private async getCheckedTasksCount(courseId: number) {
+    const query = createQueryBuilder()
+      .select('m.id', 'id')
+      .addSelect('COUNT(tr."lastCheckerId")', 'value')
+      .from(Mentor, 'm')
+      .leftJoin('user', 'u', 'u."id" = m."userId"')
+      .leftJoin(
+        qb =>
+          qb
+            .select('t.lastCheckerId', 'lastCheckerId')
+            .addSelect('t.updatedDate', 'updatedDate')
+            .from(TaskResult, 't')
+            .innerJoin(CourseTask, 'ct', 'ct.id = t."courseTaskId" AND ct."courseId" = :courseId', { courseId }),
+        'tr',
+        'tr."lastCheckerId" = u.id',
+      )
+      .where('m."courseId" = :courseId', { courseId })
+      .groupBy('m.id');
+
+    const result = await query.getRawMany();
+
+    return result.map<{ id: number; value: number }>(({ id, value }) => ({
+      id,
+      value: Number(value),
+    }));
   }
 
   private getPrimaryUserFields(modelName = 'user') {

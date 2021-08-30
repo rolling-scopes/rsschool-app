@@ -1,14 +1,14 @@
 import { IPaginationOptions, paginate } from 'koa-typeorm-pagination';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { ScoreTableFilters } from '../../../common/types/score';
-import { Course, Student } from '../models';
-import { createName } from './user.service';
-import { getPrimaryUserFields, convertToMentorBasic } from './course.service';
-import { getCourseTasks, updateScoreStudents, getCourses } from './course.service';
-import { getStageInterviewRating } from './stageInterview.service';
+import { ScoreTableFilters } from '../../../../common/types/score';
+import { Course, Student, TaskResult } from '../../models';
+import { createName } from '../user.service';
+import { getPrimaryUserFields, convertToMentorBasic } from '../course.service';
+import { getCourseTasks, updateScoreStudents, getCourses } from '../course.service';
+import { getStageInterviewRating } from '../stageInterview.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
-import { ILogger } from '../logger';
+import { ILogger } from '../../logger';
 
 const orderByFieldMapping = {
   rank: 'student.rank',
@@ -22,8 +22,18 @@ const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
+type TaskResultInput = {
+  studentId: number;
+  courseTaskId: number;
+  score: number;
+  comment: string;
+  githubPrUrl?: string;
+};
+
 export class ScoreService {
-  constructor(private courseId: number) {}
+  private taskResultRepository = getRepository(TaskResult);
+
+  constructor(private courseId: number | undefined = undefined) {}
 
   public static async recalculateTotalScore(logger: ILogger, coursesToUpdate?: Course[]) {
     const courses = coursesToUpdate ?? (await getCourses());
@@ -196,6 +206,93 @@ export class ScoreService {
     return {
       ...pagination,
       content: students,
+    };
+  }
+
+  public async saveScore(
+    studentId: number,
+    courseTaskId: number,
+    data: {
+      authorId?: number;
+      score: number;
+      comment: string;
+      githubPrUrl?: string;
+    },
+  ): Promise<boolean> {
+    const { authorId = 0, githubPrUrl = null, comment = '' } = data;
+    const score = Math.round(data.score);
+
+    const current = await this.getTaskResult(studentId, courseTaskId);
+
+    if (current == null) {
+      const taskResult = this.createTaskResult(authorId, {
+        comment,
+        score,
+        studentId,
+        courseTaskId,
+        githubPrUrl: githubPrUrl ?? undefined,
+      });
+      await this.taskResultRepository.insert(taskResult);
+      return true;
+    }
+
+    if (current.githubRepoUrl === githubPrUrl && current.comment === comment && current.score === score) {
+      return true;
+    }
+
+    if (githubPrUrl) {
+      current.githubPrUrl = githubPrUrl;
+    }
+    if (comment) {
+      current.comment = comment;
+    }
+    if (score !== current.score) {
+      current.historicalScores.push({
+        comment,
+        authorId,
+        score,
+        dateTime: Date.now(),
+      });
+      if (authorId > 0) {
+        current.lastCheckerId = authorId;
+      }
+      current.score = score;
+    }
+
+    await this.taskResultRepository.update(current.id, {
+      score: current.score,
+      comment: current.comment,
+      githubPrUrl: current.githubPrUrl,
+      historicalScores: current.historicalScores,
+      lastCheckerId: current.lastCheckerId,
+    });
+    return false;
+  }
+
+  private getTaskResult(studentId: number, courseTaskId: number) {
+    return this.taskResultRepository
+      .createQueryBuilder('r')
+      .where('r."studentId" = :studentId', { studentId })
+      .andWhere('r."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  private createTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
+    return {
+      comment: data.comment,
+      courseTaskId: data.courseTaskId,
+      studentId: data.studentId,
+      score: data.score,
+      historicalScores: [
+        {
+          authorId,
+          score: data.score,
+          dateTime: Date.now(),
+          comment: data.comment,
+        },
+      ],
+      lastCheckerId: authorId > 0 ? authorId : undefined,
+      githubPrUrl: data.githubPrUrl,
     };
   }
 }

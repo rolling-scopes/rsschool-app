@@ -2,7 +2,7 @@ import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
 import { ILogger } from '../../../logger';
 import { getCourse } from '../../../services/course.service';
-import { ScoreService } from '../../../services/score.service';
+import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
 
 export const recalculateScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {

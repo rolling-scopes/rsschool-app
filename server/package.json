@@ -8,7 +8,8 @@
     "swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts ./src/routes/**.ts",
     "test": "jest",
     "test-watch": "jest --watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "typeorm": "node -r dotenv/config -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts"
   },
   "dependencies": {
     "@koa/cors": "~3.0.0",
@@ -41,7 +42,7 @@
     "pino-multi-stream": "~4.2.0",
     "reflect-metadata": "0.1.13",
     "swagger-jsdoc": "3.5.0",
-    "typeorm": "0.2.30"
+    "typeorm": "0.2.37"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",

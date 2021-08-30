@@ -5,7 +5,7 @@ import { isUndefined } from 'lodash';
 import { ScoreTableFilters } from '../../../../../common/types/score';
 import { ILogger } from '../../../logger';
 import { getCourseTasks } from '../../../services/course.service';
-import { ScoreService } from '../../../services/score.service';
+import { ScoreService } from '../../../services/score';
 import { CourseTask, Task } from '../../../models';
 import { setCsvResponse } from '../../utils';
 
