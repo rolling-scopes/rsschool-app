@@ -3,6 +3,7 @@ import {
   GlobalOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  AlertOutlined,
   QuestionOutlined,
   TeamOutlined,
   IdcardFilled,
@@ -50,14 +51,23 @@ export function AdminSider(props: Props) {
           </Menu.Item>
         ) : null}
 
-        <Menu.Item key="3">
+        {props.isAdmin || props.isCoursePowerUser ? (
+          <Menu.Item key="3">
+            <a href="/admin/interview-questions">
+              <QuestionOutlined />
+              <span>Interview questions</span>
+            </a>
+          </Menu.Item>
+        ) : null}
+
+        <Menu.Item key="4">
           <a href="/admin/tasks">
-            <QuestionOutlined />
+            <AlertOutlined />
             <span>Tasks</span>
           </a>
         </Menu.Item>
 
-        <Menu.Item key="4">
+        <Menu.Item key="5">
           <a href="/admin/events">
             <BellOutlined />
             <span>Events</span>
@@ -65,7 +75,7 @@ export function AdminSider(props: Props) {
         </Menu.Item>
 
         {props.isAdmin ? (
-          <Menu.Item key="5">
+          <Menu.Item key="6">
             <a href="/admin/users">
               <UserOutlined />
               <span>Users</span>

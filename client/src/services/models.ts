@@ -4,12 +4,16 @@ import {
   StudentBasic as CommonStudentBasic,
   DiscordServer,
   UserGroup,
+  InterviewQuestion,
+  InterviewQuestionCategory,
 } from '../../../common/models';
 
 export interface Course extends CommonCourse {}
 export interface StudentBasic extends CommonStudentBasic {}
 export type { DiscordServer };
 export type { UserGroup };
+export type { InterviewQuestion };
+export type { InterviewQuestionCategory };
 
 export interface Mentor {
   lastName: string;
