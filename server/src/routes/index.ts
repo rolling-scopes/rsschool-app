@@ -1,3 +1,5 @@
+export * from './logging';
+
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
