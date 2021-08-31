@@ -55,7 +55,7 @@ export const ListView: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
 
   return (
     <div className="List">
-      <Row justify="center" align="middle" gutter={[16, 16]}>
+      <Row justify="center" align="middle" gutter={[16, 16]} style={{ marginBottom: '16px' }}>
         <Col>
           <Tooltip title="Previous week">
             <Button shape="circle" icon={<LeftOutlined />} size="large" onClick={handleClickBack} />
@@ -92,7 +92,7 @@ const isCurrentWeek = (date: string, timeZone: string, currentWeek: number) => {
   const startAndEnd = getStartAndEndWeekTime(currentWeek, timeZone);
   const milliseconds = moment(date).tz(timeZone).valueOf();
 
-  return milliseconds > startAndEnd[0].valueOf() && milliseconds < startAndEnd[1].valueOf();
+  return milliseconds >= startAndEnd[0].valueOf() && milliseconds < startAndEnd[1].valueOf();
 };
 
 const panelClassName = (dayOfWeek: number, currentWeek: number) => {
@@ -173,12 +173,18 @@ const getWeekElements = (
 ) => {
   const currentWeek = events.filter((event: CourseEvent) => isCurrentWeek(event.dateTime, timeZone, selectedWeek));
   const weekMap = mapToWeek(currentWeek, timeZone);
+  const dayOfSelectedWeek = moment()
+    .tz(timeZone)
+    .add(selectedWeek * weekLength, 'days');
+  const firstDayofSelectedWeek = dayOfSelectedWeek.clone().startOf('isoWeek');
 
   return weekMap.map((eventsPerDay: CourseEvent[], index: number) => {
     const eventCount = eventsPerDay.length;
+    const dayDate = firstDayofSelectedWeek.clone().add(index, 'day').format('Do MMMM');
+
     const eventCountElem = (
       <Badge count={eventCount}>
-        <span style={{ marginRight: '15px' }}>{WEEK[index]}</span>
+        <span style={{ marginRight: '15px' }}>{`${WEEK[index]} - ${dayDate}`}</span>
       </Badge>
     );
     const style = panelClassName(index + 1, selectedWeek);
@@ -195,7 +201,7 @@ const getWeekElements = (
       );
     }
 
-    return <Panel style={style} header={eventCountElem} key={key} disabled />;
+    return <Panel style={style} header={eventCountElem} key={key} collapsible="disabled" />;
   });
 };
 

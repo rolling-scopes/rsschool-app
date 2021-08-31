@@ -7,7 +7,7 @@ import { flatMap, max } from 'lodash';
 @EntityRepository(Mentor)
 export class MentorRepository extends AbstractRepository<Mentor> {
   public async findActive(courseId: number, selectStudents = false) {
-    let query = await this.getPreparedMentorQuery(selectStudents)
+    let query = this.getPreparedMentorQuery(selectStudents)
       .where('mentor.courseId = :courseId', { courseId })
       .andWhere('mentor.isExpelled = false');
     if (selectStudents) {
@@ -15,6 +15,24 @@ export class MentorRepository extends AbstractRepository<Mentor> {
     }
     const result = await query.getMany();
     return result.map(transformMentor);
+  }
+
+  public async findByGithubId(courseId: number, githubId: string) {
+    const query = this.getPreparedMentorQuery()
+      .where('mentor.courseId = :courseId', { courseId })
+      .andWhere('mUser.githubId = :githubId', { githubId });
+    const result = await query.getOne();
+    return result ? transformMentor(result) : null;
+  }
+
+  public async findActiveWithStudentsLimit(courseId: number) {
+    const query = this.getPreparedMentorQuery(true)
+      .addSelect('mentor.maxStudentsLimit')
+      .where('mentor.courseId = :courseId', { courseId })
+      .andWhere('mentor.isExpelled = false')
+      .andWhere('(students.isExpelled = false OR students IS NULL)');
+    const result = await query.getMany();
+    return result.map(transformMentorWithStudentsLimit);
   }
 
   public async findExtended(courseId: number) {
@@ -121,5 +139,12 @@ function transformMentor(record: Mentor): MentorBasic {
     countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled,
     students: record.students?.map(s => ({ id: s.id })) ?? [],
+  };
+}
+
+function transformMentorWithStudentsLimit(record: Mentor): MentorBasic & { maxStudentsLimit: number } {
+  return {
+    ...transformMentor(record),
+    maxStudentsLimit: record.maxStudentsLimit ?? 0,
   };
 }

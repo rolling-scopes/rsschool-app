@@ -48,7 +48,7 @@ export interface ExternalAccount {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn() id?: number;
+  @PrimaryGeneratedColumn() id: number;
 
   @Column({ nullable: true })
   primaryEmail?: string;

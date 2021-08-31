@@ -228,8 +228,9 @@ type TaskArtefactInput = {
 };
 
 export function createTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
+  const comment = data.comment.substr(0, 4096);
   return {
-    comment: data.comment,
+    comment,
     courseTaskId: data.courseTaskId,
     studentId: data.studentId,
     score: data.score,
@@ -238,7 +239,7 @@ export function createTaskResult(authorId: number, data: TaskResultInput): Parti
         authorId,
         score: data.score,
         dateTime: Date.now(),
-        comment: data.comment,
+        comment,
       },
     ],
     githubPrUrl: data.githubPrUrl,
@@ -280,7 +281,9 @@ export async function saveScore(
     githubPrUrl?: string;
   },
 ) {
-  const { authorId, githubPrUrl = null, comment = '' } = data;
+  const { authorId, githubPrUrl = null } = data;
+  const comment = data.comment?.substr(0, 4096) ?? '';
+
   const score = Math.round(data.score);
 
   const existingResult = await getTaskResult(studentId, courseTaskId);

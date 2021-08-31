@@ -28,7 +28,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
   if (result == null) {
     const email = getPrimaryEmail(profile.emails || [])[0];
 
-    const user: User = {
+    const user: Partial<User> = {
       githubId: id,
       primaryEmail: email ? email.value : undefined,
       firstName: profile.name ? profile.name.givenName : '',
@@ -51,7 +51,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       bestWorks: [],
     };
     const createdUser = await getRepository(User).save(user);
-    const userId = createdUser.id!;
+    const userId = createdUser.id;
     return {
       id: userId,
       githubId: createdUser.githubId.toLowerCase(),
