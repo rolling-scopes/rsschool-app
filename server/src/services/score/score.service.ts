@@ -30,6 +30,15 @@ type TaskResultInput = {
   githubPrUrl?: string;
 };
 
+type TaskResultData = {
+  authorId?: number;
+  score: number;
+  comment: string;
+  githubPrUrl?: string;
+};
+
+const KB = 1024;
+
 export class ScoreService {
   private taskResultRepository = getRepository(TaskResult);
 
@@ -209,17 +218,10 @@ export class ScoreService {
     };
   }
 
-  public async saveScore(
-    studentId: number,
-    courseTaskId: number,
-    data: {
-      authorId?: number;
-      score: number;
-      comment: string;
-      githubPrUrl?: string;
-    },
-  ): Promise<boolean> {
-    const { authorId = 0, githubPrUrl = null, comment = '' } = data;
+  public async saveScore(studentId: number, courseTaskId: number, data: TaskResultData): Promise<boolean> {
+    const { authorId = 0, githubPrUrl = null } = data;
+
+    const comment = this.trimComment(data.comment ?? '');
     const score = Math.round(data.score);
 
     const current = await this.getTaskResult(studentId, courseTaskId);
@@ -294,6 +296,10 @@ export class ScoreService {
       lastCheckerId: authorId > 0 ? authorId : undefined,
       githubPrUrl: data.githubPrUrl,
     };
+  }
+
+  private trimComment(comment: string): string {
+    return comment.substr(0, 8 * KB);
   }
 }
 
