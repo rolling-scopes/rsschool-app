@@ -22,19 +22,16 @@ const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
-type TaskResultInput = {
-  studentId: number;
-  courseTaskId: number;
-  score: number;
-  comment: string;
-  githubPrUrl?: string;
-};
-
 type TaskResultData = {
   authorId?: number;
   score: number;
   comment: string;
   githubPrUrl?: string;
+};
+
+type TaskResultInput = TaskResultData & {
+  studentId: number;
+  courseTaskId: number;
 };
 
 const KB = 1024;
@@ -227,12 +224,13 @@ export class ScoreService {
     const current = await this.getTaskResult(studentId, courseTaskId);
 
     if (current == null) {
-      const taskResult = this.createTaskResult(authorId, {
+      const taskResult = this.createTaskResult({
         comment,
         score,
         studentId,
         courseTaskId,
         githubPrUrl: githubPrUrl ?? undefined,
+        authorId,
       });
       await this.taskResultRepository.insert(taskResult);
       return true;
@@ -249,12 +247,7 @@ export class ScoreService {
       current.comment = comment;
     }
     if (score !== current.score) {
-      current.historicalScores.push({
-        comment,
-        authorId,
-        score,
-        dateTime: Date.now(),
-      });
+      current.historicalScores.push(this.createHistoricalRecord(data));
       if (authorId > 0) {
         current.lastCheckerId = authorId;
       }
@@ -279,22 +272,25 @@ export class ScoreService {
       .getOne();
   }
 
-  private createTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
+  private createTaskResult(data: TaskResultInput): Partial<TaskResult> {
+    const authorId = data.authorId ?? 0;
     return {
       comment: data.comment,
       courseTaskId: data.courseTaskId,
       studentId: data.studentId,
       score: data.score,
-      historicalScores: [
-        {
-          authorId,
-          score: data.score,
-          dateTime: Date.now(),
-          comment: data.comment,
-        },
-      ],
+      historicalScores: [this.createHistoricalRecord(data)],
       lastCheckerId: authorId > 0 ? authorId : undefined,
       githubPrUrl: data.githubPrUrl,
+    };
+  }
+
+  private createHistoricalRecord(data: Pick<TaskResultData, 'authorId' | 'comment' | 'score'>) {
+    return {
+      authorId: data.authorId ?? 0,
+      score: data.score,
+      dateTime: Date.now(),
+      comment: data.comment,
     };
   }
 
