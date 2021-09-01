@@ -120,7 +120,8 @@ export class MentorRepository extends AbstractRepository<Mentor> {
             .select('t.lastCheckerId', 'lastCheckerId')
             .addSelect('MAX(t."updatedDate")', 'updatedDate')
             .from(TaskResult, 't')
-            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds })
+            // add 0 to prevent empty array
+            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds.concat([0]) })
             .groupBy('t.lastCheckerId'),
         'tr',
         'tr."lastCheckerId" = u.id',
@@ -147,7 +148,8 @@ export class MentorRepository extends AbstractRepository<Mentor> {
             .select('t.lastCheckerId', 'lastCheckerId')
             .addSelect('t.updatedDate', 'updatedDate')
             .from(TaskResult, 't')
-            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds }),
+            // add 0 to prevent empty array
+            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds.concat([0]) }),
         'tr',
         'tr."lastCheckerId" = u.id',
       )
