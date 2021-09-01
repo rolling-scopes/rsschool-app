@@ -45,7 +45,8 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .andWhere('c.studentEndDate < NOW()')
       .andWhere("c.type <> 'interview'");
 
-    const tasks = await courseTaskQuery.getMany();
+    const courseTasks = await courseTaskQuery.getMany();
+    const courseTasksIds = courseTasks.map(t => t.id);
 
     const query = getRepository(Mentor)
       .createQueryBuilder('mentor')
@@ -66,11 +67,11 @@ export class MentorRepository extends AbstractRepository<Mentor> {
 
     const [records, checkedCountByMentor, lastCheckedDateByMentor] = await Promise.all([
       query.getMany(),
-      this.getCheckedTasksCount(courseId),
-      this.getLastCheckedDates(courseId),
+      this.getCheckedTasksCount(courseId, courseTasksIds),
+      this.getLastCheckedDates(courseId, courseTasksIds),
     ]);
 
-    const count = tasks.length;
+    const count = courseTasks.length;
     const mentors = [];
     for (const mentor of records) {
       const mentorBasic = transformMentor(mentor);
@@ -107,7 +108,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
     return mentors;
   }
 
-  private async getLastCheckedDates(courseId: number) {
+  private async getLastCheckedDates(courseId: number, courseTasksIds: number[]) {
     const query = createQueryBuilder()
       .select('m.id', 'id')
       .addSelect('tr."updatedDate"', 'value')
@@ -119,7 +120,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
             .select('t.lastCheckerId', 'lastCheckerId')
             .addSelect('MAX(t."updatedDate")', 'updatedDate')
             .from(TaskResult, 't')
-            .innerJoin(CourseTask, 'ct', 'ct.id = t."courseTaskId" AND ct."courseId" = :courseId', { courseId })
+            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds })
             .groupBy('t.lastCheckerId'),
         'tr',
         'tr."lastCheckerId" = u.id',
@@ -134,7 +135,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
     }));
   }
 
-  private async getCheckedTasksCount(courseId: number) {
+  private async getCheckedTasksCount(courseId: number, courseTasksIds: number[]) {
     const query = createQueryBuilder()
       .select('m.id', 'id')
       .addSelect('COUNT(tr."lastCheckerId")', 'value')
@@ -146,7 +147,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
             .select('t.lastCheckerId', 'lastCheckerId')
             .addSelect('t.updatedDate', 'updatedDate')
             .from(TaskResult, 't')
-            .innerJoin(CourseTask, 'ct', 'ct.id = t."courseTaskId" AND ct."courseId" = :courseId', { courseId }),
+            .where('t.courseTaskId IN (:...ids)', { ids: courseTasksIds }),
         'tr',
         'tr."lastCheckerId" = u.id',
       )

@@ -181,14 +181,14 @@ function Page(props: CoursePageProps) {
           {
             title: 'Screenings',
             dataIndex: ['screenings'],
-            sorter: numberSorter('screenings.total' as any),
+            sorter: numberSorter('screenings.completed' as any),
             width: 80,
             render: (value: any) => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Interviews',
             dataIndex: ['interviews'],
-            sorter: numberSorter('interviews.total' as any),
+            sorter: numberSorter('interviews.completed' as any),
             width: 80,
             render: (value: any) => `${value.completed} / ${value.total}`,
           },
