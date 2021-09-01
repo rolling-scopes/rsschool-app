@@ -1,8 +1,8 @@
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { courseService, interviewService } from '../../services';
+import { courseService, InterviewService } from '../../services';
 import { setResponse } from '../utils';
 import { InterviewRepository } from '../../repositories/interview';
 import { StageInterviewRepository } from '../../repositories/stageInterview';
@@ -19,7 +19,7 @@ export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterCon
   ]);
   const result = stageInterviews.concat(interviews);
 
-  setResponse(ctx, OK, result);
+  setResponse(ctx, StatusCodes.OK, result);
 };
 
 export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -31,7 +31,7 @@ export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterCont
     stageInterviewRepository.findByInterviewer(courseId, githubId),
   ]);
   const result = stageInterviews.concat(interviews);
-  setResponse(ctx, OK, result);
+  setResponse(ctx, StatusCodes.OK, result);
 };
 
 export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -53,13 +53,15 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
         type: interview.type || interview.task.type,
       };
     });
-  setResponse(ctx, OK, result);
+  setResponse(ctx, StatusCodes.OK, result);
 };
 
 export const getInterviewPairs = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
   const courseTaskId: number = Number(ctx.params.courseTaskId);
-  const data = await interviewService.getInterviewPairs(courseTaskId);
-  setResponse(ctx, OK, data);
+  const service = new InterviewService(courseId);
+  const data = await service.getInterviewPairs(courseTaskId);
+  setResponse(ctx, StatusCodes.OK, data);
 };
 
 export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -67,14 +69,14 @@ export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterC
   try {
     const student = await courseService.queryStudentByGithubId(courseId, githubId);
     if (student == null) {
-      setResponse(ctx, BAD_REQUEST, null);
+      setResponse(ctx, StatusCodes.BAD_REQUEST, null);
       return;
     }
     const repository = getCustomRepository(InterviewRepository);
     const result = await repository.addStudent(courseId, Number(courseTaskId), student.id);
-    setResponse(ctx, OK, result);
+    setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
   }
 };
 
@@ -83,21 +85,22 @@ export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterCont
   try {
     const student = await courseService.queryStudentByGithubId(courseId, githubId);
     if (student == null) {
-      setResponse(ctx, BAD_REQUEST, null);
+      setResponse(ctx, StatusCodes.BAD_REQUEST, null);
       return;
     }
     const repository = getCustomRepository(InterviewRepository);
     const result = await repository.findRegisteredStudent(courseId, Number(courseTaskId), student.id);
-    setResponse(ctx, OK, result);
+    setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
   }
 };
 
 export const createInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
-  const result = await interviewService.createInterview(courseId, courseTaskId, interviewerGithubId, studentGithubId);
-  setResponse(ctx, OK, { id: result?.id });
+  const interviewService = new InterviewService(courseId);
+  const result = await interviewService.createInterview(courseTaskId, interviewerGithubId, studentGithubId);
+  setResponse(ctx, StatusCodes.OK, { id: result?.id });
 };
 
 export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
@@ -108,26 +111,30 @@ export const createInterviews = (_: ILogger) => async (ctx: Router.RouterContext
       clean: boolean;
       registrationEnabled: boolean;
     };
-    const result = await interviewService.createInterviewsAutomatically(courseId, courseTaskId, {
+    const interviewService = new InterviewService(courseId);
+    const result = await interviewService.createInterviewsAutomatically(courseTaskId, {
       clean,
       registrationEnabled,
     });
     if (result == null) {
-      setResponse(ctx, BAD_REQUEST);
+      setResponse(ctx, StatusCodes.BAD_REQUEST);
       return;
     }
-    setResponse(ctx, OK, result);
+    setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
   }
 };
 
 export const cancelInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = Number(ctx.params.courseId);
   const pairId: number = Number(ctx.params.id);
+
   try {
+    const interviewService = new InterviewService(courseId);
     await interviewService.cancelInterviewPair(pairId);
-    setResponse(ctx, OK, {});
+    setResponse(ctx, StatusCodes.OK, {});
   } catch (e) {
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: e.message });
   }
 };

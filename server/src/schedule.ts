@@ -1,6 +1,6 @@
 import { scheduleJob } from 'node-schedule';
 import { ILogger } from './logger';
-import { ScoreService } from './services/score.service';
+import { ScoreService } from './services/score';
 import { cancelPendingTasks } from './services/taskVerification.service';
 
 export function startBackgroundJobs(logger: ILogger) {

@@ -1,20 +1,20 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { TaskSolutionChecker } from '../../../models';
-import { createCrossCheckPairs } from '../../../rules/distribution';
+import { CrossCheckDistributionService } from '../../../services/distribution';
 import { courseService, taskService } from '../../../services';
 import { setResponse } from '../../utils';
 
-const defaultPairsCount = 4;
+const crossCheckDistributionService = new CrossCheckDistributionService();
 
 export const createDistribution = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseTaskId } = ctx.params;
 
   const courseTask = await taskService.getCourseTask(courseTaskId);
   if (courseTask == null) {
-    setResponse(ctx, BAD_REQUEST);
+    setResponse(ctx, StatusCodes.BAD_REQUEST);
     return;
   }
 
@@ -27,11 +27,11 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
   const students = Array.from(solutionsMap.keys());
 
   if (students.length === 0) {
-    setResponse(ctx, OK, { crossCheckPairs: [] });
+    setResponse(ctx, StatusCodes.OK, { crossCheckPairs: [] });
     return;
   }
 
-  const pairs = createCrossCheckPairs(students, courseTask.pairsCount ?? defaultPairsCount);
+  const pairs = crossCheckDistributionService.distribute(students, courseTask.pairsCount ?? undefined);
   const crossCheckPairs = pairs
     .filter(pair => solutionsMap.has(pair.studentId))
     .map(pair => ({
@@ -41,5 +41,5 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
     }));
 
   await getRepository(TaskSolutionChecker).save(crossCheckPairs);
-  setResponse(ctx, OK, { crossCheckPairs });
+  setResponse(ctx, StatusCodes.OK, { crossCheckPairs });
 };

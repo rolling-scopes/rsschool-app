@@ -6,8 +6,8 @@ import * as awsTaskService from './aws.service';
 import * as stageInterviewService from './stageInterview.service';
 import * as notificationService from './notification.service';
 import * as studentService from './student.service';
-import * as interviewService from './interview.service';
 
+export { InterviewService } from './interview.service';
 export { RepositoryService } from './repository.service';
 export { CrossCheckService } from './crossCheck.service';
 
@@ -21,5 +21,4 @@ export {
   awsTaskService,
   stageInterviewService,
   notificationService,
-  interviewService,
 };
