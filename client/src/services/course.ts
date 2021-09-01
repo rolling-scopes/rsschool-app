@@ -673,8 +673,12 @@ export interface MentorDetails extends MentorBasic {
   maxStudentsLimit: number;
   studentsPreference: string;
   interviews: {
-    techScreeningsCount?: number;
-    interviewsCount?: number;
+    total: number;
+    completed: number;
+  };
+  screenings: {
+    total: number;
+    completed: number;
   };
 }
 

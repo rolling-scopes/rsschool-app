@@ -51,12 +51,16 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .createQueryBuilder('mentor')
       .innerJoin('mentor.user', 'user')
       .addSelect(this.getPrimaryUserFields())
-      .leftJoin('mentor.students', 'students')
-      .addSelect(['students.id', 'students.isExpelled', 'students.isFailed'])
+      .leftJoin('mentor.students', 's')
       .leftJoin('mentor.stageInterviews', 'si')
-      .leftJoin('mentor.taskChecker', 'taskChecker')
-      .leftJoin('taskChecker.courseTask', 'courseTask', 'courseTask.type = :type', { type: 'interview' })
-      .addSelect(['si.id', 'taskChecker.id', 'taskChecker.courseTaskId', 'courseTask.id', 'courseTask.type'])
+      .leftJoin('mentor.taskChecker', 'tc')
+      .leftJoin('mentor.interviewResults', 'ir')
+      .leftJoin('tc.courseTask', 't', 't.type = :type', { type: 'interview' })
+      .addSelect(['s.id', 's.isExpelled', 's.isFailed'])
+      .addSelect(['si.id', 'si.isCompleted'])
+      .addSelect(['tc.id', 'tc.courseTaskId'])
+      .addSelect(['t.id', 't.type'])
+      .addSelect(['ir.id'])
       .where(`"mentor"."courseId" = :courseId`, { courseId })
       .orderBy('mentor.createdDate');
 
@@ -85,9 +89,13 @@ export class MentorRepository extends AbstractRepository<Mentor> {
         maxStudentsLimit: mentor.maxStudentsLimit,
         studentsPreference: mentor.studentsPreference ?? 'any',
         studentsCount: activeStudents.length,
+        screenings: {
+          total: mentor.stageInterviews?.length ?? 0,
+          completed: mentor.stageInterviews?.filter(s => s.isCompleted).length ?? 0,
+        },
         interviews: {
-          techScreeningsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
-          interviewsCount: mentor.taskChecker?.filter(tc => tc.courseTask.type === 'interview').length,
+          total: mentor.taskChecker?.filter(tc => tc.courseTask.type === 'interview').length,
+          completed: mentor.interviewResults?.length ?? 0,
         },
         taskResultsStats: {
           lastUpdatedDate: lastCheckedDate,
