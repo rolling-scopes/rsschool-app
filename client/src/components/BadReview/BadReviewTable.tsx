@@ -1,4 +1,4 @@
-import { Button, message, Modal, Table, Typography } from 'antd';
+import { message, Table, Typography } from 'antd';
 import { GithubUserLink } from 'components';
 import React from 'react';
 import { checkType, IBadReview } from './BadReviewControllers';
@@ -9,7 +9,6 @@ interface IBadReviewTableProps {
 }
 
 export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
-  const [modal, contextHolder] = Modal.useModal();
   const { Text } = Typography;
 
   const columns = [
@@ -31,7 +30,7 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
       render: (id: string) => <GithubUserLink value={id} />,
     },
     {
-      title: "Checker's score",
+      title: 'Checker\'s score',
       dataIndex: 'checkerScore',
       key: 'checkerScore',
     },
@@ -41,23 +40,9 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
       key: 'studentAvgScore',
     },
     {
-      title: "Checker's comment",
+      title: 'Checker\'s comment',
       dataIndex: 'comment',
       key: 'comment',
-      render: (comment: string) => (
-        <Button
-          onClick={() =>
-            modal.info({
-              title: 'Comment',
-              content: comment.split('\n').map((text, id) => <p key={id}>{text}</p>),
-            })
-          }
-          type="link"
-          size="small"
-        >
-          Show
-        </Button>
-      ),
     },
   ];
 
@@ -76,7 +61,6 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
 
   return (
     <>
-      {contextHolder}
       {data.length ? <Table columns={columnsType} dataSource={data} scroll={{ x: true }} /> : <Text>No data</Text>}
     </>
   );
