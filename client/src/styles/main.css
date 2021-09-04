@@ -42,7 +42,7 @@ span.ant-table-filter-column-title {
   padding-bottom: 8px;
 }
 
-span.ant-radio+* {
+span.ant-radio + * {
   display: inline-block;
   white-space: normal;
   vertical-align: top;
@@ -59,3 +59,12 @@ thead.ant-table-thead > tr > th {
 /* .rc-virtual-list-scrollbar {
   display: block !important;
 } */
+
+/* table-row-* are used for Schedule Table view - Split by week feature */
+.table-row-current {
+  background-color: #f6ffed;
+}
+
+.table-row-dark {
+  background-color: #e6f7ff;
+}

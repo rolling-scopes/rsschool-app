@@ -227,24 +227,6 @@ type TaskArtefactInput = {
   presentationUrl?: string;
 };
 
-export function createTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
-  return {
-    comment: data.comment,
-    courseTaskId: data.courseTaskId,
-    studentId: data.studentId,
-    score: data.score,
-    historicalScores: [
-      {
-        authorId,
-        score: data.score,
-        dateTime: Date.now(),
-        comment: data.comment,
-      },
-    ],
-    githubPrUrl: data.githubPrUrl,
-  };
-}
-
 export function createJuryTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
   return {
     courseTaskId: data.courseTaskId,
@@ -268,61 +250,4 @@ export function createStudentArtefactTaskResult(data: TaskArtefactInput): Partia
     videoUrl: data.videoUrl,
     presentationUrl: data.presentationUrl,
   };
-}
-
-export async function saveScore(
-  studentId: number,
-  courseTaskId: number,
-  data: {
-    authorId: number;
-    score: number;
-    comment: string;
-    githubPrUrl?: string;
-  },
-) {
-  const { authorId, githubPrUrl = null, comment = '' } = data;
-  const score = Math.round(data.score);
-
-  const existingResult = await getTaskResult(studentId, courseTaskId);
-  if (existingResult == null) {
-    const taskResult = createTaskResult(authorId, {
-      comment,
-      score,
-      studentId,
-      courseTaskId,
-      githubPrUrl: githubPrUrl ?? undefined,
-    });
-    return getRepository(TaskResult).insert(taskResult);
-  }
-
-  if (
-    existingResult.githubRepoUrl === githubPrUrl &&
-    existingResult.comment === comment &&
-    existingResult.score === score
-  ) {
-    return null;
-  }
-
-  if (githubPrUrl) {
-    existingResult.githubPrUrl = githubPrUrl;
-  }
-  if (comment) {
-    existingResult.comment = comment;
-  }
-  if (score !== existingResult.score) {
-    existingResult.historicalScores.push({
-      comment,
-      authorId,
-      score,
-      dateTime: Date.now(),
-    });
-    existingResult.score = score;
-  }
-
-  return getRepository(TaskResult).update(existingResult.id, {
-    score: existingResult.score,
-    comment: existingResult.comment,
-    githubPrUrl: existingResult.githubPrUrl,
-    historicalScores: existingResult.historicalScores,
-  });
 }

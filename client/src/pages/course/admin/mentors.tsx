@@ -179,16 +179,18 @@ function Page(props: CoursePageProps) {
             width: 80,
           },
           {
-            title: 'Tech Screenings',
-            dataIndex: ['interviews', 'techScreeningsCount'],
-            sorter: numberSorter('interviews.techScreeningsCount' as any),
+            title: 'Screenings',
+            dataIndex: ['screenings'],
+            sorter: numberSorter('screenings.completed' as any),
             width: 80,
+            render: (value: any) => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Interviews',
-            dataIndex: ['interviews', 'interviewsCount'],
-            sorter: numberSorter('interviews.interviewsCount' as any),
+            dataIndex: ['interviews'],
+            sorter: numberSorter('interviews.completed' as any),
             width: 80,
+            render: (value: any) => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Students',

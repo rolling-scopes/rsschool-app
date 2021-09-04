@@ -14,6 +14,7 @@ import { Student } from './student';
 import { Course } from './course';
 import { TaskChecker } from './taskChecker';
 import { StageInterview } from './stageInterview';
+import { TaskInterviewResult } from './taskInterviewResult';
 
 @Entity()
 @Index(['courseId'])
@@ -56,4 +57,7 @@ export class Mentor {
 
   @OneToMany(_ => StageInterview, stageInterview => stageInterview.mentor, { nullable: true })
   stageInterviews: StageInterview[] | null;
+
+  @OneToMany(_ => TaskInterviewResult, (result: TaskInterviewResult) => result.mentor)
+  interviewResults: TaskInterviewResult[] | null;
 }

@@ -117,7 +117,7 @@ export class Student {
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
   feedback: StudentFeedback[] | null;
 
-  @Column({ default: new Date(0), type: 'timestamptz' })
+  @Column({ default: () => "'1970-01-01 00:00:00+00'", type: 'timestamptz' })
   startDate: Date;
 
   @Column({ type: 'timestamptz', nullable: true })

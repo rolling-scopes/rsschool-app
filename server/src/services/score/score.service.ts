@@ -1,14 +1,14 @@
 import { IPaginationOptions, paginate } from 'koa-typeorm-pagination';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { ScoreTableFilters } from '../../../common/types/score';
-import { Course, Student } from '../models';
-import { createName } from './user.service';
-import { getPrimaryUserFields, convertToMentorBasic } from './course.service';
-import { getCourseTasks, updateScoreStudents, getCourses } from './course.service';
-import { getStageInterviewRating } from './stageInterview.service';
+import { ScoreTableFilters } from '../../../../common/types/score';
+import { Course, Student, TaskResult } from '../../models';
+import { createName } from '../user.service';
+import { getPrimaryUserFields, convertToMentorBasic } from '../course.service';
+import { getCourseTasks, updateScoreStudents, getCourses } from '../course.service';
+import { getStageInterviewRating } from '../stageInterview.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
-import { ILogger } from '../logger';
+import { ILogger } from '../../logger';
 
 const orderByFieldMapping = {
   rank: 'student.rank',
@@ -22,8 +22,24 @@ const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
+type TaskResultData = {
+  authorId?: number;
+  score: number;
+  comment: string;
+  githubPrUrl?: string;
+};
+
+type TaskResultInput = TaskResultData & {
+  studentId: number;
+  courseTaskId: number;
+};
+
+const KB = 1024;
+
 export class ScoreService {
-  constructor(private courseId: number) {}
+  private taskResultRepository = getRepository(TaskResult);
+
+  constructor(private courseId: number | undefined = undefined) {}
 
   public static async recalculateTotalScore(logger: ILogger, coursesToUpdate?: Course[]) {
     const courses = coursesToUpdate ?? (await getCourses());
@@ -197,6 +213,89 @@ export class ScoreService {
       ...pagination,
       content: students,
     };
+  }
+
+  public async saveScore(studentId: number, courseTaskId: number, data: TaskResultData): Promise<boolean> {
+    const { authorId = 0, githubPrUrl = null } = data;
+
+    const comment = this.trimComment(data.comment ?? '');
+    const score = Math.round(data.score);
+
+    const current = await this.getTaskResult(studentId, courseTaskId);
+
+    if (current == null) {
+      const taskResult = this.createTaskResult({
+        comment,
+        score,
+        studentId,
+        courseTaskId,
+        githubPrUrl: githubPrUrl ?? undefined,
+        authorId,
+      });
+      await this.taskResultRepository.insert(taskResult);
+      return true;
+    }
+
+    if (current.githubRepoUrl === githubPrUrl && current.comment === comment && current.score === score) {
+      return true;
+    }
+
+    if (githubPrUrl) {
+      current.githubPrUrl = githubPrUrl;
+    }
+    if (comment) {
+      current.comment = comment;
+    }
+    if (score !== current.score) {
+      current.historicalScores.push(this.createHistoricalRecord(data));
+      if (authorId > 0) {
+        current.lastCheckerId = authorId;
+      }
+      current.score = score;
+    }
+
+    await this.taskResultRepository.update(current.id, {
+      score: current.score,
+      comment: current.comment,
+      githubPrUrl: current.githubPrUrl,
+      historicalScores: current.historicalScores,
+      lastCheckerId: current.lastCheckerId,
+    });
+    return false;
+  }
+
+  private getTaskResult(studentId: number, courseTaskId: number) {
+    return this.taskResultRepository
+      .createQueryBuilder('r')
+      .where('r."studentId" = :studentId', { studentId })
+      .andWhere('r."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  private createTaskResult(data: TaskResultInput): Partial<TaskResult> {
+    const authorId = data.authorId ?? 0;
+    return {
+      comment: data.comment,
+      courseTaskId: data.courseTaskId,
+      studentId: data.studentId,
+      score: data.score,
+      historicalScores: [this.createHistoricalRecord(data)],
+      lastCheckerId: authorId > 0 ? authorId : undefined,
+      githubPrUrl: data.githubPrUrl,
+    };
+  }
+
+  private createHistoricalRecord(data: Pick<TaskResultData, 'authorId' | 'comment' | 'score'>) {
+    return {
+      authorId: data.authorId ?? 0,
+      score: data.score,
+      dateTime: Date.now(),
+      comment: data.comment,
+    };
+  }
+
+  private trimComment(comment: string): string {
+    return comment.substr(0, 8 * KB);
   }
 }
 

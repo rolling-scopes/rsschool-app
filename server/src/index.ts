@@ -12,9 +12,10 @@ import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
 import { createConnection } from 'typeorm';
-import { models } from './models';
+// import { models } from './models';
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
 import { startBackgroundJobs } from './schedule';
+import * as pgConfig from './ormconfig';
 
 export class App {
   private koa = new Koa();
@@ -58,17 +59,13 @@ export class App {
   }
 
   public async pgConnect(): Promise<boolean> {
-    await createConnection({
-      type: 'postgres',
-      host: config.pg.host,
-      port: 5432,
-      username: config.pg.username,
-      password: config.pg.password,
-      database: config.pg.database,
-      entities: models,
-      synchronize: true,
-    });
-    this.appLogger.info('Connected to Postgres');
+    const logger = this.appLogger.child({ module: 'db' });
+    const connection = await createConnection(pgConfig);
+    logger.info('Connected to Postgres');
+
+    logger.info('Executing migrations...');
+    await connection.runMigrations();
+    logger.info('Migrations executed successfully');
 
     return true;
   }

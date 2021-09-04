@@ -1,8 +1,10 @@
 import React from 'react';
+import { ConfigProvider } from 'antd';
 import MobileCalendar from './components/MobileCalendar';
 import DesktopCalendar from './components/DesktopCalendar';
 import { CourseEvent } from 'services/course';
 import { isMobile } from 'mobile-device-detect';
+import en_GB from 'antd/lib/locale-provider/en_GB';
 
 type Props = {
   data: CourseEvent[];
@@ -14,11 +16,13 @@ type Props = {
 export const CalendarView: React.FC<Props> = ({ data, timeZone, storedTagColors, alias }) => {
   return (
     <>
-      {isMobile ? (
-        <MobileCalendar data={data} timeZone={timeZone} storedTagColors={storedTagColors} alias={alias} />
-      ) : (
-        <DesktopCalendar data={data} timeZone={timeZone} storedTagColors={storedTagColors} alias={alias} />
-      )}
+      <ConfigProvider locale={en_GB}>
+        {isMobile ? (
+          <MobileCalendar data={data} timeZone={timeZone} storedTagColors={storedTagColors} alias={alias} />
+        ) : (
+          <DesktopCalendar data={data} timeZone={timeZone} storedTagColors={storedTagColors} alias={alias} />
+        )}
+      </ConfigProvider>
     </>
   );
 };

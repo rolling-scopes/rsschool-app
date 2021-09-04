@@ -30,6 +30,7 @@ export interface CourseTask {
   isVisible?: boolean;
   special?: string;
   duration?: number;
+  score?: number | null;
 }
 
 export interface IColumn {
@@ -89,6 +90,7 @@ export interface CourseEvent {
   duration?: number;
   isTask?: boolean;
   checker?: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  score?: number;
 }
 
 export interface CourseUser {
@@ -671,8 +673,12 @@ export interface MentorDetails extends MentorBasic {
   maxStudentsLimit: number;
   studentsPreference: string;
   interviews: {
-    techScreeningsCount?: number;
-    interviewsCount?: number;
+    total: number;
+    completed: number;
+  };
+  screenings: {
+    total: number;
+    completed: number;
   };
 }
 
