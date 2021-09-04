@@ -13,7 +13,6 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { Text, Paragraph } = Typography;
 
 import { MessageOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 
 type Props = {
   data: PublicFeedback[];
@@ -118,11 +117,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
               {badges.slice(0, 1).map(({ fromUser, comment, feedbackDate, badgeId }, idx) => (
                 <Comment
                   key={`comment-${idx}`}
-                  author={
-                    <Link href={`/profile?githubId=${fromUser.githubId}`}>
-                      <a>{fromUser.name}</a>
-                    </Link>
-                  }
+                  author={<a href={`/profile?githubId=${fromUser.githubId}`}>{fromUser.name}</a>}
                   avatar={
                     <Avatar
                       src={`https://github.com/${fromUser.githubId}.png?size=${48}`}

@@ -7,11 +7,9 @@ import { MentorStats } from '../../../../common/models/profile';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { TeamOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
-
-import { TeamOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 
 type Props = {
   data: MentorStats[];
@@ -113,9 +111,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                                       marginBottom: 5,
                                     }}
                                   >
-                                    <Link href={`/profile?githubId=${githubId}`}>
-                                      <a>{name}</a>{' '}
-                                    </Link>
+                                    <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
                                     {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
                                   </p>
                                   <p style={{ fontSize: 12, marginBottom: 0 }}>

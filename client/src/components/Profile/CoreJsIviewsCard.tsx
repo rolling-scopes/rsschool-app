@@ -7,7 +7,6 @@ import CoreJsIviewsModal from './CoreJsIviewsModal';
 const { Text } = Typography;
 
 import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 
 export interface CoreJsInterviewData {
   courseFullName: string;
@@ -89,10 +88,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                     }
                     {
                       <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Interviewer:{' '}
-                        <Link href={`/profile?githubId=${interviewer.githubId}`}>
-                          <a>{interviewer.name}</a>
-                        </Link>
+                        Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
                       </p>
                     }
                   </div>

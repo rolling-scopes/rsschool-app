@@ -12,7 +12,6 @@ import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant
 import { CourseService } from '../../services/course';
 import { WarningTwoTone } from '@ant-design/icons';
 import { CSSProperties } from 'react';
-import Link from 'next/link';
 
 const { Text, Paragraph } = Typography;
 
@@ -212,10 +211,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                       )}
                       {mentor.githubId && (
                         <p style={{ fontSize: 12, marginBottom: 5 }}>
-                          Mentor:{' '}
-                          <Link href={`/profile?githubId=${mentor.githubId}`}>
-                            <a>{mentor.name}</a>
-                          </Link>
+                          Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
                         </p>
                       )}
                       {position && (
