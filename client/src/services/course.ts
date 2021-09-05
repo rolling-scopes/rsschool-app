@@ -30,6 +30,7 @@ export interface CourseTask {
   isVisible?: boolean;
   special?: string;
   duration?: number;
+  score?: number | null;
 }
 
 export interface IColumn {
@@ -89,6 +90,7 @@ export interface CourseEvent {
   duration?: number;
   isTask?: boolean;
   checker?: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  score?: number;
 }
 
 export interface CourseUser {
@@ -372,7 +374,7 @@ export class CourseService {
       review: CrossCheckReview[];
       studentId: number;
       checkerId: number;
-      historicalScores: { score: number; comment: string; dateTime: number }[];
+      historicalScores: { score: number; comment: string; dateTime: number; anonymous: boolean }[];
     } | null;
   }
 
@@ -579,6 +581,11 @@ export class CourseService {
     return result.data.data as StudentBasic;
   }
 
+  async unassignStudentFromMentor(githubId: string, data: { mentorGithuId: null; unassigningComment: string }) {
+    const result = await this.axios.put(`/student/${githubId}`, data);
+    return result.data.data;
+  }
+
   async createInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.post(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data;
@@ -666,8 +673,12 @@ export interface MentorDetails extends MentorBasic {
   maxStudentsLimit: number;
   studentsPreference: string;
   interviews: {
-    techScreeningsCount?: number;
-    interviewsCount?: number;
+    total: number;
+    completed: number;
+  };
+  screenings: {
+    total: number;
+    completed: number;
   };
 }
 
@@ -724,4 +735,5 @@ export interface CrossCheckPairs {
   url: string;
   comment: string;
   score: number;
+  key: string;
 }

@@ -76,9 +76,13 @@ export interface MentorDetails extends MentorBasic {
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'any' | 'city' | 'country';
-  interviews: {
-    techScreeningsCount?: number;
-    interviewsCount?: number;
+  interviews?: {
+    completed?: number;
+    total?: number;
+  };
+  screenings?: {
+    completed?: number;
+    total?: number;
   };
   studentsCount?: number;
   taskResultsStats?: {
@@ -111,6 +115,7 @@ export function convertToStudentBasic(student: Student): StudentBasic {
     cityName: user.cityName ?? '',
     countryName: user.countryName ?? '',
     discord: user.discord ? `${user.discord.username}#${user.discord.discriminator}` : '',
+    totalScore: student.totalScore,
   };
 }
 
@@ -146,8 +151,8 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference ?? 'any',
     studentsCount: mentor.students ? mentor.students.length : 0,
-    interviews: {
-      techScreeningsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+    screenings: {
+      total: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
     },
   };
 }

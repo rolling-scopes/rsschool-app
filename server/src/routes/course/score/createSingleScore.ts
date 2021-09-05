@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { CourseRole, IUserSession, TaskResult } from '../../../models';
 import { courseService, notificationService, taskResultsService, taskService } from '../../../services';
+import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
 
 type ScoreInput = {
@@ -17,6 +18,8 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   const { coursesRoles } = ctx.state!.user as IUserSession;
 
   const inputData: ScoreInput = ctx.request.body;
+
+  const scoreService = new ScoreService(courseId);
 
   const student = await courseService.queryStudentByGithubId(courseId, githubId);
   if (student == null) {
@@ -51,8 +54,9 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
       setResponse(ctx, BAD_REQUEST, { message: 'no score' });
       return;
     }
-    const existingResult = await taskResultsService.getTaskResult(student.id, courseTask.id);
-    if (existingResult == null) {
+
+    const current = await taskResultsService.getTaskResult(student.id, courseTask.id);
+    if (current == null) {
       const taskResult = taskResultsService.createJuryTaskResult(authorId, {
         ...data,
         studentId: student.id,
@@ -63,21 +67,21 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
       return;
     }
 
-    const existingJuryScore = existingResult.juryScores.find(score => score.authorId === authorId);
+    const existingJuryScore = current.juryScores.find(score => score.authorId === authorId);
     if (existingJuryScore) {
       existingJuryScore.score = data.score;
     } else {
-      existingResult.juryScores.push({
+      current.juryScores.push({
         authorId,
         score: data.score,
         dateTime: Date.now(),
         comment: data.comment || '',
       });
     }
-    existingResult.score = Math.round(
-      existingResult.juryScores.reduce((acc, record) => acc + record.score, 0) / existingResult.juryScores.length,
+    current.score = Math.round(
+      current.juryScores.reduce((acc, record) => acc + record.score, 0) / current.juryScores.length,
     );
-    const updateResult = await getRepository(TaskResult).save(existingResult);
+    const updateResult = await getRepository(TaskResult).save(current);
     setResponse(ctx, OK, updateResult);
     return;
   }
@@ -96,7 +100,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
     return;
   }
 
-  const result = taskResultsService.saveScore(student.id, courseTask.id, { ...data, authorId });
+  const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
   const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
   await notificationService.sendNotification([githubId], taskResultText);

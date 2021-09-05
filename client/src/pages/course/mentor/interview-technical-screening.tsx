@@ -280,10 +280,7 @@ function Page(props: CoursePageProps) {
 
   const loadData = async () => {
     const interviews = await courseService.getInterviewerStageInterviews(props.session.githubId);
-    const students = [
-      { id: 1, githubId: 'pulya10c', name: 'Aleh Serhienya', isActive: true, mentor: null, discord: '' },
-    ];
-    // setStudents(interviews.filter(i => !i.completed).map(i => i.student));
+    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
     setStudents(students);
     setInterviews(interviews);
   };

@@ -6,7 +6,7 @@ import { createGetRoute, createPostRoute, createPutRoute } from '../common';
 import { guard, anyCourseManagerGuard, adminGuard, basicAuthAws } from '../guards';
 import { setResponse } from '../utils';
 import { getRepository } from 'typeorm';
-import { taskResultsService } from '../../services';
+import { ScoreService } from '../../services/score';
 
 const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
   const stageId = Number(ctx.params.id);
@@ -33,8 +33,8 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
 
     const result = (await getRepository(TaskVerification).findOne(id))!;
 
-    await taskResultsService.saveScore(result.studentId, result.courseTaskId, {
-      authorId: 0,
+    const service = new ScoreService();
+    await service.saveScore(result.studentId, result.courseTaskId, {
       comment: result.details,
       score: result.score,
     });

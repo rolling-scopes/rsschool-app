@@ -17,19 +17,18 @@ interface IGratitude {
   [name: string]: string | number | number[];
 }
 
-type Badge = { id: string; name: string };
-
-const OUTSTANDING_WORK_ID = 'Outstanding_work';
+type Badge = { id: string; name: string; isManagerOnly: boolean };
 
 const heroBadges: Badge[] = [
-  { id: 'Congratulations', name: 'Congratulations' },
-  { id: 'Expert_help', name: 'Expert help' },
-  { id: 'Great_speaker', name: 'Great speaker' },
-  { id: 'Good_job', name: 'Good job' },
-  { id: 'Helping_hand', name: 'Helping hand' },
-  { id: 'Hero', name: 'Hero' },
-  { id: 'Thank_you', name: 'Thank you' },
-  { id: OUTSTANDING_WORK_ID, name: 'Outstanding work' },
+  { id: 'Congratulations', name: 'Congratulations', isManagerOnly: false },
+  { id: 'Expert_help', name: 'Expert help', isManagerOnly: false },
+  { id: 'Great_speaker', name: 'Great speaker', isManagerOnly: false },
+  { id: 'Good_job', name: 'Good job', isManagerOnly: false },
+  { id: 'Helping_hand', name: 'Helping hand', isManagerOnly: false },
+  { id: 'Hero', name: 'Hero', isManagerOnly: false },
+  { id: 'Thank_you', name: 'Thank you', isManagerOnly: false },
+  { id: 'Outstanding_work', name: 'Outstanding work', isManagerOnly: true },
+  { id: 'Top_performer', name: 'Top performer', isManagerOnly: true },
 ];
 
 const rolesForSpecialBadges = ['coursemanager', 'manager', 'supervisor'];
@@ -38,9 +37,7 @@ const getAvailableBadges = ({ coursesRoles }: Session, id: number) => {
   const userCourseRoles = coursesRoles ? coursesRoles[id] : [];
   const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
 
-  return heroBadges.filter((badge: Badge) =>
-    badge.id !== OUTSTANDING_WORK_ID ? true : isAvailableSpecialBadges ? true : false,
-  );
+  return heroBadges.filter((badge: Badge) => (!badge.isManagerOnly ? true : isAvailableSpecialBadges ? true : false));
 };
 
 function Page(props: Props) {

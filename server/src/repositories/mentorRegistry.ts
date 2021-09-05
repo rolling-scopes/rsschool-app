@@ -31,13 +31,19 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     if (user == null) {
       return;
     }
-    const { maxStudentsLimit, technicalMentoring, preferedStudentsLocation, preferedCourses, englishMentoring } =
-      updateData;
+    const {
+      maxStudentsLimit,
+      technicalMentoring,
+      preferedStudentsLocation,
+      preferedCourses,
+      languagesMentoring = [],
+    } = updateData;
 
     const mentorData: Partial<MentorRegistry> = {
       maxStudentsLimit,
       preferedStudentsLocation,
-      englishMentoring,
+      englishMentoring: Boolean(languagesMentoring?.find(language => language === 'english')),
+      languagesMentoring,
       preferedCourses,
       technicalMentoring,
       canceled: false,
@@ -86,6 +92,7 @@ function transformMentorRegistry(mentorRegistry: MentorRegistry) {
   return {
     id: mentorRegistry.id,
     englishMentoring: mentorRegistry.englishMentoring,
+    languagesMentoring: mentorRegistry.languagesMentoring,
     githubId: user.githubId,
     primaryEmail: user.primaryEmail,
     contactsEpamEmail: user.contactsEpamEmail,

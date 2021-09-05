@@ -39,4 +39,9 @@ export default {
     pictureId: 33,
     url: 'OutstandingWork.svg',
   },
+  Top_performer: {
+    name: 'Top performer',
+    pictureId: 34,
+    url: 'TopPerformer.svg',
+  },
 };
