@@ -6,7 +6,7 @@ import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
-import { CV } from './cv';
+import { Resume } from './resume';
 import { DiscordServer } from './discordServer';
 import { UserGroup } from './userGroup';
 import { Event } from './event';
@@ -79,7 +79,7 @@ export {
   User,
   Consent,
   ChannelType,
-  CV,
+  Resume,
 };
 
 export const models = [
@@ -120,7 +120,7 @@ export const models = [
   TaskVerification,
   User,
   Consent,
-  CV,
+  Resume,
 ];
 
 export interface IApiResponse<T> {

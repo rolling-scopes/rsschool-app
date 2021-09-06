@@ -3,7 +3,7 @@ import { Layout, Space } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { MainSection, AboutSection, CoursesSection, FeedbackSection } from 'components/cv/sections';
 import { Contacts, UserData, CVStudentStats, CVFeedback } from '../../../../common/models/cv';
-import { CVService } from '../../services/cv';
+import { OpportunitiesService } from '../../services/opportunities';
 
 const { Content } = Layout;
 
@@ -11,7 +11,7 @@ type Props = {
   ownerGithubId: string;
 };
 
-const cvService = new CVService();
+const cvService = new OpportunitiesService();
 
 function ViewCV(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,7 +26,7 @@ function ViewCV(props: Props) {
 
     const { ownerGithubId } = props;
 
-    const cvData = await cvService.getFullCVData(ownerGithubId);
+    const cvData = await cvService.getFullResumeData(ownerGithubId);
 
     const {
       notes,

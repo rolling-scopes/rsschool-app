@@ -4,9 +4,12 @@ import getConfig from 'next/config';
 
 const { serverRuntimeConfig } = getConfig();
 
-export function getServerAxiosProps(ctx?: NextPageContext | GetServerSidePropsContext): Partial<AxiosRequestConfig> {
+export function getServerAxiosProps(
+  ctx?: NextPageContext | GetServerSidePropsContext,
+  baseUrl = '',
+): Partial<AxiosRequestConfig> {
   return {
-    baseURL: serverRuntimeConfig.rsHost || '',
+    baseURL: serverRuntimeConfig.rsHost + baseUrl || baseUrl,
     headers: ctx?.req?.headers?.cookie
       ? {
           cookie: ctx.req.headers.cookie,

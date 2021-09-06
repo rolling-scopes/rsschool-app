@@ -6,7 +6,7 @@ import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../.
 import { Header } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
-import { CVService } from '../../services/cv';
+import { OpportunitiesService } from '../../services/opportunities';
 import heroesBadges from '../../configs/heroes-badges';
 import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { SwitchChangeEventHandler } from 'antd/lib/switch';
@@ -27,7 +27,7 @@ function Page(props: Props) {
   const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
   const [areHiddenJobSeekersShown, setHiddenJobSeekersShown] = useState<boolean>(false);
 
-  const cvService = new CVService();
+  const cvService = new OpportunitiesService();
 
   const countBadges = (badges: JobSeekerFeedback[]) => {
     const badgesCount: {
@@ -244,21 +244,21 @@ function Page(props: Props) {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const data: JobSeekerData[] = await cvService.getJobSeekersData(isAdmin);
+    const data: JobSeekerData[] = await cvService.getApplicants();
     setJobSeekers(data);
     setLoading(false);
   }, []);
 
   const deleteJobSeeker = async (githubId: string) => {
     setLoading(true);
-    await cvService.changeOpportunitiesConsent(githubId, false);
+    await cvService.updateConsent(githubId, false);
     await fetchData();
     setLoading(false);
   };
 
   const changeHiddenStatus = async (githubId: string, hiddenStatus: boolean) => {
     setLoading(true);
-    await cvService.changeCVVisibility(githubId, hiddenStatus);
+    await cvService.changeResumeVisibility(githubId, hiddenStatus);
     await fetchData();
     setLoading(false);
   };

@@ -4,7 +4,7 @@ import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } 
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from '../../../../common/models/cv';
-import { CVService } from 'services/cv';
+import { OpportunitiesService } from 'services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
 import {
@@ -25,7 +25,7 @@ type Props = {
   withdrawConsent: () => void;
 };
 
-const cvService = new CVService();
+const cvService = new OpportunitiesService();
 const userService = new UserService();
 
 function EditCV(props: Props) {
@@ -84,7 +84,7 @@ function EditCV(props: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const cvData = await cvService.getEditCVData(props.ownerGithubId);
+    const cvData = await cvService.getEditResumeData(props.ownerGithubId);
 
     const {
       notes,
@@ -184,7 +184,7 @@ function EditCV(props: Props) {
       fullTime,
     };
 
-    const newCVData = await cvService.saveCVData(cvData);
+    const newCVData = await cvService.saveResumeData(cvData);
 
     const {
       selfIntroLink: newSelfIntroLink,
@@ -376,7 +376,7 @@ function EditCV(props: Props) {
 
     setLoading(true);
 
-    const newExpirationDate = await cvService.extendCV();
+    const newExpirationDate = await cvService.updateResume();
 
     setExpiration(newExpirationDate);
 

@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 type EnglishLevel = 'A0' | 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1' | 'B1+' | 'B2' | 'B2+' | 'C1' | 'C1+' | 'C2';
 
 @Entity()
-export class CV {
+export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
