@@ -8,8 +8,6 @@ const validationMessages = {
   invalid: (fieldName: string): string => `This is not a valid ${fieldName}`,
 };
 
-const PHONE_NUMBER_REGEXP = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
-
 const contactsValidationRules: {
   [key: string]: Rule[];
 } = {
@@ -20,6 +18,7 @@ const contactsValidationRules: {
     },
     () => ({
       validator(_, value) {
+        const PHONE_NUMBER_REGEXP = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
         return !value || PHONE_NUMBER_REGEXP.test(value)
           ? Promise.resolve()
           : Promise.reject(new Error(validationMessages.invalid('phone number')));
