@@ -46,7 +46,7 @@ export interface ExternalAccount {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn() id?: number;
+  @PrimaryGeneratedColumn() id: number;
 
   @Column({ nullable: true })
   primaryEmail?: string;
@@ -130,10 +130,7 @@ export class User {
   @Column({ nullable: true })
   contactsNotes?: string;
 
-  @Column({
-    type: 'json',
-    default: null,
-  })
+  @Column({ type: 'json', nullable: true })
   discord: Discord | null;
 
   @Column({ nullable: true })

@@ -2,16 +2,28 @@ import Router from '@koa/router';
 import { OK } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
-import { CourseTask, Task, TaskResult } from '../../../models';
+import { CourseTask, Task, TaskResult, Student } from '../../../models';
 import { setResponse } from '../../utils';
 
 export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
+  const userId: number = ctx.state.user.id;
+
+  const student = await getRepository(Student)
+    .createQueryBuilder('student')
+    .innerJoin('student.user', 'user')
+    .where('student."courseId" = :courseId', { courseId })
+    .andWhere('"user"."id" = :userId', { userId })
+    .getOne();
 
   const courseTasks = await getRepository(CourseTask)
     .createQueryBuilder('courseTask')
     .addSelect('COUNT(taskResult.id)', 'taskResultCount')
     .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
+    .leftJoin(TaskResult, 'tr', '"tr"."courseTaskId" = "courseTask"."id" AND "tr"."studentId" = :studentId', {
+      studentId: student?.id,
+    })
+    .addSelect('tr.score', 'score')
     .innerJoinAndSelect('courseTask.task', 'task')
     .leftJoin('courseTask.taskOwner', 'taskOwner')
     .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
@@ -20,6 +32,8 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
     .addGroupBy('courseTask.id')
     .addGroupBy('task.id')
     .addGroupBy('taskOwner.id')
+    .addGroupBy('tr.score')
+    .addGroupBy('tr.id')
     .getRawAndEntities();
 
   const data = courseTasks.entities.map(item => {
@@ -57,6 +71,7 @@ export const getCourseTasksDetails = (_: ILogger) => async (ctx: Router.RouterCo
       pairsCount: item.pairsCount,
       special: item.special,
       duration: item.duration,
+      score: student && raw ? Number(raw.score) : null,
     };
   });
 

@@ -2,8 +2,9 @@ import Router from '@koa/router';
 import { OK } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
-import { IUserSession, Student, TaskResult } from '../../../models';
-import { OperationResult, taskResultsService } from '../../../services';
+import { IUserSession, Student } from '../../../models';
+import { OperationResult } from '../../../services';
+import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
 
 type ScoresInput = {
@@ -22,7 +23,9 @@ export const createMultipleScores = (logger: ILogger) => async (ctx: Router.Rout
   const inputData: ScoresInput[] = ctx.request.body;
   const result: OperationResult[] = [];
 
-  for await (const item of inputData) {
+  const scoreService = new ScoreService(courseId);
+
+  for (const item of inputData) {
     try {
       logger.info(item.studentGithubId);
 
@@ -50,38 +53,21 @@ export const createMultipleScores = (logger: ILogger) => async (ctx: Router.Rout
         continue;
       }
 
-      const existingResult = await taskResultsService.getTaskResult(student.id, data.courseTaskId);
       const user = ctx.state.user as IUserSession | null;
       const authorId = user?.id ?? 0;
 
-      if (existingResult == null) {
-        const taskResult = taskResultsService.createTaskResult(authorId, {
-          ...data,
-          studentId: Number(student.id),
-        });
-        const addResult = await getRepository(TaskResult).save(taskResult);
-        result.push({ status: 'created', value: addResult.id });
-        continue;
-      }
+      const isNew = await scoreService.saveScore(Number(student.id), Number(courseTaskId), {
+        authorId,
+        comment: data.comment,
+        score: data.score,
+        githubPrUrl: data.githubPrUrl,
+      });
 
-      if (data.githubPrUrl) {
-        existingResult.githubPrUrl = item.githubPrUrl || '';
+      if (isNew) {
+        result.push({ status: 'created', value: undefined });
+      } else {
+        result.push({ status: 'updated', value: undefined });
       }
-      if (data.comment) {
-        existingResult.comment = item.comment;
-      }
-      if (data.score !== existingResult.score) {
-        existingResult.historicalScores.push({
-          authorId,
-          score: data.score,
-          dateTime: Date.now(),
-          comment: item.comment,
-        });
-        existingResult.score = data.score;
-      }
-
-      const updateResult = await getRepository(TaskResult).save(existingResult);
-      result.push({ status: 'updated', value: updateResult.id });
     } catch (e) {
       result.push({ status: 'failed', value: e.message });
     }

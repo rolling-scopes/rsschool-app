@@ -4,11 +4,12 @@ import { omit } from 'lodash';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, CrossCheckPairs } from 'services/course';
+import { CourseService, CrossCheckPairs, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { css } from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../../common/types/pagination';
 import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score';
+import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 
 const { Text } = Typography;
 
@@ -35,6 +36,7 @@ export function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(props.course?.id), [props.course]);
 
   const [loading, setLoading] = useState(false);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairs[],
     pagination: { current: 1, pageSize: 100 } as IPaginationInfo,
@@ -45,11 +47,11 @@ export function Page(props: CoursePageProps) {
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-      const crossCheckData = await courseService.getCrossCheckPairs(
-        crossCheckList.pagination,
-        {},
-        crossCheckList.orderBy,
-      );
+      const [crossCheckData, tasksFromReq] = await Promise.all([
+        courseService.getCrossCheckPairs(crossCheckList.pagination, {}, crossCheckList.orderBy),
+        courseService.getCourseTasksDetails(),
+      ]);
+      setCourseTasks(tasksFromReq.filter(task => task.pairsCount));
       setCrossCheckList({
         content: crossCheckData.content,
         pagination: crossCheckData.pagination,
@@ -95,6 +97,7 @@ export function Page(props: CoursePageProps) {
       {contextHolder}
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
+          <BadReviewControllers courseTasks={courseTasks} />
           {renderTable(
             loaded,
             crossCheckList.content,

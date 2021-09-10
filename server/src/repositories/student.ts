@@ -49,6 +49,11 @@ export class StudentRepository extends AbstractRepository<Student> {
     await getRepository(Student).update(student.id, { mentorId: mentor ? mentor.id : null });
   }
 
+  public async setMentorsBatch(pairs: { mentor: { id: number }; student: { id: number } }[]) {
+    const records = pairs.map(({ student, mentor }) => ({ id: student.id, mentorId: mentor.id }));
+    await getRepository(Student).save(records);
+  }
+
   public async search(courseId: number, searchText: string): Promise<UserBasic[]> {
     const searchQuery = `${searchText}%`;
 
@@ -90,25 +95,8 @@ export class StudentRepository extends AbstractRepository<Student> {
     if (record == null) {
       return null;
     }
-    return {
-      id: record.id,
-      name: userService.createName(record.user),
-      githubId: record.user.githubId,
-      cityName: record.user.cityName ?? '',
-      countryName: record.user.countryName ?? '',
-      isActive: !record.isExpelled && !record.isFailed,
-      discord: getDiscordUsername(record.user.discord),
-      mentor: record.mentor
-        ? {
-            id: record.mentor.id,
-            name: userService.createName(record.mentor.user),
-            githubId: record.mentor.user.githubId,
-            cityName: record.mentor.user.cityName,
-            countryName: record.mentor.user.countryName,
-            isActive: !record.mentor.isExpelled,
-          }
-        : null,
-    };
+
+    return transformStudent(record);
   }
 
   public async findAndIncludeDetails(courseId: number, githubId: string) {
@@ -329,6 +317,7 @@ function transformStudent(record: Student): StudentBasic {
     countryName: record.user.countryName ?? 'Unknown',
     isActive: !record.isExpelled && !record.isFailed,
     discord: getDiscordUsername(record.user.discord),
+    totalScore: record.totalScore,
     mentor: record.mentor
       ? {
           id: record.mentor.id,

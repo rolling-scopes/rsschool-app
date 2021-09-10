@@ -17,4 +17,5 @@ export interface StudentBasic extends UserBasic {
   countryName?: string;
   mentor: MentorBasic | { id: number } | null;
   discord: string;
+  totalScore: number;
 }

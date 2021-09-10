@@ -2,7 +2,7 @@ import Router from '@koa/router';
 import { OK } from 'http-status-codes';
 import NodeCache from 'node-cache';
 import { ILogger } from '../../../logger';
-import { ScoreService } from '../../../services/score.service';
+import { ScoreService } from '../../../services/score';
 import { setResponse } from '../../utils';
 
 const memoryCache = new NodeCache({ stdTTL: 120, checkperiod: 150 });
