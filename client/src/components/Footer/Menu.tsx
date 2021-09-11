@@ -14,19 +14,12 @@ class Menu extends React.Component<any, any> {
           dataSource={this.props.data}
           renderItem={(linkInfo: LinkInfo) => (
             <List.Item key={linkInfo.link}>
-              {linkInfo.newTab ? (
-                <a target="_blank" href={linkInfo.link}>
+              <Link href={linkInfo.link}>
+                <a target={linkInfo.newTab ? '_blank' : '_self'}>
                   {linkInfo.icon}&nbsp;
                   {linkInfo.name}
                 </a>
-              ) : (
-                <Link href={linkInfo.link}>
-                  <a>
-                    {linkInfo.icon}&nbsp;
-                    {linkInfo.name}
-                  </a>
-                </Link>
-              )}
+              </Link>
             </List.Item>
           )}
         />
