@@ -34,6 +34,13 @@ export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) =>
   setResponse(ctx, OK);
 };
 
+export const restoreExpelledMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const githubId: string = ctx.params.githubId;
+  await courseService.restoreMentor(courseId, githubId);
+  setResponse(ctx, OK);
+};
+
 export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params as Params;
   const mentor = await courseService.getMentorByGithubId(courseId, githubId);

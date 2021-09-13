@@ -478,6 +478,10 @@ export class CourseService {
     await this.axios.post(`/mentor/${githubId}/status/expelled`);
   }
 
+  async restoreMentor(githubId: string) {
+    await this.axios.post(`/mentor/${githubId}/status/restore`);
+  }
+
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
     const result = await this.axios.get<{
       data: {
