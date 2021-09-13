@@ -1,7 +1,7 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { userService } from './index';
-import { MentorRepository } from '../repositories/mentor';
-import { StudentRepository } from '../repositories/student';
+import { MentorRepository } from '../repositories/mentor.repository';
+import { StudentRepository } from '../repositories/student.repository';
 import { createMentorStudentPairs } from '../rules/mentors';
 import { OperationResult } from './operationResult';
 import { Mentor } from '../models';

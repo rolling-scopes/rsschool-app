@@ -7,7 +7,7 @@ import { getUserByGithubId } from '../../services/user.service';
 import { Mentor, Student } from '../../models';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { updateSession } from '../../session';
-import { StudentRepository } from '../../repositories/student';
+import { StudentRepository } from '../../repositories/student.repository';
 import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };

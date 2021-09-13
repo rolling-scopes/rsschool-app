@@ -1,8 +1,8 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { CourseTask, TaskChecker } from '../models';
-import { MentorRepository } from '../repositories/mentor';
+import { MentorRepository } from '../repositories/mentor.repository';
 import { CrossMentorDistributionService } from '../services/distribution';
-import { InterviewRepository } from '../repositories/interview';
+import { InterviewRepository } from '../repositories/interview.repository';
 
 const crossMentorService = new CrossMentorDistributionService();
 

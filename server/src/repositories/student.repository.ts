@@ -2,7 +2,7 @@ import { EntityRepository, AbstractRepository, getRepository, getCustomRepositor
 import { Student } from '../models';
 import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
-import { StageInterviewRepository } from './stageInterview';
+import { StageInterviewRepository } from './stageInterview.repository';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {

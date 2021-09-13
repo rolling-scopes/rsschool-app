@@ -5,7 +5,7 @@ import { ILogger } from '../../logger';
 import { Feedback, TaskInterviewResult } from '../../models';
 import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
-import { StudentRepository } from '../../repositories/student';
+import { StudentRepository } from '../../repositories/student.repository';
 
 type FeedbackInput = { toUserId: number; comment: string };
 
