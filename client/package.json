@@ -27,7 +27,7 @@
     "mobile-device-detect": "^0.4.3",
     "moment": "~2.29.1",
     "moment-timezone": "~0.5.33",
-    "next": "~11.1.0",
+    "next": "~11.1.2",
     "next-transpile-modules": "~8.0.0",
     "qs": "^6.9.4",
     "react": "~17.0.2",
