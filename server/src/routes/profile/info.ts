@@ -21,7 +21,7 @@ import {
   RelationRole,
   Permissions,
 } from './permissions';
-import { ConsentRepository } from '../../repositories/consent';
+import { ConsentRepository } from '../../repositories/consent.repository';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId: userGithubId, roles, coursesRoles, isAdmin } = ctx.state!.user as IUserSession;

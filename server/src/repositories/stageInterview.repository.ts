@@ -2,7 +2,7 @@ import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
 import { InterviewStatus, InterviewDetails } from '../../../common/models/interview';
 import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
-import { InterviewInfo } from './interview';
+import { InterviewInfo } from './interview.repository';
 import { createInterviews } from '../rules/interviews';
 import { queryMentorByGithubId, queryStudentByGithubId } from '../services/course.service';
 

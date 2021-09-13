@@ -6,7 +6,7 @@ import { ILogger } from '../logger';
 import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
 import { guard } from './guards';
 import { setResponse } from './utils';
-import { FeedbackRepository } from '../repositories/feedback';
+import { FeedbackRepository } from '../repositories/feedback.repository';
 import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 import { courseService } from '../services';
 
