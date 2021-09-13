@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository } from 'typeorm';
-import { StageInterviewRepository } from '../../../repositories/stageInterview';
+import { StageInterviewRepository } from '../../../repositories/stageInterview.repository';
 import { ILogger } from '../../../logger';
 import { setResponse } from '../../utils';
 

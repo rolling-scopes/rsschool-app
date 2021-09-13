@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { CourseTask, TaskChecker } from '../../../models';
-import { MentorRepository } from '../../../repositories/mentor';
+import { MentorRepository } from '../../../repositories/mentor.repository';
 import { CrossMentorDistributionService } from '../../../services/distribution';
 import { setResponse } from '../../utils';
 
