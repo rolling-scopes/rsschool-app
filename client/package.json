@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "antd": "~4.16.7",
-    "axios": "~0.21.1",
+    "axios": "~0.21.2",
     "chart.js": "2.9.4",
     "csvtojson": "~2.0.10",
     "lodash": "~4.17.21",
