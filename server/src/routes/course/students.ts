@@ -7,7 +7,7 @@ import { ILogger } from '../../logger';
 import { Student } from '../../models';
 import { courseService, OperationResult, userService } from '../../services';
 import { setCsvResponse, setResponse } from '../utils';
-import { StudentRepository } from '../../repositories/student';
+import { StudentRepository } from '../../repositories/student.repository';
 
 export const getStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId = Number(ctx.params.courseId);

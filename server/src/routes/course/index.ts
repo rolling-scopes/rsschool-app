@@ -43,7 +43,7 @@ import * as stageInterview from './stageInterview';
 
 import * as interviews from './interviews';
 
-import { getCourseTasksDetails, createCourseTaskDistribution, getCourseTasks, getCourseTask } from './tasks';
+import * as tasks from './tasks';
 import {
   createRepository,
   createRepositories,
@@ -133,15 +133,17 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/task/:id', courseGuard, getCourseTask(logger));
+  router.get('/task/:id', courseGuard, tasks.getCourseTask(logger));
   router.post('/task', courseManagerGuard, createPostRoute(CourseTask, logger));
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
   router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
 
-  router.get('/tasks', courseGuard, getCourseTasks(logger));
-  router.get('/tasks/details', courseGuard, getCourseTasksDetails(logger));
+  router.get('/tasks', courseGuard, tasks.getCourseTasks(logger));
+  router.get('/tasks/details', courseGuard, tasks.getCourseTasksDetails(logger));
+  router.get('/tasks/schedule', courseGuard, tasks.getCourseTasksDetailsForSchedule(logger));
+
   router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
-  router.post('/task/:courseTaskId/distribution', courseManagerGuard, createCourseTaskDistribution(logger));
+  router.post('/task/:courseTaskId/distribution', courseManagerGuard, tasks.createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post(
     '/task/:courseTaskId/cross-check/distribution',
