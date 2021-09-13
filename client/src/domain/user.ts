@@ -41,3 +41,7 @@ export function isTaskOwner(session: Session, course: Course) {
 export function isJuryActivist(session: Session, course: Course) {
   return session.coursesRoles?.[course.id]?.includes('juryActivist') ?? false;
 }
+
+export function isHirer(session: Session) {
+  return session.isHirer;
+}

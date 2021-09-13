@@ -10,13 +10,14 @@ import {
   HomeOutlined,
   RobotFilled,
   UserOutlined,
+  ProfileFilled,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
 
 const { Sider } = Layout;
 
-type Props = { isAdmin?: boolean; isCoursePowerUser?: boolean };
+type Props = { isAdmin?: boolean; isCoursePowerUser?: boolean; isHirer?: boolean };
 
 export function AdminSider(props: Props) {
   const [collapsed, setCollapsed] = useState(true);
@@ -106,6 +107,15 @@ export function AdminSider(props: Props) {
             <a href="/admin/user-group">
               <TeamOutlined />
               <span>User Groups</span>
+            </a>
+          </Menu.Item>
+        ) : null}
+
+        {props.isAdmin || props.isHirer ? (
+          <Menu.Item key="10">
+            <a href="/employer">
+              <ProfileFilled />
+              <span>Employer Page</span>
             </a>
           </Menu.Item>
         ) : null}
