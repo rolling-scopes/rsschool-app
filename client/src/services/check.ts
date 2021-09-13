@@ -18,15 +18,15 @@ export class CheckService {
     this.cache = {};
   }
 
-  async getData(taskId: number, type: checkType) {
+  async getData(taskId: number, type: checkType, courseId: number) {
     let dataFromService: IBadReview[] = [];
     try {
       switch (type) {
         case 'Bad comment':
-          dataFromService = await this.getDataFromServer(taskId, type);
+          dataFromService = await this.getDataFromServer(taskId, type, courseId);
           break;
         case 'Did not check':
-          dataFromService = await this.getDataFromServer(taskId, type);
+          dataFromService = await this.getDataFromServer(taskId, type, courseId);
           break;
         case 'No type':
           break;
@@ -39,9 +39,9 @@ export class CheckService {
     return dataFromService;
   }
 
-  private async getDataFromServer(taskId: number, type: routesType) {
+  private async getDataFromServer(taskId: number, type: routesType, courseId: number) {
     if (this.cache?.[taskId]?.[type]) return this.cache[taskId][type];
-    const result = await this.axios.get(`checks/${ROUTES[type]}/${taskId}`);
+    const result = await this.axios.get(`checks/${ROUTES[type]}/${courseId}/${taskId}`);
     this.saveToCache(taskId, type, result.data.data);
     return result.data.data;
   }
