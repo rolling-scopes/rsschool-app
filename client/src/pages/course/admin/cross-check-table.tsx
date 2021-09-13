@@ -93,7 +93,7 @@ export function Page(props: CoursePageProps) {
 
   return (
     <>
-      <Header title='Cross-Check' username={props.session.githubId} courseName={props.course.name} />
+      <Header title="Cross-Check" username={props.session.githubId} courseName={props.course.name} />
       {contextHolder}
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
@@ -132,7 +132,7 @@ function renderTable(
   const tableWidth = 800;
   return (
     <Table<CrossCheckPairs>
-      className='table-score'
+      className="table-score"
       showHeader
       scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
       pagination={pagination}
@@ -161,7 +161,7 @@ function renderTable(
                 <>
                   <GithubAvatar githubId={value} size={24} />
                   &nbsp;
-                  <a target='_blank' href={`https://github.com/${value}`}>
+                  <a target="_blank" href={`https://github.com/${value}`}>
                     {value}
                   </a>
                 </>
@@ -182,7 +182,7 @@ function renderTable(
                 <>
                   <GithubAvatar githubId={value} size={24} />
                   &nbsp;
-                  <a target='_blank' href={`https://github.com/${value}`}>
+                  <a target="_blank" href={`https://github.com/${value}`}>
                     {value}
                   </a>
                 </>
@@ -229,7 +229,7 @@ function renderTable(
           key: 'comment',
           width: 60,
           render: (_, record) => (
-            <Button onClick={() => viewComment(record)} type='link' size='small'>
+            <Button onClick={() => viewComment(record)} type="link" size="small">
               Show
             </Button>
           ),

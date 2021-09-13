@@ -59,9 +59,9 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
 
   return (
     <>
-      <Row gutter={16} justify='start' style={{ marginBottom: '10px' }}>
+      <Row gutter={16} justify="start" style={{ marginBottom: '10px' }}>
         <Col>
-          <Select placeholder='Select task' style={{ width: 200 }} onChange={(value: number) => setTaskId(value)}>
+          <Select placeholder="Select task" style={{ width: 200 }} onChange={(value: number) => setTaskId(value)}>
             {courseTasks.map(task => (
               <Option key={task.id} value={task.id}>
                 {task.name}
@@ -70,12 +70,12 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
           </Select>
         </Col>
         <Col>
-          <Button type='primary' danger onClick={() => buttonHandler('Bad comment')} disabled={!taskId}>
+          <Button type="primary" danger onClick={() => buttonHandler('Bad comment')} disabled={!taskId}>
             Bad comment
           </Button>
         </Col>
         <Col>
-          <Button type='primary' danger onClick={() => buttonHandler('Did not check')} disabled={!taskId}>
+          <Button type="primary" danger onClick={() => buttonHandler('Did not check')} disabled={!taskId}>
             Didn't check
           </Button>
         </Col>
@@ -86,7 +86,9 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
         width={1250}
         style={{ top: 20 }}
         footer={[
-          <Button type='primary' onClick={handleOk}>OK</Button>,
+          <Button type="primary" onClick={handleOk}>
+            OK
+          </Button>,
         ]}
       >
         {isLoading || !data ? <Spin /> : <BadReviewTable data={data} type={checkType!} />}

@@ -30,7 +30,7 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
       render: (id: string) => <GithubUserLink value={id} />,
     },
     {
-      title: 'Checker\'s score',
+      title: "Checker's score",
       dataIndex: 'checkerScore',
       key: 'checkerScore',
     },
@@ -40,7 +40,7 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
       key: 'studentAvgScore',
     },
     {
-      title: 'Checker\'s comment',
+      title: "Checker's comment",
       dataIndex: 'comment',
       key: 'comment',
     },
@@ -60,8 +60,6 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
   }
 
   return (
-    <>
-      {data.length ? <Table columns={columnsType} dataSource={data} scroll={{ x: true }} /> : <Text>No data</Text>}
-    </>
+    <>{data.length ? <Table columns={columnsType} dataSource={data} scroll={{ x: true }} /> : <Text>No data</Text>}</>
   );
 };
