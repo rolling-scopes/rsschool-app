@@ -67,10 +67,10 @@ export function ScoreTable(props: Props) {
       ]);
       const sortedTasks = courseTasks
         .filter(task => !!task.studentEndDate || props.course.completed)
-        .map(task => {
-          task.isVisible = !notVisibleColumns?.includes(task.name);
-          return task;
-        });
+        .map(task => ({
+          ...task,
+          isVisible: !notVisibleColumns?.includes(task.name),
+        }));
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
 
@@ -100,7 +100,7 @@ export function ScoreTable(props: Props) {
   };
 
   const handleModalOk = (values: Store) => {
-    setNotVisibleColumns(Object.keys(values).filter((value: string) => !values[value]));
+    setNotVisibleColumns(Object.keys(values).filter((value: string) => values[value] === false));
     setIsVisibleSettings(!isVisibleSetting);
   };
 
