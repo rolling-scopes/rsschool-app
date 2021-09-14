@@ -65,8 +65,12 @@ export function ScoreTable(props: Props) {
         courseService.getCourseScore(students.pagination, filters, students.orderBy),
         courseService.getCourseTasks(),
       ]);
-      const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
-
+      const sortedTasks = courseTasks
+        .filter(task => !!task.studentEndDate || props.course.completed)
+        .map(task => {
+          task.isVisible = !notVisibleColumns?.includes(task.name);
+          return task;
+        });
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
 
@@ -84,8 +88,10 @@ export function ScoreTable(props: Props) {
     cityName,
     mentor,
     handleSettings: () => setIsVisibleSettings(true),
-    taskColumns: getTaskColumns(courseTasks).filter(column => !notVisibleColumns?.includes(column.name)),
+    taskColumns: getTaskColumns(courseTasks),
   });
+
+  const getVisibleColumns = (columns: any[]) => columns.filter(column => !notVisibleColumns?.includes(column.name));
 
   const [notVisibleColumns, setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns', []);
 
@@ -94,7 +100,7 @@ export function ScoreTable(props: Props) {
   };
 
   const handleModalOk = (values: Store) => {
-    setNotVisibleColumns(Object.keys(values).filter((value: string) => values[value] === false));
+    setNotVisibleColumns(Object.keys(values).filter((value: string) => !values[value]));
     setIsVisibleSettings(!isVisibleSetting);
   };
 
@@ -107,13 +113,13 @@ export function ScoreTable(props: Props) {
       <Table<StudentScore>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(columns.length), y: 'calc(100vh - 250px)' }}
+        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(100vh - 250px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
         onChange={getCourseScore as any}
-        columns={columns}
+        columns={getVisibleColumns(columns)}
       />
       <SettingsModal
         courseTasks={courseTasks}
