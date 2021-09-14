@@ -1,8 +1,8 @@
 import * as courseService from './course.service';
 import { IUserSession } from '../models';
 import { getCustomRepository } from 'typeorm';
-import { StageInterviewRepository } from '../repositories/stageInterview';
-import { StudentRepository } from '../repositories/student';
+import { StageInterviewRepository } from '../repositories/stageInterview.repository';
+import { StudentRepository } from '../repositories/student.repository';
 
 export async function canChangeStatus(
   session: IUserSession,

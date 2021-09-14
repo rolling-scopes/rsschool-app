@@ -65,7 +65,7 @@ export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
 export interface CourseTaskDetails extends CourseTask {
   stageId: number;
   description: string | null;
-  taskResultCount: number;
+  resultsCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
   pairsCount?: number;
 }
@@ -155,6 +155,12 @@ export class CourseService {
   async getCourseTasksDetails() {
     type Response = { data: CourseTaskDetails[] };
     const result = await this.axios.get<Response>('/tasks/details');
+    return result.data.data.sort(sortTasksByEndDate);
+  }
+
+  async getCourseTasksForSchedule() {
+    type Response = { data: CourseTaskDetails[] };
+    const result = await this.axios.get<Response>('/tasks/schedule');
     return result.data.data.sort(sortTasksByEndDate);
   }
 

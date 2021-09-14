@@ -10,7 +10,7 @@ import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { notificationService } from '../../services';
-import { MentorRegistryRepository } from '../../repositories/mentorRegistry';
+import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
 
 export function registryRouter(logger?: ILogger) {
   const router = new Router<any, any>({ prefix: '/registry' });

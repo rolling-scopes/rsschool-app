@@ -4,8 +4,8 @@ import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution'
 import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
-import { CrossCheckRepository } from '../repositories/crossCheck';
-import { UserRepository } from '../repositories/user';
+import { CrossCheckRepository } from '../repositories/crossCheck.repository';
+import { UserRepository } from '../repositories/user.repository';
 
 export interface CrossCheckSolution {
   url: string;

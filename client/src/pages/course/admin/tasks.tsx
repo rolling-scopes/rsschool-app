@@ -279,7 +279,7 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
       dataIndex: 'taskId',
       render: idFromArrayRenderer(tasks),
     },
-    { title: 'Scores Count', dataIndex: 'taskResultCount' },
+    { title: 'Scores Count', dataIndex: 'resultsCount' },
     {
       title: 'Start Date',
       dataIndex: 'studentStartDate',
