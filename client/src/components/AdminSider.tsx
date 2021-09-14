@@ -1,18 +1,20 @@
 import {
+  AlertOutlined,
   BellOutlined,
   GlobalOutlined,
+  HomeOutlined,
+  IdcardFilled,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  AlertOutlined,
   QuestionOutlined,
-  TeamOutlined,
-  IdcardFilled,
-  HomeOutlined,
   RobotFilled,
+  TeamOutlined,
+  TrophyOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const { Sider } = Layout;
 
@@ -59,6 +61,15 @@ export function AdminSider(props: Props) {
             </a>
           </Menu.Item>
         ) : null}
+
+        <Menu.Item key="10">
+          <Link href="/admin/disciplines">
+            <a>
+              <TrophyOutlined />
+              <span>Disciplines</span>
+            </a>
+          </Link>
+        </Menu.Item>
 
         <Menu.Item key="4">
           <a href="/admin/tasks">

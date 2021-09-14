@@ -1,12 +1,13 @@
 import { Alert, AlertTypes } from './alert';
 import { Certificate } from './certificate';
-import { Consent, ChannelType } from './consent';
+import { ChannelType, Consent } from './consent';
 import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
 import { CV } from './cv';
+import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
 import { UserGroup } from './userGroup';
 import { Event } from './event';
@@ -47,6 +48,7 @@ export {
   CourseManager,
   CourseTask,
   CourseUser,
+  Discipline,
   DiscordServer,
   UserGroup,
   Event,
@@ -90,6 +92,7 @@ export const models = [
   CourseManager,
   CourseTask,
   CourseUser,
+  Discipline,
   DiscordServer,
   UserGroup,
   Event,
