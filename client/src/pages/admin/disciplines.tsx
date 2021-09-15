@@ -1,6 +1,6 @@
-import { Disciplines } from '../../modules/Discipline/pages/Disciplines';
 import { getServerSideProps } from '../../modules/Discipline/data/getServerSideProps';
 import { withSession } from '../../components';
+import { DisciplinePage } from '../../modules/Discipline/pages/DisciplinePage';
 
 export { getServerSideProps };
-export default withSession(Disciplines);
+export default withSession(DisciplinePage);

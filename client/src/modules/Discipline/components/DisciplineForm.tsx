@@ -2,6 +2,8 @@ import { Form, Input } from 'antd';
 import { useCallback, useEffect, useMemo } from 'react';
 import { DisciplineService } from '../../../services/discipline';
 import { IDiscipline } from '../model';
+import { addDiscipline, updateDiscipline } from '../reducers/actions';
+import { useDisciplineContext } from '../contexts/DisciplineContext';
 
 const { Item } = Form;
 
@@ -13,6 +15,7 @@ interface IDisciplineForm {
 export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: IDisciplineForm) => {
   const disciplineService = useMemo(() => new DisciplineService(), []);
   const [form] = Form.useForm();
+  const { dispatch } = useDisciplineContext();
 
   if (!discipline) form.resetFields();
 
@@ -22,15 +25,17 @@ export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: ID
     }
   }, [discipline]);
 
-  const saveDiscipline = useCallback(data => {
+  const saveDiscipline = useCallback(async data => {
     if (!discipline?.id) {
       setIsModalVisible(false);
-      disciplineService.postDiscipline(data);
+      const res = await disciplineService.postDiscipline(data);
       form.resetFields();
+      addDiscipline(dispatch, [res]);
     } else {
       setIsModalVisible(false);
-      disciplineService.updateDiscipline(discipline.id, data);
+      const res = await disciplineService.updateDiscipline(discipline.id, data);
       form.resetFields();
+      updateDiscipline(dispatch, [res]);
     }
   }, []);
 

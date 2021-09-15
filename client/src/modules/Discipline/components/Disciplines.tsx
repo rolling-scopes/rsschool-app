@@ -1,10 +1,12 @@
 import { AdminSider, Header, Session } from '../../../components';
 import { isAnyCoursePowerUserManager } from '../../../domain/user';
 import { Button, Layout } from 'antd';
-import { DisciplineModal } from '../components/DisciplineModal';
-import { useState } from 'react';
+import { DisciplineModal } from './DisciplineModal';
+import { useEffect, useState } from 'react';
 import { IDiscipline } from '../model';
-import { DisciplineTable } from '../components/DisciplineTable';
+import { DisciplineTable } from './DisciplineTable';
+import { useDisciplineContext } from '../contexts/DisciplineContext';
+import { loadAllDisciplines } from '../reducers/actions';
 
 const { Content } = Layout;
 
@@ -12,6 +14,11 @@ type IDisciplines = { session: Session; disciplines?: IDiscipline[] };
 
 export const Disciplines = ({ session, disciplines }: IDisciplines) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { dispatch } = useDisciplineContext();
+
+  useEffect(() => {
+    if (disciplines) loadAllDisciplines(dispatch, disciplines);
+  }, [disciplines]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -26,7 +33,7 @@ export const Disciplines = ({ session, disciplines }: IDisciplines) => {
           <Button type="primary" onClick={showModal} style={{ marginBottom: '25px' }}>
             Add Disciplines
           </Button>
-          <DisciplineTable disciplines={disciplines ?? []} />
+          <DisciplineTable />
           <DisciplineModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
         </Content>
       </Layout>

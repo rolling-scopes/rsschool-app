@@ -4,36 +4,36 @@ import { DeleteOutlined, ExclamationCircleOutlined, SettingOutlined } from '@ant
 import { useMemo, useState } from 'react';
 import { DisciplineModal } from './DisciplineModal';
 import { DisciplineService } from '../../../services/discipline';
+import { useDisciplineContext } from '../contexts/DisciplineContext';
+import { deleteDiscipline } from '../reducers/actions';
 
 const { Column } = Table;
 
 const { confirm } = Modal;
 
-interface IDisciplineTable {
-  disciplines: IDiscipline[];
-}
-
-export const DisciplineTable = ({ disciplines }: IDisciplineTable) => {
+export const DisciplineTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [discipline, setDiscipline] = useState<IDiscipline>({} as IDiscipline);
   const disciplineService = useMemo(() => new DisciplineService(), []);
+  const { disciplines, dispatch } = useDisciplineContext();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  const deleteDiscipline = (record: IDiscipline) => {
+  const deleteDisciplineHandler = (record: IDiscipline) => {
     confirm({
       title: 'Do you want to delete this discipline?',
       icon: <ExclamationCircleOutlined />,
       content: 'Some descriptions',
-      onOk() {
-        disciplineService.deleteDiscipline(record.id);
+      async onOk() {
+        const res = await disciplineService.deleteDiscipline(record.id);
+        deleteDiscipline(dispatch, [res]);
       },
     });
   };
 
-  const updateDiscipline = (record: IDiscipline) => {
+  const updateDisciplineHandler = (record: IDiscipline) => {
     showModal();
     setDiscipline(record);
   };
@@ -47,10 +47,10 @@ export const DisciplineTable = ({ disciplines }: IDisciplineTable) => {
           key="action"
           render={record => (
             <Space size="middle">
-              <Button key={'edit'} onClick={() => updateDiscipline(record)}>
+              <Button key={'edit'} onClick={() => updateDisciplineHandler(record)}>
                 <SettingOutlined />
               </Button>
-              <Button key={'delete'} onClick={() => deleteDiscipline(record)} danger>
+              <Button key={'delete'} onClick={() => deleteDisciplineHandler(record)} danger>
                 <DeleteOutlined />
               </Button>
             </Space>
