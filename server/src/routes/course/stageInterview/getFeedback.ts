@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
-import { StageInterviewFeedbackRepository } from '../../../repositories/stageInterviewFeedback';
+import { StageInterviewFeedbackRepository } from '../../../repositories/stageInterviewFeedback.repository';
 import { setResponse } from '../../utils';
 
 export const getFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {

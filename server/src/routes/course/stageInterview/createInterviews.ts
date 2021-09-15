@@ -2,7 +2,7 @@ import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
-import { StageInterviewRepository } from '../../../repositories/stageInterview';
+import { StageInterviewRepository } from '../../../repositories/stageInterview.repository';
 import { setResponse } from '../../utils';
 
 type BodyParams = {

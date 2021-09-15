@@ -4,8 +4,8 @@ import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { courseService, InterviewService } from '../../services';
 import { setResponse } from '../utils';
-import { InterviewRepository } from '../../repositories/interview';
-import { StageInterviewRepository } from '../../repositories/stageInterview';
+import { InterviewRepository } from '../../repositories/interview.repository';
+import { StageInterviewRepository } from '../../repositories/stageInterview.repository';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 

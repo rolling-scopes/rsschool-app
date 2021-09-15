@@ -122,7 +122,13 @@ export function HomePage(props: Props) {
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
           {activeCourse && (
-            <Select style={{ width: 250, marginBottom: 16 }} defaultValue={activeCourse.id} onChange={handleChange}>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              style={{ width: 250, marginBottom: 16 }}
+              defaultValue={activeCourse.id}
+              onChange={handleChange}
+            >
               {courses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
                   {course.name} ({getStatus(course)})

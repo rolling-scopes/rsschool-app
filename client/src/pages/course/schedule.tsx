@@ -49,7 +49,10 @@ export function SchedulePage(props: CoursePageProps) {
   }, [data]);
 
   const loadData = async () => {
-    const [events, tasks] = await Promise.all([courseService.getCourseEvents(), courseService.getCourseTasksDetails()]);
+    const [events, tasks] = await Promise.all([
+      courseService.getCourseEvents(),
+      courseService.getCourseTasksForSchedule(),
+    ]);
     const data = events.concat(tasksToEvents(tasks)).sort((a, b) => a.dateTime.localeCompare(b.dateTime));
 
     setData(data);
@@ -96,9 +99,10 @@ export function SchedulePage(props: CoursePageProps) {
       }
 
       await loadData();
-    } catch (e) {
-      if (e.message.match(/^Incorrect data/)) {
-        message.error(e.message);
+    } catch (err) {
+      const error = err as Error;
+      if (error.message.match(/^Incorrect data/)) {
+        message.error(error.message);
       } else {
         message.error('An error occured. Please try later.');
       }

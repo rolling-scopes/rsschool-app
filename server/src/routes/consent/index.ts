@@ -4,7 +4,7 @@ import { Consent } from '../../models';
 import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from 'http-status-codes';
 import { setResponse, setErrorResponse } from '../utils';
 import { basicAuthAws } from '../guards';
-import { ConsentRepository } from '../../repositories/consent';
+import { ConsentRepository } from '../../repositories/consent.repository';
 import { getCustomRepository } from 'typeorm';
 
 export function consentRoute(_: ILogger) {
