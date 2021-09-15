@@ -357,7 +357,7 @@ function renderSelfEducation(courseTask: CourseTask, verifications: Verification
     strictAttemptsMode = true,
   } = courseTask?.publicAttributes ?? {};
 
-  const attempts = verifications.map(v => courseTask?.id === v.courseTaskId).length;
+  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId).length;
   const attemptsLeft = maxAttemptsNumber - attempts;
 
   return (
