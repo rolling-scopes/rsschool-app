@@ -23,8 +23,6 @@ export class CheckService {
     try {
       switch (type) {
         case 'Bad comment':
-          dataFromService = await this.getDataFromServer(taskId, type, courseId);
-          break;
         case 'Did not check':
           dataFromService = await this.getDataFromServer(taskId, type, courseId);
           break;
