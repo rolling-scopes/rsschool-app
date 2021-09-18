@@ -15,13 +15,13 @@ const publicRoutes = [
     icon: <BugTwoTone twoToneColor="#d60000" />,
     name: 'Report a bug',
     link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=bug_report.md`,
-    newTab: false,
+    newTab: true,
   },
   {
     icon: <HddTwoTone twoToneColor="#d60000" />,
     name: 'Report a data issue',
     link: `${githubIssuesUrl}/new?assignees=apalchys&labels=&template=data-issue-report.md&title=`,
-    newTab: false,
+    newTab: true,
   },
 ];
 

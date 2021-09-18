@@ -4,6 +4,7 @@ import { GithubAvatar } from 'components/GithubAvatar';
 import { css } from 'styled-jsx/css';
 // TODO: ucnomment after testing
 import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone /* ExperimentOutlined */ } from '@ant-design/icons';
+import Link from 'next/link';
 
 type Props = {
   username: string;
@@ -70,14 +71,16 @@ export function Header(props: Props) {
   return (
     <nav style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
       <div className="logo">
-        <a href="/">
-          <img
-            style={{ height: 30 }}
-            className="header-logo"
-            src="/static/images/logo-rsschool3.png"
-            alt="Rolling Scopes School Logo"
-          />
-        </a>
+        <Link href="/">
+          <a>
+            <img
+              style={{ height: 30 }}
+              className="header-logo"
+              src="/static/images/logo-rsschool3.png"
+              alt="Rolling Scopes School Logo"
+            />
+          </a>
+        </Link>
       </div>
       <div className="title">
         <b>{props.title}</b> {props.courseName}
