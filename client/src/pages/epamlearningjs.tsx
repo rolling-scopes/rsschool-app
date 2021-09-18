@@ -91,7 +91,7 @@ class EpamLearningJs extends React.Component<Props, State> {
                     </Typography.Text>
                   </Typography.Paragraph>
                   <Typography.Paragraph type="warning">
-                    IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
+                    IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
                   </Typography.Paragraph>
                 </>
               )}

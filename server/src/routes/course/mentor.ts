@@ -7,7 +7,7 @@ import { getUserByGithubId } from '../../services/user.service';
 import { Mentor, Student } from '../../models';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { updateSession } from '../../session';
-import { StudentRepository } from '../../repositories/student';
+import { StudentRepository } from '../../repositories/student.repository';
 import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
@@ -31,6 +31,13 @@ export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) =>
   const courseId: number = ctx.params.courseId;
   const githubId: string = ctx.params.githubId;
   await courseService.expelMentor(courseId, githubId);
+  setResponse(ctx, OK);
+};
+
+export const restoreExpelledMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const courseId: number = ctx.params.courseId;
+  const githubId: string = ctx.params.githubId;
+  await courseService.restoreMentor(courseId, githubId);
   setResponse(ctx, OK);
 };
 

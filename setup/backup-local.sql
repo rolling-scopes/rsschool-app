@@ -5,6 +5,8 @@
 -- Dumped from database version 10.6 (Debian 10.6-1.pgdg90+1)
 -- Dumped by pg_dump version 13.3
 
+-- Started on 2021-09-11 21:19:05
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -17,6 +19,26 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- TOC entry 3 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: rs_master
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO rs_master;
+
+--
+-- TOC entry 3572 (class 0 OID 0)
+-- Dependencies: 3
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: rs_master
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- TOC entry 581 (class 1247 OID 16386)
 -- Name: user_english_level_enum; Type: TYPE; Schema: public; Owner: rs_master
 --
 
@@ -35,6 +57,7 @@ ALTER TYPE public.user_english_level_enum OWNER TO rs_master;
 SET default_tablespace = '';
 
 --
+-- TOC entry 196 (class 1259 OID 16399)
 -- Name: alert; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -52,6 +75,7 @@ CREATE TABLE public.alert (
 ALTER TABLE public.alert OWNER TO rs_master;
 
 --
+-- TOC entry 197 (class 1259 OID 16409)
 -- Name: alert_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -67,6 +91,8 @@ CREATE SEQUENCE public.alert_id_seq
 ALTER TABLE public.alert_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3573 (class 0 OID 0)
+-- Dependencies: 197
 -- Name: alert_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -74,6 +100,7 @@ ALTER SEQUENCE public.alert_id_seq OWNED BY public.alert.id;
 
 
 --
+-- TOC entry 198 (class 1259 OID 16411)
 -- Name: certificate; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -92,6 +119,7 @@ CREATE TABLE public.certificate (
 ALTER TABLE public.certificate OWNER TO rs_master;
 
 --
+-- TOC entry 199 (class 1259 OID 16420)
 -- Name: certificate_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -107,6 +135,8 @@ CREATE SEQUENCE public.certificate_id_seq
 ALTER TABLE public.certificate_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3574 (class 0 OID 0)
+-- Dependencies: 199
 -- Name: certificate_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -114,6 +144,7 @@ ALTER SEQUENCE public.certificate_id_seq OWNED BY public.certificate.id;
 
 
 --
+-- TOC entry 200 (class 1259 OID 16422)
 -- Name: consent; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -131,6 +162,7 @@ CREATE TABLE public.consent (
 ALTER TABLE public.consent OWNER TO rs_master;
 
 --
+-- TOC entry 201 (class 1259 OID 16430)
 -- Name: consent_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -146,6 +178,8 @@ CREATE SEQUENCE public.consent_id_seq
 ALTER TABLE public.consent_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3575 (class 0 OID 0)
+-- Dependencies: 201
 -- Name: consent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -153,6 +187,7 @@ ALTER SEQUENCE public.consent_id_seq OWNED BY public.consent.id;
 
 
 --
+-- TOC entry 202 (class 1259 OID 16432)
 -- Name: course; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -184,6 +219,7 @@ CREATE TABLE public.course (
 ALTER TABLE public.course OWNER TO rs_master;
 
 --
+-- TOC entry 203 (class 1259 OID 16444)
 -- Name: course_event; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -211,6 +247,7 @@ CREATE TABLE public.course_event (
 ALTER TABLE public.course_event OWNER TO rs_master;
 
 --
+-- TOC entry 204 (class 1259 OID 16453)
 -- Name: course_event_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -226,6 +263,8 @@ CREATE SEQUENCE public.course_event_id_seq
 ALTER TABLE public.course_event_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3576 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: course_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -233,6 +272,7 @@ ALTER SEQUENCE public.course_event_id_seq OWNED BY public.course_event.id;
 
 
 --
+-- TOC entry 205 (class 1259 OID 16455)
 -- Name: course_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -248,6 +288,8 @@ CREATE SEQUENCE public.course_id_seq
 ALTER TABLE public.course_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3577 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -255,6 +297,7 @@ ALTER SEQUENCE public.course_id_seq OWNED BY public.course.id;
 
 
 --
+-- TOC entry 206 (class 1259 OID 16457)
 -- Name: course_manager; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -270,6 +313,7 @@ CREATE TABLE public.course_manager (
 ALTER TABLE public.course_manager OWNER TO rs_master;
 
 --
+-- TOC entry 207 (class 1259 OID 16462)
 -- Name: course_manager_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -285,6 +329,8 @@ CREATE SEQUENCE public.course_manager_id_seq
 ALTER TABLE public.course_manager_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3578 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: course_manager_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -292,6 +338,7 @@ ALTER SEQUENCE public.course_manager_id_seq OWNED BY public.course_manager.id;
 
 
 --
+-- TOC entry 208 (class 1259 OID 16464)
 -- Name: course_task; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -321,6 +368,7 @@ CREATE TABLE public.course_task (
 ALTER TABLE public.course_task OWNER TO rs_master;
 
 --
+-- TOC entry 209 (class 1259 OID 16476)
 -- Name: course_task_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -336,6 +384,8 @@ CREATE SEQUENCE public.course_task_id_seq
 ALTER TABLE public.course_task_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3579 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: course_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -343,6 +393,7 @@ ALTER SEQUENCE public.course_task_id_seq OWNED BY public.course_task.id;
 
 
 --
+-- TOC entry 210 (class 1259 OID 16478)
 -- Name: course_user; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -361,6 +412,7 @@ CREATE TABLE public.course_user (
 ALTER TABLE public.course_user OWNER TO rs_master;
 
 --
+-- TOC entry 211 (class 1259 OID 16486)
 -- Name: course_user_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -376,6 +428,8 @@ CREATE SEQUENCE public.course_user_id_seq
 ALTER TABLE public.course_user_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3580 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: course_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -383,6 +437,7 @@ ALTER SEQUENCE public.course_user_id_seq OWNED BY public.course_user.id;
 
 
 --
+-- TOC entry 212 (class 1259 OID 16488)
 -- Name: cv; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -413,6 +468,7 @@ CREATE TABLE public.cv (
 ALTER TABLE public.cv OWNER TO rs_master;
 
 --
+-- TOC entry 213 (class 1259 OID 16494)
 -- Name: cv_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -428,6 +484,8 @@ CREATE SEQUENCE public.cv_id_seq
 ALTER TABLE public.cv_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3581 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: cv_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -435,6 +493,7 @@ ALTER SEQUENCE public.cv_id_seq OWNED BY public.cv.id;
 
 
 --
+-- TOC entry 214 (class 1259 OID 16496)
 -- Name: discord_server; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -451,6 +510,7 @@ CREATE TABLE public.discord_server (
 ALTER TABLE public.discord_server OWNER TO rs_master;
 
 --
+-- TOC entry 215 (class 1259 OID 16504)
 -- Name: discord_server_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -466,6 +526,8 @@ CREATE SEQUENCE public.discord_server_id_seq
 ALTER TABLE public.discord_server_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3582 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: discord_server_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -473,6 +535,7 @@ ALTER SEQUENCE public.discord_server_id_seq OWNED BY public.discord_server.id;
 
 
 --
+-- TOC entry 216 (class 1259 OID 16506)
 -- Name: event; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -491,6 +554,7 @@ CREATE TABLE public.event (
 ALTER TABLE public.event OWNER TO rs_master;
 
 --
+-- TOC entry 217 (class 1259 OID 16515)
 -- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -506,6 +570,8 @@ CREATE SEQUENCE public.event_id_seq
 ALTER TABLE public.event_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3583 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -513,6 +579,7 @@ ALTER SEQUENCE public.event_id_seq OWNED BY public.event.id;
 
 
 --
+-- TOC entry 218 (class 1259 OID 16517)
 -- Name: feedback; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -532,6 +599,7 @@ CREATE TABLE public.feedback (
 ALTER TABLE public.feedback OWNER TO rs_master;
 
 --
+-- TOC entry 219 (class 1259 OID 16526)
 -- Name: feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -547,6 +615,8 @@ CREATE SEQUENCE public.feedback_id_seq
 ALTER TABLE public.feedback_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3584 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -554,6 +624,101 @@ ALTER SEQUENCE public.feedback_id_seq OWNED BY public.feedback.id;
 
 
 --
+-- TOC entry 271 (class 1259 OID 17294)
+-- Name: interview_question; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.interview_question (
+    id integer NOT NULL,
+    "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
+    title character varying NOT NULL,
+    question character varying NOT NULL
+);
+
+
+ALTER TABLE public.interview_question OWNER TO rs_master;
+
+--
+-- TOC entry 272 (class 1259 OID 17305)
+-- Name: interview_question_categories_interview_question_category; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.interview_question_categories_interview_question_category (
+    "interviewQuestionId" integer NOT NULL,
+    "interviewQuestionCategoryId" integer NOT NULL
+);
+
+
+ALTER TABLE public.interview_question_categories_interview_question_category OWNER TO rs_master;
+
+--
+-- TOC entry 269 (class 1259 OID 17279)
+-- Name: interview_question_category; Type: TABLE; Schema: public; Owner: rs_master
+--
+
+CREATE TABLE public.interview_question_category (
+    id integer NOT NULL,
+    "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
+    name character varying NOT NULL
+);
+
+
+ALTER TABLE public.interview_question_category OWNER TO rs_master;
+
+--
+-- TOC entry 268 (class 1259 OID 17277)
+-- Name: interview_question_category_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
+--
+
+CREATE SEQUENCE public.interview_question_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.interview_question_category_id_seq OWNER TO rs_master;
+
+--
+-- TOC entry 3585 (class 0 OID 0)
+-- Dependencies: 268
+-- Name: interview_question_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
+--
+
+ALTER SEQUENCE public.interview_question_category_id_seq OWNED BY public.interview_question_category.id;
+
+
+--
+-- TOC entry 270 (class 1259 OID 17292)
+-- Name: interview_question_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
+--
+
+CREATE SEQUENCE public.interview_question_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.interview_question_id_seq OWNER TO rs_master;
+
+--
+-- TOC entry 3586 (class 0 OID 0)
+-- Dependencies: 270
+-- Name: interview_question_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
+--
+
+ALTER SEQUENCE public.interview_question_id_seq OWNED BY public.interview_question.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 16528)
 -- Name: mentor; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -572,6 +737,7 @@ CREATE TABLE public.mentor (
 ALTER TABLE public.mentor OWNER TO rs_master;
 
 --
+-- TOC entry 221 (class 1259 OID 16537)
 -- Name: mentor_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -587,6 +753,8 @@ CREATE SEQUENCE public.mentor_id_seq
 ALTER TABLE public.mentor_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3587 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: mentor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -594,6 +762,7 @@ ALTER SEQUENCE public.mentor_id_seq OWNED BY public.mentor.id;
 
 
 --
+-- TOC entry 222 (class 1259 OID 16539)
 -- Name: mentor_registry; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -608,13 +777,15 @@ CREATE TABLE public.mentor_registry (
     "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
     "technicalMentoring" text DEFAULT ''::text NOT NULL,
     "preselectedCourses" text DEFAULT ''::text NOT NULL,
-    canceled boolean DEFAULT false NOT NULL
+    canceled boolean DEFAULT false NOT NULL,
+    "languagesMentoring" text DEFAULT ''::text NOT NULL
 );
 
 
 ALTER TABLE public.mentor_registry OWNER TO rs_master;
 
 --
+-- TOC entry 223 (class 1259 OID 16551)
 -- Name: mentor_registry_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -630,6 +801,8 @@ CREATE SEQUENCE public.mentor_registry_id_seq
 ALTER TABLE public.mentor_registry_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3588 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: mentor_registry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -637,6 +810,7 @@ ALTER SEQUENCE public.mentor_registry_id_seq OWNED BY public.mentor_registry.id;
 
 
 --
+-- TOC entry 224 (class 1259 OID 16553)
 -- Name: private_feedback; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -654,6 +828,7 @@ CREATE TABLE public.private_feedback (
 ALTER TABLE public.private_feedback OWNER TO rs_master;
 
 --
+-- TOC entry 225 (class 1259 OID 16561)
 -- Name: private_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -669,6 +844,8 @@ CREATE SEQUENCE public.private_feedback_id_seq
 ALTER TABLE public.private_feedback_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3589 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: private_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -676,6 +853,7 @@ ALTER SEQUENCE public.private_feedback_id_seq OWNED BY public.private_feedback.i
 
 
 --
+-- TOC entry 226 (class 1259 OID 16563)
 -- Name: profile_permissions; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -703,6 +881,7 @@ CREATE TABLE public.profile_permissions (
 ALTER TABLE public.profile_permissions OWNER TO rs_master;
 
 --
+-- TOC entry 227 (class 1259 OID 16584)
 -- Name: profile_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -718,6 +897,8 @@ CREATE SEQUENCE public.profile_permissions_id_seq
 ALTER TABLE public.profile_permissions_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3590 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: profile_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -725,6 +906,7 @@ ALTER SEQUENCE public.profile_permissions_id_seq OWNED BY public.profile_permiss
 
 
 --
+-- TOC entry 228 (class 1259 OID 16586)
 -- Name: registry; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -743,6 +925,7 @@ CREATE TABLE public.registry (
 ALTER TABLE public.registry OWNER TO rs_master;
 
 --
+-- TOC entry 229 (class 1259 OID 16596)
 -- Name: registry_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -758,6 +941,8 @@ CREATE SEQUENCE public.registry_id_seq
 ALTER TABLE public.registry_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3591 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: registry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -765,6 +950,7 @@ ALTER SEQUENCE public.registry_id_seq OWNED BY public.registry.id;
 
 
 --
+-- TOC entry 230 (class 1259 OID 16598)
 -- Name: repository_event; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -781,6 +967,7 @@ CREATE TABLE public.repository_event (
 ALTER TABLE public.repository_event OWNER TO rs_master;
 
 --
+-- TOC entry 231 (class 1259 OID 16606)
 -- Name: repository_event_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -796,6 +983,8 @@ CREATE SEQUENCE public.repository_event_id_seq
 ALTER TABLE public.repository_event_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3592 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: repository_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -803,6 +992,7 @@ ALTER SEQUENCE public.repository_event_id_seq OWNED BY public.repository_event.i
 
 
 --
+-- TOC entry 232 (class 1259 OID 16608)
 -- Name: stage; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -821,6 +1011,7 @@ CREATE TABLE public.stage (
 ALTER TABLE public.stage OWNER TO rs_master;
 
 --
+-- TOC entry 233 (class 1259 OID 16617)
 -- Name: stage_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -836,6 +1027,8 @@ CREATE SEQUENCE public.stage_id_seq
 ALTER TABLE public.stage_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3593 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: stage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -843,6 +1036,7 @@ ALTER SEQUENCE public.stage_id_seq OWNED BY public.stage.id;
 
 
 --
+-- TOC entry 234 (class 1259 OID 16619)
 -- Name: stage_interview; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -865,6 +1059,7 @@ CREATE TABLE public.stage_interview (
 ALTER TABLE public.stage_interview OWNER TO rs_master;
 
 --
+-- TOC entry 235 (class 1259 OID 16629)
 -- Name: stage_interview_feedback; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -880,6 +1075,7 @@ CREATE TABLE public.stage_interview_feedback (
 ALTER TABLE public.stage_interview_feedback OWNER TO rs_master;
 
 --
+-- TOC entry 236 (class 1259 OID 16637)
 -- Name: stage_interview_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -895,6 +1091,8 @@ CREATE SEQUENCE public.stage_interview_feedback_id_seq
 ALTER TABLE public.stage_interview_feedback_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3594 (class 0 OID 0)
+-- Dependencies: 236
 -- Name: stage_interview_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -902,6 +1100,7 @@ ALTER SEQUENCE public.stage_interview_feedback_id_seq OWNED BY public.stage_inte
 
 
 --
+-- TOC entry 237 (class 1259 OID 16639)
 -- Name: stage_interview_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -917,6 +1116,8 @@ CREATE SEQUENCE public.stage_interview_id_seq
 ALTER TABLE public.stage_interview_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3595 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: stage_interview_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -924,6 +1125,7 @@ ALTER SEQUENCE public.stage_interview_id_seq OWNED BY public.stage_interview.id;
 
 
 --
+-- TOC entry 238 (class 1259 OID 16641)
 -- Name: stage_interview_student; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -939,6 +1141,7 @@ CREATE TABLE public.stage_interview_student (
 ALTER TABLE public.stage_interview_student OWNER TO rs_master;
 
 --
+-- TOC entry 239 (class 1259 OID 16646)
 -- Name: stage_interview_student_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -954,6 +1157,8 @@ CREATE SEQUENCE public.stage_interview_student_id_seq
 ALTER TABLE public.stage_interview_student_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3596 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: stage_interview_student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -961,6 +1166,7 @@ ALTER SEQUENCE public.stage_interview_student_id_seq OWNED BY public.stage_inter
 
 
 --
+-- TOC entry 240 (class 1259 OID 16648)
 -- Name: student; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -988,13 +1194,15 @@ CREATE TABLE public.student (
     "totalScoreChangeDate" timestamp with time zone,
     "repositoryLastActivityDate" timestamp with time zone,
     rank integer DEFAULT 999999 NOT NULL,
-    "crossCheckScore" double precision DEFAULT '0'::double precision NOT NULL
+    "crossCheckScore" double precision DEFAULT '0'::double precision NOT NULL,
+    "unassigningComment" text
 );
 
 
 ALTER TABLE public.student OWNER TO rs_master;
 
 --
+-- TOC entry 241 (class 1259 OID 16664)
 -- Name: student_feedback; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1010,6 +1218,7 @@ CREATE TABLE public.student_feedback (
 ALTER TABLE public.student_feedback OWNER TO rs_master;
 
 --
+-- TOC entry 242 (class 1259 OID 16672)
 -- Name: student_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1025,6 +1234,8 @@ CREATE SEQUENCE public.student_feedback_id_seq
 ALTER TABLE public.student_feedback_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3597 (class 0 OID 0)
+-- Dependencies: 242
 -- Name: student_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1032,6 +1243,7 @@ ALTER SEQUENCE public.student_feedback_id_seq OWNED BY public.student_feedback.i
 
 
 --
+-- TOC entry 243 (class 1259 OID 16674)
 -- Name: student_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1047,6 +1259,8 @@ CREATE SEQUENCE public.student_id_seq
 ALTER TABLE public.student_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3598 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1054,6 +1268,7 @@ ALTER SEQUENCE public.student_id_seq OWNED BY public.student.id;
 
 
 --
+-- TOC entry 244 (class 1259 OID 16676)
 -- Name: task; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1080,6 +1295,7 @@ CREATE TABLE public.task (
 ALTER TABLE public.task OWNER TO rs_master;
 
 --
+-- TOC entry 245 (class 1259 OID 16688)
 -- Name: task_artefact; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1098,6 +1314,7 @@ CREATE TABLE public.task_artefact (
 ALTER TABLE public.task_artefact OWNER TO rs_master;
 
 --
+-- TOC entry 246 (class 1259 OID 16696)
 -- Name: task_artefact_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1113,6 +1330,8 @@ CREATE SEQUENCE public.task_artefact_id_seq
 ALTER TABLE public.task_artefact_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3599 (class 0 OID 0)
+-- Dependencies: 246
 -- Name: task_artefact_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1120,6 +1339,7 @@ ALTER SEQUENCE public.task_artefact_id_seq OWNED BY public.task_artefact.id;
 
 
 --
+-- TOC entry 247 (class 1259 OID 16698)
 -- Name: task_checker; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1136,6 +1356,7 @@ CREATE TABLE public.task_checker (
 ALTER TABLE public.task_checker OWNER TO rs_master;
 
 --
+-- TOC entry 248 (class 1259 OID 16703)
 -- Name: task_checker_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1151,6 +1372,8 @@ CREATE SEQUENCE public.task_checker_id_seq
 ALTER TABLE public.task_checker_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3600 (class 0 OID 0)
+-- Dependencies: 248
 -- Name: task_checker_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1158,6 +1381,7 @@ ALTER SEQUENCE public.task_checker_id_seq OWNED BY public.task_checker.id;
 
 
 --
+-- TOC entry 249 (class 1259 OID 16705)
 -- Name: task_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1173,6 +1397,8 @@ CREATE SEQUENCE public.task_id_seq
 ALTER TABLE public.task_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3601 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1180,6 +1406,7 @@ ALTER SEQUENCE public.task_id_seq OWNED BY public.task.id;
 
 
 --
+-- TOC entry 250 (class 1259 OID 16707)
 -- Name: task_interview_result; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1199,6 +1426,7 @@ CREATE TABLE public.task_interview_result (
 ALTER TABLE public.task_interview_result OWNER TO rs_master;
 
 --
+-- TOC entry 251 (class 1259 OID 16716)
 -- Name: task_interview_result_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1214,6 +1442,8 @@ CREATE SEQUENCE public.task_interview_result_id_seq
 ALTER TABLE public.task_interview_result_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3602 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: task_interview_result_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1221,6 +1451,7 @@ ALTER SEQUENCE public.task_interview_result_id_seq OWNED BY public.task_intervie
 
 
 --
+-- TOC entry 252 (class 1259 OID 16718)
 -- Name: task_interview_student; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1237,6 +1468,7 @@ CREATE TABLE public.task_interview_student (
 ALTER TABLE public.task_interview_student OWNER TO rs_master;
 
 --
+-- TOC entry 253 (class 1259 OID 16723)
 -- Name: task_interview_student_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1252,6 +1484,8 @@ CREATE SEQUENCE public.task_interview_student_id_seq
 ALTER TABLE public.task_interview_student_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3603 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: task_interview_student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1259,6 +1493,7 @@ ALTER SEQUENCE public.task_interview_student_id_seq OWNED BY public.task_intervi
 
 
 --
+-- TOC entry 254 (class 1259 OID 16725)
 -- Name: task_result; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1280,6 +1515,7 @@ CREATE TABLE public.task_result (
 ALTER TABLE public.task_result OWNER TO rs_master;
 
 --
+-- TOC entry 255 (class 1259 OID 16735)
 -- Name: task_result_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1295,6 +1531,8 @@ CREATE SEQUENCE public.task_result_id_seq
 ALTER TABLE public.task_result_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3604 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: task_result_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1302,6 +1540,7 @@ ALTER SEQUENCE public.task_result_id_seq OWNED BY public.task_result.id;
 
 
 --
+-- TOC entry 256 (class 1259 OID 16737)
 -- Name: task_solution; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1320,6 +1559,7 @@ CREATE TABLE public.task_solution (
 ALTER TABLE public.task_solution OWNER TO rs_master;
 
 --
+-- TOC entry 257 (class 1259 OID 16747)
 -- Name: task_solution_checker; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1337,6 +1577,7 @@ CREATE TABLE public.task_solution_checker (
 ALTER TABLE public.task_solution_checker OWNER TO rs_master;
 
 --
+-- TOC entry 258 (class 1259 OID 16752)
 -- Name: task_solution_checker_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1352,6 +1593,8 @@ CREATE SEQUENCE public.task_solution_checker_id_seq
 ALTER TABLE public.task_solution_checker_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3605 (class 0 OID 0)
+-- Dependencies: 258
 -- Name: task_solution_checker_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1359,6 +1602,7 @@ ALTER SEQUENCE public.task_solution_checker_id_seq OWNED BY public.task_solution
 
 
 --
+-- TOC entry 259 (class 1259 OID 16754)
 -- Name: task_solution_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1374,6 +1618,8 @@ CREATE SEQUENCE public.task_solution_id_seq
 ALTER TABLE public.task_solution_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3606 (class 0 OID 0)
+-- Dependencies: 259
 -- Name: task_solution_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1381,6 +1627,7 @@ ALTER SEQUENCE public.task_solution_id_seq OWNED BY public.task_solution.id;
 
 
 --
+-- TOC entry 260 (class 1259 OID 16756)
 -- Name: task_solution_result; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1402,6 +1649,7 @@ CREATE TABLE public.task_solution_result (
 ALTER TABLE public.task_solution_result OWNER TO rs_master;
 
 --
+-- TOC entry 261 (class 1259 OID 16767)
 -- Name: task_solution_result_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1417,6 +1665,8 @@ CREATE SEQUENCE public.task_solution_result_id_seq
 ALTER TABLE public.task_solution_result_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3607 (class 0 OID 0)
+-- Dependencies: 261
 -- Name: task_solution_result_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1424,6 +1674,7 @@ ALTER SEQUENCE public.task_solution_result_id_seq OWNED BY public.task_solution_
 
 
 --
+-- TOC entry 262 (class 1259 OID 16769)
 -- Name: task_verification; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1443,6 +1694,7 @@ CREATE TABLE public.task_verification (
 ALTER TABLE public.task_verification OWNER TO rs_master;
 
 --
+-- TOC entry 263 (class 1259 OID 16779)
 -- Name: task_verification_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1458,6 +1710,8 @@ CREATE SEQUENCE public.task_verification_id_seq
 ALTER TABLE public.task_verification_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3608 (class 0 OID 0)
+-- Dependencies: 263
 -- Name: task_verification_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1465,6 +1719,7 @@ ALTER SEQUENCE public.task_verification_id_seq OWNED BY public.task_verification
 
 
 --
+-- TOC entry 264 (class 1259 OID 16781)
 -- Name: user; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1512,6 +1767,7 @@ CREATE TABLE public."user" (
 ALTER TABLE public."user" OWNER TO rs_master;
 
 --
+-- TOC entry 265 (class 1259 OID 16795)
 -- Name: user_group; Type: TABLE; Schema: public; Owner: rs_master
 --
 
@@ -1528,6 +1784,7 @@ CREATE TABLE public.user_group (
 ALTER TABLE public.user_group OWNER TO rs_master;
 
 --
+-- TOC entry 266 (class 1259 OID 16803)
 -- Name: user_group_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1543,6 +1800,8 @@ CREATE SEQUENCE public.user_group_id_seq
 ALTER TABLE public.user_group_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3609 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: user_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1550,6 +1809,7 @@ ALTER SEQUENCE public.user_group_id_seq OWNED BY public.user_group.id;
 
 
 --
+-- TOC entry 267 (class 1259 OID 16805)
 -- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: rs_master
 --
 
@@ -1565,6 +1825,8 @@ CREATE SEQUENCE public.user_id_seq
 ALTER TABLE public.user_id_seq OWNER TO rs_master;
 
 --
+-- TOC entry 3610 (class 0 OID 0)
+-- Dependencies: 267
 -- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rs_master
 --
 
@@ -1572,6 +1834,7 @@ ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
 
 
 --
+-- TOC entry 2990 (class 2604 OID 16807)
 -- Name: alert id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1579,6 +1842,7 @@ ALTER TABLE ONLY public.alert ALTER COLUMN id SET DEFAULT nextval('public.alert_
 
 
 --
+-- TOC entry 2994 (class 2604 OID 16808)
 -- Name: certificate id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1586,6 +1850,7 @@ ALTER TABLE ONLY public.certificate ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- TOC entry 2997 (class 2604 OID 16809)
 -- Name: consent id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1593,6 +1858,7 @@ ALTER TABLE ONLY public.consent ALTER COLUMN id SET DEFAULT nextval('public.cons
 
 
 --
+-- TOC entry 3004 (class 2604 OID 16810)
 -- Name: course id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1600,6 +1866,7 @@ ALTER TABLE ONLY public.course ALTER COLUMN id SET DEFAULT nextval('public.cours
 
 
 --
+-- TOC entry 3008 (class 2604 OID 16811)
 -- Name: course_event id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1607,6 +1874,7 @@ ALTER TABLE ONLY public.course_event ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- TOC entry 3011 (class 2604 OID 16812)
 -- Name: course_manager id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1614,6 +1882,7 @@ ALTER TABLE ONLY public.course_manager ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- TOC entry 3018 (class 2604 OID 16813)
 -- Name: course_task id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1621,6 +1890,7 @@ ALTER TABLE ONLY public.course_task ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- TOC entry 3024 (class 2604 OID 16814)
 -- Name: course_user id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1628,6 +1898,7 @@ ALTER TABLE ONLY public.course_user ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- TOC entry 3025 (class 2604 OID 16815)
 -- Name: cv id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1635,6 +1906,7 @@ ALTER TABLE ONLY public.cv ALTER COLUMN id SET DEFAULT nextval('public.cv_id_seq
 
 
 --
+-- TOC entry 3028 (class 2604 OID 16816)
 -- Name: discord_server id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1642,6 +1914,7 @@ ALTER TABLE ONLY public.discord_server ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- TOC entry 3032 (class 2604 OID 16817)
 -- Name: event id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1649,6 +1922,7 @@ ALTER TABLE ONLY public.event ALTER COLUMN id SET DEFAULT nextval('public.event_
 
 
 --
+-- TOC entry 3036 (class 2604 OID 16818)
 -- Name: feedback id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1656,6 +1930,23 @@ ALTER TABLE ONLY public.feedback ALTER COLUMN id SET DEFAULT nextval('public.fee
 
 
 --
+-- TOC entry 3164 (class 2604 OID 17297)
+-- Name: interview_question id; Type: DEFAULT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question ALTER COLUMN id SET DEFAULT nextval('public.interview_question_id_seq'::regclass);
+
+
+--
+-- TOC entry 3161 (class 2604 OID 17282)
+-- Name: interview_question_category id; Type: DEFAULT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_category ALTER COLUMN id SET DEFAULT nextval('public.interview_question_category_id_seq'::regclass);
+
+
+--
+-- TOC entry 3040 (class 2604 OID 16819)
 -- Name: mentor id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1663,6 +1954,7 @@ ALTER TABLE ONLY public.mentor ALTER COLUMN id SET DEFAULT nextval('public.mento
 
 
 --
+-- TOC entry 3047 (class 2604 OID 16820)
 -- Name: mentor_registry id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1670,6 +1962,7 @@ ALTER TABLE ONLY public.mentor_registry ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- TOC entry 3051 (class 2604 OID 16821)
 -- Name: private_feedback id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1677,6 +1970,7 @@ ALTER TABLE ONLY public.private_feedback ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- TOC entry 3067 (class 2604 OID 16822)
 -- Name: profile_permissions id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1684,6 +1978,7 @@ ALTER TABLE ONLY public.profile_permissions ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- TOC entry 3072 (class 2604 OID 16823)
 -- Name: registry id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1691,6 +1986,7 @@ ALTER TABLE ONLY public.registry ALTER COLUMN id SET DEFAULT nextval('public.reg
 
 
 --
+-- TOC entry 3075 (class 2604 OID 16824)
 -- Name: repository_event id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1698,6 +1994,7 @@ ALTER TABLE ONLY public.repository_event ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- TOC entry 3079 (class 2604 OID 16825)
 -- Name: stage id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1705,6 +2002,7 @@ ALTER TABLE ONLY public.stage ALTER COLUMN id SET DEFAULT nextval('public.stage_
 
 
 --
+-- TOC entry 3084 (class 2604 OID 16826)
 -- Name: stage_interview id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1712,6 +2010,7 @@ ALTER TABLE ONLY public.stage_interview ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- TOC entry 3087 (class 2604 OID 16827)
 -- Name: stage_interview_feedback id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1719,6 +2018,7 @@ ALTER TABLE ONLY public.stage_interview_feedback ALTER COLUMN id SET DEFAULT nex
 
 
 --
+-- TOC entry 3090 (class 2604 OID 16828)
 -- Name: stage_interview_student id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1726,6 +2026,7 @@ ALTER TABLE ONLY public.stage_interview_student ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- TOC entry 3100 (class 2604 OID 16829)
 -- Name: student id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1733,6 +2034,7 @@ ALTER TABLE ONLY public.student ALTER COLUMN id SET DEFAULT nextval('public.stud
 
 
 --
+-- TOC entry 3104 (class 2604 OID 16830)
 -- Name: student_feedback id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1740,6 +2042,7 @@ ALTER TABLE ONLY public.student_feedback ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- TOC entry 3111 (class 2604 OID 16831)
 -- Name: task id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1747,6 +2050,7 @@ ALTER TABLE ONLY public.task ALTER COLUMN id SET DEFAULT nextval('public.task_id
 
 
 --
+-- TOC entry 3114 (class 2604 OID 16832)
 -- Name: task_artefact id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1754,6 +2058,7 @@ ALTER TABLE ONLY public.task_artefact ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- TOC entry 3117 (class 2604 OID 16833)
 -- Name: task_checker id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1761,6 +2066,7 @@ ALTER TABLE ONLY public.task_checker ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- TOC entry 3121 (class 2604 OID 16834)
 -- Name: task_interview_result id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1768,6 +2074,7 @@ ALTER TABLE ONLY public.task_interview_result ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- TOC entry 3124 (class 2604 OID 16835)
 -- Name: task_interview_student id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1775,6 +2082,7 @@ ALTER TABLE ONLY public.task_interview_student ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- TOC entry 3129 (class 2604 OID 16836)
 -- Name: task_result id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1782,6 +2090,7 @@ ALTER TABLE ONLY public.task_result ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- TOC entry 3134 (class 2604 OID 16837)
 -- Name: task_solution id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1789,6 +2098,7 @@ ALTER TABLE ONLY public.task_solution ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- TOC entry 3137 (class 2604 OID 16838)
 -- Name: task_solution_checker id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1796,6 +2106,7 @@ ALTER TABLE ONLY public.task_solution_checker ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- TOC entry 3143 (class 2604 OID 16839)
 -- Name: task_solution_result id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1803,6 +2114,7 @@ ALTER TABLE ONLY public.task_solution_result ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- TOC entry 3148 (class 2604 OID 16840)
 -- Name: task_verification id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1810,6 +2122,7 @@ ALTER TABLE ONLY public.task_verification ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- TOC entry 3157 (class 2604 OID 16841)
 -- Name: user id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1817,6 +2130,7 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 
 
 --
+-- TOC entry 3160 (class 2604 OID 16842)
 -- Name: user_group id; Type: DEFAULT; Schema: public; Owner: rs_master
 --
 
@@ -1824,6 +2138,8 @@ ALTER TABLE ONLY public.user_group ALTER COLUMN id SET DEFAULT nextval('public.u
 
 
 --
+-- TOC entry 3490 (class 0 OID 16399)
+-- Dependencies: 196
 -- Data for Name: alert; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1832,6 +2148,8 @@ COPY public.alert (id, "createdDate", "updatedDate", text, "courseId", enabled, 
 
 
 --
+-- TOC entry 3492 (class 0 OID 16411)
+-- Dependencies: 198
 -- Data for Name: certificate; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1840,6 +2158,8 @@ COPY public.certificate (id, "createdDate", "updatedDate", "publicId", "studentI
 
 
 --
+-- TOC entry 3494 (class 0 OID 16422)
+-- Dependencies: 200
 -- Data for Name: consent; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1848,6 +2168,8 @@ COPY public.consent (id, "createdDate", "updatedDate", "channelValue", "channelT
 
 
 --
+-- TOC entry 3496 (class 0 OID 16432)
+-- Dependencies: 202
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1859,6 +2181,8 @@ COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillI
 
 
 --
+-- TOC entry 3497 (class 0 OID 16444)
+-- Dependencies: 203
 -- Data for Name: course_event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1936,6 +2260,8 @@ COPY public.course_event (id, "createdDate", "updatedDate", "eventId", "courseId
 
 
 --
+-- TOC entry 3500 (class 0 OID 16457)
+-- Dependencies: 206
 -- Data for Name: course_manager; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -1944,6 +2270,8 @@ COPY public.course_manager (id, "createdDate", "updatedDate", "courseId", "userI
 
 
 --
+-- TOC entry 3502 (class 0 OID 16464)
+-- Dependencies: 208
 -- Data for Name: course_task; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2105,6 +2433,8 @@ COPY public.course_task (id, "createdDate", "updatedDate", "mentorStartDate", "m
 
 
 --
+-- TOC entry 3504 (class 0 OID 16478)
+-- Dependencies: 210
 -- Data for Name: course_user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2113,6 +2443,8 @@ COPY public.course_user (id, "createdDate", "updatedDate", "courseId", "userId",
 
 
 --
+-- TOC entry 3506 (class 0 OID 16488)
+-- Dependencies: 212
 -- Data for Name: cv; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2121,6 +2453,8 @@ COPY public.cv (id, "githubId", name, "selfIntroLink", "startFrom", "fullTime", 
 
 
 --
+-- TOC entry 3508 (class 0 OID 16496)
+-- Dependencies: 214
 -- Data for Name: discord_server; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2130,6 +2464,8 @@ COPY public.discord_server (id, "createdDate", "updatedDate", name, "gratitudeUr
 
 
 --
+-- TOC entry 3510 (class 0 OID 16506)
+-- Dependencies: 216
 -- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2301,6 +2637,8 @@ COPY public.event (id, "createdDate", "updatedDate", name, "descriptionUrl", des
 
 
 --
+-- TOC entry 3512 (class 0 OID 16517)
+-- Dependencies: 218
 -- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2309,6 +2647,38 @@ COPY public.feedback (id, "createdDate", "updatedDate", "badgeId", "fromUserId",
 
 
 --
+-- TOC entry 3565 (class 0 OID 17294)
+-- Dependencies: 271
+-- Data for Name: interview_question; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.interview_question (id, "createdDate", "updatedDate", title, question) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3566 (class 0 OID 17305)
+-- Dependencies: 272
+-- Data for Name: interview_question_categories_interview_question_category; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.interview_question_categories_interview_question_category ("interviewQuestionId", "interviewQuestionCategoryId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3563 (class 0 OID 17279)
+-- Dependencies: 269
+-- Data for Name: interview_question_category; Type: TABLE DATA; Schema: public; Owner: rs_master
+--
+
+COPY public.interview_question_category (id, "createdDate", "updatedDate", name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3514 (class 0 OID 16528)
+-- Dependencies: 220
 -- Data for Name: mentor; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2325,14 +2695,18 @@ COPY public.mentor (id, "createdDate", "updatedDate", "maxStudentsLimit", "cours
 
 
 --
+-- TOC entry 3516 (class 0 OID 16539)
+-- Dependencies: 222
 -- Data for Name: mentor_registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.mentor_registry (id, "userId", "preferedCourses", "maxStudentsLimit", "englishMentoring", "preferedStudentsLocation", "createdDate", "updatedDate", "technicalMentoring", "preselectedCourses", canceled) FROM stdin;
+COPY public.mentor_registry (id, "userId", "preferedCourses", "maxStudentsLimit", "englishMentoring", "preferedStudentsLocation", "createdDate", "updatedDate", "technicalMentoring", "preselectedCourses", canceled, "languagesMentoring") FROM stdin;
 \.
 
 
 --
+-- TOC entry 3518 (class 0 OID 16553)
+-- Dependencies: 224
 -- Data for Name: private_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2341,6 +2715,8 @@ COPY public.private_feedback (id, comment, "createdDate", "updatedDate", "course
 
 
 --
+-- TOC entry 3520 (class 0 OID 16563)
+-- Dependencies: 226
 -- Data for Name: profile_permissions; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2349,6 +2725,8 @@ COPY public.profile_permissions (id, "createdDate", "updatedDate", "userId", "is
 
 
 --
+-- TOC entry 3522 (class 0 OID 16586)
+-- Dependencies: 228
 -- Data for Name: registry; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2360,6 +2738,8 @@ COPY public.registry (id, type, status, "createdDate", "updatedDate", "userId", 
 
 
 --
+-- TOC entry 3524 (class 0 OID 16598)
+-- Dependencies: 230
 -- Data for Name: repository_event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2368,6 +2748,8 @@ COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdD
 
 
 --
+-- TOC entry 3526 (class 0 OID 16608)
+-- Dependencies: 232
 -- Data for Name: stage; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2376,6 +2758,8 @@ COPY public.stage (id, "createdDate", "updatedDate", name, "courseId", status, "
 
 
 --
+-- TOC entry 3528 (class 0 OID 16619)
+-- Dependencies: 234
 -- Data for Name: stage_interview; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2387,6 +2771,8 @@ COPY public.stage_interview (id, "createdDate", "updatedDate", "studentId", "men
 
 
 --
+-- TOC entry 3529 (class 0 OID 16629)
+-- Dependencies: 235
 -- Data for Name: stage_interview_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2396,6 +2782,8 @@ COPY public.stage_interview_feedback (id, "createdDate", "updatedDate", "stageIn
 
 
 --
+-- TOC entry 3532 (class 0 OID 16641)
+-- Dependencies: 238
 -- Data for Name: stage_interview_student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2405,34 +2793,38 @@ COPY public.stage_interview_student (id, "createdDate", "updatedDate", "studentI
 
 
 --
+-- TOC entry 3534 (class 0 OID 16648)
+-- Dependencies: 240
 -- Data for Name: student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingReason", "courseCompleted", "isTopPerformer", "preferedMentorGithubId", "readyFullTime", "courseId", "userId", "mentorId", "cvUrl", "hiredById", "hiredByName", "isFailed", "totalScore", "startDate", "endDate", repository, "totalScoreChangeDate", "repositoryLastActivityDate", rank, "crossCheckScore") FROM stdin;
-14329	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	1090	\N	\N	\N	\N	f	32	2020-04-06 15:31:44.388+00	\N	\N	2021-07-28 21:28:00.058+00	\N	1	0
-14327	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	11563	1266	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N	\N	2	0
-14331	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	3	0
-14332	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0
-14333	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0
-14335	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0
-14334	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0
-14336	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2549	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	8	0
-14330	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2089	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0
-14328	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.086033	t	test	f	f	\N	\N	13	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0
-14340	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2089	1266	\N	\N	\N	f	1585	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	1	0
-14337	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	11563	1266	\N	\N	\N	f	620	2020-04-06 15:15:02.757+00	\N	\N	2021-07-28 21:28:00.123+00	\N	2	0
-14346	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2549	1266	\N	\N	\N	f	560	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	3	0
-14341	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0
-14342	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0
-14343	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0
-14345	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0
-14339	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	1090	\N	\N	\N	\N	f	0	2020-04-06 15:31:44.388+00	\N	\N	\N	\N	8	0
-14344	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0
-14338	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.146524	t	test	f	f	\N	\N	23	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0
+COPY public.student (id, "createdDate", "updatedDate", "isExpelled", "expellingReason", "courseCompleted", "isTopPerformer", "preferedMentorGithubId", "readyFullTime", "courseId", "userId", "mentorId", "cvUrl", "hiredById", "hiredByName", "isFailed", "totalScore", "startDate", "endDate", repository, "totalScoreChangeDate", "repositoryLastActivityDate", rank, "crossCheckScore", "unassigningComment") FROM stdin;
+14329	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	1090	\N	\N	\N	\N	f	32	2020-04-06 15:31:44.388+00	\N	\N	2021-07-28 21:28:00.058+00	\N	1	0	\N
+14327	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	11563	1266	\N	\N	\N	f	0	2020-04-06 15:15:02.757+00	\N	\N	\N	\N	2	0	\N
+14331	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	3	0	\N
+14332	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N
+14333	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0	\N
+14335	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0	\N
+14334	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N
+14336	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2549	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	8	0	\N
+14330	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.086033	f	\N	f	f	\N	\N	13	2089	1266	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0	\N
+14328	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.086033	t	test	f	f	\N	\N	13	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0	\N
+14340	2020-04-06 15:33:53.058912	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2089	1266	\N	\N	\N	f	1585	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	1	0	\N
+14337	2020-04-06 15:15:02.77565	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	11563	1266	\N	\N	\N	f	620	2020-04-06 15:15:02.757+00	\N	\N	2021-07-28 21:28:00.123+00	\N	2	0	\N
+14346	2020-04-06 15:39:07.779618	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2549	1266	\N	\N	\N	f	560	1970-01-01 00:00:00+00	\N	\N	2021-07-28 21:28:00.124+00	\N	3	0	\N
+14341	2020-04-06 15:33:59.694437	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2098	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	4	0	\N
+14342	2020-04-06 15:34:04.8008	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2103	1267	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	5	0	\N
+14343	2020-04-06 15:34:09.064514	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2115	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	6	0	\N
+14345	2020-04-06 15:34:19.221853	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2480	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	7	0	\N
+14339	2020-04-06 15:31:44.421341	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	1090	\N	\N	\N	\N	f	0	2020-04-06 15:31:44.388+00	\N	\N	\N	\N	8	0	\N
+14344	2020-04-06 15:34:17.983101	2021-07-28 21:28:00.146524	f	\N	f	f	\N	\N	23	2277	\N	\N	\N	\N	f	0	1970-01-01 00:00:00+00	\N	\N	\N	\N	9	0	\N
+14338	2020-04-06 15:30:27.104695	2021-07-28 21:28:00.146524	t	test	f	f	\N	\N	23	677	1268	\N	\N	\N	f	0	2020-04-06 15:30:27.091+00	2020-04-07 13:34:01.397+00	\N	\N	\N	10	0	\N
 \.
 
 
 --
+-- TOC entry 3535 (class 0 OID 16664)
+-- Dependencies: 241
 -- Data for Name: student_feedback; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2441,6 +2833,8 @@ COPY public.student_feedback (id, "createdDate", "updatedDate", comment, "studen
 
 
 --
+-- TOC entry 3538 (class 0 OID 16676)
+-- Dependencies: 244
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2853,6 +3247,8 @@ COPY public.task (id, "createdDate", "updatedDate", name, "descriptionUrl", desc
 
 
 --
+-- TOC entry 3539 (class 0 OID 16688)
+-- Dependencies: 245
 -- Data for Name: task_artefact; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2861,6 +3257,8 @@ COPY public.task_artefact (id, "createdDate", "updatedDate", "courseTaskId", "st
 
 
 --
+-- TOC entry 3541 (class 0 OID 16698)
+-- Dependencies: 247
 -- Data for Name: task_checker; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2869,6 +3267,8 @@ COPY public.task_checker (id, "createdDate", "updatedDate", "courseTaskId", "stu
 
 
 --
+-- TOC entry 3544 (class 0 OID 16707)
+-- Dependencies: 250
 -- Data for Name: task_interview_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2877,6 +3277,8 @@ COPY public.task_interview_result (id, "createdDate", "updatedDate", "courseTask
 
 
 --
+-- TOC entry 3546 (class 0 OID 16718)
+-- Dependencies: 252
 -- Data for Name: task_interview_student; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2885,6 +3287,8 @@ COPY public.task_interview_student (id, "createdDate", "updatedDate", "studentId
 
 
 --
+-- TOC entry 3548 (class 0 OID 16725)
+-- Dependencies: 254
 -- Data for Name: task_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2903,6 +3307,8 @@ COPY public.task_result (id, "createdDate", "updatedDate", "githubPrUrl", "githu
 
 
 --
+-- TOC entry 3550 (class 0 OID 16737)
+-- Dependencies: 256
 -- Data for Name: task_solution; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2921,6 +3327,8 @@ COPY public.task_solution (id, "createdDate", "updatedDate", "courseTaskId", "st
 
 
 --
+-- TOC entry 3551 (class 0 OID 16747)
+-- Dependencies: 257
 -- Data for Name: task_solution_checker; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2939,6 +3347,8 @@ COPY public.task_solution_checker (id, "createdDate", "updatedDate", "courseTask
 
 
 --
+-- TOC entry 3554 (class 0 OID 16756)
+-- Dependencies: 260
 -- Data for Name: task_solution_result; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2948,6 +3358,8 @@ COPY public.task_solution_result (id, "createdDate", "updatedDate", "courseTaskI
 
 
 --
+-- TOC entry 3556 (class 0 OID 16769)
+-- Dependencies: 262
 -- Data for Name: task_verification; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2956,6 +3368,8 @@ COPY public.task_verification (id, "createdDate", "updatedDate", "studentId", "c
 
 
 --
+-- TOC entry 3558 (class 0 OID 16781)
+-- Dependencies: 264
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -2993,6 +3407,8 @@ COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "upd
 
 
 --
+-- TOC entry 3559 (class 0 OID 16795)
+-- Dependencies: 265
 -- Data for Name: user_group; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
@@ -3001,6 +3417,8 @@ COPY public.user_group (id, "createdDate", "updatedDate", name, users, roles) FR
 
 
 --
+-- TOC entry 3611 (class 0 OID 0)
+-- Dependencies: 197
 -- Name: alert_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3008,6 +3426,8 @@ SELECT pg_catalog.setval('public.alert_id_seq', 1, false);
 
 
 --
+-- TOC entry 3612 (class 0 OID 0)
+-- Dependencies: 199
 -- Name: certificate_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3015,6 +3435,8 @@ SELECT pg_catalog.setval('public.certificate_id_seq', 590, true);
 
 
 --
+-- TOC entry 3613 (class 0 OID 0)
+-- Dependencies: 201
 -- Name: consent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3022,6 +3444,8 @@ SELECT pg_catalog.setval('public.consent_id_seq', 1, false);
 
 
 --
+-- TOC entry 3614 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: course_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3029,6 +3453,8 @@ SELECT pg_catalog.setval('public.course_event_id_seq', 133, true);
 
 
 --
+-- TOC entry 3615 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: course_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3036,6 +3462,8 @@ SELECT pg_catalog.setval('public.course_id_seq', 25, true);
 
 
 --
+-- TOC entry 3616 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: course_manager_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3043,6 +3471,8 @@ SELECT pg_catalog.setval('public.course_manager_id_seq', 30, true);
 
 
 --
+-- TOC entry 3617 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: course_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3050,6 +3480,8 @@ SELECT pg_catalog.setval('public.course_task_id_seq', 430, true);
 
 
 --
+-- TOC entry 3618 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: course_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3057,6 +3489,8 @@ SELECT pg_catalog.setval('public.course_user_id_seq', 120, true);
 
 
 --
+-- TOC entry 3619 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: cv_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3064,6 +3498,8 @@ SELECT pg_catalog.setval('public.cv_id_seq', 1, false);
 
 
 --
+-- TOC entry 3620 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: discord_server_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3071,6 +3507,8 @@ SELECT pg_catalog.setval('public.discord_server_id_seq', 2, true);
 
 
 --
+-- TOC entry 3621 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3078,6 +3516,8 @@ SELECT pg_catalog.setval('public.event_id_seq', 125, true);
 
 
 --
+-- TOC entry 3622 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3085,6 +3525,26 @@ SELECT pg_catalog.setval('public.feedback_id_seq', 615, true);
 
 
 --
+-- TOC entry 3623 (class 0 OID 0)
+-- Dependencies: 268
+-- Name: interview_question_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
+--
+
+SELECT pg_catalog.setval('public.interview_question_category_id_seq', 1, false);
+
+
+--
+-- TOC entry 3624 (class 0 OID 0)
+-- Dependencies: 270
+-- Name: interview_question_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
+--
+
+SELECT pg_catalog.setval('public.interview_question_id_seq', 1, false);
+
+
+--
+-- TOC entry 3625 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: mentor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3092,6 +3552,8 @@ SELECT pg_catalog.setval('public.mentor_id_seq', 1275, true);
 
 
 --
+-- TOC entry 3626 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: mentor_registry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3099,6 +3561,8 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
 
 
 --
+-- TOC entry 3627 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: private_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3106,6 +3570,8 @@ SELECT pg_catalog.setval('public.private_feedback_id_seq', 65, true);
 
 
 --
+-- TOC entry 3628 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: profile_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3113,6 +3579,8 @@ SELECT pg_catalog.setval('public.profile_permissions_id_seq', 115, true);
 
 
 --
+-- TOC entry 3629 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: registry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3120,6 +3588,8 @@ SELECT pg_catalog.setval('public.registry_id_seq', 8955, true);
 
 
 --
+-- TOC entry 3630 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: repository_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3127,6 +3597,8 @@ SELECT pg_catalog.setval('public.repository_event_id_seq', 1, false);
 
 
 --
+-- TOC entry 3631 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: stage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3134,6 +3606,8 @@ SELECT pg_catalog.setval('public.stage_id_seq', 30, true);
 
 
 --
+-- TOC entry 3632 (class 0 OID 0)
+-- Dependencies: 236
 -- Name: stage_interview_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3141,6 +3615,8 @@ SELECT pg_catalog.setval('public.stage_interview_feedback_id_seq', 1234, true);
 
 
 --
+-- TOC entry 3633 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: stage_interview_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3148,6 +3624,8 @@ SELECT pg_catalog.setval('public.stage_interview_id_seq', 10689, true);
 
 
 --
+-- TOC entry 3634 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: stage_interview_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3155,6 +3633,8 @@ SELECT pg_catalog.setval('public.stage_interview_student_id_seq', 1091, true);
 
 
 --
+-- TOC entry 3635 (class 0 OID 0)
+-- Dependencies: 242
 -- Name: student_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3162,6 +3642,8 @@ SELECT pg_catalog.setval('public.student_feedback_id_seq', 136, true);
 
 
 --
+-- TOC entry 3636 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3169,6 +3651,8 @@ SELECT pg_catalog.setval('public.student_id_seq', 14346, true);
 
 
 --
+-- TOC entry 3637 (class 0 OID 0)
+-- Dependencies: 246
 -- Name: task_artefact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3176,6 +3660,8 @@ SELECT pg_catalog.setval('public.task_artefact_id_seq', 226, true);
 
 
 --
+-- TOC entry 3638 (class 0 OID 0)
+-- Dependencies: 248
 -- Name: task_checker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3183,6 +3669,8 @@ SELECT pg_catalog.setval('public.task_checker_id_seq', 4148, true);
 
 
 --
+-- TOC entry 3639 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3190,6 +3678,8 @@ SELECT pg_catalog.setval('public.task_id_seq', 497, true);
 
 
 --
+-- TOC entry 3640 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: task_interview_result_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3197,6 +3687,8 @@ SELECT pg_catalog.setval('public.task_interview_result_id_seq', 627, true);
 
 
 --
+-- TOC entry 3641 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: task_interview_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3204,6 +3696,8 @@ SELECT pg_catalog.setval('public.task_interview_student_id_seq', 1, false);
 
 
 --
+-- TOC entry 3642 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: task_result_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3211,6 +3705,8 @@ SELECT pg_catalog.setval('public.task_result_id_seq', 78651, true);
 
 
 --
+-- TOC entry 3643 (class 0 OID 0)
+-- Dependencies: 258
 -- Name: task_solution_checker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3218,6 +3714,8 @@ SELECT pg_catalog.setval('public.task_solution_checker_id_seq', 11577, true);
 
 
 --
+-- TOC entry 3644 (class 0 OID 0)
+-- Dependencies: 259
 -- Name: task_solution_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3225,6 +3723,8 @@ SELECT pg_catalog.setval('public.task_solution_id_seq', 3339, true);
 
 
 --
+-- TOC entry 3645 (class 0 OID 0)
+-- Dependencies: 261
 -- Name: task_solution_result_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3232,6 +3732,8 @@ SELECT pg_catalog.setval('public.task_solution_result_id_seq', 10812, true);
 
 
 --
+-- TOC entry 3646 (class 0 OID 0)
+-- Dependencies: 263
 -- Name: task_verification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3239,6 +3741,8 @@ SELECT pg_catalog.setval('public.task_verification_id_seq', 55459, true);
 
 
 --
+-- TOC entry 3647 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: user_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3246,6 +3750,8 @@ SELECT pg_catalog.setval('public.user_group_id_seq', 1, false);
 
 
 --
+-- TOC entry 3648 (class 0 OID 0)
+-- Dependencies: 267
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
@@ -3253,6 +3759,25 @@ SELECT pg_catalog.setval('public.user_id_seq', 11563, true);
 
 
 --
+-- TOC entry 3296 (class 2606 OID 17289)
+-- Name: interview_question_category PK_023f8ae4bea4330f21df438399c; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_category
+    ADD CONSTRAINT "PK_023f8ae4bea4330f21df438399c" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3304 (class 2606 OID 17309)
+-- Name: interview_question_categories_interview_question_category PK_0557624b272acc8d39463763be1; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_categories_interview_question_category
+    ADD CONSTRAINT "PK_0557624b272acc8d39463763be1" PRIMARY KEY ("interviewQuestionId", "interviewQuestionCategoryId");
+
+
+--
+-- TOC entry 3231 (class 2606 OID 16844)
 -- Name: stage_interview PK_06a48c907e0091d4082cfb003aa; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3261,6 +3786,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3217 (class 2606 OID 16846)
 -- Name: private_feedback PK_14f0f39ae69058ce456dbd0d77f; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3269,6 +3795,7 @@ ALTER TABLE ONLY public.private_feedback
 
 
 --
+-- TOC entry 3223 (class 2606 OID 16848)
 -- Name: registry PK_2eca29d55a9556d854416df8ce5; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3277,6 +3804,7 @@ ALTER TABLE ONLY public.registry
 
 
 --
+-- TOC entry 3204 (class 2606 OID 16850)
 -- Name: event PK_30c2f3bbaf6d34a55f8ae6e4614; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3285,6 +3813,7 @@ ALTER TABLE ONLY public.event
 
 
 --
+-- TOC entry 3213 (class 2606 OID 16852)
 -- Name: mentor_registry PK_3673050147cd9bc5c73d27512e3; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3293,6 +3822,7 @@ ALTER TABLE ONLY public.mentor_registry
 
 
 --
+-- TOC entry 3294 (class 2606 OID 16854)
 -- Name: user_group PK_3c29fba6fe013ec8724378ce7c9; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3301,6 +3831,7 @@ ALTER TABLE ONLY public.user_group
 
 
 --
+-- TOC entry 3242 (class 2606 OID 16856)
 -- Name: student PK_3d8016e1cb58429474a3c041904; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3309,6 +3840,7 @@ ALTER TABLE ONLY public.student
 
 
 --
+-- TOC entry 3235 (class 2606 OID 16858)
 -- Name: stage_interview_student PK_43beb2b1cc5778fd367897b92e8; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3317,6 +3849,7 @@ ALTER TABLE ONLY public.stage_interview_student
 
 
 --
+-- TOC entry 3250 (class 2606 OID 16860)
 -- Name: task_artefact PK_43bf3d6d2510e22aac59085f0e0; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3325,6 +3858,7 @@ ALTER TABLE ONLY public.task_artefact
 
 
 --
+-- TOC entry 3198 (class 2606 OID 16862)
 -- Name: cv PK_4ddf7891daf83c3506efa503bb8; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3333,6 +3867,7 @@ ALTER TABLE ONLY public.cv
 
 
 --
+-- TOC entry 3285 (class 2606 OID 16864)
 -- Name: task_verification PK_5080be855b9d24b3d8e93ff425b; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3341,6 +3876,7 @@ ALTER TABLE ONLY public.task_verification
 
 
 --
+-- TOC entry 3257 (class 2606 OID 16866)
 -- Name: task_interview_result PK_549c326d1e4b1c5b42eb915fa2f; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3349,6 +3885,7 @@ ALTER TABLE ONLY public.task_interview_result
 
 
 --
+-- TOC entry 3183 (class 2606 OID 16868)
 -- Name: course_event PK_55e3af1e9fa10f21fc27fdc0852; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3357,6 +3894,7 @@ ALTER TABLE ONLY public.course_event
 
 
 --
+-- TOC entry 3265 (class 2606 OID 16870)
 -- Name: task_result PK_623dd43986d67c74bad752b37a5; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3365,6 +3903,7 @@ ALTER TABLE ONLY public.task_result
 
 
 --
+-- TOC entry 3246 (class 2606 OID 16872)
 -- Name: student_feedback PK_62d4a9be66752e38bd228a78223; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3373,6 +3912,7 @@ ALTER TABLE ONLY public.student_feedback
 
 
 --
+-- TOC entry 3219 (class 2606 OID 16874)
 -- Name: profile_permissions PK_63cefd76c1a42679af47a57eeba; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3381,6 +3921,7 @@ ALTER TABLE ONLY public.profile_permissions
 
 
 --
+-- TOC entry 3281 (class 2606 OID 16876)
 -- Name: task_solution_result PK_676aad5c32840e4c5d04a61300e; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3389,6 +3930,7 @@ ALTER TABLE ONLY public.task_solution_result
 
 
 --
+-- TOC entry 3269 (class 2606 OID 16878)
 -- Name: task_solution PK_77bdef09a7686521e5bbc8247a9; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3397,6 +3939,7 @@ ALTER TABLE ONLY public.task_solution
 
 
 --
+-- TOC entry 3233 (class 2606 OID 16880)
 -- Name: stage_interview_feedback PK_7cafd89ce6a6a3789de3912df21; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3405,6 +3948,7 @@ ALTER TABLE ONLY public.stage_interview_feedback
 
 
 --
+-- TOC entry 3206 (class 2606 OID 16882)
 -- Name: feedback PK_8389f9e087a57689cd5be8b2b13; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3413,6 +3957,7 @@ ALTER TABLE ONLY public.feedback
 
 
 --
+-- TOC entry 3227 (class 2606 OID 16884)
 -- Name: repository_event PK_861ff064ff09ee2e5bbae703649; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3421,6 +3966,16 @@ ALTER TABLE ONLY public.repository_event
 
 
 --
+-- TOC entry 3300 (class 2606 OID 17304)
+-- Name: interview_question PK_87eb879ef299ec607aa30e9bd39; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question
+    ADD CONSTRAINT "PK_87eb879ef299ec607aa30e9bd39" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3170 (class 2606 OID 16886)
 -- Name: certificate PK_8daddfc65f59e341c2bbc9c9e43; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3429,6 +3984,7 @@ ALTER TABLE ONLY public.certificate
 
 
 --
+-- TOC entry 3174 (class 2606 OID 16888)
 -- Name: consent PK_9115e8d6b082d4fc46d56134d29; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3437,6 +3993,7 @@ ALTER TABLE ONLY public.consent
 
 
 --
+-- TOC entry 3252 (class 2606 OID 16890)
 -- Name: task_checker PK_999186887e14614c7cdf73b176e; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3445,6 +4002,7 @@ ALTER TABLE ONLY public.task_checker
 
 
 --
+-- TOC entry 3209 (class 2606 OID 16892)
 -- Name: mentor PK_9fcebd0a40237e9b6defcbd9d74; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3453,6 +4011,7 @@ ALTER TABLE ONLY public.mentor
 
 
 --
+-- TOC entry 3202 (class 2606 OID 16894)
 -- Name: discord_server PK_a4db655f3e40126e5eed1769c90; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3461,6 +4020,7 @@ ALTER TABLE ONLY public.discord_server
 
 
 --
+-- TOC entry 3192 (class 2606 OID 16896)
 -- Name: course_task PK_aba6301a06559588941ae21b70c; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3469,6 +4029,7 @@ ALTER TABLE ONLY public.course_task
 
 
 --
+-- TOC entry 3168 (class 2606 OID 16898)
 -- Name: alert PK_ad91cad659a3536465d564a4b2f; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3477,6 +4038,7 @@ ALTER TABLE ONLY public.alert
 
 
 --
+-- TOC entry 3185 (class 2606 OID 16900)
 -- Name: course_manager PK_b344e2b90017167035afd591a76; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3485,6 +4047,7 @@ ALTER TABLE ONLY public.course_manager
 
 
 --
+-- TOC entry 3196 (class 2606 OID 16902)
 -- Name: course_user PK_bb2c8374d6f04bf9301895d1b33; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3493,6 +4056,7 @@ ALTER TABLE ONLY public.course_user
 
 
 --
+-- TOC entry 3276 (class 2606 OID 16904)
 -- Name: task_solution_checker PK_bc32b5c4e5fb9602786de86594f; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3501,6 +4065,7 @@ ALTER TABLE ONLY public.task_solution_checker
 
 
 --
+-- TOC entry 3179 (class 2606 OID 16906)
 -- Name: course PK_bf95180dd756fd204fb01ce4916; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3509,6 +4074,7 @@ ALTER TABLE ONLY public.course
 
 
 --
+-- TOC entry 3229 (class 2606 OID 16908)
 -- Name: stage PK_c54d11b3c24a188262844af1612; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3517,6 +4083,7 @@ ALTER TABLE ONLY public.stage
 
 
 --
+-- TOC entry 3288 (class 2606 OID 16910)
 -- Name: user PK_cace4a159ff9f2512dd42373760; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3525,6 +4092,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
+-- TOC entry 3259 (class 2606 OID 16912)
 -- Name: task_interview_student PK_e01dbf882c881571c02d3e59bf2; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3533,6 +4101,7 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
+-- TOC entry 3248 (class 2606 OID 16914)
 -- Name: task PK_fb213f79ee45060ba925ecd576e; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3541,6 +4110,7 @@ ALTER TABLE ONLY public.task
 
 
 --
+-- TOC entry 3271 (class 2606 OID 16916)
 -- Name: task_solution UQ_098e2d5fb54138c4a090b2de0e5; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3549,6 +4119,7 @@ ALTER TABLE ONLY public.task_solution
 
 
 --
+-- TOC entry 3290 (class 2606 OID 16918)
 -- Name: user UQ_0d84cc6a830f0e4ebbfcd6381dd; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3557,6 +4128,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
+-- TOC entry 3237 (class 2606 OID 16920)
 -- Name: stage_interview_student UQ_16e069fec7420cb8c9bce692360; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3565,6 +4137,7 @@ ALTER TABLE ONLY public.stage_interview_student
 
 
 --
+-- TOC entry 3221 (class 2606 OID 16922)
 -- Name: profile_permissions UQ_28231d1cb8ceafd42ae9ed45db9; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3573,6 +4146,16 @@ ALTER TABLE ONLY public.profile_permissions
 
 
 --
+-- TOC entry 3298 (class 2606 OID 17291)
+-- Name: interview_question_category UQ_40c79f8d86c0b762b849c8c0781; Type: CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_category
+    ADD CONSTRAINT "UQ_40c79f8d86c0b762b849c8c0781" UNIQUE (name);
+
+
+--
+-- TOC entry 3215 (class 2606 OID 16924)
 -- Name: mentor_registry UQ_469871166ea5d53d181d63bba4d; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3581,6 +4164,7 @@ ALTER TABLE ONLY public.mentor_registry
 
 
 --
+-- TOC entry 3244 (class 2606 OID 16926)
 -- Name: student UQ_5b59e5fa1772006c44bacf10d4e; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3589,6 +4173,7 @@ ALTER TABLE ONLY public.student
 
 
 --
+-- TOC entry 3267 (class 2606 OID 16928)
 -- Name: task_result UQ_7d9b9262cf5403990b21b6b5cd7; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3597,6 +4182,7 @@ ALTER TABLE ONLY public.task_result
 
 
 --
+-- TOC entry 3211 (class 2606 OID 16930)
 -- Name: mentor UQ_86a8c9674f84523385ff741bfc2; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3605,6 +4191,7 @@ ALTER TABLE ONLY public.mentor
 
 
 --
+-- TOC entry 3261 (class 2606 OID 16932)
 -- Name: task_interview_student UQ_9b70aaee77ce73e847688838e7e; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3613,6 +4200,7 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
+-- TOC entry 3172 (class 2606 OID 16934)
 -- Name: certificate UQ_a5b1acee8501273d8c777df4bc1; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3621,6 +4209,7 @@ ALTER TABLE ONLY public.certificate
 
 
 --
+-- TOC entry 3176 (class 2606 OID 16936)
 -- Name: consent UQ_a85c68db612327cf60a0d0e7b4a; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3629,6 +4218,7 @@ ALTER TABLE ONLY public.consent
 
 
 --
+-- TOC entry 3292 (class 2606 OID 16938)
 -- Name: user UQ_afa885683cae0bb53ae1c81bce5; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3637,6 +4227,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
+-- TOC entry 3283 (class 2606 OID 16940)
 -- Name: task_solution_result UQ_cd11c253afeee499efe93f3e184; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3645,6 +4236,7 @@ ALTER TABLE ONLY public.task_solution_result
 
 
 --
+-- TOC entry 3200 (class 2606 OID 16942)
 -- Name: cv UQ_f21b478fe949f06e4e64d728318; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3653,6 +4245,7 @@ ALTER TABLE ONLY public.cv
 
 
 --
+-- TOC entry 3181 (class 2606 OID 16944)
 -- Name: course UQ_fc5c908f913cd7188a018775f5f; Type: CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3661,6 +4254,7 @@ ALTER TABLE ONLY public.course
 
 
 --
+-- TOC entry 3193 (class 1259 OID 16945)
 -- Name: IDX_062e03d78da22a7bd9becbfaaa; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3668,6 +4262,7 @@ CREATE INDEX "IDX_062e03d78da22a7bd9becbfaaa" ON public.course_user USING btree 
 
 
 --
+-- TOC entry 3224 (class 1259 OID 16946)
 -- Name: IDX_076f71901ba479a51b2deaacd5; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3675,6 +4270,15 @@ CREATE INDEX "IDX_076f71901ba479a51b2deaacd5" ON public.repository_event USING b
 
 
 --
+-- TOC entry 3301 (class 1259 OID 17310)
+-- Name: IDX_0b3c9d5127523db43a8c4997f5; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_0b3c9d5127523db43a8c4997f5" ON public.interview_question_categories_interview_question_category USING btree ("interviewQuestionId");
+
+
+--
+-- TOC entry 3238 (class 1259 OID 16947)
 -- Name: IDX_0d29e2a35a0c87dc9377411f43; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3682,6 +4286,7 @@ CREATE INDEX "IDX_0d29e2a35a0c87dc9377411f43" ON public.student USING btree ("me
 
 
 --
+-- TOC entry 3286 (class 1259 OID 16948)
 -- Name: IDX_0d84cc6a830f0e4ebbfcd6381d; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3689,6 +4294,7 @@ CREATE UNIQUE INDEX "IDX_0d84cc6a830f0e4ebbfcd6381d" ON public."user" USING btre
 
 
 --
+-- TOC entry 3272 (class 1259 OID 16949)
 -- Name: IDX_115efaf0e1569ebe8a201f000e; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3696,6 +4302,7 @@ CREATE INDEX "IDX_115efaf0e1569ebe8a201f000e" ON public.task_solution_checker US
 
 
 --
+-- TOC entry 3273 (class 1259 OID 16950)
 -- Name: IDX_12380a77f5769e0b608b4c5ece; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3703,6 +4310,7 @@ CREATE INDEX "IDX_12380a77f5769e0b608b4c5ece" ON public.task_solution_checker US
 
 
 --
+-- TOC entry 3186 (class 1259 OID 16951)
 -- Name: IDX_1a6e36b16de159653a4fd2f432; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3710,6 +4318,7 @@ CREATE INDEX "IDX_1a6e36b16de159653a4fd2f432" ON public.course_task USING btree 
 
 
 --
+-- TOC entry 3177 (class 1259 OID 16952)
 -- Name: IDX_1c6a31a1098e0c472c4196f85d; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3717,6 +4326,15 @@ CREATE INDEX "IDX_1c6a31a1098e0c472c4196f85d" ON public.course USING btree ("dis
 
 
 --
+-- TOC entry 3302 (class 1259 OID 17311)
+-- Name: IDX_277a1b8395fd2896391b01b761; Type: INDEX; Schema: public; Owner: rs_master
+--
+
+CREATE INDEX "IDX_277a1b8395fd2896391b01b761" ON public.interview_question_categories_interview_question_category USING btree ("interviewQuestionCategoryId");
+
+
+--
+-- TOC entry 3187 (class 1259 OID 16953)
 -- Name: IDX_33927c9b6369c34ee32f708421; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3724,6 +4342,7 @@ CREATE INDEX "IDX_33927c9b6369c34ee32f708421" ON public.course_task USING btree 
 
 
 --
+-- TOC entry 3253 (class 1259 OID 16954)
 -- Name: IDX_33cc2ea503287d1e19e696c028; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3731,6 +4350,7 @@ CREATE INDEX "IDX_33cc2ea503287d1e19e696c028" ON public.task_interview_result US
 
 
 --
+-- TOC entry 3188 (class 1259 OID 16955)
 -- Name: IDX_3cf45a981cf54c2b3e10f677c9; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3738,6 +4358,7 @@ CREATE INDEX "IDX_3cf45a981cf54c2b3e10f677c9" ON public.course_task USING btree 
 
 
 --
+-- TOC entry 3254 (class 1259 OID 16956)
 -- Name: IDX_4f512b65d2481c2fd737680f79; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3745,6 +4366,7 @@ CREATE INDEX "IDX_4f512b65d2481c2fd737680f79" ON public.task_interview_result US
 
 
 --
+-- TOC entry 3262 (class 1259 OID 16957)
 -- Name: IDX_5565a1f41896ecd29591b239ef; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3752,6 +4374,7 @@ CREATE INDEX "IDX_5565a1f41896ecd29591b239ef" ON public.task_result USING btree 
 
 
 --
+-- TOC entry 3194 (class 1259 OID 16958)
 -- Name: IDX_70824fef35e6038e459e58e035; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3759,6 +4382,7 @@ CREATE INDEX "IDX_70824fef35e6038e459e58e035" ON public.course_user USING btree 
 
 
 --
+-- TOC entry 3274 (class 1259 OID 16959)
 -- Name: IDX_85a40b3dcc11dcfdfb836b7ff3; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3766,6 +4390,7 @@ CREATE INDEX "IDX_85a40b3dcc11dcfdfb836b7ff3" ON public.task_solution_checker US
 
 
 --
+-- TOC entry 3189 (class 1259 OID 16960)
 -- Name: IDX_87736b09d69bacdc6bc272e023; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3773,6 +4398,7 @@ CREATE INDEX "IDX_87736b09d69bacdc6bc272e023" ON public.course_task USING btree 
 
 
 --
+-- TOC entry 3225 (class 1259 OID 16961)
 -- Name: IDX_955719ac67b6cb47bf005b200e; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3780,6 +4406,7 @@ CREATE INDEX "IDX_955719ac67b6cb47bf005b200e" ON public.repository_event USING b
 
 
 --
+-- TOC entry 3255 (class 1259 OID 16962)
 -- Name: IDX_9d0edea65b297ba0d7d8064d05; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3787,6 +4414,7 @@ CREATE INDEX "IDX_9d0edea65b297ba0d7d8064d05" ON public.task_interview_result US
 
 
 --
+-- TOC entry 3239 (class 1259 OID 16963)
 -- Name: IDX_a29d066e554ba135f0d9408c1b; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3794,6 +4422,7 @@ CREATE INDEX "IDX_a29d066e554ba135f0d9408c1b" ON public.student USING btree ("co
 
 
 --
+-- TOC entry 3240 (class 1259 OID 16964)
 -- Name: IDX_b35463776b4a11a3df3c30d920; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3801,6 +4430,7 @@ CREATE INDEX "IDX_b35463776b4a11a3df3c30d920" ON public.student USING btree ("us
 
 
 --
+-- TOC entry 3277 (class 1259 OID 16965)
 -- Name: IDX_b74f71762142b09ea10a288166; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3808,6 +4438,7 @@ CREATE INDEX "IDX_b74f71762142b09ea10a288166" ON public.task_solution_result USI
 
 
 --
+-- TOC entry 3278 (class 1259 OID 16966)
 -- Name: IDX_bdb2f3421163e324b337395909; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3815,6 +4446,7 @@ CREATE INDEX "IDX_bdb2f3421163e324b337395909" ON public.task_solution_result USI
 
 
 --
+-- TOC entry 3190 (class 1259 OID 16967)
 -- Name: IDX_de17ec9312951a05365d5d4d25; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3822,6 +4454,7 @@ CREATE INDEX "IDX_de17ec9312951a05365d5d4d25" ON public.course_task USING btree 
 
 
 --
+-- TOC entry 3263 (class 1259 OID 16968)
 -- Name: IDX_e0c522b2cdf095ad5c5f51c0ae; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3829,6 +4462,7 @@ CREATE INDEX "IDX_e0c522b2cdf095ad5c5f51c0ae" ON public.task_result USING btree 
 
 
 --
+-- TOC entry 3279 (class 1259 OID 16969)
 -- Name: IDX_e8aaf4d079a719ade8ebc1397e; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3836,6 +4470,7 @@ CREATE INDEX "IDX_e8aaf4d079a719ade8ebc1397e" ON public.task_solution_result USI
 
 
 --
+-- TOC entry 3207 (class 1259 OID 16970)
 -- Name: IDX_f3dfd194e3463dc94600921378; Type: INDEX; Schema: public; Owner: rs_master
 --
 
@@ -3843,6 +4478,7 @@ CREATE INDEX "IDX_f3dfd194e3463dc94600921378" ON public.mentor USING btree ("cou
 
 
 --
+-- TOC entry 3356 (class 2606 OID 16971)
 -- Name: task_solution FK_04a0e8cec45008def71698916ae; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3851,6 +4487,7 @@ ALTER TABLE ONLY public.task_solution
 
 
 --
+-- TOC entry 3317 (class 2606 OID 16976)
 -- Name: course_user FK_062e03d78da22a7bd9becbfaaac; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3859,6 +4496,16 @@ ALTER TABLE ONLY public.course_user
 
 
 --
+-- TOC entry 3366 (class 2606 OID 17322)
+-- Name: interview_question_categories_interview_question_category FK_0b3c9d5127523db43a8c4997f59; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_categories_interview_question_category
+    ADD CONSTRAINT "FK_0b3c9d5127523db43a8c4997f59" FOREIGN KEY ("interviewQuestionId") REFERENCES public.interview_question(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3339 (class 2606 OID 16981)
 -- Name: student FK_0d29e2a35a0c87dc9377411f432; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3867,6 +4514,7 @@ ALTER TABLE ONLY public.student
 
 
 --
+-- TOC entry 3357 (class 2606 OID 16986)
 -- Name: task_solution_checker FK_115efaf0e1569ebe8a201f000e2; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3875,6 +4523,7 @@ ALTER TABLE ONLY public.task_solution_checker
 
 
 --
+-- TOC entry 3325 (class 2606 OID 16991)
 -- Name: private_feedback FK_1448716050d6c839a198a199ddb; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3883,6 +4532,7 @@ ALTER TABLE ONLY public.private_feedback
 
 
 --
+-- TOC entry 3330 (class 2606 OID 16996)
 -- Name: stage FK_16bd843ee63aeb303b35e288960; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3891,6 +4541,7 @@ ALTER TABLE ONLY public.stage
 
 
 --
+-- TOC entry 3307 (class 2606 OID 17001)
 -- Name: course_event FK_18edb72a122ff56bddcaec6055c; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3899,6 +4550,7 @@ ALTER TABLE ONLY public.course_event
 
 
 --
+-- TOC entry 3313 (class 2606 OID 17006)
 -- Name: course_task FK_1a6e36b16de159653a4fd2f4323; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3907,6 +4559,7 @@ ALTER TABLE ONLY public.course_task
 
 
 --
+-- TOC entry 3306 (class 2606 OID 17011)
 -- Name: course FK_1c6a31a1098e0c472c4196f85d8; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3915,6 +4568,7 @@ ALTER TABLE ONLY public.course
 
 
 --
+-- TOC entry 3328 (class 2606 OID 17016)
 -- Name: registry FK_2449b2493e4b436fda3c21ba5df; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3923,6 +4577,16 @@ ALTER TABLE ONLY public.registry
 
 
 --
+-- TOC entry 3367 (class 2606 OID 17327)
+-- Name: interview_question_categories_interview_question_category FK_277a1b8395fd2896391b01b7612; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
+--
+
+ALTER TABLE ONLY public.interview_question_categories_interview_question_category
+    ADD CONSTRAINT "FK_277a1b8395fd2896391b01b7612" FOREIGN KEY ("interviewQuestionCategoryId") REFERENCES public.interview_question_category(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3319 (class 2606 OID 17021)
 -- Name: feedback FK_2b4d98c492a3965505cf57e2e8a; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3931,6 +4595,7 @@ ALTER TABLE ONLY public.feedback
 
 
 --
+-- TOC entry 3331 (class 2606 OID 17026)
 -- Name: stage_interview FK_2e4ed1c8264a48ffe7f85474018; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3939,6 +4604,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3314 (class 2606 OID 17031)
 -- Name: course_task FK_33927c9b6369c34ee32f7084215; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3947,6 +4613,7 @@ ALTER TABLE ONLY public.course_task
 
 
 --
+-- TOC entry 3348 (class 2606 OID 17036)
 -- Name: task_interview_result FK_33cc2ea503287d1e19e696c0280; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3955,6 +4622,7 @@ ALTER TABLE ONLY public.task_interview_result
 
 
 --
+-- TOC entry 3315 (class 2606 OID 17041)
 -- Name: course_task FK_3cf45a981cf54c2b3e10f677c95; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3963,6 +4631,7 @@ ALTER TABLE ONLY public.course_task
 
 
 --
+-- TOC entry 3326 (class 2606 OID 17046)
 -- Name: private_feedback FK_43900d7df69f46dd5c7a44d0c80; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3971,6 +4640,7 @@ ALTER TABLE ONLY public.private_feedback
 
 
 --
+-- TOC entry 3324 (class 2606 OID 17051)
 -- Name: mentor_registry FK_469871166ea5d53d181d63bba4d; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3979,6 +4649,7 @@ ALTER TABLE ONLY public.mentor_registry
 
 
 --
+-- TOC entry 3332 (class 2606 OID 17056)
 -- Name: stage_interview FK_47cb62b5215db20cd02ce51305c; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3987,6 +4658,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3349 (class 2606 OID 17061)
 -- Name: task_interview_result FK_4f512b65d2481c2fd737680f791; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -3995,6 +4667,7 @@ ALTER TABLE ONLY public.task_interview_result
 
 
 --
+-- TOC entry 3308 (class 2606 OID 17066)
 -- Name: course_event FK_50d7cfb1d0d26c574bb64ffb869; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4003,6 +4676,7 @@ ALTER TABLE ONLY public.course_event
 
 
 --
+-- TOC entry 3311 (class 2606 OID 17071)
 -- Name: course_manager FK_51727e0e86522ee68c1d7ab556f; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4011,6 +4685,7 @@ ALTER TABLE ONLY public.course_manager
 
 
 --
+-- TOC entry 3345 (class 2606 OID 17076)
 -- Name: task_checker FK_520bd8f9d4ae3b18430899c4490; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4019,6 +4694,7 @@ ALTER TABLE ONLY public.task_checker
 
 
 --
+-- TOC entry 3354 (class 2606 OID 17081)
 -- Name: task_result FK_5565a1f41896ecd29591b239ef5; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4027,6 +4703,7 @@ ALTER TABLE ONLY public.task_result
 
 
 --
+-- TOC entry 3346 (class 2606 OID 17086)
 -- Name: task_checker FK_5a95946eb2c610d54379689312d; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4035,6 +4712,7 @@ ALTER TABLE ONLY public.task_checker
 
 
 --
+-- TOC entry 3309 (class 2606 OID 17091)
 -- Name: course_event FK_5aa0fd2863ab6cc52828525649c; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4043,6 +4721,7 @@ ALTER TABLE ONLY public.course_event
 
 
 --
+-- TOC entry 3333 (class 2606 OID 17096)
 -- Name: stage_interview FK_61a1f43cc337dcfd0a267e6f3bc; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4051,6 +4730,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3337 (class 2606 OID 17101)
 -- Name: stage_interview_student FK_61d2e056326504ec484b8ed59e7; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4059,6 +4739,7 @@ ALTER TABLE ONLY public.stage_interview_student
 
 
 --
+-- TOC entry 3318 (class 2606 OID 17106)
 -- Name: course_user FK_70824fef35e6038e459e58e0358; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4067,6 +4748,7 @@ ALTER TABLE ONLY public.course_user
 
 
 --
+-- TOC entry 3336 (class 2606 OID 17111)
 -- Name: stage_interview_feedback FK_7b7d891769e42df16686873c3c6; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4075,6 +4757,7 @@ ALTER TABLE ONLY public.stage_interview_feedback
 
 
 --
+-- TOC entry 3327 (class 2606 OID 17116)
 -- Name: private_feedback FK_7f6ab332685af8fa4239d8e04e5; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4083,6 +4766,7 @@ ALTER TABLE ONLY public.private_feedback
 
 
 --
+-- TOC entry 3358 (class 2606 OID 17121)
 -- Name: task_solution_checker FK_85a40b3dcc11dcfdfb836b7ff3e; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4091,6 +4775,7 @@ ALTER TABLE ONLY public.task_solution_checker
 
 
 --
+-- TOC entry 3316 (class 2606 OID 17126)
 -- Name: course_task FK_87736b09d69bacdc6bc272e0239; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4099,6 +4784,7 @@ ALTER TABLE ONLY public.course_task
 
 
 --
+-- TOC entry 3342 (class 2606 OID 17131)
 -- Name: student_feedback FK_8d1bc199ec06383ae933039bf2d; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4107,6 +4793,7 @@ ALTER TABLE ONLY public.student_feedback
 
 
 --
+-- TOC entry 3350 (class 2606 OID 17136)
 -- Name: task_interview_result FK_9d0edea65b297ba0d7d8064d05a; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4115,6 +4802,7 @@ ALTER TABLE ONLY public.task_interview_result
 
 
 --
+-- TOC entry 3329 (class 2606 OID 17141)
 -- Name: registry FK_a19cc98b348420faa739dfd4240; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4123,6 +4811,7 @@ ALTER TABLE ONLY public.registry
 
 
 --
+-- TOC entry 3340 (class 2606 OID 17146)
 -- Name: student FK_a29d066e554ba135f0d9408c1b3; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4131,6 +4820,7 @@ ALTER TABLE ONLY public.student
 
 
 --
+-- TOC entry 3305 (class 2606 OID 17151)
 -- Name: certificate FK_a5b1acee8501273d8c777df4bc1; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4139,6 +4829,7 @@ ALTER TABLE ONLY public.certificate
 
 
 --
+-- TOC entry 3365 (class 2606 OID 17156)
 -- Name: user FK_afa885683cae0bb53ae1c81bce5; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4147,6 +4838,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
+-- TOC entry 3341 (class 2606 OID 17161)
 -- Name: student FK_b35463776b4a11a3df3c30d920a; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4155,6 +4847,7 @@ ALTER TABLE ONLY public.student
 
 
 --
+-- TOC entry 3360 (class 2606 OID 17166)
 -- Name: task_solution_result FK_b74f71762142b09ea10a2881669; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4163,6 +4856,7 @@ ALTER TABLE ONLY public.task_solution_result
 
 
 --
+-- TOC entry 3361 (class 2606 OID 17171)
 -- Name: task_solution_result FK_bdb2f3421163e324b337395909e; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4171,6 +4865,7 @@ ALTER TABLE ONLY public.task_solution_result
 
 
 --
+-- TOC entry 3320 (class 2606 OID 17176)
 -- Name: feedback FK_bfea5673b7379b1adfa2036da3f; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4179,6 +4874,7 @@ ALTER TABLE ONLY public.feedback
 
 
 --
+-- TOC entry 3347 (class 2606 OID 17181)
 -- Name: task_checker FK_c8594a64515d69f4dae0da90006; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4187,6 +4883,7 @@ ALTER TABLE ONLY public.task_checker
 
 
 --
+-- TOC entry 3343 (class 2606 OID 17186)
 -- Name: task_artefact FK_d79f770bf46cd7659b6e5dda1c1; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4195,6 +4892,7 @@ ALTER TABLE ONLY public.task_artefact
 
 
 --
+-- TOC entry 3363 (class 2606 OID 17191)
 -- Name: task_verification FK_d8959fe22a43ff7773b36409924; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4203,6 +4901,7 @@ ALTER TABLE ONLY public.task_verification
 
 
 --
+-- TOC entry 3312 (class 2606 OID 17196)
 -- Name: course_manager FK_d937cb10a6bf6cc8574046bb716; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4211,6 +4910,7 @@ ALTER TABLE ONLY public.course_manager
 
 
 --
+-- TOC entry 3351 (class 2606 OID 17201)
 -- Name: task_interview_student FK_da5613e78890f0093805a441c92; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4219,6 +4919,7 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
+-- TOC entry 3364 (class 2606 OID 17206)
 -- Name: task_verification FK_dae85baef040e0c3eaf1794ff6d; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4227,6 +4928,7 @@ ALTER TABLE ONLY public.task_verification
 
 
 --
+-- TOC entry 3334 (class 2606 OID 17211)
 -- Name: stage_interview FK_db66372bf51271337293b341bf4; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4235,6 +4937,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3352 (class 2606 OID 17216)
 -- Name: task_interview_student FK_dc9248f22e6b30f63e7afa4f218; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4243,6 +4946,7 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
+-- TOC entry 3322 (class 2606 OID 17221)
 -- Name: mentor FK_df4bfe54f243bd089ea8fb66ed0; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4251,6 +4955,7 @@ ALTER TABLE ONLY public.mentor
 
 
 --
+-- TOC entry 3355 (class 2606 OID 17226)
 -- Name: task_result FK_e0c522b2cdf095ad5c5f51c0ae0; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4259,6 +4964,7 @@ ALTER TABLE ONLY public.task_result
 
 
 --
+-- TOC entry 3338 (class 2606 OID 17231)
 -- Name: stage_interview_student FK_e59f3cbfd1cf52fddf905fc8dea; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4267,6 +4973,7 @@ ALTER TABLE ONLY public.stage_interview_student
 
 
 --
+-- TOC entry 3344 (class 2606 OID 17236)
 -- Name: task_artefact FK_e683ee274bcf6363c043a29f535; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4275,6 +4982,7 @@ ALTER TABLE ONLY public.task_artefact
 
 
 --
+-- TOC entry 3362 (class 2606 OID 17241)
 -- Name: task_solution_result FK_e8aaf4d079a719ade8ebc1397ef; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4283,6 +4991,7 @@ ALTER TABLE ONLY public.task_solution_result
 
 
 --
+-- TOC entry 3359 (class 2606 OID 17246)
 -- Name: task_solution_checker FK_ee4c145a114a9ada3ec1be0f936; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4291,6 +5000,7 @@ ALTER TABLE ONLY public.task_solution_checker
 
 
 --
+-- TOC entry 3335 (class 2606 OID 17251)
 -- Name: stage_interview FK_f08ecdf6dd22870ac34cbacff51; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4299,6 +5009,7 @@ ALTER TABLE ONLY public.stage_interview
 
 
 --
+-- TOC entry 3353 (class 2606 OID 17256)
 -- Name: task_interview_student FK_f348c327bf727d9de3acd7b4b49; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4307,6 +5018,7 @@ ALTER TABLE ONLY public.task_interview_student
 
 
 --
+-- TOC entry 3323 (class 2606 OID 17261)
 -- Name: mentor FK_f3dfd194e3463dc946009213782; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4315,6 +5027,7 @@ ALTER TABLE ONLY public.mentor
 
 
 --
+-- TOC entry 3310 (class 2606 OID 17266)
 -- Name: course_event FK_f736d0c55020fc4e5eb28634316; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4323,6 +5036,7 @@ ALTER TABLE ONLY public.course_event
 
 
 --
+-- TOC entry 3321 (class 2606 OID 17271)
 -- Name: feedback FK_fefc350f416e262e904dcf6b35e; Type: FK CONSTRAINT; Schema: public; Owner: rs_master
 --
 
@@ -4330,14 +5044,7 @@ ALTER TABLE ONLY public.feedback
     ADD CONSTRAINT "FK_fefc350f416e262e904dcf6b35e" FOREIGN KEY ("toUserId") REFERENCES public."user"(id);
 
 
---
--- Name: datahub; Type: PUBLICATION; Schema: -; Owner: rs_master
---
-
-CREATE PUBLICATION datahub FOR ALL TABLES WITH (publish = 'insert, update, delete');
-
-
-ALTER PUBLICATION datahub OWNER TO rs_master;
+-- Completed on 2021-09-11 21:19:06
 
 --
 -- PostgreSQL database dump complete

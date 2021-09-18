@@ -6,7 +6,7 @@ import { ILogger } from '../../logger';
 import { Student } from '../../models';
 import { setResponse } from '../utils';
 import { config } from '../../config';
-import { StudentRepository } from '../../repositories/student';
+import { StudentRepository } from '../../repositories/student.repository';
 
 export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;

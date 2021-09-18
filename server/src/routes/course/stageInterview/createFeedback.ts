@@ -3,8 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { IUserSession, Student } from '../../../models';
-import { StageInterviewRepository } from '../../../repositories/stageInterview';
-import { StageInterviewFeedbackRepository } from '../../../repositories/stageInterviewFeedback';
+import { StageInterviewRepository } from '../../../repositories/stageInterview.repository';
+import { StageInterviewFeedbackRepository } from '../../../repositories/stageInterviewFeedback.repository';
 import { courseService } from '../../../services';
 import { setResponse } from '../../utils';
 

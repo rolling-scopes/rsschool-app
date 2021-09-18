@@ -19,8 +19,8 @@ import {
   CourseRole,
 } from '../models';
 import { createName } from './user.service';
-import { StageInterviewRepository } from '../repositories/stageInterview';
-import { MentorRepository } from '../repositories/mentor';
+import { StageInterviewRepository } from '../repositories/stageInterview.repository';
+import { MentorRepository } from '../repositories/mentor.repository';
 import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
@@ -197,6 +197,13 @@ export async function expelMentor(courseId: number, githubId: string) {
     await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
     await getRepository(Mentor).update(mentor.id, { isExpelled: true });
     await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
+  }
+}
+
+export async function restoreMentor(courseId: number, githubId: string) {
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
   }
 }
 

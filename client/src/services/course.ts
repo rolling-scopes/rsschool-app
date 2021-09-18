@@ -9,6 +9,8 @@ import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 
+type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+
 export interface CourseTask {
   id: number;
   taskId: number;
@@ -24,13 +26,31 @@ export interface CourseTask {
   studentStartDate: string | null;
   studentEndDate: string | null;
   useJury: boolean;
-  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: Checker;
   taskOwnerId: number | null;
   publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
   special?: string;
   duration?: number;
   score?: number | null;
+}
+
+export interface Verification {
+  id: number;
+  createdDate: string;
+  courseTaskId: number;
+  courseTask: {
+    id: number;
+    task: {
+      name: string;
+    };
+    type: string;
+  };
+  details: string;
+  metadata: unknown[];
+  score: number;
+  status: string;
+  studentId: number;
 }
 
 export interface IColumn {
@@ -65,7 +85,7 @@ export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
 export interface CourseTaskDetails extends CourseTask {
   stageId: number;
   description: string | null;
-  taskResultCount: number;
+  resultsCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
   pairsCount?: number;
 }
@@ -89,7 +109,7 @@ export interface CourseEvent {
   special?: string;
   duration?: number;
   isTask?: boolean;
-  checker?: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker?: Checker;
   score?: number;
 }
 
@@ -155,6 +175,12 @@ export class CourseService {
   async getCourseTasksDetails() {
     type Response = { data: CourseTaskDetails[] };
     const result = await this.axios.get<Response>('/tasks/details');
+    return result.data.data.sort(sortTasksByEndDate);
+  }
+
+  async getCourseTasksForSchedule() {
+    type Response = { data: CourseTaskDetails[] };
+    const result = await this.axios.get<Response>('/tasks/schedule');
     return result.data.data.sort(sortTasksByEndDate);
   }
 
@@ -470,6 +496,10 @@ export class CourseService {
 
   async expelMentor(githubId: string) {
     await this.axios.post(`/mentor/${githubId}/status/expelled`);
+  }
+
+  async restoreMentor(githubId: string) {
+    await this.axios.post(`/mentor/${githubId}/status/restore`);
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
