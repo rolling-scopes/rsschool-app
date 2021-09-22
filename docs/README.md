@@ -5,3 +5,4 @@ Welcome to the [RSApp](https://app.rs.school) docs
 ## Features:
 
 * [CV](./features/cv.md)
+* [CV](./features/choose-kata-languages.md)
