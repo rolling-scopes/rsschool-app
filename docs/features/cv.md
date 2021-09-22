@@ -8,22 +8,22 @@ RsApp CV is a 2-part functionality:
 
 User can get access to the CV from the dropdown menu in the header, or by following the link `app.rs.school/cv?githubid=<github id of the CV owner>`
 
-![CV link in Header](./img/cv/header-dropdown.JPG)
+<kbd>![CV link in Header](./img/cv/header-dropdown.JPG)</kbd>
 
 To start work with CV, user needs to log in and follow the link `app.rs.school/cv?githubid=<github id of the CV owner>`
 
-![No consent view](./img/cv/no-consent.JPG)
+<kbd>![No consent view](./img/cv/no-consent.JPG)</kbd>
 
 There user will be asked to give his consent to the use of user data, after which the CV will become available to user (but not yet available to employers).
 
-![No consent view](./img/cv/no-consent-modal.JPG)
+<kbd>![No consent view](./img/cv/no-consent-modal.JPG)</kbd>
 
 CV has 2 views: `View` and `Form`.
 View is the “front” side of the CV and displays the available information, `Form` allows user to add, modify and delete user information in the CV.
 
 This is how CV `View` looks like:
 
-![Filled CV View](./img/cv/cv-view-filled.JPG)
+<kbd>![Filled CV View](./img/cv/cv-view-filled.JPG)</kbd>
 
 There are 2 types of data presented in the CV:
 * Information that the user can freely change directly
@@ -57,17 +57,17 @@ There are 2 types of data presented in the CV:
 
 If the user is the owner of the CV that he opens (if the `githubid` under which the user is logged in matches the `githubid` of the requested CV), in addition to the CV itself, in the upper left corner there will be a switch to the `Form` view.
 
-![CV emply with switch](./img/cv/cv-empty.JPG)
+<kbd>![CV emply with switch](./img/cv/cv-empty.JPG)</kbd>
 
 When user clicks on this switch, the `Form` will appear where user can fill in the data for the CV
 
-![CV Form](./img/cv/cv-form-filled.JPG)
+<kbd>![CV Form](./img/cv/cv-form-filled.JPG)</kbd>
 
 All this data doesn't overlap with user profile/student data/etc, it's associated with CV only.
 
 Also there are few buttons at the bottom.
 
-![CV Form buttons](./img/cv/cv-form-buttons.JPG)
+<kbd>![CV Form buttons](./img/cv/cv-form-buttons.JPG)</kbd>
 
 * `Save` button saves the entered CV data on the server
 * `Get data from profile` button fills the form fields with data from the profile (without saving these values ​​on the server)
@@ -79,7 +79,7 @@ Other features:
 
 * CV `View` can be printed, special styles are applied via `@media print` when attempting to print
 
-![CV View print](./img/cv/cv-view-print.JPG)
+<kbd>![CV View print](./img/cv/cv-view-print.JPG)</kbd>
 
 * Only CV owner and users with roles `admin` or `hirer` have access to student's CV
 
@@ -90,7 +90,7 @@ The grouping table at `/employer` page contains information for employers to fin
 
 Only users with roles `admin` or `hirer` have access to this table. In the UI, the link to that page is in the Admin Sider.
 
-![Admin Sider Employer page link](./img/cv/employer-page-link.JPG)
+<kbd>![Admin Sider Employer page link](./img/cv/employer-page-link.JPG)</kbd>
 
 The grouping table includes only those users who have filled in the minimum amount of information to display at the `/employer` page and whose CV has not yet expired.
 
@@ -110,7 +110,7 @@ For each record, the following columns are displayed:
     * `Position` - user's position in the score
 * `Public feedback` - public feedback on the user (gratitudes). Only badge icons and their number are displayed on this page.
 
-![Admin Sider Employer page link](./img/cv/employer-page.JPG)
+<kbd>![Admin Sider Employer page link](./img/cv/employer-page.JPG)</kbd>
 
 Other features:
 

@@ -1,3 +1,7 @@
-# List of RSApp features:
+# RSApp docs
 
-* [CV](./docs/cv.md)
+Welcome to the [RSApp](https://app.rs.school) docs
+
+## Features:
+
+* [CV](./features/cv.md)
