@@ -1,15 +1,12 @@
-import { ILogger } from '../logger';
 import { Resume } from '../models';
-import { FeedbackRepository } from '../repositories/feedback';
+import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume';
-import { StudentRepository } from '../repositories/student';
+import { StudentRepository } from '../repositories/student.repository';
 
 export class ApplicantService {
   private resumeRepository = new ResumeRepository();
   private feedbackRespository = new FeedbackRepository();
   private studentRepository = new StudentRepository();
-
-  constructor(private logger: ILogger) {}
 
   public async getApplicants(visibleOnly: boolean) {
     const profiles = await this.resumeRepository.findActive(visibleOnly);

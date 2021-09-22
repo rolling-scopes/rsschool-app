@@ -6,10 +6,10 @@ import { setResponse } from '../utils';
 
 const { OK, CONFLICT, INTERNAL_SERVER_ERROR } = StatusCodes;
 
-export const updateConsent = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const updateConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.state.user;
   const { consent } = ctx.request.body;
-  const service = new ResumeService(githubId, logger);
+  const service = new ResumeService(githubId);
 
   try {
     const data = await service.updateConsent(Boolean(consent));

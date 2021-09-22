@@ -6,9 +6,9 @@ import { setResponse } from '../utils';
 
 const { OK } = StatusCodes;
 
-export const getApplicants = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const getApplicants = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const onlyVisible = !ctx.state?.user?.isAdmin;
-  const applicantService = new ApplicantService(logger);
+  const applicantService = new ApplicantService();
 
   const data = await applicantService.getApplicants(onlyVisible);
 

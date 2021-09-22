@@ -6,12 +6,12 @@ import { setResponse } from '../utils';
 
 const { NOT_FOUND, OK } = StatusCodes;
 
-export const getResume = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const getResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { mod } = ctx.query;
   const { githubId } = ctx.state.user;
   const isFullDataNeeded = mod === 'all';
 
-  const service = new ResumeService(githubId, logger);
+  const service = new ResumeService(githubId);
   const data = await service.getData(isFullDataNeeded);
 
   if (data == null) {

@@ -6,9 +6,9 @@ import { setResponse } from '../utils';
 
 const { OK } = StatusCodes;
 
-export const updateStatus = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const updateStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.state.user;
-  const resumeService = new ResumeService(githubId, logger);
+  const resumeService = new ResumeService(githubId);
   const result = await resumeService.updateStatus();
   setResponse(ctx, OK, Number(result.expires));
 };

@@ -6,10 +6,10 @@ import { setResponse } from '../utils';
 
 const { OK, NOT_FOUND, INTERNAL_SERVER_ERROR } = StatusCodes;
 
-export const updateVisibility = (logger: ILogger) => async (ctx: Router.RouterContext) => {
+export const updateVisibility = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { isHidden } = ctx.request.body;
   const { githubId } = ctx.state.user;
-  const service = new ResumeService(githubId, logger);
+  const service = new ResumeService(githubId);
   try {
     const result = await service.setVisibility(!isHidden);
     setResponse(ctx, OK, result);
