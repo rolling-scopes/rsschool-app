@@ -1,14 +1,14 @@
-import { Modal, Layout, Spin, Table, Typography, Button } from 'antd';
+import { Button, Layout, Modal, Spin, Table, Typography } from 'antd';
 import { GithubAvatar, Header, withSession } from 'components';
 import { omit } from 'lodash';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { CourseService, CrossCheckPairs, CourseTaskDetails } from 'services/course';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { css } from 'styled-jsx/css';
 import { IPaginationInfo } from '../../../../../common/types/pagination';
-import { ScoreTableFilters, ScoreOrder } from '../../../../../common/types/score';
+import { ScoreOrder, ScoreTableFilters } from '../../../../../common/types/score';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 
 const { Text } = Typography;
@@ -97,7 +97,7 @@ export function Page(props: CoursePageProps) {
       {contextHolder}
       <Layout.Content style={{ margin: 8 }}>
         <Spin spinning={loading}>
-          <BadReviewControllers courseTasks={courseTasks} />
+          <BadReviewControllers courseTasks={courseTasks} courseId={props.course?.id} />
           {renderTable(
             loaded,
             crossCheckList.content,
@@ -243,10 +243,12 @@ const styles = css`
   :global(.rs-table-row-disabled) {
     opacity: 0.25;
   }
+
   :global(.table-score td, .table-score th) {
     padding: 0 5px !important;
     font-size: 11px;
   }
+
   :global(.table-score td a) {
     line-height: 24px;
   }

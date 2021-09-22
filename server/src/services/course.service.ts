@@ -200,6 +200,13 @@ export async function expelMentor(courseId: number, githubId: string) {
   }
 }
 
+export async function restoreMentor(courseId: number, githubId: string) {
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
+  }
+}
+
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {
   const record = await mentorQuery()
     .innerJoin('mentor.user', 'user')
