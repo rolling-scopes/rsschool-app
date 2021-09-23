@@ -99,11 +99,11 @@ export function Header(props: Props) {
           </Button>
         )}
         <Link href="https://rolling-scopes.github.io/rsschool-app">
-          <Tooltip title="RSApp docs">
-            <a>
+          <a>
+            <Tooltip title="RSApp docs">
               <QuestionCircleFilled style={{ fontSize: '150%', marginRight: '15px' }} />
-            </a>
-          </Tooltip>
+            </Tooltip>
+          </a>
         </Link>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="dashed" size="large">
