@@ -8,7 +8,7 @@ import { useAsync } from 'react-use';
 import { CourseService, MentorDetails } from 'services/course';
 import { relativeDays } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { SyncOutlined } from '@ant-design/icons';
+import { SyncOutlined, FileExcelOutlined } from '@ant-design/icons';
 
 type Stats = {
   recordCount: number;
@@ -97,6 +97,8 @@ function Page(props: CoursePageProps) {
     }
   };
 
+  const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
+
   return (
     <PageLayout
       loading={loading}
@@ -142,8 +144,11 @@ function Page(props: CoursePageProps) {
       </div>
       <Divider dashed />
       <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>
-        <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
+        <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
           Sync with GitHub Teams
+        </Button>
+        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
+          Export CSV
         </Button>
       </Row>
       <Table<MentorDetails>
