@@ -144,10 +144,10 @@ function Page(props: CoursePageProps) {
       </div>
       <Divider dashed />
       <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>
-        <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
+        <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
           Sync with GitHub Teams
         </Button>
-        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
+        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
           Export CSV
         </Button>
       </Row>
