@@ -10,5 +10,5 @@ export const getMentorsDetailsCsv = (logger: ILogger) => async (ctx: Router.Rout
   const service = new MentorService(courseId, logger);
   const result = await service.getMentorsWithStats();
   const csv = await parseAsync(result, { flatten: true });
-  setCsvResponse(ctx, StatusCodes.OK, csv);
+  setCsvResponse(ctx, StatusCodes.OK, csv, 'mentors');
 };
