@@ -13,7 +13,7 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .select('t.name', 'taskName')
     .addSelect('"checkerUser"."githubId"', 'checkerGithubId')
     .addSelect('"studentUser"."githubId"', 'studentGithubId')
-    .addSelect('"studentAvg"."avg"', 'studentAvgScore')
+    .addSelect('round("studentAvg"."avg", 1)', 'studentAvgScore')
     .addSelect('ts.score', 'checkerScore')
     .innerJoin(
       qb =>

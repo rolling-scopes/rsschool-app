@@ -22,6 +22,7 @@ import {
   getMentorInterview,
   deleteMentor as postMentorStatusExpelled,
   postMentor,
+  restoreExpelledMentor,
 } from './mentor';
 import * as mentors from './mentors';
 import * as score from './score';
@@ -195,6 +196,7 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
   router.post('/mentors', adminGuard, mentors.createMentors(mentorsLogger));
   router.post('/mentors/students', courseSupervisorGuard, mentors.assignStudents(mentorsLogger));
   router.get('/mentors/details', courseSupervisorGuard, mentors.getMentorsDetails(mentorsLogger));
+  router.get('/mentors/details/csv', courseSupervisorGuard, mentors.getMentorsDetailsCsv(mentorsLogger));
   router.get('/mentors/search/:searchText', courseGuard, mentors.searchMentors(mentorsLogger));
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
@@ -210,6 +212,12 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
     courseManagerGuard,
     validateGithubId,
     postMentorStatusExpelled(mentorLogger),
+  );
+  router.post(
+    '/mentor/:githubId/status/restore',
+    courseManagerGuard,
+    validateGithubId,
+    restoreExpelledMentor(mentorLogger),
   );
 }
 
