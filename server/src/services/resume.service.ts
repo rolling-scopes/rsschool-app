@@ -35,7 +35,7 @@ export class ResumeService {
   }
 
   public async getData(full: boolean) {
-    const resume = this.resumeRepository.find(this.githubId);
+    const resume = await this.resumeRepository.find(this.githubId);
 
     if (!full) {
       return resume;
