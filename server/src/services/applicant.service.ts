@@ -20,10 +20,12 @@ export class ApplicantService {
           this.studentRepository.findAndIncludeStatsForResume(githubId),
         ]);
 
+        const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+
         return {
           ...cv,
           feedback,
-          courses,
+          courses: realCourses,
         };
       }),
     );

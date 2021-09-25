@@ -45,11 +45,15 @@ export class ResumeService {
       this.feedbackRespository.getResumeFeedback(this.githubId),
       this.studentRepository.findAndIncludeStatsForResume(this.githubId),
     ]);
+
+    const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+
     const fullData = {
       ...resume,
       feedback,
-      courses,
+      courses: realCourses,
     };
+
     return fullData;
   }
 
