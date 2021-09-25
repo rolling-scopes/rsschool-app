@@ -3,9 +3,11 @@ import { Resume, User } from '../models';
 
 @EntityRepository(Resume)
 export class ResumeRepository extends AbstractRepository<Resume> {
+
   public async find(githubId: string) {
     const resume = await this.createQueryBuilder('cv')
       .select('"cv"."name" AS "name"')
+      .select('"cv"."id" AS "id"')
       .addSelect('"cv"."selfIntroLink" AS "selfIntroLink"')
       .addSelect('"cv"."startFrom" AS "startFrom"')
       .addSelect('"cv"."fullTime" AS "fullTime"')
