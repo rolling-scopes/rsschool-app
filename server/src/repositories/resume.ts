@@ -24,8 +24,8 @@ export class ResumeRepository extends AbstractRepository<Resume> {
       .addSelect('"cv"."website" AS "website"')
       .addSelect('"cv"."locations" AS "locations"')
       .where('"cv"."githubId" = :githubId', { githubId })
-      .getOne();
-
+      .getRawOne();
+      
     return resume;
   }
 
