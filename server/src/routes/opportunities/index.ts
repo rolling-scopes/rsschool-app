@@ -14,8 +14,8 @@ export function opportunitiesRoute(logger: ILogger) {
 
   router.post('/status', guard, updateStatus(logger));
 
-  router.get('/cv', guard, getResume(logger));
-  router.post('/cv', guard, saveResume(logger));
+  router.get('/resume', guard, getResume(logger));
+  router.post('/resume', guard, saveResume(logger));
 
   router.post('/visibility', guard, updateVisibility(logger));
 
