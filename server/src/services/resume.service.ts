@@ -1,15 +1,15 @@
 import { StatusCodes } from 'http-status-codes';
 import { DateTime } from 'luxon';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume';
 import { StudentRepository } from '../repositories/student.repository';
 
 export class ResumeService {
-  private resumeRepository = new ResumeRepository();
-  private feedbackRespository = new FeedbackRepository();
-  private studentRepository = new StudentRepository();
+  private resumeRepository = getCustomRepository(ResumeRepository);
+  private feedbackRespository = getCustomRepository(FeedbackRepository);
+  private studentRepository = getCustomRepository(StudentRepository);
   private userRepository = getRepository(User);
 
   constructor(private githubId: string) {}
