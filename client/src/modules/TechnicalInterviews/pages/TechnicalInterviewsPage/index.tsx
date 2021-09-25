@@ -1,11 +1,12 @@
 import { Col, Layout, message, Row, Spin, Tabs } from 'antd';
 import { AdminSider, Header, Session } from 'components';
-import { AddCategoryButton } from 'modules/InterviewQuestions/components/Buttons/AddCategoryButton';
-import { AddQuestionButton } from 'modules/InterviewQuestions/components/Buttons/AddQuestionButton';
-import { CategoryModalForm } from 'modules/InterviewQuestions/components/Modals/CategoryModalForm';
-import { QuestionsModalForm } from 'modules/InterviewQuestions/components/Modals/QuestionModalForm';
-import { CategoriesTable } from 'modules/InterviewQuestions/components/Tables/CategoriesTable';
-import { QuestionsTable } from 'modules/InterviewQuestions/components/Tables/QuestionsTable';
+import { AddCategoryButton } from 'modules/TechnicalInterviews/components/Buttons/AddCategoryButton';
+import { AddTemplateButton } from 'modules/TechnicalInterviews/components/Buttons/AddTemplateButton';
+import { AddQuestionButton } from 'modules/TechnicalInterviews/components/Buttons/AddQuestionButton';
+import { CategoryModalForm } from 'modules/TechnicalInterviews/components/Modals/CategoryModalForm';
+import { QuestionsModalForm } from 'modules/TechnicalInterviews/components/Modals/QuestionModalForm';
+import { CategoriesTable } from 'modules/TechnicalInterviews/components/Tables/CategoriesTable';
+import { QuestionsTable } from 'modules/TechnicalInterviews/components/Tables/QuestionsTable';
 import { useState } from 'react';
 import { InterviewQuestionCategoryService, InterviewQuestionService } from 'services/interviewQuestion';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
@@ -14,7 +15,7 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 type Props = { session: Session; questions: InterviewQuestion[]; categories: InterviewQuestionCategory[] };
 
-export function InterviewQuestionsPage(props: Props) {
+export function TechnicalInterviewsPage(props: Props) {
   const [questions, setQuestions] = useState(props.questions);
   const [categories, setCategories] = useState(props.categories);
   const [modalQuestionData, setModalQuestionData] = useState<InterviewQuestion | null>(null);
@@ -78,6 +79,9 @@ export function InterviewQuestionsPage(props: Props) {
         <Content style={{ margin: 8 }}>
           <Row gutter={16} justify="start">
             <Col>
+              <AddTemplateButton />
+            </Col>
+            <Col>
               <AddQuestionButton onClick={handleAddQuestion} />
             </Col>
             <Col>
@@ -85,7 +89,8 @@ export function InterviewQuestionsPage(props: Props) {
             </Col>
           </Row>
           <Spin spinning={loading}>
-            <Tabs defaultActiveKey="QuestionsTable">
+            <Tabs defaultActiveKey="TemplatesTable">
+              <TabPane tab="Templates Table" key="TemplatesTable"></TabPane>
               <TabPane tab="Questions Table" key="QuestionsTable">
                 <QuestionsTable
                   data={questions}

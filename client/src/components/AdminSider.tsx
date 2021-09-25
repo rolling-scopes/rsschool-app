@@ -58,10 +58,10 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin || props.isCoursePowerUser ? (
           <Menu.Item key="3">
-            <Link href="/admin/interview-questions">
+            <Link href="/admin/technical-interviews">
               <a>
                 <QuestionOutlined />
-                <span>Interview questions</span>
+                <span>Technical interviews</span>
               </a>
             </Link>
           </Menu.Item>

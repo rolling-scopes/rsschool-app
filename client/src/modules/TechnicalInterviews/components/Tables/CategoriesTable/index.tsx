@@ -1,5 +1,5 @@
 import { message, Table } from 'antd';
-import { getCategoriesColumns } from 'modules/InterviewQuestions/data/getColumns';
+import { getCategoriesColumns } from 'modules/TechnicalInterviews/data/getColumns';
 import { InterviewQuestionCategoryService } from 'services/interviewQuestion';
 import { InterviewQuestionCategory } from 'services/models';
 
