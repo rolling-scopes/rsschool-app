@@ -8,12 +8,13 @@ export function getServerAxiosProps(
   ctx?: NextPageContext | GetServerSidePropsContext,
   baseUrl = '',
 ): Partial<AxiosRequestConfig> {
+  const { rsHost } = serverRuntimeConfig;
   return {
-    baseURL: serverRuntimeConfig.rsHost + baseUrl || baseUrl,
+    baseURL: rsHost ? serverRuntimeConfig.rsHost + baseUrl : baseUrl,
     headers: ctx?.req?.headers?.cookie
       ? {
-          cookie: ctx.req.headers.cookie,
-        }
+        cookie: ctx.req.headers.cookie,
+      }
       : undefined,
   };
 }
