@@ -1,9 +1,8 @@
 import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
-import { Course, Mentor, Student, User } from '../models';
+import { Course, Mentor, Student, User, Certificate } from '../models';
 import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
-import { Certificate } from 'crypto';
 import { getFullName } from '../rules';
 import { omit } from 'lodash';
 
