@@ -20,7 +20,13 @@ import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask, SelfEducationQuestion, SelfEducationQuestionWithIndex } from 'services/course';
+import {
+  CourseService,
+  CourseTask,
+  SelfEducationQuestion,
+  SelfEducationQuestionWithIndex,
+  Verification,
+} from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { notUrlPattern } from 'services/validators';
 import { shortDateTimeRenderer } from 'components/Table';
@@ -36,7 +42,7 @@ function Page(props: CoursePageProps) {
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
   const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
-  const [verifications, setVerifications] = useState([] as any[]);
+  const [verifications, setVerifications] = useState<Verification[]>([]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
 
   const courseTask = useMemo(() => {
@@ -169,7 +175,7 @@ function Page(props: CoursePageProps) {
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect onChange={handleCourseTaskChange} data={courseTasks} />
-            {renderTaskFields(props.session.githubId, courseTask)}
+            {renderTaskFields(props.session.githubId, courseTask, verifications)}
             <Row>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -222,16 +228,8 @@ function Page(props: CoursePageProps) {
                       <>
                         <Typography.Text>{value}</Typography.Text>
                         <div>
-                          {item?.metadata?.map(
-                            (
-                              {
-                                id,
-                                url,
-                                name,
-                                completed,
-                              }: { id: string; url: string; name: string; completed: boolean },
-                              index: number,
-                            ) => (
+                          {(item?.metadata as { id: string; url: string; name: string; completed: boolean }[])?.map(
+                            ({ id, url, name, completed }, index: number) => (
                               <div>
                                 <Typography.Link key={id} href={url} target="_blank">
                                   {completed ? (
@@ -297,7 +295,7 @@ function UploadJupyterNotebook() {
   );
 }
 
-function renderTaskFields(githubId: string, courseTask?: CourseTask) {
+function renderTaskFields(githubId: string, courseTask: CourseTask | undefined, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
     case 'jstask':
@@ -315,7 +313,7 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
-          {renderSelfEducation(courseTask)}
+          {renderSelfEducation(courseTask, verifications)}
         </>
       );
     case 'codewars': {
@@ -338,13 +336,29 @@ function renderTaskFields(githubId: string, courseTask?: CourseTask) {
   }
 }
 
-function renderSelfEducation(courseTask: CourseTask) {
+function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
+  if (value === 1) {
+    return `Only 1 attempt left. Be carefull, It's your last attempt!`;
+  }
+  if (value > 1) {
+    return `${value} attempts left.`;
+  }
+  if (strictAttemptsMode) {
+    return 'You have no more attempts.';
+  }
+  return 'Limit of "free" attempts is over. Now you can get only half a score.';
+}
+
+function renderSelfEducation(courseTask: CourseTask, verifications: Verification[]) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
   const {
     maxAttemptsNumber = 0,
     tresholdPercentage = 0,
     strictAttemptsMode = true,
   } = courseTask?.publicAttributes ?? {};
+
+  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId).length;
+  const attemptsLeft = maxAttemptsNumber - attempts;
 
   return (
     <>
@@ -353,6 +367,11 @@ function renderSelfEducation(courseTask: CourseTask) {
         <Typography.Text mark strong>
           Note: You must score at least {tresholdPercentage}% of points to pass. You have only {maxAttemptsNumber}{' '}
           attempts. {!strictAttemptsMode && 'After limit attemps is over you can get only half a score.'}
+        </Typography.Text>
+      </Typography.Paragraph>
+      <Typography.Paragraph>
+        <Typography.Text strong style={{ fontSize: '2em', color: attemptsLeft > 1 ? '#1890ff' : '#cc0000' }}>
+          {getAttemptsLeftMessage(attemptsLeft, strictAttemptsMode)}
         </Typography.Text>
       </Typography.Paragraph>
       {questions.map(({ question, answers, multiple, index: questionIndex, questionImage, answersType }) => {

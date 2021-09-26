@@ -17,7 +17,7 @@ export function EntityDetailsPage(props: CoursePageProps) {
 
   const router = useRouter();
   const { entityType, entityId } = router.query;
-  const alias = Array.isArray(course) ? course[0] : course;
+  const alias = Array.isArray(course) ? course[0].alias : course.alias;
   const [entityData, setEntityData] = useState<CourseTaskDetails | CourseEvent>();
   const [isModalOpen, setModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState<CourseTaskDetails | CourseEvent | null>(null);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row, Col, Space } from 'antd';
-import { YoutubeFilled, GithubFilled, MessageFilled } from '@ant-design/icons';
+import { YoutubeFilled, GithubFilled, MessageFilled, LinkedinOutlined } from '@ant-design/icons';
 
 const iconStyle = { fontSize: 24, color: '#000' };
 
@@ -21,6 +21,12 @@ const socialLinks = [
     icon: <MessageFilled style={iconStyle} />,
     name: 'Discord',
     link: `https://discord.gg/PRADsJB`,
+    newTab: true,
+  },
+  {
+    icon: <LinkedinOutlined style={iconStyle} />,
+    name: 'Linkedin',
+    link: `https://www.linkedin.com/company/the-rolling-scopes-school/`,
     newTab: true,
   },
 ];

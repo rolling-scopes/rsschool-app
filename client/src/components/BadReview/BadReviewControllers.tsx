@@ -1,11 +1,12 @@
-import { Select, Row, Button, Col, Modal, Spin } from 'antd';
-import { useMemo, useState, useEffect } from 'react';
+import { Button, Col, Modal, Row, Select, Spin } from 'antd';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckService } from 'services/check';
 import { CourseTaskDetails } from 'services/course';
 import { BadReviewTable } from './BadReviewTable';
 
 interface IBadReviewControllersProps {
   courseTasks: CourseTaskDetails[];
+  courseId: number;
 }
 
 export interface IBadReview {
@@ -19,7 +20,7 @@ export interface IBadReview {
 
 export type checkType = 'Bad comment' | 'Did not check' | 'No type';
 
-export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps) {
+export function BadReviewControllers({ courseTasks, courseId }: IBadReviewControllersProps) {
   const { Option } = Select;
   const [taskId, setTaskId] = useState<number>();
   const [data, setData] = useState<IBadReview[]>();
@@ -28,15 +29,20 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const checkService = useMemo(() => new CheckService(), []);
 
+  const getData = useCallback(async (): Promise<void> => {
+    if (taskId && checkType) {
+      setIsLoading(true);
+      const dataFromService = await checkService.getData(taskId, checkType, courseId);
+      setData(dataFromService);
+      setIsLoading(false);
+    }
+  }, [taskId, checkType, checkService, courseId]);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
     setIsModalVisible(false);
   };
 
@@ -48,14 +54,6 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
   useEffect(() => setCheckType('No type'), [taskId]);
 
   useEffect(() => {
-    async function getData(): Promise<void> {
-      if (taskId && checkType) {
-        setIsLoading(true);
-        const dataFromService = await checkService.getData(taskId, checkType);
-        setData(dataFromService);
-        setIsLoading(false);
-      }
-    }
     getData();
   }, [checkType]);
 
@@ -85,9 +83,13 @@ export function BadReviewControllers({ courseTasks }: IBadReviewControllersProps
       <Modal
         title={`Bad checkers in ${checkType}`}
         visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={1000}
+        width={1250}
+        style={{ top: 20 }}
+        footer={[
+          <Button type="primary" onClick={handleOk}>
+            OK
+          </Button>,
+        ]}
       >
         {isLoading || !data ? <Spin /> : <BadReviewTable data={data} type={checkType!} />}
       </Modal>
