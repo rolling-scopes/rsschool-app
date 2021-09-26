@@ -18,7 +18,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
         <div>
           <p>
             Mentored Students:
-
+             
             <Text
               strong={true}
               style={
@@ -32,7 +32,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode disabled 1`]
           </p>
           <p>
             Courses as Mentor:
-
+             
             <Text
               strong={true}
               style={
@@ -105,7 +105,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
         <div>
           <p>
             Mentored Students:
-
+             
             <Text
               strong={true}
               style={
@@ -119,7 +119,7 @@ exports[`MentorStatsCard Should render correctly if is editing mode enabled 1`] 
           </p>
           <p>
             Courses as Mentor:
-
+             
             <Text
               strong={true}
               style={
