@@ -5,19 +5,21 @@ import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 
 type Props = {
   data: InterviewQuestion[];
-  handleEditQuestion: (question: InterviewQuestion) => void;
-  loadData: () => Promise<void>;
+  handleEditQuestion?: (question: InterviewQuestion) => void;
+  loadData?: () => Promise<void>;
   categories: InterviewQuestionCategory[];
+  addQuestionToModule?: (defaultValue: any) => void;
+  removeQuestionFromModule?: (index: number) => void;
 };
 
 export function QuestionsTable(props: Props) {
-  const { data, handleEditQuestion, loadData, categories } = props;
+  const { data, handleEditQuestion, loadData, categories, addQuestionToModule, removeQuestionFromModule } = props;
   const interviewQuestionService = new InterviewQuestionService();
 
   const handleDeleteQuestion = async (id: number) => {
     try {
       await interviewQuestionService.deleteInterviewQuestion(id);
-      await loadData();
+      loadData && (await loadData());
     } catch (error) {
       message.error('Something went wrong. Please try again later.');
     }
@@ -27,7 +29,13 @@ export function QuestionsTable(props: Props) {
     <Table
       style={{ margin: 8 }}
       dataSource={data}
-      columns={getQuestionsColumns(handleEditQuestion, handleDeleteQuestion, categories)}
+      columns={getQuestionsColumns(
+        categories,
+        handleEditQuestion,
+        !addQuestionToModule ? handleDeleteQuestion : undefined,
+        addQuestionToModule,
+        removeQuestionFromModule,
+      )}
     />
   );
 }

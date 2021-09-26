@@ -1,26 +1,47 @@
-import { Layout, Form, Input, Button, Row, Col, Popconfirm } from 'antd';
+import { Layout, Form, Input, Button, Row, Col, Popconfirm, Space } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AdminSider, Header, Session } from 'components';
-import { InterviewQuestion } from 'services/models';
+import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 import { useRouter } from 'next/router';
-import FormList from 'antd/lib/form/FormList';
+import FormList, { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import FormItem from 'antd/lib/form/FormItem';
+import { useState } from 'react';
+import { ModuleQuestionsModal } from 'modules/TechnicalInterviews/components/Modals/ModuleQuestionsModal';
+import { ModuleQuestions } from 'modules/TechnicalInterviews/components/Forms/ModuleQuestions';
 
 const { Content } = Layout;
 
-type Props = { session: Session; questions: InterviewQuestion[] };
+type Props = {
+  session: Session;
+  interviewQuestions: InterviewQuestion[];
+  interviewCategories: InterviewQuestionCategory[];
+};
 
 export function InterviewTemplatePage(props: Props) {
+  const { session, interviewQuestions, interviewCategories } = props;
   const router = useRouter();
+  const [modalQuestionIsVisible, setModalQuestionIsVisible] = useState(false);
   const [mode, id] = Array.isArray(router.query.slug) ? router.query.slug : [router.query.slug];
   const [form] = Form.useForm();
+
+  const onFinish = values => {
+    console.log('Received values of form:', values);
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} />
+      <AdminSider isAdmin={session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Interview Template" username={props.session.githubId} />
         <Content style={{ margin: 12 }}>
-          <Form size="middle" layout="vertical" form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 10 }}>
+          <Form
+            size="middle"
+            layout="vertical"
+            form={form}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 10 }}
+            onFinish={onFinish}
+          >
             <Form.Item
               key="templateName"
               name="templateName"
@@ -32,16 +53,16 @@ export function InterviewTemplatePage(props: Props) {
               <Input />
             </Form.Item>
             <Form.List name="modules">
-              {(modules, { add, remove }) => (
+              {(modules, { add: addModule, remove: removeModule }) => (
                 <>
-                  {modules.map(module => (
+                  {modules.map((module, moduleIndex) => (
                     <>
                       <Form.Item
                         {...module}
                         label="Module Name"
-                        name={[module.name, 'name']}
-                        fieldKey={[module.fieldKey, 'name']}
-                        rules={[{ required: true, message: 'Missing name' }]}
+                        name={[module.name, 'moduleName']}
+                        fieldKey={[module.fieldKey, 'moduleKey']}
+                        rules={[{ required: true, message: 'Missing module name' }]}
                         wrapperCol={{ span: 16 }}
                       >
                         <Row gutter={16} align="middle">
@@ -49,34 +70,46 @@ export function InterviewTemplatePage(props: Props) {
                             <Input />
                           </Col>
                           <Col span={1}>
-                            <Popconfirm title="Sure to delete?" onConfirm={() => remove(module.name)}>
+                            <Popconfirm title="Sure to delete?" onConfirm={() => removeModule(module.name)}>
                               <Button size="small" icon={<DeleteOutlined size={8} />} danger />
                             </Popconfirm>
                           </Col>
                         </Row>
-                        <FormList name="questions">
-                          {(questions, { add, remove }) => (
-                            <>
-                              <FormItem wrapperCol={{ span: 6 }} style={{ marginTop: 8 }}>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                  Add Question
-                                </Button>
-                              </FormItem>
-                            </>
-                          )}
-                        </FormList>
                       </Form.Item>
+                      <FormList name={[module.name, 'moduleQuestions']}>
+                        {(moduleQuestions, actions) => (
+                          <ModuleQuestions
+                            moduleQuestions={moduleQuestions}
+                            actions={actions}
+                            interviewCategories={interviewCategories}
+                            interviewQuestions={interviewQuestions}
+                          />
+                        )}
+                      </FormList>
                     </>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button type="dashed" onClick={() => addModule()} block icon={<PlusOutlined />}>
                       Add Module
                     </Button>
                   </Form.Item>
                 </>
               )}
             </Form.List>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
           </Form>
+          {/* <ModuleQuestionsModal
+            questions={interviewQuestions}
+            categories={interviewCategories}
+            isVisible={modalQuestionIsVisible}
+            onCancel={handleModalQuestionCancel}
+            // addQuestionToModule={addQuestion}
+            // removeQuestionFromModule={removeQuestion}
+          /> */}
         </Content>
       </Layout>
     </Layout>

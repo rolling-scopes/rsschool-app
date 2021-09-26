@@ -1,12 +1,16 @@
 import { GetServerSideProps } from 'next';
-import { InterviewQuestionService } from 'services/interviewQuestion';
+import { InterviewQuestionCategoryService, InterviewQuestionService } from 'services/interviewQuestion';
 
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
     const interviewQuestionService = new InterviewQuestionService(ctx);
-    const [questions] = await Promise.all([interviewQuestionService.getInterviewQuestions()]);
-    return { props: { questions } };
+    const interviewQuestionCategoryService = new InterviewQuestionCategoryService(ctx);
+    const [interviewQuestions, interviewCategories] = await Promise.all([
+      interviewQuestionService.getInterviewQuestions(),
+      interviewQuestionCategoryService.getInterviewQuestionCategories(),
+    ]);
+    return { props: { interviewQuestions, interviewCategories } };
   } catch (e) {
-    return { props: { questions: [] } };
+    return { props: { interviewQuestions: [], interviewCategories: [] } };
   }
 };

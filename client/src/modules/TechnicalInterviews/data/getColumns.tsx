@@ -1,12 +1,14 @@
 import { Button, Popconfirm, Popover, Space, Tag } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 import { getColumnSearchProps, stringSorter } from 'components/Table';
 
 export function getQuestionsColumns(
-  handleEditQuestion: (question: InterviewQuestion) => void,
-  handleDeleteQuestion: (id: number) => Promise<void>,
   questionCategories: InterviewQuestionCategory[],
+  handleEditQuestion?: (question: InterviewQuestion) => void,
+  handleDeleteQuestion?: (id: number) => Promise<void>,
+  addQuestionToModule?: (defaultValue: string) => void,
+  removeQuestionFromModule?: (index: number) => void,
 ) {
   return [
     {
@@ -49,10 +51,24 @@ export function getQuestionsColumns(
       key: 'actions',
       render: (question: InterviewQuestion) => (
         <Space size="middle">
-          <Button size="small" icon={<EditOutlined size={8} />} onClick={() => handleEditQuestion(question)} />
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(question.id)}>
-            <Button size="small" icon={<DeleteOutlined size={8} />} danger />
-          </Popconfirm>
+          {handleEditQuestion && (
+            <Button size="small" icon={<EditOutlined size={8} />} onClick={() => handleEditQuestion(question)} />
+          )}
+          {handleDeleteQuestion && (
+            <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteQuestion(question.id)}>
+              <Button size="small" icon={<DeleteOutlined size={8} />} danger />
+            </Popconfirm>
+          )}
+          {addQuestionToModule && (
+            <Button
+              size="small"
+              icon={<PlusOutlined size={8} />}
+              onClick={() => addQuestionToModule(question.question)}
+            />
+          )}
+          {removeQuestionFromModule && (
+            <Button size="small" icon={<MinusOutlined size={8} />} onClick={() => removeQuestionFromModule(0)} />
+          )}
         </Space>
       ),
     },
