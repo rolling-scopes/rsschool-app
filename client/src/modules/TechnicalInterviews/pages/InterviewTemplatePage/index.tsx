@@ -1,12 +1,9 @@
-import { Layout, Form, Input, Button, Row, Col, Popconfirm, Space } from 'antd';
+import { Layout, Form, Input, Button, Row, Col, Popconfirm, Divider } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AdminSider, Header, Session } from 'components';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 import { useRouter } from 'next/router';
-import FormList, { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
-import FormItem from 'antd/lib/form/FormItem';
-import { useState } from 'react';
-import { ModuleQuestionsModal } from 'modules/TechnicalInterviews/components/Modals/ModuleQuestionsModal';
+import FormList from 'antd/lib/form/FormList';
 import { ModuleQuestions } from 'modules/TechnicalInterviews/components/Forms/ModuleQuestions';
 
 const { Content } = Layout;
@@ -20,7 +17,6 @@ type Props = {
 export function InterviewTemplatePage(props: Props) {
   const { session, interviewQuestions, interviewCategories } = props;
   const router = useRouter();
-  const [modalQuestionIsVisible, setModalQuestionIsVisible] = useState(false);
   const [mode, id] = Array.isArray(router.query.slug) ? router.query.slug : [router.query.slug];
   const [form] = Form.useForm();
 
@@ -38,7 +34,7 @@ export function InterviewTemplatePage(props: Props) {
             size="middle"
             layout="vertical"
             form={form}
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 10 }}
             onFinish={onFinish}
           >
@@ -55,18 +51,19 @@ export function InterviewTemplatePage(props: Props) {
             <Form.List name="modules">
               {(modules, { add: addModule, remove: removeModule }) => (
                 <>
-                  {modules.map((module, moduleIndex) => (
+                  {modules.map(module => (
                     <>
+                      <Divider />
                       <Form.Item
                         {...module}
                         label="Module Name"
                         name={[module.name, 'moduleName']}
                         fieldKey={[module.fieldKey, 'moduleKey']}
                         rules={[{ required: true, message: 'Missing module name' }]}
-                        wrapperCol={{ span: 16 }}
+                        wrapperCol={{ span: 10 }}
                       >
                         <Row gutter={16} align="middle">
-                          <Col span={8}>
+                          <Col span={15}>
                             <Input />
                           </Col>
                           <Col span={1}>
@@ -102,14 +99,6 @@ export function InterviewTemplatePage(props: Props) {
               </Button>
             </Form.Item>
           </Form>
-          {/* <ModuleQuestionsModal
-            questions={interviewQuestions}
-            categories={interviewCategories}
-            isVisible={modalQuestionIsVisible}
-            onCancel={handleModalQuestionCancel}
-            // addQuestionToModule={addQuestion}
-            // removeQuestionFromModule={removeQuestion}
-          /> */}
         </Content>
       </Layout>
     </Layout>
