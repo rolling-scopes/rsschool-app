@@ -42,12 +42,8 @@ class MentorStatsCard extends React.Component<Props, State> {
   };
 
   private countStudents = (data: MentorStats[]) =>
-    data.reduce((acc: Student[], cur: MentorStats) => {
-      if (cur.students?.length) {
-        acc.concat(cur.students);
-      }
-      return acc;
-    }, []).length;
+    data.reduce((acc: Student[], cur: MentorStats) => (cur?.students?.length ? acc.concat(cur.students) : acc), [])
+      .length;
 
   shouldComponentUpdate = (nextProps: Props, nextState: State) =>
     !isEqual(
