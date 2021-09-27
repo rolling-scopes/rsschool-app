@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DisciplineService } from '../../../services/discipline';
 import { IDiscipline } from '../model';
 import { addDiscipline, updateDiscipline } from '../reducers/actions';
@@ -14,8 +14,9 @@ interface IDisciplineForm {
 
 export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: IDisciplineForm) => {
   const disciplineService = useMemo(() => new DisciplineService(), []);
+  const [disciplineName, setDisciplineName] = useState<string>('');
   const [form] = Form.useForm();
-  const { dispatch } = useDisciplineContext();
+  const { disciplines, dispatch } = useDisciplineContext();
 
   if (!discipline) form.resetFields();
 
@@ -37,21 +38,31 @@ export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: ID
       form.resetFields();
       updateDiscipline(dispatch, [res]);
     }
-  }, []);
+  }, [setIsModalVisible, discipline]);
+
+  const validateName = useCallback((name: string): boolean => {
+    let isRightName = true;
+    if (disciplines.some(d => d.name === name)) {
+      isRightName = false;
+    }
+    return isRightName;
+  }, [disciplines]);
 
   return (
-    <Form name="discipline" onFinish={saveDiscipline} form={form}>
+    <Form name='discipline' onFinish={saveDiscipline} form={form}>
       <Item
-        name="name"
-        label="Discipline"
+        name='name'
+        label='Discipline'
         rules={[
           {
             required: true,
             message: 'Please input discipline',
           },
         ]}
+        validateStatus={validateName(disciplineName) ? 'success' : 'error'}
+        help={!validateName(disciplineName) && 'Discipline is already exist'}
       >
-        <Input />
+        <Input onChange={(e) => setDisciplineName(e.target.value)} />
       </Item>
     </Form>
   );
