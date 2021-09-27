@@ -8,7 +8,7 @@ import { OpportunitiesService } from 'services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
 import {
-  WarningTwoTone,
+  ExclamationCircleTwoTone,
   SaveOutlined,
   ClearOutlined,
   DeleteOutlined,
@@ -42,8 +42,7 @@ function EditCV(props: Props) {
 
     const title = (
       <Title level={3} style={{ textAlign: 'center' }}>
-        <WarningTwoTone twoToneColor="#fcbe03" /> <Text strong>Are you sure?</Text>
-        <WarningTwoTone twoToneColor="#fcbe03" />
+        <ExclamationCircleTwoTone twoToneColor="#d60000" /> <Text strong>Deleting CV</Text>
       </Title>
     );
 
@@ -53,12 +52,8 @@ function EditCV(props: Props) {
       'Вы уверены, что хотите удалить свое резюме? Информация, содержащаяся в нем, будет удалена, а работодатели не смогут получить к нему доступ.';
     const confirmationModalContent = (
       <>
-        <Paragraph style={textStyle} underline strong>
-          {message}
-        </Paragraph>
-        <Paragraph style={textStyle} underline strong>
-          {messageRu}
-        </Paragraph>
+        <Paragraph style={textStyle}>{message}</Paragraph>
+        <Paragraph style={textStyle}>{messageRu}</Paragraph>
       </>
     );
 
@@ -67,8 +62,8 @@ function EditCV(props: Props) {
       title,
       content: confirmationModalContent,
       centered: true,
-      maskStyle: { backgroundColor: 'red' },
       maskClosable: true,
+      okText: 'Delete my CV',
       onOk: () => props.withdrawConsent(),
     });
   };
@@ -383,10 +378,7 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
-  const buttonStyle = {
-    borderRadius: '15px',
-    margin: '5px 0',
-  };
+  const buttonStyle = {};
 
   return (
     <LoadingScreen show={loading}>
@@ -409,17 +401,19 @@ function EditCV(props: Props) {
                 </Row>
               </Col>
             </Space>
-            <Button
-              style={buttonStyle}
-              block
-              type="primary"
-              htmlType="button"
-              onClick={() => handleSave()}
-              icon={<SaveOutlined />}
-            >
-              Save
-            </Button>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Row justify="center" style={{ paddingTop: 24 }}>
+              <Button
+                size="large"
+                style={{ ...buttonStyle, minWidth: 300 }}
+                type="primary"
+                htmlType="button"
+                onClick={() => handleSave()}
+                icon={<SaveOutlined />}
+              >
+                Save
+              </Button>
+            </Row>
+            <Row justify="space-between" style={{ paddingTop: 24 }}>
               <Popconfirm
                 title="Are you sure? Unsaved fields data will be reaplced with profile data."
                 onConfirm={fillFromProfile}
@@ -469,7 +463,7 @@ function EditCV(props: Props) {
               >
                 Delete my CV
               </Button>
-            </div>
+            </Row>
           </Card>
         </Content>
       </Layout>

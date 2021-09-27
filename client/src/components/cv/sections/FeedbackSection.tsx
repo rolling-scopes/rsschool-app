@@ -25,9 +25,7 @@ function FeedbackSection(props: Props) {
     </>
   );
 
-  return (
-    <SectionCV content={sectionContent} title="Public feedback" icon={<CommentOutlined className="hide-on-print" />} />
-  );
+  return <SectionCV content={sectionContent} title="Public feedback" icon={<CommentOutlined className="no-print" />} />;
 }
 
 function FeedbackContent(props: { feedback: CVFeedback[]; showCount: number }) {
@@ -35,7 +33,7 @@ function FeedbackContent(props: { feedback: CVFeedback[]; showCount: number }) {
 
   const feedbackStyle = {
     padding: '2px',
-    border: '1px solid black',
+    border: '1px solid #e0e0e0',
     borderRadius: '15px',
     marginBottom: '8px',
   };
@@ -60,17 +58,13 @@ function FeedbackContent(props: { feedback: CVFeedback[]; showCount: number }) {
     const { comment, feedbackDate } = feedback;
 
     return (
-      <Card
-        key={`feedback-${index}`}
-        style={feedbackStyle}
-        size="small"
-        title={
+      <Card key={`feedback-${index}`} style={feedbackStyle} size="small">
+        <Paragraph ellipsis={{ rows: 2, expandable: true }}>
+          {comment}{' '}
           <Tooltip title={moment(feedbackDate).format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment(feedbackDate).fromNow().toUpperCase()}</span>
+            <span style={{ color: '#666' }}>{moment(feedbackDate).fromNow().toLowerCase()}</span>
           </Tooltip>
-        }
-      >
-        <Paragraph ellipsis={{ rows: 2, expandable: true }}>{comment}</Paragraph>
+        </Paragraph>
       </Card>
     );
   });
@@ -78,17 +72,19 @@ function FeedbackContent(props: { feedback: CVFeedback[]; showCount: number }) {
   return (
     <>
       <Text>Recent feedback</Text>
-      {feedbackElements}
-      {expansionNeeded &&
-        (allFeedbackVisible ? (
-          <Button className="hide-on-print" onClick={showFeedbackPartially}>
-            Show partially
-          </Button>
-        ) : (
-          <Button className="hide-on-print" onClick={showAllFeedback}>
-            Show all
-          </Button>
-        ))}
+      <div style={{ paddingTop: 16 }}>
+        {feedbackElements}
+        {expansionNeeded &&
+          (allFeedbackVisible ? (
+            <Button className="no-print" onClick={showFeedbackPartially}>
+              Show partially
+            </Button>
+          ) : (
+            <Button className="no-print" onClick={showAllFeedback}>
+              Show all
+            </Button>
+          ))}
+      </div>
     </>
   );
 }

@@ -13,8 +13,8 @@ export function getServerAxiosProps(
     baseURL: rsHost ? serverRuntimeConfig.rsHost + baseUrl : baseUrl,
     headers: ctx?.req?.headers?.cookie
       ? {
-        cookie: ctx.req.headers.cookie,
-      }
+          cookie: ctx.req.headers.cookie,
+        }
       : undefined,
   };
 }

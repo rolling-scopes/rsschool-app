@@ -3,31 +3,12 @@ import { Resume, User } from '../models';
 
 @EntityRepository(Resume)
 export class ResumeRepository extends AbstractRepository<Resume> {
-
   public async find(githubId: string) {
-    const resume = await this.createQueryBuilder('cv')
-      .select('"cv"."name" AS "name"')
-      .select('"cv"."id" AS "id"')
-      .addSelect('"cv"."selfIntroLink" AS "selfIntroLink"')
-      .addSelect('"cv"."startFrom" AS "startFrom"')
-      .addSelect('"cv"."fullTime" AS "fullTime"')
-      .addSelect('"cv"."expires" AS "expires"')
-      .addSelect('"cv"."militaryService" AS "militaryService"')
-      .addSelect('"cv"."englishLevel" AS "englishLevel"')
-      .addSelect('"cv"."avatarLink" AS "avatarLink"')
-      .addSelect('"cv"."desiredPosition" AS "desiredPosition"')
-      .addSelect('"cv"."notes" AS "notes"')
-      .addSelect('"cv"."phone" AS "phone"')
-      .addSelect('"cv"."email" AS "email"')
-      .addSelect('"cv"."skype" AS "skype"')
-      .addSelect('"cv"."telegram" AS "telegram"')
-      .addSelect('"cv"."linkedin" AS "linkedin"')
-      .addSelect('"cv"."githubUsername" AS "githubUsername"')
-      .addSelect('"cv"."website" AS "website"')
-      .addSelect('"cv"."locations" AS "locations"')
-      .where('"cv"."githubId" = :githubId', { githubId })
-      .getRawOne();
-      
+    const resume = await this.repository.findOne({
+      where: {
+        githubId,
+      },
+    });
     return resume;
   }
 

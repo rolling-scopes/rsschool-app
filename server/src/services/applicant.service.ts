@@ -1,6 +1,6 @@
 import { Resume } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
-import { ResumeRepository } from '../repositories/resume';
+import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
 
 export class ApplicantService {

@@ -11,7 +11,7 @@ type CVInfoProps = {
   ownerGithubId?: string;
   isOwner: boolean;
   notFound: boolean;
-  opportunitiesConsent: boolean;
+  consent: boolean;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
   withdrawConsent: (ownerGithubId: string) => void;
@@ -24,7 +24,7 @@ function CVInfo(props: CVInfoProps) {
     ownerGithubId,
     isOwner,
     notFound,
-    opportunitiesConsent,
+    consent,
     editMode,
     switchView,
     withdrawConsent,
@@ -44,10 +44,10 @@ function CVInfo(props: CVInfoProps) {
   }
 
   if (isOwner) {
-    if (opportunitiesConsent) {
+    if (consent) {
       return (
         <>
-          <Divider className="hide-on-print" plain>
+          <Divider className="no-print" plain>
             <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
             <Switch
               style={{ marginLeft: '5px' }}
@@ -68,7 +68,7 @@ function CVInfo(props: CVInfoProps) {
       return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
     }
   } else {
-    if (opportunitiesConsent) {
+    if (consent) {
       return <ViewCV ownerGithubId={ownerGithubId} />;
     } else {
       return <NoConsentViewCV isOwner={false} />;

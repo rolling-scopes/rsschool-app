@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
-import { ResumeRepository } from '../repositories/resume';
+import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
 
 export class ResumeService {
@@ -60,7 +60,7 @@ export class ResumeService {
   public async getConsent() {
     const user = await this.userRepository.findOne({ where: { githubId: this.githubId } });
     if (user == null) {
-      throw StatusCodes.NOT_FOUND;
+      return false;
     }
     const value = user.opportunitiesConsent;
     return value;

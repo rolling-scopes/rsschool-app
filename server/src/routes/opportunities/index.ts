@@ -19,7 +19,7 @@ export function opportunitiesRoute(logger: ILogger) {
 
   router.post('/visibility', guard, updateVisibility(logger));
 
-  router.get('/consent', guard, getConsent(logger));
+  router.get('/consent/:githubId', guard, getConsent(logger));
   router.post('/consent', guard, updateConsent(logger));
 
   router.get('/applicants', guard, getApplicants(logger));

@@ -8,10 +8,10 @@ const { OK, CONFLICT, INTERNAL_SERVER_ERROR } = StatusCodes;
 
 export const updateConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId } = ctx.state.user;
-  const { opportunitiesConsent } = ctx.request.body;
+  const { consent } = ctx.request.body;
   const service = new ResumeService(githubId);
   try {
-    const data = await service.updateConsent(Boolean(opportunitiesConsent));
+    const data = await service.updateConsent(Boolean(consent));
     setResponse(ctx, OK, data);
   } catch (err) {
     switch (err) {

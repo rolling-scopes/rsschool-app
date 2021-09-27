@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import {
   EditOutlined,
@@ -48,8 +49,8 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      <Menu.Item key="2">
-        <Button type="link" href={`/cv?githubid=${username}`} style={{ textAlign: 'left' }}>
+      <Menu.Item key="2" hidden>
+        <Button type="link" href={`/cv/${username}`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
         </Button>
       </Menu.Item>
@@ -63,7 +64,10 @@ export function Header(props: Props) {
   );
 
   return (
-    <nav style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+    <nav
+      className="no-print"
+      style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
+    >
       <div className="logo">
         <Link href="/">
           <a>

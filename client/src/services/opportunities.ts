@@ -11,16 +11,14 @@ export class OpportunitiesService {
   }
 
   public async getConsent(githubId: string) {
-    const response = await this.axios.get<{ data: boolean }>(`/consent`, {
-      params: { githubId },
-    });
+    const response = await this.axios.get<{ data: boolean }>(`/consent/${githubId}`);
     return response.data.data;
   }
 
-  public async updateConsent(githubId: string, opportunitiesConsent: boolean) {
+  public async updateConsent(githubId: string, consent: boolean) {
     const response = await this.axios.post<{ data: boolean }>(`/consent`, {
       githubId,
-      opportunitiesConsent,
+      consent,
     });
     return response.data.data;
   }

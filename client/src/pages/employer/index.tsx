@@ -53,7 +53,7 @@ function Page(props: Props) {
 
         return (
           <>
-            <a href={`/cv?githubid=${githubId}`}>{name ?? 'Unknown'}</a>
+            <a href={`/cv/${githubId}`}>{name ?? 'Unknown'}</a>
             {isAdmin && (
               <>
                 {isHidden ? (

@@ -1,10 +1,25 @@
-## Proposed changes
+#### 🤔 This is a ...
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Performance optimization
+- [ ] Refactoring
+- [ ] Test Case
+- [ ] Documentation update
+- [ ] Other
 
-_Describe the big picture of your changes here to communicate to the maintainers why we should accept this pull request. If it fixes a bug or resolves a feature request, be sure to link to that issue._
+#### 🔗 Related issue link
 
-## Checklist
+_Describe the source of requirement, like related issue link._
 
-- [ ] Lint and unit tests pass locally with my changes
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I have added necessary documentation
-- [ ] 
+#### 💡 Background and solution 
+
+_Describe the big picture of your changes here_
+
+
+#### ☑️ Self Check before Merge
+
+⚠️ Please check all items below before review. ⚠️
+
+- [ ] Database migration is added or not needed
+- [ ] Documentation is updated/provided or not needed
+- [ ] Changes are tested locally

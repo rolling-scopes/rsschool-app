@@ -7,7 +7,7 @@ import { setResponse } from '../utils';
 const { OK } = StatusCodes;
 
 export const getConsent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId } = ctx.state.user;
+  const githubId: string = ctx.params.githubId;
   const service = new ResumeService(githubId);
 
   const data = await service.getConsent();
