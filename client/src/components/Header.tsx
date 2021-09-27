@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { Button, Menu, Dropdown } from 'antd';
+import { Button, Menu, Dropdown, Tooltip } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { css } from 'styled-jsx/css';
 // TODO: ucnomment after testing
-import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone /* ExperimentOutlined */ } from '@ant-design/icons';
+import {
+  EyeOutlined,
+  EditOutlined,
+  LogoutOutlined,
+  SaveTwoTone,
+  QuestionCircleFilled /* ExperimentOutlined */,
+} from '@ant-design/icons';
 import Link from 'next/link';
 
 type Props = {
@@ -92,6 +98,13 @@ export function Header(props: Props) {
             <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
           </Button>
         )}
+        <Link href="https://docs.app.rs.school">
+          <a>
+            <Tooltip title="RSApp docs">
+              <QuestionCircleFilled style={{ fontSize: '150%', marginRight: '15px' }} />
+            </Tooltip>
+          </a>
+        </Link>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="dashed" size="large">
             <GithubAvatar githubId={props.username} size={24} />
