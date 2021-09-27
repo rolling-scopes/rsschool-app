@@ -98,7 +98,7 @@ export function Header(props: Props) {
             <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
           </Button>
         )}
-        <Link href="https://rolling-scopes.github.io/rsschool-app">
+        <Link href="https://docs.app.rs.school">
           <a>
             <Tooltip title="RSApp docs">
               <QuestionCircleFilled style={{ fontSize: '150%', marginRight: '15px' }} />
