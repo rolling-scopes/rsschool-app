@@ -1,4 +1,5 @@
-import { Button, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { RegistrationPageLayout } from 'components';
 import { LocationSelect } from 'components/Forms';
@@ -11,7 +12,7 @@ import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Location } from '../../../../../../common/models';
+import { Location, StudentStats } from '../../../../../../common/models';
 import { Info } from 'modules/Registry/components';
 import { css } from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
@@ -26,12 +27,19 @@ export type Props = {
   session: Session;
 };
 
+interface IdName {
+  id: number;
+  name: string;
+}
+
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
+  const { githubId } = props.session;
   const [form] = Form.useForm();
   const update = useUpdate();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [courses, setCourses] = useState([] as Course[]);
+  const [registeredForCourses, setRegisteredForCourses] = useState([] as IdName[]);
   const [location, setLocation] = useState(null as Location | null);
   const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
@@ -39,11 +47,20 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
     setLoading(true);
     const userService = new UserService();
     const courseService = new CoursesService();
-    const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
+    const [profile, profileInfo, courses] = await Promise.all([
+      userService.getMyProfile(),
+      userService.getProfileInfo(githubId),
+      courseService.getCourses(),
+    ]);
+    const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
     const activeCourses = props.courseAlias
-      ? courses.filter((course: Course) => course.alias === props.courseAlias)
-      : courses.filter(isCourseOpenForRegistry).sort(sortByStartDate);
+      ? courses.filter(
+          (course: Course) =>
+            course.alias === props.courseAlias && !registeredForCourses.find(({ id }) => id === course.id),
+        )
+      : courses.filter(isCourseOpenForRegistry(registeredForCourses)).sort(sortByStartDate);
 
+    setRegisteredForCourses(registeredForCourses);
     setCourses(activeCourses);
     setInitialData(profile);
     setLoading(false);
@@ -61,7 +78,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
       if (loading) {
         return;
       }
-      setLoading(true);
+
       const { courseId, location, primaryEmail, firstName, lastName } = values;
       const registryModel = { type: TYPES.STUDENT, courseId };
       const userModel = {
@@ -72,19 +89,53 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
         lastName,
       };
 
-      try {
-        const userResponse = await axios.post('/api/profile/me', userModel);
-        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-        if (githubId) {
-          await axios.post('/api/registry', registryModel);
-          setSubmitted(true);
-        } else {
-          message.error('Invalid github id');
+      if (registeredForCourses.length) {
+        Modal.confirm({
+          icon: <WarningOutlined style={{ color: 'red', fontWeight: 700, fontSize: 24 }} />,
+          title: <h3 style={{ fontWeight: 700, textAlign: 'center' }}>Course registration warning</h3>,
+          content: (
+            <div style={{ fontWeight: 500, fontSize: 15 }}>
+              You are already registered for the following courses:
+              <ul>
+                {registeredForCourses.map(({ name }) => (
+                  <li>{`${name}`}</li>
+                ))}
+              </ul>
+              <span style={{ fontWeight: 700, fontSize: 16, backgroundColor: 'yellow' }}>NOTE:</span>
+              <span style={{ fontWeight: 700 }}>
+                {' '}
+                We do not recommend studying at several courses at the same time.
+              </span>
+            </div>
+          ),
+          centered: true,
+          onOk: async () => {
+            await confirmRegistration();
+          },
+          okText: 'Registration',
+          cancelText: 'Return',
+          maskClosable: true,
+        });
+      } else {
+        await confirmRegistration();
+      }
+
+      async function confirmRegistration() {
+        setLoading(true);
+        try {
+          const userResponse = await axios.post('/api/profile/me', userModel);
+          const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+          if (githubId) {
+            await axios.post('/api/registry', registryModel);
+            setSubmitted(true);
+          } else {
+            message.error('Invalid github id');
+          }
+        } catch (e) {
+          message.error('An error occured. Please try later.');
+        } finally {
+          setLoading(false);
         }
-      } catch (e) {
-        message.error('An error occured. Please try later.');
-      } finally {
-        setLoading(false);
       }
     },
     [loading],
@@ -115,7 +166,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
         form={form}
         initialValues={getInitialValues(initialData, courses)}
         onChange={update}
-        onFinish={(values: any) => handleSubmit({ ...values, location })}
+        onFinish={(values: any) => handleSubmit({ ...values, location, registeredForCourses })}
       >
         <div className="student-registration">
           <div className="student-registration-slide">
@@ -259,18 +310,32 @@ function sortByStartDate(a: Course, b: Course) {
   return a.startDate.localeCompare(b.startDate);
 }
 
-function isCourseOpenForRegistry(course: Course) {
+function enrolledOtherCourses(studentStats: StudentStats[] | undefined, courses: Course[]) {
+  return (
+    studentStats?.reduce((acc, { isExpelled, isCourseCompleted, courseId }) => {
+      const course = courses?.find(el => el.id === courseId);
+      if (!isExpelled && !isCourseCompleted && course && !course?.completed) {
+        acc.push({ id: courseId, name: `${course.name} (${getStatus(course)})` });
+      }
+      return acc;
+    }, [] as IdName[]) ?? []
+  );
+}
+
+function isCourseOpenForRegistry(registeredCourses: IdName[]) {
   // invite only courses do not open for public registration
-  if (course.inviteOnly || course.completed) {
+  return (course: Course) => {
+    if (course.inviteOnly || course.completed || registeredCourses.find(({ id }) => id === course.id)) {
+      return false;
+    }
+    if (course.planned) {
+      return true;
+    }
+    if (course.registrationEndDate) {
+      return new Date(course.registrationEndDate).getTime() > Date.now();
+    }
     return false;
-  }
-  if (course.planned) {
-    return true;
-  }
-  if (course.registrationEndDate) {
-    return new Date(course.registrationEndDate).getTime() > Date.now();
-  }
-  return false;
+  };
 }
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
@@ -286,6 +351,13 @@ function getInitialValues({ countryName, cityName, ...initialData }: Partial<Use
     courseId: courses[0].id,
     location,
   };
+}
+
+function getStatus(course: Course) {
+  if (course.planned) {
+    return 'Planned';
+  }
+  return 'Active';
 }
 
 const styles = css`
