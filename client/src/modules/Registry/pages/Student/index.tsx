@@ -1,20 +1,21 @@
-import { Button, Col, Form, Input, message, Result, Row, Select, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { RegistrationPageLayout } from 'components';
 import { LocationSelect } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import { Session } from 'components/withSession';
 import { useCallback, useState, useEffect } from 'react';
-import { useAsync, useUpdate } from 'react-use';
-import { CoursesService } from 'services/courses';
+import { useUpdate } from 'react-use';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
-import { UserFull, UserService } from 'services/user';
+import { UserFull } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Location } from '../../../../../../common/models';
 import { Info } from 'modules/Registry/components';
 import { css } from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
+import { useStudentCourseData } from './hooks/useStudentsCourseData';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -27,41 +28,29 @@ export type Props = {
 };
 
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
+  const { githubId } = props.session;
   const [form] = Form.useForm();
   const update = useUpdate();
-  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [courses, setCourses] = useState([] as Course[]);
   const [location, setLocation] = useState(null as Location | null);
-  const [initialData, setInitialData] = useState({} as Partial<UserFull>);
 
-  useAsync(async () => {
-    setLoading(true);
-    const userService = new UserService();
-    const courseService = new CoursesService();
-    const [profile, courses] = await Promise.all([userService.getMyProfile(), courseService.getCourses()]);
-    const activeCourses = props.courseAlias
-      ? courses.filter((course: Course) => course.alias === props.courseAlias)
-      : courses.filter(isCourseOpenForRegistry).sort(sortByStartDate);
+  const [loading, setLoading] = useState(false);
 
-    setCourses(activeCourses);
-    setInitialData(profile);
-    setLoading(false);
-  }, []);
+  const { student, studentLoading } = useStudentCourseData(githubId, props.courseAlias);
 
   useEffect(() => {
     setLocation({
-      countryName: initialData.countryName,
-      cityName: initialData.cityName,
+      countryName: student?.profile.countryName,
+      cityName: student?.profile.cityName,
     } as Location);
-  }, [initialData]);
+  }, [student?.profile]);
 
   const handleSubmit = useCallback(
     async (values: any) => {
-      if (loading) {
+      if (loading || studentLoading) {
         return;
       }
-      setLoading(true);
+
       const { courseId, location, primaryEmail, firstName, lastName } = values;
       const registryModel = { type: TYPES.STUDENT, courseId };
       const userModel = {
@@ -72,28 +61,62 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
         lastName,
       };
 
-      try {
-        const userResponse = await axios.post('/api/profile/me', userModel);
-        const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-        if (githubId) {
-          await axios.post('/api/registry', registryModel);
-          setSubmitted(true);
-        } else {
-          message.error('Invalid github id');
+      if (student?.registeredForCourses.length) {
+        Modal.confirm({
+          icon: <WarningOutlined style={{ color: 'red', fontWeight: 700, fontSize: 24 }} />,
+          title: <h3 style={{ fontWeight: 700, textAlign: 'center' }}>Course registration warning</h3>,
+          content: (
+            <div style={{ fontWeight: 500, fontSize: 15 }}>
+              You are already registered for the following courses:
+              <ul>
+                {student?.registeredForCourses.map(({ name }) => (
+                  <li key={name}>{`${name}`}</li>
+                ))}
+              </ul>
+              <span style={{ fontWeight: 700, fontSize: 16, backgroundColor: 'yellow' }}>NOTE:</span>
+              <span style={{ fontWeight: 700 }}>
+                {' '}
+                We do not recommend studying at several courses at the same time.
+              </span>
+            </div>
+          ),
+          centered: true,
+          onOk: async () => {
+            await confirmRegistration();
+          },
+          okText: 'Registration',
+          cancelText: 'Return',
+          maskClosable: true,
+        });
+      } else {
+        await confirmRegistration();
+      }
+
+      async function confirmRegistration() {
+        setLoading(true);
+        try {
+          const userResponse = await axios.post('/api/profile/me', userModel);
+          const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
+          if (githubId) {
+            await axios.post('/api/registry', registryModel);
+            setSubmitted(true);
+          } else {
+            message.error('Invalid github id');
+          }
+        } catch (e) {
+          message.error('An error occured. Please try later.');
+        } finally {
+          setLoading(false);
         }
-      } catch (e) {
-        message.error('An error occured. Please try later.');
-      } finally {
-        setLoading(false);
       }
     },
-    [loading],
+    [loading, studentLoading],
   );
 
   let content: React.ReactNode;
-  if (loading) {
+  if (loading || studentLoading) {
     content = undefined;
-  } else if (!courses.length) {
+  } else if (!student?.courses.length) {
     content = <NoCourses />;
   } else if (submitted) {
     content = (
@@ -113,9 +136,11 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
         layout="vertical"
         style={{ margin: '10px', height: '100%' }}
         form={form}
-        initialValues={getInitialValues(initialData, courses)}
+        initialValues={getInitialValues(student?.profile, student?.courses)}
         onChange={update}
-        onFinish={(values: any) => handleSubmit({ ...values, location })}
+        onFinish={(values: any) =>
+          handleSubmit({ ...values, location, registeredForCourses: student?.registeredForCourses })
+        }
       >
         <div className="student-registration">
           <div className="student-registration-slide">
@@ -143,7 +168,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 <Col xs={24} sm={24} md={20} lg={20} xl={20}>
                   <Form.Item name="courseId">
                     <Select placeholder="Select course...">
-                      {courses.map(course => (
+                      {student?.courses.map(course => (
                         <Select.Option key={course.id} value={course.id}>
                           {course.name} ({course.primarySkillName}, {formatMonthFriendly(course.startDate)})
                         </Select.Option>
@@ -249,28 +274,10 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   }
 
   return (
-    <RegistrationPageLayout loading={loading} githubId={props.session.githubId}>
+    <RegistrationPageLayout loading={loading || studentLoading} githubId={props.session.githubId}>
       {content}
     </RegistrationPageLayout>
   );
-}
-
-function sortByStartDate(a: Course, b: Course) {
-  return a.startDate.localeCompare(b.startDate);
-}
-
-function isCourseOpenForRegistry(course: Course) {
-  // invite only courses do not open for public registration
-  if (course.inviteOnly || course.completed) {
-    return false;
-  }
-  if (course.planned) {
-    return true;
-  }
-  if (course.registrationEndDate) {
-    return new Date(course.registrationEndDate).getTime() > Date.now();
-  }
-  return false;
 }
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
