@@ -78,3 +78,20 @@ jobs:
         working-directory: ./client
         run: |
           docker push ghcr.io/rolling-scopes/rsschool-app-client:master
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy in EC2
+        env:
+            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+            HOSTNAME : ${{ secrets.EC2_HOSTNAME  }}
+            USERNAME : ${{ secrets.EC2_USERNAME  }}
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            sleep 10
+            docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
+            docker system prune -f
+          '
