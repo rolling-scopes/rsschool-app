@@ -31,9 +31,9 @@ jobs:
           cache-name: cache-next
         with:
           path: ./client/src/.next/cache/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}
+            ${{ runner.os }}-build-${{ env.cache-name }}-
 
       - name: Cache node modules
         uses: actions/cache@v2
