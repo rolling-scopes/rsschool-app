@@ -33,6 +33,15 @@ export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.discord`,
 ];
 
+export const getContactsUserFields = (modelName = 'user') => [
+  `${modelName}.primaryEmail`,
+  `${modelName}.contactsPhone`,
+  `${modelName}.contactsEmail`,
+  `${modelName}.contactsTelegram`,
+  `${modelName}.contactsLinkedIn`,
+  `${modelName}.contactsSkype`,
+];
+
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
   return await getRepository(Mentor)
     .createQueryBuilder('mentor')
