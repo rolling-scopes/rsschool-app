@@ -7,4 +7,5 @@ module.exports = {
     '^configs(.*)$': '<rootDir>/configs/$1',
   },
   verbose: true,
+  testEnvironment: 'jsdom',
 };
