@@ -134,16 +134,15 @@ jobs:
   deploy:
     needs: [build_client, build_server]
     runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+      HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
+      USERNAME: ${{ secrets.EC2_USERNAME  }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Deploy in EC2
-        env:
-          PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-          HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
-          USERNAME: ${{ secrets.EC2_USERNAME  }}
-
+      - name: Pull the latest images
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
@@ -151,6 +150,18 @@ jobs:
             sleep 10
             docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
             docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
+          '
+
+      - name: Restart
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker-compose up -d
+          '
+
+      - name: Clean up
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker system prune -f
           '
