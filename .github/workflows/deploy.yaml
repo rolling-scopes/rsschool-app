@@ -140,5 +140,6 @@ jobs:
             sleep 10
             docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
             docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
+            docker-compose up -d
             docker system prune -f
           '
