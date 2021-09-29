@@ -2,9 +2,9 @@ import { IPaginationOptions, paginate } from 'koa-typeorm-pagination';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
 import { ScoreTableFilters } from '../../../../common/types/score';
-import { Course, Student, TaskResult } from '../../models';
+import { Course, CourseTask, Student, TaskResult } from '../../models';
 import { createName } from '../user.service';
-import { getPrimaryUserFields, convertToMentorBasic } from '../course.service';
+import { getPrimaryUserFields, convertToMentorBasic, getContactsUserFields } from '../course.service';
 import { getCourseTasks, updateScoreStudents, getCourses } from '../course.service';
 import { getStageInterviewRating } from '../stageInterview.service';
 import { round, mapValues, keyBy, sum } from 'lodash';
@@ -22,6 +22,24 @@ const orderByFieldMapping = {
   repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
+const defaultFilter: ScoreTableFilters = {
+  activeOnly: false,
+  githubId: '',
+  name: '',
+  'mentor.githubId': '',
+  cityName: '',
+};
+
+const defaultPagination: IPaginationOptions = {
+  current: 1,
+  pageSize: 1e9,
+};
+
+const defaultOrder: { field: keyof typeof orderByFieldMapping; direction: 'ASC' | 'DESC' } = {
+  field: 'rank',
+  direction: 'ASC',
+};
+
 type TaskResultData = {
   authorId?: number;
   score: number;
@@ -36,10 +54,14 @@ type TaskResultInput = TaskResultData & {
 
 const KB = 1024;
 
+type ScoreOptions = {
+  includeContacts?: boolean;
+};
+
 export class ScoreService {
   private taskResultRepository = getRepository(TaskResult);
 
-  constructor(private courseId: number | undefined = undefined) {}
+  constructor(private courseId: number, private options: ScoreOptions = {}) {}
 
   public static async recalculateTotalScore(logger: ILogger, coursesToUpdate?: Course[]) {
     const courses = coursesToUpdate ?? (await getCourses());
@@ -100,27 +122,11 @@ export class ScoreService {
     }
   }
 
-  public async getStudentsScore(
-    paginateOptions: IPaginationOptions = {
-      current: 1,
-      pageSize: 1e9,
-    },
-    filter: ScoreTableFilters = {
-      activeOnly: false,
-      githubId: '',
-      name: '',
-      'mentor.githubId': '',
-      cityName: '',
-    },
-    orderBy: { field: keyof typeof orderByFieldMapping; direction: 'ASC' | 'DESC' } = {
-      field: 'rank',
-      direction: 'ASC',
-    },
-  ) {
+  public async getStudentsScore(paginateOptions = defaultPagination, filter = defaultFilter, orderBy = defaultOrder) {
     let query = getRepository(Student)
       .createQueryBuilder('student')
       .innerJoin('student.user', 'user')
-      .addSelect(getPrimaryUserFields())
+      .addSelect(getPrimaryUserFields().concat(this.options.includeContacts ? getContactsUserFields() : []))
       .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
       .addSelect(['mentor.id', 'mentor.userId'])
       .leftJoin('student.taskResults', 'tr')
@@ -206,6 +212,14 @@ export class ScoreService {
         countryName: user.countryName ?? 'Other',
         taskResults,
         isActive: !student.isExpelled && !student.isFailed,
+        contacts: this.options.includeContacts
+          ? {
+              epamEmail: user.contactsEpamEmail,
+              email: user.primaryEmail || user.contactsEmail,
+              linkedIn: user.contactsLinkedIn,
+              telegram: user.contactsTelegram,
+            }
+          : null,
       };
     });
 
@@ -213,6 +227,25 @@ export class ScoreService {
       ...pagination,
       content: students,
     };
+  }
+
+  public async getStudentsScoreForExport(filters: ScoreTableFilters) {
+    const students = await this.getStudentsScore(undefined, filters);
+    const courseTasks = await getCourseTasks(this.courseId);
+
+    return students.content.map(student => {
+      return {
+        githubId: student.githubId,
+        name: student.name,
+        locationName: student.cityName,
+        countryName: student.countryName || 'Other',
+        mentorGithubId: student.mentor ? student.mentor.githubId : '',
+        totalScore: student.totalScore,
+        isActive: student.isActive,
+        contacts: student.contacts,
+        ...this.getTasksResults(student.taskResults, courseTasks),
+      };
+    });
   }
 
   public async saveScore(studentId: number, courseTaskId: number, data: TaskResultData): Promise<boolean> {
@@ -296,6 +329,15 @@ export class ScoreService {
 
   private trimComment(comment: string): string {
     return comment.substr(0, 8 * KB);
+  }
+
+  private getTasksResults(results: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
+    return courseTasks.reduce((acc, courseTask) => {
+      const result = results.find(r => r.courseTaskId === courseTask.id);
+      const { name } = courseTask.task;
+      acc[name] = result?.score ?? 0;
+      return acc;
+    }, {} as Record<string, number>);
   }
 }
 

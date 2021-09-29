@@ -1,18 +1,10 @@
-For docs developing we are using [mkdocs](https://www.mkdocs.org). 
+# RSApp docs
 
-## Installation
-[Link for mkdocs installation guide](https://www.mkdocs.org/#installation).
+Welcome to the [RSApp](https://app.rs.school) docs!
 
-## Developing
-After installation for developing run:
-```
-mkdocs serve
-```
+You can read about RSApp features by clicking to links in menu below or at left side of the page. The search is also available at top left corner of the page. Enjoy!
 
-Go to [localhost:8000](http://localhost:8000)
+## Features:
 
-## Building
-When you want to generate docs run:
-```
-mkdocs build
-```
+* [CV](./features/cv.md)
+* [Choose kata languages](./features/choose-kata-languages.md)

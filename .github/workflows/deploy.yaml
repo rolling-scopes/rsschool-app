@@ -1,0 +1,167 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [master]
+
+concurrency: master
+
+jobs:
+  build_client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache .next
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-next
+        with:
+          path: ./client/src/.next/cache/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: client-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test (npm test)
+        run: npm test
+
+      - name: Build (npm run build)
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Clean modules
+        run: npm ci --production --no-optional
+
+      - name: Upload to CDN
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
+          AWS_DEFAULT_REGION: eu-central-1
+        run: aws s3 cp src/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
+
+      - name: Build container
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish "client" container
+        run: docker push ghcr.io/rolling-scopes/rsschool-app-client:master
+
+  build_server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: server-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test (npm test)
+        run: npm test
+
+      - name: Build (npm run build)
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Build container
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish "server" container
+        run: docker push ghcr.io/rolling-scopes/rsschool-app-server:master
+
+  deploy:
+    needs: [build_client, build_server]
+    runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+      HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
+      USERNAME: ${{ secrets.EC2_USERNAME  }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Pull the latest images
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            sleep 10
+            docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
+            docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
+          '
+
+      - name: Restart
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            docker-compose up -d
+          '
+
+      - name: Clean up
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            docker system prune -f
+          '
