@@ -24,9 +24,7 @@ export function useStudentCourseData(githubId: string, courseAlias: string | und
     ]);
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
     const activeCourses = courseAlias
-      ? courses.filter(
-          (course: Course) => course.alias === courseAlias && isCourseOpenForRegistry(registeredForCourses)(course),
-        )
+      ? courses.filter(isCourseOpenForRegistryWithAlias(registeredForCourses, courseAlias))
       : courses.filter(isCourseOpenForRegistry(registeredForCourses)).sort(sortByStartDate);
     return {
       profile,
@@ -51,19 +49,31 @@ function enrolledOtherCourses(studentStats: StudentStats[] | undefined, courses:
 }
 
 function isCourseOpenForRegistry(registeredCourses: IdName[]) {
-  // invite only courses do not open for public registration
   return (course: Course) => {
-    if (course.inviteOnly || course.completed || registeredCourses.some(({ id }) => id === course.id)) {
+    // invite only courses do not open for public registration
+    if (course.inviteOnly) {
       return false;
     }
-    if (course.planned) {
-      return true;
-    }
-    if (course.registrationEndDate) {
-      return new Date(course.registrationEndDate).getTime() > Date.now();
-    }
-    return false;
+    return isCourseAvailableForRegistration(course, registeredCourses);
   };
+}
+
+function isCourseOpenForRegistryWithAlias(registeredCourses: IdName[], courseAlias?: string) {
+  return (course: Course) =>
+    courseAlias === course.alias && isCourseAvailableForRegistration(course, registeredCourses);
+}
+
+function isCourseAvailableForRegistration(course: Course, registeredCourses: IdName[]) {
+  if (course.completed || registeredCourses.some(({ id }) => id === course.id)) {
+    return false;
+  }
+  if (course.planned) {
+    return true;
+  }
+  if (course.registrationEndDate) {
+    return new Date(course.registrationEndDate).getTime() > Date.now();
+  }
+  return false;
 }
 
 function sortByStartDate(a: Course, b: Course) {
