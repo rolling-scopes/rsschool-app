@@ -14,13 +14,10 @@ function Page(props: IProps) {
         <Image src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
       </Row>
       <Row justify="center">
-        <h2 style={{ fontSize: '102px', marginBottom: 0 }}>404</h2>
+        <h1 style={{ fontSize: '102px', marginBottom: 0 }}>404</h1>
       </Row>
       <Row justify="center">
-        <h3>That page doesn't exist!</h3>
-      </Row>
-      <Row justify="center">
-        <p>Sorry, the page you were looking for could not be found.</p>
+        <h2>Sorry, Page Not Found</h2>
       </Row>
     </PageLayout>
   );
