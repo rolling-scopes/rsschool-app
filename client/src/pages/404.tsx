@@ -10,7 +10,7 @@ type IProps = {
 function Page(props: IProps) {
   return (
     <PageLayout loading={false} githubId={props.session.githubId}>
-      <Row justify="center" style={{ margin: '75px 0' }}>
+      <Row justify="center" style={{ margin: '65px 0 25px 0' }}>
         <Image src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
       </Row>
       <Row justify="center">
