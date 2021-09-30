@@ -10,11 +10,11 @@ type IProps = {
 function Page(props: IProps) {
   return (
     <PageLayout loading={false} githubId={props.session.githubId}>
-      <Row justify="center">
-        <Image src="/static/svg/err.svg" alt="Error 404" width={400} height={400} />
+      <Row justify="center" style={{ margin: '75px 0' }}>
+        <Image src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
       </Row>
       <Row justify="center">
-        <h2>404</h2>
+        <h2 style={{ fontSize: '102px', marginBottom: 0 }}>404</h2>
       </Row>
       <Row justify="center">
         <h3>That page doesn't exist!</h3>
