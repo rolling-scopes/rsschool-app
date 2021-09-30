@@ -11,7 +11,7 @@ function Page(props: IProps) {
   return (
     <PageLayout loading={false} githubId={props.session.githubId}>
       <Row justify="center">
-        <Image src="/static/svg/err.svg" alt="Picture of the author" width={400} height={400} />
+        <Image src="/static/svg/err.svg" alt="Error 404" width={400} height={400} />
       </Row>
       <Row justify="center">
         <h2>404</h2>
