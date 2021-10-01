@@ -23,6 +23,17 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
       - name: Restore next build
         uses: actions/cache@v2
         env:

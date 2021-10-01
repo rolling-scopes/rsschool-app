@@ -7,6 +7,9 @@ module.exports = {
     '^utils(.*)$': '<rootDir>/utils/$1',
     '^configs(.*)$': '<rootDir>/configs/$1',
   },
+  transform: {
+    '^.+\\.(ts|tsx)$': 'babel-jest',
+  },
   verbose: true,
   testEnvironment: 'jsdom',
 };

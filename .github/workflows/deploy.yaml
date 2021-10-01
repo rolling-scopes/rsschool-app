@@ -30,7 +30,7 @@ jobs:
         env:
           cache-name: cache-next
         with:
-          path: ./client/src/.next/cache/
+          path: ./client/.next/cache/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -66,7 +66,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
           AWS_DEFAULT_REGION: eu-central-1
-        run: aws s3 cp src/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
+        run: aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Build container
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master .

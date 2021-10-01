@@ -11,7 +11,7 @@ COPY package.json /client
 COPY package-lock.json /client
 
 COPY next.config.js /client
-COPY src/static /client/static
+COPY public /client/public
 COPY node_modules /client/node_modules
 COPY .next /client/.next
 

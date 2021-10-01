@@ -25,16 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache node modules
+      - name: Restore npm cache
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
       - name: Install dependencies
@@ -45,13 +44,19 @@ jobs:
           npm run ci:format
           npm run ci:lint
 
-      - name: Test (npm test)
-        run: |
-          npm test
+      - name: Test (client)
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: client
+          test-script: npm run test:ci
+
+      - name: Test (server)
+        run: npm run test:ci
+        working-directory: server
 
       - name: Build (npm run ci:build)
-        run: |
-          npm run ci:build
+        run: npm run ci:build
 
       - name: Auto Label
         uses: banyan/auto-label@1.2
