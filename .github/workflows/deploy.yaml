@@ -25,26 +25,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache .next
+      - name: Restore next cache
         uses: actions/cache@v2
         env:
           cache-name: cache-next
         with:
-          path: ./client/.next/cache/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }}
+          path: client/.next/cache/
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Cache node modules
+      - name: Restore npm cache
         uses: actions/cache@v2
         env:
-          cache-name: client-node-modules
+          cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
       - name: Install dependencies
@@ -95,16 +94,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache node modules
+      - name: Restore npm cache
         uses: actions/cache@v2
         env:
-          cache-name: server-node-modules
+          cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
       - name: Install dependencies
