@@ -66,7 +66,7 @@ export class RepositoryService {
     if (!course) {
       return;
     }
-    const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
+    const students = await getCustomRepository(StudentRepository).findAndIncludeRepository(this.courseId);
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = RepositoryService.getRepoName(githubId, course);

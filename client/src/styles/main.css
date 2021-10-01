@@ -77,3 +77,9 @@ thead.ant-table-thead > tr > th {
 .table-row-dark {
   background-color: #e6f7ff;
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

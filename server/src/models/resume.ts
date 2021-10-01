@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 type EnglishLevel = 'A0' | 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1' | 'B1+' | 'B2' | 'B2+' | 'C1' | 'C1+' | 'C2';
 
 @Entity()
-export class CV {
+export class Resume {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,7 +19,7 @@ export class CV {
   @Column({ nullable: true, type: 'text' })
   startFrom: string;
 
-  @Column({ nullable: true })
+  @Column({ default: false })
   fullTime: boolean;
 
   @Column({ nullable: true, type: 'numeric' })
@@ -56,11 +56,14 @@ export class CV {
   linkedin: string;
 
   @Column({ nullable: true, type: 'text' })
-  location: string;
+  locations: string;
 
   @Column({ nullable: true, type: 'text' })
   githubUsername: string;
 
   @Column({ nullable: true, type: 'text' })
   website: string;
+
+  @Column({ default: false })
+  isHidden: boolean;
 }
