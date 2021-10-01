@@ -25,16 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Cache node modules
+      - name: Restore npm cache
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
       - name: Install dependencies
