@@ -53,6 +53,7 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
   if (courseTask.type === 'selfeducation') {
     await createSelfeducationVerification({
       ctx,
+      courseId,
       courseTask,
       student: {
         id: student.id,
@@ -89,6 +90,7 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
 
 const createSelfeducationVerification = async ({
   ctx,
+  courseId,
   courseTask,
   student: { id: studentId, answers: studentAnswers },
 }: SelfEducationVerificationParams) => {
@@ -148,7 +150,7 @@ const createSelfeducationVerification = async ({
 
   const result = (await getRepository(TaskVerification).findOne(identifier.id))!;
 
-  const service = new ScoreService();
+  const service = new ScoreService(courseId);
   await service.saveScore(result.studentId, result.courseTaskId, {
     comment: result.details,
     score: result.score,
@@ -170,6 +172,7 @@ type VerificationEvent = {
 
 type SelfEducationVerificationParams = {
   ctx: Router.RouterContext;
+  courseId: number;
   courseTask: CourseTask;
   student: {
     id: number;

@@ -1,9 +1,5 @@
 module.exports = {
   globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-      diagnostics: true,
-    },
     NODE_ENV: 'test',
   },
   preset: 'ts-jest',
@@ -11,7 +7,7 @@ module.exports = {
   moduleDirectories: ['node_modules', 'src'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   transform: {
-    '^.+\\.ts?$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   verbose: true,

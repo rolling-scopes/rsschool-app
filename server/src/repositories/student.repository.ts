@@ -1,8 +1,10 @@
 import { EntityRepository, AbstractRepository, getRepository, getCustomRepository } from 'typeorm';
-import { Student } from '../models';
+import { Course, Mentor, Student, User, Certificate } from '../models';
 import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
+import { getFullName } from '../rules';
+import { omit } from 'lodash';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -146,7 +148,7 @@ export class StudentRepository extends AbstractRepository<Student> {
     return records.map(transformStudent);
   }
 
-  public async findWithRepository(courseId: number) {
+  public async findAndIncludeRepository(courseId: number) {
     const query = await getRepository(Student)
       .createQueryBuilder('student')
       .innerJoin('student.user', 'sUser')
@@ -194,6 +196,82 @@ export class StudentRepository extends AbstractRepository<Student> {
     }
 
     return query.getMany();
+  }
+
+  public async findAndIncludeStatsForResume(githubId: string) {
+    const query = await getRepository(Student)
+      .createQueryBuilder('student')
+      .addSelect('"course"."id" AS "courseId"')
+      .addSelect('"course"."name" AS "courseName"')
+      .addSelect('"course"."locationName" AS "locationName"')
+      .addSelect('"course"."fullName" AS "courseFullName"')
+      .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
+      .addSelect('"student"."totalScore" AS "totalScore"')
+      .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
+      .addSelect('"userMentor"."lastName" AS "mentorLastName"')
+      .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
+      .addSelect('"certificate"."publicId" AS "certificateId"');
+
+    query
+      .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
+      .leftJoin(Certificate, 'certificate', '"certificate"."studentId" = "student"."id"')
+      .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"')
+      .leftJoin(Mentor, 'mentor', '"mentor"."id" = "student"."mentorId"')
+      .leftJoin(User, 'userMentor', '"userMentor"."id" = "mentor"."userId"');
+
+    query
+      .where('"user"."githubId" = :githubId', { githubId })
+      .andWhere('"student"."isExpelled" != :expelled', { expelled: true })
+      .groupBy('"course"."id", "student"."id", "userMentor"."id", "certificate"."publicId"')
+      .orderBy('"course"."endDate"', 'DESC');
+
+    const rawStats = await query.getRawMany();
+
+    const studentStats = rawStats.map(
+      ({
+        courseId,
+        courseName,
+        locationName,
+        courseFullName,
+        isCourseCompleted,
+        totalScore,
+        mentorFirstName,
+        mentorLastName,
+        mentorGithubId,
+        certificateId,
+      }: any) => {
+        return {
+          courseId,
+          courseName,
+          locationName,
+          courseFullName,
+          isCourseCompleted,
+          totalScore,
+          certificateId,
+          position: null,
+          mentor: {
+            githubId: mentorGithubId,
+            name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
+          },
+        };
+      },
+    );
+
+    const studentPositions = await Promise.all(
+      studentStats.map(async ({ totalScore, courseId }: { totalScore: number; courseId: number }) => {
+        const rawPositions = await getRepository(Student)
+          .createQueryBuilder('student')
+          .select('"student"."courseId" AS "courseId"')
+          .addSelect('COUNT(*) AS "position"')
+          .where('"student"."courseId" = :courseId', { courseId })
+          .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
+          .groupBy('"student"."courseId"')
+          .getRawMany();
+        return rawPositions.map(({ position }) => ({ position: Number(position) }))[0];
+      }),
+    );
+
+    return studentStats.map((stats, idx) => ({ ...omit(stats, ['courseId']), ...studentPositions[idx] }));
   }
 
   public async save(students: Partial<Student>[]) {

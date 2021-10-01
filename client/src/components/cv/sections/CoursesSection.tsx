@@ -32,6 +32,7 @@ function CoursesSection(props: Props) {
   const sectionContent = (
     <List
       dataSource={courses}
+      size="small"
       renderItem={(record: CVStudentStats) => {
         const {
           courseFullName,
@@ -78,7 +79,7 @@ function CoursesSection(props: Props) {
     />
   );
 
-  return <SectionCV content={sectionContent} title="RSS courses" icon={<SafetyOutlined />} />;
+  return <SectionCV content={sectionContent} title="RS School Courses" icon={<SafetyOutlined />} />;
 }
 
 export default CoursesSection;

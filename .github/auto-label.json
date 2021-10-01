@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "client": ["client/"],
+    "server": ["server/"],
+    "dependencies": "package.json"
+  }
+}
