@@ -52,3 +52,8 @@ jobs:
       - name: Build (npm run ci:build)
         run: |
           npm run ci:build
+
+      - name: Auto Label
+        uses: banyan/auto-label@1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
