@@ -45,13 +45,18 @@ jobs:
           npm run ci:format
           npm run ci:lint
 
-      - name: Test (npm test)
-        run: |
-          npm test
+      - name: Test (client)
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: client
+
+      - name: Test (server)
+        run: npm test
+        working-directory: server
 
       - name: Build (npm run ci:build)
-        run: |
-          npm run ci:build
+        run: npm run ci:build
 
       - name: Auto Label
         uses: banyan/auto-label@1.2
