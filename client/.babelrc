@@ -1,9 +1,5 @@
 {
-  "presets": [
-    [
-      "next/babel"
-    ]
-  ],
+  "presets": ["next/babel"],
   "plugins": [
     [
       "@babel/plugin-proposal-decorators",
@@ -11,5 +7,10 @@
         "legacy": true
       }
     ]
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["styled-jsx/babel"]
+    }
+  }
 }

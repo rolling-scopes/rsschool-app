@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Col, Comment, Divider, Row } from 'antd';
-import { GithubUserLink } from 'components';
+import { GithubUserLink } from 'components/GithubUserLink';
 
 type Props = {
   comments: {
