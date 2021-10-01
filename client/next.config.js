@@ -13,11 +13,11 @@ const nextConfig = {
   },
   assetPrefix: isProd ? 'https://cdn.rs.school' : '',
   webpack: config => {
-    config.resolve.alias['configs'] = path.join(__dirname, 'configs');
-    config.resolve.alias['components'] = path.join(__dirname, 'components');
-    config.resolve.alias['services'] = path.join(__dirname, 'services');
-    config.resolve.alias['utils'] = path.join(__dirname, 'utils');
-    config.resolve.alias['domain'] = path.join(__dirname, 'domain');
+    config.resolve.alias['configs'] = path.join(__dirname, 'src/configs');
+    config.resolve.alias['components'] = path.join(__dirname, 'src/components');
+    config.resolve.alias['services'] = path.join(__dirname, 'src/services');
+    config.resolve.alias['utils'] = path.join(__dirname, 'src/utils');
+    config.resolve.alias['domain'] = path.join(__dirname, 'src/domain');
     config.plugins.push(new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/));
     return config;
   },
