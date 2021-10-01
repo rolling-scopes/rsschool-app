@@ -15,6 +15,7 @@
     "ci:build": "tsc",
     "prod": "next start -p 8080",
     "test": "jest",
+    "test:ci": "jest --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage"
   },

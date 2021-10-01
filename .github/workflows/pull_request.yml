@@ -49,9 +49,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: client
+          test-script: npm run test:ci
 
       - name: Test (server)
-        run: npm test
+        run: npm run test:ci
         working-directory: server
 
       - name: Build (npm run ci:build)
