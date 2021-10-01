@@ -1,4 +1,5 @@
 module.exports = {
+  rootDir: 'src',
   setupFiles: ['<rootDir>/__mocks__/setupJest.ts'],
   moduleNameMapper: {
     '^components(.*)$': '<rootDir>/components/$1',

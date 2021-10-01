@@ -2,6 +2,7 @@
 yarn-error.log
 client/dist
 client/node_modules
+client/.next
 client/src/.next
 node_modules/
 server/.env
@@ -9,9 +10,6 @@ server/.env.aws
 server/dist
 server/dist
 server/node_modules
-serverless/**/node_modules
-serverless/**/.serverless
-serverless/**/.build
 .idea
 .DS_Store
 coverage
