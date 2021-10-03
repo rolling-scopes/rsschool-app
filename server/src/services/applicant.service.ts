@@ -1,12 +1,13 @@
+import { getCustomRepository } from 'typeorm';
 import { Resume } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
 
 export class ApplicantService {
-  private resumeRepository = new ResumeRepository();
-  private feedbackRespository = new FeedbackRepository();
-  private studentRepository = new StudentRepository();
+  private resumeRepository = getCustomRepository(ResumeRepository);
+  private feedbackRespository = getCustomRepository(FeedbackRepository);
+  private studentRepository = getCustomRepository(StudentRepository);
 
   public async getApplicants(visibleOnly: boolean) {
     const profiles = await this.resumeRepository.findActive(visibleOnly);
