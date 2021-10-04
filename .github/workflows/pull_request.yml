@@ -50,6 +50,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: client
           test-script: npm run test:ci
+          skip-step: install
 
       - name: Test (server)
         run: npm run test:ci
