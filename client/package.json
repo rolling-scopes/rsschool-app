@@ -3,11 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "browserslist": [
-    "chrome >= 64",
-    "firefox >= 57",
-    "ie >= 11",
-    "safari >= 11",
-    "edge >= 14"
+    "> 1%"
   ],
   "scripts": {
     "start": "node server.js",
