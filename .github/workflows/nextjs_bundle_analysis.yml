@@ -9,11 +9,11 @@ on:
 
 defaults:
   run:
-    # change this if your nextjs app does not live at the root of the repo
     working-directory: ./
 
 jobs:
   analyze:
+    name: Analyze Next.js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
