@@ -21,6 +21,6 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           artifact: test-report-server
-          name: Test Report (Client)
+          name: Test Report (Server)
           path: '*.xml'
           reporter: jest-junit
