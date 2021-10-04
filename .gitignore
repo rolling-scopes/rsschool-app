@@ -6,4 +6,4 @@ dist/
 .env*
 .idea
 coverage
-client/report.json
+reports/*.xml
