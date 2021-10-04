@@ -1,0 +1,25 @@
+name: 'Test Reports'
+on:
+  workflow_run:
+    workflows: ['Pull Request CI']
+    types:
+      - completed
+jobs:
+  report_client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Client Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results-client # artifact name
+          name: Client Jest Tests # Name of the check run which will be created
+          path: '*.xml' # Path to test results (inside artifact .zip)
+          reporter: jest-junit # Format of test results
+
+      - name: Server Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results-server # artifact name
+          name: Server Jest Tests # Name of the check run which will be created
+          path: '*.xml' # Path to test results (inside artifact .zip)
+          reporter: jest-junit # Format of test results
