@@ -4,8 +4,12 @@ on:
   pull_request:
     branches: [master]
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
-  check:
+  lint:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -38,10 +42,40 @@ jobs:
           npm run ci:format
           npm run ci:lint
 
-      - name: Build (npm run ci:build)
-        run: npm run ci:build
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
-  tests:
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Format & Lint (npm run ci:lint && npm run ci:format)
+        run: |
+          npm run ci:format
+          npm run ci:lint
+
+  test:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job

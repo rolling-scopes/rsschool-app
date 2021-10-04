@@ -5,21 +5,19 @@ on:
     types:
       - completed
 jobs:
-  report_client:
+  reports:
     runs-on: ubuntu-latest
     steps:
-      - name: Client Test Report
-        uses: dorny/test-reporter@v1
+      - uses: dorny/test-reporter@v1
         with:
-          artifact: test-results-client # artifact name
-          name: Client Jest Tests # Name of the check run which will be created
-          path: '*.xml' # Path to test results (inside artifact .zip)
-          reporter: jest-junit # Format of test results
+          artifact: test-results-client
+          name: client test report
+          path: '*.xml'
+          reporter: jest-junit
 
-      - name: Server Test Report
-        uses: dorny/test-reporter@v1
+      - uses: dorny/test-reporter@v1
         with:
-          artifact: test-results-server # artifact name
-          name: Server Jest Tests # Name of the check run which will be created
-          path: '*.xml' # Path to test results (inside artifact .zip)
-          reporter: jest-junit # Format of test results
+          artifact: test-results-server
+          name: server test report
+          path: '*.xml'
+          reporter: jest-junit
