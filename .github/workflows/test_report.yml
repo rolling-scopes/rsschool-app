@@ -1,0 +1,23 @@
+name: 'Test Reports'
+on:
+  workflow_run:
+    workflows: ['Pull Request CI']
+    types:
+      - completed
+jobs:
+  reports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results-client
+          name: client test report
+          path: '*.xml'
+          reporter: jest-junit
+
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results-server
+          name: server test report
+          path: '*.xml'
+          reporter: jest-junit
