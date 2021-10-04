@@ -7,10 +7,6 @@ on:
     branches: [master]
     types: [opened, synchronize]
 
-defaults:
-  run:
-    working-directory: ./
-
 jobs:
   analyze:
     name: Analyze Next.js
@@ -39,7 +35,7 @@ jobs:
         env:
           cache-name: cache-next
         with:
-          path: client/.next/cache/
+          path: ./client/.next/cache/
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
