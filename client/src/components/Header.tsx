@@ -49,7 +49,7 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      <Menu.Item key="2" hidden>
+      <Menu.Item key="2">
         <Button type="link" href={`/cv/${username}`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
         </Button>
