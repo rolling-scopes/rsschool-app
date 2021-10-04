@@ -9,11 +9,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    # The type of runner that the job will run on
+  pr_lint:
+    name: Lint and Format
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
@@ -56,11 +54,9 @@ jobs:
           npm run ci:format
           npm run ci:lint
 
-  build:
-    # The type of runner that the job will run on
+  pr_build:
+    name: Build
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
@@ -103,7 +99,8 @@ jobs:
           npm run ci:format
           npm run ci:lint
 
-  test:
+  pr_test:
+    name: Test
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -157,17 +154,18 @@ jobs:
         uses: actions/upload-artifact@v2
         if: success() || failure()
         with:
-          name: test-results-client
+          name: test-report-client
           path: reports/jest-junit-client.xml
 
       - name: Upload test report (server)
         uses: actions/upload-artifact@v2
         if: success() || failure()
         with:
-          name: test-results-server
+          name: test-report-server
           path: reports/jest-junit-server.xml
 
-  auto_label:
+  pr_auto_label:
+    name: Auto Label
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
