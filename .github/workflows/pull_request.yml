@@ -34,6 +34,20 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: |
+            node_modules
+            client/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
       - name: Install dependencies
         run: npm install
 
@@ -67,6 +81,20 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: |
+            node_modules
+            client/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
       - name: Install dependencies
         run: npm install
 
@@ -94,6 +122,20 @@ jobs:
           cache-name: cache-npm
         with:
           path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: |
+            node_modules
+            client/node_modules
+            server/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
