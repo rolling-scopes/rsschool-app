@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  check:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -50,6 +50,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: client
           test-script: npm run test:ci
+          skip-step: install
 
       - name: Test (server)
         run: npm run test:ci
@@ -57,6 +58,20 @@ jobs:
 
       - name: Build (npm run ci:build)
         run: npm run ci:build
+
+  auto_label:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Auto Label
         uses: banyan/auto-label@1.2
