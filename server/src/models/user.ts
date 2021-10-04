@@ -132,10 +132,7 @@ export class User {
   @Column({ nullable: true })
   contactsNotes?: string;
 
-  @Column({
-    type: 'json',
-    default: null,
-  })
+  @Column({ type: 'json', nullable: true })
   discord: Discord | null;
 
   @Column({ nullable: true })

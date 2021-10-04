@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
-import { ExclamationCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const { Paragraph, Title } = Typography;
 const { Item } = List;
@@ -26,10 +26,10 @@ function NoConsentViewCV(props: Props) {
     ru: {
       header: 'Вы уверены? Следующая информация будет доступна рекрутерам:',
       availableDataList: [
-        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военное службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.);',
-        'Контактные данные (телефон, электронная почта, скайп, телеграм, linkedIn, локация, в которой хотите работать, гитхаб, ссылка на вебсайт);',
+        'Личная информация (имя, желаемая позиция, уровень английского, отношение к военной службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.);',
+        'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, Github, ссылка на веб-сайт);',
         'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре);',
-        'Информация о публичной обратной связи (gratitudes)',
+        'Информация о публичной обратной связи (отзывы в RSApp)',
       ],
     },
   };
@@ -58,8 +58,7 @@ function NoConsentViewCV(props: Props) {
 
   const showConfirmationModal = () => {
     Modal.confirm({
-      icon: <ExclamationCircleOutlined />,
-      title: 'Are you sure?',
+      icon: null,
       content: confirmationModalContent,
       maskClosable: true,
       onOk() {

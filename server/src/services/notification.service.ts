@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { config } from '../config';
 import { Consent, ChannelType, CourseTask } from '../models';
 import { courseService } from '.';
-import { ConsentRepository } from '../repositories/consent';
+import { ConsentRepository } from '../repositories/consent.repository';
 import { getCustomRepository } from 'typeorm';
 
 export async function renderMentorConfirmationText(preselectedCourseIds: number[]) {

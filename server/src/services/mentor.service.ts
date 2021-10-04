@@ -1,11 +1,12 @@
 import { getCustomRepository, getRepository } from 'typeorm';
 import { userService } from './index';
-import { MentorRepository } from '../repositories/mentor';
-import { StudentRepository } from '../repositories/student';
+import { MentorRepository } from '../repositories/mentor.repository';
+import { StudentRepository } from '../repositories/student.repository';
 import { createMentorStudentPairs } from '../rules/mentors';
 import { OperationResult } from './operationResult';
 import { Mentor } from '../models';
 import { ILogger } from '../logger';
+import { MentorDetails } from './course.service';
 
 export class MentorService {
   private studentRepository = getCustomRepository(StudentRepository);
@@ -48,5 +49,10 @@ export class MentorService {
       result.push({ status: 'created', value: savedMentor.id });
     }
     return result;
+  }
+
+  public async getMentorsWithStats(): Promise<MentorDetails[]> {
+    const mentors = this.mentorRepository.findExtended(this.courseId);
+    return mentors;
   }
 }

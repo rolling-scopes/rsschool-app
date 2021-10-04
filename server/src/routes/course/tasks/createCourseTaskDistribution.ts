@@ -3,9 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
 import { CourseTask, TaskChecker } from '../../../models';
-import { MentorRepository } from '../../../repositories/mentor';
-import { createCrossMentorPairs } from '../../../rules/distribution';
+import { MentorRepository } from '../../../repositories/mentor.repository';
+import { CrossMentorDistributionService } from '../../../services/distribution';
 import { setResponse } from '../../utils';
+
+const crossMentorDistributionService = new CrossMentorDistributionService();
 
 export const createCourseTaskDistribution = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseTaskId = Number(ctx.params.courseTaskId);
@@ -35,7 +37,7 @@ export const createCourseTaskDistribution = (logger: ILogger) => async (ctx: Rou
 
   const existingPairs = await checkerRepository.find({ courseTaskId });
 
-  const { mentors: crossMentors } = createCrossMentorPairs(mentors, existingPairs);
+  const { mentors: crossMentors } = crossMentorDistributionService.distribute(mentors, existingPairs);
 
   const taskCheckPairs = crossMentors
     .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
+import Link from 'next/link';
 import { ToolTwoTone } from '@ant-design/icons';
 import { Alert, Button, Col, Layout, List, Row, Select, Typography } from 'antd';
 import { AdminSider, FooterLayout, Header } from 'components';
 import { Session } from 'components/withSession';
-import { isAnyCoursePowerUserManager } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
@@ -19,7 +19,7 @@ import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
 import { Alert as AlertType } from 'domain/alerts';
-import { isAdmin } from 'domain/user';
+import { isAdmin, isAnyCoursePowerUserManager, isHirer } from 'domain/user';
 
 const { Content } = Layout;
 
@@ -41,6 +41,7 @@ export function HomePage(props: Props) {
 
   const isAdminUser = isAdmin(props.session);
   const isCoursePowerUser = isAnyCoursePowerUserManager(props.session);
+  const isHirerUser = isHirer(props.session);
   const isPowerUser = isAdminUser || isCoursePowerUser;
 
   const courses = getCourses(props.session, props.courses ?? []);
@@ -94,7 +95,7 @@ export function HomePage(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isCoursePowerUser} />}
+      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isCoursePowerUser} isHirer={isHirerUser} />}
 
       <Layout style={{ background: '#fff' }}>
         <Header username={props.session.githubId} />
@@ -121,7 +122,13 @@ export function HomePage(props: Props) {
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
           {activeCourse && (
-            <Select style={{ width: 250, marginBottom: 16 }} defaultValue={activeCourse.id} onChange={handleChange}>
+            <Select
+              showSearch
+              optionFilterProp="children"
+              style={{ width: 250, marginBottom: 16 }}
+              defaultValue={activeCourse.id}
+              onChange={handleChange}
+            >
               {courses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
                   {course.name} ({getStatus(course)})
@@ -138,9 +145,11 @@ export function HomePage(props: Props) {
                 dataSource={courseLinks}
                 renderItem={(linkInfo: LinkRenderData) => (
                   <List.Item key={linkInfo.url}>
-                    <a href={linkInfo.url}>
-                      {linkInfo.icon} {linkInfo.name}
-                    </a>
+                    <Link href={linkInfo.url}>
+                      <a>
+                        {linkInfo.icon} {linkInfo.name}
+                      </a>
+                    </Link>
                   </List.Item>
                 )}
               />
@@ -158,9 +167,11 @@ export function HomePage(props: Props) {
                   dataSource={adminLinks}
                   renderItem={(linkInfo: LinkRenderData) => (
                     <List.Item key={linkInfo.url}>
-                      <a href={linkInfo.url}>
-                        {linkInfo.icon} {linkInfo.name}
-                      </a>
+                      <Link href={linkInfo.url}>
+                        <a>
+                          {linkInfo.icon} {linkInfo.name}
+                        </a>
+                      </Link>
                     </List.Item>
                   )}
                 />

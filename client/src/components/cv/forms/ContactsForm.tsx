@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Form, Input, Card } from 'antd';
 import { Contacts } from '../../../../../common/models/cv';
-import { Rule } from 'rc-field-form/lib/interface';
+import { contactsValidationRules as validationRules } from './form-validation';
 
 const { Item } = Form;
+const { TextArea } = Input;
 
 type Props = {
   contactsList: Contacts;
@@ -16,102 +17,11 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
 
   React.useEffect(() => {
     form.setFieldsValue(contactsList);
+    form.validateFields();
   }, [contactsList]);
 
   const itemStyle = {
     maxWidth: '310px',
-  };
-
-  const validationMessages = {
-    required: "Field can't be empty",
-    min: (length: number): string => `Mininal text length is ${length}`,
-    max: (length: number): string => `Maximal text length is ${length}`,
-    whitespace: "Field can't contain only whitespaces",
-  };
-
-  const validationRules: {
-    [key: string]: Rule[];
-  } = {
-    phone: [
-      {
-        max: 15,
-        message: validationMessages.max(15),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    email: [
-      {
-        max: 50,
-        message: validationMessages.max(50),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    skype: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    telegram: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    linkedin: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    location: [
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    github: [
-      {
-        max: 30,
-        message: validationMessages.max(30),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
-    website: [
-      {
-        max: 100,
-        message: validationMessages.max(100),
-      },
-      {
-        whitespace: true,
-        message: validationMessages.whitespace,
-      },
-    ],
   };
 
   return (
@@ -169,13 +79,16 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
         </Item>
         <Item
           style={itemStyle}
-          label="Location"
+          label="Locations (each from new line)"
           wrapperCol={{ span: 24 }}
           labelCol={{ span: 24 }}
-          name="location"
-          rules={[...validationRules['location']]}
+          name="locations"
+          rules={[...validationRules['locations']]}
         >
-          <Input placeholder="The location in which you want to work" />
+          <TextArea
+            rows={4}
+            placeholder="The locations in which you want to work (maximum 3, separated by semicolons)"
+          />
         </Item>
         <Item
           style={itemStyle}

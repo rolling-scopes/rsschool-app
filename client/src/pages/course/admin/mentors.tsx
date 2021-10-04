@@ -1,4 +1,4 @@
-import { Button, Divider, message, Row, Statistic, Table } from 'antd';
+import { Button, Divider, message, Row, Statistic, Table, Popconfirm } from 'antd';
 import { PageLayout, withSession } from 'components';
 import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
@@ -8,7 +8,7 @@ import { useAsync } from 'react-use';
 import { CourseService, MentorDetails } from 'services/course';
 import { relativeDays } from 'services/formatter';
 import { CoursePageProps } from 'services/models';
-import { SyncOutlined } from '@ant-design/icons';
+import { SyncOutlined, FileExcelOutlined } from '@ant-design/icons';
 
 type Stats = {
   recordCount: number;
@@ -62,12 +62,23 @@ function Page(props: CoursePageProps) {
     });
   }, []);
 
-  const handleExpell = async ({ githubId }: MentorDetails) => {
+  const handleExpel = async ({ githubId }: MentorDetails) => {
     try {
       setLoading(true);
       await service.expelMentor(githubId);
-      const records = mentors.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r));
-      setMentors(records);
+      setMentors(prevRecords => prevRecords.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r)));
+    } catch (e) {
+      message.error('An error occured. Please try later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRestore = async ({ githubId }: MentorDetails) => {
+    try {
+      setLoading(true);
+      await service.restoreMentor(githubId);
+      setMentors(prevRecords => prevRecords.map(r => (r.githubId === githubId ? { ...r, isActive: true } : r)));
     } catch (e) {
       message.error('An error occured. Please try later.');
     } finally {
@@ -85,6 +96,8 @@ function Page(props: CoursePageProps) {
       setLoading(false);
     }
   };
+
+  const exportToCsv = () => (window.location.href = `/api/course/${courseId}/mentors/details/csv`);
 
   return (
     <PageLayout
@@ -134,10 +147,13 @@ function Page(props: CoursePageProps) {
         <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
           Sync with GitHub Teams
         </Button>
+        <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
+          Export CSV
+        </Button>
       </Row>
       <Table<MentorDetails>
         rowKey="githubId"
-        rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
+        rowClassName={record => (!record.isActive ? 'rs-table-row-cols-disabled' : '')}
         pagination={{ pageSize: 100 }}
         size="small"
         dataSource={mentors}
@@ -179,16 +195,18 @@ function Page(props: CoursePageProps) {
             width: 80,
           },
           {
-            title: 'Tech Screenings',
-            dataIndex: ['interviews', 'techScreeningsCount'],
-            sorter: numberSorter('interviews.techScreeningsCount' as any),
+            title: 'Screenings',
+            dataIndex: ['screenings'],
+            sorter: numberSorter('screenings.completed' as any),
             width: 80,
+            render: (value: any) => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Interviews',
-            dataIndex: ['interviews', 'interviewsCount'],
-            sorter: numberSorter('interviews.interviewsCount' as any),
+            dataIndex: ['interviews'],
+            sorter: numberSorter('interviews.completed' as any),
             width: 80,
+            render: (value: any) => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Students',
@@ -211,14 +229,31 @@ function Page(props: CoursePageProps) {
           {
             title: 'Actions',
             dataIndex: 'actions',
-            render: (_: string, mentor: MentorDetails) => (
-              <>
-                <Button type="link" onClick={() => handleExpell(mentor)}>
-                  Expel
-                </Button>
-                <AssignStudentModal courseId={courseId} mentorGithuId={mentor.githubId} />
-              </>
-            ),
+            render: (_: string, mentor: MentorDetails) =>
+              mentor.isActive ? (
+                <>
+                  <Popconfirm
+                    onConfirm={() => handleExpel(mentor)}
+                    title="Do you want to exclude a mentor from this course?"
+                  >
+                    <Button type="link" href="#">
+                      Expel
+                    </Button>
+                  </Popconfirm>
+                  <AssignStudentModal courseId={courseId} mentorGithuId={mentor.githubId} />
+                </>
+              ) : (
+                <>
+                  <Popconfirm
+                    onConfirm={() => handleRestore(mentor)}
+                    title="Do you want to restore mentor for this course?"
+                  >
+                    <Button type="link" href="#">
+                      Restore
+                    </Button>
+                  </Popconfirm>
+                </>
+              ),
           },
         ]}
       />

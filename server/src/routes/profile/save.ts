@@ -6,7 +6,7 @@ import { ProfilePermissions, User, Consent } from '../../models';
 import { SaveProfileInfo } from '../../../../common/models/profile';
 import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
-import { ConsentRepository } from '../../repositories/consent';
+import { ConsentRepository } from '../../repositories/consent.repository';
 
 export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { id: userId } = ctx.state!.user as IUserSession;

@@ -3,6 +3,7 @@ import { Typography } from 'antd';
 import { GithubAvatar } from 'components';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
 import { isArray } from 'lodash';
+import Link from 'next/link';
 import { StudentScore } from 'services/course';
 
 const { Text } = Typography;
@@ -49,7 +50,11 @@ export function getColumns(props: Props) {
       dataIndex: 'name',
       width: 150,
       sorter: 'name',
-      render: (value: any, record: StudentScore) => <a href={`/profile?githubId=${record.githubId}`}>{value}</a>,
+      render: (value: any, record: StudentScore) => (
+        <Link href={`/profile?githubId=${record.githubId}`}>
+          <a>{value}</a>
+        </Link>
+      ),
       ...getColumnSearchProps('name'),
     },
     {
@@ -95,7 +100,11 @@ export function getColumns(props: Props) {
       width: 150,
       sorter: 'mentor',
       defaultFilteredValue: mentor ? (isArray(mentor) ? mentor : [mentor]) : undefined,
-      render: (value: string) => <a href={`/profile?githubId=${value}`}>{value}</a>,
+      render: (value: string) => (
+        <Link href={`/profile?githubId=${value}`}>
+          <a>{value}</a>
+        </Link>
+      ),
       ...getColumnSearchProps('mentor.githubId'),
     },
     {

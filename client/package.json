@@ -11,23 +11,24 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "build": "next build src",
-    "ci:build": "tsc -p ./src/tsconfig.json",
+    "build": "next build",
+    "ci:build": "tsc",
     "prod": "next start -p 8080",
-    "test": "jest --config=./src/jest.config.js",
-    "test-watch": "jest --config=./src/jest.config.js --watch",
-    "coverage": "jest --coverage --config=./src/jest.config.js"
+    "test": "jest",
+    "test:ci": "jest --silent --ci --coverage --json --outputFile=report.json --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "antd": "~4.16.7",
-    "axios": "~0.21.1",
+    "axios": "~0.21.4",
     "chart.js": "2.9.4",
     "csvtojson": "~2.0.10",
     "lodash": "~4.17.21",
     "mobile-device-detect": "^0.4.3",
     "moment": "~2.29.1",
     "moment-timezone": "~0.5.33",
-    "next": "~11.1.0",
+    "next": "~11.1.2",
     "next-transpile-modules": "~8.0.0",
     "qs": "^6.9.4",
     "react": "~17.0.2",
@@ -62,9 +63,14 @@
     "enzyme": "~3.11.0",
     "enzyme-to-json": "~3.6.2",
     "express": "~4.17.1",
-    "http-proxy-middleware": "~0.19.1",
-    "jest": "~26.6.3",
+    "http-proxy-middleware": "~2.0.1",
+    "jest": "~27.2.2",
     "ts-jest": "~26.5.6",
     "typescript": "~4.3.5"
+  },
+  "nextBundleAnalysis": {
+    "budget": 512000,
+    "budgetPercentIncreaseRed": 5,
+    "showDetails": true
   }
 }

@@ -5,8 +5,8 @@ import { config } from '../config';
 import { ILogger } from '../logger';
 import { Course, Student } from '../models';
 import { courseService } from '../services';
-import { StudentRepository } from '../repositories/student';
-import { MentorRepository } from '../repositories/mentor';
+import { StudentRepository } from '../repositories/student.repository';
+import { MentorRepository } from '../repositories/mentor.repository';
 import { MentorBasic } from '../../../common/models';
 
 export class RepositoryService {
@@ -66,7 +66,7 @@ export class RepositoryService {
     if (!course) {
       return;
     }
-    const students = await getCustomRepository(StudentRepository).findWithRepository(this.courseId);
+    const students = await getCustomRepository(StudentRepository).findAndIncludeRepository(this.courseId);
     for (const githubId of students) {
       const owner = config.github.org;
       const repo = RepositoryService.getRepoName(githubId, course);

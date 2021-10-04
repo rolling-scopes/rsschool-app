@@ -33,6 +33,15 @@ body,
   opacity: 0.25;
 }
 
+.rs-table-row-cols-disabled td:not(.rs-table-row-cols-disabled td:last-of-type) {
+  opacity: 0.25;
+  border-bottom: 1px solid #cacaca;
+}
+
+.ant-table-tbody .rs-table-row-cols-disabled:hover td:last-of-type {
+  background: rgba(250, 250, 250, 0.25);
+}
+
 div.ant-table-column-sorters {
   padding: 0;
 }
@@ -67,4 +76,10 @@ thead.ant-table-thead > tr > th {
 
 .table-row-dark {
   background-color: #e6f7ff;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }

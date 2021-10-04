@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
+import { User } from './user';
 
 type ScoreRecord = {
   score: number;
@@ -60,4 +61,10 @@ export class TaskResult {
 
   @Column({ nullable: true })
   comment?: string;
+
+  @ManyToOne(_ => User)
+  lastChecker?: User;
+
+  @Column({ nullable: true })
+  lastCheckerId?: number;
 }

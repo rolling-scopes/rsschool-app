@@ -19,8 +19,8 @@ import {
   CourseRole,
 } from '../models';
 import { createName } from './user.service';
-import { StageInterviewRepository } from '../repositories/stageInterview';
-import { MentorRepository } from '../repositories/mentor';
+import { StageInterviewRepository } from '../repositories/stageInterview.repository';
+import { MentorRepository } from '../repositories/mentor.repository';
 import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
@@ -31,6 +31,15 @@ export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.cityName`,
   `${modelName}.countryName`,
   `${modelName}.discord`,
+];
+
+export const getContactsUserFields = (modelName = 'user') => [
+  `${modelName}.primaryEmail`,
+  `${modelName}.contactsPhone`,
+  `${modelName}.contactsEmail`,
+  `${modelName}.contactsTelegram`,
+  `${modelName}.contactsLinkedIn`,
+  `${modelName}.contactsSkype`,
 ];
 
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
@@ -76,9 +85,13 @@ export interface MentorDetails extends MentorBasic {
   countryName: string;
   maxStudentsLimit: number;
   studentsPreference: 'any' | 'city' | 'country';
-  interviews: {
-    techScreeningsCount?: number;
-    interviewsCount?: number;
+  interviews?: {
+    completed?: number;
+    total?: number;
+  };
+  screenings?: {
+    completed?: number;
+    total?: number;
   };
   studentsCount?: number;
   taskResultsStats?: {
@@ -147,8 +160,8 @@ export function convertToMentorDetails(mentor: Mentor): MentorDetails {
     maxStudentsLimit: mentor.maxStudentsLimit,
     studentsPreference: mentor.studentsPreference ?? 'any',
     studentsCount: mentor.students ? mentor.students.length : 0,
-    interviews: {
-      techScreeningsCount: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
+    screenings: {
+      total: mentor.stageInterviews ? mentor.stageInterviews.length : 0,
     },
   };
 }
@@ -193,6 +206,13 @@ export async function expelMentor(courseId: number, githubId: string) {
     await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
     await getRepository(Mentor).update(mentor.id, { isExpelled: true });
     await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
+  }
+}
+
+export async function restoreMentor(courseId: number, githubId: string) {
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
   }
 }
 
