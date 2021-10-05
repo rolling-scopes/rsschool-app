@@ -78,9 +78,9 @@ export function ScoreTable(props: Props) {
     } finally {
       props.onLoading(false);
     }
-  }, []);
+  }, [props.activeOnly]);
 
-  useEffect(() => loadInitialData() as any, []);
+  useEffect(() => loadInitialData() as any, [props.activeOnly]);
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
 
