@@ -27,6 +27,10 @@ function Page(props: Props) {
   const [jobSeekers, setJobSeekers] = useState<JobSeekerData[] | null>(null);
   const [areHiddenJobSeekersShown, setHiddenJobSeekersShown] = useState<boolean>(false);
 
+  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
+
+  const hasPriorityRole = isAdmin || isHirer;
+
   const cvService = new OpportunitiesService();
 
   const countBadges = (badges: JobSeekerFeedback[]) => {
@@ -299,12 +303,10 @@ function Page(props: Props) {
   };
 
   useEffect(() => {
-    fetchData();
+    if (hasPriorityRole) fetchData();
   }, []);
 
-  const { isAdmin, isHirer, githubId: userGithubId } = props.session;
-
-  if (!(isAdmin || isHirer))
+  if (!hasPriorityRole)
     return (
       <>
         <Header username={userGithubId} />

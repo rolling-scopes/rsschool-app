@@ -106,7 +106,7 @@ export class ResumeService {
     }
 
     const isHidden = !isVisible;
-    await this.resumeRepository.save(this.githubId, { isHidden });
+    await this.resumeRepository.save(this.githubId, { isHidden, id: resume.id });
     return isHidden;
   }
 }

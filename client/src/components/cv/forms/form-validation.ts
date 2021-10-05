@@ -1,5 +1,4 @@
 import { Rule } from 'rc-field-form/lib/interface';
-import { phonePattern } from 'services/validators';
 
 const validationMessages = {
   required: "Field can't be empty",
@@ -19,6 +18,10 @@ const contactsValidationRules: {
     },
     () => ({
       async validator(_, value) {
+        /* phonePattern is created inside of the validation function
+        due to a bug where the validation does not work correctly
+        if the phonePattern is taken from the upper scope */
+        const phonePattern = /^\+[1-9]{1}[0-9]{3,14}$/gi;
         if (!value || phonePattern.test(value)) {
           return Promise.resolve();
         }
