@@ -5,11 +5,7 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
-  workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: ./
+    types: [opened, synchronize]
 
 jobs:
   analyze:
@@ -39,7 +35,7 @@ jobs:
         env:
           cache-name: cache-next
         with:
-          path: client/.next/cache/
+          path: ./client/.next/cache/
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-

@@ -16,7 +16,7 @@ import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 
 type Props = CoursePageProps & {
-  onLoading: (balue: boolean) => void;
+  onLoading: (value: boolean) => void;
   activeOnly: boolean;
 };
 
@@ -78,9 +78,9 @@ export function ScoreTable(props: Props) {
     } finally {
       props.onLoading(false);
     }
-  }, []);
+  }, [activeOnly]);
 
-  useEffect(() => loadInitialData() as any, []);
+  useEffect(() => loadInitialData() as any, [activeOnly]);
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
 
