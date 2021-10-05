@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Popover, Space, Tag } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 import { getColumnSearchProps, stringSorter } from 'components/Table';
 
@@ -7,8 +7,7 @@ export function getQuestionsColumns(
   questionCategories: InterviewQuestionCategory[],
   handleEditQuestion?: (question: InterviewQuestion) => void,
   handleDeleteQuestion?: (id: number) => Promise<void>,
-  addQuestionToModule?: (defaultValue: string) => void,
-  removeQuestionFromModule?: (index: number) => void,
+  addQuestionToModule?: (question: InterviewQuestion) => void,
 ) {
   return [
     {
@@ -60,14 +59,7 @@ export function getQuestionsColumns(
             </Popconfirm>
           )}
           {addQuestionToModule && (
-            <Button
-              size="small"
-              icon={<PlusOutlined size={8} />}
-              onClick={() => addQuestionToModule(question.question)}
-            />
-          )}
-          {removeQuestionFromModule && (
-            <Button size="small" icon={<MinusOutlined size={8} />} onClick={() => removeQuestionFromModule(0)} />
+            <Button size="small" icon={<PlusOutlined size={8} />} onClick={() => addQuestionToModule(question)} />
           )}
         </Space>
       ),

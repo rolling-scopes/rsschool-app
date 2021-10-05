@@ -8,12 +8,11 @@ type Props = {
   categories: InterviewQuestionCategory[];
   isVisible: boolean;
   onCancel: () => void;
-  addQuestionToModule?: (defaultValue: string) => void;
-  removeQuestionFromModule?: (index: number) => void;
+  addQuestionToModule?: (question: InterviewQuestion) => void;
 };
 
 export function ModuleQuestionsModal(props: Props) {
-  const { isVisible, onCancel, questions, categories, addQuestionToModule, removeQuestionFromModule } = props;
+  const { isVisible, onCancel, questions, categories, addQuestionToModule } = props;
 
   return (
     <Modal
@@ -27,12 +26,7 @@ export function ModuleQuestionsModal(props: Props) {
         </Button>,
       ]}
     >
-      <QuestionsTable
-        data={questions}
-        categories={categories}
-        addQuestionToModule={addQuestionToModule}
-        removeQuestionFromModule={removeQuestionFromModule}
-      />
+      <QuestionsTable data={questions} categories={categories} addQuestionToModule={addQuestionToModule} />
     </Modal>
   );
 }

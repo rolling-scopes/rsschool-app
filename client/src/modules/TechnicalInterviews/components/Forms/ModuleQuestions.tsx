@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, Row } from 'antd';
+import { Button, Col, Form, FormInstance, Input, InputNumber, Row } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import { InterviewQuestion, InterviewQuestionCategory } from 'services/models';
 import { useState } from 'react';
@@ -11,6 +11,8 @@ type Props = {
   actions: FormListOperation;
   interviewQuestions: InterviewQuestion[];
   interviewCategories: InterviewQuestionCategory[];
+  form: FormInstance<any>;
+  index: number;
 };
 
 export function ModuleQuestions(props: Props) {
@@ -21,38 +23,41 @@ export function ModuleQuestions(props: Props) {
     setModalQuestionIsVisible(false);
   };
 
+  const handleAddQuestion = (question: InterviewQuestion) => {
+    actions.add({ ...question, weight: 1 });
+  };
+
   return (
     <>
       {moduleQuestions.map(field => {
         return (
-          <Row align="middle" key={field.key}>
-            <Col>
+          <Row align="middle" key={field.key} justify="start" gutter={[8, 0]}>
+            <Col span={8}>
               <Form.Item
                 {...field}
-                name={[field.name, 'name']}
+                name={[field.name, 'question']}
                 fieldKey={[field.fieldKey, 'question']}
+                wrapperCol={{ span: 24 }}
                 label="question"
-                wrapperCol={{ span: 20 }}
-                labelCol={{ span: 16 }}
-                style={{ marginRight: 8, marginBottom: 4 }}
+                style={{ marginBottom: 4 }}
               >
-                <Input disabled />
+                <Input readOnly />
               </Form.Item>
             </Col>
-            <Col>
+            <Col flex="0 1 0">
               <Form.Item
                 {...field}
                 label="weight"
                 name={[field.name, 'weight']}
+                wrapperCol={{ span: 12 }}
+                labelCol={{ span: 12 }}
                 fieldKey={[field.fieldKey, 'weight']}
-                wrapperCol={{ span: 16 }}
-                labelCol={{ span: 16 }}
-                style={{ marginRight: 8, marginBottom: 0 }}
+                style={{ marginBottom: 4 }}
               >
                 <InputNumber min={1} max={5} />
               </Form.Item>
             </Col>
-            <Col>
+            <Col style={{ alignSelf: 'end', marginBottom: '6px' }} className="gutter-row" span={2}>
               <Button size="small" icon={<DeleteOutlined />} danger onClick={() => actions.remove(field.name)} />
             </Col>
           </Row>
@@ -60,11 +65,11 @@ export function ModuleQuestions(props: Props) {
       })}
       <FormItem wrapperCol={{ span: 6 }} style={{ marginTop: 8 }}>
         <Button
-          type="dashed"
+          size="small"
+          type="ghost"
           onClick={() => {
             setModalQuestionIsVisible(true);
           }}
-          block
           icon={<PlusOutlined />}
         >
           Add Question
@@ -75,8 +80,7 @@ export function ModuleQuestions(props: Props) {
         categories={interviewCategories}
         isVisible={modalQuestionIsVisible}
         onCancel={handleModalQuestionCancel}
-        addQuestionToModule={actions.add}
-        removeQuestionFromModule={actions.remove}
+        addQuestionToModule={handleAddQuestion}
       />
     </>
   );

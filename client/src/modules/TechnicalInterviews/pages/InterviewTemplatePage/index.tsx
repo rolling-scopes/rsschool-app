@@ -14,6 +14,15 @@ type Props = {
   interviewCategories: InterviewQuestionCategory[];
 };
 
+const formItemLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 8 },
+};
+const formTailLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 8, offset: 4 },
+};
+
 export function InterviewTemplatePage(props: Props) {
   const { session, interviewQuestions, interviewCategories } = props;
   const router = useRouter();
@@ -30,15 +39,9 @@ export function InterviewTemplatePage(props: Props) {
       <Layout style={{ background: '#fff' }}>
         <Header title="Interview Template" username={props.session.githubId} />
         <Content style={{ margin: 12 }}>
-          <Form
-            size="middle"
-            layout="vertical"
-            form={form}
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 10 }}
-            onFinish={onFinish}
-          >
+          <Form {...formItemLayout} size="middle" layout="vertical" form={form} onFinish={onFinish}>
             <Form.Item
+              {...formTailLayout}
               key="templateName"
               name="templateName"
               label="Template Name"
@@ -51,7 +54,7 @@ export function InterviewTemplatePage(props: Props) {
             <Form.List name="modules">
               {(modules, { add: addModule, remove: removeModule }) => (
                 <>
-                  {modules.map(module => (
+                  {modules.map((module, index) => (
                     <>
                       <Divider />
                       <Form.Item
@@ -73,10 +76,12 @@ export function InterviewTemplatePage(props: Props) {
                           </Col>
                         </Row>
                       </Form.Item>
-                      <FormList name={[module.name, 'moduleQuestions']}>
+                      <FormList name={[module.name, 'moduleQuestions']} initialValue={[]}>
                         {(moduleQuestions, actions) => (
                           <ModuleQuestions
+                            form={form}
                             moduleQuestions={moduleQuestions}
+                            index={index}
                             actions={actions}
                             interviewCategories={interviewCategories}
                             interviewQuestions={interviewQuestions}
@@ -86,14 +91,14 @@ export function InterviewTemplatePage(props: Props) {
                     </>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => addModule()} block icon={<PlusOutlined />}>
+                    <Button type="ghost" size="middle" onClick={() => addModule()} block icon={<PlusOutlined />}>
                       Add Module
                     </Button>
                   </Form.Item>
                 </>
               )}
             </Form.List>
-            <Form.Item>
+            <Form.Item labelCol={{ span: 4 }} wrapperCol={{ span: 8 }}>
               <Button type="primary" htmlType="submit">
                 Submit
               </Button>

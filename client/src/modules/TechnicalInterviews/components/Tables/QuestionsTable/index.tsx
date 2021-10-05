@@ -8,8 +8,7 @@ type Props = {
   handleEditQuestion?: (question: InterviewQuestion) => void;
   loadData?: () => Promise<void>;
   categories: InterviewQuestionCategory[];
-  addQuestionToModule?: (defaultValue: any) => void;
-  removeQuestionFromModule?: (index: number) => void;
+  addQuestionToModule?: (question: InterviewQuestion) => void;
 };
 
 export function QuestionsTable(props: Props) {
@@ -34,7 +33,6 @@ export function QuestionsTable(props: Props) {
         handleEditQuestion,
         !addQuestionToModule ? handleDeleteQuestion : undefined,
         addQuestionToModule,
-        removeQuestionFromModule,
       )}
     />
   );
