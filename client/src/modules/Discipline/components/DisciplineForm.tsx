@@ -26,33 +26,39 @@ export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: ID
     }
   }, [discipline]);
 
-  const saveDiscipline = useCallback(async data => {
-    if (!discipline?.id) {
-      setIsModalVisible(false);
-      const res = await disciplineService.postDiscipline(data);
-      form.resetFields();
-      addDiscipline(dispatch, [res]);
-    } else {
-      setIsModalVisible(false);
-      const res = await disciplineService.updateDiscipline(discipline.id, data);
-      form.resetFields();
-      updateDiscipline(dispatch, [res]);
-    }
-  }, [setIsModalVisible, discipline]);
+  const saveDiscipline = useCallback(
+    async data => {
+      if (!discipline?.id) {
+        setIsModalVisible(false);
+        const res = await disciplineService.postDiscipline(data);
+        form.resetFields();
+        addDiscipline(dispatch, [res]);
+      } else {
+        setIsModalVisible(false);
+        const res = await disciplineService.updateDiscipline(discipline.id, data);
+        form.resetFields();
+        updateDiscipline(dispatch, [res]);
+      }
+    },
+    [setIsModalVisible, discipline],
+  );
 
-  const validateName = useCallback((name: string): boolean => {
-    let isRightName = true;
-    if (disciplines.some(d => d.name === name)) {
-      isRightName = false;
-    }
-    return isRightName;
-  }, [disciplines]);
+  const validateName = useCallback(
+    (name: string): boolean => {
+      let isRightName = true;
+      if (disciplines.some(d => d.name === name)) {
+        isRightName = false;
+      }
+      return isRightName;
+    },
+    [disciplines],
+  );
 
   return (
-    <Form name='discipline' onFinish={saveDiscipline} form={form}>
+    <Form name="discipline" onFinish={saveDiscipline} form={form}>
       <Item
-        name='name'
-        label='Discipline'
+        name="name"
+        label="Discipline"
         rules={[
           {
             required: true,
@@ -62,7 +68,7 @@ export const DisciplineForm = ({ setIsModalVisible, discipline = undefined }: ID
         validateStatus={validateName(disciplineName) ? 'success' : 'error'}
         help={!validateName(disciplineName) && 'Discipline is already exist'}
       >
-        <Input onChange={(e) => setDisciplineName(e.target.value)} />
+        <Input onChange={e => setDisciplineName(e.target.value)} />
       </Item>
     </Form>
   );
