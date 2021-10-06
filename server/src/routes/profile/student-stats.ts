@@ -14,24 +14,7 @@ import {
 } from '../../models';
 import { Permissions } from './permissions';
 
-type StudentPosition = {
-  courseId: number;
-  position: number;
-};
-
-const getStudentPosition = async ({ totalScore, courseId }: StudentStats): Promise<StudentPosition> =>
-  (
-    await getRepository(Student)
-      .createQueryBuilder('student')
-      .select('"student"."courseId" AS "courseId"')
-      .addSelect('COUNT(*) AS "position"')
-      .where('"student"."courseId" = :courseId', { courseId })
-      .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
-      .groupBy('"student"."courseId"')
-      .getRawMany()
-  ).map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
-
-const getStudentStatsWithoutPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
+const getStudentStatsWithPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
   const { isCoreJsFeedbackVisible, isExpellingReasonVisible } = permissions;
 
   const query = await getRepository(Student)
@@ -43,6 +26,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
     .addSelect('"student"."isExpelled" AS "isExpelled"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
     .addSelect('"student"."totalScore" AS "totalScore"')
+    .addSelect('"student"."rank" AS "position"')
     .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
     .addSelect('"userMentor"."lastName" AS "mentorLastName"')
     .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
@@ -129,6 +113,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
       interviewerFirstName,
       interviewerLastName,
       certificateId,
+      position,
     }: any) => {
       const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
         maxScore,
@@ -158,7 +143,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
         totalScore,
         tasks,
         certificateId,
-        position: null,
+        position,
         mentor: {
           githubId: mentorGithubId,
           name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
@@ -169,9 +154,6 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
 };
 
 export const getStudentStats = async (githubId: string, permissions: Permissions) => {
-  const studentStats = await getStudentStatsWithoutPosition(githubId, permissions);
-  const studentPositions = await Promise.all(studentStats.map(stats => getStudentPosition(stats)));
-  const studentStatsWithPositions = studentStats.map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
-
-  return studentStatsWithPositions;
+  const studentStats = await getStudentStatsWithPosition(githubId, permissions);
+  return studentStats;
 };
