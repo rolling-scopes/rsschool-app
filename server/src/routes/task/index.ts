@@ -33,7 +33,7 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
 
     const result = (await getRepository(TaskVerification).findOne(id))!;
 
-    const service = new ScoreService();
+    const service = new ScoreService(0);
     await service.saveScore(result.studentId, result.courseTaskId, {
       comment: result.details,
       score: result.score,

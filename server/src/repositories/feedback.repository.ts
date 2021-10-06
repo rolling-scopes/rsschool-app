@@ -1,5 +1,5 @@
 import { AbstractRepository, EntityRepository, getManager } from 'typeorm';
-import { Feedback } from '../models';
+import { Feedback, User } from '../models';
 import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 
 @EntityRepository(Feedback)
@@ -93,5 +93,24 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
       content,
       count: count.count,
     };
+  }
+
+  public async getResumeFeedback(githubId: string) {
+    return await this.createQueryBuilder('feedback')
+      .select('"feedback"."updatedDate" AS "feedbackDate"')
+      .addSelect('"feedback"."comment" AS "comment"')
+      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+      .where('"user"."githubId" = :githubId', { githubId })
+      .orderBy('"feedback"."updatedDate"', 'DESC')
+      .getRawMany();
+  }
+
+  public async getApplicantFeedback(githubId: string) {
+    return await this.createQueryBuilder('feedback')
+      .select('"feedback"."badgeId" AS "badgeId"')
+      .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
+      .where('"user"."githubId" = :githubId', { githubId })
+      .orderBy('"feedback"."updatedDate"', 'DESC')
+      .getMany();
   }
 }

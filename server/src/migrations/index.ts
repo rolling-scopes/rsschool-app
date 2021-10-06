@@ -4,6 +4,7 @@ import { StudentMigration1630342025950 } from './1630342025950-StudentMigration'
 import { UserMigration1630342266002 } from './1630342266002-UserMigration';
 import { StudentMigration1630347897950 } from './1630347897950-StudentMigration';
 import { Discipline1631623461511 } from './1631623461511-Discipline';
+import { ResumeMigration1632333725126 } from './1632333725126-ResumeMigration';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -12,4 +13,5 @@ export const migrations = [
   UserMigration1630342266002,
   StudentMigration1630347897950,
   Discipline1631623461511,
+  ResumeMigration1632333725126,
 ];

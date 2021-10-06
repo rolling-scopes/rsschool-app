@@ -9,7 +9,7 @@ type Props = {
 function AvatarCV(props: Props) {
   const src = props.src ?? undefined;
   const icon = src ? null : <UserOutlined />;
-  return <Avatar src={src} icon={icon} size={120} />;
+  return <Avatar src={src} icon={icon} size={100} />;
 }
 
 export default AvatarCV;

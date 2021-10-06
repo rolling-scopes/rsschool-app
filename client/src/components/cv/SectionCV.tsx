@@ -13,16 +13,16 @@ type Props = {
 function SectionCV(props: Props) {
   const { title, icon, content, className } = props;
 
-  const avatar = icon ? <Avatar size={51} icon={icon} /> : null;
+  const avatar = icon ? <Avatar size={24} icon={icon} /> : null;
 
   const complexTitle = title && (
-    <Title style={{ display: 'inline-block' }} className={className}>
+    <Title level={4} style={{ display: 'inline-block' }} className={className}>
       {avatar} {title}
     </Title>
   );
 
   return (
-    <Card title={complexTitle} bordered={false}>
+    <Card size="small" title={complexTitle} bordered={false}>
       {content}
     </Card>
   );

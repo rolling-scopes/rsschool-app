@@ -1,9 +1,16 @@
-import * as React from 'react';
-import { Button, Menu, Dropdown } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import Link from 'next/link';
+import { Button, Dropdown, Menu, Tooltip } from 'antd';
+import {
+  EditOutlined,
+  EyeOutlined,
+  LogoutOutlined,
+  QuestionCircleFilled,
+  SaveTwoTone,
+  SolutionOutlined,
+} from '@ant-design/icons';
 import { css } from 'styled-jsx/css';
-// TODO: ucnomment after testing
-import { EyeOutlined, EditOutlined, LogoutOutlined, SaveTwoTone /* ExperimentOutlined */ } from '@ant-design/icons';
+import { GithubAvatar } from 'components/GithubAvatar';
+import * as React from 'react';
 
 type Props = {
   username: string;
@@ -17,13 +24,7 @@ type Props = {
 };
 
 export function Header(props: Props) {
-  const {
-    isProfilePage,
-    onChangeProfilePageMode,
-    isProfileEditingModeEnabled,
-    // TODO: uncomment after testing
-    isSaveButtonVisible /* username */,
-  } = props;
+  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible, username } = props;
 
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
@@ -48,16 +49,11 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      {/* TODO: uncomment after testing */}
-      {/*       <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
-        <Button
-          type="link"
-          href={`/cv?githubId=${username}`}
-          style={{ textAlign: 'left' }}
-        >
-          <ExperimentOutlined /> My CV
+      <Menu.Item key="2">
+        <Button type="link" href={`/cv/${username}`} style={{ textAlign: 'left' }}>
+          <SolutionOutlined /> My CV
         </Button>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3">
         <Button type="link" href={'/api/auth/logout'} style={{ textAlign: 'left' }}>
@@ -68,16 +64,21 @@ export function Header(props: Props) {
   );
 
   return (
-    <nav style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+    <nav
+      className="no-print"
+      style={{ padding: '8px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
+    >
       <div className="logo">
-        <a href="/">
-          <img
-            style={{ height: 30 }}
-            className="header-logo"
-            src="/static/images/logo-rsschool3.png"
-            alt="Rolling Scopes School Logo"
-          />
-        </a>
+        <Link href="/">
+          <a>
+            <img
+              style={{ height: 30 }}
+              className="header-logo"
+              src="/static/images/logo-rsschool3.png"
+              alt="Rolling Scopes School Logo"
+            />
+          </a>
+        </Link>
       </div>
       <div className="title">
         <b>{props.title}</b> {props.courseName}
@@ -89,6 +90,13 @@ export function Header(props: Props) {
             <span style={{ marginLeft: 7, fontSize: 14, verticalAlign: 'text-top', color: '#f5222d' }}>Save</span>
           </Button>
         )}
+        <Link href="https://docs.app.rs.school">
+          <a>
+            <Tooltip title="RSApp docs">
+              <QuestionCircleFilled style={{ fontSize: '150%', marginRight: '15px' }} />
+            </Tooltip>
+          </a>
+        </Link>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button type="dashed" size="large">
             <GithubAvatar githubId={props.username} size={24} />

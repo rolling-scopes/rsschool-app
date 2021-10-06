@@ -16,7 +16,7 @@ import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
 
 type Props = CoursePageProps & {
-  onLoading: (balue: boolean) => void;
+  onLoading: (value: boolean) => void;
   activeOnly: boolean;
 };
 
@@ -65,8 +65,12 @@ export function ScoreTable(props: Props) {
         courseService.getCourseScore(students.pagination, filters, students.orderBy),
         courseService.getCourseTasks(),
       ]);
-      const sortedTasks = courseTasks.filter(task => !!task.studentEndDate || props.course.completed);
-
+      const sortedTasks = courseTasks
+        .filter(task => !!task.studentEndDate || props.course.completed)
+        .map(task => ({
+          ...task,
+          isVisible: !notVisibleColumns?.includes(task.name),
+        }));
       setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setCourseTasks(sortedTasks);
 
@@ -74,9 +78,9 @@ export function ScoreTable(props: Props) {
     } finally {
       props.onLoading(false);
     }
-  }, []);
+  }, [activeOnly]);
 
-  useEffect(() => loadInitialData() as any, []);
+  useEffect(() => loadInitialData() as any, [activeOnly]);
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
 
@@ -84,8 +88,10 @@ export function ScoreTable(props: Props) {
     cityName,
     mentor,
     handleSettings: () => setIsVisibleSettings(true),
-    taskColumns: getTaskColumns(courseTasks).filter(column => !notVisibleColumns?.includes(column.name)),
+    taskColumns: getTaskColumns(courseTasks),
   });
+
+  const getVisibleColumns = (columns: any[]) => columns.filter(column => !notVisibleColumns?.includes(column.name));
 
   const [notVisibleColumns, setNotVisibleColumns] = useLocalStorage<string[]>('notVisibleColumns', []);
 
@@ -107,13 +113,13 @@ export function ScoreTable(props: Props) {
       <Table<StudentScore>
         className="table-score"
         showHeader
-        scroll={{ x: getTableWidth(columns.length), y: 'calc(100vh - 250px)' }}
+        scroll={{ x: getTableWidth(getVisibleColumns(columns).length), y: 'calc(100vh - 250px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
         rowKey="githubId"
         rowClassName={record => (!record.isActive ? 'rs-table-row-disabled' : '')}
         dataSource={students.content}
         onChange={getCourseScore as any}
-        columns={columns}
+        columns={getVisibleColumns(columns)}
       />
       <SettingsModal
         courseTasks={courseTasks}

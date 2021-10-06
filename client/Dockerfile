@@ -10,9 +10,9 @@ WORKDIR /client
 COPY package.json /client
 COPY package-lock.json /client
 
-COPY src/next.config.js /client
-COPY src/static /client/static
-COPY src/.next /client/.next
+COPY next.config.js /client
+COPY public /client/public
 COPY node_modules /client/node_modules
+COPY .next /client/.next
 
 CMD [ "npm", "run", "prod" ]

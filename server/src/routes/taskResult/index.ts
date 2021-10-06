@@ -25,7 +25,7 @@ const createPostTaskResult = (_: ILogger) => async (ctx: Router.RouterContext) =
     setResponse(ctx, StatusCodes.BAD_REQUEST, {});
     return;
   }
-  const scoreService = new ScoreService();
+  const scoreService = new ScoreService(0);
 
   await scoreService.saveScore(Number(input.studentId), Number(input.courseTaskId), {
     score: Number(input.score),

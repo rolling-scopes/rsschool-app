@@ -7,10 +7,11 @@ import NoConsentViewCV from './NoConsentViewCV';
 const { Text } = Typography;
 
 type CVInfoProps = {
-  ownerGithubId?: string | string[];
+  hasPriorityRole: boolean;
+  ownerGithubId?: string;
   isOwner: boolean;
-  errorOccured: boolean;
-  opportunitiesConsent: boolean | null;
+  notFound: boolean;
+  consent: boolean;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
   withdrawConsent: (ownerGithubId: string) => void;
@@ -19,29 +20,34 @@ type CVInfoProps = {
 
 function CVInfo(props: CVInfoProps) {
   const {
+    hasPriorityRole,
     ownerGithubId,
     isOwner,
-    errorOccured,
-    opportunitiesConsent,
+    notFound,
+    consent,
     editMode,
     switchView,
     withdrawConsent,
     giveConsent,
   } = props;
 
-  if (errorOccured) {
-    return <Result status={404} title="User not found" />;
-  }
-
-  if (ownerGithubId === undefined || ownerGithubId instanceof Array) {
+  if (ownerGithubId === undefined) {
     return <Result status="warning" title="This page doesn't exist" />;
   }
 
+  if (!isOwner && !hasPriorityRole) {
+    return <Result status="403" title="Sorry, but you don't have access to this page" />;
+  }
+
+  if (notFound) {
+    return <Result status={404} title="User not found" />;
+  }
+
   if (isOwner) {
-    if (opportunitiesConsent) {
+    if (consent) {
       return (
         <>
-          <Divider className="hide-on-print" plain>
+          <Divider className="no-print" plain>
             <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
             <Switch
               style={{ marginLeft: '5px' }}
@@ -62,7 +68,7 @@ function CVInfo(props: CVInfoProps) {
       return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
     }
   } else {
-    if (opportunitiesConsent) {
+    if (consent) {
       return <ViewCV ownerGithubId={ownerGithubId} />;
     } else {
       return <NoConsentViewCV isOwner={false} />;

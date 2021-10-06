@@ -33,6 +33,15 @@ export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.discord`,
 ];
 
+export const getContactsUserFields = (modelName = 'user') => [
+  `${modelName}.primaryEmail`,
+  `${modelName}.contactsPhone`,
+  `${modelName}.contactsEmail`,
+  `${modelName}.contactsTelegram`,
+  `${modelName}.contactsLinkedIn`,
+  `${modelName}.contactsSkype`,
+];
+
 export async function getCourseMentor(courseId: number, userId: number): Promise<{ id: number } | undefined> {
   return await getRepository(Mentor)
     .createQueryBuilder('mentor')
@@ -197,6 +206,13 @@ export async function expelMentor(courseId: number, githubId: string) {
     await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
     await getRepository(Mentor).update(mentor.id, { isExpelled: true });
     await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
+  }
+}
+
+export async function restoreMentor(courseId: number, githubId: string) {
+  const mentor = await queryMentorByGithubId(courseId, githubId);
+  if (mentor) {
+    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
   }
 }
 

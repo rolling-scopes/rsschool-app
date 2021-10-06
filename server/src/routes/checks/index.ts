@@ -7,8 +7,8 @@ import { courseManagerGuard } from '../guards';
 export function checksRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/checks' });
 
-  router.get('/badcomment/:taskId', courseManagerGuard, getBadComment(logger));
-  router.get('/maxscore/:taskId', courseManagerGuard, getMaxScoreCheckers(logger));
+  router.get('/badcomment/:courseId/:taskId', courseManagerGuard, getBadComment(logger));
+  router.get('/maxscore/:courseId/:taskId', courseManagerGuard, getMaxScoreCheckers(logger));
 
   return router;
 }

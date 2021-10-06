@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "code:client": ["client/"],
+    "code:server": ["server/"],
+    "⛓ dependencies": "**/package.json"
+  }
+}
