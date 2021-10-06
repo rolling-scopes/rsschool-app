@@ -239,6 +239,7 @@ export class StudentRepository extends AbstractRepository<Student> {
         mentorLastName,
         mentorGithubId,
         certificateId,
+        student_rank,
       }: any) => {
         return {
           courseId,
@@ -248,7 +249,7 @@ export class StudentRepository extends AbstractRepository<Student> {
           isCourseCompleted,
           totalScore,
           certificateId,
-          position: null,
+          position: student_rank,
           mentor: {
             githubId: mentorGithubId,
             name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
@@ -257,21 +258,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       },
     );
 
-    const studentPositions = await Promise.all(
-      studentStats.map(async ({ totalScore, courseId }: { totalScore: number; courseId: number }) => {
-        const rawPositions = await getRepository(Student)
-          .createQueryBuilder('student')
-          .select('"student"."courseId" AS "courseId"')
-          .addSelect('COUNT(*) AS "position"')
-          .where('"student"."courseId" = :courseId', { courseId })
-          .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
-          .groupBy('"student"."courseId"')
-          .getRawMany();
-        return rawPositions.map(({ position }) => ({ position: Number(position) }))[0];
-      }),
-    );
-
-    return studentStats.map((stats, idx) => ({ ...omit(stats, ['courseId']), ...studentPositions[idx] }));
+    return studentStats.map(stats => ({ ...omit(stats, ['courseId']) }));
   }
 
   public async save(students: Partial<Student>[]) {
