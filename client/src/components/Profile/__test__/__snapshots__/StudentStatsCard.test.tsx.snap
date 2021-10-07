@@ -824,56 +824,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                 }
                               }
                             >
-                              Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <Base
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <LocaleReceiver
-                                    componentName="Text"
-                                  >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            32
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </Text>
-                            </p>
-                            <p
-                              style={
-                                Object {
-                                  "fontSize": 12,
-                                  "marginBottom": 5,
-                                }
-                              }
-                            >
                               Score: 
                               <Text
                                 mark={true}
@@ -1239,56 +1189,6 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                               >
                                 Dima Testovich
                               </a>
-                            </p>
-                            <p
-                              style={
-                                Object {
-                                  "fontSize": 12,
-                                  "marginBottom": 5,
-                                }
-                              }
-                            >
-                              Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <Base
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <LocaleReceiver
-                                    componentName="Text"
-                                  >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            32
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </Text>
                             </p>
                             <p
                               style={
@@ -2286,56 +2186,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 }
                               }
                             >
-                              Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <Base
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <LocaleReceiver
-                                    componentName="Text"
-                                  >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            32
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </Text>
-                            </p>
-                            <p
-                              style={
-                                Object {
-                                  "fontSize": 12,
-                                  "marginBottom": 5,
-                                }
-                              }
-                            >
                               Score: 
                               <Text
                                 mark={true}
@@ -2701,56 +2551,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                               >
                                 Dima Testovich
                               </a>
-                            </p>
-                            <p
-                              style={
-                                Object {
-                                  "fontSize": 12,
-                                  "marginBottom": 5,
-                                }
-                              }
-                            >
-                              Position: 
-                              <Text
-                                strong={true}
-                              >
-                                <Base
-                                  component="span"
-                                  strong={true}
-                                >
-                                  <LocaleReceiver
-                                    componentName="Text"
-                                  >
-                                    <ResizeObserver
-                                      disabled={true}
-                                      onResize={[Function]}
-                                    >
-                                      <Typography
-                                        className=""
-                                        component="span"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          className="ant-typography"
-                                          style={
-                                            Object {
-                                              "WebkitLineClamp": undefined,
-                                            }
-                                          }
-                                        >
-                                          <strong>
-                                            32
-                                          </strong>
-                                        </span>
-                                      </Typography>
-                                    </ResizeObserver>
-                                  </LocaleReceiver>
-                                </Base>
-                              </Text>
                             </p>
                             <p
                               style={
