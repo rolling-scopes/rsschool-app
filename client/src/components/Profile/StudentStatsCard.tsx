@@ -177,7 +177,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                   mentor,
                   totalScore,
                   isExpelled,
-                  position,
+                  rank,
                   isCourseCompleted,
                   certificateId,
                   courseId,
@@ -214,9 +214,9 @@ class StudentStatsCard extends React.Component<Props, State> {
                           Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
                         </p>
                       )}
-                      {position && (
+                      {rank && (
                         <p style={{ fontSize: 12, marginBottom: 5 }}>
-                          Position: <Text strong>{position}</Text>
+                          Position: <Text strong>{rank}</Text>
                         </p>
                       )}
                       <p style={{ fontSize: 12, marginBottom: 5 }}>

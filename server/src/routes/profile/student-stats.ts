@@ -26,7 +26,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
     .addSelect('"student"."isExpelled" AS "isExpelled"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
     .addSelect('"student"."totalScore" AS "totalScore"')
-    .addSelect('"student"."rank" AS "position"')
+    .addSelect('"student"."rank" AS "rank"')
     .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
     .addSelect('"userMentor"."lastName" AS "mentorLastName"')
     .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
@@ -113,7 +113,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       interviewerFirstName,
       interviewerLastName,
       certificateId,
-      position,
+      rank,
     }: any) => {
       const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
         maxScore,
@@ -143,7 +143,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
         totalScore,
         tasks,
         certificateId,
-        position,
+        rank,
         mentor: {
           githubId: mentorGithubId,
           name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
