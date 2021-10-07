@@ -10,7 +10,7 @@ type Props = {
   data: Item[];
   colors: Record<string, string>;
   onItemSelected: (item: Item) => void;
-}
+};
 
 const TasksChart: React.FC<Props> = ({ data, colors, onItemSelected }) => {
   const config: PieConfig = {
@@ -39,12 +39,10 @@ const TasksChart: React.FC<Props> = ({ data, colors, onItemSelected }) => {
     statistic: {
       title: false,
     },
-    onReady: plot => {
-      console.log(plot);
+    onReady: plot =>
       plot.chart.on('element:click', (evt: any) => {
         onItemSelected(evt.data.data);
-      });
-    },
+      }),
   };
   return <Pie {...config} />;
 };
