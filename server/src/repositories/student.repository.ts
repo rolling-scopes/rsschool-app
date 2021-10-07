@@ -249,7 +249,7 @@ export class StudentRepository extends AbstractRepository<Student> {
           isCourseCompleted,
           totalScore,
           certificateId,
-          position: student_rank,
+          rank: student_rank,
           mentor: {
             githubId: mentorGithubId,
             name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),

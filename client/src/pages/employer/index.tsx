@@ -164,7 +164,7 @@ function Page(props: Props) {
                 certificateId,
                 isCourseCompleted,
                 totalScore,
-                position,
+                rank,
                 mentor: { name: mentorName, githubId: mentorGithubId },
               } = record;
               const title = `${courseFullName}${locationName ? locationName : ''}`;
@@ -173,7 +173,7 @@ function Page(props: Props) {
                 <>
                   <Text style={{ whiteSpace: 'nowrap' }}>Score: {totalScore}</Text>
                   <br />
-                  <Text style={{ whiteSpace: 'nowrap' }}>Position: {position}</Text>
+                  <Text style={{ whiteSpace: 'nowrap' }}>Position: {rank}</Text>
                 </>
               );
               let courseStatus;

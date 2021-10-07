@@ -8,7 +8,7 @@ export interface CourseData {
   certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
-  position: number | null;
+  rank: number | null;
   mentor: {
     githubId: string;
     name: string;
@@ -83,7 +83,7 @@ export interface CVStudentStats {
   certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
-  position: number | null;
+  rank: number | null;
   mentor: {
     githubId: string;
     name: string;
