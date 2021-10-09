@@ -19,11 +19,11 @@
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "4.28.3",
-    "@typescript-eslint/parser": "4.28.3",
+    "@typescript-eslint/eslint-plugin": "4.33.0",
+    "@typescript-eslint/parser": "4.33.0",
     "concurrently": "6.1.0",
-    "eslint": "7.31.0",
-    "prettier": "2.3.2",
+    "eslint": "7.32.0",
+    "prettier": "2.4.1",
     "typescript": "4.3.5"
   }
 }

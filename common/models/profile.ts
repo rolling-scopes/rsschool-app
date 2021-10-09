@@ -96,7 +96,7 @@ export interface StudentStats {
   certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
-  position: number | null;
+  rank: number | null;
   mentor: {
     githubId: string;
     name: string;
