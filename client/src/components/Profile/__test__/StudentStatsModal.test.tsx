@@ -15,7 +15,7 @@ describe('StudentStatsModal', () => {
       isCourseCompleted: true,
       totalScore: 1201,
       certificateId: 'asd',
-      position: 32,
+      rank: 32,
       mentor: {
         githubId: 'andrew123',
         name: 'Andrey Andreev',
