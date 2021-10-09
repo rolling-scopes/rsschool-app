@@ -16,7 +16,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           "githubId": "andrew123",
           "name": "Andrey Andreev",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -60,7 +60,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           "githubId": "dimon12",
           "name": "Dima Testovich",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -126,7 +126,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           "githubId": "andrew123",
           "name": "Andrey Andreev",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -216,7 +216,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                 "githubId": "andrew123",
                 "name": "Andrey Andreev",
               },
-              "position": 32,
+              "rank": 32,
               "tasks": Array [
                 Object {
                   "comment": "test",
@@ -260,7 +260,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                 "githubId": "dimon12",
                 "name": "Dima Testovich",
               },
-              "position": 32,
+              "rank": 32,
               "tasks": Array [
                 Object {
                   "comment": "test",
@@ -492,7 +492,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                     "githubId": "andrew123",
                     "name": "Andrey Andreev",
                   },
-                  "position": 32,
+                  "rank": 32,
                   "tasks": Array [
                     Object {
                       "comment": "test",
@@ -536,7 +536,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                     "githubId": "dimon12",
                     "name": "Dima Testovich",
                   },
-                  "position": 32,
+                  "rank": 32,
                   "tasks": Array [
                     Object {
                       "comment": "test",
@@ -1477,7 +1477,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           "githubId": "andrew123",
           "name": "Andrey Andreev",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -1521,7 +1521,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           "githubId": "dimon12",
           "name": "Dima Testovich",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -1587,7 +1587,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           "githubId": "andrew123",
           "name": "Andrey Andreev",
         },
-        "position": 32,
+        "rank": 32,
         "tasks": Array [
           Object {
             "comment": "test",
@@ -1677,7 +1677,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 "githubId": "andrew123",
                 "name": "Andrey Andreev",
               },
-              "position": 32,
+              "rank": 32,
               "tasks": Array [
                 Object {
                   "comment": "test",
@@ -1721,7 +1721,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 "githubId": "dimon12",
                 "name": "Dima Testovich",
               },
-              "position": 32,
+              "rank": 32,
               "tasks": Array [
                 Object {
                   "comment": "test",
@@ -1954,7 +1954,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                     "githubId": "andrew123",
                     "name": "Andrey Andreev",
                   },
-                  "position": 32,
+                  "rank": 32,
                   "tasks": Array [
                     Object {
                       "comment": "test",
@@ -1998,7 +1998,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                     "githubId": "dimon12",
                     "name": "Dima Testovich",
                   },
-                  "position": 32,
+                  "rank": 32,
                   "tasks": Array [
                     Object {
                       "comment": "test",
