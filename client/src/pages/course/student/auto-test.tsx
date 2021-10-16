@@ -400,7 +400,23 @@ function renderSelfEducation(courseTask: CourseTask, verifications: Verification
               <Checkbox.Group>
                 {answers.map((answer, index) => (
                   <Row key={index}>
-                    <Checkbox value={index}>{answer}</Checkbox>
+                    <Checkbox value={index}>
+                      {answersType === 'image' ? (
+                        <>
+                          ({index + 1}){' '}
+                          <img
+                            src={answer}
+                            style={{
+                              width: '100%',
+                              maxWidth: '400px',
+                              marginBottom: '10px',
+                            }}
+                          />
+                        </>
+                      ) : (
+                        answer
+                      )}
+                    </Checkbox>
                   </Row>
                 ))}
               </Checkbox.Group>
