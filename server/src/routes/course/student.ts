@@ -6,6 +6,7 @@ import { Feedback, TaskInterviewResult } from '../../models';
 import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
+import { userGuards } from '../guards';
 
 type FeedbackInput = { toUserId: number; comment: string };
 
@@ -96,11 +97,15 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
     return;
   }
   const user = ctx.state!.user;
-  const { githubId: userGithubId, isAdmin, isSupervisor, isManager } = user;
-  const isPowerUser = isAdmin || isSupervisor || isManager;
-  const isCourseMentor = user.roles[courseId] === 'mentor';
-  if (!isPowerUser && isCourseMentor) {
-    const mentorStudents = await getCustomRepository(StudentRepository).findByMentor(courseId, userGithubId);
+  const guard = userGuards(user);
+  const [isPowerUser, isSupervisor, isCourseMentor] = [
+    guard.isPowerUser(courseId),
+    guard.isSupervisor(courseId),
+    guard.isMentor(courseId),
+  ];
+  const isPowerUserOrSupervisor = isPowerUser || isSupervisor;
+  if (!isPowerUserOrSupervisor && isCourseMentor) {
+    const mentorStudents = await getCustomRepository(StudentRepository).findByMentor(courseId, user.githubId);
     const isUpdatedStudentMenteeOfRequestor = mentorStudents.some(
       ({ githubId: studentGithubId }) => studentGithubId === githubId,
     );

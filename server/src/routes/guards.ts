@@ -14,7 +14,7 @@ export const basicAuthAws = auth({
   pass: config.users.verification.password,
 });
 
-const userGuards = (user: IUserSession) => {
+export const userGuards = (user: IUserSession) => {
   const courses = Object.keys(user.coursesRoles ?? {});
   const guards = {
     isAdmin: () => user.isAdmin,
