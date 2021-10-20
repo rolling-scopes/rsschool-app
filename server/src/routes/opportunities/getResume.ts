@@ -7,8 +7,7 @@ import { setResponse } from '../utils';
 const { NOT_FOUND, OK } = StatusCodes;
 
 export const getResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { mod } = ctx.query;
-  const { githubId } = ctx.state.user;
+  const { mod, githubId } = ctx.query;
   const isFullDataNeeded = mod === 'all';
 
   const service = new ResumeService(githubId);
