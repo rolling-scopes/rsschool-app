@@ -2,7 +2,7 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
-import { StudentStats } from '../../../../../../../common/models';
+import { StudentStats } from '../../../../../common/models';
 
 type IdName = {
   id: number;
@@ -67,12 +67,16 @@ function isCourseAvailableForRegistration(course: Course, registeredCourses: IdN
   if (course.completed || registeredCourses.some(({ id }) => id === course.id)) {
     return false;
   }
+
+  const isRegistrationActive = new Date(course.registrationEndDate || 0).getTime() > Date.now();
+  if (isRegistrationActive) {
+    return true;
+  }
+
   if (course.planned) {
     return true;
   }
-  if (course.registrationEndDate) {
-    return new Date(course.registrationEndDate).getTime() > Date.now();
-  }
+
   return false;
 }
 
