@@ -14,6 +14,7 @@ import {
   courseManagerGuard,
   basicAuthAws,
   anyCourseMentorGuard,
+  courseSupervisorOrMentorGuard,
 } from '../guards';
 import { setResponse } from '../utils';
 import {
@@ -226,7 +227,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-  router.put('/student/:githubId', courseSupervisorGuard, updateStudent(logger));
+  router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
   router.get(
     '/student/:githubId/interview/stage',
