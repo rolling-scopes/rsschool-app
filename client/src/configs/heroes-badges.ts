@@ -44,7 +44,7 @@ export default {
     pictureId: 34,
     url: 'TopPerformer.svg',
   },
-  Job_offer: {
+  Job_Offer: {
     name: 'Job Offer',
     pictureId: 35,
     url: 'JobOffer.svg',
