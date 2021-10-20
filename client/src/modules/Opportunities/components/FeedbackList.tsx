@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Typography, Card, Tooltip, Button, List, Col } from 'antd';
-import moment from 'moment';
+import { Button, Col, List, Tooltip, Typography } from 'antd';
 import { CVFeedback } from 'common/models/cv';
+import moment from 'moment';
+import * as React from 'react';
 
 const { Text, Paragraph } = Typography;
 
@@ -14,13 +14,6 @@ export function FeedbackList({ feedback, showCount }: Props) {
   if (feedback == null) {
     return null;
   }
-
-  const feedbackStyle = {
-    padding: '2px',
-    border: '1px dotted #e0e0e0',
-    borderRadius: '15px',
-    marginBottom: '8px',
-  };
 
   const feedbackPartial = feedback.slice(0, showCount);
   const expansionNeeded = feedback.length > showCount;
