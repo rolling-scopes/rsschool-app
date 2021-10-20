@@ -4,7 +4,7 @@ import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } 
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from '../../../../common/models/cv';
-import { OpportunitiesService } from 'services/opportunities';
+import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
 import {

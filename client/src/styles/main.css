@@ -4,6 +4,18 @@ body,
   height: 100%;
 }
 
+.rs-link {
+  background-color: #fff;
+  color: #000;
+  display: inline-block;
+  padding: 1px 2px;
+}
+
+.rs-link:hover {
+  background-color: #10f3ff;
+  color: #000;
+}
+
 .ant-layout-sider-dark h4 {
   color: rgba(255, 255, 255, 0.6);
   background: #07223b;
@@ -82,4 +94,28 @@ thead.ant-table-thead > tr > th {
   .no-print {
     display: none !important;
   }
+}
+
+.cv-section-header {
+  color: #000;
+  text-transform: uppercase;
+  background-color: rgb(255, 236, 61);
+  padding: 0 8px 0 8px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.cv-sidebar .cv-icon-inverted .anticon svg {
+  fill: #fff;
+}
+
+.cv-sidebar {
+  padding: 16px;
+  background-color: #000;
+  color: #fff;
+}
+
+.cv-sidebar .icon-link {
+  background-color: #fff;
+  color: #000;
 }

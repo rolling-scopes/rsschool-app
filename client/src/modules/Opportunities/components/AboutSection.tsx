@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Row, Col, Typography } from 'antd';
-import SectionCV from '../SectionCV';
-import { ScheduleOutlined } from '@ant-design/icons';
+import Section from './Section';
 
 const { Text } = Typography;
 
@@ -12,15 +11,19 @@ type Props = {
 function AboutSection(props: Props) {
   const { notes } = props;
 
+  if (!notes) {
+    return null;
+  }
+
   const sectionContent = (
     <Row>
       <Col>
-        <Text style={{ fontSize: '16px' }}>{notes}</Text>
+        <Text style={{ fontSize: 16 }}>{notes}</Text>
       </Col>
     </Row>
   );
 
-  return <SectionCV content={sectionContent} title="About me" icon={<ScheduleOutlined />} />;
+  return <Section content={sectionContent} title="About" />;
 }
 
 export default AboutSection;

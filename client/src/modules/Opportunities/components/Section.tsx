@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-function SectionCV(props: Props) {
+function Section(props: Props) {
   const { title, icon, content, className } = props;
 
   const avatar = icon ? <Avatar size={24} icon={icon} /> : null;
@@ -28,4 +28,4 @@ function SectionCV(props: Props) {
   );
 }
 
-export default SectionCV;
+export default Section;

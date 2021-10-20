@@ -6,10 +6,8 @@ type Props = {
   src: string | null;
 };
 
-function AvatarCV(props: Props) {
+export function AvatarCV(props: Props) {
   const src = props.src ?? undefined;
   const icon = src ? null : <UserOutlined />;
-  return <Avatar src={src} icon={icon} size={100} />;
+  return <Avatar src={src} icon={icon} size={80} />;
 }
-
-export default AvatarCV;
