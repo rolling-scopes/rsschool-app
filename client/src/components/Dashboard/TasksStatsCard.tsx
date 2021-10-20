@@ -1,11 +1,13 @@
-import * as React from 'react';
+import { useCallback } from 'react';
 import { useState } from 'react';
 import CommonCard from './CommonDashboardCard';
 import { AuditOutlined } from '@ant-design/icons';
 import { CourseTask } from 'services/course';
-import { Doughnut } from 'react-chartjs-2';
 import { StudentStats } from '../../../../common/models';
 import { TasksStatsModal } from './TasksStatsModal';
+import dynamic from 'next/dynamic';
+
+const TasksChart = dynamic(() => import('./TasksChart'), { ssr: false });
 
 export interface TasksStatistics {
   completed: (CourseTask | StudentStats)[];
@@ -54,7 +56,7 @@ export function TasksStatsCard(props: Props) {
     courseName,
   } = props;
 
-  const showTasksStatsModal = (chartLabel: string) => {
+  const showTasksStatsModal = useCallback((chartLabel: string) => {
     switch (chartLabel) {
       case GroupTaskName.Completed:
         setStatisticsTableName('Completed tasks');
@@ -70,60 +72,22 @@ export function TasksStatsCard(props: Props) {
         break;
     }
     setTasksStatsModalVisible(true);
-  };
+  }, []);
 
   const hideTasksStatsModal = () => {
     setTasksStatsModalVisible(false);
   };
 
-  const setChartTooltipOptions = () => {
-    return {
-      title(tooltipItems: ITooltipItem[], data: ITooltipData) {
-        const index: number = tooltipItems[0].index;
-        const label: string = data.labels[index].toLowerCase();
-        const value: number = data.datasets[0].data[index];
-        return `Tasks ${label}: ${value}`;
-      },
-      label() {
-        return;
-      },
-      footer() {
-        return ' Click to see details';
-      },
-    };
-  };
+  const data = [
+    { value: completed.length, type: GroupTaskName.Completed },
+    { value: notDone.length, type: GroupTaskName.NotCompleted },
+    { value: future.length, type: GroupTaskName.Future },
+  ].filter(item => item.value);
 
-  const dataForChart = {
-    labels: [GroupTaskName.Completed, GroupTaskName.NotCompleted, GroupTaskName.Future],
-    datasets: [
-      {
-        data: [completed.length, notDone.length, future.length],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      },
-    ],
-  };
-
-  const options = {
-    cutoutPercentage: 20,
-    legend: {
-      labels: {
-        fontSize: 14,
-        padding: 30,
-        boxWidth: 15,
-      },
-      position: 'bottom',
-    },
-    tooltips: {
-      titleFontStyle: 'normal',
-      titleFontSize: 14,
-      callbacks: setChartTooltipOptions(),
-    },
-    onClick: (_: any, chartItem: any) => {
-      if (chartItem[0]) {
-        showTasksStatsModal(chartItem[0]._model.label);
-      }
-    },
+  const colors = {
+    [GroupTaskName.Completed]: '#FF6384',
+    [GroupTaskName.NotCompleted]: '#36A2EB',
+    [GroupTaskName.Future]: '#FFCE56',
   };
 
   return (
@@ -139,8 +103,8 @@ export function TasksStatsCard(props: Props) {
         title="Tasks statistics"
         icon={<AuditOutlined />}
         content={
-          <div style={{ minHeight: 220, minWidth: 220, maxWidth: 250, margin: 'auto' }}>
-            <Doughnut type="doughnut" width={50} height={50} data={dataForChart} options={options} />
+          <div style={{ minWidth: 200, maxWidth: 200, margin: 'auto' }}>
+            <TasksChart data={data} colors={colors} onItemSelected={data => showTasksStatsModal(data.type)} />
           </div>
         }
       />
