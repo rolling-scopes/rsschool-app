@@ -34,25 +34,42 @@ function ContactsList({ contacts }: Props) {
   return (
     <div>
       {list.map(({ icon, node, value }, i) => (
-        <div key={i} style={{ paddingTop: 3 }}>
-          <span className="cv-icon-inverted" style={{ paddingRight: 8 }}>
+        <div className="container" key={i} style={{ paddingTop: 3 }}>
+          <div className="icon" style={{ paddingRight: 8 }}>
             {icon}
-          </span>
-          <span>
-            {node}
-            <Button
-              onClick={() => {
-                copyToClipboard(value ?? '');
-                notification.success({ message: 'Copied to clipboard' });
-              }}
-              style={{ color: '#fff' }}
-              size="small"
-              type="text"
-              icon={<CopyOutlined />}
-            />
-          </span>
+          </div>
+          <div className="value">{node}</div>
+          <Button
+            onClick={() => {
+              copyToClipboard(value ?? '');
+              notification.success({ message: 'Copied to clipboard' });
+            }}
+            style={{ color: '#fff' }}
+            size="small"
+            type="text"
+            icon={<CopyOutlined />}
+          />
         </div>
       ))}
+      <style jsx>{`
+        .container {
+          max-width: 100%;
+          display: flex;
+        }
+
+        .value {
+          word-break: break-all;
+        }
+
+        @media print {
+          .icon {
+            color: #000 !important;
+          }
+          .icon .anticon svg {
+            fill: #000 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

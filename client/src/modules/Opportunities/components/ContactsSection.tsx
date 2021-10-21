@@ -1,5 +1,6 @@
 import { Contacts } from 'common/models/cv';
 import ContactsList from './ContactsList';
+import { SidebarSectionHeader } from './SidebarSectionHeader';
 
 type Props = {
   contacts: Contacts | null;
@@ -12,9 +13,7 @@ export function ContactsSection({ contacts }: Props) {
 
   return (
     <div>
-      <div style={{ fontSize: 14, paddingTop: 8, paddingBottom: 12 }}>
-        <span className="cv-section-header">Contacts</span>
-      </div>
+      <SidebarSectionHeader title="Contacts" />
       <ContactsList contacts={contacts} />
     </div>
   );

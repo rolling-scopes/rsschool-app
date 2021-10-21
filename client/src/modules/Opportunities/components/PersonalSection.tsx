@@ -1,7 +1,7 @@
 import { UserData } from 'common/models/cv';
 import React, { Fragment } from 'react';
-import { css } from 'styled-jsx/css';
 import { getPersonalToRender } from '../data/getPersonalToRender';
+import { SidebarSectionHeader } from './SidebarSectionHeader';
 
 type Props = {
   user: UserData | null;
@@ -15,36 +15,35 @@ export function PersonalSection({ user }: Props) {
 
   return (
     <div>
-      <div style={{ fontSize: 14, paddingTop: 24, paddingBottom: 12 }}>
-        <span className="cv-section-header">Personal</span>
-      </div>
+      <SidebarSectionHeader title="Personal" />
       <div>
         {data.map(({ title, value }) => (
           <Fragment key={title}>
-            <div className="skill">{title}</div>
-            <div className="skill-value">{value}</div>
+            <div className="title">{title}</div>
+            <div className="value">{value}</div>
           </Fragment>
         ))}
       </div>
-      <style jsx>{styles}</style>
+      <style jsx>{`
+        .title {
+          font-size: 12px;
+          color: #eee;
+          text-transform: uppercase;
+        }
+
+        .value {
+          padding-bottom: 16px;
+          font-weight: bold;
+          word-break: break-all;
+        }
+
+        @media print {
+          .title,
+          .value {
+            color: #000;
+          }
+        }
+      `}</style>
     </div>
   );
 }
-
-const styles = css`
-  .user :global(.anticon svg) {
-    fill: #fff;
-  }
-
-  .skill {
-    font-size: 12px;
-    color: #eee;
-    text-transform: uppercase;
-  }
-
-  .skill-value {
-    padding-bottom: 16px;
-    font-weight: bold;
-    word-break: break-all;
-  }
-`;

@@ -19,19 +19,21 @@ function ViewCV({ ownerGithubId }: Props) {
   return (
     <LoadingScreen show={loading}>
       {userData && (
-        <Row style={{ minHeight: '100vh', padding: 10 }}>
-          <Col xl={8} lg={8} md={8} sm={8} xs={24} className="cv-sidebar">
+        <Row className="print-no-padding" style={{ minHeight: '100vh', padding: 10 }}>
+          <Col xl={8} lg={8} md={10} sm={24} xs={24} className="cv-sidebar">
             <Row>
               <NameTitle userData={userData} />
             </Row>
-            <Row>
-              <PersonalSection user={userData} />
-            </Row>
-            <Row>
-              <ContactsSection contacts={contacts} />
+            <Row gutter={24}>
+              <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
+                <PersonalSection user={userData} />
+              </Col>
+              <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
+                <ContactsSection contacts={contacts} />
+              </Col>
             </Row>
           </Col>
-          <Col xl={16} lg={16} md={16} sm={16} xs={24}>
+          <Col xl={16} lg={16} md={14} sm={24} xs={24}>
             <AboutSection notes={userData.notes} />
             <CoursesSection courses={courses ?? []} />
             <FeedbackSection feedback={feedback} />

@@ -49,7 +49,7 @@ export function CVPage({ session }: PropsWithChildren<Props>) {
       <LoadingScreen show={loading || !githubId}>
         <Header username={session.githubId} />
         <Layout className="cv-layout">
-          <Content style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
+          <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
             <CVInfo
               hasPriorityRole={hasPriorityRole}
               ownerGithubId={githubId}
@@ -68,25 +68,6 @@ export function CVPage({ session }: PropsWithChildren<Props>) {
         html,
         body {
           font-family: 'Ubuntu', sans-serif;
-        }
-        @media print {
-          .ant-avatar-icon,
-          .profile,
-          .footer {
-            display: none !important;
-          }
-          .black-on-print {
-            color: black !important;
-          }
-          .cv-layout,
-          .ant-layout-content {
-            margin: 0 !important;
-          }
-        }
-        @media (max-width: 959px) {
-          .view-cv-layout {
-            width: 100% !important;
-          }
         }
         .cv-layout {
           background-color: white !important;

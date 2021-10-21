@@ -94,28 +94,32 @@ thead.ant-table-thead > tr > th {
   .no-print {
     display: none !important;
   }
+  .print-black {
+    color: black !important;
+    background-color: white !important;
+  }
+  .print-no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 
-.cv-section-header {
-  color: #000;
-  text-transform: uppercase;
-  background-color: rgb(255, 236, 61);
-  padding: 0 8px 0 8px;
-  font-weight: bold;
-  display: inline-block;
-}
+/* CV */
 
-.cv-sidebar .cv-icon-inverted .anticon svg {
-  fill: #fff;
+.cv-card-section {
+  break-inside: avoid;
 }
 
 .cv-sidebar {
   padding: 16px;
   background-color: #000;
   color: #fff;
+  break-inside: avoid;
 }
 
-.cv-sidebar .icon-link {
-  background-color: #fff;
-  color: #000;
+@media print {
+  .cv-sidebar {
+    background-color: #fff;
+    color: #000;
+  }
 }
