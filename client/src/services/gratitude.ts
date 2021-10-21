@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { stringify } from 'qs';
 import { IGratitudeGetResponse, IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 
 export class GratitudeService {
@@ -8,7 +7,7 @@ export class GratitudeService {
     return result.data.data;
   }
   async getGratitude(data?: IGratitudeGetRequest): Promise<{ content: IGratitudeGetResponse[]; count: number }> {
-    const result = await axios.get(`/api/feedback/gratitude?${stringify(data)}`);
+    const result = await axios.get(`/api/feedback/gratitude`, { params: data });
     return result.data.data;
   }
 }
