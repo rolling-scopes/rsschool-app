@@ -22,7 +22,7 @@ const PerformanceChart: React.FC<{ percent: number; text: string }> = ({ percent
     },
     statistic: {
       title: {
-        formatter: ({ percent }: Datum = { percent: 0 }) => `${percent * 100}%`,
+        formatter: ({ percent }: Datum = { percent: 0 }) => `${Math.round(percent * 100)}%`,
         style: ({ percent }: Datum = { percent: 0 }) => ({
           fontSize: '14px',
           lineHeight: 1,
