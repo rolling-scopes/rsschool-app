@@ -50,7 +50,7 @@
     "@types/json2csv": "4.5.1",
     "@types/jsonwebtoken": "8.3.5",
     "@types/koa": "2.11.3",
-    "@types/koa-basic-auth": "2.0.3",
+    "@types/koa-basic-auth": "2.0.4",
     "@types/koa-bodyparser": "4.2.0",
     "@types/koa-passport": "4.0.2",
     "@types/koa-session": "5.10.2",
