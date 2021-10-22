@@ -28,6 +28,8 @@ type Props = {
 const cvService = new OpportunitiesService();
 const userService = new UserService();
 
+const buttonStyle = { width: 'fit-content', margin: '5px' };
+
 function EditCV(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
@@ -377,8 +379,6 @@ function EditCV(props: Props) {
 
     setLoading(false);
   };
-
-  const buttonStyle = {};
 
   return (
     <LoadingScreen show={loading}>
