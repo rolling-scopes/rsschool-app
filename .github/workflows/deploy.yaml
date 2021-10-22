@@ -6,14 +6,12 @@ on:
 
 concurrency:
   group: deploy_${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy_build_client:
     name: Build (Client)
     runs-on: ubuntu-latest
-    concurrency:
-      group: deploy_build_client_${{ github.head_ref }}
-      cancel-in-progress: true
     defaults:
       run:
         working-directory: ./client
@@ -84,9 +82,6 @@ jobs:
   deploy_build_server:
     name: Build (Server)
     runs-on: ubuntu-latest
-    concurrency:
-      group: deploy_build_server_${{ github.head_ref }}
-      cancel-in-progress: true
     defaults:
       run:
         working-directory: ./server
