@@ -14,6 +14,7 @@ import {
 import { Contacts, ContactType } from 'common/models/cv';
 import { getContactsToRender } from '../data/getContactsToRender';
 import { useCopyToClipboard } from 'react-use';
+import { Link } from './Link';
 
 const { Text } = Typography;
 
@@ -84,43 +85,23 @@ type AllowedContacts = {
 const contactRendererMap: AllowedContacts = {
   phone: {
     icon: <PhoneOutlined />,
-    render: contact => (
-      <a className="rs-link" title="Phone" target="_blank" rel="nofollow" href={`tel:${contact}`}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="Phone" url={`tel:${contact}`} text={contact} />,
   },
   email: {
     icon: <MailOutlined />,
-    render: contact => (
-      <a title="E-mail" className="rs-link" target="_blank" rel="nofollow" href={`mailto:${contact}`}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="E-mail" url={`mailto:${contact}`} text={contact} />,
   },
   skype: {
     icon: <SkypeOutlined />,
-    render: contact => (
-      <a title="Skype" className="rs-link" target="_blank" rel="nofollow" href={`skype:${contact}?chat`}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="Skype" url={`skype:${contact}?chat`} text={contact} />,
   },
   telegram: {
     icon: <MessageOutlined />,
-    render: contact => (
-      <a title="Telegram" className="rs-link" target="_blank" rel="nofollow" href={`https://t.me/${contact}`}>
-        @{contact}
-      </a>
-    ),
+    render: contact => <Link title="Telegram" url={`https://t.me/${contact}`} text={`@${contact}`} />,
   },
   linkedin: {
     icon: <LinkedinOutlined />,
-    render: contact => (
-      <a className="rs-link" title="LinkedIn" target="_blank" rel="nofollow" href={contact}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="LinkedIn" url={contact} text={contact} />,
   },
   locations: {
     icon: <AimOutlined />,
@@ -128,19 +109,11 @@ const contactRendererMap: AllowedContacts = {
   },
   github: {
     icon: <GithubOutlined />,
-    render: contact => (
-      <a className="rs-link" title="Github" target="_blank" rel="nofollow" href={`https://github.com/${contact}`}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="Github" url={`https://github.com/${contact}`} text={contact} />,
   },
   website: {
     icon: <IdcardOutlined />,
-    render: contact => (
-      <a className="rs-link" title="Website" target="_blank" rel="nofollow" href={contact}>
-        {contact}
-      </a>
-    ),
+    render: contact => <Link title="Website" url={contact} text={contact} />,
   },
 };
 

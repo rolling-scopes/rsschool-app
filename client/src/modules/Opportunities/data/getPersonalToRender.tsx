@@ -2,6 +2,7 @@ import { UserData, MilitaryServiceStatus } from 'common/models/cv';
 import capitalize from 'lodash/capitalize';
 
 export function getPersonalToRender(user: UserData) {
+  const { selfIntroLink } = user;
   return [
     {
       title: 'English',
@@ -9,7 +10,13 @@ export function getPersonalToRender(user: UserData) {
     },
     {
       title: 'Self Introduction',
-      value: user.selfIntroLink || 'Not Available',
+      value: selfIntroLink ? (
+        <a className="rs-link" target="_blank" rel="nofollow" href={selfIntroLink}>
+          {selfIntroLink}
+        </a>
+      ) : (
+        'Not Available'
+      ),
     },
     {
       title: 'Ready to work full time',
