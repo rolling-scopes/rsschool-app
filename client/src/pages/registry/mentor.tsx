@@ -8,8 +8,9 @@ MentorRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
     return { courseAlias };
-  } catch (e) {
-    console.error(e.message);
+  } catch (err) {
+    const error = err as Error;
+    console.error(error?.message);
     return { courseAlias: undefined };
   }
 };

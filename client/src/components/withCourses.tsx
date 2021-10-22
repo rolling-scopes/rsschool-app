@@ -8,8 +8,9 @@ function withCourses(WrappedComponent: React.ComponentType<any>) {
       try {
         const courses = await new UserService(ctx).getCourses();
         return { courses };
-      } catch (e) {
-        console.error(e.message);
+      } catch (err) {
+        const error = err as Error;
+        console.error(error?.message);
         return { courses: [] };
       }
     }

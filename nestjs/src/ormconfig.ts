@@ -11,6 +11,8 @@ const config: ConnectionOptions = {
   database: process.env.RSSHCOOL_API_PG_DATABASE,
   entities,
   migrations,
+  synchronize: false,
+  migrationsRun: false,
   cli: {
     migrationsDir: 'src/migrations',
   },

@@ -2,7 +2,18 @@ const path = require('path');
 const webpack = require('webpack');
 const isProd = process.env.NODE_ENV === 'production';
 
+const server = process.env.SERVER_URL || 'http://localhost:3001';
+const nestjs = process.env.NESTJS_URL || 'http://localhost:3002';
+
 const nextConfig = {
+  rewrites: () => [
+    { source: "/api/alerts/:path*", destination: `${nestjs}/alerts/:path*` },
+    { source: "/api/:path*", destination: `${server}/:path*` },
+    {
+      source: "/:any*",
+      destination: "/",
+    },
+  ],
   serverRuntimeConfig: {
     rsHost: process.env.RS_HOST || 'http://localhost:3000',
   },

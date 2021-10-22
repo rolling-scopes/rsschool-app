@@ -31,8 +31,9 @@ class EpamLearningJs extends React.Component<Props, State> {
         return EpamLearningJs.redirectToRegistry(ctx);
       }
       return { course };
-    } catch (e) {
-      console.error(e.message);
+    } catch (err) {
+      const error = err as Error;
+      console.error(error.message);
       return { course: null };
     }
   }
