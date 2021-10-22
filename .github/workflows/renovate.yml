@@ -1,7 +1,7 @@
 name: Renovate
 on:
   schedule:
-    - cron: '0/15 * * * *'
+    - cron: '0/30 * * * *'
 jobs:
   renovate:
     runs-on: ubuntu-latest
@@ -11,5 +11,5 @@ jobs:
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v28.8.2
         with:
-          configurationFile: example/renovate-config.js
+          configurationFile: renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
