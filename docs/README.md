@@ -6,5 +6,5 @@ You can read about `RS School App` features by clicking to links in menu below o
 
 ## Features:
 
-* [CV](./features/cv.md)
-* [Choose kata languages](./features/choose-kata-languages.md)
+- [CV](./features/cv.md)
+- [Choose kata languages](./features/choose-kata-languages.md)
