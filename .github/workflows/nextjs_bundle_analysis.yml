@@ -7,6 +7,10 @@ on:
     branches: [master]
     types: [opened, synchronize]
 
+concurrency:
+  group: nextjs_bundle_analysis_${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze Next.js
