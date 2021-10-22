@@ -3,5 +3,7 @@
   "dependencyDashboard": true,
   "lockFileMaintenance": { "enabled": true },
   "labels": ["renovate"],
-  "transitiveRemediation": true
+  "transitiveRemediation": true,
+  "platform": "github",
+  "repositories": ["rolling-scopes/rsschool-app"]
 }
