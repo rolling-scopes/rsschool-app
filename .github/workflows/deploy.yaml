@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 concurrency:
-  group: deploy_${{ github.head_ref }}
+  group: deploy
   cancel-in-progress: true
 
 jobs:

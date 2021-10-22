@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize]
 
 concurrency:
-  group: nextjs_bundle_analysis_${{ github.head_ref }}
+  group: nextjs_bundle_analysis_${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
