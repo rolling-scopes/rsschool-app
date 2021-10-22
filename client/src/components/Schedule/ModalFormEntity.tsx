@@ -32,6 +32,10 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
     setEntityData(values);
   };
 
+  if (!alias) {
+    return null;
+  }
+
   return (
     <Modal
       visible={visible}
