@@ -184,7 +184,7 @@ function Page(props: CoursePageProps) {
             <Select.Option value="ipynb">Jupyter Notebook</Select.Option>
             <Select.Option value="cv:markdown">CV Markdown</Select.Option>
             <Select.Option value="cv:html">CV HTML</Select.Option>
-            <Select.Option value="selfeducation">RSAPP Test</Select.Option>
+            <Select.Option value="selfeducation">RS School App Test</Select.Option>
             <Select.Option value="codewars">Codewars</Select.Option>
             <Select.Option value="test">Google Form Test</Select.Option>
             <Select.Option value="codejam">Code Jam</Select.Option>

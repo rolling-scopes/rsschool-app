@@ -1,6 +1,6 @@
 # CV
 
-RsApp CV is a 2-part functionality:
+CV is a 2-part functionality:
 * For users who want to find a job it helps create their own resume and present it to a potential employer
 * For employers who want to find an employee it grants access to user's resumes. 
 
@@ -44,9 +44,9 @@ There are 2 types of data presented in the CV:
         * `Telegram public name` - Telegram public name (contained in the link to Telegram after `t.me/`)
         * `LinkedIn username` -  LinkedIn username (contained in thelink to the user's profile in LinkedIn)
         * `Locations` - locations where the user is able to work (3 locations can be added, each from a new line, the extra ones will be truncated)
-        * `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RSApp)
+        * `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
         * `Website` - a link to a website (with a portfolio, some profile etc.)
-* Information that is pulled from RSApp and cannot be changed directly
+* Information that is pulled from RS School App and cannot be changed directly
     * `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken):
         * `Course name` - course name
         * `Course status` - user's status on the course (in progress, completed, completed with certificate, etc.)

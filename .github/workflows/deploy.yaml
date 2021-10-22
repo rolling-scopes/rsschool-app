@@ -1,4 +1,4 @@
-name: Deploy RS App
+name: Deploy RS School App
 
 on:
   push:
