@@ -1,0 +1,7 @@
+{
+  "extends": ["config:base"],
+  "dependencyDashboard": true,
+  "lockFileMaintenance": true,
+  "labels": ["renovate"],
+  "transitiveRemediation": true
+}
