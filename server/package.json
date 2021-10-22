@@ -46,7 +46,7 @@
     "typeorm": "0.2.37"
   },
   "devDependencies": {
-    "@types/jest": "25.2.1",
+    "@types/jest": "25.2.3",
     "@types/json2csv": "4.5.1",
     "@types/jsonwebtoken": "8.3.5",
     "@types/koa": "2.11.3",
