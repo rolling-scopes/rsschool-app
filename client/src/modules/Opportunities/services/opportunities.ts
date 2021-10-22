@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
 import { NextPageContext } from 'next';
-import { JobSeekerData, GetFullCVData, AllUserCVData, EditCVData } from '../../../common/models/cv';
+import { JobSeekerData, GetFullCVData, AllUserCVData, EditCVData } from 'common/models/cv';
 
 export class OpportunitiesService {
   private axios: AxiosInstance;

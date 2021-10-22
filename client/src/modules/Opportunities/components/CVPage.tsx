@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Result, Switch, Typography, Divider } from 'antd';
-import EditCV from './EditCV';
+import EditCV from '../../../components/cv/EditCV';
 import ViewCV from './ViewCV';
-import NoConsentViewCV from './NoConsentViewCV';
+import NoConsentViewCV from '../../../components/cv/NoConsentViewCV';
 
 const { Text } = Typography;
 
@@ -64,16 +64,14 @@ function CVInfo(props: CVInfoProps) {
           )}
         </>
       );
-    } else {
-      return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
     }
-  } else {
-    if (consent) {
-      return <ViewCV ownerGithubId={ownerGithubId} />;
-    } else {
-      return <NoConsentViewCV isOwner={false} />;
-    }
+    return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
   }
+
+  if (consent) {
+    return <ViewCV ownerGithubId={ownerGithubId} />;
+  }
+  return <NoConsentViewCV isOwner={false} />;
 }
 
 export default CVInfo;

@@ -7,25 +7,24 @@ type Props = {
   title?: React.ReactNode;
   icon?: React.ReactNode;
   content: React.ReactNode;
-  className?: string;
 };
 
-function SectionCV(props: Props) {
-  const { title, icon, content, className } = props;
+function Section(props: Props) {
+  const { title, icon, content } = props;
 
   const avatar = icon ? <Avatar size={24} icon={icon} /> : null;
 
   const complexTitle = title && (
-    <Title level={4} style={{ display: 'inline-block' }} className={className}>
+    <Title level={4} style={{ display: 'inline-block' }}>
       {avatar} {title}
     </Title>
   );
 
   return (
-    <Card size="small" title={complexTitle} bordered={false}>
+    <Card className="cv-card-section" size="small" title={complexTitle} bordered={false}>
       {content}
     </Card>
   );
 }
 
-export default SectionCV;
+export default Section;

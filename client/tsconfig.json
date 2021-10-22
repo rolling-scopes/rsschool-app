@@ -1,8 +1,7 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": "src",
     "declaration": false,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -12,6 +11,6 @@
     "skipLibCheck": true,
     "lib": ["dom", "es2015", "es2016", "es2017"]
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["./next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./node_modules"]
 }

@@ -6,7 +6,7 @@ import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../.
 import { Header } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';
-import { OpportunitiesService } from '../../services/opportunities';
+import { OpportunitiesService } from '../../modules/Opportunities/services/opportunities';
 import heroesBadges from '../../configs/heroes-badges';
 import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { SwitchChangeEventHandler } from 'antd/lib/switch';

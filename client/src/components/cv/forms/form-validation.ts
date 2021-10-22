@@ -69,12 +69,8 @@ const contactsValidationRules: {
   ],
   linkedin: [
     {
-      max: 30,
-      message: validationMessages.max(30),
-    },
-    {
-      whitespace: true,
-      message: validationMessages.whitespace,
+      type: 'url',
+      message: validationMessages.invalid('URL'),
     },
   ],
   locations: [

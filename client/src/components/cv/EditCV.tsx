@@ -4,7 +4,7 @@ import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } 
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from '../../../../common/models/cv';
-import { OpportunitiesService } from 'services/opportunities';
+import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
 import {
@@ -27,6 +27,8 @@ type Props = {
 
 const cvService = new OpportunitiesService();
 const userService = new UserService();
+
+const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 function EditCV(props: Props) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -378,8 +380,6 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
-  const buttonStyle = {};
-
   return (
     <LoadingScreen show={loading}>
       <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
@@ -413,19 +413,14 @@ function EditCV(props: Props) {
                 Save
               </Button>
             </Row>
-            <Row justify="space-between" style={{ paddingTop: 24 }}>
+            <Row justify="center" style={{ paddingTop: 24 }}>
               <Popconfirm
                 title="Are you sure? Unsaved fields data will be reaplced with profile data."
                 onConfirm={fillFromProfile}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button
-                  style={{ ...buttonStyle, width: '33%' }}
-                  type="default"
-                  htmlType="button"
-                  icon={<CopyOutlined />}
-                >
+                <Button style={buttonStyle} type="default" htmlType="button" icon={<CopyOutlined />}>
                   Get data from profile
                 </Button>
               </Popconfirm>
@@ -435,17 +430,12 @@ function EditCV(props: Props) {
                 okText="Yes"
                 cancelText="No"
               >
-                <Button
-                  style={{ ...buttonStyle, width: '21%' }}
-                  type="default"
-                  htmlType="button"
-                  icon={<ClearOutlined />}
-                >
+                <Button style={buttonStyle} type="default" htmlType="button" icon={<ClearOutlined />}>
                   Reset fields
                 </Button>
               </Popconfirm>
               <Button
-                style={{ ...buttonStyle, width: '21%' }}
+                style={buttonStyle}
                 type="default"
                 htmlType="button"
                 onClick={extendCV}
@@ -454,7 +444,7 @@ function EditCV(props: Props) {
                 Extend CV
               </Button>
               <Button
-                style={{ ...buttonStyle, padding: '4px', width: '21%' }}
+                style={buttonStyle}
                 type="primary"
                 danger
                 htmlType="button"
