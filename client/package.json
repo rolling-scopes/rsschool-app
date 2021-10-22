@@ -41,7 +41,7 @@
     "@types/csvtojson": "1.1.5",
     "@types/enzyme": "3.10.9",
     "@types/jest": "24.9.1",
-    "@types/lodash": "4.14.171",
+    "@types/lodash": "4.14.176",
     "@types/moment-timezone": "0.5.30",
     "@types/node": "10.17.60",
     "@types/react": "17.0.31",
