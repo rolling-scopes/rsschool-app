@@ -57,18 +57,11 @@ export interface IConfig {
   name: string;
   sessionAge: number;
   sessionKey: string;
-  integrations: {
-    heroes: {
-      url?: string;
-      username: string;
-      password: string;
-    };
-  };
 }
 
 export const config: IConfig = {
   app: {
-    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'davojta', 'shastel', 'sonejka', 'forkollaider'],
+    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'sonejka'],
   },
   users: {
     verification: {
@@ -118,13 +111,6 @@ export const config: IConfig = {
     region: process.env.RSSHCOOL_API_AWS_REGION || '',
     restApiUrl: process.env.RSSHCOOL_API_AWS_TASK_API_URL || '',
     restApiKey: process.env.RSSHCOOL_API_AWS_TASK_API_KEY || '',
-  },
-  integrations: {
-    heroes: {
-      url: '', // turn off.
-      username: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_USERNAME || '',
-      password: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_PASSWORD || '',
-    },
   },
   name: 'rsschool-api',
   port: parseInt(process.env.NODE_PORT || '3001', 10),

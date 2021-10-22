@@ -1,7 +1,7 @@
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { DiscordService, HeroesService } from '../integrations';
+import { DiscordService } from '../integrations';
 import { ILogger } from '../logger';
 import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
 import { guard } from './guards';
@@ -12,6 +12,8 @@ import { courseService } from '../services';
 
 type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; courseId: number };
 type FeedbackInput = { toUserId: number; comment: string };
+
+const { OK, BAD_REQUEST } = StatusCodes;
 
 export function feedbackRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/feedback' });
@@ -45,18 +47,7 @@ const postPrivateFeedback = (_: ILogger) => {
   };
 };
 
-const isValidName = (name: string) => typeof name === 'string' && name.trim().length > 0;
-
-const getUserDisplayName = (data: User) => {
-  let name = data.githubId;
-  if (isValidName(data.firstName) || isValidName(data.lastName)) {
-    name = `${data.firstName} ${data.lastName}`;
-  }
-  return name;
-};
-
 const postGratitudeFeedback = (logger: ILogger) => {
-  const heroesService = new HeroesService(logger);
   const discordService = new DiscordService(logger);
 
   type Badge = { id: string; name: string; isManagerOnly: boolean };
@@ -81,27 +72,6 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
 
     return heroBadges.filter((badge: Badge) => (!badge.isManagerOnly ? true : isAvailableSpecialBadges ? true : false));
-  };
-
-  const postToHeroes = (fromUser: User | undefined, toUser: User | undefined, data: GratitudeInput) => {
-    if (
-      !fromUser ||
-      !fromUser.primaryEmail ||
-      !toUser ||
-      !toUser.primaryEmail ||
-      !data.badgeId ||
-      !heroesService.isCommentValid(data.comment)
-    ) {
-      return Promise.resolve(null);
-    }
-    return heroesService.assignBadge({
-      assignerEmail: fromUser.primaryEmail,
-      assignerName: getUserDisplayName(fromUser),
-      receiverEmail: toUser!.primaryEmail,
-      receiverName: getUserDisplayName(toUser),
-      comment: data.comment,
-      event: data.badgeId,
-    });
   };
 
   const postToDiscord = (
@@ -137,17 +107,16 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const userRepository = getRepository(User);
     const [fromUser, toUser] = await Promise.all([userRepository.findOne(id), userRepository.findOne(data.toUserId)]);
 
-    const heroesUrl = (await postToHeroes(fromUser, toUser, data)) ?? undefined;
     const course = await courseService.getCourse(data.courseId);
 
     await postToDiscord(fromUser, toUser, data, course?.discordServer.gratitudeUrl);
+
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
       course: data.courseId ? data.courseId : undefined,
       fromUser: id,
       toUser: data.toUserId,
-      heroesUrl,
     };
     const result = await getRepository(Feedback).save(feedback);
 
