@@ -10,8 +10,8 @@ export type RouterContext = Router.RouterContext<
 
 const basicAuthAdmin = auth({ name: config.admin.username, pass: config.admin.password });
 export const basicAuthAws = auth({
-  name: config.users.verification.username,
-  pass: config.users.verification.password,
+  name: config.users.cloud.username,
+  pass: config.users.cloud.password,
 });
 
 export const userGuards = (user: IUserSession) => {
