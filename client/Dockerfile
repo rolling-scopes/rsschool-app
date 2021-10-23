@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM arm64v8/node:lts-alpine
 
 EXPOSE 8080
 
