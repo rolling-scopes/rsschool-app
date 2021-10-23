@@ -23,7 +23,7 @@ const nextConfig = {
     APP_VERSION: process.env.APP_VERSION,
     RSSHCOOL_UI_GCP_MAPS_API_KEY: process.env.RSSHCOOL_UI_GCP_MAPS_API_KEY,
   },
-  assetPrefix: isProd ? 'https://cdn.rs.school' : '',
+  // assetPrefix: isProd ? 'https://cdn.rs.school' : '',
   webpack: config => {
     config.resolve.alias['configs'] = path.join(__dirname, 'src/configs');
     config.resolve.alias['components'] = path.join(__dirname, 'src/components');
