@@ -57,7 +57,7 @@
     "@types/koa-static": "4.0.2",
     "@types/koa__cors": "2.2.3",
     "@types/koa__router": "8.0.2",
-    "@types/lodash": "4.14.149",
+    "@types/lodash": "4.14.176",
     "@types/lru-cache": "5.1.0",
     "@types/luxon": "1.27.1",
     "@types/node": "12.12.34",
