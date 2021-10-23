@@ -27,16 +27,9 @@ export class AlertsService {
     });
   }
 
-  public async findAll(): Promise<Alert[]> {
+  public async findAll({ enabled }: { enabled: boolean }): Promise<Alert[]> {
     const items = await this.alertsRepository.find({
-      select: fields,
-    });
-    return items;
-  }
-
-  public async findEnabled(): Promise<Alert[]> {
-    const items = await this.alertsRepository.find({
-      where: { enabled: true },
+      where: { enabled },
       select: fields,
     });
     return items;

@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Query,
+  ParseBoolPipe,
+  DefaultValuePipe,
+} from '@nestjs/common';
 import { AlertsService } from './alerts.service';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
@@ -13,8 +25,9 @@ export class AlertsController {
   }
 
   @Get()
-  findAll() {
-    return this.alertService.findAll();
+  findAll(@Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean) {
+    const data = this.alertService.findAll({ enabled });
+    return { data };
   }
 
   @Patch(':id')
