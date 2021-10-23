@@ -65,10 +65,7 @@ services:
       - client
 
   nestjs:
-    build:
-      context: ./nestjs
-      dockerfile: Dockerfile
-    # image: ghcr.io/rolling-scopes/rsschool-app-nestjs:master
+    image: ghcr.io/rolling-scopes/rsschool-app-nestjs:master
     ports:
       - 8082:8080
     environment:
