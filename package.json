@@ -11,7 +11,7 @@
     "lint": "eslint client server --ext .ts,.tsx",
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"common/**/*.{ts,tsx,js}\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
-    "ci:lint": "eslint . --ext .ts,.tsx",
+    "ci:lint": "eslint client server --ext .ts,.tsx",
     "ci:build": "concurrently \"cd ./client && npm run ci:build\" \"cd ./server && npm run build\"",
     "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
     "db:dump": "pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
