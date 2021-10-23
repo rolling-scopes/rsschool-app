@@ -58,7 +58,7 @@ jobs:
         run: npm run build
 
       - name: Clean modules
-        run: npm install --production --no-optional
+        run: npm prune --production --no-optional
 
       - name: Upload to CDN
         env:
