@@ -1,4 +1,4 @@
-import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from '../../../common/models';
+import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
   switch (value) {

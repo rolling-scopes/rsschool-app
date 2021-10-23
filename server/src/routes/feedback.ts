@@ -7,7 +7,7 @@ import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
 import { guard } from './guards';
 import { setResponse } from './utils';
 import { FeedbackRepository } from '../repositories/feedback.repository';
-import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
+import { IGratitudeGetRequest } from 'common/interfaces/gratitude';
 import { courseService } from '../services';
 
 type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; courseId: number };

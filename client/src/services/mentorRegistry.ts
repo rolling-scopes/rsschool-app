@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
   preselectedCourses: number[];

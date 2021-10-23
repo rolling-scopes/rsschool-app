@@ -1,5 +1,5 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import { MentorBasic } from '../../../common/models';
+import { MentorBasic } from 'common/models';
 import { Mentor, CourseTask, TaskResult } from '../models';
 import { userService } from '../services';
 import { createQueryBuilder } from 'typeorm';

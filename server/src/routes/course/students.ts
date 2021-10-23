@@ -2,7 +2,7 @@ import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
-import { MentorBasic } from '../../../../common/models';
+import { MentorBasic } from 'common/models';
 import { ILogger } from '../../logger';
 import { Student } from '../../models';
 import { courseService, OperationResult, userService } from '../../services';

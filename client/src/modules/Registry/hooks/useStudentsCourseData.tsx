@@ -2,7 +2,7 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
-import { StudentStats } from '../../../../../common/models';
+import { StudentStats } from 'common/models';
 
 type IdName = {
   id: number;

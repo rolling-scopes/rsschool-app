@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { mountToJson } from 'enzyme-to-json';
 import StudentStatsCard from '../StudentStatsCard';
-import { StudentStats } from '../../../../../common/models/profile';
+import { StudentStats } from 'common/models/profile';
 
 describe('', () => {
   const githubId = 'test';

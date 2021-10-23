@@ -2,7 +2,7 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { Card, Typography, Input, Row, Col } from 'antd';
-import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { GeneralInfo, ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { LocationSelect } from 'components/Forms';

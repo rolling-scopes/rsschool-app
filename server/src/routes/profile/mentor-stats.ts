@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { MentorStats } from '../../../../common/models/profile';
+import { MentorStats } from 'common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course } from '../../models';
 import { RepositoryService } from '../../services';

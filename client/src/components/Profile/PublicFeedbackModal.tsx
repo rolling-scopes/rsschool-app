@@ -1,6 +1,6 @@
 import * as React from 'react';
 import moment from 'moment';
-import { PublicFeedback } from '../../../../common/models/profile';
+import { PublicFeedback } from 'common/models/profile';
 import { Typography, Comment, Avatar, Tooltip, Modal, Row, Col } from 'antd';
 import heroesBadges from '../../configs/heroes-badges';
 

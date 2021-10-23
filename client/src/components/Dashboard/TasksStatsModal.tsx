@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StudentStats } from '../../../../common/models/profile';
+import { StudentStats } from 'common/models/profile';
 import { Modal, Table, Typography } from 'antd';
 import { CourseTask } from 'services/course';
 import { dateTimeRenderer, dateRenderer } from 'components/Table';

@@ -5,8 +5,8 @@ import { Typography, Comment, Tooltip, Avatar, Badge } from 'antd';
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
-import { PublicFeedback } from '../../../../common/models/profile';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { PublicFeedback } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 

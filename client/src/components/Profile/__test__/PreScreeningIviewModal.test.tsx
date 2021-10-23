@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import PreScreeningIviewModal from '../PreScreeningIviewModal';
-import { StageInterviewDetailedFeedback } from '../../../../../common/models/profile';
+import { StageInterviewDetailedFeedback } from 'common/models/profile';
 
 describe('PreScreeningIviewModal', () => {
   it('Should render correctly', () => {

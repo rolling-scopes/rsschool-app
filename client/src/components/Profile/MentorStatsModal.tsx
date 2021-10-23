@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MentorStats } from '../../../../common/models/profile';
+import { MentorStats } from 'common/models/profile';
 import { Modal, Avatar, Typography, Tag, Row, Col } from 'antd';
 
 const { Text } = Typography;

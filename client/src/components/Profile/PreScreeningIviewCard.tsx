@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography, List, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
-import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
+import { StageInterviewDetailedFeedback } from 'common/models/profile';
 import { formatDate } from 'services/formatter';
 import { Rating } from 'components/Rating';
 import PreScreeningIviewModal from './PreScreeningIviewModal';

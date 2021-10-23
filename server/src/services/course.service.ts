@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { getRepository, getManager, getCustomRepository } from 'typeorm';
-import { MentorBasic, StudentBasic } from '../../../common/models';
+import { MentorBasic, StudentBasic } from 'common/models';
 import {
   Course,
   CourseTask,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IGratitudeGetResponse, IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
+import { IGratitudeGetResponse, IGratitudeGetRequest } from 'common/interfaces/gratitude';
 
 export class GratitudeService {
   async postGratitude(data: { toUserId: number; badgeId?: string; comment: string; courseId: number }) {
