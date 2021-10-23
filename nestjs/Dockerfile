@@ -12,6 +12,6 @@ COPY package.json /app
 COPY package-lock.json /app
 RUN npm install --production --no-optional
 
-COPY dist /dist
+COPY dist /app/dist
 
 CMD [ "node", "dist/main" ]

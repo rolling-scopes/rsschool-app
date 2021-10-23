@@ -7,11 +7,12 @@ const nestjs = process.env.NESTJS_URL || 'http://localhost:3002';
 
 const nextConfig = {
   rewrites: () => [
-    { source: "/api/alerts/:path*", destination: `${nestjs}/alerts/:path*` },
-    { source: "/api/:path*", destination: `${server}/:path*` },
+    { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
+    { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
+    { source: '/api/:path*', destination: `${server}/:path*` },
     {
-      source: "/:any*",
-      destination: "/",
+      source: '/:any*',
+      destination: '/',
     },
   ],
   serverRuntimeConfig: {
