@@ -80,6 +80,8 @@ services:
   certbot:
     image: certbot/certbot
     restart: unless-stopped
+    networks:
+      - shared-network
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
