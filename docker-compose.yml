@@ -61,6 +61,8 @@ services:
       - 443:443
     depends_on:
       - client
+      - server
+      - nestjs
 
   nestjs:
     image: ghcr.io/rolling-scopes/rsschool-app-nestjs:master
