@@ -47,7 +47,7 @@
   "devDependencies": {
     "@types/jest": "25.2.3",
     "@types/json2csv": "4.5.1",
-    "@types/jsonwebtoken": "8.3.5",
+    "@types/jsonwebtoken": "8.5.5",
     "@types/koa": "2.11.3",
     "@types/koa-basic-auth": "2.0.4",
     "@types/koa-bodyparser": "4.2.0",
