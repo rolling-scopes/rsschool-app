@@ -13,8 +13,9 @@ function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: n
         const courses = await new UserService(context).getCourses();
         const course = courses.find(c => (courseId ? c.id === courseId : c.alias === alias)) || null;
         return { course };
-      } catch (e) {
-        console.error(e.message);
+      } catch (err) {
+        const error = err as Error;
+        console.error(error?.message);
         return { course: undefined };
       }
     }

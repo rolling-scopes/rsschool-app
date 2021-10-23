@@ -17,7 +17,7 @@ import {
   MentorRegistry,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 
 interface Relations {
   student: string;

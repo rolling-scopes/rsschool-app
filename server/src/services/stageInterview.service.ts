@@ -1,6 +1,6 @@
 import { StageInterview, StageInterviewFeedback, StageInterviewStudent, Student } from '../models';
 import { getRepository } from 'typeorm';
-import { StageInterviewFeedbackJson } from '../../../common/models';
+import { StageInterviewFeedbackJson } from 'common/models';
 import * as courseService from './course.service';
 
 export async function getAvailableStudents(courseId: number) {

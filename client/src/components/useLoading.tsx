@@ -13,7 +13,7 @@ export function useLoading(
         setLoading(true);
         return await action(...args);
       } catch (e) {
-        catchHandler(e);
+        catchHandler(e as Error);
       } finally {
         setLoading(false);
       }

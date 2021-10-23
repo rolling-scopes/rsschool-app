@@ -69,9 +69,10 @@ export function Page(props: CoursePageProps) {
       setSubmitResults(submitResults);
       setSelectedFileList(new Map());
       message.success('Score has been submitted.');
-    } catch (e) {
-      if (e.message.match(/^Incorrect data/)) {
-        message.error(e.message);
+    } catch (err) {
+      const error = err as Error;
+      if (error.message.match(/^Incorrect data/)) {
+        message.error(error.message);
       } else {
         message.error('An error occured. Please try later.');
       }
