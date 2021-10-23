@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, Spin } from 'antd';
 import usePlacesAutocomplete from 'use-places-autocomplete';
-import { Location } from '../../../../common/models/profile';
+import { Location } from 'common/models/profile';
 
 type Props = {
   onChange: (arg: Location | null) => void;

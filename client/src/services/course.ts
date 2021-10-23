@@ -1,12 +1,12 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { Event } from './event';
-import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '../../../common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
 import { sortTasksByEndDate } from 'services/rules';
 import { TaskType } from './task';
-import { ScoreTableFilters } from '../../../common/types/score';
-import { IPaginationInfo, Pagination } from '../../../common/types/pagination';
+import { ScoreTableFilters } from 'common/types/score';
+import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
-import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 
 type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';

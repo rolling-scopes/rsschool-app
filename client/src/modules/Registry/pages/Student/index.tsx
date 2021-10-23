@@ -11,7 +11,7 @@ import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Location } from '../../../../../../common/models';
+import { Location } from 'common/models';
 import { Info } from 'modules/Registry/components';
 import { css } from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';

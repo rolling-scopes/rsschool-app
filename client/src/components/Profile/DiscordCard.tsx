@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography } from 'antd';
 import CommonCard from './CommonCard';
-import { Discord } from '../../../../common/models/profile';
+import { Discord } from 'common/models/profile';
 import { CheckSquareTwoTone, WarningTwoTone } from '@ant-design/icons';
 import discordIntegration from '../../configs/discord-integration';
 import CopyToClipboardButton from '../CopyToClipboardButton';

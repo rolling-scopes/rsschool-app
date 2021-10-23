@@ -8,7 +8,7 @@ import { CourseService, Interview } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
-import { InterviewPair } from '../../../../../common/models/interview';
+import { InterviewPair } from 'common/models/interview';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;

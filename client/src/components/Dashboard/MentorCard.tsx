@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Typography, List } from 'antd';
 import CommonCard from './CommonDashboardCard';
 import { TeamOutlined, GithubFilled, EnvironmentFilled } from '@ant-design/icons';
-import { MentorBasic } from '../../../../common/models';
+import { MentorBasic } from 'common/models';
 import { GithubAvatar } from 'components';
 
 interface MentorContact {

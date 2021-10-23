@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { NextPageContext, GetServerSidePropsContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
-import { EnglishLevel } from '../../../common/models';
-import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
+import { EnglishLevel } from 'common/models';
+import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 

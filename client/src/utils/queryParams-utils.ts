@@ -1,5 +1,5 @@
+import { isArray, isNil } from 'lodash';
 import { ParsedUrlQuery } from 'querystring';
-import { isArray, isNull, isUndefined } from 'lodash';
 import { onlyDefined } from './onlyDefined';
 
 export const getQueryParams = (
@@ -8,7 +8,7 @@ export const getQueryParams = (
 ): ParsedUrlQuery => {
   let params = { ...initialQueryParams };
   for (const [key, value] of Object.entries(queryParams)) {
-    if (!isNull(value) && !isUndefined(value)) {
+    if (!isNil(value)) {
       if (isArray(value) && value[0] !== '') {
         params = { ...params, [key]: value[0] };
       } else if (typeof value === 'string' && value !== '') {

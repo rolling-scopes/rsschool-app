@@ -10,8 +10,8 @@ const { Text } = Typography;
 
 type Props = {
   taskColumns: any[];
-  cityName: string | string[];
-  mentor: string | string[];
+  cityName?: string | string[];
+  mentor?: string | string[];
   handleSettings: () => void;
 };
 

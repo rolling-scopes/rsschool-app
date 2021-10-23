@@ -7,8 +7,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { css } from 'styled-jsx/css';
-import { IPaginationInfo } from '../../../../../common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from '../../../../../common/types/score';
+import { IPaginationInfo } from 'common/types/pagination';
+import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 
 const { Text } = Typography;
