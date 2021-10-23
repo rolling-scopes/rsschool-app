@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { PublicFeedback } from 'common/models/profile';
+import { PublicFeedback } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Feedback } from '../../models';
 

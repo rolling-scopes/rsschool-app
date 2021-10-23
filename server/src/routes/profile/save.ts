@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { ProfilePermissions, User, Consent } from '../../models';
-import { SaveProfileInfo } from 'common/models/profile';
+import { SaveProfileInfo } from '../../../../common/models/profile';
 import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
 import { ConsentRepository } from '../../repositories/consent.repository';

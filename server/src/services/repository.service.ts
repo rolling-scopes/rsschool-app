@@ -7,7 +7,7 @@ import { Course, Student } from '../models';
 import { courseService } from '../services';
 import { StudentRepository } from '../repositories/student.repository';
 import { MentorRepository } from '../repositories/mentor.repository';
-import { MentorBasic } from 'common/models';
+import { MentorBasic } from '../../../common/models';
 
 export class RepositoryService {
   constructor(private courseId: number, private github: Octokit, private logger?: ILogger) {}

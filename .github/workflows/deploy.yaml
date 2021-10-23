@@ -199,7 +199,7 @@ jobs:
           AWS_DEFAULT_REGION: eu-central-1
         with:
           ssm-path: /prod/app
-          format: shell
+          format: dotenv
           output: .env
 
       - name: Pull the latest images

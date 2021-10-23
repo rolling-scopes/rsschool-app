@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { StageInterviewDetailedFeedback } from 'common/models/profile';
+import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course, StageInterview, StageInterviewFeedback } from '../../models';
 import { stageInterviewService } from '../../services';

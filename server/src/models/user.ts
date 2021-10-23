@@ -17,7 +17,7 @@ import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { CourseManager } from './courseManager';
-import { Discord } from 'common/models/profile';
+import { Discord } from '../../../common/models/profile';
 
 export interface EducationRecord {
   graduationYear: number;

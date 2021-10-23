@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
-import { ProfileInfo, ConfigurableProfilePermissions } from 'common/models/profile';
+import { ProfileInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
 import { getMentorStats } from './mentor-stats';
 import { getPublicFeedback } from './public-feedback';
 import { getStageInterviewFeedback } from './stage-interview-feedback';

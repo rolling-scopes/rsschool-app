@@ -1,5 +1,5 @@
 import { EntityRepository, AbstractRepository, getRepository } from 'typeorm';
-import { InterviewStatus, InterviewDetails } from 'common/models/interview';
+import { InterviewStatus, InterviewDetails } from '../../../common/models/interview';
 import { StageInterview, CourseTask, StageInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
 import { InterviewInfo } from './interview.repository';
