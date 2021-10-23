@@ -94,10 +94,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Format & Lint (npm run ci:lint && npm run ci:format)
+      - name: Build (npm run ci:build)
         run: |
-          npm run ci:format
-          npm run ci:lint
+          npm run ci:build
 
   pr_test:
     name: Test
