@@ -3,7 +3,7 @@ export interface IConfig {
     admins: string[];
   };
   users: {
-    verification: {
+    cloud: {
       username: string;
       password: string;
     };
@@ -64,9 +64,9 @@ export const config: IConfig = {
     admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'sonejka'],
   },
   users: {
-    verification: {
-      username: process.env.RSSHCOOL_API_VERIFICATION_USERNAME || 'test',
-      password: process.env.RSSHCOOL_API_VERIFICATION_PASSWORD || 'test',
+    cloud: {
+      username: process.env.RSSHCOOL_API_USERS_CLOUD_USERNAME || 'test',
+      password: process.env.RSSHCOOL_API_USERS_CLOUD_PASSWORD || 'test',
     },
   },
   auth: {
@@ -109,8 +109,8 @@ export const config: IConfig = {
     secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',
     accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
     region: process.env.RSSHCOOL_API_AWS_REGION || '',
-    restApiUrl: process.env.RSSHCOOL_API_AWS_TASK_API_URL || '',
-    restApiKey: process.env.RSSHCOOL_API_AWS_TASK_API_KEY || '',
+    restApiUrl: process.env.RSSHCOOL_API_AWS_REST_API_URL || '',
+    restApiKey: process.env.RSSHCOOL_API_AWS_REST_API_KEY || '',
   },
   name: 'rsschool-api',
   port: parseInt(process.env.NODE_PORT || '3001', 10),
