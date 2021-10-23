@@ -181,7 +181,7 @@ jobs:
 
   deploy_aws:
     name: Deploy to AWS
-    needs: [deploy_build_client, deploy_build_server]
+    needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
     runs-on: ubuntu-latest
     env:
       PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
@@ -194,11 +194,13 @@ jobs:
       - name: Pull the latest images
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
+          scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:/usr/src/app/docker-compose.yml
+          scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:/usr/src/app/nginx/nginx.conf
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             sleep 10
             docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
             docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
+            docker pull ghcr.io/rolling-scopes/rsschool-app-nestjs:master
           '
 
       - name: Restart

@@ -8,7 +8,7 @@
     "test": "cd ./client && npm run test && cd ../server && npm run test && cd ..",
     "test-watch": "cd ./client && npm run test-watch && cd ../server && npm run test-watch",
     "coverage": "cd ./client && npm run coverage && cd ../server && npm run coverage",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint client server --ext .ts,.tsx",
     "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"common/**/*.{ts,tsx,js}\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\"",
     "ci:lint": "eslint . --ext .ts,.tsx",
