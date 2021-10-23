@@ -7,8 +7,6 @@ services:
     environment:
       RS_HOST: ${RS_HOST}
       RSSHCOOL_UI_GCP_MAPS_API_KEY: ${RSSHCOOL_UI_GCP_MAPS_API_KEY}
-      SERVER_URL: 'http://server:8080'
-      NESTJS_URL: 'http://nestjs:8080'
     restart: on-failure
     networks:
       - shared-network

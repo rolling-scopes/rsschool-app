@@ -2,11 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const isProd = process.env.NODE_ENV === 'production';
 
-const server = process.env.SERVER_URL || 'http://localhost:3001';
-const nestjs = process.env.NESTJS_URL || 'http://localhost:3002';
+const server = process.env.SERVER_HOST || 'http://localhost:3001';
+const nestjs = process.env.NESTJS_HOST || 'http://localhost:3002';
 
 const nextConfig = {
-  rewrites: () => [
+  rewrites: () => isProd ? [] : [
     { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
     { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
     { source: '/api/:path*', destination: `${server}/:path*` },
