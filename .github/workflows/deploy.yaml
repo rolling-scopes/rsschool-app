@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Test (npm test)
         run: npm test
@@ -58,7 +58,7 @@ jobs:
         run: npm run build
 
       - name: Clean modules
-        run: npm ci --production --no-optional
+        run: npm install --production --no-optional
 
       - name: Upload to CDN
         env:
