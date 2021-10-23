@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Modal, Tag, Typography, Table } from 'antd';
 import { formatDate } from 'services/formatter';
 import { Rating } from 'components/Rating';
-import { StageInterviewDetailedFeedback } from '../../../../common/models/profile';
+import { StageInterviewDetailedFeedback } from 'common/models/profile';
 import { CODING_LEVELS, SKILLS_LEVELS, SKILL_NAME } from 'services/reference-data/stageInterview';
 import { ENGLISH_LEVELS } from 'services/reference-data';
 

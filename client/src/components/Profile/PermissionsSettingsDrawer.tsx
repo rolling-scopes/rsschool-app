@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { toPairs, mapValues, values } from 'lodash';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { Drawer, Checkbox, List, Typography } from 'antd';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';

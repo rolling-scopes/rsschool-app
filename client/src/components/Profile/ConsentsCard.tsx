@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Consent } from '../../../../common/models/profile';
+import { Consent } from 'common/models/profile';
 import CommonCard from './CommonCard';
 import { NotificationOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { List, Typography, Checkbox } from 'antd';

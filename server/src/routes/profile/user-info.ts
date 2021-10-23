@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { UserInfo } from '../../../../common/models/profile';
+import { UserInfo } from 'common/models/profile';
 import { getFullName } from '../../rules';
 import { User } from '../../models';
 import { Permissions } from './permissions';

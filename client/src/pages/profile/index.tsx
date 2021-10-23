@@ -23,7 +23,7 @@ import {
   GeneralInfo,
   Consent,
   Discord,
-} from '../../../../common/models/profile';
+} from 'common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';

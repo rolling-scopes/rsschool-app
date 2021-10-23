@@ -9,8 +9,8 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { CourseService, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { IPaginationInfo } from '../../../../../../common/types/pagination';
-import { ScoreTableFilters } from '../../../../../../common/types/score';
+import { IPaginationInfo } from 'common/types/pagination';
+import { ScoreTableFilters } from 'common/types/score';
 
 const { Text } = Typography;
 

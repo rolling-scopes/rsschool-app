@@ -2,8 +2,8 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, Select } from 'antd';
 import CommonCard from './CommonCard';
-import { GeneralInfo, ConfigurableProfilePermissions } from '../../../../common/models/profile';
-import { EnglishLevel } from '../../../../common/models/index';
+import { GeneralInfo, ConfigurableProfilePermissions } from 'common/models/profile';
+import { EnglishLevel } from 'common/models/index';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 

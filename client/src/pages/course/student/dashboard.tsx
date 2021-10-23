@@ -11,7 +11,7 @@ import withSession from 'components/withSession';
 import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
-import { StudentTasksDetail } from '../../../../../common/models';
+import { StudentTasksDetail } from 'common/models';
 import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard, RepositoryCard } from 'components/Dashboard';
 
 function Page(props: CoursePageProps) {

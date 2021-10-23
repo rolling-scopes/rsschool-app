@@ -6,7 +6,7 @@ import {
   UserGroup,
   InterviewQuestion,
   InterviewQuestionCategory,
-} from '../../../common/models';
+} from 'common/models';
 
 export interface Course extends CommonCourse {}
 export interface StudentBasic extends CommonStudentBasic {}

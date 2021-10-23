@@ -2,7 +2,7 @@ import { Button, Card, Form, Input, Pagination, Row, Select, Typography, Avatar 
 import { css } from 'styled-jsx/css';
 import { useCallback, useEffect, useState } from 'react';
 import { Course } from '../../../services/models';
-import { IGratitudeGetResponse, IGratitudeGetRequest } from '../../../../../common/interfaces/gratitude';
+import { IGratitudeGetResponse, IGratitudeGetRequest } from 'common/interfaces/gratitude';
 import { GratitudeService } from '../../../services/gratitude';
 import { useAsync } from 'react-use';
 import { CoursesService } from '../../../services/courses';

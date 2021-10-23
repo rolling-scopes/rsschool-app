@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm, Result, Tooltip, Switch } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
-import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from '../../../../common/models/cv';
+import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from 'common/models/cv';
 import { Header } from 'components';
 import { NextRouter, withRouter } from 'next/router';
 import withSession, { Session } from 'components/withSession';

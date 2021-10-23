@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, Typography, Empty } from 'antd';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import PermissionsSettingsDrawer from './PermissionsSettingsDrawer';
 import ProfileSettingsDrawer from './ProfileSettingsDrawer';
 import { ChangedPermissionsSettings } from 'pages/profile';

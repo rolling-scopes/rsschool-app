@@ -3,7 +3,7 @@ import { useState } from 'react';
 import CommonCard from './CommonDashboardCard';
 import { AuditOutlined } from '@ant-design/icons';
 import { CourseTask } from 'services/course';
-import { StudentStats } from '../../../../common/models';
+import { StudentStats } from 'common/models';
 import { TasksStatsModal } from './TasksStatsModal';
 import dynamic from 'next/dynamic';
 

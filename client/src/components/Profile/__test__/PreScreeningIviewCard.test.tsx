@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { mountToJson } from 'enzyme-to-json';
 import PreScreeningIviewCard from '../PreScreeningIviewCard';
-import { StageInterviewDetailedFeedback } from '../../../../../common/models/profile';
+import { StageInterviewDetailedFeedback } from 'common/models/profile';
 
 describe('PreScreeningIviewCard', () => {
   const data = [

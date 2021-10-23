@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import EducationCard from '../EducationCard';
-import { GeneralInfo } from '../../../../../common/models/profile';
+import { GeneralInfo } from 'common/models/profile';
 
 describe('EducationCard', () => {
   describe('Should render correctly', () => {

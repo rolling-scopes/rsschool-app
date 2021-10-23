@@ -3,7 +3,7 @@ import { Button, Descriptions, Drawer } from 'antd';
 import { CommentModal, MentorSearch } from 'components';
 import { useState } from 'react';
 import { StudentDetails } from 'services/course';
-import { MentorBasic } from '../../../../common/models';
+import { MentorBasic } from 'common/models';
 import { css } from 'styled-jsx/css';
 
 type Props = {

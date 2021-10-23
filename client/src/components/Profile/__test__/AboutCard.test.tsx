@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import AboutCard from '../AboutCard';
-import { GeneralInfo } from '../../../../../common/models/profile';
+import { GeneralInfo } from 'common/models/profile';
 
 describe('AboutCard', () => {
   describe('Should render correctly', () => {

@@ -7,7 +7,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course } from '../../../../../common/models';
+import { Course } from 'common/models';
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session }) {

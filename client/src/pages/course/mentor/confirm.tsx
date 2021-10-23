@@ -5,7 +5,7 @@ import { useState, useMemo } from 'react';
 import { useAsync } from 'react-use';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { useRouter } from 'next/router';
-import { Course } from '../../../../../common/models';
+import { Course } from 'common/models';
 import { CoursesService } from 'services/courses';
 import { CourseService } from 'services/course';
 import { FormInstance } from 'antd/lib/form';
