@@ -14,6 +14,7 @@ import {
 import { AlertsService } from './alerts.service';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
+import { Alert } from './entities/alert.entity';
 
 @Controller('alerts')
 export class AlertsController {
@@ -25,8 +26,10 @@ export class AlertsController {
   }
 
   @Get()
-  findAll(@Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean) {
-    const data = this.alertService.findAll({ enabled });
+  async findAll(
+    @Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean,
+  ): Promise<{ data: Alert[] }> {
+    const data = await this.alertService.findAll({ enabled });
     return { data };
   }
 
