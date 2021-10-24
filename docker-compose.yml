@@ -8,8 +8,6 @@ services:
       RS_HOST: ${RS_HOST}
       RSSHCOOL_UI_GCP_MAPS_API_KEY: ${RSSHCOOL_UI_GCP_MAPS_API_KEY}
     restart: on-failure
-    networks:
-      - shared-network
     depends_on:
       - server
       - nestjs
@@ -43,8 +41,6 @@ services:
       RSSHCOOL_API_USERS_CLOUD_PASSWORD: ${RSSHCOOL_API_VERIFICATION_PASSWORD}
       RSSHCOOL_API_USERS_CLOUD_USERNAME: ${RSSHCOOL_API_VERIFICATION_USERNAME}
     restart: on-failure
-    networks:
-      - shared-network
 
   nginx:
     image: nginx:1.15-alpine
@@ -54,8 +50,6 @@ services:
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
-    networks:
-      - shared-network
     ports:
       - 80:8080
       - 443:443
@@ -74,18 +68,11 @@ services:
       RSSHCOOL_API_PG_PASSWORD: ${RSSHCOOL_API_PG_PASSWORD}
       RSSHCOOL_API_PG_DATABASE: ${RSSHCOOL_API_PG_DATABASE}
     restart: on-failure
-    networks:
-      - shared-network
 
   certbot:
     image: certbot/certbot
     restart: unless-stopped
-    networks:
-      - shared-network
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-networks:
-  shared-network:
