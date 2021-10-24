@@ -42,7 +42,7 @@
     "pino-multi-stream": "4.2.0",
     "reflect-metadata": "0.1.13",
     "tsconfig-paths": "3.9.0",
-    "typeorm": "0.2.37"
+    "typeorm": "0.2.38"
   },
   "devDependencies": {
     "@types/jest": "25.2.3",
