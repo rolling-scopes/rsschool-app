@@ -64,7 +64,7 @@
     "@types/pg": "7.14.11",
     "@types/pino-multi-stream": "3.1.2",
     "cross-env": "6.0.3",
-    "dotenv": "8.2.0",
+    "dotenv": "8.6.0",
     "jest": "27.3.1",
     "jest-junit": "12.3.0",
     "pino-pretty": "3.6.1",
