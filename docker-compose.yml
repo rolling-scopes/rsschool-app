@@ -1,6 +1,7 @@
 version: '3'
 services:
   client:
+    container_name: client
     image: ghcr.io/rolling-scopes/rsschool-app-client:master
     ports:
       - 8081:8080
@@ -11,8 +12,11 @@ services:
     depends_on:
       - server
       - nestjs
+    networks:
+      - shared-network
 
   server:
+    container_name: server
     image: ghcr.io/rolling-scopes/rsschool-app-server:master
     ports:
       - 8080:8080
@@ -41,24 +45,11 @@ services:
       RSSHCOOL_API_USERS_CLOUD_PASSWORD: ${RSSHCOOL_API_VERIFICATION_PASSWORD}
       RSSHCOOL_API_USERS_CLOUD_USERNAME: ${RSSHCOOL_API_VERIFICATION_USERNAME}
     restart: on-failure
-
-  nginx:
-    image: nginx:1.15-alpine
-    restart: unless-stopped
-    volumes:
-      - ./nginx:/etc/nginx
-      - ./letsencrypt:/etc/letsencrypt
-      - ./certbot:/var/www/certbot
-    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
-    ports:
-      - 80:8080
-      - 443:443
-    depends_on:
-      - client
-      - server
-      - nestjs
+    networks:
+      - shared-network
 
   nestjs:
+    container_name: nestjs
     image: ghcr.io/rolling-scopes/rsschool-app-nestjs:master
     ports:
       - 8082:8080
@@ -68,11 +59,40 @@ services:
       RSSHCOOL_API_PG_PASSWORD: ${RSSHCOOL_API_PG_PASSWORD}
       RSSHCOOL_API_PG_DATABASE: ${RSSHCOOL_API_PG_DATABASE}
     restart: on-failure
+    networks:
+      - shared-network
+    depends_on:
+      - server
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.14-alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./letsencrypt:/etc/letsencrypt
+      - ./certbot:/var/www/certbot
+    command: 'nginx -g "daemon off;"'
+    ports:
+      - 80:8080
+      - 443:443
+    networks:
+      - shared-network
+    depends_on:
+      - client
+      - server
+      - nestjs
 
   certbot:
+    container_name: certbot
     image: certbot/certbot
     restart: unless-stopped
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+
+networks:
+  shared-network:
