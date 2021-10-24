@@ -6,15 +6,18 @@ const server = process.env.SERVER_HOST || 'http://localhost:3001';
 const nestjs = process.env.NESTJS_HOST || 'http://localhost:3002';
 
 const nextConfig = {
-  rewrites: () => isProd ? [] : [
-    { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
-    { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
-    { source: '/api/:path*', destination: `${server}/:path*` },
-    {
-      source: '/:any*',
-      destination: '/',
-    },
-  ],
+  rewrites: () =>
+    isProd
+      ? []
+      : [
+          { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
+          { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
+          { source: '/api/:path*', destination: `${server}/:path*` },
+          {
+            source: '/:any*',
+            destination: '/',
+          },
+        ],
   serverRuntimeConfig: {
     rsHost: process.env.RS_HOST || 'http://localhost:3000',
   },
