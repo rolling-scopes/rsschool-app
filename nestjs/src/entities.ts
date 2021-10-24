@@ -1,3 +1,3 @@
-import { Alert } from "./alerts/entities/alert.entity";
+import { Alert } from './alerts/entities/alert.entity';
 
 export const entities = [Alert];
