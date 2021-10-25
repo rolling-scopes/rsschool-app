@@ -1,6 +1,5 @@
 {
   "presets": ["next/babel"],
-  "plugins": [],
   "env": {
     "test": {
       "plugins": ["styled-jsx/babel"]

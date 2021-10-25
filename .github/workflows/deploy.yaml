@@ -58,7 +58,7 @@ jobs:
         run: npm run build
 
       - name: Clean modules
-        run: npm prune --production --no-optional
+        run: npm prune --production
 
       - name: Build container
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master .

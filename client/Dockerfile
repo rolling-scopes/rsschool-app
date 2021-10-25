@@ -7,11 +7,12 @@ ENV NODE_PORT 8080
 
 WORKDIR /client
 
+COPY next.config.js /client
+COPY public /client/public
+
 COPY package.json /client
 COPY package-lock.json /client
 
-COPY next.config.js /client
-COPY public /client/public
 COPY node_modules /client/node_modules
 COPY .next /client/.next
 

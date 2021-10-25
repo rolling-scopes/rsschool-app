@@ -8,9 +8,10 @@ ENV TZ utc
 
 WORKDIR /src
 
+COPY tsconfig.json /src
 COPY package.json /src
 COPY package-lock.json /src
-COPY tsconfig.json /src
+
 RUN npm install --production --no-optional
 
 COPY public /src/public
