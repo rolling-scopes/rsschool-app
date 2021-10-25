@@ -181,6 +181,9 @@ jobs:
       PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
       HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
       USERNAME: ${{ secrets.EC2_USERNAME  }}
+    environment:
+      name: production
+      url: https://app.rs.school
     steps:
       - name: Checkout
         uses: actions/checkout@v2
