@@ -26,7 +26,7 @@ export function RepositoryCard(props: Props) {
           <p>
             GitHub will automatically send you an invite to access the repository. The invite comes to the mail you
             specified when registering on GitHub (<span style={{ color: 'red', fontWeight: 700 }}>ATTENTION:</span> not
-            to the mail you specified in the RS APP)
+            to the mail you specified in the RS School App)
           </p>
           <p style={{ fontSize: 18, fontWeight: 800, color: 'red' }}>
             After creating a private school repository, you must go to your mail, find an invitation EMAIL and accept
