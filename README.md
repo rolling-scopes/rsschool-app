@@ -1,37 +1,43 @@
 [![Deploy](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml)
 
-# Rolling Scopes School Application
 
-### UNDER ACTIVE DEVELOPMENT
+<img src="https://www.rs.school/images/rs_school.svg" width="250px"/>
 
-
-The [web application](https://app.rs.school) which powers [Rolling Scopes School](https://rs.school) education process. It helps thousands students to become JavaScipt developers.
+# RS School App
 
 
----
+The [app.rs.school](https://app.rs.school) is a tool for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
 
-## Technology stack
- - Typescript
- - Next.js
- - React
- - Node.js
- - Koa.js
- - Docker
- - PostgreSQL
+<img src="https://user-images.githubusercontent.com/618807/138608245-f00471ce-f982-4901-a32e-7246720ed13b.png" width="600px"/>
 
----
+
+## Technology Overview
+
+### Stack
+ - Language: [Typescript](https://www.typescriptlang.org/)
+ - Front-end: [Next.js](https://nextjs.org/) / [React](https://reactjs.org/)
+ - Back-end: [Koa.js](https://koajs.com/) / [Node.js](https://nodejs.org/en/)
+ - Database: [PostgreSQL](https://www.postgresql.org/)
+ - Deployment: [Docker](https://www.docker.com/)
+
+### Infrastructure
+
+ - Cloud: [AWS EC2](https://aws.amazon.com/ec2/), [AWS RDS](https://aws.amazon.com/rds/postgresql/), [AWS S3](https://aws.amazon.com/s3/), [AWS CloudWatch](https://aws.amazon.com/cloudwatch/)
+ - CI/CD: [Github Actions](https://github.com/rolling-scopes/rsschool-app/tree/master/.github/workflows)
+
 
 ## Getting Started
 
-  ### Prerequisites
+### Prerequisites
 
+Please install the following software before starting development:
   - [Git 2.10+](https://git-scm.com/downloads)
-  - [NodeJS LTS](https://nodejs.org/en/)
+  - [Node.js LTS](https://nodejs.org/en/download/)
   - [Docker](https://docs.docker.com/install/)
   - [Docker Compose](https://docs.docker.com/compose/install/)
-  
 
-  ### Steps
+
+### Steps
   - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
   - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
   - Run `npm run db:up` (starts local database)
@@ -43,7 +49,6 @@ The [web application](https://app.rs.school) which powers [Rolling Scopes School
 ## Contributing
 
 See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
-
 
 ## Contributors
 
@@ -66,11 +71,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 <a href="https://opencollective.com/rsschool/organization/0/website"><img src="https://opencollective.com/rsschool/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/rsschool/organization/1/website"><img src="https://opencollective.com/rsschool/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/2/website"><img src="https://opencollective.com/rsschool/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/3/website"><img src="https://opencollective.com/rsschool/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/4/website"><img src="https://opencollective.com/rsschool/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/5/website"><img src="https://opencollective.com/rsschool/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/6/website"><img src="https://opencollective.com/rsschool/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/7/website"><img src="https://opencollective.com/rsschool/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/8/website"><img src="https://opencollective.com/rsschool/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/9/website"><img src="https://opencollective.com/rsschool/organization/9/avatar.svg"></a>
+
+## License
+
+[Mozilla Public License 2.0](https://github.com/rolling-scopes/rsschool-app/blob/master/LICENSE)
