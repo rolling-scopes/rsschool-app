@@ -12,10 +12,10 @@
     "sourceMap": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "target": "es2017",
+    "target": "es2020",
     "outDir": "./dist",
-    "lib": ["es2017", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]
+    "lib": ["es2020", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]
   },
-  "include": ["./**/*.ts", "./**/*.js"],
+  "include": ["./src/**/*.ts", "./src/**/*.js"],
   "exclude": ["./node_modules", "./dist"]
 }

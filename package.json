@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start:client": "npm start --workspace=client",
-    "start:server": "npm start --workspace=server",
-    "start:nestjs": "npm start --workspace=nestjs",
     "start": "concurrently \"npm:start:*\"",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "start:nestjs": "cd nestjs && npm start",
+
+    "postinstall": "concurrently \"npm:setup:*\"",
+    "setup:client": "cd client && npm install",
+    "setup:server": "cd server && npm install",
+    "setup:nestjs": "cd nestjs && npm install",
+
+    "install": "concurrently \"npm:install:*\"",
     "build": "npm run build -ws",
     "test": "npm test -ws",
     "coverage": "npm run coverage -ws",
@@ -20,16 +27,7 @@
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.1.0",
-    "@typescript-eslint/parser": "5.1.0",
     "concurrently": "6.3.0",
-    "eslint": "8.1.0",
-    "prettier": "2.4.1",
-    "typescript": "4.3.5"
-  },
-  "workspaces": [
-    "./client",
-    "./server",
-    "./nestjs"
-  ]
+    "prettier": "2.4.1"
+  }
 }

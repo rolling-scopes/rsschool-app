@@ -1,7 +1,7 @@
 import Router from '@koa/router';
-import { ScoreTableFilters } from 'common/types/score';
 import { StatusCodes } from 'http-status-codes';
 import { parseAsync } from 'json2csv';
+import { ScoreTableFilters } from '../../../../../common/types/score';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { ScoreService } from '../../../services/score';
