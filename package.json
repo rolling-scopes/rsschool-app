@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start:client": "npm ",
-    "postinstall": "concurrently \"cd ./client && npm install\" \"cd ./server && npm install\"",
     "start": "concurrently \"cd ./client && npm start\" \"cd ./server && npm start\"",
     "test": "cd ./client && npm run test && cd ../server && npm run test && cd ..",
     "test-watch": "cd ./client && npm run test-watch && cd ../server && npm run test-watch",
