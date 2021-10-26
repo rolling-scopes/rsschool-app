@@ -1,6 +1,17 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
     "target": "es2017",
     "outDir": "./dist",
     "lib": ["es2017", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]

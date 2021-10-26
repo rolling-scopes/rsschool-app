@@ -1,4 +1,4 @@
-import { Moment } from '../../client/node_modules/moment-timezone';
+import { Moment } from 'moment-timezone';
 import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
 
 export interface CourseData {

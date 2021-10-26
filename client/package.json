@@ -18,7 +18,7 @@
   "dependencies": {
     "@ant-design/charts": "1.2.14",
     "antd": "4.16.13",
-    "axios": "0.21.4",
+    "axios": "0.23.0",
     "csvtojson": "2.0.10",
     "lodash": "4.17.21",
     "mobile-device-detect": "0.4.3",

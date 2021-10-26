@@ -1,6 +1,6 @@
 import { AbstractRepository, EntityRepository, getManager } from 'typeorm';
 import { Feedback, User } from '../models';
-import { IGratitudeGetRequest } from 'common/interfaces/gratitude';
+import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 
 @EntityRepository(Feedback)
 export class FeedbackRepository extends AbstractRepository<Feedback> {

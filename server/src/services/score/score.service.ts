@@ -1,7 +1,7 @@
 import { IPaginationOptions, paginate } from 'koa-typeorm-pagination';
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { ScoreTableFilters } from 'common/types/score';
+import { ScoreTableFilters } from '../../../../common/types/score';
 import { Course, CourseTask, Student, TaskResult } from '../../models';
 import { createName } from '../user.service';
 import { getPrimaryUserFields, convertToMentorBasic, getContactsUserFields } from '../course.service';

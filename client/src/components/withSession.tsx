@@ -30,7 +30,7 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
           return;
         }
         try {
-          const response = await axios.get(`/api/session`);
+          const response = await axios.get<any>(`/api/session`);
           setLoading(false);
           sessionCache = response.data.data;
           setSession(sessionCache);

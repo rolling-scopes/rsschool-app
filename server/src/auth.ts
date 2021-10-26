@@ -28,6 +28,6 @@ export function setupPassport(logger: ILogger) {
     ),
   );
   passport.serializeUser((user, cb) => cb(null, user));
-  passport.deserializeUser((obj, cb) => cb(null, obj));
+  passport.deserializeUser<any>((obj, cb) => cb(null, obj));
   return passport;
 }
