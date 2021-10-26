@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start:client": "npm ",
     "postinstall": "concurrently \"cd ./client && npm install\" \"cd ./server && npm install\"",
     "start": "concurrently \"cd ./client && npm start\" \"cd ./server && npm start\"",
     "test": "cd ./client && npm run test && cd ../server && npm run test && cd ..",
@@ -25,5 +26,10 @@
     "eslint": "8.1.0",
     "prettier": "2.4.1",
     "typescript": "4.3.5"
-  }
+  },
+  "workspaces": [
+    "./client",
+    "./server",
+    "./nestjs"
+  ]
 }
