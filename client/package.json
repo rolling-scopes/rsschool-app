@@ -10,6 +10,7 @@
     "build": "next build",
     "ci:build": "tsc",
     "prod": "next start -p 8080",
+    "lint": "eslint src/**/*.{ts,tsx}",
     "test": "jest",
     "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
     "test:watch": "jest --watch",
