@@ -23,7 +23,7 @@
     "lint:client": "cd client && npm run lint",
     "lint:server": "cd server && npm run lint",
     "lint:nestjs": "cd nestjs && npm run lint",
-    "format": "prettier --write \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"common/**/*.{ts,tsx,js}\" \"docs/**/*.md\"",
+    "format": "prettier --write \"{client,server,nestjs,common}/**/*.{ts,tsx,js}\" \"docs/**/*.md\"",
     "ci:format": "prettier --check \"server/**/*.{ts,tsx}\" \"client/**/*.{ts,tsx,js}\" \"common/**/*.{ts,tsx,js}\" \"docs/**/*.md\"",
     "db:restore": "docker exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
     "db:dump": "pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
