@@ -94,9 +94,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build (npm run ci:build)
+      - name: Build (npm run build)
         run: |
-          npm run ci:build
+          npm run build
 
   pr_test:
     name: Test
