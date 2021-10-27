@@ -1,7 +1,15 @@
 import { Col, Row, Select, Tooltip, Button, Form, Upload, message } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { RcFile } from 'antd/lib/upload';
-import { EyeOutlined, EyeInvisibleOutlined, DownloadOutlined, UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  EyeOutlined,
+  EyeInvisibleOutlined,
+  DownloadOutlined,
+  UploadOutlined,
+  PlusOutlined,
+  CheckSquareOutlined,
+  BorderOutlined,
+} from '@ant-design/icons';
 import { withSession, PageLayout } from 'components';
 import { TableView, CalendarView, ListView } from 'components/Schedule';
 import withCourseData from 'components/withCourseData';
@@ -23,7 +31,10 @@ import csv from 'csvtojson';
 
 const { Option } = Select;
 const LOCAL_VIEW_MODE = 'scheduleViewMode';
+const TAG_COLORS = 'tagColors';
 const LOCAL_HIDE_OLD_EVENTS = 'scheduleHideOldEvents';
+const LOCAL_HIDE_DONE_TASKS = 'scheduleHideDoneTasks';
+const LIMIT_FOR_DONE_TASKS = 'scheduleLimitForDoneTask';
 
 export function SchedulePage(props: CoursePageProps) {
   const [form] = Form.useForm();
@@ -32,8 +43,10 @@ export function SchedulePage(props: CoursePageProps) {
   const [typesFromBase, setTypesFromBase] = useState<string[]>([]);
   const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [scheduleViewMode, setScheduleViewMode] = useLocalStorage<string>(LOCAL_VIEW_MODE, getDefaultViewMode());
-  const [storedTagColors, setStoredTagColors] = useLocalStorage<object>('tagColors', DEFAULT_COLORS);
+  const [storedTagColors, setStoredTagColors] = useLocalStorage<object>(TAG_COLORS, DEFAULT_COLORS);
   const [isOldEventsHidden, setOldEventsHidden] = useLocalStorage<boolean>(LOCAL_HIDE_OLD_EVENTS, false);
+  const [isDoneTasksHidden, setDoneTasksHidden] = useLocalStorage<boolean>(LOCAL_HIDE_DONE_TASKS, false);
+  const [limitForDoneTask, setLimitForDoneTask] = useLocalStorage<number>(LIMIT_FOR_DONE_TASKS, 100);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editableRecord, setEditableRecord] = useState(null);
   const [fileList, setFileList] = useState<RcFile[]>([]);
@@ -42,11 +55,19 @@ export function SchedulePage(props: CoursePageProps) {
     () => isCourseManager(props.session, props.course),
     [props.session, props.course.id],
   ) as boolean;
-  const relevantEvents = useMemo(() => {
-    const yesterday = moment.utc().subtract(1, 'day');
+  const filteredData = useMemo(() => {
+    let filteredData = data.slice(0);
+    if (isOldEventsHidden) {
+      const yesterday = moment.utc().subtract(1, 'day');
+      filteredData = data.filter(({ dateTime }) => moment(dateTime).isAfter(yesterday, 'day'));
+    }
 
-    return data.filter(({ dateTime }) => moment(dateTime).isAfter(yesterday, 'day'));
-  }, [data]);
+    if (isDoneTasksHidden && limitForDoneTask) {
+      filteredData = filteredData.filter(({ done }) => !done || done < limitForDoneTask);
+    }
+
+    return filteredData;
+  }, [data, isOldEventsHidden, isDoneTasksHidden]);
 
   const loadData = async () => {
     const [events, tasks] = await Promise.all([
@@ -71,10 +92,13 @@ export function SchedulePage(props: CoursePageProps) {
 
   const viewMode = scheduleViewMode as ViewMode;
   const ScheduleView = mapScheduleViewToComponent[viewMode] || TableView;
-  const filteredData = isOldEventsHidden ? relevantEvents : data;
 
   const toggleOldEvents = () => {
     setOldEventsHidden(!isOldEventsHidden);
+  };
+
+  const toggleDoneTasks = () => {
+    setDoneTasksHidden(!isDoneTasksHidden);
   };
 
   const closeModal = async () => {
@@ -192,10 +216,21 @@ export function SchedulePage(props: CoursePageProps) {
           </Tooltip>
         </Col>
         <Col>
+          <Tooltip title="Hide done tasks" mouseEnterDelay={1}>
+            <Button
+              type="primary"
+              onClick={toggleDoneTasks}
+              icon={isDoneTasksHidden ? <BorderOutlined /> : <CheckSquareOutlined />}
+            />
+          </Tooltip>
+        </Col>
+        <Col>
           <UserSettings
             typesFromBase={typesFromBase}
             setStoredTagColors={setStoredTagColors}
             storedTagColors={storedTagColors}
+            setLimitForDoneTask={setLimitForDoneTask}
+            limitForDoneTask={limitForDoneTask}
           />
         </Col>
       </Row>
@@ -206,6 +241,7 @@ export function SchedulePage(props: CoursePageProps) {
         courseId={props.course.id}
         refreshData={loadData}
         storedTagColors={storedTagColors}
+        limitForDoneTask={limitForDoneTask}
         alias={props.course.alias}
       />
       {isModalOpen && (
@@ -252,7 +288,8 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
     isTask: true,
     special: task.special,
     duration: task.duration,
-    score: task.score,
+    score: `${task.score}/${task.maxScore}`,
+    done: task.score && task.maxScore ? Math.round((task.score / task.maxScore) * 100) : 0,
   } as CourseEvent;
 };
 

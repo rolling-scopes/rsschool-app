@@ -14,6 +14,7 @@ import {
   urlRenderer,
   placeRenderer,
   renderTagWithStyle,
+  scoreRenderer,
 } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
 import { ScheduleRow } from './model';
@@ -37,6 +38,7 @@ type Props = {
   courseId: number;
   refreshData: Function;
   storedTagColors?: object;
+  limitForDoneTask?: number;
   alias: string;
 };
 
@@ -160,7 +162,7 @@ const getColumns = (
   {
     title: 'Score',
     dataIndex: 'score',
-    render: (value: number) => <Text strong>{value}</Text>,
+    render: scoreRenderer,
   },
 ];
 
@@ -171,6 +173,7 @@ export function TableView({
   courseId,
   refreshData,
   storedTagColors = DEFAULT_COLORS,
+  limitForDoneTask,
   alias,
 }: Props) {
   const [form] = Form.useForm();
@@ -360,7 +363,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record => getTableRowClass(record, isSplitedByWeek)}
+        rowClassName={record => getTableRowClass(record, isSplitedByWeek, limitForDoneTask)}
       />
     </Form>
   );
@@ -406,7 +409,15 @@ const getNewDataForUpdate = (entity: CourseEvent) => {
   return dataForUpdate;
 };
 
-const getTableRowClass = (record: CourseEvent, isSplitedByWeek: boolean | undefined): string => {
+const getTableRowClass = (
+  record: CourseEvent,
+  isSplitedByWeek: boolean | undefined,
+  limitForDoneTask: number | undefined,
+): string => {
+  if (limitForDoneTask && record.done && record.done >= limitForDoneTask) {
+    return 'table-row-done';
+  }
+
   if (!isSplitedByWeek) {
     return '';
   }
@@ -415,7 +426,7 @@ const getTableRowClass = (record: CourseEvent, isSplitedByWeek: boolean | undefi
     return 'table-row-current';
   }
 
-  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-dark';
+  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-odd';
 };
 
 export default TableView;
