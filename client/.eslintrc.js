@@ -25,7 +25,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/ban-types': 0,
     'no-control-regex': 0,
-    'no-console': ["error", { allow: ["warn", "error"] }],
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-useless-escape': 0,
   },
 };
