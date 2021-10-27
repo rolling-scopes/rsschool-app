@@ -377,20 +377,19 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     attributes: JSON.parse(values.attributes ?? '{}'),
   } as Partial<Task>;
 
-  let taskTemplateId;
+  let taskId = undefined;
 
   if (isUpdateMode && editableRecord) {
-    taskTemplateId = editableRecord.id;
-    await taskService.updateTask(taskTemplateId, templateTaskData);
+    await taskService.updateTask(editableRecord.id, templateTaskData);
   } else {
-    const data: any = await taskService.createTask(templateTaskData);
-    taskTemplateId = data.identifiers[0].id;
+    const { id } = await taskService.createTask(templateTaskData);
+    taskId = id;
   }
 
   const [startDate, endDate] = values.range || [null, null];
   values = {
     courseId,
-    taskId: taskTemplateId,
+    taskId,
     special: values.special ? values.special.join(',') : '',
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
@@ -433,7 +432,7 @@ const createEvent = async (
     await eventService.updateEvent(eventTemplateId, templateEventData);
   } else {
     const data: any = await eventService.createEvent(templateEventData);
-    eventTemplateId = data.identifiers[0].id;
+    eventTemplateId = data.id;
   }
 
   values = {

@@ -43,12 +43,12 @@ export class TaskService {
     return result.data.data;
   }
 
-  async updateTask(id: number, data: Partial<Task>) {
+  async updateTask(id: number, data: Partial<Task>): Promise<Task> {
     const result = await axios.put<{ data: Task }>(`/api/task/${id}`, data);
     return result.data.data;
   }
 
-  async createTask(data: Partial<Task>) {
+  async createTask(data: Partial<Task>): Promise<Task> {
     const result = await axios.post<{ data: Task }>(`/api/task/`, data);
     return result.data.data;
   }

@@ -34,7 +34,8 @@ export const createPostRoute =
   async (ctx: Router.RouterContext) => {
     const { id, createdDate, ...data } = ctx.request.body;
     try {
-      const result = await getRepository(entity).insert(data);
+      await getRepository(entity).insert(data);
+      const result = await getRepository(entity).findOne(id);
       setResponse(ctx, OK, result);
     } catch (e) {
       if (logger) {
@@ -50,7 +51,8 @@ export const createPutRoute =
     const { id: _id, createdDate, ...data } = ctx.request.body;
     const id: number = Number(ctx.params.id);
     try {
-      const result = await getRepository(entity).update(id, data);
+      await getRepository(entity).update(id, data);
+      const result = await getRepository(entity).findOne(id);
       setResponse(ctx, OK, result);
     } catch (e) {
       if (logger) {
