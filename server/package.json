@@ -4,14 +4,13 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "tsnd --ignore-watch node_modules --inspect --notify false -r dotenv/config -r tsconfig-paths/register -- ./index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
-    "swagger": "swagger-jsdoc -d swaggerDef.js -o ./public/swagger.yml ./src/routes/**/*.ts ./src/routes/**.ts",
+    "start": "tsnd --ignore-watch node_modules --inspect --notify false -r dotenv/config -r tsconfig-paths/register -- ./src/index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "lint": "eslint src/**/*.ts",
     "test": "jest",
     "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
     "test-watch": "jest --watch",
     "coverage": "jest --coverage",
-    "typeorm": "node -r dotenv/config -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts"
+    "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts"
   },
   "dependencies": {
     "@koa/cors": "3.0.0",

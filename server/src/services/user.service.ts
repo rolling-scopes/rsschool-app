@@ -6,6 +6,13 @@ export function getUserByGithubId(id: string) {
   return getRepository(User).findOne({ where: { githubId } });
 }
 
+export function getUserByProvider(provider: string, providerUserId: string) {
+  return getRepository(User).findOne({
+    where: { provider, providerUserId },
+    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseManagers', 'courseManagers.course'],
+  });
+}
+
 export function getFullUserByGithubId(id: string) {
   const githubId = id.toLowerCase();
 
@@ -26,7 +33,7 @@ export function getUserById(id: number) {
   return getRepository(User).findOne({ where: { id } });
 }
 
-export function saveUser(user: User) {
+export function saveUser(user: Partial<User>) {
   return getRepository(User).save(user);
 }
 

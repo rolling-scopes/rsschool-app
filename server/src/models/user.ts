@@ -10,6 +10,7 @@ import {
   OneToOne,
   Index,
   JoinColumn,
+  Unique,
 } from 'typeorm';
 import { Student } from './student';
 import { Mentor } from './mentor';
@@ -45,6 +46,7 @@ export interface ExternalAccount {
 }
 
 @Entity()
+@Unique(['providerUserId', 'provider'])
 export class User {
   @PrimaryGeneratedColumn() id: number;
 
@@ -54,6 +56,13 @@ export class User {
   @Column({ name: 'githubId', unique: true })
   @Index({ unique: true })
   githubId: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 64 })
+  @Index()
+  providerUserId?: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 32 })
+  provider?: string;
 
   @Column({ nullable: true })
   firstName: string;
