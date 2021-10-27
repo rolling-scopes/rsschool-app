@@ -1,5 +1,10 @@
 import { IPaginationInfo } from '../../types/pagination';
-import { HeroesFormData } from '../../../client/src/components/Forms/Heroes/types';
+
+export type HeroesFormData = {
+  name?: string;
+  githubId?: string;
+  courseId?: number;
+};
 
 export interface IGratitudeGetResponse {
   activist: boolean;

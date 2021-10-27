@@ -7,7 +7,7 @@ import { GratitudeService } from '../../../services/gratitude';
 import { useAsync } from 'react-use';
 import { CoursesService } from '../../../services/courses';
 import { onlyDefined } from '../../../utils/onlyDefined';
-import { HeroesFormData } from './types';
+import { HeroesFormData } from '../../../../../common/interfaces/gratitude';
 import heroesBadges from '../../../configs/heroes-badges';
 import Masonry from 'react-masonry-css';
 

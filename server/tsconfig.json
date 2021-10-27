@@ -16,6 +16,6 @@
     "outDir": "./dist",
     "lib": ["es2020", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]
   },
-  "include": ["./src/**/*.ts", "./src/**/*.js"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["./node_modules", "./dist"]
 }
