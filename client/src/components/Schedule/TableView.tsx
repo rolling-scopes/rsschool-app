@@ -381,9 +381,9 @@ const getCourseTaskDataForUpdate = (entity: CourseEvent) => {
 
   const dataForUpdate = {
     [taskDate]: entity.dateTime,
-    taskOwnerId: entity.organizer ? entity.organizer.githubId : null,
+    taskOwnerId: entity.organizer ? entity.organizer.id : undefined,
     special: entity.special || '',
-    duration: entity.duration || null,
+    duration: entity.duration || undefined,
   };
 
   if (entity.event.type !== 'deadline') {

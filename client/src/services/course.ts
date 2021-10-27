@@ -270,7 +270,7 @@ export class CourseService {
     return result.data.data;
   }
 
-  async updateCourseTask(courseTaskId: number, data: any) {
+  async updateCourseTask(courseTaskId: number, data: Partial<CourseTask>): Promise<CourseTask> {
     const result = await this.axios.put<{ data: CourseTask }>(`/task/${courseTaskId}`, data);
     return result.data.data;
   }
