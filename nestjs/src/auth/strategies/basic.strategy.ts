@@ -1,7 +1,7 @@
-import { BasicStrategy as Strategy } from 'passport-http';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { BasicStrategy as Strategy } from 'passport-http';
 
 @Injectable()
 export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
@@ -9,7 +9,7 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
     super({ passReqToCallback: true });
   }
 
-  public validate = async (_, username: string, password: string): Promise<boolean> => {
+  public async validate (_, username: string, password: string): Promise<boolean> {
     if (
       this.configService.get<string>('RSSHCOOL_API_ADMIN_USERNAME') === username &&
       this.configService.get<string>('RSSHCOOL_API_ADMIN_PASSWORD') === password
@@ -17,5 +17,5 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
       return true;
     }
     throw new UnauthorizedException();
-  };
+  }
 }

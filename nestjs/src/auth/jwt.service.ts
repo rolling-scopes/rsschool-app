@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sign, verify } from 'jsonwebtoken';
+import { JWT_TOKEN_EXPIRATION } from './constants';
 
 @Injectable()
 export class JwtService {
@@ -11,7 +12,7 @@ export class JwtService {
   }
 
   public createToken(payload: any) {
-    const jwt: string = sign(payload, this.secretKey, { expiresIn: '7d' });
+    const jwt: string = sign(payload, this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
     return jwt;
   }
 

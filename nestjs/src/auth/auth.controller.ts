@@ -2,8 +2,8 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { RequestWithUser } from './request-with-user';
-
+import { RequestWithUser } from './models';
+import { JWT_COOKIE_NAME } from './constants';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -16,7 +16,7 @@ export class AuthController {
   @UseGuards(AuthGuard('github'))
   githubCallback(@Req() req: RequestWithUser, @Res() res: Response) {
     const token = this.authService.validateGithub(req);
-    res.cookie('auth-token', token);
+    res.cookie(JWT_COOKIE_NAME, token);
     res.redirect('/');
   }
 }
