@@ -76,14 +76,14 @@ export class UserService {
   }
 
   async submitPrivateFeedback(data: { toUserId: number; comment: string }) {
-    await this.axios.post<any>(`/api/feedback/private`, {
+    await this.axios.post(`/api/feedback/private`, {
       toUserId: Number(data.toUserId),
       comment: data.comment,
     });
   }
 
   async submitStudentFeedback(data: { toUserId: number; comment: string }, courseId: string) {
-    await this.axios.post<any>(`api/course/${courseId}/student/feedback`, {
+    await this.axios.post(`api/course/${courseId}/student/feedback`, {
       toUserId: Number(data.toUserId),
       comment: data.comment,
     });

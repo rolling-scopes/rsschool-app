@@ -1,15 +1,15 @@
-import { DeleteOutlined, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import { Avatar, Badge, Col, Layout, List, Popconfirm, Result, Row, Switch, Table, Tooltip, Typography } from 'antd';
-import { SwitchChangeEventHandler } from 'antd/lib/switch';
-import { Header } from 'components';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Layout, Table, List, Typography, Row, Col, Badge, Avatar, Popconfirm, Result, Tooltip, Switch } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
-import withSession, { Session } from 'components/withSession';
-import { JobSeekerData, JobSeekerFeedback, JobSeekerStudentStats } from 'modules/Opportunities/models';
-import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
+import { JobSeekerData, JobSeekerStudentStats, JobSeekerFeedback } from 'common/models/cv';
+import { Header } from 'components';
 import { NextRouter, withRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import withSession, { Session } from 'components/withSession';
+import { OpportunitiesService } from '../../modules/Opportunities/services/opportunities';
 import heroesBadges from '../../configs/heroes-badges';
+import { EyeInvisibleOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SwitchChangeEventHandler } from 'antd/lib/switch';
 
 const { Content } = Layout;
 const { Text } = Typography;

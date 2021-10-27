@@ -1,7 +1,7 @@
 import Router from '@koa/router';
+import { ScoreTableFilters } from 'common/types/score';
 import { StatusCodes } from 'http-status-codes';
-import { parseAsync, transforms } from 'json2csv';
-import { ScoreTableFilters } from '../../../../../common/types/score';
+import { parseAsync } from 'json2csv';
 import { ILogger } from '../../../logger';
 import { IUserSession } from '../../../models';
 import { ScoreService } from '../../../services/score';
@@ -22,7 +22,7 @@ export const getScoreCsv = (_: ILogger) => async (ctx: Router.RouterContext) => 
     includeContacts: user?.isAdmin ?? false,
   });
   const result = await service.getStudentsScoreForExport(filters);
-  const csv = await parseAsync(result, { transforms: [transforms.flatten] });
+  const csv = await parseAsync(result, { flatten: true });
 
   setCsvResponse(ctx, StatusCodes.OK, csv, 'score');
 };

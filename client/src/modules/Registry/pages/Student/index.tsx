@@ -95,10 +95,10 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
       async function confirmRegistration() {
         setLoading(true);
         try {
-          const userResponse = await axios.post<any>('/api/profile/me', userModel);
+          const userResponse = await axios.post('/api/profile/me', userModel);
           const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
           if (githubId) {
-            await axios.post<any>('/api/registry', registryModel);
+            await axios.post('/api/registry', registryModel);
             setSubmitted(true);
           } else {
             message.error('Invalid github id');

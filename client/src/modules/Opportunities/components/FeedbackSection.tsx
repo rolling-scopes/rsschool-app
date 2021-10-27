@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
 import * as React from 'react';
-import { CVFeedback } from '../models';
+import { CVFeedback } from 'common/models/cv';
 import Section from './Section';
 import { FeedbackList } from './FeedbackList';
 

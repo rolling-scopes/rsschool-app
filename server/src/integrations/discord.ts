@@ -32,7 +32,7 @@ export class DiscordService {
       username: params.fromGithubId,
       content: `${mention}\n${params.comment}`,
     };
-    const result = await axios.post<any>(params.gratitudeUrl, message);
+    const result = await axios.post(params.gratitudeUrl, message);
     this.logger.info(result.status.toString());
   }
 }

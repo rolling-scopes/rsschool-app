@@ -1,14 +1,14 @@
+import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
-import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
-import { getCustomRepository, getRepository } from 'typeorm';
-import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
 import { ILogger } from '../../logger';
-import { Mentor, Student } from '../../models';
-import { StudentRepository } from '../../repositories/student.repository';
 import { courseService } from '../../services';
-import { getUserByGithubId } from '../../services/user.service';
-import { updateSession } from '../../session';
 import { setResponse } from '../utils';
+import { getUserByGithubId } from '../../services/user.service';
+import { Mentor, Student } from '../../models';
+import { getRepository, getCustomRepository } from 'typeorm';
+import { updateSession } from '../../session';
+import { StudentRepository } from '../../repositories/student.repository';
+import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 

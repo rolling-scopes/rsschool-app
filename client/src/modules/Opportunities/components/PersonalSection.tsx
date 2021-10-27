@@ -1,4 +1,4 @@
-import { UserData } from '../models';
+import { UserData } from 'common/models/cv';
 import React, { Fragment } from 'react';
 import { getPersonalToRender } from '../data/getPersonalToRender';
 import { SidebarSectionHeader } from './SidebarSectionHeader';

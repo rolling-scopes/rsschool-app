@@ -55,7 +55,7 @@ function Page(props: Props) {
     const url = `/api/registry?type=mentor&courseId=${courseId}`;
     const {
       data: { data: registrations },
-    } = await axios.get<any>(url);
+    } = await axios.get(url);
     const statistics = { ...DEFAULT_STATISTICS };
 
     for (const registration of registrations) {
@@ -112,7 +112,7 @@ function Page(props: Props) {
     if (selectedIds.length) {
       try {
         setLoading(true);
-        await axios.put<any>('/api/registry', { ids: selectedIds, status });
+        await axios.put('/api/registry', { ids: selectedIds, status });
         await handleCourseChange(courseId as number);
       } catch (e) {
         console.error(e);

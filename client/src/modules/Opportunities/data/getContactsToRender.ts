@@ -1,4 +1,4 @@
-import { Contacts } from '../models';
+import { Contacts } from 'common/models/cv';
 
 type EntryOf<T extends object> = { [K in keyof T]: [K, T[K]] }[keyof T];
 

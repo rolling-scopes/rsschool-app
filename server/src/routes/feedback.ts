@@ -1,14 +1,14 @@
-import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
+import Router from '@koa/router';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 import { DiscordService } from '../integrations';
 import { ILogger } from '../logger';
 import { Feedback, IUserSession, PrivateFeedback, User } from '../models';
-import { FeedbackRepository } from '../repositories/feedback.repository';
-import { courseService } from '../services';
 import { guard } from './guards';
 import { setResponse } from './utils';
+import { FeedbackRepository } from '../repositories/feedback.repository';
+import { IGratitudeGetRequest } from 'common/interfaces/gratitude';
+import { courseService } from '../services';
 
 type GratitudeInput = { toUserId: number; comment: string; badgeId?: string; courseId: number };
 type FeedbackInput = { toUserId: number; comment: string };

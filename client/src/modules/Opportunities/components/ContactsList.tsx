@@ -11,7 +11,7 @@ import {
   MessageOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
-import { Contacts, ContactType } from '../models';
+import { Contacts, ContactType } from 'common/models/cv';
 import { getContactsToRender } from '../data/getContactsToRender';
 import { useCopyToClipboard } from 'react-use';
 import { Link } from './Link';

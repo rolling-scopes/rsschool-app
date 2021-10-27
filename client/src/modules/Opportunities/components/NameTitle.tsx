@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserData } from '../models';
+import { UserData } from 'common/models/cv';
 import { AvatarCV } from 'modules/Opportunities/components/AvatarCV';
 
 type Props = {

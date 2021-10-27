@@ -1,7 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import { Form, Input, Select, DatePicker, Checkbox, Card } from 'antd';
-import { UserData } from 'modules/Opportunities/models';
+import { UserData } from 'common/models/cv';
 import { ENGLISH_LEVELS } from '../../../services/reference-data/english';
 import { userDataValidationRules as validationRules } from './form-validation';
 

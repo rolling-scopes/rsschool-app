@@ -115,7 +115,7 @@ function Page(props: CoursePageProps) {
 
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError<any>;
+      const error = e as AxiosError;
       if (error.response?.status === 429) {
         notification.warn({
           message: (

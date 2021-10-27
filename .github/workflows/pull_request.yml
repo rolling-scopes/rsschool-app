@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -49,10 +49,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Format & Lint (npm run lint && npm run ci:format)
+      - name: Format & Lint (npm run ci:lint && npm run ci:format)
         run: |
           npm run ci:format
-          npm run lint
+          npm run ci:lint
 
   pr_build:
     name: Build
@@ -61,7 +61,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -94,9 +94,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build (npm run build)
+      - name: Build (npm run ci:build)
         run: |
-          npm run build
+          npm run ci:build
 
   pr_test:
     name: Test
@@ -107,7 +107,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -173,7 +173,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
 
       - name: Checkout
         uses: actions/checkout@v2
