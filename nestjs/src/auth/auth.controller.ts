@@ -10,6 +10,7 @@ export class AuthController {
 
   @Get('github/login')
   @UseGuards(AuthGuard('github'))
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   githubLogin() {}
 
   @Get('github/callback')

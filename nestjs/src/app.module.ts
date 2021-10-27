@@ -2,7 +2,6 @@ import { Logger, Module } from '@nestjs/common';
 import { AlertsModule } from './alerts/alerts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { WinstonModule } from 'nest-winston';
 import * as config from './ormconfig';
 
 @Module({

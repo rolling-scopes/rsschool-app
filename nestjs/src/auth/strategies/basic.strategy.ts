@@ -9,7 +9,7 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
     super({ passReqToCallback: true });
   }
 
-  public async validate (_, username: string, password: string): Promise<boolean> {
+  public async validate(_: any, username: string, password: string): Promise<boolean> {
     if (
       this.configService.get<string>('RSSHCOOL_API_ADMIN_USERNAME') === username &&
       this.configService.get<string>('RSSHCOOL_API_ADMIN_PASSWORD') === password
