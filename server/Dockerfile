@@ -17,4 +17,4 @@ RUN npm install --production --no-optional
 COPY public /src/public
 COPY dist /src
 
-CMD [ "node", "./server/src/index.js" ]
+CMD [ "node", "-r", "tsconfig-paths/register", "./server/src/index.js" ]
