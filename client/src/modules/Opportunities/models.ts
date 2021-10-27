@@ -1,5 +1,5 @@
-import { Moment } from '../../client/node_modules/moment-timezone';
-import { ENGLISH_LEVELS } from '../../client/src/services/reference-data/english';
+import { Moment } from 'moment';
+import { ENGLISH_LEVELS } from '../../services/reference-data/english';
 
 export interface CourseData {
   locationName: string;

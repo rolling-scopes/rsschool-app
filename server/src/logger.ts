@@ -48,15 +48,15 @@ export const loggerMiddleware =
       data.status = ctx.status;
     } catch (e) {
       if ((e as AxiosError).isAxiosError) {
-        const error = e as AxiosError;
+        const error = e as AxiosError<any>;
         logger.error(error.message, {
           data: error.response?.data,
           status: error.response?.status,
         });
       } else {
-        logger.error(e);
+        logger.error(e as any);
       }
-      data.status = e.status;
+      data.status = (e as any).status;
     }
     logger.info({
       msg: 'Processed request',

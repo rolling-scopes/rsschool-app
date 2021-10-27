@@ -109,7 +109,10 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           aboutMyself: resume.aboutMyself,
         };
 
-        const requests = [axios.post('/api/profile/me', userModel), axios.post('/api/registry/mentor', registryModel)];
+        const requests = [
+          axios.post<any>('/api/profile/me', userModel),
+          axios.post<any>('/api/registry/mentor', registryModel),
+        ];
 
         try {
           await Promise.all(requests);

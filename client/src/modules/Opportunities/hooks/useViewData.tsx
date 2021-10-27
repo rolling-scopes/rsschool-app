@@ -1,4 +1,4 @@
-import { Contacts, CVFeedback, CVStudentStats, UserData } from 'common/models/cv';
+import { Contacts, CVFeedback, CVStudentStats, UserData } from '../models';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { OpportunitiesService } from '../services/opportunities';

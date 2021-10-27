@@ -40,7 +40,7 @@ export type Notification = {
 };
 
 function postNotification(notification: Notification) {
-  axios.post(`${config.aws.restApiUrl}/notification`, notification, {
+  axios.post<any>(`${config.aws.restApiUrl}/notification`, notification, {
     headers: { 'x-api-key': config.aws.restApiKey },
   });
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Form, Input, Card } from 'antd';
-import { Contacts } from 'common/models/cv';
+import { Contacts } from 'modules/Opportunities/models';
 import { contactsValidationRules as validationRules } from './form-validation';
 
 const { Item } = Form;

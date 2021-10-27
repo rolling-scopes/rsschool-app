@@ -6,7 +6,7 @@ import { userService } from '../services';
 
 const hirers: string[] = config.roles.hirers;
 
-type Profile = {
+export type Profile = {
   username?: string;
   name?: {
     givenName: string;

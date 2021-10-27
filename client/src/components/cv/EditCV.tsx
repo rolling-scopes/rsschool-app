@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from 'common/models/cv';
+import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
