@@ -101,7 +101,7 @@ function Page(props: CoursePageProps) {
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       const response = error.response;
       const errorMessage = response?.data?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);

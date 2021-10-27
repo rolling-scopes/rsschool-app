@@ -1,6 +1,6 @@
 import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { PreferredStudentsLocation } from '../../../common/enums/mentor';
 
 @Entity()
 export class MentorRegistry {

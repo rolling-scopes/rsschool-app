@@ -1,6 +1,6 @@
 import { StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
-import { CVStudentStats } from 'common/models/cv';
+import { CVStudentStats } from '../models';
 import Section from 'modules/Opportunities/components/Section';
 import * as React from 'react';
 import { css } from 'styled-jsx/css';
