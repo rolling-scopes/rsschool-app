@@ -1,4 +1,4 @@
-import { Contacts } from 'common/models/cv';
+import { Contacts } from '../models';
 import ContactsList from './ContactsList';
 import { SidebarSectionHeader } from './SidebarSectionHeader';
 

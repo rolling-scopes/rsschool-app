@@ -1,4 +1,4 @@
-import { UserData, MilitaryServiceStatus } from 'common/models/cv';
+import { UserData, MilitaryServiceStatus } from '../models';
 import capitalize from 'lodash/capitalize';
 
 export function getPersonalToRender(user: UserData) {

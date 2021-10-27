@@ -1,5 +1,5 @@
 import { Button, Col, List, Tooltip, Typography } from 'antd';
-import { CVFeedback } from 'common/models/cv';
+import { CVFeedback } from '../models';
 import moment from 'moment';
 import * as React from 'react';
 
