@@ -10,27 +10,27 @@ const { Text } = Typography;
 type Props = {
   tags: string[];
   storedTagColors?: object;
-  setStoredTagColors: (value: object) => void;
+  onSaveTagColors: (value: object) => void;
   limitForDoneTask?: number;
-  setLimitForDoneTask: (value: number) => void;
+  onSaveLimitForDoneTask: (value: number) => void;
 };
 
 const TagColor: React.FC<Props> = ({
   storedTagColors,
-  setStoredTagColors,
+  onSaveTagColors,
   tags,
   limitForDoneTask,
-  setLimitForDoneTask,
+  onSaveLimitForDoneTask,
 }) => {
   const memoizedSetTagColor = useCallback(
     (e: IColorState, tagName, storedTagColors) => {
-      setTagColor(e, tagName, setStoredTagColors, storedTagColors);
+      setTagColor(e, tagName, onSaveTagColors, storedTagColors);
     },
     [storedTagColors],
   );
 
   const onChangeLimit = useCallback(limit => {
-    setLimitForDoneTask(limit);
+    onSaveLimitForDoneTask(limit);
   }, []);
 
   const collapseTags = (

@@ -6,17 +6,17 @@ import TagColor from './TagColor';
 type Props = {
   typesFromBase: string[];
   storedTagColors?: object;
-  setStoredTagColors: (value: object) => void;
+  onSaveTagColors: (value: object) => void;
   limitForDoneTask?: number;
-  setLimitForDoneTask: (value: number) => void;
+  onSaveLimitForDoneTask: (value: number) => void;
 };
 
 const UserSettings: React.FC<Props> = ({
   storedTagColors,
-  setStoredTagColors,
+  onSaveTagColors,
   typesFromBase,
   limitForDoneTask,
-  setLimitForDoneTask,
+  onSaveLimitForDoneTask,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const showDrawer = () => {
@@ -32,10 +32,10 @@ const UserSettings: React.FC<Props> = ({
       <Drawer title="User Settings" placement="right" closable={false} onClose={onClose} visible={isOpen}>
         <TagColor
           tags={typesFromBase}
-          setStoredTagColors={setStoredTagColors}
+          onSaveTagColors={onSaveTagColors}
           storedTagColors={storedTagColors}
           limitForDoneTask={limitForDoneTask}
-          setLimitForDoneTask={setLimitForDoneTask}
+          onSaveLimitForDoneTask={onSaveLimitForDoneTask}
         />
       </Drawer>
     </Tooltip>

@@ -227,9 +227,9 @@ export function SchedulePage(props: CoursePageProps) {
         <Col>
           <UserSettings
             typesFromBase={typesFromBase}
-            setStoredTagColors={setStoredTagColors}
+            onSaveTagColors={setStoredTagColors}
             storedTagColors={storedTagColors}
-            setLimitForDoneTask={setLimitForDoneTask}
+            onSaveLimitForDoneTask={setLimitForDoneTask}
             limitForDoneTask={limitForDoneTask}
           />
         </Col>

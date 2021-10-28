@@ -121,13 +121,17 @@ export const placeRenderer = (value: string) => {
 };
 
 export const scoreRenderer = (score: string) => {
-  const scoreParts = score?.split('/');
-
-  if (!scoreParts?.length) {
+  if (!score) {
     return;
   }
 
-  const done = ((+scoreParts[0] / +scoreParts[1]) * 100).toFixed();
+  const [num, total] = score.split('/');
+
+  if (!num || !total) {
+    return;
+  }
+
+  const done = ((+num / +total) * 100).toFixed();
 
   return (
     <Tooltip placement="topLeft" title={`Done: ${done} %.`}>

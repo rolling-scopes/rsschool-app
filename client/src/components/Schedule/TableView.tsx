@@ -409,11 +409,7 @@ const getNewDataForUpdate = (entity: CourseEvent) => {
   return dataForUpdate;
 };
 
-const getTableRowClass = (
-  record: CourseEvent,
-  isSplitedByWeek: boolean | undefined,
-  limitForDoneTask: number | undefined,
-): string => {
+const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitForDoneTask?: number): string => {
   if (limitForDoneTask && record.done && record.done >= limitForDoneTask) {
     return 'table-row-done';
   }
