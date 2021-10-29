@@ -9,9 +9,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 
   constructor(readonly configService: ConfigService) {
     super({
-      clientID: configService.get('RSSHCOOL_GITHUB_CLIENT_ID'),
-      clientSecret: configService.get('RSSHCOOL_GITHUB_CLIENT_SECRET'),
-      callbackURL: configService.get('RSSHCOOL_GITHUB_CALLBACK_URL'),
+      clientID: configService.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID'),
+      clientSecret: configService.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
+      callbackURL: configService.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
       scope: ['user:email'],
     });
   }
