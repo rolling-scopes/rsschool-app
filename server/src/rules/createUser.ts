@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+import { Profile } from 'passport-github2';
 import { flatMap } from 'lodash';
 import { config } from '../config';
 import { Course, IUserSession, CourseRoles, User, CourseTask, CourseUser, CourseRole } from '../models';
@@ -6,30 +7,36 @@ import { userService } from '../services';
 
 const hirers: string[] = config.roles.hirers;
 
-export type Profile = {
-  username?: string;
-  name?: {
-    givenName: string;
-    familyName: string;
-  };
-  emails?: { value: string; primary?: boolean }[];
-};
-
 function getPrimaryEmail(emails: Array<{ value: string; primary?: boolean }>) {
   return emails.filter(email => email.primary);
 }
 
 export async function createUser(profile: Profile, admin: boolean = false): Promise<IUserSession> {
-  const id = profile.username!.toLowerCase();
-  const result = await userService.getFullUserByGithubId(id);
+  const username = profile.username!.toLowerCase();
+  const providerUserId = profile.id.toString();
+  const provider = profile.provider.toString();
+  const result =
+    (provider ? await userService.getUserByProvider(provider, providerUserId) : undefined) ??
+    (await userService.getFullUserByGithubId(username));
 
-  const isAdmin = config.app.admins.includes(id) || admin;
-  const isHirer = hirers.includes(id);
+  if (result != null && provider && !result.provider) {
+    await userService.saveUser({
+      id: result.id,
+      provider: provider,
+      providerUserId: providerUserId,
+      githubId: username,
+    });
+  }
+
+  const isAdmin = config.app.admins.includes(username) || admin;
+  const isHirer = hirers.includes(username);
   if (result == null) {
     const email = getPrimaryEmail(profile.emails || [])[0];
 
     const user: Partial<User> = {
-      githubId: id,
+      githubId: username,
+      providerUserId,
+      provider,
       primaryEmail: email ? email.value : undefined,
       firstName: profile.name ? profile.name.givenName : '',
       lastName: profile.name ? profile.name.familyName : '',
@@ -75,7 +82,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       .select('"courseTask"."id" AS "courseTaskId", "course"."id" AS "courseId"')
       .leftJoin(Course, 'course', '"course"."id" = "courseTask"."courseId"')
       .leftJoin(User, 'user', '"user"."id" = "courseTask"."taskOwnerId"')
-      .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${id}'`)
+      .where(`"courseTask"."checker" = 'taskOwner' AND "user"."githubId" = '${username}'`)
       .getRawMany(),
     getRepository(CourseUser)
       .createQueryBuilder('courseUser')

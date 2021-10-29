@@ -1,7 +1,7 @@
 import passport from 'koa-passport';
-import { Strategy as GitHubStrategy } from 'passport-github2';
+import { Strategy as GitHubStrategy, Profile } from 'passport-github2';
 import { config } from './config';
-import { createUser, Profile } from './rules';
+import { createUser } from './rules';
 import { ILogger } from './logger';
 
 export function setupPassport(logger: ILogger) {

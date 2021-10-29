@@ -1,11 +1,6 @@
 import { ConnectionOptions } from 'typeorm';
-import { config as dotenv } from 'dotenv';
 import { entities } from './entities';
 import { migrations } from './migrations';
-
-if (process.env.NODE_ENV !== 'production') {
-  dotenv();
-}
 
 const config: ConnectionOptions = {
   type: 'postgres',
