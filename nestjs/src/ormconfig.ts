@@ -4,11 +4,11 @@ import { migrations } from './migrations';
 
 const config: ConnectionOptions = {
   type: 'postgres',
-  host: process.env.RSSHCOOL_API_PG_HOST,
+  host: process.env.RSSHCOOL_PG_HOST,
   port: 5432,
-  username: process.env.RSSHCOOL_API_PG_USERNAME,
-  password: process.env.RSSHCOOL_API_PG_PASSWORD,
-  database: process.env.RSSHCOOL_API_PG_DATABASE,
+  username: process.env.RSSHCOOL_PG_USERNAME,
+  password: process.env.RSSHCOOL_PG_PASSWORD,
+  database: process.env.RSSHCOOL_PG_DATABASE,
   entities,
   migrations,
   synchronize: false,
