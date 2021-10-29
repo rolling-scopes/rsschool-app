@@ -3,7 +3,7 @@
 node_modules/
 .next/
 dist/
-.env*
+.env
 .idea
 coverage
 reports/*.xml

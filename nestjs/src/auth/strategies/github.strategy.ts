@@ -1,16 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-github2';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   private readonly logger = new Logger(GithubStrategy.name);
 
-  constructor() {
+  constructor(readonly configService: ConfigService) {
     super({
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL,
+      clientID: configService.get('RSSHCOOL_GITHUB_CLIENT_ID'),
+      clientSecret: configService.get('RSSHCOOL_GITHUB_CLIENT_SECRET'),
+      callbackURL: configService.get('RSSHCOOL_GITHUB_CALLBACK_URL'),
       scope: ['user:email'],
     });
   }
