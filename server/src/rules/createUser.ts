@@ -19,7 +19,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     (provider ? await userService.getUserByProvider(provider, providerUserId) : undefined) ??
     (await userService.getFullUserByGithubId(username));
 
-  if (result != null && provider && !result.provider) {
+  if (result != null && (result.githubId !== username || !result.provider)) {
     await userService.saveUser({
       id: result.id,
       provider: provider,
@@ -60,7 +60,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     const userId = createdUser.id;
     return {
       id: userId,
-      githubId: createdUser.githubId.toLowerCase(),
+      githubId: username,
       isAdmin,
       isHirer,
       roles: {},
@@ -115,6 +115,6 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     isHirer,
     id: userId,
     coursesRoles,
-    githubId: result.githubId.toLowerCase(),
+    githubId: username,
   };
 }
