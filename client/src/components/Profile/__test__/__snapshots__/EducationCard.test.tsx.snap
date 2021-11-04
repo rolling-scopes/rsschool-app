@@ -292,7 +292,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             onPermissionsSettingsChange={[MockFunction]}
           >
             <DrawerWrapper
-              className="jsx-2583821679"
               closable={true}
               getContainer={false}
               onClose={[Function]}
@@ -307,7 +306,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               visible={false}
             >
               <Drawer
-                className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
                 onClose={[Function]}
@@ -324,7 +322,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  className="jsx-2583821679"
+                  className=""
                   defaultOpen={false}
                   duration=".3s"
                   ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
@@ -357,7 +355,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      className="jsx-2583821679"
+                      className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
@@ -384,7 +382,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       }
                     >
                       <div
-                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        className="ant-drawer ant-drawer-top"
                         onTransitionEnd={[Function]}
                         style={
                           Object {
@@ -600,9 +598,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                     </Spin>
                                   </div>
                                 </List>
-                                <JSXStyle
-                                  id="2583821679"
-                                />
                               </div>
                             </div>
                           </div>
@@ -613,6 +608,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
+            <JSXStyle
+              id="261503908"
+            />
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -2322,7 +2320,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             onPermissionsSettingsChange={[MockFunction]}
           >
             <DrawerWrapper
-              className="jsx-2583821679"
               closable={true}
               getContainer={false}
               onClose={[Function]}
@@ -2337,7 +2334,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               visible={false}
             >
               <Drawer
-                className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
                 onClose={[Function]}
@@ -2354,7 +2350,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  className="jsx-2583821679"
+                  className=""
                   defaultOpen={false}
                   duration=".3s"
                   ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
@@ -2387,7 +2383,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      className="jsx-2583821679"
+                      className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
@@ -2414,7 +2410,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       }
                     >
                       <div
-                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        className="ant-drawer ant-drawer-top"
                         onTransitionEnd={[Function]}
                         style={
                           Object {
@@ -2630,9 +2626,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     </Spin>
                                   </div>
                                 </List>
-                                <JSXStyle
-                                  id="2583821679"
-                                />
                               </div>
                             </div>
                           </div>
@@ -2643,6 +2636,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
+            <JSXStyle
+              id="261503908"
+            />
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={

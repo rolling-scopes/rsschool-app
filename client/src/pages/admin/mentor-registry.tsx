@@ -10,7 +10,7 @@ import { CoursesService } from 'services/courses';
 import { ModalForm } from 'components/Forms';
 import { useLoading } from 'components/useLoading';
 
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { isAnyCourseManager } from '../../domain/user';
 

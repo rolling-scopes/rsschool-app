@@ -4,7 +4,7 @@ import { CommentModal, MentorSearch } from 'components';
 import { useState } from 'react';
 import { StudentDetails } from 'services/course';
 import { MentorBasic } from 'common/models';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 
 type Props = {
   details: StudentDetails | null;

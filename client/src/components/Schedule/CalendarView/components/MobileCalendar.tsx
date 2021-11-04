@@ -5,7 +5,7 @@ import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 
 const { Text } = Typography;
 

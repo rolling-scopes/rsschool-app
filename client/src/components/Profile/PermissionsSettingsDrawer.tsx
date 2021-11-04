@@ -4,7 +4,6 @@ import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { Drawer, Checkbox, List, Typography } from 'antd';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { css } from 'styled-jsx/css';
 
 const { Text } = Typography;
 
@@ -37,10 +36,10 @@ enum roles {
   student = 'Student assigned to you (if you are a mentor)',
 }
 
-class PermissionsSettingsDrawer extends React.Component<Props> {
-  render() {
-    const { isSettingsVisible, hideSettings, permissionsSettings, onPermissionsSettingsChange } = this.props;
-    return (
+function PermissionsSettingsDrawer(props: Props) {
+  const { isSettingsVisible, hideSettings, permissionsSettings, onPermissionsSettingsChange } = props;
+  return (
+    <>
       <Drawer
         title="Visibility settings"
         placement="top"
@@ -49,7 +48,6 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
         visible={isSettingsVisible}
         getContainer={false}
         style={{ position: 'absolute', display: isSettingsVisible ? 'block' : 'none' }}
-        className={className}
       >
         <List
           itemLayout="horizontal"
@@ -81,25 +79,23 @@ class PermissionsSettingsDrawer extends React.Component<Props> {
             </List.Item>
           )}
         />
-        {styles}
       </Drawer>
-    );
-  }
+      <style jsx>{`
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      `}</style>
+    </>
+  );
 }
-
-const { className, styles } = css.resolve`
-  :global(.ant-drawer-content-wrapper) {
-    height: inherit !important;
-  }
-
-  :global(.ant-drawer-wrapper-body) {
-    overflow: hidden;
-  }
-
-  :global(.ant-drawer-body) {
-    height: calc(100% - 55px);
-    overflow: auto;
-  }
-`;
 
 export default PermissionsSettingsDrawer;

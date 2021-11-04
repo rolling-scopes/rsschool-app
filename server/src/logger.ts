@@ -1,9 +1,9 @@
 import Router from '@koa/router';
-import pinoLogger from 'pino-multi-stream';
-const cloudwatch = require('pino-cloudwatch'); //tslint:disable-line
-import { config } from './config';
 import { AxiosError } from 'axios';
+import pinoLogger from 'pino-multi-stream';
 import { ParsedUrlQuery } from 'querystring';
+import { config } from './config';
+const cloudwatch = require('@apalchys/pino-cloudwatch'); //tslint:disable-line
 
 export interface ILog {
   data?: any;
