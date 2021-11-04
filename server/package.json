@@ -13,7 +13,7 @@
     "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts"
   },
   "dependencies": {
-    "@apalchys/pino-cloudwatch": "^0.8.0",
+    "@apalchys/pino-cloudwatch": "0.8.0",
     "@koa/cors": "3.0.0",
     "@koa/router": "8.0.8",
     "aws-sdk": "2.1021.0",
