@@ -10,12 +10,13 @@ type Props = {
   updateUrl: () => void;
 };
 
-const getNameGithubRepository = (url: string | null | undefined) => (url ? url.split('/').pop() ?? '' : '');
+const getGithubRepoName = (url: string | null | undefined) => (url ? url.split('/').pop() ?? '' : '');
 
 export function RepositoryCard(props: Props) {
   const { Text, Paragraph } = Typography;
   const { url, githubId, onSendInviteRepository, updateUrl } = props;
-  const nameGithubRepository = getNameGithubRepository(url);
+  const repoName = getGithubRepoName(url);
+  const hasRepo = !!url;
   const [loading, withLoading] = useLoading(false);
 
   const showInformation = () => {
@@ -47,8 +48,11 @@ export function RepositoryCard(props: Props) {
 
   const handleSubmit = withLoading(async () => {
     await onSendInviteRepository(githubId);
+    const shouldShowInformation = !hasRepo;
+    if (shouldShowInformation) {
+      showInformation();
+    }
     updateUrl();
-    showInformation();
   });
 
   return (
@@ -65,7 +69,7 @@ export function RepositoryCard(props: Props) {
                     <Text strong>{'Your repository:'}</Text>
                     <Paragraph style={{ textAlign: 'center', marginBottom: 10 }}>
                       <a target="_blank" href={url} style={{ fontSize: 16 }}>
-                        <GithubFilled /> {nameGithubRepository}
+                        <GithubFilled /> {repoName}
                       </a>
                     </Paragraph>
                   </div>
