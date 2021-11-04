@@ -7,7 +7,10 @@ const app = appId && privateKey ? new App({ appId: Number(appId), privateKey }) 
 export class GithubService {
   public static async initGithub(): Promise<Octokit> {
     const { installationId } = config.github;
-    const octokit = await app?.getInstallationOctokit(Number(installationId));
-    return octokit!;
+    if (!app) {
+      throw new Error('Github App is not configured');
+    }
+    const octokit = await app.getInstallationOctokit(Number(installationId));
+    return octokit;
   }
 }

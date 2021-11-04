@@ -1,5 +1,5 @@
 import { GithubFilled, WarningTwoTone } from '@ant-design/icons';
-import { Button, Col, message, Modal, Row, Spin, Typography } from 'antd';
+import { Button, Col, Modal, Row, Spin, Typography } from 'antd';
 import { useLoading } from 'components/useLoading';
 import CommonCard from './CommonDashboardCard';
 
