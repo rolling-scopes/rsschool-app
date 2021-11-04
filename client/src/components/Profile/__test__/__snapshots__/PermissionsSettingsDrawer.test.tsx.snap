@@ -67,7 +67,6 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
   }
 >
   <DrawerWrapper
-    className="jsx-2583821679"
     closable={true}
     getContainer={false}
     onClose={[MockFunction]}
@@ -82,7 +81,6 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
     visible={true}
   >
     <Drawer
-      className="jsx-2583821679"
       closable={true}
       getContainer={false}
       onClose={[MockFunction]}
@@ -99,7 +97,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
     >
       <DrawerWrapper
         afterVisibleChange={[Function]}
-        className="jsx-2583821679"
+        className=""
         defaultOpen={false}
         duration=".3s"
         ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
@@ -132,7 +130,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
         >
           <DrawerChild
             afterVisibleChange={[Function]}
-            className="jsx-2583821679"
+            className=""
             duration=".3s"
             ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
             getContainer={[Function]}
@@ -159,7 +157,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
             }
           >
             <div
-              className="ant-drawer ant-drawer-top ant-drawer-open jsx-2583821679"
+              className="ant-drawer ant-drawer-top ant-drawer-open"
               onKeyDown={[Function]}
               onTransitionEnd={[Function]}
               style={
@@ -418,8 +416,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -469,6 +470,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isProfileVisible-all"
                                           style={
                                             Object {
@@ -540,8 +542,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -591,6 +596,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-all"
                                           style={
                                             Object {
@@ -656,6 +662,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-mentor"
                                           style={
                                             Object {
@@ -721,6 +728,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-student"
                                           style={
                                             Object {
@@ -792,8 +800,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -843,6 +854,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-all"
                                           style={
                                             Object {
@@ -908,6 +920,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-mentor"
                                           style={
                                             Object {
@@ -973,6 +986,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-student"
                                           style={
                                             Object {
@@ -1044,8 +1058,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1095,6 +1112,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEnglishVisible-all"
                                           style={
                                             Object {
@@ -1160,6 +1178,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEnglishVisible-student"
                                           style={
                                             Object {
@@ -1231,8 +1250,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1282,6 +1304,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEmailVisible-all"
                                           style={
                                             Object {
@@ -1347,6 +1370,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEmailVisible-student"
                                           style={
                                             Object {
@@ -1418,8 +1442,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1469,6 +1496,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isTelegramVisible-all"
                                           style={
                                             Object {
@@ -1534,6 +1562,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isTelegramVisible-student"
                                           style={
                                             Object {
@@ -1605,8 +1634,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1656,6 +1688,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isSkypeVisible-all"
                                           style={
                                             Object {
@@ -1721,6 +1754,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isSkypeVisible-student"
                                           style={
                                             Object {
@@ -1792,8 +1826,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1843,6 +1880,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPhoneVisible-all"
                                           style={
                                             Object {
@@ -1908,6 +1946,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPhoneVisible-student"
                                           style={
                                             Object {
@@ -1979,8 +2018,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2030,6 +2072,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isContactsNotesVisible-all"
                                           style={
                                             Object {
@@ -2095,6 +2138,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isContactsNotesVisible-student"
                                           style={
                                             Object {
@@ -2166,8 +2210,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2217,6 +2264,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-all"
                                           style={
                                             Object {
@@ -2282,6 +2330,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-mentor"
                                           style={
                                             Object {
@@ -2347,6 +2396,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-student"
                                           style={
                                             Object {
@@ -2418,8 +2468,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2469,6 +2522,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-all"
                                           style={
                                             Object {
@@ -2534,6 +2588,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-mentor"
                                           style={
                                             Object {
@@ -2599,6 +2654,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-student"
                                           style={
                                             Object {
@@ -2670,8 +2726,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2721,6 +2780,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-all"
                                           style={
                                             Object {
@@ -2786,6 +2846,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-mentor"
                                           style={
                                             Object {
@@ -2851,6 +2912,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-student"
                                           style={
                                             Object {
@@ -2922,8 +2984,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2973,6 +3038,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isStudentStatsVisible-all"
                                           style={
                                             Object {
@@ -3038,6 +3104,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isStudentStatsVisible-student"
                                           style={
                                             Object {
@@ -3111,9 +3178,6 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                           </Spin>
                         </div>
                       </List>
-                      <JSXStyle
-                        id="2583821679"
-                      />
                     </div>
                   </div>
                 </div>
@@ -3124,5 +3188,8 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
       </DrawerWrapper>
     </Drawer>
   </DrawerWrapper>
+  <JSXStyle
+    id="261503908"
+  />
 </PermissionsSettingsDrawer>
 `;
