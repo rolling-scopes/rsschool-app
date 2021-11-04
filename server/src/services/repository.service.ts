@@ -285,10 +285,10 @@ export class RepositoryService {
   async createTeam(github: Octokit, teamName: string, courseId: number) {
     const { org } = config.github;
     const { data: team } = await github.rest.teams.getByName({ org, team_slug: teamName });
-    const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
-    this.logger?.info('Creating team', teamName);
 
     if (!team.slug) {
+      const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
+      this.logger?.info('Creating team', teamName);
       const response = await github.rest.teams.create({ privacy: 'secret', name: teamName, org });
       const courseTeamSlug = response.data?.slug;
       for (const maintainer of mentors) {
