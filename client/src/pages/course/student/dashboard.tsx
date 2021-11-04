@@ -21,7 +21,6 @@ import {
 } from 'modules/StudentDashboard/components';
 import { useLoading } from 'components/useLoading';
 
-
 const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
 
 function Page(props: CoursePageProps) {
@@ -218,10 +217,6 @@ const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent 
 };
 
 const showCountEventsOnStudentsDashboard = () =>
-  Number(
-    localStorage.getItem(STORAGE_KEY)
-      ? localStorage.getItem(STORAGE_KEY)
-      : 1,
-  );
+  Number(localStorage.getItem(STORAGE_KEY) ? localStorage.getItem(STORAGE_KEY) : 1);
 
 export default withCourseData(withSession(Page));
