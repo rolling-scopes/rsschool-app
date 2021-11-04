@@ -3,7 +3,7 @@ import { HeartTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 
 import { RegistrationPageLayout } from 'components';
 import { Session } from 'components/withSession';

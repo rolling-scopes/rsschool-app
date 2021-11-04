@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask, IColumn, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { SettingsModal } from 'modules/Score/components/SettingsModal';

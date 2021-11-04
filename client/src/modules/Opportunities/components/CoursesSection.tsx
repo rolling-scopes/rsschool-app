@@ -3,7 +3,7 @@ import { Col, List, Row, Typography } from 'antd';
 import { CVStudentStats } from '../models';
 import Section from 'modules/Opportunities/components/Section';
 import * as React from 'react';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { StudentStatus } from './StudentStatus';
 
 const { Text } = Typography;

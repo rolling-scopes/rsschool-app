@@ -8,7 +8,7 @@ import {
   SaveTwoTone,
   SolutionOutlined,
 } from '@ant-design/icons';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { GithubAvatar } from 'components/GithubAvatar';
 import * as React from 'react';
 

@@ -11,6 +11,10 @@
     {
       "matchPackagePatterns": [ "koa" ],
       "groupName": "koa"
+    },
+    {
+      "matchPackagePatterns": [ "react-" ],
+      "groupName": "react libs"
     }
   ]
 }
