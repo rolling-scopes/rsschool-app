@@ -110,7 +110,8 @@ export interface CourseEvent {
   duration?: number;
   isTask?: boolean;
   checker?: Checker;
-  score?: number;
+  score?: string;
+  done?: number;
 }
 
 export interface CourseUser {

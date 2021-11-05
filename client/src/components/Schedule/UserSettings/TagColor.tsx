@@ -1,24 +1,37 @@
 import React, { useCallback } from 'react';
 import TagColorIcon from './TagColorIcon';
-import { Collapse, Tag } from 'antd';
+import { Collapse, Tag, Divider, InputNumber, Typography } from 'antd';
 import { GithubPicker, ColorState as IColorState } from 'react-color';
 import { pickerColors, setTagColor, getTagStyle } from './userSettingsHandlers';
+
+const { Panel } = Collapse;
+const { Text } = Typography;
 
 type Props = {
   tags: string[];
   storedTagColors?: object;
-  setStoredTagColors: (value: object) => void;
+  onSaveTagColors: (value: object) => void;
+  limitForDoneTask?: number;
+  onSaveLimitForDoneTask: (value: number) => void;
 };
 
-const TagColor: React.FC<Props> = ({ storedTagColors, setStoredTagColors, tags }) => {
-  const { Panel } = Collapse;
-
+const TagColor: React.FC<Props> = ({
+  storedTagColors,
+  onSaveTagColors,
+  tags,
+  limitForDoneTask,
+  onSaveLimitForDoneTask,
+}) => {
   const memoizedSetTagColor = useCallback(
     (e: IColorState, tagName, storedTagColors) => {
-      setTagColor(e, tagName, setStoredTagColors, storedTagColors);
+      setTagColor(e, tagName, onSaveTagColors, storedTagColors);
     },
     [storedTagColors],
   );
+
+  const onChangeLimit = useCallback(limit => {
+    onSaveLimitForDoneTask(limit);
+  }, []);
 
   const collapseTags = (
     <Collapse accordion ghost>
@@ -38,11 +51,16 @@ const TagColor: React.FC<Props> = ({ storedTagColors, setStoredTagColors, tags }
   );
 
   return (
-    <Collapse expandIcon={() => <TagColorIcon />}>
-      <Panel header="Change Tag Color" key="tags">
-        {collapseTags}
-      </Panel>
-    </Collapse>
+    <>
+      <Collapse expandIcon={() => <TagColorIcon />}>
+        <Panel header="Change Tag Color" key="tags">
+          {collapseTags}
+        </Panel>
+      </Collapse>
+      <Divider />
+      <Text strong>Limit for done tasks (%):</Text>
+      <InputNumber min={0} max={100} defaultValue={limitForDoneTask} onChange={onChangeLimit} />
+    </>
   );
 };
 

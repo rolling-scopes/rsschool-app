@@ -7,8 +7,10 @@ import {
   GithubOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
+
+const { Text } = Typography;
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -115,5 +117,25 @@ export const placeRenderer = (value: string) => {
     </div>
   ) : (
     <Tooltip title={value}>{<div style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{value}</div>}</Tooltip>
+  );
+};
+
+export const scoreRenderer = (score: string) => {
+  if (!score) {
+    return;
+  }
+
+  const [num, total] = score.split('/');
+
+  if (!num || !total) {
+    return;
+  }
+
+  const done = ((+num / +total) * 100).toFixed();
+
+  return (
+    <Tooltip placement="topLeft" title={`Done: ${done} %.`}>
+      <Text strong>{score}</Text>
+    </Tooltip>
   );
 };
