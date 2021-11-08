@@ -40,11 +40,12 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
     });
 
     setResponse(ctx, OK, result);
-  } catch (e) {
+  } catch (err) {
+    const error = err as Error;
     if (logger) {
-      logger.error(e.message);
+      logger.error(error.message);
     }
-    setResponse(ctx, BAD_REQUEST, { message: e.message });
+    setResponse(ctx, BAD_REQUEST, { message: error.message });
   }
 };
 

@@ -1,8 +1,10 @@
-import { NOT_FOUND, OK, BAD_REQUEST } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { setResponse } from './utils';
 import { getManager, getRepository, ObjectType } from 'typeorm';
 import { ILogger } from '../logger';
+
+const { NOT_FOUND, OK, INTERNAL_SERVER_ERROR } = StatusCodes;
 
 export const createGetRoute =
   <T extends ObjectType<T>>(entity: T, _?: ILogger, relations?: string[]) =>
@@ -32,16 +34,19 @@ export const createGetAllRoute =
 export const createPostRoute =
   <T extends ObjectType<T>>(entity: T, logger?: ILogger) =>
   async (ctx: Router.RouterContext) => {
-    const { id, createdDate, ...data } = ctx.request.body;
+    const { id, createdDate, updatedDate, ...data } = ctx.request.body;
     try {
-      await getRepository(entity).insert(data);
-      const result = await getRepository(entity).findOne(id);
+      const {
+        identifiers: [identifier],
+      } = await getRepository(entity).insert(data);
+      const result = await getRepository(entity).findOne(identifier['id']);
       setResponse(ctx, OK, result);
-    } catch (e) {
+    } catch (err) {
+      const error = err as Error;
       if (logger) {
-        logger.error(e.message);
+        logger.error(error.message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
     }
   };
 
@@ -54,11 +59,12 @@ export const createPutRoute =
       await getRepository(entity).update(id, data);
       const result = await getRepository(entity).findOne(id);
       setResponse(ctx, OK, result);
-    } catch (e) {
+    } catch (err) {
+      const error = err as Error;
       if (logger) {
-        logger.error(e.message);
+        logger.error(error.message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
     }
   };
 
@@ -69,11 +75,12 @@ export const createDeleteRoute =
     try {
       const result = await getRepository(entity).delete(id);
       setResponse(ctx, OK, result);
-    } catch (e) {
+    } catch (err) {
+      const error = err as Error;
       if (logger) {
-        logger.error(e.message);
+        logger.error(error.message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
     }
   };
 
@@ -84,11 +91,12 @@ export const createDisableRoute =
     try {
       const result = await getRepository(entity).update(id, { disabled: true });
       setResponse(ctx, OK, result);
-    } catch (e) {
+    } catch (err) {
+      const error = err as Error;
       if (logger) {
-        logger.error(e.message);
+        logger.error(error.message);
       }
-      setResponse(ctx, BAD_REQUEST, { message: e.message });
+      setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
     }
   };
 
@@ -101,11 +109,12 @@ export const createMultiplePostRoute =
       try {
         const result = await getRepository(entity).insert(someEntity);
         setResponse(ctx, OK, result);
-      } catch (e) {
+      } catch (err) {
+        const error = err as Error;
         if (logger) {
-          logger.error(e.message);
+          logger.error(error.message);
         }
-        setResponse(ctx, BAD_REQUEST, { message: e.message });
+        setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
       }
     });
   };
@@ -119,11 +128,12 @@ export const createMultiplePutRoute =
       try {
         const result = await getRepository(entity).update(someEntity.id, someEntity);
         setResponse(ctx, OK, result);
-      } catch (e) {
+      } catch (err) {
+        const error = err as Error;
         if (logger) {
-          logger.error(e.message);
+          logger.error(error.message);
         }
-        setResponse(ctx, BAD_REQUEST, { message: e.message });
+        setResponse(ctx, INTERNAL_SERVER_ERROR, { message: error.message });
       }
     });
   };

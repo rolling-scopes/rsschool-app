@@ -21,7 +21,7 @@ const ModalWindow: React.FC<Props> = ({ isOpen, data, handleOnClose, timeZone, s
   const typeHeader = data.isTask ? 'Task:' : 'Event:';
   const title = (
     <Link
-      href={`/course/entityDetails?course=${alias}&entityType=${data.isTask ? 'task' : 'event'}&entityId=${data.id}`}
+      href={`/course/entity-details?course=${alias}&entityType=${data.isTask ? 'task' : 'event'}&entityId=${data.id}`}
     >
       <a>
         <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>

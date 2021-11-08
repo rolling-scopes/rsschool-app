@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Task, TaskService } from 'services/task';
+// import { Task, TaskService } from 'services/task';
 import { CourseEvent, CourseService } from 'services/course';
 import { withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';
@@ -24,7 +24,7 @@ import {
 import moment from 'moment-timezone';
 import { EVENT_TYPES, SPECIAL_ENTITY_TAGS, TASK_TYPES } from './model';
 import { TIMEZONES } from '../../configs/timezones';
-import { Event, EventService } from 'services/event';
+// import { Event, EventService } from 'services/event';
 import { times } from 'lodash';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 
@@ -130,7 +130,7 @@ const FormEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
-        <Select>{entityTypes}</Select>
+        <Select disabled>{entityTypes}</Select>
       </Form.Item>
 
       <Form.Item name="special" label="Special">
@@ -188,7 +188,7 @@ const FormEntity: React.FC<Props> = ({
           },
         ]}
       >
-        <Input />
+        <Input disabled />
       </Form.Item>
 
       <Form.Item name="organizerId" label="Organizer" rules={[{ required: false }]}>
@@ -201,7 +201,7 @@ const FormEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="description" label="Description">
-        <TextArea />
+        <TextArea disabled />
       </Form.Item>
 
       {entityType === 'task' && (
@@ -243,7 +243,7 @@ const FormEntity: React.FC<Props> = ({
           <Divider />
 
           <Form.Item name="verification" label="Verification (deprecated)">
-            <Radio.Group>
+            <Radio.Group disabled>
               <Radio value="manual">Manual</Radio>
               <Radio value="auto">Auto</Radio>
             </Radio.Group>
@@ -252,13 +252,13 @@ const FormEntity: React.FC<Props> = ({
           <Collapse>
             <Collapse.Panel header="Github" key="1">
               <Form.Item name="githubPrRequired" label="" valuePropName="checked">
-                <Checkbox>Pull Request required</Checkbox>
+                <Checkbox disabled>Pull Request required</Checkbox>
               </Form.Item>
               <Form.Item name="sourceGithubRepoUrl" label="Source Repo Url" rules={[{ pattern: githubRepoUrl }]}>
-                <Input placeholder="https://github.com/rolling-scopes-school/task1" />
+                <Input disabled placeholder="https://github.com/rolling-scopes-school/task1" />
               </Form.Item>
               <Form.Item name="githubRepoName" label="Expected Repo Name">
-                <Input placeholder="task1" />
+                <Input disabled placeholder="task1" />
               </Form.Item>
             </Collapse.Panel>
             <Collapse.Panel header="JSON Attributes" key="2">
@@ -266,7 +266,7 @@ const FormEntity: React.FC<Props> = ({
                 name="attributes"
                 rules={[{ validator: async (_, value: string) => JSON.parse(value), message: 'Invalid json' }]}
               >
-                <Input.TextArea rows={6} />
+                <Input.TextArea disabled rows={6} />
               </Form.Item>
             </Collapse.Panel>
           </Collapse>
@@ -362,34 +362,33 @@ const loadUsers = async (searchText: string) => {
 };
 
 const createTask = async (courseId: number, values: any, isUpdateMode: boolean, editableRecord: CourseEvent | null) => {
-  const taskService = new TaskService();
+  // const taskService = new TaskService();
   const serviceCouseTask = new CourseService(courseId);
 
-  const templateTaskData = {
-    name: values.name,
-    type: values.type,
-    descriptionUrl: values.descriptionUrl || '',
-    description: values.description || '',
-    verification: values.verification,
-    githubPrRequired: values.githubPrRequired,
-    sourceGithubRepoUrl: values.sourceGithubRepoUrl,
-    githubRepoName: values.githubRepoName,
-    attributes: JSON.parse(values.attributes ?? '{}'),
-  } as Partial<Task>;
+  // const templateTaskData = {
+  //   name: values.name,
+  //   type: values.type,
+  //   descriptionUrl: values.descriptionUrl || '',
+  //   description: values.description || '',
+  //   verification: values.verification,
+  //   githubPrRequired: values.githubPrRequired,
+  //   sourceGithubRepoUrl: values.sourceGithubRepoUrl,
+  //   githubRepoName: values.githubRepoName,
+  //   attributes: JSON.parse(values.attributes ?? '{}'),
+  // } as Partial<Task>;
 
-  let taskId = undefined;
+  // let taskId = undefined;
 
-  if (isUpdateMode && editableRecord) {
-    await taskService.updateTask(editableRecord.id, templateTaskData);
-  } else {
-    const { id } = await taskService.createTask(templateTaskData);
-    taskId = id;
-  }
+  // if (isUpdateMode && editableRecord) {
+  //   await taskService.updateTask(editableRecord.id, templateTaskData);
+  // } else {
+  //   const { id } = await taskService.createTask(templateTaskData);
+  //   taskId = id;
+  // }
 
   const [startDate, endDate] = values.range || [null, null];
   values = {
     courseId,
-    taskId,
     special: values.special ? values.special.join(',') : '',
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
@@ -405,7 +404,7 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
   if (isUpdateMode && editableRecord) {
     await serviceCouseTask.updateCourseTask(editableRecord.id, values);
   } else {
-    await serviceCouseTask.createCourseTask(values);
+    // await serviceCouseTask.createCourseTask(values);
   }
 };
 
@@ -415,29 +414,29 @@ const createEvent = async (
   isUpdateMode: boolean,
   editableRecord: CourseEvent | null,
 ) => {
-  const eventService = new EventService();
+  // const eventService = new EventService();
   const serviceCouse = new CourseService(courseId);
 
-  const templateEventData = {
-    name: values.name,
-    type: values.type,
-    descriptionUrl: values.descriptionUrl,
-    description: values.description,
-  } as Partial<Event>;
+  // const templateEventData = {
+  //   name: values.name,
+  //   type: values.type,
+  //   descriptionUrl: values.descriptionUrl,
+  //   description: values.description,
+  // } as Partial<Event>;
 
-  let eventTemplateId;
+  // let eventTemplateId;
 
-  if (isUpdateMode && editableRecord) {
-    eventTemplateId = editableRecord.event.id;
-    await eventService.updateEvent(eventTemplateId, templateEventData);
-  } else {
-    const data: any = await eventService.createEvent(templateEventData);
-    eventTemplateId = data.id;
-  }
+  // if (isUpdateMode && editableRecord) {
+  //   eventTemplateId = editableRecord.event.id;
+  //   await eventService.updateEvent(eventTemplateId, templateEventData);
+  // } else {
+  //   const data: any = await eventService.createEvent(templateEventData);
+  //   eventTemplateId = data.id;
+  // }
 
   values = {
-    courseId,
-    eventId: eventTemplateId,
+    // courseId,
+    // eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
     dateTime: values.dateTime || null,
     duration: values.duration || null,

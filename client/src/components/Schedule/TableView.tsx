@@ -117,7 +117,7 @@ const getColumns = (
     render: (value: string, row: any) => {
       return (
         <Link
-          href={`/course/entityDetails?course=${alias}&entityType=${row.isTask ? 'task' : 'event'}&entityId=${row.id}`}
+          href={`/course/entity-details?course=${alias}&entityType=${row.isTask ? 'task' : 'event'}&entityId=${row.id}`}
         >
           <a>
             <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>

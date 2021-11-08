@@ -6,7 +6,6 @@ import {
   EyeInvisibleOutlined,
   DownloadOutlined,
   UploadOutlined,
-  PlusOutlined,
   CheckSquareOutlined,
   BorderOutlined,
 } from '@ant-design/icons';
@@ -195,13 +194,13 @@ export function SchedulePage(props: CoursePageProps) {
             </Form>
             <Col>
               <Tooltip title="Add new" mouseEnterDelay={1}>
-                <Button
+                {/* <Button
                   type="primary"
                   icon={<PlusOutlined />}
                   onClick={() => {
                     setModalOpen(true);
                   }}
-                />
+                /> */}
               </Tooltip>
             </Col>
           </>
@@ -288,7 +287,7 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
     isTask: true,
     special: task.special,
     duration: task.duration,
-    score: `${task.score}/${task.maxScore}`,
+    score: task.score ? `${task.score}/${task.maxScore}` : '',
     done: task.score && task.maxScore ? Math.round((task.score / task.maxScore) * 100) : 0,
   } as CourseEvent;
 };
