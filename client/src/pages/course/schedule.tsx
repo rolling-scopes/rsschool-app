@@ -287,7 +287,7 @@ const createCourseEventFromTask = (task: CourseTaskDetails, type: string): Cours
     isTask: true,
     special: task.special,
     duration: task.duration,
-    score: task.score ? `${task.score}/${task.maxScore}` : '',
+    score: task.score != null ? `${task.score}/${task.maxScore}` : '',
     done: task.score && task.maxScore ? Math.round((task.score / task.maxScore) * 100) : 0,
   } as CourseEvent;
 };
