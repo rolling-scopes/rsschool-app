@@ -52,7 +52,7 @@
     "@types/jest": "27.0.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/lodash": "4.14.176",
-    "@types/node": "16.11.6",
+    "@types/node": "16.11.7",
     "@types/passport-github2": "1.2.5",
     "@types/passport-http": "0.3.9",
     "@types/passport-jwt": "3.0.6",
