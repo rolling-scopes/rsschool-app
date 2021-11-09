@@ -31,7 +31,7 @@
     "koa-static": "5.0.0",
     "koa-typeorm-pagination": "1.0.1",
     "lodash": "4.17.21",
-    "luxon": "2.1.0",
+    "luxon": "2.1.1",
     "moment-timezone": "0.5.33",
     "node-cache": "5.1.2",
     "node-schedule": "2.0.0",
