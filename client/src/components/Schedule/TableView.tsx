@@ -103,7 +103,6 @@ const getColumns = (
     title: 'Type',
     dataIndex: ['event', 'type'],
     render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors),
-    editable: true,
   },
   {
     title: 'Special',
@@ -128,7 +127,6 @@ const getColumns = (
       );
     },
     ...getColumnSearchProps('event.name'),
-    editable: true,
   },
   {
     title: 'Url',

@@ -126,7 +126,7 @@ const FormEntity: React.FC<Props> = ({
       </Form.Item>
 
       <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter task name' }]}>
-        <Input />
+        <Input disabled />
       </Form.Item>
 
       <Form.Item name="type" label="Type" rules={[{ required: true }]}>
