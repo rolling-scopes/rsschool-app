@@ -35,7 +35,7 @@ const ContactsForm = React.forwardRef((props: Props, ref: any) => {
           name="phone"
           rules={[...validationRules['phone']]}
         >
-          <Input placeholder="+1-202-555-0111" />
+          <Input placeholder="+12025550111" />
         </Item>
         <Item
           style={itemStyle}
