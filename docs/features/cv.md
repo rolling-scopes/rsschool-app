@@ -40,7 +40,7 @@ There are 2 types of data presented in the CV:
     - `Ready to work full time` - is the user ready to work full time
     - `About me` - a few sentences to tell about yourself
   - `Contacts`
-    - `Phone` - phone number
+    - `Phone` - phone number (international format)
     - `Email` - email address
     - `Skype id` - skype id
     - `Telegram public name` - Telegram public name (contained in the link to Telegram after `t.me/`)
