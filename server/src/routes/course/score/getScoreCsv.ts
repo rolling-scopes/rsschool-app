@@ -22,7 +22,7 @@ export const getScoreCsv = (_: ILogger) => async (ctx: Router.RouterContext) => 
     includeContacts: user?.isAdmin ?? false,
   });
   const result = await service.getStudentsScoreForExport(filters);
-  const csv = await parseAsync(result, { transforms: [transforms.flatten] });
+  const csv = await parseAsync(result, { transforms: [transforms.flatten()] });
 
   setCsvResponse(ctx, StatusCodes.OK, csv, 'score');
 };
