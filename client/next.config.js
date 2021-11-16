@@ -11,7 +11,7 @@ const nextConfig = {
       : [
           { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
           { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
-          { source: '/api/:path*', destination: `${server}/:path*` }
+          { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {
     rsHost: process.env.RS_HOST || 'http://localhost:3000',
