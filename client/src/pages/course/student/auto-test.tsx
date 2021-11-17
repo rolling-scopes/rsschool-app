@@ -357,7 +357,7 @@ function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
 
 function getTimeToTheNextSubmit(hours: number, lastAttemptTime?: string) {
   if (!hours || !lastAttemptTime) return 0;
-  const diff = new Date(lastAttemptTime).getTime() - new Date().getTime() + hours * 60 * 60 * 1000;
+  const diff = moment(lastAttemptTime).diff(moment().subtract(hours, 'hour'));
   if (diff < 0) return 0;
   return diff;
 }
