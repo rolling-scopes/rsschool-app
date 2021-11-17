@@ -38,7 +38,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
   }
 
   if (isEmailVisible) {
-    query.addSelect('"user"."contactsEmail" AS "contactsEmail"');
+    query.addSelect('"user"."contactsEmail" AS "contactsEmail"').addSelect('"user"."contactsEpamEmail" AS "epamEmail"');
   }
 
   if (isTelegramVisible) {
@@ -81,6 +81,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
     contactsNotes = null,
     contactsLinkedIn = null,
     aboutMyself = null,
+    epamEmail = null,
   } = rawUser;
 
   return {
@@ -100,6 +101,7 @@ export const getUserInfo = async (githubId: string, permissions: Permissions): P
       ? {
           phone: contactsPhone,
           email: contactsEmail,
+          epamEmail,
           skype: contactsSkype,
           telegram: contactsTelegram,
           notes: contactsNotes,

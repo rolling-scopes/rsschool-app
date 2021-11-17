@@ -5,6 +5,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
   data={
     Object {
       "email": "vasya@tut.by",
+      "epamEmail": "vasya@epam.com",
       "linkedIn": "http://linkedin_test.com/vasya",
       "notes": "vasya",
       "phone": "1232422",
@@ -21,6 +22,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
       <List
         dataSource={
           Array [
+            Object {
+              "key": "epamEmail",
+              "name": "EPAM E-mail",
+              "value": "vasya@epam.com",
+            },
             Object {
               "key": "email",
               "name": "E-mail",
@@ -65,6 +71,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
       <List
         dataSource={
           Array [
+            Object {
+              "key": "epamEmail",
+              "name": "EPAM E-mail",
+              "value": "vasya@epam.com",
+            },
             Object {
               "key": "email",
               "name": "E-mail",
@@ -272,6 +283,11 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
             dataSource={
               Array [
                 Object {
+                  "key": "epamEmail",
+                  "name": "EPAM E-mail",
+                  "value": "vasya@epam.com",
+                },
+                Object {
                   "key": "email",
                   "name": "E-mail",
                   "value": "vasya@tut.by",
@@ -324,6 +340,55 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     <ul
                       className="ant-list-items"
                     >
+                      <Item>
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <Base
+                              component="span"
+                              strong={true}
+                            >
+                              <LocaleReceiver
+                                componentName="Text"
+                              >
+                                <ResizeObserver
+                                  disabled={true}
+                                  onResize={[Function]}
+                                >
+                                  <Typography
+                                    className=""
+                                    component="span"
+                                    style={
+                                      Object {
+                                        "WebkitLineClamp": undefined,
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      className="ant-typography"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": undefined,
+                                        }
+                                      }
+                                    >
+                                      <strong>
+                                        EPAM E-mail
+                                        :
+                                      </strong>
+                                    </span>
+                                  </Typography>
+                                </ResizeObserver>
+                              </LocaleReceiver>
+                            </Base>
+                          </Text>
+                           
+                          vasya@epam.com
+                        </li>
+                      </Item>
                       <Item>
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -641,6 +706,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
   data={
     Object {
       "email": "vasya@tut.by",
+      "epamEmail": "vasya@epam.com",
       "linkedIn": null,
       "notes": null,
       "phone": "1232422",
@@ -657,6 +723,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       <List
         dataSource={
           Array [
+            Object {
+              "key": "epamEmail",
+              "name": "EPAM E-mail",
+              "value": "vasya@epam.com",
+            },
             Object {
               "key": "email",
               "name": "E-mail",
@@ -686,6 +757,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       <List
         dataSource={
           Array [
+            Object {
+              "key": "epamEmail",
+              "name": "EPAM E-mail",
+              "value": "vasya@epam.com",
+            },
             Object {
               "key": "email",
               "name": "E-mail",
@@ -900,6 +976,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             dataSource={
               Array [
                 Object {
+                  "key": "epamEmail",
+                  "name": "EPAM E-mail",
+                  "value": "vasya@epam.com",
+                },
+                Object {
                   "key": "email",
                   "name": "E-mail",
                   "value": "vasya@tut.by",
@@ -937,6 +1018,55 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     <ul
                       className="ant-list-items"
                     >
+                      <Item>
+                        <li
+                          className="ant-list-item ant-list-item-no-flex"
+                        >
+                          <Text
+                            strong={true}
+                          >
+                            <Base
+                              component="span"
+                              strong={true}
+                            >
+                              <LocaleReceiver
+                                componentName="Text"
+                              >
+                                <ResizeObserver
+                                  disabled={true}
+                                  onResize={[Function]}
+                                >
+                                  <Typography
+                                    className=""
+                                    component="span"
+                                    style={
+                                      Object {
+                                        "WebkitLineClamp": undefined,
+                                      }
+                                    }
+                                  >
+                                    <span
+                                      className="ant-typography"
+                                      style={
+                                        Object {
+                                          "WebkitLineClamp": undefined,
+                                        }
+                                      }
+                                    >
+                                      <strong>
+                                        EPAM E-mail
+                                        :
+                                      </strong>
+                                    </span>
+                                  </Typography>
+                                </ResizeObserver>
+                              </LocaleReceiver>
+                            </Base>
+                          </Text>
+                           
+                          vasya@epam.com
+                        </li>
+                      </Item>
                       <Item>
                         <li
                           className="ant-list-item ant-list-item-no-flex"
@@ -1422,6 +1552,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 dataSource={
                   Array [
                     Object {
+                      "key": "epamEmail",
+                      "name": "EPAM E-mail",
+                      "value": "vasya@epam.com",
+                    },
+                    Object {
                       "key": "email",
                       "name": "E-mail",
                       "value": "vasya@tut.by",
@@ -1688,6 +1823,11 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   dataSource={
                                     Array [
                                       Object {
+                                        "key": "epamEmail",
+                                        "name": "EPAM E-mail",
+                                        "value": "vasya@epam.com",
+                                      },
+                                      Object {
                                         "key": "email",
                                         "name": "E-mail",
                                         "value": "vasya@tut.by",
@@ -1740,6 +1880,128 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                           <ul
                                             className="ant-list-items"
                                           >
+                                            <Item>
+                                              <li
+                                                className="ant-list-item"
+                                              >
+                                                <div
+                                                  style={
+                                                    Object {
+                                                      "width": "100%",
+                                                    }
+                                                  }
+                                                >
+                                                  <p
+                                                    style={
+                                                      Object {
+                                                        "fontSize": 18,
+                                                        "marginBottom": 5,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      strong={true}
+                                                    >
+                                                      <Base
+                                                        component="span"
+                                                        strong={true}
+                                                      >
+                                                        <LocaleReceiver
+                                                          componentName="Text"
+                                                        >
+                                                          <ResizeObserver
+                                                            disabled={true}
+                                                            onResize={[Function]}
+                                                          >
+                                                            <Typography
+                                                              className=""
+                                                              component="span"
+                                                              style={
+                                                                Object {
+                                                                  "WebkitLineClamp": undefined,
+                                                                }
+                                                              }
+                                                            >
+                                                              <span
+                                                                className="ant-typography"
+                                                                style={
+                                                                  Object {
+                                                                    "WebkitLineClamp": undefined,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <strong>
+                                                                  EPAM E-mail
+                                                                  :
+                                                                </strong>
+                                                              </span>
+                                                            </Typography>
+                                                          </ResizeObserver>
+                                                        </LocaleReceiver>
+                                                      </Base>
+                                                    </Text>
+                                                  </p>
+                                                  <Input
+                                                    onChange={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": "100%",
+                                                      }
+                                                    }
+                                                    type="text"
+                                                    value="vasya@epam.com"
+                                                  >
+                                                    <ClearableLabeledInput
+                                                      bordered={true}
+                                                      element={
+                                                        <input
+                                                          className="ant-input"
+                                                          onBlur={[Function]}
+                                                          onChange={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          type="text"
+                                                          value="vasya@epam.com"
+                                                        />
+                                                      }
+                                                      focused={false}
+                                                      handleReset={[Function]}
+                                                      inputType="input"
+                                                      onChange={[Function]}
+                                                      prefixCls="ant-input"
+                                                      style={
+                                                        Object {
+                                                          "width": "100%",
+                                                        }
+                                                      }
+                                                      triggerFocus={[Function]}
+                                                      type="text"
+                                                      value="vasya@epam.com"
+                                                    >
+                                                      <input
+                                                        className="ant-input"
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        type="text"
+                                                        value="vasya@epam.com"
+                                                      />
+                                                    </ClearableLabeledInput>
+                                                  </Input>
+                                                </div>
+                                              </li>
+                                            </Item>
                                             <Item>
                                               <li
                                                 className="ant-list-item"

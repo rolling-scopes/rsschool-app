@@ -50,6 +50,7 @@ export interface GeneralInfo {
 export interface Contacts {
   phone: string | null;
   email: string | null;
+  epamEmail: string | null;
   skype: string | null;
   telegram: string | null;
   notes: string | null;
