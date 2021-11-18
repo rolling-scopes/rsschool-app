@@ -410,6 +410,7 @@ export class CourseService {
     const result = await this.axios.get<any>(`/task/${courseTaskId}/cross-check/details`);
     return result.data.data as {
       criteria: CrossCheckCriteria[];
+      studentEndDate: string | undefined;
     } | null;
   }
 

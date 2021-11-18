@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
+import { Button, Col, Form, Input, message, Row, Modal, Checkbox, Typography } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -33,6 +33,7 @@ function Page(props: CoursePageProps) {
   const [newComments, setNewComments] = useState([] as CrossCheckComment[]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [submitDeadlinePassed, setSubmitDeadlinePassed] = useState<boolean>(false);
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
@@ -107,6 +108,8 @@ function Page(props: CoursePageProps) {
 
     const review = submittedSolution?.review ?? [];
     const criteria = taskDetails?.criteria ?? [];
+    const endDate = taskDetails?.studentEndDate ? new Date(taskDetails.studentEndDate) : null;
+    const submitDeadlinePassed = Date.now() > (endDate ? endDate.getTime() : 0);
 
     form.setFieldsValue({ review });
     form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
@@ -116,6 +119,7 @@ function Page(props: CoursePageProps) {
     setSubmittedSolution(submittedSolution);
     setCourseTaskId(courseTask.id);
     setCriteria(criteria);
+    setSubmitDeadlinePassed(submitDeadlinePassed);
     setComments(submittedSolution?.comments ?? []);
     setAuthorId(submittedSolution?.studentId ?? null);
   };
@@ -127,7 +131,7 @@ function Page(props: CoursePageProps) {
 
   const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
-  const submitAllowed = !!task;
+  const submitAllowed = !!task && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
 
   return (
@@ -196,6 +200,11 @@ function Page(props: CoursePageProps) {
                   </Col>
                 )}
               </Row>
+            )}
+            {submitDeadlinePassed && (
+              <Typography.Text strong type="danger">
+                Submission deadline has already passed
+              </Typography.Text>
             )}
           </Form>
         </Col>
