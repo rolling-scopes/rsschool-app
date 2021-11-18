@@ -237,9 +237,9 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
-        `/students/search/${query}`,
-      );
+      const response = await this.axios.get<{
+        data: { id: number; githubId: string; name: string; mentorGithubId: string }[];
+      }>(`/students/search/${query}`);
       return response.data.data;
     } catch (e) {
       return [];

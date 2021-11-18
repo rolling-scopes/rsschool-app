@@ -66,8 +66,11 @@ export class StudentRepository extends AbstractRepository<Student> {
         `user.githubId AS "githubId"`,
         `user.firstName AS "firstName"`,
         `user.lastName AS "lastName"`,
+        `mentor.githubId AS "mentorGithubId"`,
       ])
       .leftJoin('student.user', 'user')
+      .leftJoin('student.mentor', 'mentorEntity')
+      .leftJoin('mentorEntity.user', 'mentor')
       .where('student.courseId = :courseId')
       .andWhere('student.isExpelled = false')
       .andWhere(
@@ -85,6 +88,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       id: entity.id,
       githubId: entity.githubId,
       name: userService.createName(entity),
+      mentorGithubId: entity.mentorGithubId,
     }));
   }
 
