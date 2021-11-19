@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
+import moment from 'moment';
 import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
@@ -131,11 +132,16 @@ function Page(props: CoursePageProps) {
         return;
       }
       if (error.response?.status === 403) {
+        const oneAttemptPerNumberOfHours = courseTask?.publicAttributes?.oneAttemptPerNumberOfHours;
         notification.error({
           message: (
             <>
-              You already submit this task {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times. Attempts limit
-              is over!
+              You can submit this task only {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times.{' '}
+              {!!oneAttemptPerNumberOfHours &&
+                `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
+                  oneAttemptPerNumberOfHours !== 1 && 's'
+                } `}
+              For now your attempts limit is over!
             </>
           ),
         });
@@ -230,8 +236,8 @@ function Page(props: CoursePageProps) {
                         <div>
                           {(item?.metadata as { id: string; url: string; name: string; completed: boolean }[])?.map(
                             ({ id, url, name, completed }, index: number) => (
-                              <div>
-                                <Typography.Link key={id} href={url} target="_blank">
+                              <div key={id}>
+                                <Typography.Link href={url} target="_blank">
                                   {completed ? (
                                     <CheckSquareTwoTone twoToneColor="#52c41a" />
                                   ) : (
@@ -247,7 +253,7 @@ function Page(props: CoursePageProps) {
                     );
                   }
 
-                  return typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value;
+                  return typeof value === 'string' ? value.split('\\n').map(str => <div key={str}>{str}</div>) : value;
                 },
               },
             ]}
@@ -349,16 +355,32 @@ function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
   return 'Limit of "free" attempts is over. Now you can get only half a score.';
 }
 
+function getTimeToTheNextSubmit(hours: number, lastAttemptTime?: string) {
+  if (!hours || !lastAttemptTime) return 0;
+  const diff = moment(lastAttemptTime).diff(moment().subtract(hours, 'hour'));
+  if (diff < 0) return 0;
+  return diff;
+}
+
+function formatMiliseconds(ms: number) {
+  return moment.utc(ms).format('HH:mm:ss');
+}
+
 function renderSelfEducation(courseTask: CourseTask, verifications: Verification[]) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
   const {
     maxAttemptsNumber = 0,
     tresholdPercentage = 0,
     strictAttemptsMode = true,
+    oneAttemptPerNumberOfHours = 0,
   } = courseTask?.publicAttributes ?? {};
 
-  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId).length;
-  const attemptsLeft = maxAttemptsNumber - attempts;
+  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId);
+  const attemptsLeft = maxAttemptsNumber - attempts.length;
+  const [lastAttempt] = attempts;
+  const lastAttemptTime = lastAttempt?.createdDate;
+  const timeToTheNextSubmit = getTimeToTheNextSubmit(oneAttemptPerNumberOfHours, lastAttemptTime);
+  const isSubmitAllowed = timeToTheNextSubmit === 0;
 
   return (
     <>
@@ -370,8 +392,20 @@ function renderSelfEducation(courseTask: CourseTask, verifications: Verification
         </Typography.Text>
       </Typography.Paragraph>
       <Typography.Paragraph>
+        {oneAttemptPerNumberOfHours ? (
+          <Typography.Text mark strong>
+            You have only one attempt per {oneAttemptPerNumberOfHours} hour{oneAttemptPerNumberOfHours !== 1 && 's'}.
+          </Typography.Text>
+        ) : (
+          ''
+        )}
+      </Typography.Paragraph>
+      <Typography.Paragraph>
         <Typography.Text strong style={{ fontSize: '2em', color: attemptsLeft > 1 ? '#1890ff' : '#cc0000' }}>
           {getAttemptsLeftMessage(attemptsLeft, strictAttemptsMode)}
+          {!isSubmitAllowed &&
+            attemptsLeft > 0 &&
+            ` Next submit is possible in ${formatMiliseconds(timeToTheNextSubmit)}`}
         </Typography.Text>
       </Typography.Paragraph>
       {questions.map(({ question, answers, multiple, index: questionIndex, questionImage, answersType }) => {
