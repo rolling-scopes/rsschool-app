@@ -150,6 +150,8 @@ export type CrossCheckComment = {
 
 export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
 
+export type SearchStudent = UserBasic & { mentor: UserBasic | null };
+
 export class CourseService {
   private axios: AxiosInstance;
 
@@ -238,9 +240,7 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: { id: number; githubId: string; name: string }[] }>(
-        `/students/search/${query}`,
-      );
+      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`);
       return response.data.data;
     } catch (e) {
       return [];

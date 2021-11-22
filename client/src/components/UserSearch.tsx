@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Select } from 'antd';
+import { Select, Typography } from 'antd';
 import { GithubAvatar } from 'components';
 import { get } from 'lodash';
 import { SelectProps } from 'antd/lib/select';
+import type { SearchStudent } from 'services/course';
 
-type Person = { id: number; githubId: string; name: string };
+type Person = { id: number; githubId: string; name: string } | SearchStudent;
 
 export type UserProps = SelectProps<string> & {
   searchFn?: (value: string) => Promise<Person[]>;
@@ -47,6 +48,13 @@ export function UserSearch(props: UserProps) {
         return (
           <Select.Option key={key} value={key}>
             <GithubAvatar size={24} githubId={person.githubId} /> {person.name} ({person.githubId})
+            {(person as SearchStudent).mentor ? (
+              <Typography.Paragraph type="warning">
+                Current mentor: {(person as SearchStudent).mentor?.githubId}
+              </Typography.Paragraph>
+            ) : (
+              ''
+            )}
           </Select.Option>
         );
       })}
