@@ -1,6 +1,7 @@
 import { Rate, Recommendation, SoftSkill, StudentFeedbackContent } from '@entities/student-feedback';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNotEmptyObject, IsObject, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsEnum, IsNotEmpty, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { LanguageLevel } from '../../../data';
 
 export class StudentFeedbackContentDto implements StudentFeedbackContent {
@@ -19,14 +20,16 @@ export class StudentFeedbackContentDto implements StudentFeedbackContent {
   @ApiProperty()
   recommendationComment: string;
 
-  @IsObject()
   @ApiProperty()
-  softSkills: Record<SoftSkill, Rate>;
+  @IsArray()
+  softSkills: { id: SoftSkill; value: Rate }[];
 }
 
 @ApiResponse({})
 export class CreateStudentFeedbackDto {
-  @IsNotEmptyObject()
+  @ValidateNested()
+  @IsObject()
+  @Type(() => StudentFeedbackContentDto)
   content: StudentFeedbackContentDto;
 
   @IsEnum(Recommendation)

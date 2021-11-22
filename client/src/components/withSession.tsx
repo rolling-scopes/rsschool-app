@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
+import React, { useState } from 'react';
+import { useAsync } from 'react-use';
+import { LoadingScreen } from './LoadingScreen';
+import { useLoading } from './useLoading';
 
 export type Role = 'student' | 'mentor' | 'coursemanager';
 
@@ -19,34 +21,27 @@ let sessionCache: Session | undefined;
 
 function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: Role) {
   return (props: any) => {
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, withLoading] = useLoading(true);
     const [session, setSession] = useState<Session | undefined>();
 
-    useEffect(() => {
-      const load = async () => {
+    useAsync(
+      withLoading(async () => {
         if (sessionCache != null) {
-          setLoading(false);
           setSession(sessionCache);
           return;
         }
         try {
-          const response = await axios.get<any>(`/api/session`);
-          setLoading(false);
+          const response = await axios.get<{ data: Session }>(`/api/session`);
           sessionCache = response.data.data;
           setSession(sessionCache);
         } catch (e) {
-          setLoading(false);
-          Router.push('/login', {
-            pathname: '/login',
-            query: {
-              url: encodeURIComponent(document.location.pathname + document.location.search),
-            },
-          });
+          const { pathname, search } = document.location;
+          const redirectUrl = encodeURIComponent(`${pathname}${search}`);
+          Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
         }
-      };
-
-      load();
-    }, []);
+      }),
+      [],
+    );
 
     if (session && requiredRole) {
       const { roles, isAdmin } = session;

@@ -18,13 +18,13 @@ export interface StudentFeedbackContent {
   impression: string;
   gaps: string;
   recommendationComment: string;
-  softSkills: Record<SoftSkill, Rate>;
+  softSkills: { id: SoftSkill; value: Rate }[];
 }
 
 export enum SoftSkill {
-  Responsible = 'responsible',
-  TeamPlayer = 'team-player',
-  Communicable = 'communicable',
+  Responsible = 'skill.soft.responsible',
+  TeamPlayer = 'skill.soft.team-player',
+  Communicable = 'skill.soft.communicable',
 }
 
 export enum Rate {

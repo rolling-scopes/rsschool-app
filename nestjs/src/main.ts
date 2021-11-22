@@ -28,7 +28,8 @@ async function bootstrap() {
       forbidUnknownValues: true,
       forbidNonWhitelisted: true,
       exceptionFactory: (errors: ValidationError[]) => {
-        const message = errors.map(error => Object.values(error.constraints).join('\n')).join('\n');
+        console.log(errors[0].children);
+        const message = errors.map(error => Object.values(error?.constraints ?? {}).join('\n')).join('\n');
         return new BadRequestException(message);
       },
     }),
