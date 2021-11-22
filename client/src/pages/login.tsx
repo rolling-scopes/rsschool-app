@@ -9,8 +9,7 @@ export default function LoginPage() {
   return (
     <main>
       <div className="login-form">
-        <img className="login-image" src="/static/images/logo-rs-school.svg" alt="RS School Logo" />
-
+        <div style={{ width: 320, height: 120 }} className="login-image" />
         <Card
           style={{ width: 320 }}
           cover={
@@ -44,6 +43,12 @@ export default function LoginPage() {
 }
 
 const styles = css`
+  .login-image {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('/static/images/logo-rsschool3.png');
+    margin: 0 auto 50px;
+  }
   .login-form {
     position: absolute;
     top: 50%;
@@ -58,12 +63,6 @@ const styles = css`
       top: 20px;
       transform: translate(-50%, 0);
     }
-  }
-
-  .login-image {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto 50px;
   }
 
   .login-card-img {
