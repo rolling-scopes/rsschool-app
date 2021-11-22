@@ -61,16 +61,12 @@ export class StudentRepository extends AbstractRepository<Student> {
 
     const entities = await getRepository(Student)
       .createQueryBuilder('student')
-      .select([
-        `student.id AS "id"`,
-        `user.githubId AS "githubId"`,
-        `user.firstName AS "firstName"`,
-        `user.lastName AS "lastName"`,
-        `mentor.githubId AS "mentorGithubId"`,
-      ])
+      .select([`student.id`, 'mentor.id'])
+      .addSelect(this.getBasicUserFields('user'))
+      .addSelect(this.getBasicUserFields('mUser'))
       .leftJoin('student.user', 'user')
-      .leftJoin('student.mentor', 'mentorEntity')
-      .leftJoin('mentorEntity.user', 'mentor')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
       .where('student.courseId = :courseId')
       .andWhere('student.isExpelled = false')
       .andWhere(
@@ -82,13 +78,19 @@ export class StudentRepository extends AbstractRepository<Student> {
         { courseId, searchQuery },
       )
       .limit(20)
-      .getRawMany();
+      .getMany();
 
     return entities.map(entity => ({
       id: entity.id,
-      githubId: entity.githubId,
-      name: userService.createName(entity),
-      mentorGithubId: entity.mentorGithubId,
+      githubId: entity.user.githubId,
+      name: userService.createName(entity.user),
+      mentor: entity.mentor?.user
+        ? {
+            id: entity.mentor.id,
+            githubId: entity.mentor.user.githubId,
+            name: userService.createName(entity.mentor.user),
+          }
+        : null,
     }));
   }
 
@@ -297,6 +299,10 @@ export class StudentRepository extends AbstractRepository<Student> {
       name: userService.createName(record.user),
       githubId: record.user.githubId,
     };
+  }
+
+  private getBasicUserFields(modelName = 'user') {
+    return [`${modelName}.id`, `${modelName}.firstName`, `${modelName}.lastName`, `${modelName}.githubId`];
   }
 
   private getPrimaryUserFields(modelName = 'user') {
