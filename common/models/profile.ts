@@ -126,7 +126,6 @@ export interface PublicFeedback {
   feedbackDate: string;
   badgeId: string;
   comment: string;
-  heroesUri: string;
   fromUser: {
     name: string;
     githubId: string;
