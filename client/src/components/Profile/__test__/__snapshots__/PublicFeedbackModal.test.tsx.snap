@@ -50,11 +50,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="apetr avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/apetr.png?size=48"
+          <GithubAvatar
+            githubId="apetr"
+            size={48}
           />
         }
         content={
@@ -144,11 +142,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -238,11 +234,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -332,11 +326,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -426,11 +418,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="vasssa avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/vasssa.png?size=48"
+          <GithubAvatar
+            githubId="vasssa"
+            size={48}
           />
         }
         content={
@@ -520,11 +510,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="demaa avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/demaa.png?size=48"
+          <GithubAvatar
+            githubId="demaa"
+            size={48}
           />
         }
         content={

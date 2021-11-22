@@ -1,5 +1,6 @@
 import { GithubFilled } from '@ant-design/icons';
 import css from 'styled-jsx/css';
+import { CDN_AVATARS_URL } from 'configs/cdn';
 
 export function GithubUserLink(props: { value: string }) {
   const imgProps: any = { loading: 'lazy' };
@@ -9,7 +10,7 @@ export function GithubUserLink(props: { value: string }) {
         <img
           {...imgProps}
           style={{ height: '24px', width: '24px', borderRadius: '12px' }}
-          src={`https://github.com/${props.value}.png?size=48`}
+          src={`${CDN_AVATARS_URL}/${props.value}.png?size=48`}
         />{' '}
         {props.value}
       </a>{' '}

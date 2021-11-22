@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MentorStats } from 'common/models/profile';
-import { Modal, Avatar, Typography, Tag, Row, Col } from 'antd';
+import { Modal, Typography, Tag, Row, Col } from 'antd';
+import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Text } = Typography;
 
@@ -35,12 +36,7 @@ class MentorStatsModal extends React.Component<Props> {
                 <Row style={{ marginBottom: 24 }} justify="space-between">
                   <Col>
                     <div style={{ fontSize: 16, marginBottom: 16 }}>
-                      <Avatar
-                        src={`${guithubLink}.png?size=${128}`}
-                        alt={`${githubId} avatar`}
-                        size={48}
-                        style={{ marginRight: 24 }}
-                      />
+                      <GithubAvatar githubId={githubId} size={48} style={{ marginRight: 24 }} />
                       <Text strong>
                         <a href={profile}>{name}</a>
                       </Text>

@@ -209,11 +209,9 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode disabled 
             </a>
           }
           avatar={
-            <Avatar
-              alt="apetr avatar"
-              shape="circle"
-              size="default"
-              src="https://github.com/apetr.png?size=48"
+            <GithubAvatar
+              githubId="apetr"
+              size={48}
             />
           }
           content={
@@ -474,11 +472,9 @@ exports[`PublicFeedbackCard Should render correctly if is editing mode enabled 1
             </a>
           }
           avatar={
-            <Avatar
-              alt="apetr avatar"
-              shape="circle"
-              size="default"
-              src="https://github.com/apetr.png?size=48"
+            <GithubAvatar
+              githubId="apetr"
+              size={48}
             />
           }
           content={
