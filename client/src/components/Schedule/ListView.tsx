@@ -149,7 +149,10 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
           <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
           <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors)}</th>
           <th style={{ width: '80%' }}>
-            <Link href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}>
+            <Link
+              prefetch={false}
+              href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
+            >
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
                   {name}
