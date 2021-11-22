@@ -1,7 +1,8 @@
 import * as React from 'react';
 import moment from 'moment';
 import { PublicFeedback } from 'common/models/profile';
-import { Typography, Comment, Avatar, Tooltip, Modal, Row, Col } from 'antd';
+import { Typography, Comment, Tooltip, Modal, Row, Col } from 'antd';
+import { GithubAvatar } from 'components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
 const { Text } = Typography;
@@ -29,12 +30,7 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
             <Col key={`modal-comment-${idx}`} xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 8 }} lg={{ span: 6 }}>
               <Comment
                 author={<a href={`/profile?githubId=${fromUser.githubId}`}>{fromUser.name}</a>}
-                avatar={
-                  <Avatar
-                    src={`https://github.com/${fromUser.githubId}.png?size=${48}`}
-                    alt={`${fromUser.githubId} avatar`}
-                  />
-                }
+                avatar={<GithubAvatar size={48} githubId={fromUser.githubId} />}
                 content={
                   <>
                     {badgeId ? (
