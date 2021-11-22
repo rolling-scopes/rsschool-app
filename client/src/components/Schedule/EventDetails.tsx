@@ -101,7 +101,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, o
 
         {!isPreview && (
           <div className="button__close">
-            <Link href={`/course/schedule?course=${alias}`}>
+            <Link prefetch={false} href={`/course/schedule?course=${alias}`}>
               <a>
                 <Button icon={<CloseOutlined />} />
               </a>
