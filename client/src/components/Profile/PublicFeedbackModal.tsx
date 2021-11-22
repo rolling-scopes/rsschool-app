@@ -25,7 +25,7 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
         width={'80%'}
       >
         <Row gutter={[16, 16]}>
-          {badges.map(({ fromUser, comment, feedbackDate, badgeId, heroesUri }, idx) => (
+          {badges.map(({ fromUser, comment, feedbackDate, badgeId }, idx) => (
             <Col key={`modal-comment-${idx}`} xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 8 }} lg={{ span: 6 }}>
               <Comment
                 author={<a href={`/profile?githubId=${fromUser.githubId}`}>{fromUser.name}</a>}
@@ -45,14 +45,6 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
                       ''
                     )}
                     <p style={{ marginBottom: 5 }}>{comment}</p>
-                    {heroesUri && (
-                      <p style={{ fontSize: 12 }}>
-                        Look at on{' '}
-                        <a href={heroesUri} target="_blank">
-                          heroes.by
-                        </a>
-                      </p>
-                    )}
                   </>
                 }
                 datetime={

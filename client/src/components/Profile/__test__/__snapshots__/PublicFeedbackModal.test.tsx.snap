@@ -78,22 +78,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -171,22 +155,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
               }
             >
               Test
-            </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
             </p>
           </React.Fragment>
         }
@@ -266,22 +234,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -359,22 +311,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
               }
             >
               Test
-            </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
             </p>
           </React.Fragment>
         }
@@ -454,22 +390,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -547,22 +467,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
               }
             >
               Test
-            </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
             </p>
           </React.Fragment>
         }
