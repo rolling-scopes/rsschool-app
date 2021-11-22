@@ -145,7 +145,7 @@ export function HomePage(props: Props) {
                 dataSource={courseLinks}
                 renderItem={(linkInfo: LinkRenderData) => (
                   <List.Item key={linkInfo.url}>
-                    <Link href={linkInfo.url}>
+                    <Link prefetch={false} href={linkInfo.url}>
                       <a>
                         {linkInfo.icon} {linkInfo.name}
                       </a>
@@ -167,7 +167,7 @@ export function HomePage(props: Props) {
                   dataSource={adminLinks}
                   renderItem={(linkInfo: LinkRenderData) => (
                     <List.Item key={linkInfo.url}>
-                      <Link href={linkInfo.url}>
+                      <Link prefetch={false} href={linkInfo.url}>
                         <a>
                           {linkInfo.icon} {linkInfo.name}
                         </a>

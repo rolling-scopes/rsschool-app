@@ -6,6 +6,7 @@ import {
   OneToMany,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  Index,
 } from 'typeorm';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { Mentor } from './mentor';
@@ -33,12 +34,14 @@ export class StageInterview {
   stageInterviewFeedbacks: StageInterviewFeedback[];
 
   @Column()
+  @Index()
   studentId: number;
 
   @ManyToOne(_ => Mentor)
   mentor: Mentor;
 
   @Column()
+  @Index()
   mentorId: number;
 
   @ManyToOne(_ => Stage, { nullable: true })

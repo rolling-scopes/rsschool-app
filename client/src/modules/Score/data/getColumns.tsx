@@ -51,7 +51,7 @@ export function getColumns(props: Props) {
       width: 150,
       sorter: 'name',
       render: (value: any, record: StudentScore) => (
-        <Link href={`/profile?githubId=${record.githubId}`}>
+        <Link prefetch={false} href={`/profile?githubId=${record.githubId}`}>
           <a>{value}</a>
         </Link>
       ),
@@ -101,7 +101,7 @@ export function getColumns(props: Props) {
       sorter: 'mentor',
       defaultFilteredValue: mentor ? (isArray(mentor) ? mentor : [mentor]) : undefined,
       render: (value: string) => (
-        <Link href={`/profile?githubId=${value}`}>
+        <Link prefetch={false} href={`/profile?githubId=${value}`}>
           <a>{value}</a>
         </Link>
       ),

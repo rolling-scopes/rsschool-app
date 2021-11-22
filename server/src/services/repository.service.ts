@@ -198,8 +198,21 @@ export class RepositoryService {
       await this.createTeam(github, teamName, course.id);
     }
 
-    this.logger?.info(`adding user ${githubId} to the team ${teamName}`);
-    await github.rest.teams.addOrUpdateMembershipForUserInOrg({ org: owner, team_slug: teamName, username: githubId });
+    this.logger?.info(`[${teamName}] adding user ${githubId}`);
+    try {
+      await github.rest.teams.addOrUpdateMembershipForUserInOrg({
+        org: owner,
+        team_slug: teamName,
+        username: githubId,
+      });
+    } catch (err) {
+      const error = err as RequestError;
+      if (error.status === 404) {
+        this.logger?.info(`[${teamName}] user ${githubId} does not exist`);
+      } else {
+        throw err;
+      }
+    }
   }
 
   private async addTeamToRepository(github: Octokit, course: Course, githubId: string) {
