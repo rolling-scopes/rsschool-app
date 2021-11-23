@@ -28,6 +28,8 @@
     "@nestjs/passport": "8.0.1",
     "@nestjs/platform-express": "8.2.3",
     "@nestjs/typeorm": "8.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "cookie-parser": "1.4.5",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.21",

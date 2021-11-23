@@ -12,7 +12,6 @@ export class CourseUserService {
 
   public getByUserId(userId: number): Promise<CourseUser[]> {
     return this.courseUserRepository.find({
-      select: ['id', 'courseId', 'userId'],
       where: { userId },
     });
   }

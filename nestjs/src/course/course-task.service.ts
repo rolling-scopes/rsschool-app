@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CourseTask } from '@entities/courseTask';
+import { CourseTask, Checker } from '@entities/courseTask';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@entities/user';
@@ -14,9 +14,8 @@ export class CourseTaskService {
   public getByOwner(username: string) {
     return this.courseTaskRepository
       .createQueryBuilder('t')
-      .select('t.courseId')
       .leftJoin(User, 'u', 'u.id = t.taskOwnerId')
-      .where(`t.checker = 'taskOwner'`)
+      .where(`t.checker = :checker`, { checker: Checker.TaskOwner })
       .andWhere('u.githubId = :username', { username })
       .getMany();
   }

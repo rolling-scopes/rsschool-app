@@ -15,6 +15,14 @@ import { TaskResult } from './taskResult';
 import { User } from './user';
 import { Course } from './course';
 
+export enum Checker {
+  Assigned = 'assigned',
+  Mentor = 'mentor',
+  TaskOwner = 'taskOwner',
+  Jury = 'jury',
+  CrossCheck = 'crossCheck',
+}
+
 @Entity()
 export class CourseTask {
   @PrimaryGeneratedColumn() id: number;
@@ -65,7 +73,7 @@ export class CourseTask {
 
   @Column({ default: 'mentor' })
   @Index()
-  checker: 'assigned' | 'mentor' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: Checker;
 
   @ManyToOne(_ => User, { nullable: true })
   taskOwner: User | null;

@@ -1,18 +1,56 @@
-import { Entity, CreateDateColumn, Column, ManyToOne, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Mentor } from './mentor';
 import { Student } from './student';
+
+export interface StudentFeedbackContent {
+  impression: string;
+  gaps: string;
+  recommendationComment: string;
+}
+
+export enum Recommendation {
+  Hire = 'hire',
+  NotHire = 'notHire',
+}
+
 @Entity()
+@Unique(['studentId', 'mentorId'])
 export class StudentFeedback {
-  @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn({ name: 'id' })
+  public id: number;
 
-  @CreateDateColumn()
-  createdDate: number;
+  @CreateDateColumn({ name: 'created_date' })
+  public createdDate: number;
 
-  @UpdateDateColumn()
-  updatedDate: number;
+  @UpdateDateColumn({ name: 'updated_date' })
+  public updatedDate: number;
 
   @ManyToOne(_ => Student)
-  student: Student | number;
+  @JoinColumn({ name: 'student_id' })
+  public student: Student | number;
 
-  @Column()
-  comment?: string;
+  @Column({ name: 'student_id' })
+  public studentId: number;
+
+  @ManyToOne(_ => Mentor)
+  @JoinColumn({ name: 'mentor_id' })
+  public mentor: Mentor | number;
+
+  @Column({ name: 'mentor_id' })
+  public mentorId: number;
+
+  @Column({ name: 'content', type: 'json' })
+  public content?: StudentFeedbackContent;
+
+  @Column({ name: 'recommendation' })
+  public recommendation?: Recommendation;
 }

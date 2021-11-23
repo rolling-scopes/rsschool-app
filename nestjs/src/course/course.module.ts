@@ -6,7 +6,9 @@ import { Course } from '@entities/course';
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
 import { Task } from '@entities/task';
-import { Student, Mentor, TaskChecker, StageInterview, StageInterviewFeedback } from '@entities/index';
+import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInterviewFeedback } from '@entities/index';
+import { FeedbackController } from './feedback.controller';
+import { FeedbackService } from './feedback.service';
 
 @Module({
   imports: [
@@ -20,10 +22,11 @@ import { Student, Mentor, TaskChecker, StageInterview, StageInterviewFeedback } 
       Task,
       CourseUser,
       TaskChecker,
+      StudentFeedback,
     ]),
   ],
-  controllers: [],
-  providers: [CourseTaskService, CourseUserService],
+  controllers: [FeedbackController],
+  providers: [CourseTaskService, CourseUserService, FeedbackService],
   exports: [CourseTaskService, CourseUserService],
 })
 export class CourseModule {}
