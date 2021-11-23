@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { NextPageContext, GetServerSidePropsContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
@@ -17,8 +16,8 @@ type SearchResponse = { data: UserBasic[] };
 export class UserService {
   private axios: AxiosInstance;
 
-  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
-    this.axios = axios.create(getServerAxiosProps(ctx));
+  constructor(token?: string) {
+    this.axios = axios.create(getServerAxiosProps(token));
   }
 
   async getDiscordIds() {

@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { RequestWithUser } from './models';
 import { JWT_COOKIE_NAME } from './constants';
 
-const isDev = process.env.NODE_ENV === 'production';
+const isDev = process.env.NODE_ENV !== 'production';
 
 @Controller('auth')
 export class AuthController {

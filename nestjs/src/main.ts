@@ -4,28 +4,17 @@ if (process.env.NODE_ENV !== 'production') {
 }
 import { BadRequestException, ValidationError, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 import * as cookieParser from 'cookie-parser';
-import { utilities, WinstonModule } from 'nest-winston';
-import * as winston from 'winston';
 import { AppModule } from './app.module';
 import { ValidationFilter } from './core/validation';
 
 const port = process.env.NODE_PORT || 3002;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.ms(),
-            utilities.format.nestLike('App', { prettyPrint: true }),
-          ),
-        }),
-      ],
-    }),
-  });
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
   app.use(cookieParser());
   app.useGlobalFilters(new ValidationFilter());
   app.useGlobalPipes(
@@ -40,6 +29,11 @@ async function bootstrap() {
       },
     }),
   );
+
+  const config = new DocumentBuilder().setTitle('RS School API').build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('swagger', app, document);
+
   await app.listen(port);
 }
 bootstrap();

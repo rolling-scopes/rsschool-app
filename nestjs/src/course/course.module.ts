@@ -7,8 +7,7 @@ import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
 import { Task } from '@entities/task';
 import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInterviewFeedback } from '@entities/index';
-import { FeedbackController } from './feedback.controller';
-import { FeedbackService } from './feedback.service';
+import { FeedbackService, FeedbackController } from './feedback';
 
 @Module({
   imports: [

@@ -44,7 +44,7 @@ export class ConfigService {
         admin: conf.get<string>('RSSCHOOL_AUTH_DEV_ADMIN')?.toLowerCase() === 'true',
       },
       jwt: {
-        secretKey: conf.get('RSSHCOOL_JWT_SECRET_KEY') ?? 'secret',
+        secretKey: conf.get('RSSHCOOL_AUTH_JWT_SECRET_KEY') ?? 'secret',
       },
     };
 

@@ -28,9 +28,9 @@ export class App {
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());
 
-    this.koa.keys = [config.sessionKey];
-
-    this.koa.use(koaJwt({ key: 'user', cookie: 'auth-token', secret: config.sessionKey, passthrough: true }));
+    this.koa.use(
+      koaJwt({ key: 'user', cookie: 'auth-token', secret: config.sessionKey, debug: true, passthrough: true }),
+    );
 
     process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
   }
