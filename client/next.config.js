@@ -11,6 +11,7 @@ const nextConfig = {
       : [
           { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
           { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
+          { source: '/api/auth/:path*', destination: `${nestjs}/auth/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {

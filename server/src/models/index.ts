@@ -1,4 +1,4 @@
-import { Alert, AlertTypes } from './alert';
+import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
 import { Consent, ChannelType } from './consent';
 import { Course } from './course';
@@ -40,7 +40,7 @@ import { TaskVerification } from './taskVerification';
 export * from './session';
 export {
   Alert,
-  AlertTypes,
+  AlertType as AlertTypes,
   Certificate,
   Course,
   CourseEvent,

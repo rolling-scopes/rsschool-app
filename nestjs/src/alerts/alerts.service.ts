@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
-import { Alert, AlertType } from './entities/alert.entity';
+import { Alert, AlertType } from '@entities/alert';
 import { omitBy, isUndefined } from 'lodash';
 
 const fields: (keyof Alert)[] = ['id', 'text', 'type', 'courseId', 'enabled'];
