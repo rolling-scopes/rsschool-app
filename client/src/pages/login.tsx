@@ -22,7 +22,7 @@ export default function LoginPage() {
           actions={[
             <Button
               key={'github'}
-              onClick={() => (window.location.href = `/api/auth/github${location.search}`)}
+              onClick={() => (window.location.href = `/api/auth/github/login${location.search}`)}
               size="large"
               icon={<GithubOutlined />}
               type="primary"
