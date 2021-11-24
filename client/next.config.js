@@ -13,6 +13,7 @@ const nextConfig = {
           { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
           { source: '/api/auth/:path*', destination: `${nestjs}/auth/:path*` },
           { source: '/api/student/:path*', destination: `${nestjs}/student/:path*` },
+          { source: '/api/profile/:path*', destination: `${nestjs}/profile/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {

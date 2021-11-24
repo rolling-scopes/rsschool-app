@@ -1,8 +1,7 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
-import { AuthService } from './auth.service';
-import { RequestWithUser } from './models';
+import { AuthService, RequestWithUser } from './auth.service';
 import { JWT_COOKIE_NAME } from './constants';
 
 const isDev = process.env.NODE_ENV !== 'production';

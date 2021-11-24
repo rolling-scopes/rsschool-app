@@ -18,6 +18,7 @@ import { ProfilePermissions } from './profilePermissions';
 import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { CourseManager } from './courseManager';
+import { CourseUser } from './courseUser';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -190,8 +191,8 @@ export class User {
   @JoinColumn()
   profilePermissions: ProfilePermissions | null;
 
-  @OneToMany(_ => CourseManager, (courseManager: CourseManager) => courseManager.user, { nullable: true })
-  courseManagers: CourseManager[] | null;
+  @OneToMany(_ => CourseUser, (courseUser: CourseUser) => courseUser.user, { nullable: true })
+  courseUsers: CourseUser[] | null;
 
   @BeforeInsert()
   beforeInsert?() {

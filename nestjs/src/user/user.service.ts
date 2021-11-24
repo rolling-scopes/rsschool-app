@@ -15,14 +15,7 @@ export class UserService {
 
     return this.userRepository.findOne({
       where: { githubId },
-      relations: [
-        'mentors',
-        'students',
-        'mentors.course',
-        'students.course',
-        'courseManagers',
-        'courseManagers.course',
-      ],
+      relations: ['mentors', 'students', 'courseUsers'],
     });
   }
 

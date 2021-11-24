@@ -2,15 +2,17 @@ import { Alert, Col, Row } from 'antd';
 import { NextPageContext } from 'next';
 import * as React from 'react';
 import { Course } from 'services/models';
+import { parse } from 'cookie';
 import { UserService } from 'services/user';
 import { Session } from './withSession';
 
 function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: number) {
   return class extends React.PureComponent<{ course?: Course | null; session: Session }> {
-    static async getInitialProps(context: NextPageContext) {
+    static async getInitialProps(ctx: NextPageContext) {
       try {
-        const alias = context.query.course;
-        const courses = await new UserService(context).getCourses();
+        const alias = ctx.query.course;
+        const cookies = parse(ctx.req?.headers.cookie || '');
+        const courses = await new UserService(cookies['auth-token']).getCourses();
         const course = courses.find(c => (courseId ? c.id === courseId : c.alias === alias)) || null;
         return { course };
       } catch (err) {

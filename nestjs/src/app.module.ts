@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
 import { CourseModule } from './course/course.module';
 import * as config from './ormconfig';
+import { ProfileModule } from './profile';
 import { UserModule } from './user/user.module';
 
 const devMode = process.env.NODE_ENV !== 'production';
@@ -27,6 +28,7 @@ const devMode = process.env.NODE_ENV !== 'production';
     UserModule,
     CourseModule,
     AuthModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

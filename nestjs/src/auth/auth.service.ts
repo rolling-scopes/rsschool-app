@@ -7,7 +7,14 @@ import { Profile } from 'passport';
 import { CourseTaskService, CourseUserService } from '../course';
 import { UserService } from '../user/user.service';
 import { JwtService } from './jwt.service';
-import { RequestWithUser } from './models';
+
+type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
+export type RequestUser = Awaited<ReturnType<AuthService['createUser']>>;
+
+export type RequestWithUser = Request & {
+  user: RequestUser;
+};
 
 @Injectable()
 export class AuthService {
@@ -66,10 +73,10 @@ export class AuthService {
     }
     const roles: { [key: string]: 'student' | 'mentor' } = {};
     result.students?.forEach(student => {
-      roles[student.course.id] = 'student';
+      roles[student.courseId] = 'student';
     });
     result.mentors?.forEach(mentor => {
-      roles[mentor.course.id] = 'mentor';
+      roles[mentor.courseId] = 'mentor';
     });
 
     const userId = result.id;

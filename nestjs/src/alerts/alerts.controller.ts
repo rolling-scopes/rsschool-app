@@ -30,7 +30,7 @@ export class AlertsController {
 
   @Get()
   @UseGuards(AuthGuard(['jwt', 'basic']))
-  async findAll(
+  async getAll(
     @Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean,
   ): Promise<{ data: Alert[] }> {
     const data = await this.alertService.findAll({ enabled });
