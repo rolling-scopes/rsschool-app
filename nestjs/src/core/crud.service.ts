@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
 
 export abstract class CrudService<T> {
-  constructor(private repository: Repository<T>) {}
+  constructor(protected repository: Repository<T>) {}
 
   public async getAll(): Promise<T[]> {
     return this.repository.find();

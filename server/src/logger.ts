@@ -43,7 +43,6 @@ export const loggerMiddleware =
     };
     const start = Date.now();
     try {
-      logger.info('Request started', data);
       ctx.logger = logger;
       await next();
       data.status = ctx.status;

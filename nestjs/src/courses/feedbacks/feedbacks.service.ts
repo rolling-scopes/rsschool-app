@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateStudentFeedbackDto } from './dto';
 
 @Injectable()
-export class FeedbackService {
+export class FeedbacksService {
   constructor(
     @InjectRepository(StudentFeedback)
     readonly studentFeedbackRepository: Repository<StudentFeedback>,

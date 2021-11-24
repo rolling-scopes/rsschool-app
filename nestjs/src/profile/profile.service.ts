@@ -2,14 +2,14 @@ import { Course } from '@entities/course';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { UserService } from '../user/user.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
-    private userService: UserService,
+    private userService: UsersService,
   ) {}
 
   public async getCourses(githubId: string): Promise<Course[]> {

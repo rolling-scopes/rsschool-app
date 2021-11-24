@@ -1,3 +1,4 @@
+import { Alert } from '@entities/alert';
 import {
   Body,
   Controller,
@@ -12,24 +13,25 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
+import { DefaultGuard } from '../auth';
 import { AlertsService } from './alerts.service';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
-import { Alert } from '@entities/alert';
 
 @Controller('alerts')
+@ApiTags('alerts')
 export class AlertsController {
   constructor(private readonly alertService: AlertsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(['jwt', 'basic']))
+  @UseGuards(DefaultGuard)
   create(@Body() createAlertDto: CreateAlertDto) {
     return this.alertService.create(createAlertDto);
   }
 
   @Get()
-  @UseGuards(AuthGuard(['jwt', 'basic']))
+  @UseGuards(DefaultGuard)
   async getAll(
     @Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean,
   ): Promise<{ data: Alert[] }> {
@@ -38,13 +40,13 @@ export class AlertsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard(['jwt', 'basic']))
+  @UseGuards(DefaultGuard)
   update(@Param('id', ParseIntPipe) id: number, @Body() updateAlertDto: UpdateAlertDto) {
     return this.alertService.update(id, updateAlertDto);
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard(['jwt', 'basic']))
+  @UseGuards(DefaultGuard)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.alertService.remove(id);
   }

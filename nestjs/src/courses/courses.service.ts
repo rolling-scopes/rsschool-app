@@ -5,15 +5,15 @@ import { Repository } from 'typeorm';
 import { CrudService } from '../core';
 
 @Injectable()
-export class CourseService extends CrudService<Course> {
+export class CoursesService extends CrudService<Course> {
   constructor(
     @InjectRepository(Course)
-    readonly courseRepository: Repository<Course>,
+    readonly coursesRepository: Repository<Course>,
   ) {
-    super(courseRepository);
+    super(coursesRepository);
   }
 
   public getByAlias(alias: string): Promise<Course> {
-    return this.courseRepository.findOne({ where: { alias } });
+    return this.coursesRepository.findOne({ where: { alias } });
   }
 }

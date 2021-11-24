@@ -1,13 +1,15 @@
-import { Logger, Module } from '@nestjs/common';
+import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
-import { CourseModule } from './course/course.module';
+import { LoggerMiddleware } from './core/logging';
+import { CoursesModule } from './courses/courses.module';
+import { DisciplinesModule } from './disciplines';
 import * as config from './ormconfig';
 import { ProfileModule } from './profile';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './users';
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -25,12 +27,17 @@ const devMode = process.env.NODE_ENV !== 'production';
     }),
     ConfigModule,
     AlertsModule,
-    UserModule,
-    CourseModule,
+    UsersModule,
+    CoursesModule,
     AuthModule,
     ProfileModule,
+    DisciplinesModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

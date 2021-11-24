@@ -36,7 +36,6 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 
-export * from './session';
 export {
   Alert,
   AlertType as AlertTypes,

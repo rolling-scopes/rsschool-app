@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '@entities/user';
 
 @Injectable()
-export class CourseTaskService {
+export class CourseTasksService {
   constructor(
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,

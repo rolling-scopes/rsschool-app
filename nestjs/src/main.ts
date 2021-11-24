@@ -14,6 +14,8 @@ const port = process.env.NODE_PORT || 3002;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
+
+  app.enableCors();
   app.useLogger(app.get(Logger));
   app.use(cookieParser());
   app.useGlobalFilters(new ValidationFilter());

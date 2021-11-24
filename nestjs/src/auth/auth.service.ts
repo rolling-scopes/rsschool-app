@@ -1,13 +1,14 @@
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { Profile } from 'passport';
-import { CourseTaskService, CourseUserService } from '../course';
-import { UserService } from '../user/user.service';
-import { CurrentUser } from './current-user.model';
+import { Request } from 'express';
+import { CourseTasksService, CourseUsersService } from '../courses';
+import { UsersService } from '../users/users.service';
+import { AuthUser } from './auth-user.model';
 import { JwtService } from './jwt.service';
 
 export type CurrentRequest = Request & {
-  user: CurrentUser;
+  user: AuthUser;
 };
 
 @Injectable()
@@ -17,12 +18,12 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    readonly courseTaskService: CourseTaskService,
-    readonly courseUserService: CourseUserService,
-    readonly userService: UserService,
+    readonly courseTaskService: CourseTasksService,
+    readonly courseUserService: CourseUsersService,
+    readonly userService: UsersService,
   ) {}
 
-  public async createRequestUser(profile: Profile, admin = false): Promise<CurrentUser> {
+  public async createAuthUser(profile: Profile, admin = false): Promise<AuthUser> {
     const username = profile.username?.toLowerCase();
     const providerUserId = profile.id.toString();
     const provider = profile.provider.toString();
@@ -40,7 +41,7 @@ export class AuthService {
     }
 
     const isAdmin = this.admins.includes(username) || admin;
-    const isHirer = this.hirers.includes(username);
+    // const isHirer = this.hirers.includes(username);
 
     if (result == null) {
       const [email] = profile.emails?.filter((email: any) => !!email.primary) ?? [];
@@ -55,11 +56,11 @@ export class AuthService {
         lastActivityTime: Date.now(),
       };
       const createdUser = await this.userService.saveUser(user);
-      return new CurrentUser(createdUser, [], isAdmin);
+      return new AuthUser(createdUser, [], isAdmin);
     }
 
     const courseTasks = await this.courseTaskService.getByOwner(username);
-    return new CurrentUser(result, courseTasks, isAdmin);
+    return new AuthUser(result, courseTasks, isAdmin);
   }
 
   public validateGithub(req: CurrentRequest) {

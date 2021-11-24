@@ -7,9 +7,7 @@ export enum Role {
   User = 'user',
 }
 
-export interface CourseRoles {
-  [key: string]: CourseRole[] | undefined;
-}
+export type CourseRoles = Record<string, CourseRole[]>;
 
 export const enum CourseRole {
   taskOwner = 'taskOwner',
@@ -20,12 +18,13 @@ export const enum CourseRole {
   mentor = 'mentor',
 }
 
-export class CurrentUser {
+export class AuthUser {
   public readonly roles: Record<string, 'mentor' | 'student'>;
   public readonly isAdmin: boolean;
   public readonly isHirer: boolean;
   public readonly id: number;
   public readonly coursesRoles: CourseRoles;
+  public readonly appRoles: Role[];
   public readonly githubId: string;
 
   constructor(user: Partial<User>, courseTasks: CourseTask[], admin: boolean) {
@@ -47,9 +46,10 @@ export class CurrentUser {
 
     this.id = userId;
     this.isAdmin = admin;
+    this.githubId = user.githubId;
+    this.appRoles = [admin ? Role.Admin : Role.User];
     this.roles = roles;
     this.coursesRoles = coursesRoles;
-    this.githubId = user.githubId;
     return this;
   }
 

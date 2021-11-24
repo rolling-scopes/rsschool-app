@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CourseTaskService } from './course-task.service';
-import { CourseUserService } from './course-user.service';
+import { CourseTasksService } from './course-tasks.service';
+import { CourseUsersService } from './course-users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from '@entities/course';
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
 import { Task } from '@entities/task';
 import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInterviewFeedback } from '@entities/index';
-import { FeedbackService, FeedbackController } from './feedback';
-import { CourseController } from './course.controller';
-import { CourseService } from './course.service';
+import { FeedbacksService, FeedbacksController } from './feedbacks';
+import { CourseController } from './courses.controller';
+import { CoursesService } from './courses.service';
 
 @Module({
   imports: [
@@ -26,8 +26,8 @@ import { CourseService } from './course.service';
       StudentFeedback,
     ]),
   ],
-  controllers: [FeedbackController, CourseController],
-  providers: [CourseTaskService, CourseUserService, FeedbackService, CourseService],
-  exports: [CourseTaskService, CourseUserService],
+  controllers: [FeedbacksController, CourseController],
+  providers: [CourseTasksService, CourseUsersService, FeedbacksService, CoursesService],
+  exports: [CourseTasksService, CourseUsersService],
 })
-export class CourseModule {}
+export class CoursesModule {}
