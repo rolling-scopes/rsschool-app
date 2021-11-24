@@ -18,7 +18,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   }
 
   public async validate(_accessToken: string, _refreshToken: string, profile: Profile, done: any): Promise<void> {
-    const user = await this.authService.createUser(profile, this.config.auth.dev.admin);
+    const user = await this.authService.createRequestUser(profile, this.config.auth.dev.admin);
 
     this.logger.log({ message: `Logged in: [${user.githubId}]`, githubId: user.githubId });
 

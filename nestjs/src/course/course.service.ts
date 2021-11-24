@@ -2,19 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { Course } from '@entities/course';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CrudService } from '../core';
 
 @Injectable()
-export class CourseService {
+export class CourseService extends CrudService<Course> {
   constructor(
     @InjectRepository(Course)
     readonly courseRepository: Repository<Course>,
-  ) {}
-
-  public getAll(): Promise<Course[]> {
-    return this.courseRepository.find();
+  ) {
+    super(courseRepository);
   }
 
-  public getOne(id: number): Promise<Course> {
-    return this.courseRepository.findOne(id);
+  public getByAlias(alias: string): Promise<Course> {
+    return this.courseRepository.findOne({ where: { alias } });
   }
 }

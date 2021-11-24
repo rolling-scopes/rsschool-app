@@ -1,19 +1,13 @@
-import { CourseTask } from '@entities/courseTask';
-import { CourseUser } from '@entities/courseUser';
-import { CourseRole, CourseRoles } from '@entities/session';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { Profile } from 'passport';
 import { CourseTaskService, CourseUserService } from '../course';
 import { UserService } from '../user/user.service';
+import { CurrentUser } from './current-user.model';
 import { JwtService } from './jwt.service';
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
-
-export type RequestUser = Awaited<ReturnType<AuthService['createUser']>>;
-
-export type RequestWithUser = Request & {
-  user: RequestUser;
+export type CurrentRequest = Request & {
+  user: CurrentUser;
 };
 
 @Injectable()
@@ -28,7 +22,7 @@ export class AuthService {
     readonly userService: UserService,
   ) {}
 
-  public async createUser(profile: Profile, admin = false) {
+  public async createRequestUser(profile: Profile, admin = false): Promise<CurrentUser> {
     const username = profile.username?.toLowerCase();
     const providerUserId = profile.id.toString();
     const provider = profile.provider.toString();
@@ -61,71 +55,18 @@ export class AuthService {
         lastActivityTime: Date.now(),
       };
       const createdUser = await this.userService.saveUser(user);
-      const userId = createdUser.id;
-      return {
-        id: userId,
-        githubId: username,
-        isAdmin,
-        isHirer,
-        roles: {},
-        coursesRoles: {},
-      };
+      return new CurrentUser(createdUser, [], isAdmin);
     }
-    const roles: { [key: string]: 'student' | 'mentor' } = {};
-    result.students?.forEach(student => {
-      roles[student.courseId] = 'student';
-    });
-    result.mentors?.forEach(mentor => {
-      roles[mentor.courseId] = 'mentor';
-    });
 
-    const userId = result.id;
-    const [taskOwner, courseUsers] = await Promise.all([
-      this.courseTaskService.getByOwner(username),
-      this.courseUserService.getByUserId(userId),
-    ] as const);
-
-    const coursesRoles = this.getCourseRoles(courseUsers, taskOwner);
-
-    return {
-      roles,
-      isAdmin,
-      isHirer,
-      id: userId,
-      coursesRoles,
-      githubId: username,
-    };
+    const courseTasks = await this.courseTaskService.getByOwner(username);
+    return new CurrentUser(result, courseTasks, isAdmin);
   }
 
-  public validateGithub(req: RequestWithUser) {
+  public validateGithub(req: CurrentRequest) {
     if (!req.user) {
       return null;
     }
 
     return this.jwtService.createToken(req.user);
-  }
-
-  private getCourseRoles(courseUsers: CourseUser[], taskOwner: CourseTask[]) {
-    return courseUsers
-      .flatMap(u => {
-        const result: { courseId: number; role: CourseRole }[] = [];
-        if (u.isJuryActivist) {
-          result.push({ courseId: u.courseId, role: CourseRole.juryActivist });
-        }
-        if (u.isManager) {
-          result.push({ courseId: u.courseId, role: CourseRole.manager });
-        }
-        return result;
-      })
-      .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
-      .reduce((acc, item) => {
-        if (!acc[item.courseId]) {
-          acc[item.courseId] = [];
-        }
-        if (!acc[item.courseId].includes(item.role)) {
-          acc[item.courseId].push(item.role);
-        }
-        return acc;
-      }, {} as CourseRoles);
   }
 }

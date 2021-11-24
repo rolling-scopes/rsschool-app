@@ -10,11 +10,7 @@ const nextConfig = {
       ? []
       : [
           { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
-          { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
-          { source: '/api/auth/:path*', destination: `${nestjs}/auth/:path*` },
-          { source: '/api/student/:path*', destination: `${nestjs}/student/:path*` },
-          { source: '/api/profile/:path*', destination: `${nestjs}/profile/:path*` },
-          { source: '/api/courses/:path*', destination: `${nestjs}/courses/:path*` },
+          { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {

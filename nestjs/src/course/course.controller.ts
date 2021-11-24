@@ -1,7 +1,6 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { DefaultGuard, RequiredRole, RoleGuard } from '../auth';
 import { CourseService } from './course.service';
-import { RequiredRole, RoleGuard } from '../auth';
 
 @Controller()
 export class CourseController {
@@ -9,16 +8,22 @@ export class CourseController {
 
   @Get('courses')
   @RequiredRole()
-  @UseGuards(AuthGuard(['jwt', 'basic']), RoleGuard)
+  @UseGuards(DefaultGuard, RoleGuard)
   public async getCourses() {
     const data = await this.courseService.getAll();
     return { data };
   }
 
-  @Get('courses/:id')
-  @UseGuards(AuthGuard(['jwt', 'basic']))
-  public async getCourse(@Param('id', ParseIntPipe) id: number) {
-    const data = await this.courseService.getOne(id);
+  @Get('courses/:aliasOrId')
+  @UseGuards(DefaultGuard)
+  public async getCourse(@Param('aliasOrId') aliasOrId: number | string) {
+    const id = Number(aliasOrId);
+    if (!Number.isNaN(id)) {
+      const data = await this.courseService.getById(id);
+      return { data };
+    }
+    const alias = aliasOrId.toString();
+    const data = await this.courseService.getByAlias(alias);
     return { data };
   }
 }

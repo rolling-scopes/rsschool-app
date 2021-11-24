@@ -46,7 +46,7 @@ export class UserService {
   }
 
   async getCourses() {
-    const result = await this.axios.get<{ data: Course[] }>(`/api/profile/me/courses`);
+    const result = await this.axios.get<{ data: Course[] }>(`/api/v2/profile/me/courses`);
     return result.data.data.sort((a, b) => b.id - a.id);
   }
 

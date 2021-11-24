@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestWithUser } from '../auth/auth.service';
+import { CurrentRequest } from '../auth/auth.service';
 import { ProfileCourseDto } from './dto';
 import { ProfileService } from './profile.service';
 
@@ -11,7 +11,7 @@ export class ProfileController {
   @Get(':username/courses')
   @UseGuards(AuthGuard(['jwt', 'basic']))
   async getCourses(
-    @Req() req: RequestWithUser,
+    @Req() req: CurrentRequest,
     @Param('username') username: string,
   ): Promise<{ data: ProfileCourseDto[] }> {
     const user = username === 'me' ? req.user?.githubId : username;
