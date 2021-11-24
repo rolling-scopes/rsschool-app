@@ -14,6 +14,7 @@ const nextConfig = {
           { source: '/api/auth/:path*', destination: `${nestjs}/auth/:path*` },
           { source: '/api/student/:path*', destination: `${nestjs}/student/:path*` },
           { source: '/api/profile/:path*', destination: `${nestjs}/profile/:path*` },
+          { source: '/api/courses/:path*', destination: `${nestjs}/courses/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {
