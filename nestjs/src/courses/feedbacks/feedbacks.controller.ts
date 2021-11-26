@@ -2,11 +2,12 @@ import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateStudentFeedbackDto } from './dto/create-student-feedback.dto';
+import { FeedbacksMapper } from './feedbacks.mapper';
 import { FeedbacksService } from './feedbacks.service';
 
 @Controller()
 export class FeedbacksController {
-  constructor(private feedbackService: FeedbacksService) {}
+  constructor(private feedbackService: FeedbacksService, private feedbackMapper: FeedbacksMapper) {}
 
   @Post('student/:id/feedback')
   @UseGuards(AuthGuard(['jwt', 'basic']))

@@ -11,7 +11,7 @@ export class FeedbacksService {
     readonly studentFeedbackRepository: Repository<StudentFeedback>,
   ) {}
 
-  public async createStudentFeedback(studentId: number, data: CreateStudentFeedbackDto) {
+  public async createStudentFeedback(studentId: number, data: StudentFeedback) {
     return this.studentFeedbackRepository.create({
       studentId,
       content: data.content,

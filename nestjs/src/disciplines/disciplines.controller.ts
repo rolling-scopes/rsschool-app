@@ -3,7 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredAppRoles, Role } from '../auth';
 import { DisciplineMapper } from './disciplines.mapper';
 import { DisciplinesService } from './disciplines.service';
-import { DisciplineDto, UpsertDisciplineDto } from './dto';
+import { DisciplineDto, CreateDisciplineDto, UpdateDisciplineDto } from './dto';
 
 @Controller('disciplines')
 @ApiTags('disciplines')
@@ -16,7 +16,7 @@ export class DisciplinesController {
   @Post()
   @RequiredAppRoles([Role.Admin])
   @ApiResponse({ type: DisciplineDto })
-  public create(@Body() dto: UpsertDisciplineDto): Promise<DisciplineDto> {
+  public create(@Body() dto: CreateDisciplineDto): Promise<DisciplineDto> {
     return this.service.create(this.mapper.convertToEntity(dto));
   }
 
@@ -37,7 +37,7 @@ export class DisciplinesController {
   @Patch(':id')
   @RequiredAppRoles([Role.Admin])
   @ApiResponse({ type: DisciplineDto })
-  public update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpsertDisciplineDto): Promise<DisciplineDto> {
+  public update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDisciplineDto): Promise<DisciplineDto> {
     return this.service.update(id, this.mapper.convertToEntity(dto));
   }
 }
