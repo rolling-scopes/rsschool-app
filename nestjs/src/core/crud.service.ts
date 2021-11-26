@@ -14,17 +14,24 @@ export abstract class CrudService<T> {
 
   public async create(data: DeepPartial<T>): Promise<T> {
     if (this.repository.hasId(data as T)) {
-      throw new BadRequestException('Id is not allowed');
+      throw new BadRequestException('id is not allowed');
     }
     return this.repository.create(data);
   }
 
   public async update(id: number, data: DeepPartial<T>): Promise<T> {
+    if (this.repository.hasId(data as T)) {
+      throw new BadRequestException('id is not allowed');
+    }
     await this.repository.update(id, data);
     return this.repository.findOne(id);
   }
 
   public async delete(id: number): Promise<void> {
     await this.repository.delete(id);
+  }
+
+  public async markDeleted(id: number): Promise<void> {
+    await this.repository.update(id, { deleted: true } as any);
   }
 }

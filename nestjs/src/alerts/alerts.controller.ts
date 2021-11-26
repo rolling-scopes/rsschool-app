@@ -34,9 +34,9 @@ export class AlertsController {
   @UseGuards(DefaultGuard)
   async getAll(
     @Query('enabled', new DefaultValuePipe(true), ParseBoolPipe) enabled: boolean,
-  ): Promise<{ data: Alert[] }> {
-    const data = await this.alertService.findAll({ enabled });
-    return { data };
+  ): Promise<{ items: Alert[] }> {
+    const items = await this.alertService.findAll({ enabled });
+    return { items };
   }
 
   @Patch(':id')

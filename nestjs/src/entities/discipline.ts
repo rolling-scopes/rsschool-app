@@ -16,5 +16,5 @@ export class Discipline {
 
   @Column({ name: 'deleted', default: false })
   @Index()
-  public deleted: boolean;
+  public deleted: boolean = false;
 }

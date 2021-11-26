@@ -13,8 +13,8 @@ export class CourseController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredAppRoles([Role.Admin])
   public async getCourses() {
-    const data = await this.courseService.getAll();
-    return { data };
+    const items = await this.courseService.getAll();
+    return { items };
   }
 
   @Get('courses/:aliasOrId')
@@ -22,10 +22,8 @@ export class CourseController {
   public async getCourse(@Param('aliasOrId') aliasOrId: number | string) {
     const id = Number(aliasOrId);
     if (!Number.isNaN(id)) {
-      const data = await this.courseService.getById(id);
-      return { data };
+      return this.courseService.getById(id);
     }
-    const data = await this.courseService.getByAlias(aliasOrId.toString());
-    return { data };
+    return this.courseService.getByAlias(aliasOrId.toString());
   }
 }

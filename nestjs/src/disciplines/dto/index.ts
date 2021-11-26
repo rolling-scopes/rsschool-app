@@ -1,2 +1,2 @@
 export * from './discipline.dto';
-export * from './save-discipline.dto';
+export * from './upsert-discipline.dto';

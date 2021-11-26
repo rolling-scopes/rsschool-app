@@ -16,10 +16,10 @@ export class ProfileController {
   async getCourses(
     @Req() req: CurrentRequest,
     @Param('username') username: string,
-  ): Promise<{ data: ProfileCourseDto[] }> {
+  ): Promise<{ items: ProfileCourseDto[] }> {
     const user = username === 'me' ? req.user?.githubId : username;
-    const data = await this.profileService.getCourses(user);
+    const items = await this.profileService.getCourses(user);
 
-    return { data };
+    return { items };
   }
 }
