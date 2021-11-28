@@ -10,12 +10,12 @@ export enum Role {
 export type CourseRoles = Record<string, CourseRole[]>;
 
 export const enum CourseRole {
-  taskOwner = 'taskOwner',
-  juryActivist = 'juryActivist',
-  manager = 'manager',
-  supervisor = 'supervisor',
-  student = 'student',
-  mentor = 'mentor',
+  TaskOwner = 'taskOwner',
+  JuryActivist = 'juryActivist',
+  Manager = 'manager',
+  Supervisor = 'supervisor',
+  Student = 'student',
+  Mentor = 'mentor',
 }
 
 export class AuthUser {
@@ -33,11 +33,11 @@ export class AuthUser {
 
     user.students?.forEach(student => {
       roles[student.courseId] = 'student';
-      courseRoles[student.courseId] = [CourseRole.student];
+      courseRoles[student.courseId] = [CourseRole.Student];
     });
     user.mentors?.forEach(mentor => {
       roles[mentor.courseId] = 'mentor';
-      courseRoles[mentor.courseId] = [CourseRole.mentor];
+      courseRoles[mentor.courseId] = [CourseRole.Mentor];
     });
 
     const userId = user.id;
@@ -58,14 +58,14 @@ export class AuthUser {
       .flatMap(u => {
         const result: { courseId: number; role: CourseRole }[] = [];
         if (u.isJuryActivist) {
-          result.push({ courseId: u.courseId, role: CourseRole.juryActivist });
+          result.push({ courseId: u.courseId, role: CourseRole.JuryActivist });
         }
         if (u.isManager) {
-          result.push({ courseId: u.courseId, role: CourseRole.manager });
+          result.push({ courseId: u.courseId, role: CourseRole.Manager });
         }
         return result;
       })
-      .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
+      .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.TaskOwner })))
       .reduce((acc, item) => {
         if (!acc[item.courseId]) {
           acc[item.courseId] = [];

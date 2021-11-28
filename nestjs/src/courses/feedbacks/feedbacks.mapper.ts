@@ -1,10 +1,9 @@
-import { CrudDtoMapper } from '../../core/crud-dto.mapper';
 import { CreateStudentFeedbackDto } from './dto';
 import { StudentFeedback } from '@entities/studentFeedback';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FeedbacksMapper extends CrudDtoMapper<CreateStudentFeedbackDto, StudentFeedback> {
+export class FeedbacksMapper {
   public convertToDto(entity: StudentFeedback): CreateStudentFeedbackDto {
     return {
       mentorId: entity.mentorId,
@@ -17,10 +16,11 @@ export class FeedbacksMapper extends CrudDtoMapper<CreateStudentFeedbackDto, Stu
     };
   }
 
-  public convertToEntity(dto: CreateStudentFeedbackDto): StudentFeedback {
+  public convertToEntity(studentId: number, dto: CreateStudentFeedbackDto): StudentFeedback {
     const entity = new StudentFeedback();
     entity.mentorId = dto.mentorId;
     entity.recommendation = dto.recommendation;
+    entity.studentId = studentId;
     return entity;
   }
 }

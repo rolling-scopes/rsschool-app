@@ -10,6 +10,7 @@ import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInt
 import { FeedbacksService, FeedbacksController } from './feedbacks';
 import { CourseController } from './courses.controller';
 import { CoursesService } from './courses.service';
+import { StudentsService } from './students';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { CoursesService } from './courses.service';
     ]),
   ],
   controllers: [FeedbacksController, CourseController],
-  providers: [CourseTasksService, CourseUsersService, FeedbacksService, CoursesService],
+  providers: [CourseTasksService, CourseUsersService, FeedbacksService, CoursesService, StudentsService],
   exports: [CourseTasksService, CourseUsersService],
 })
 export class CoursesModule {}

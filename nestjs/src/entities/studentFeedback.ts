@@ -1,3 +1,4 @@
+import { LanguageLevel } from 'src/data';
 import {
   Column,
   CreateDateColumn,
@@ -51,6 +52,9 @@ export class StudentFeedback {
   @Column({ name: 'content', type: 'json' })
   public content?: StudentFeedbackContent;
 
-  @Column({ name: 'recommendation' })
+  @Column({ name: 'recommendation', type: 'varchar', length: 64 })
   public recommendation?: Recommendation;
+
+  @Column({ name: 'english_level', type: 'varchar', length: 8 })
+  public englishLevel: LanguageLevel;
 }
