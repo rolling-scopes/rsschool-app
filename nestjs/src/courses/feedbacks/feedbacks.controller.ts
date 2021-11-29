@@ -13,7 +13,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from 'src/auth';
 import { CourseAccessService } from '../course-access.service';
-import { CreateStudentFeedbackDto } from './dto';
+import { CreateStudentFeedbackDto, StudentFeedbackDto } from './dto';
 import { FeedbacksService } from './feedbacks.service';
 
 @Controller()
@@ -21,10 +21,10 @@ import { FeedbacksService } from './feedbacks.service';
 export class FeedbacksController {
   constructor(private courseAccessService: CourseAccessService, private feedbackService: FeedbacksService) {}
 
-  @Post('student/:studentId/feedback')
+  @Post('students/:studentId/feedback')
   @UseGuards(DefaultGuard)
   public async createStudentFeedback(
-    @Param(':studentId', ParseIntPipe) studentId: number,
+    @Param('studentId', ParseIntPipe) studentId: number,
     @Body() body: CreateStudentFeedbackDto,
     @Req() req: CurrentRequest,
   ) {
@@ -32,24 +32,31 @@ export class FeedbacksController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    return this.feedbackService.createStudentFeedback(studentId, body, req.user.id);
+    const feedback = await this.feedbackService.createStudentFeedback(studentId, body, req.user.id);
+    return new StudentFeedbackDto(feedback);
   }
 
-  @Get('student/:studentId/feedback/:id')
+  @Get('students/:studentId/feedback/:id')
   @UseGuards(DefaultGuard)
   public async getStudentFeedback(
-    @Param(':studentId', ParseIntPipe) studentId: number,
-    @Param(':id', ParseIntPipe) id: number,
+    @Param('studentId', ParseIntPipe) studentId: number,
+    @Param('id', ParseIntPipe) id: number,
     @Req() req: CurrentRequest,
   ) {
     const hasAccess = await this.courseAccessService.canAccessStudentFeedback(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const feedback = await this.feedbackService.getStudentFeedback(studentId, id);
-    if (feedback === null) {
+    try {
+      const feedback = await this.feedbackService.getStudentFeedback(studentId, id);
+      if (feedback == null) {
+        throw new NotFoundException();
+      }
+
+      return new StudentFeedbackDto(feedback);
+    } catch (e) {
+      console.log(e);
       throw new NotFoundException();
     }
-    return feedback;
   }
 }

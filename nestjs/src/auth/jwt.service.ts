@@ -12,7 +12,7 @@ export class JwtService {
   }
 
   public createToken(payload: any) {
-    const jwt: string = sign(payload, this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
+    const jwt: string = sign(JSON.parse(JSON.stringify(payload)), this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
     return jwt;
   }
 

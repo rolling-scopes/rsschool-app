@@ -1,6 +1,6 @@
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
-import { StudentFeedback } from '@entities/studentFeedback';
+import { StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,31 +10,37 @@ import { CreateStudentFeedbackDto } from './dto';
 export class FeedbacksService {
   constructor(
     @InjectRepository(StudentFeedback)
-    private readonly studentFeedbackRepository: Repository<StudentFeedback>,
+    private readonly studentFeedbacksRepository: Repository<StudentFeedback>,
+    @InjectRepository(Student)
     private readonly studentsRepository: Repository<Student>,
+    @InjectRepository(Mentor)
     private readonly mentorsRepository: Repository<Mentor>,
   ) {}
 
   public async createStudentFeedback(
     studentId: number,
-    data: CreateStudentFeedbackDto,
+    feedback: CreateStudentFeedbackDto,
     authorId: number,
   ): Promise<StudentFeedback> {
     const student = await this.studentsRepository.findOne(studentId);
     const mentor = await this.mentorsRepository.findOne({ userId: authorId, courseId: student.courseId });
 
-    return this.studentFeedbackRepository.create({
-      student: student.id,
+    const { id } = await this.studentFeedbacksRepository.save<Partial<StudentFeedback>>({
+      studentId: student.id,
       mentorId: mentor?.id,
       auhtorId: authorId,
-      content: data.content,
-      recommendation: data.recommendation,
+      content: feedback.content,
+      recommendation: feedback.recommendation,
+      englishLevel: feedback.englishLevel,
     });
+
+    return this.getStudentFeedback(studentId, id);
   }
 
   public async getStudentFeedback(studentId: number, id: number): Promise<StudentFeedback> {
-    return this.studentFeedbackRepository.findOne({
+    return this.studentFeedbacksRepository.findOneOrFail({
       where: { studentId, id },
+      relations: ['student', 'mentor', 'author'],
     });
   }
 }

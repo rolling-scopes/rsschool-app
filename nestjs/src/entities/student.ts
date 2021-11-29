@@ -17,7 +17,7 @@ import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
-import { StudentFeedback } from './studentFeedback';
+import { StudentFeedback } from './student-feedback';
 import { StageInterview } from './stageInterview';
 
 @Entity()

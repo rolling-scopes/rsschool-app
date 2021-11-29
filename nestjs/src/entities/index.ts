@@ -24,7 +24,7 @@ import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { StageInterviewStudent } from './stageInterviewStudent';
 import { Student } from './student';
-import { StudentFeedback } from './studentFeedback';
+import { StudentFeedback } from './student-feedback';
 import { Task } from './task';
 import { TaskArtefact } from './taskArtefact';
 import { TaskChecker } from './taskChecker';

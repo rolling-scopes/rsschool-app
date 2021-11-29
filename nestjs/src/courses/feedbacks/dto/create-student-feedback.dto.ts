@@ -1,6 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString, IsEnum, IsNotEmptyObject } from 'class-validator';
-import { Recommendation, StudentFeedbackContent } from '@entities/studentFeedback';
+import { IsNotEmpty, IsString, IsEnum, IsNotEmptyObject } from 'class-validator';
+import { Recommendation, StudentFeedbackContent } from '@entities/student-feedback';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { LanguageLevel } from 'src/data';
 
 export class StudentFeedbackContentDto implements StudentFeedbackContent {
   @IsNotEmpty()
@@ -27,4 +28,8 @@ export class CreateStudentFeedbackDto {
   @IsEnum(Recommendation)
   @IsNotEmpty()
   recommendation: Recommendation;
+
+  @IsEnum(LanguageLevel)
+  @IsNotEmpty()
+  englishLevel: LanguageLevel;
 }

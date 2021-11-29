@@ -19,19 +19,19 @@ export class CourseAccessService {
       return false;
     }
 
-    if (user.appRoles.includes(Role.Admin)) {
+    if (user.appRoles?.includes(Role.Admin)) {
       return true;
     }
 
     const { courseId } = student;
-    const courseInfo = user.courses[courseId];
-    const currentMentorId = user.courses[courseId]?.mentorId;
+    const courseInfo = user.courses?.[courseId];
+    const currentMentorId = user.courses?.[courseId]?.mentorId;
 
     if (mentorId != null && mentorId !== currentMentorId) {
       return false;
     }
 
-    if (courseInfo.roles.includes(CourseRole.Manager)) {
+    if (courseInfo?.roles.includes(CourseRole.Manager)) {
       return true;
     }
 
