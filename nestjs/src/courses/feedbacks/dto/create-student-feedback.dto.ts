@@ -2,7 +2,7 @@ import { IsNotEmpty, IsNumber, IsString, IsEnum, IsNotEmptyObject } from 'class-
 import { Recommendation, StudentFeedbackContent } from '@entities/studentFeedback';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 
-class StudentFeedbackContentDto implements StudentFeedbackContent {
+export class StudentFeedbackContentDto implements StudentFeedbackContent {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
@@ -23,10 +23,6 @@ class StudentFeedbackContentDto implements StudentFeedbackContent {
 export class CreateStudentFeedbackDto {
   @IsNotEmptyObject()
   content: StudentFeedbackContentDto;
-
-  @IsNotEmpty()
-  @IsNumber()
-  mentorId: number;
 
   @IsEnum(Recommendation)
   @IsNotEmpty()

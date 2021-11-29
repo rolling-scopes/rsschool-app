@@ -57,4 +57,7 @@ export class StudentFeedback {
 
   @Column({ name: 'english_level', type: 'varchar', length: 8 })
   public englishLevel: LanguageLevel;
+
+  @Column({ name: 'author_id' })
+  public auhtorId: number;
 }
