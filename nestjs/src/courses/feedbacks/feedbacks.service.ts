@@ -4,7 +4,7 @@ import { StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateStudentFeedbackDto } from './dto';
+import { CreateStudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
 import { PersonDto } from '../../core/dto';
 
 @Injectable()
@@ -35,18 +35,28 @@ export class FeedbacksService {
       englishLevel: feedback.englishLevel,
     });
 
-    return this.getStudentFeedback(studentId, id);
+    return this.getStudentFeedback(id);
   }
 
-  public async getStudentFeedback(studentId: number, id: number): Promise<StudentFeedback> {
+  public async updateStudentFeedback(id: number, feedback: UpdateStudentFeedbackDto): Promise<StudentFeedback> {
+    await this.studentFeedbacksRepository.save({
+      id,
+      content: feedback.content,
+      recommendation: feedback.recommendation,
+      englishLevel: feedback.englishLevel,
+    });
+
+    return this.getStudentFeedback(id);
+  }
+
+  public async getStudentFeedback(id: number): Promise<StudentFeedback> {
     return this.studentFeedbacksRepository
       .createQueryBuilder('f')
       .leftJoin('f.mentor', 'mentor')
       .addSelect(['mentor.id'])
       .leftJoin('f.author', 'author')
       .addSelect(PersonDto.getQueryFields('author'))
-      .where('f.studentId = :studentId', { studentId })
-      .andWhere('f.id = :id', { id })
+      .where('f.id = :id', { id })
       .getOneOrFail();
   }
 }

@@ -1,6 +1,7 @@
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { ApiResponse } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsNotEmptyObject } from 'class-validator';
+import { LanguageLevel } from 'src/data';
 import { PersonDto } from '../../../core/dto';
 import { StudentFeedbackContentDto } from './create-student-feedback.dto';
 @ApiResponse({})
@@ -13,6 +14,7 @@ export class StudentFeedbackDto {
     this.id = studentFeedback.id;
     this.createdDate = studentFeedback.createdDate;
     this.updatedDate = studentFeedback.updatedDate;
+    this.englishLevel = studentFeedback.englishLevel;
   }
 
   id: number;
@@ -21,15 +23,13 @@ export class StudentFeedbackDto {
 
   updatedDate: string;
 
-  @IsNotEmptyObject()
   content: StudentFeedbackContentDto;
 
-  @IsEnum(Recommendation)
-  @IsNotEmpty()
   recommendation: Recommendation;
 
-  @IsNotEmptyObject()
   author: PersonDto;
 
   mentor?: PersonDto;
+
+  englishLevel: LanguageLevel;
 }

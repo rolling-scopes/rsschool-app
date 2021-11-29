@@ -9,11 +9,12 @@ import {
   Req,
   UseGuards,
   NotFoundException,
+  Patch,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from 'src/auth';
 import { CourseAccessService } from '../course-access.service';
-import { CreateStudentFeedbackDto, StudentFeedbackDto } from './dto';
+import { CreateStudentFeedbackDto, StudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
 import { FeedbacksService } from './feedbacks.service';
 
 @Controller()
@@ -36,6 +37,22 @@ export class FeedbacksController {
     return new StudentFeedbackDto(feedback);
   }
 
+  @Patch('students/:studentId/feedback/:id')
+  @UseGuards(DefaultGuard)
+  public async updateStudentFeedback(
+    @Param('studentId', ParseIntPipe) studentId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateStudentFeedbackDto,
+    @Req() req: CurrentRequest,
+  ) {
+    const hasAccess = await this.courseAccessService.canAccessStudentFeedback(req.user, studentId);
+    if (!hasAccess) {
+      throw new ForbiddenException();
+    }
+    const feedback = await this.feedbackService.updateStudentFeedback(id, body);
+    return new StudentFeedbackDto(feedback);
+  }
+
   @Get('students/:studentId/feedback/:id')
   @UseGuards(DefaultGuard)
   public async getStudentFeedback(
@@ -47,7 +64,10 @@ export class FeedbacksController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const feedback = await this.feedbackService.getStudentFeedback(studentId, id);
+    const feedback = await this.feedbackService.getStudentFeedback(id);
+    if (feedback.studentId !== studentId) {
+      throw new ForbiddenException();
+    }
     return new StudentFeedbackDto(feedback);
   }
 }
