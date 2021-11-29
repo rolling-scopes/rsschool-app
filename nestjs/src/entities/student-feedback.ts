@@ -41,7 +41,7 @@ export class StudentFeedback {
 
   @ManyToOne(_ => Student)
   @JoinColumn({ name: 'student_id' })
-  public student: Student;
+  public student: Pick<Student, 'id'>;
 
   @Column({ name: 'student_id' })
   @Index()
@@ -49,7 +49,7 @@ export class StudentFeedback {
 
   @ManyToOne(_ => Mentor, { nullable: true })
   @JoinColumn({ name: 'mentor_id' })
-  public mentor: Mentor;
+  public mentor: Pick<Mentor, 'id'>;
 
   @Column({ name: 'mentor_id', nullable: true })
   @Index()
@@ -69,5 +69,5 @@ export class StudentFeedback {
 
   @ManyToOne(_ => User)
   @JoinColumn({ name: 'author_id' })
-  public author: User;
+  public author: Pick<User, 'id' | 'firstName' | 'lastName'>;
 }

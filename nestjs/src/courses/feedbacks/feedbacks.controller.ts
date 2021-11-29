@@ -47,16 +47,7 @@ export class FeedbacksController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    try {
-      const feedback = await this.feedbackService.getStudentFeedback(studentId, id);
-      if (feedback == null) {
-        throw new NotFoundException();
-      }
-
-      return new StudentFeedbackDto(feedback);
-    } catch (e) {
-      console.log(e);
-      throw new NotFoundException();
-    }
+    const feedback = await this.feedbackService.getStudentFeedback(studentId, id);
+    return new StudentFeedbackDto(feedback);
   }
 }

@@ -16,4 +16,9 @@ export class PersonDto {
   @IsNumber()
   @ApiProperty()
   id: number;
+
+  public static getQueryFields(base = '') {
+    const prefix = base ? `${base}.` : '';
+    return ['id', 'firstName', 'lastName'].map(i => `${prefix}${i}`);
+  }
 }

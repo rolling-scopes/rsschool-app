@@ -9,6 +9,7 @@ import { Logger } from 'nestjs-pino';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { ValidationFilter } from './core/validation';
+import { EntityNotFoundFilter } from './core/filters';
 
 const port = process.env.NODE_PORT || 3002;
 
@@ -19,6 +20,7 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   app.use(cookieParser());
   app.useGlobalFilters(new ValidationFilter());
+  app.useGlobalFilters(new EntityNotFoundFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

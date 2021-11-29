@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentFeedbackDto } from './dto';
+import { PersonDto } from '../../core/dto';
 
 @Injectable()
 export class FeedbacksService {
@@ -38,9 +39,14 @@ export class FeedbacksService {
   }
 
   public async getStudentFeedback(studentId: number, id: number): Promise<StudentFeedback> {
-    return this.studentFeedbacksRepository.findOneOrFail({
-      where: { studentId, id },
-      relations: ['student', 'mentor', 'author'],
-    });
+    return this.studentFeedbacksRepository
+      .createQueryBuilder('f')
+      .leftJoin('f.mentor', 'mentor')
+      .addSelect(['mentor.id'])
+      .leftJoin('f.author', 'author')
+      .addSelect(PersonDto.getQueryFields('author'))
+      .where('f.studentId = :studentId', { studentId })
+      .andWhere('f.id = :id', { id })
+      .getOneOrFail();
   }
 }
