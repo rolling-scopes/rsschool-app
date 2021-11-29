@@ -18,11 +18,27 @@ export interface StudentFeedbackContent {
   impression: string;
   gaps: string;
   recommendationComment: string;
+  softSkills: Record<SoftSkill, Rate>;
+}
+
+export enum SoftSkill {
+  Responsible = 'responsible',
+  TeamPlayer = 'team-player',
+  Communicable = 'communicable',
+}
+
+export enum Rate {
+  None,
+  Poor,
+  Fair,
+  Good,
+  Great,
+  Excellent,
 }
 
 export enum Recommendation {
   Hire = 'hire',
-  NotHire = 'notHire',
+  NotHire = 'not-hire',
 }
 
 @Entity()
@@ -61,8 +77,8 @@ export class StudentFeedback {
   @Column({ name: 'recommendation', type: 'varchar', length: 64 })
   public recommendation?: Recommendation;
 
-  @Column({ name: 'english_level', type: 'varchar', length: 8 })
-  public englishLevel: LanguageLevel;
+  @Column({ name: 'english_level', type: 'varchar', length: 8, nullable: true })
+  public englishLevel?: LanguageLevel;
 
   @Column({ name: 'author_id' })
   public auhtorId: number;
