@@ -199,6 +199,10 @@ function Page(props: Props) {
           <Checkbox>Use Private Repositories</Checkbox>
         </Form.Item>
 
+        <Form.Item name="personalMentoring" label="Personal Mentoring" valuePropName="checked">
+          <Checkbox>Personal mentoring</Checkbox>
+        </Form.Item>
+
         <Form.Item name="inviteOnly" label="Invite Only" valuePropName="checked">
           <Checkbox>Invite Only Course</Checkbox>
         </Form.Item>
@@ -248,6 +252,7 @@ function createRecord(values: any) {
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
+    personalMentoring: values.personalMentoring,
   };
   return record;
 }

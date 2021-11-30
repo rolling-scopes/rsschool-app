@@ -15,4 +15,5 @@ export interface Course {
   certificateIssuer: string;
   discordServerId: number;
   usePrivateRepositories: boolean;
+  personalMentoring: boolean;
 }

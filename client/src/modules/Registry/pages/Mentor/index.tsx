@@ -36,11 +36,10 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
   useAsync(async () => {
     setLoading(true);
     const [profile, courses] = await Promise.all([new UserService().getMyProfile(), new CoursesService().getCourses()]);
-
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
       : courses
-          .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
+          .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
           .sort((a, b) => a.startDate.localeCompare(b.startDate));
     const checkedListCourse = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias).map(({ id }: Course) => id)

@@ -95,4 +95,7 @@ export class Course {
 
   @Column({ default: true })
   usePrivateRepositories: boolean;
+
+  @Column({ default: true })
+  personalMentoring: boolean;
 }
