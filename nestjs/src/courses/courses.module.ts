@@ -10,7 +10,7 @@ import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInt
 import { FeedbacksService, FeedbacksController } from './feedbacks';
 import { CourseController } from './courses.controller';
 import { CoursesService } from './courses.service';
-import { StudentsService } from './students';
+import { StudentsService, StudentsController } from './students';
 import { CourseAccessService } from './course-access.service';
 
 @Module({
@@ -28,7 +28,7 @@ import { CourseAccessService } from './course-access.service';
       StudentFeedback,
     ]),
   ],
-  controllers: [FeedbacksController, CourseController],
+  controllers: [FeedbacksController, CourseController, StudentsController],
   providers: [
     CourseTasksService,
     CourseUsersService,

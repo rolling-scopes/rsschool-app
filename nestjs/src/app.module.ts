@@ -18,7 +18,7 @@ const devMode = process.env.NODE_ENV !== 'production';
     LoggerModule.forRoot({
       pinoHttp: {
         autoLogging: false,
-        prettyPrint: devMode ? { ignore: 'time,hostname,pid,host,remoteAddress' } : false,
+        prettyPrint: devMode ? { ignore: 'time,hostname,pid,host,remoteAddress,req' } : false,
       },
     }),
     TypeOrmModule.forRoot({

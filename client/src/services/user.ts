@@ -46,8 +46,8 @@ export class UserService {
   }
 
   async getCourses() {
-    const result = await this.axios.get<{ data: Course[] }>(`/api/v2/profile/me/courses`);
-    return result.data.data.sort((a, b) => b.id - a.id);
+    const result = await this.axios.get<{ items: Course[] }>(`/api/v2/profile/me/courses`);
+    return result.data.items.sort((a, b) => b.id - a.id);
   }
 
   async searchUser(query: string | null) {

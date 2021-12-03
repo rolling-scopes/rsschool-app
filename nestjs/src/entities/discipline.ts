@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Discipline {
@@ -11,10 +11,9 @@ export class Discipline {
   @UpdateDateColumn({ name: 'updated_date' })
   public updatedDate: string;
 
+  @DeleteDateColumn({ name: 'deleted_date' })
+  public deletedDate: string;
+
   @Column({ name: 'name' })
   public name: string;
-
-  @Column({ name: 'deleted', default: false })
-  @Index()
-  public deleted: boolean = false;
 }
