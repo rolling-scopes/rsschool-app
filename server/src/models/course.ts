@@ -10,7 +10,6 @@ import {
   Index,
 } from 'typeorm';
 import { DiscordServer } from './discordServer';
-import { Stage } from './stage';
 import { Student } from './student';
 import { Mentor } from './mentor';
 import { Registry } from './registry';
@@ -62,9 +61,6 @@ export class Course {
 
   @Column({ nullable: true })
   locationName: string;
-
-  @OneToMany(_ => Stage, (stage: Stage) => stage.course)
-  stages: Stage[];
 
   @OneToMany(_ => Student, (student: Student) => student.course)
   students: Student[];

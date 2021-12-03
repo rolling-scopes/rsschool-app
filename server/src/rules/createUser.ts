@@ -52,7 +52,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       activist: false,
       lastActivityTime: Date.now(),
       isActive: true,
-      courseManagers: [],
+      courseUsers: [],
       profilePermissions: null,
       opportunitiesConsent: false,
     };

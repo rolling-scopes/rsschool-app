@@ -10,7 +10,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "paths": { "@entities/*": ["./src/entities/*"] },
+    "paths": { "@entities/*": ["../server/src/models/*"] },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

@@ -1,36 +1,44 @@
+import { LanguageLevel } from './data';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Index,
   DeleteDateColumn,
 } from 'typeorm';
 import { User } from './user';
 import { Mentor } from './mentor';
 import { Student } from './student';
 
-export enum LanguageLevel {
-  A1 = 'a1',
-  A2 = 'a2',
-  B1 = 'b1',
-  B2 = 'b2',
-  C1 = 'c1',
-  C2 = 'c2',
-}
-
 export interface StudentFeedbackContent {
   impression: string;
   gaps: string;
   recommendationComment: string;
+  softSkills: { id: SoftSkill; value: Rate }[];
+}
+
+export enum SoftSkill {
+  Responsible = 'skill.soft.responsible',
+  TeamPlayer = 'skill.soft.team-player',
+  Communicable = 'skill.soft.communicable',
+}
+
+export enum Rate {
+  None,
+  Poor,
+  Fair,
+  Good,
+  Great,
+  Excellent,
 }
 
 export enum Recommendation {
   Hire = 'hire',
-  NotHire = 'notHire',
+  NotHire = 'not-hire',
 }
 
 @Entity()
@@ -49,7 +57,7 @@ export class StudentFeedback {
 
   @ManyToOne(_ => Student)
   @JoinColumn({ name: 'student_id' })
-  public student: Student;
+  public student: Pick<Student, 'id'>;
 
   @Column({ name: 'student_id' })
   @Index()
@@ -57,7 +65,7 @@ export class StudentFeedback {
 
   @ManyToOne(_ => Mentor, { nullable: true })
   @JoinColumn({ name: 'mentor_id' })
-  public mentor: Mentor;
+  public mentor: Pick<Mentor, 'id'>;
 
   @Column({ name: 'mentor_id', nullable: true })
   @Index()
@@ -69,13 +77,13 @@ export class StudentFeedback {
   @Column({ name: 'recommendation', type: 'varchar', length: 64 })
   public recommendation?: Recommendation;
 
-  @Column({ name: 'english_level', type: 'varchar', length: 8 })
-  public englishLevel: LanguageLevel;
+  @Column({ name: 'english_level', type: 'varchar', length: 8, nullable: true })
+  public englishLevel?: LanguageLevel;
 
   @Column({ name: 'author_id' })
   public auhtorId: number;
 
   @ManyToOne(_ => User)
   @JoinColumn({ name: 'author_id' })
-  public author: User;
+  public author: Pick<User, 'id' | 'firstName' | 'lastName'>;
 }
