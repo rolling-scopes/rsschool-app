@@ -15,6 +15,7 @@ export async function getAvailableStudents(courseId: number) {
       'si.id',
       'si.isGoodCandidate',
       'si.isCompleted',
+      'si.isCanceled',
       'sif.json',
       'sif.updatedDate',
     ])
