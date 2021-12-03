@@ -1,14 +1,14 @@
 import { NextPageContext } from 'next';
 import * as React from 'react';
 import { UserService } from 'services/user';
-import { parse } from 'cookie';
+import { getTokenFromContext } from 'utils/server';
 
 function withCourses(WrappedComponent: React.ComponentType<any>) {
   return class extends React.PureComponent {
     static async getInitialProps(ctx: NextPageContext) {
       try {
-        const cookies = parse(ctx.req?.headers.cookie || '');
-        const courses = await new UserService(cookies['auth-token']).getCourses();
+        const token = getTokenFromContext(ctx);
+        const courses = await new UserService(token).getCourses();
         return { courses };
       } catch (err) {
         const error = err as Error;

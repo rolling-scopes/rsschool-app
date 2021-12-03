@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
-import { parse } from 'cookie';
 import { StudentsService } from 'services/students';
+import { getTokenFromContext } from 'utils/server';
 
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
@@ -8,8 +8,8 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
     if (!studentId) {
       throw new Error();
     }
-    const cookies = parse(ctx.req?.headers.cookie || '');
-    const student = await new StudentsService(cookies['auth-token']).getStudent(Number(studentId));
+    const token = getTokenFromContext(ctx);
+    const student = await new StudentsService(token).getStudent(Number(studentId));
     return {
       props: {
         params: ctx?.params ?? {},

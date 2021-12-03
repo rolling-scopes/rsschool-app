@@ -1,11 +1,11 @@
 import { GetServerSideProps } from 'next';
 import { UserService } from 'services/user';
-import { parse } from 'cookie';
+import { getTokenFromContext } from 'utils/server';
 
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
-    const cookies = parse(ctx.req.headers.cookie || '');
-    const courses = await new UserService(cookies['auth-token']).getCourses();
+    const token = getTokenFromContext(ctx);
+    const courses = await new UserService(token).getCourses();
     return {
       props: { courses },
     };

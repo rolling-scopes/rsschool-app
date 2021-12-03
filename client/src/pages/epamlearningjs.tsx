@@ -7,6 +7,7 @@ import { CourseService, CourseTask } from 'services/course';
 import { UserService } from 'services/user';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskSelect } from 'components/Forms';
+import { getTokenFromContext } from 'utils/server';
 
 type Props = CoursePageProps;
 type State = { courseTaskId: number | null; courseTasks: (CourseTask & { score: number })[]; loading: boolean };
@@ -22,27 +23,6 @@ class EpamLearningJs extends React.Component<Props, State> {
     super(props);
     this.courseService = new CourseService(props.course.id);
   }
-
-  static async getInitialProps(ctx: NextPageContext) {
-    try {
-      const courses = await new UserService(ctx).getCourses();
-      const course = courses.find(c => c.alias === courseName) || null;
-      if (course == null) {
-        return EpamLearningJs.redirectToRegistry(ctx);
-      }
-      return { course };
-    } catch (err) {
-      const error = err as Error;
-      console.error(error.message);
-      return { course: null };
-    }
-  }
-
-  static redirectToRegistry = (ctx: NextPageContext) => {
-    ctx.res?.writeHead(302, { Location: registryUrl });
-    ctx.res?.end();
-    return {};
-  };
 
   async componentDidMount() {
     const studentScore = await this.courseService
@@ -152,6 +132,23 @@ class EpamLearningJs extends React.Component<Props, State> {
 }
 
 const Page = withSession(EpamLearningJs);
-(Page as any).getInitialProps = EpamLearningJs.getInitialProps;
-(Page as any).redirectToRegistry = EpamLearningJs.redirectToRegistry;
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  try {
+    const token = getTokenFromContext(ctx);
+    const courses = await new UserService(token).getCourses();
+    const course = courses.find(c => c.alias === courseName) || null;
+    if (course == null) {
+      ctx.res?.writeHead(302, { Location: registryUrl });
+      ctx.res?.end();
+      return {};
+    }
+    return { course };
+  } catch (err) {
+    const error = err as Error;
+    console.error(error.message);
+    return { course: null };
+  }
+};
+
 export default Page;
