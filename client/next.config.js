@@ -10,6 +10,8 @@ const nextConfig = {
       ? []
       : [
           { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
+          { source: '/swagger', destination: `${nestjs}/swagger/` },
+          { source: '/swagger:path', destination: `${nestjs}/swagger/swagger:path` },
           { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],

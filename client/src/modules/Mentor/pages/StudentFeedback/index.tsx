@@ -1,33 +1,47 @@
 import { Alert, Button, Col, Form, Input, message, Radio, Rate, Row, Typography } from 'antd';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import { useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
+import { CoursePageProps, StudentBasic } from 'services/models';
 import { StudentsService } from 'services/students';
 import { softSkills } from '../../data/softSkills';
 
-type Props = {
-  student: any;
-  session: { githubId: string };
-};
-
-export function StudentFeedback(props: Props) {
-  const { githubId } = props.session;
-  const { student } = props;
+export function StudentFeedback({ session, course }: CoursePageProps) {
+  const { githubId } = session;
+  const { id: courseId } = course;
+  const mentorId = Number(session.courses[courseId].mentorId);
   const [form] = Form.useForm();
-
+  const router = useRouter();
+  const [noData, setNoData] = useState(false);
+  const [students, setStudents] = useState<StudentBasic[]>([]);
   const service = useMemo(() => new StudentsService(), []);
-  const selected = student?.githubId;
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+
+  useAsync(async () => {
+    const students = await courseService.getMentorStudents(mentorId);
+    if (students.length === 0) {
+      setNoData(true);
+      return;
+    }
+    setStudents(students);
+    const studentId = router.query['studentId'] ? Number(router.query['studentId']) : null;
+    form.setFieldsValue({ studentId });
+  }, []);
 
   const handleSubmit = async (values: any) => {
     try {
-      await service.createFeedback(student.id, values);
+      const { studentId, ...rest } = values;
+      await service.createFeedback(studentId, rest);
     } catch (e) {
       message.error('Error occurred while creating feedback. Please try later.');
     }
   };
 
   return (
-    <PageLayoutSimple title="Student Feedback" loading={false} githubId={githubId}>
+    <PageLayoutSimple noData={noData} title="Student Feedback" loading={false} githubId={githubId}>
       <Alert
         showIcon
         type="info"
@@ -39,14 +53,8 @@ export function StudentFeedback(props: Props) {
         }
       />
       <Form style={{ margin: '24px 0' }} onFinish={handleSubmit} form={form} layout="vertical">
-        <Form.Item label="Student">
-          <UserSearch
-            allowClear={false}
-            clearIcon={false}
-            value={selected}
-            defaultValues={[student]}
-            keyField="githubId"
-          />
+        <Form.Item name="studentId" label="Student">
+          <UserSearch allowClear={false} clearIcon={false} defaultValues={students} keyField="id" />
         </Form.Item>
         <Form.Item name="impression" required label="General Impression">
           <Input.TextArea rows={7} />

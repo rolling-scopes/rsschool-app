@@ -1,16 +1,30 @@
 import { MessageOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 import { Button, List } from 'antd';
+import { StudentBasic } from 'common/models';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
-import { useMentorStudents } from 'modules/Feedback/hooks/useMentorStudents';
+import { useLoading } from 'components/useLoading';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
-export function StudentFeedbacks(props: CoursePageProps) {
+export function Students(props: CoursePageProps) {
   const { githubId } = props.session;
-  const { id } = props.course;
+  const { id: courseId, alias } = props.course;
+  const mentorId = Number(props.session.courses[courseId].mentorId);
+  const [loading, withLoading] = useLoading(false);
+  const [students, setStudents] = useState<StudentBasic[]>([]);
 
-  const [students, _, loading] = useMentorStudents(id);
+  const service = useMemo(() => new CourseService(courseId), [courseId]);
+  useAsync(
+    withLoading(async () => {
+      const data = await service.getMentorStudents(mentorId);
+      setStudents(data);
+    }),
+    [],
+  );
 
   return (
     <PageLayoutSimple title="Your students" loading={loading} githubId={githubId}>
@@ -21,12 +35,12 @@ export function StudentFeedbacks(props: CoursePageProps) {
               key={student.githubId}
               extra={
                 <div>
-                  <div>Score: N/A</div>
-                  <div>Rank: N/A</div>
+                  <div>Rank: {student.rank}</div>
+                  <div>Score: {student.totalScore}</div>
                 </div>
               }
               actions={[
-                <Link href={`/student/${student.id}/feedback`}>
+                <Link href={`/course/mentor/feedback?course=${alias}&studentId=${student.id}`}>
                   <Button type="text" icon={<MessageOutlined />}>
                     Feedback
                   </Button>

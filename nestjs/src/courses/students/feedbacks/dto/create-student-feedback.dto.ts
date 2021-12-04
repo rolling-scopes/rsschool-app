@@ -2,7 +2,7 @@ import { Rate, Recommendation, SoftSkill, StudentFeedbackContent } from '@entiti
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { LanguageLevel } from '../../../data';
+import { LanguageLevel } from '../../../../data';
 
 export class StudentFeedbackContentDto implements StudentFeedbackContent {
   @IsNotEmpty()

@@ -52,7 +52,7 @@ export class AuthUser {
       courseRoles[mentor.courseId] = [CourseRole.Mentor];
 
       const info = courses[mentor.courseId] ?? ({ mentorId: null, studentId: null, roles: [] } as CourseInfo);
-      info.studentId = mentor.id;
+      info.mentorId = mentor.id;
       info.roles.push(CourseRole.Mentor);
       courses[mentor.courseId] = info;
     });

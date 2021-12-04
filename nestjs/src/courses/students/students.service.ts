@@ -13,4 +13,11 @@ export class StudentsService {
   public getById(id: number) {
     return this.studentRepository.findOne(id);
   }
+
+  public getByMentorId(mentorId: number) {
+    return this.studentRepository.find({
+      where: { mentorId },
+      relations: ['user', 'feedbacks'],
+    });
+  }
 }

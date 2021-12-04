@@ -1,9 +1,10 @@
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsNotEmptyObject } from 'class-validator';
 import { LanguageLevel } from 'src/data';
-import { PersonDto } from '../../../core/dto';
+import { PersonDto } from '../../../../core/dto';
 import { StudentFeedbackContentDto } from './create-student-feedback.dto';
+
 @ApiResponse({})
 export class StudentFeedbackDto {
   constructor(studentFeedback: StudentFeedback) {
@@ -17,19 +18,27 @@ export class StudentFeedbackDto {
     this.englishLevel = studentFeedback.englishLevel;
   }
 
+  @ApiProperty()
   id: number;
 
+  @ApiProperty()
   createdDate: string;
 
+  @ApiProperty()
   updatedDate: string;
 
+  @ApiProperty()
   content: StudentFeedbackContentDto;
 
+  @ApiProperty()
   recommendation: Recommendation;
 
+  @ApiProperty()
   author: PersonDto;
 
+  @ApiProperty()
   mentor?: PersonDto;
 
+  @ApiProperty()
   englishLevel: LanguageLevel;
 }

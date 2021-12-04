@@ -1,25 +1,20 @@
 import { GetServerSideProps } from 'next';
-import { StudentsService } from 'services/students';
+import { UserService } from 'services/user';
 import { getTokenFromContext } from 'utils/server';
 
 export const getServerSideProps: GetServerSideProps<any> = async ctx => {
   try {
-    const studentId = ctx.params?.studentId;
-    if (!studentId) {
-      throw new Error();
-    }
+    const alias = ctx.query.course as string;
     const token = getTokenFromContext(ctx);
-    const student = await new StudentsService(token).getStudent(Number(studentId));
+    const courses = await new UserService(token).getCourses();
     return {
       props: {
-        params: ctx?.params ?? {},
-        student,
+        course: courses.find(course => course.alias === alias) ?? null,
       },
     };
   } catch (e) {
     return {
       props: {
-        params: {},
         student: null,
       },
     };

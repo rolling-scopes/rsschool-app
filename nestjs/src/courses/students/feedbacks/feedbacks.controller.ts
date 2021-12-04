@@ -11,18 +11,18 @@ import {
   NotFoundException,
   Patch,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from 'src/auth';
-import { CourseAccessService } from '../course-access.service';
+import { CourseAccessService } from '../../course-access.service';
 import { CreateStudentFeedbackDto, StudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
 import { FeedbacksService } from './feedbacks.service';
 
-@Controller()
-@ApiTags('course feedbacks')
+@Controller('students/:studentId/feedbacks')
+@ApiTags('students feedbacks')
 export class FeedbacksController {
   constructor(private courseAccessService: CourseAccessService, private feedbackService: FeedbacksService) {}
 
-  @Post('students/:studentId/feedback')
+  @Post('/')
   @UseGuards(DefaultGuard)
   public async createStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
@@ -37,7 +37,7 @@ export class FeedbacksController {
     return new StudentFeedbackDto(feedback);
   }
 
-  @Patch('students/:studentId/feedback/:id')
+  @Patch('/:id')
   @UseGuards(DefaultGuard)
   public async updateStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
@@ -53,8 +53,9 @@ export class FeedbacksController {
     return new StudentFeedbackDto(feedback);
   }
 
-  @Get('students/:studentId/feedback/:id')
+  @Get('/:id')
   @UseGuards(DefaultGuard)
+  @ApiResponse({ status: 200, type: StudentFeedbackDto })
   public async getStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
     @Param('id', ParseIntPipe) id: number,

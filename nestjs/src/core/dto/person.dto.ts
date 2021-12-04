@@ -4,7 +4,7 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class PersonDto {
   constructor(person?: { firstName?: string; lastName?: string; id: number }) {
     this.id = person?.id;
-    this.name = [person?.firstName || '', person?.lastName || ''].join(' ').trim();
+    this.name = [person?.firstName || '', person?.lastName || ''].join(' ').trim() || '(Empty)';
   }
 
   @IsNotEmpty()

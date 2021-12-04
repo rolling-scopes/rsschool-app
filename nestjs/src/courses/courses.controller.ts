@@ -4,12 +4,12 @@ import { Role } from '../auth';
 import { DefaultGuard, RequiredAppRoles, RoleGuard } from '../auth';
 import { CoursesService } from './courses.service';
 
-@Controller()
+@Controller('courses')
 @ApiTags('courses')
 export class CourseController {
   constructor(private courseService: CoursesService) {}
 
-  @Get('courses')
+  @Get('/')
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredAppRoles([Role.Admin])
   public async getCourses() {
@@ -17,7 +17,7 @@ export class CourseController {
     return { items };
   }
 
-  @Get('courses/:aliasOrId')
+  @Get('/:aliasOrId')
   @UseGuards(DefaultGuard)
   public async getCourse(@Param('aliasOrId') aliasOrId: number | string) {
     const id = Number(aliasOrId);

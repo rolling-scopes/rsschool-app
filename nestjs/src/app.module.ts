@@ -4,7 +4,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
-import { LoggerMiddleware } from './core/logging';
+import { LoggingMiddleware } from './core/middlewares';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
 import * as config from './ormconfig';
@@ -38,6 +38,6 @@ const devMode = process.env.NODE_ENV !== 'production';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

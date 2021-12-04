@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
-import { PersonDto } from '../../core/dto';
+import { PersonDto } from '../../../core/dto';
 
 @Injectable()
 export class FeedbacksService {

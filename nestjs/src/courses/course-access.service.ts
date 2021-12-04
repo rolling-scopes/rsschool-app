@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthUser, CourseRole, Role } from 'src/auth';
+import { AuthUser, CourseRole, Role } from '../auth';
 import { StudentsService } from './students';
 
 export enum Operation {
