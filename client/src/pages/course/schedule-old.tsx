@@ -1,15 +1,17 @@
 import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Table, Tag, Row, Tooltip, Select } from 'antd';
-import { withSession, GithubUserLink, PageLayout } from 'components';
+import { Row, Select, Table, Tag, Tooltip } from 'antd';
+import { GithubUserLink } from 'components/GithubUserLink';
+import { PageLayout } from 'components/PageLayout';
+import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
-import { useState, useMemo } from 'react';
+import withSession from 'components/withSession';
+import moment from 'moment-timezone';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import moment from 'moment-timezone';
 import { TIMEZONES } from '../../configs/timezones';
-import { useAsync } from 'react-use';
-import { useLoading } from 'components/useLoading';
 
 enum EventTypeColor {
   deadline = '#ff0000',

@@ -1,10 +1,11 @@
 import { Button, Checkbox, Col, Form, message, Row } from 'antd';
-import { PageLayout, UserSearch } from 'components';
+import { PageLayout } from 'components/PageLayout';
+import { UserSearch } from 'components/UserSearch';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { CrossCheckAssignmentLink, AssignmentLink } from 'components/CrossCheck/CrossCheckAssignmentLink';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import withSession, { CourseRole } from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseTask, CrossCheckComment, CrossCheckReview, CrossCheckCriteria } from 'services/course';
@@ -146,7 +147,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, 'student'));
+export default withCourseData(withSession(Page, CourseRole.Student));
 
 function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
   return review?.reduce((acc, r) => {

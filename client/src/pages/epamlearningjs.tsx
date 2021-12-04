@@ -1,6 +1,6 @@
 import { Button, Col, Form, message, Row, Table, Typography, Spin } from 'antd';
 import { NextPageContext } from 'next';
-import { withSession } from 'components';
+import { withSession } from 'components/withSession';
 import * as React from 'react';
 import { AxiosError } from 'axios';
 import { CourseService, CourseTask } from 'services/course';

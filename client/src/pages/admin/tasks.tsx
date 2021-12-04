@@ -1,5 +1,7 @@
 import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Radio, Select, Table } from 'antd';
-import { AdminSider, Header, Session, withSession } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
+import withSession, { Session } from 'components/withSession';
 import { boolIconRenderer, stringSorter, tagsRenderer, getColumnSearchProps } from 'components/Table';
 import { union } from 'lodash';
 import { useCallback, useState } from 'react';

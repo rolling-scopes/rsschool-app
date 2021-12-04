@@ -1,5 +1,7 @@
 import { Col, Layout, message, Row, Spin, Tabs } from 'antd';
-import { AdminSider, Header, Session } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
+import { Session } from 'components/withSession';
 import { AddCategoryButton } from 'modules/InterviewQuestions/components/Buttons/AddCategoryButton';
 import { AddQuestionButton } from 'modules/InterviewQuestions/components/Buttons/AddQuestionButton';
 import { CategoryModalForm } from 'modules/InterviewQuestions/components/Modals/CategoryModalForm';

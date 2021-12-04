@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Modal, Space, Typography } from 'antd';
 import moment from 'moment';
-import { GithubUserLink } from 'components';
+import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTagWithStyle, urlRenderer } from 'components/Table/renderers';
 import { CourseEvent } from 'services/course';
 

@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 'antd';
-
-import { Header, Session, withSession, AdminSider } from 'components';
+import { Session, withSession } from 'components/withSession';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';

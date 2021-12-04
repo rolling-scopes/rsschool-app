@@ -71,13 +71,16 @@ const session = {
   isAdmin: true,
   isHirer: false,
   isActivist: false,
-  roles: {
-    1: 'mentor',
-    2: 'student',
-    11: 'mentor',
-  },
-  coursesRoles: {
-    13: ['manager'],
+  courses: {
+    13: {
+      roles: ['manager'],
+    },
+    1: {
+      roles: ['mentor'],
+    },
+    2: {
+      roles: ['student'],
+    },
   },
 } as Session;
 const router = {

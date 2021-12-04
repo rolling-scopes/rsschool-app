@@ -4,7 +4,7 @@ import { ScheduleOutlined, YoutubeOutlined, QuestionCircleOutlined } from '@ant-
 import { CourseEvent } from 'services/course';
 import { Row, Col, Tag, Typography, Tooltip, Select } from 'antd';
 import { dateTimeTimeZoneRenderer } from './renderers';
-import { GithubUserLink } from 'components';
+import { GithubUserLink } from 'components/GithubUserLink';
 
 type Props = {
   nextEvents: CourseEvent[];

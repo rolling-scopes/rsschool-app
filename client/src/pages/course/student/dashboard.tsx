@@ -5,7 +5,9 @@ import css from 'styled-jsx/css';
 import { useAsync } from 'react-use';
 import { useMemo, useState } from 'react';
 
-import { PageLayout, LoadingScreen } from 'components';
+import { LoadingScreen } from 'components/LoadingScreen';
+import { PageLayout } from 'components/PageLayout';
+
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services/course';

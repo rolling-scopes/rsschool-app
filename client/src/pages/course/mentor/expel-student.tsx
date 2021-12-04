@@ -1,17 +1,18 @@
 import { Button, Form, Input, message, Typography, Radio } from 'antd';
-import { PageLayoutSimple, UserSearch } from 'components';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import withSession, { CourseRole } from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
+import { isStudent } from 'domain/user';
 
 type ActionOnStudent = 'expel' | 'unassign';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-  const roles = props.session.roles;
   const userGithubId = props.session.githubId;
 
   const [form] = Form.useForm();
@@ -21,7 +22,7 @@ function Page(props: CoursePageProps) {
   const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
-    if (roles[courseId] === 'student') {
+    if (isStudent(props.session, courseId)) {
       const student = await courseService.getStudentSummary(userGithubId);
       if (student.isActive) {
         setStudents([
@@ -131,4 +132,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, 'mentor'));
+export default withCourseData(withSession(Page, CourseRole.Mentor));
