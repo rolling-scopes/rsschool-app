@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Row, Modal, Checkbox, Typography } from 'antd';
+import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
@@ -131,7 +131,8 @@ function Page(props: CoursePageProps) {
 
   const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
-  const submitAllowed = !!task && !submitDeadlinePassed;
+  const taskExists = !!task;
+  const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
 
   return (
@@ -145,8 +146,11 @@ function Page(props: CoursePageProps) {
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
-            <SubmittedStatus solution={submittedSolution} />
-
+            <SubmittedStatus
+              taskExists={taskExists}
+              solution={submittedSolution}
+              deadlinePassed={submitDeadlinePassed}
+            />
             {submitAllowed && (
               <Form.Item
                 name="url"
@@ -200,11 +204,6 @@ function Page(props: CoursePageProps) {
                   </Col>
                 )}
               </Row>
-            )}
-            {submitDeadlinePassed && (
-              <Typography.Text strong type="danger">
-                Submission deadline has already passed
-              </Typography.Text>
             )}
           </Form>
         </Col>
