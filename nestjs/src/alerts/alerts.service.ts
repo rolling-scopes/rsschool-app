@@ -19,12 +19,13 @@ export class AlertsService {
 
   public async create(createAlertDto: CreateAlertDto) {
     const { text, type, courseId, enabled = false } = createAlertDto;
-    await this.alertsRepository.insert({
+    const { id } = await this.alertsRepository.save({
       text,
       type: type as AlertType,
       courseId,
       enabled,
     });
+    return this.alertsRepository.findOne(id);
   }
 
   public async findAll({ enabled }: { enabled: boolean }): Promise<Alert[]> {
@@ -37,7 +38,7 @@ export class AlertsService {
 
   public async update(id: number, updateAlertDto: UpdateAlertDto) {
     const { text, type, courseId, enabled } = updateAlertDto;
-    return this.alertsRepository.update(
+    await this.alertsRepository.update(
       id,
       clean({
         text,
@@ -46,6 +47,7 @@ export class AlertsService {
         enabled,
       }),
     );
+    return this.alertsRepository.findOne(id);
   }
 
   public async remove(id: number) {

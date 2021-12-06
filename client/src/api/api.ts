@@ -24,6 +24,86 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface AlertDto
+ */
+export interface AlertDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof AlertDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlertDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlertDto
+     */
+    'text': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AlertDto
+     */
+    'enabled': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AlertDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlertDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlertDto
+     */
+    'createdDate': string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateAlertDto
+ */
+export interface CreateAlertDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateAlertDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateAlertDto
+     */
+    'text': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateAlertDto
+     */
+    'enabled'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateAlertDto
+     */
+    'courseId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface CreateDisciplineDto
  */
 export interface CreateDisciplineDto {
@@ -290,13 +370,13 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
-         * @param {object} body 
+         * @param {CreateAlertDto} createAlertDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('alertsControllerCreate', 'body', body)
+        createAlert: async (createAlertDto: CreateAlertDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createAlertDto' is not null or undefined
+            assertParamExists('createAlert', 'createAlertDto', createAlertDto)
             const localVarPath = `/api/v2/alerts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -316,7 +396,40 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createAlertDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAlert: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteAlert', 'id', id)
+            const localVarPath = `/api/v2/alerts/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -329,9 +442,9 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerGetAll: async (enabled: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAlerts: async (enabled: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'enabled' is not null or undefined
-            assertParamExists('alertsControllerGetAll', 'enabled', enabled)
+            assertParamExists('getAlerts', 'enabled', enabled)
             const localVarPath = `/api/v2/alerts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -362,48 +475,15 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        alertsControllerRemove: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('alertsControllerRemove', 'id', id)
-            const localVarPath = `/api/v2/alerts/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id 
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerUpdate: async (id: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateAlert: async (id: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('alertsControllerUpdate', 'id', id)
+            assertParamExists('updateAlert', 'id', id)
             // verify required parameter 'body' is not null or undefined
-            assertParamExists('alertsControllerUpdate', 'body', body)
+            assertParamExists('updateAlert', 'body', body)
             const localVarPath = `/api/v2/alerts/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -443,12 +523,22 @@ export const AlertsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {object} body 
+         * @param {CreateAlertDto} createAlertDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async alertsControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.alertsControllerCreate(body, options);
+        async createAlert(createAlertDto: CreateAlertDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AlertDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createAlert(createAlertDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteAlert(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAlert(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -457,18 +547,8 @@ export const AlertsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async alertsControllerGetAll(enabled: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.alertsControllerGetAll(enabled, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async alertsControllerRemove(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.alertsControllerRemove(id, options);
+        async getAlerts(enabled: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AlertDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAlerts(enabled, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -478,8 +558,8 @@ export const AlertsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async alertsControllerUpdate(id: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.alertsControllerUpdate(id, body, options);
+        async updateAlert(id: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AlertDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateAlert(id, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -494,12 +574,21 @@ export const AlertsApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
-         * @param {object} body 
+         * @param {CreateAlertDto} createAlertDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerCreate(body: object, options?: any): AxiosPromise<void> {
-            return localVarFp.alertsControllerCreate(body, options).then((request) => request(axios, basePath));
+        createAlert(createAlertDto: CreateAlertDto, options?: any): AxiosPromise<AlertDto> {
+            return localVarFp.createAlert(createAlertDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAlert(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteAlert(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -507,17 +596,8 @@ export const AlertsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerGetAll(enabled: boolean, options?: any): AxiosPromise<void> {
-            return localVarFp.alertsControllerGetAll(enabled, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        alertsControllerRemove(id: number, options?: any): AxiosPromise<void> {
-            return localVarFp.alertsControllerRemove(id, options).then((request) => request(axios, basePath));
+        getAlerts(enabled: boolean, options?: any): AxiosPromise<Array<AlertDto>> {
+            return localVarFp.getAlerts(enabled, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -526,8 +606,8 @@ export const AlertsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        alertsControllerUpdate(id: number, body: object, options?: any): AxiosPromise<void> {
-            return localVarFp.alertsControllerUpdate(id, body, options).then((request) => request(axios, basePath));
+        updateAlert(id: number, body: object, options?: any): AxiosPromise<AlertDto> {
+            return localVarFp.updateAlert(id, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -541,13 +621,24 @@ export const AlertsApiFactory = function (configuration?: Configuration, basePat
 export class AlertsApi extends BaseAPI {
     /**
      * 
-     * @param {object} body 
+     * @param {CreateAlertDto} createAlertDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AlertsApi
      */
-    public alertsControllerCreate(body: object, options?: AxiosRequestConfig) {
-        return AlertsApiFp(this.configuration).alertsControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    public createAlert(createAlertDto: CreateAlertDto, options?: AxiosRequestConfig) {
+        return AlertsApiFp(this.configuration).createAlert(createAlertDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AlertsApi
+     */
+    public deleteAlert(id: number, options?: AxiosRequestConfig) {
+        return AlertsApiFp(this.configuration).deleteAlert(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -557,19 +648,8 @@ export class AlertsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AlertsApi
      */
-    public alertsControllerGetAll(enabled: boolean, options?: AxiosRequestConfig) {
-        return AlertsApiFp(this.configuration).alertsControllerGetAll(enabled, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AlertsApi
-     */
-    public alertsControllerRemove(id: number, options?: AxiosRequestConfig) {
-        return AlertsApiFp(this.configuration).alertsControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    public getAlerts(enabled: boolean, options?: AxiosRequestConfig) {
+        return AlertsApiFp(this.configuration).getAlerts(enabled, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -580,8 +660,8 @@ export class AlertsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AlertsApi
      */
-    public alertsControllerUpdate(id: number, body: object, options?: AxiosRequestConfig) {
-        return AlertsApiFp(this.configuration).alertsControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
+    public updateAlert(id: number, body: object, options?: AxiosRequestConfig) {
+        return AlertsApiFp(this.configuration).updateAlert(id, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
