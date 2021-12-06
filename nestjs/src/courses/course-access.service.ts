@@ -13,7 +13,7 @@ export enum Operation {
 export class CourseAccessService {
   constructor(private studentsService: StudentsService) {}
 
-  public async canAccessStudentFeedback(user: AuthUser, studentId: number, mentorId?: number): Promise<boolean> {
+  public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
     const student = await this.studentsService.getById(studentId);
     if (student == null) {
       return false;
@@ -26,10 +26,6 @@ export class CourseAccessService {
     const { courseId } = student;
     const courseInfo = user.courses?.[courseId];
     const currentMentorId = user.courses?.[courseId]?.mentorId;
-
-    if (mentorId != null && mentorId !== currentMentorId) {
-      return false;
-    }
 
     if (courseInfo?.roles.includes(CourseRole.Manager)) {
       return true;

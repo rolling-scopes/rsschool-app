@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
+import { ProfileService } from 'api/services/ProfileService';
 import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
@@ -16,8 +17,8 @@ type SearchResponse = { data: UserBasic[] };
 export class UserService {
   private axios: AxiosInstance;
 
-  constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token));
+  constructor(private token?: string) {
+    this.axios = axios.create(getServerAxiosProps(this.token));
   }
 
   async getDiscordIds() {
@@ -46,8 +47,8 @@ export class UserService {
   }
 
   async getCourses() {
-    const result = await this.axios.get<{ items: Course[] }>(`/api/v2/profile/me/courses`);
-    return result.data.items.sort((a, b) => b.id - a.id);
+    const data = await ProfileService.getCourses('me');
+    return data.sort((a, b) => b.id - a.id);
   }
 
   async searchUser(query: string | null) {

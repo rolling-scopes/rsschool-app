@@ -1,1 +1,1 @@
-export * from './profile-courses.dto';
+export * from './profile-course.dto';

@@ -8,7 +8,7 @@ import { CourseUser } from '@entities/courseUser';
 import { Task } from '@entities/task';
 import { Student, Mentor, TaskChecker, StudentFeedback, StageInterview, StageInterviewFeedback } from '@entities/index';
 import { FeedbacksService, FeedbacksController } from './students/feedbacks';
-import { CourseController } from './courses.controller';
+import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
 import { CourseAccessService } from './course-access.service';
@@ -29,16 +29,16 @@ import { MentorsService, MentorsController } from './mentors';
       StudentFeedback,
     ]),
   ],
-  controllers: [FeedbacksController, CourseController, StudentsController, MentorsController],
+  controllers: [FeedbacksController, CoursesController, StudentsController, MentorsController],
   providers: [
+    CourseAccessService,
     CourseTasksService,
     CourseUsersService,
     FeedbacksService,
     CoursesService,
     StudentsService,
-    CourseAccessService,
     MentorsService,
   ],
-  exports: [CourseTasksService, CourseUsersService],
+  exports: [CourseAccessService, CourseTasksService, CourseUsersService],
 })
 export class CoursesModule {}

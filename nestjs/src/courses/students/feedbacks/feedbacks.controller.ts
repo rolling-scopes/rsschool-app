@@ -11,7 +11,7 @@ import {
   NotFoundException,
   Patch,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from 'src/auth';
 import { CourseAccessService } from '../../course-access.service';
 import { CreateStudentFeedbackDto, StudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
@@ -24,12 +24,14 @@ export class FeedbacksController {
 
   @Post('/')
   @UseGuards(DefaultGuard)
+  @ApiOperation({ operationId: 'createStudentFeedback' })
+  @ApiCreatedResponse({ type: StudentFeedbackDto })
   public async createStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
     @Body() body: CreateStudentFeedbackDto,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudentFeedback(req.user, studentId);
+    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
@@ -45,7 +47,7 @@ export class FeedbacksController {
     @Body() body: UpdateStudentFeedbackDto,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudentFeedback(req.user, studentId);
+    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
@@ -61,7 +63,7 @@ export class FeedbacksController {
     @Param('id', ParseIntPipe) id: number,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudentFeedback(req.user, studentId);
+    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }

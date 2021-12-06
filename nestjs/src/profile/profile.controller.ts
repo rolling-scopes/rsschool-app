@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { CurrentRequest } from '../auth/auth.service';
 import { ProfileCourseDto } from './dto';
@@ -13,13 +13,12 @@ export class ProfileController {
 
   @Get(':username/courses')
   @UseGuards(DefaultGuard)
-  async getCourses(
-    @Req() req: CurrentRequest,
-    @Param('username') username: string,
-  ): Promise<{ items: ProfileCourseDto[] }> {
+  @ApiSecurity('cookieAuth')
+  @ApiOperation({ operationId: 'getCourses' })
+  @ApiOkResponse({ type: [ProfileCourseDto] })
+  async getCourses(@Req() req: CurrentRequest, @Param('username') username: string): Promise<ProfileCourseDto[]> {
     const user = username === 'me' ? req.user?.githubId : username;
-    const items = await this.profileService.getCourses(user);
-
-    return { items };
+    const data = await this.profileService.getCourses(user);
+    return data;
   }
 }

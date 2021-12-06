@@ -1,12 +1,12 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role } from '../auth';
 import { DefaultGuard, RequiredAppRoles, RoleGuard } from '../auth';
 import { CoursesService } from './courses.service';
 
 @Controller('courses')
 @ApiTags('courses')
-export class CourseController {
+export class CoursesController {
   constructor(private courseService: CoursesService) {}
 
   @Get('/')
@@ -19,7 +19,8 @@ export class CourseController {
 
   @Get('/:aliasOrId')
   @UseGuards(DefaultGuard)
-  public async getCourse(@Param('aliasOrId') aliasOrId: number | string) {
+  @ApiOperation({ operationId: 'getCourse' })
+  public async getCourse(@Param('aliasOrId') aliasOrId: string) {
     const id = Number(aliasOrId);
     if (!Number.isNaN(id)) {
       return this.courseService.getById(id);

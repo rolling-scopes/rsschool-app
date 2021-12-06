@@ -19,4 +19,4 @@ const config: ConnectionOptions = {
   logging: ['migration', 'error', 'warn'],
 };
 
-export = config;
+export default config;

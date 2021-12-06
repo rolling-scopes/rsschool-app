@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from './config';
 import { LoggingMiddleware } from './core/middlewares';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
-import * as config from './ormconfig';
+import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 
