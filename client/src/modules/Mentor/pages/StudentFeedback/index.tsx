@@ -1,12 +1,11 @@
 import { Alert, Button, Col, Form, Input, message, Radio, Rate, Row, Typography } from 'antd';
+import { MentorsApi, MentorStudentDto, StudentsFeedbacksApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CoursePageProps, StudentBasic } from 'services/models';
-import { StudentsService } from 'services/students';
+import { CoursePageProps } from 'services/models';
 import { softSkills } from '../../data/softSkills';
 
 export function StudentFeedback({ session, course }: CoursePageProps) {
@@ -16,12 +15,12 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [noData, setNoData] = useState(false);
-  const [students, setStudents] = useState<StudentBasic[]>([]);
-  const service = useMemo(() => new StudentsService(), []);
-  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const [students, setStudents] = useState<MentorStudentDto[]>([]);
+  const service = useMemo(() => new StudentsFeedbacksApi(undefined, ''), []);
+  const mentorsService = useMemo(() => new MentorsApi(undefined, ''), []);
 
   useAsync(async () => {
-    const students = await courseService.getMentorStudents(mentorId);
+    const { data: students } = await mentorsService.getMentorStudents(mentorId);
     if (students.length === 0) {
       setNoData(true);
       return;
@@ -34,7 +33,7 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
   const handleSubmit = async (values: any) => {
     try {
       const { studentId, ...rest } = values;
-      await service.createFeedback(studentId, rest);
+      await service.createStudentFeedback(studentId, rest);
     } catch (e) {
       message.error('Error occurred while creating feedback. Please try later.');
     }

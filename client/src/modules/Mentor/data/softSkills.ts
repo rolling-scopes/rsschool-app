@@ -4,7 +4,7 @@ export const softSkills: { id: string; name: string }[] = [
     name: 'Responsible',
   },
   {
-    id: 'skills.soft.team-player',
+    id: 'skill.soft.team-player',
     name: 'Good team player',
   },
   {

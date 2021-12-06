@@ -312,13 +312,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async getMentorStudents(mentorId: number) {
-    const result = await this.axios.get<StudentBasic[]>(`/mentors/${mentorId}/students`, {
-      baseURL: `/api/v2`,
-    });
-    return result.data;
-  }
-
   async getInterviewStudents(courseTaskId: number) {
     const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
     return result.data.data;

@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { exit } from 'process';
 
 const generate = async () => {
-  const config = new DocumentBuilder().build();
+  const config = new DocumentBuilder().addServer('https://app.rs.school').build();
   const app = await NestFactory.create(AppModule, { logger: null });
   app.setGlobalPrefix('api/v2');
   const document = SwaggerModule.createDocument(app, config);

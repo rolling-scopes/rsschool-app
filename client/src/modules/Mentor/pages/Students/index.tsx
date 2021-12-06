@@ -1,27 +1,26 @@
-import { MessageOutlined } from '@ant-design/icons';
+import { MessageOutlined, MessageTwoTone } from '@ant-design/icons';
 import { Button, List } from 'antd';
-import { StudentBasic } from 'common/models';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { MentorsApi, MentorStudentDto } from 'api';
 
 export function Students(props: CoursePageProps) {
   const { githubId } = props.session;
-  const { id: courseId, alias } = props.course;
+  const { id: courseId, alias, completed } = props.course;
   const mentorId = Number(props.session.courses[courseId].mentorId);
   const [loading, withLoading] = useLoading(false);
-  const [students, setStudents] = useState<StudentBasic[]>([]);
+  const [students, setStudents] = useState<MentorStudentDto[]>([]);
 
-  const service = useMemo(() => new CourseService(courseId), [courseId]);
+  const service = useMemo(() => new MentorsApi(undefined, ''), []);
   useAsync(
     withLoading(async () => {
-      const data = await service.getMentorStudents(mentorId);
-      setStudents(data);
+      const r = await service.getMentorStudents(mentorId);
+      setStudents(r.data);
     }),
     [],
   );
@@ -41,8 +40,8 @@ export function Students(props: CoursePageProps) {
               }
               actions={[
                 <Link href={`/course/mentor/feedback?course=${alias}&studentId=${student.id}`}>
-                  <Button type="text" icon={<MessageOutlined />}>
-                    Feedback
+                  <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
+                    {student.hasFeedback ? `Edit Feedback` : `Give Feedback`}
                   </Button>
                 </Link>,
               ]}
