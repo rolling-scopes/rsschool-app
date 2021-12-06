@@ -11,34 +11,37 @@ import { CreateDisciplineDto, DisciplineDto, UpdateDisciplineDto } from './dto';
 export class DisciplinesController {
   constructor(private readonly service: DisciplinesService) {}
 
-  @Post()
+  @Post('/')
   @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'createDiscipline' })
   @ApiOkResponse({ type: DisciplineDto })
-  public create(@Body() dto: CreateDisciplineDto): Promise<Discipline> {
-    return this.service.create(dto);
+  public async create(@Body() dto: CreateDisciplineDto) {
+    const data = await this.service.create(dto);
+    return new DisciplineDto(data);
   }
 
-  @Get()
+  @Get('/')
   @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'getDisciplines' })
   @ApiOkResponse({ type: [DisciplineDto] })
-  public async getAll(): Promise<Discipline[]> {
-    return await this.service.getAll();
+  public async getAll() {
+    const items = await this.service.getAll();
+    return items.map(item => new DisciplineDto(item));
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'deleteDiscipline' })
-  public delete(@Param('id', ParseIntPipe) id: number) {
+  public async delete(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'updateDiscipline' })
   @ApiOkResponse({ type: DisciplineDto })
-  public update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDisciplineDto): Promise<Discipline> {
-    return this.service.update(id, dto);
+  public async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDisciplineDto) {
+    const data = await this.service.update(id, dto);
+    return new DisciplineDto(data);
   }
 }

@@ -250,6 +250,37 @@ export interface CreateDisciplineDto {
 /**
  * 
  * @export
+ * @interface DisciplineDto
+ */
+export interface DisciplineDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DisciplineDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DisciplineDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DisciplineDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DisciplineDto
+     */
+    'updatedDate': string;
+}
+/**
+ * 
+ * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -1118,9 +1149,9 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerCreate: async (createDisciplineDto: CreateDisciplineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createDiscipline: async (createDisciplineDto: CreateDisciplineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createDisciplineDto' is not null or undefined
-            assertParamExists('disciplinesControllerCreate', 'createDisciplineDto', createDisciplineDto)
+            assertParamExists('createDiscipline', 'createDisciplineDto', createDisciplineDto)
             const localVarPath = `/api/v2/disciplines`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1153,9 +1184,9 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerDelete: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteDiscipline: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('disciplinesControllerDelete', 'id', id)
+            assertParamExists('deleteDiscipline', 'id', id)
             const localVarPath = `/api/v2/disciplines/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1185,7 +1216,7 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerGetAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getDisciplines: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v2/disciplines`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1216,11 +1247,11 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerUpdate: async (id: number, updateDisciplineDto: UpdateDisciplineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateDiscipline: async (id: number, updateDisciplineDto: UpdateDisciplineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('disciplinesControllerUpdate', 'id', id)
+            assertParamExists('updateDiscipline', 'id', id)
             // verify required parameter 'updateDisciplineDto' is not null or undefined
-            assertParamExists('disciplinesControllerUpdate', 'updateDisciplineDto', updateDisciplineDto)
+            assertParamExists('updateDiscipline', 'updateDisciplineDto', updateDisciplineDto)
             const localVarPath = `/api/v2/disciplines/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1264,8 +1295,8 @@ export const DisciplinesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async disciplinesControllerCreate(createDisciplineDto: CreateDisciplineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.disciplinesControllerCreate(createDisciplineDto, options);
+        async createDiscipline(createDisciplineDto: CreateDisciplineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DisciplineDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDiscipline(createDisciplineDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1274,8 +1305,8 @@ export const DisciplinesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async disciplinesControllerDelete(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.disciplinesControllerDelete(id, options);
+        async deleteDiscipline(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDiscipline(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1283,8 +1314,8 @@ export const DisciplinesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async disciplinesControllerGetAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.disciplinesControllerGetAll(options);
+        async getDisciplines(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DisciplineDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDisciplines(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1294,8 +1325,8 @@ export const DisciplinesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async disciplinesControllerUpdate(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.disciplinesControllerUpdate(id, updateDisciplineDto, options);
+        async updateDiscipline(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DisciplineDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDiscipline(id, updateDisciplineDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1314,8 +1345,8 @@ export const DisciplinesApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerCreate(createDisciplineDto: CreateDisciplineDto, options?: any): AxiosPromise<void> {
-            return localVarFp.disciplinesControllerCreate(createDisciplineDto, options).then((request) => request(axios, basePath));
+        createDiscipline(createDisciplineDto: CreateDisciplineDto, options?: any): AxiosPromise<DisciplineDto> {
+            return localVarFp.createDiscipline(createDisciplineDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1323,16 +1354,16 @@ export const DisciplinesApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerDelete(id: number, options?: any): AxiosPromise<void> {
-            return localVarFp.disciplinesControllerDelete(id, options).then((request) => request(axios, basePath));
+        deleteDiscipline(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteDiscipline(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerGetAll(options?: any): AxiosPromise<void> {
-            return localVarFp.disciplinesControllerGetAll(options).then((request) => request(axios, basePath));
+        getDisciplines(options?: any): AxiosPromise<Array<DisciplineDto>> {
+            return localVarFp.getDisciplines(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1341,8 +1372,8 @@ export const DisciplinesApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        disciplinesControllerUpdate(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: any): AxiosPromise<void> {
-            return localVarFp.disciplinesControllerUpdate(id, updateDisciplineDto, options).then((request) => request(axios, basePath));
+        updateDiscipline(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: any): AxiosPromise<DisciplineDto> {
+            return localVarFp.updateDiscipline(id, updateDisciplineDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1361,8 +1392,8 @@ export class DisciplinesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DisciplinesApi
      */
-    public disciplinesControllerCreate(createDisciplineDto: CreateDisciplineDto, options?: AxiosRequestConfig) {
-        return DisciplinesApiFp(this.configuration).disciplinesControllerCreate(createDisciplineDto, options).then((request) => request(this.axios, this.basePath));
+    public createDiscipline(createDisciplineDto: CreateDisciplineDto, options?: AxiosRequestConfig) {
+        return DisciplinesApiFp(this.configuration).createDiscipline(createDisciplineDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1372,8 +1403,8 @@ export class DisciplinesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DisciplinesApi
      */
-    public disciplinesControllerDelete(id: number, options?: AxiosRequestConfig) {
-        return DisciplinesApiFp(this.configuration).disciplinesControllerDelete(id, options).then((request) => request(this.axios, this.basePath));
+    public deleteDiscipline(id: number, options?: AxiosRequestConfig) {
+        return DisciplinesApiFp(this.configuration).deleteDiscipline(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1382,8 +1413,8 @@ export class DisciplinesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DisciplinesApi
      */
-    public disciplinesControllerGetAll(options?: AxiosRequestConfig) {
-        return DisciplinesApiFp(this.configuration).disciplinesControllerGetAll(options).then((request) => request(this.axios, this.basePath));
+    public getDisciplines(options?: AxiosRequestConfig) {
+        return DisciplinesApiFp(this.configuration).getDisciplines(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1394,8 +1425,8 @@ export class DisciplinesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DisciplinesApi
      */
-    public disciplinesControllerUpdate(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: AxiosRequestConfig) {
-        return DisciplinesApiFp(this.configuration).disciplinesControllerUpdate(id, updateDisciplineDto, options).then((request) => request(this.axios, this.basePath));
+    public updateDiscipline(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: AxiosRequestConfig) {
+        return DisciplinesApiFp(this.configuration).updateDiscipline(id, updateDisciplineDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

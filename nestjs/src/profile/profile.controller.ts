@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiOkResponse, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { CurrentRequest } from '../auth/auth.service';
 import { ProfileCourseDto } from './dto';
@@ -13,7 +12,6 @@ export class ProfileController {
 
   @Get(':username/courses')
   @UseGuards(DefaultGuard)
-  @ApiSecurity('cookieAuth')
   @ApiOperation({ operationId: 'getUserCourses' })
   @ApiOkResponse({ type: [ProfileCourseDto] })
   async getCourses(@Req() req: CurrentRequest, @Param('username') username: string): Promise<ProfileCourseDto[]> {
