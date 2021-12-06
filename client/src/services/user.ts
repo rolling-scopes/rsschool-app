@@ -1,9 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
-import { ProfileService } from 'api/services/ProfileService';
-import { Course } from './models';
+import { Configuration, ProfileApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -16,9 +15,13 @@ type SearchResponse = { data: UserBasic[] };
 
 export class UserService {
   private axios: AxiosInstance;
+  private profileApi: ProfileApi;
+  private opts: AxiosRequestConfig;
 
   constructor(private token?: string) {
-    this.axios = axios.create(getServerAxiosProps(this.token));
+    this.opts = getServerAxiosProps(this.token);
+    this.axios = axios.create(this.opts);
+    this.profileApi = new ProfileApi(new Configuration({ basePath: this.opts.baseURL, baseOptions: this.opts }));
   }
 
   async getDiscordIds() {
@@ -47,7 +50,7 @@ export class UserService {
   }
 
   async getCourses() {
-    const data = await ProfileService.getCourses('me');
+    const { data } = await this.profileApi.getCourses('me');
     return data.sort((a, b) => b.id - a.id);
   }
 
