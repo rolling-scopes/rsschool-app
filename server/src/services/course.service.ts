@@ -476,8 +476,8 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 export function isPowerUser(courseId: number, session: IUserSession) {
   return (
     session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
   );
 }
 

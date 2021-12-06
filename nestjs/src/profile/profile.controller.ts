@@ -14,7 +14,7 @@ export class ProfileController {
   @Get(':username/courses')
   @UseGuards(DefaultGuard)
   @ApiSecurity('cookieAuth')
-  @ApiOperation({ operationId: 'getCourses' })
+  @ApiOperation({ operationId: 'getUserCourses' })
   @ApiOkResponse({ type: [ProfileCourseDto] })
   async getCourses(@Req() req: CurrentRequest, @Param('username') username: string): Promise<ProfileCourseDto[]> {
     const user = username === 'me' ? req.user?.githubId : username;

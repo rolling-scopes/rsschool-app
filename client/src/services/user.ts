@@ -50,7 +50,7 @@ export class UserService {
   }
 
   async getCourses() {
-    const { data } = await this.profileApi.getCourses('me');
+    const { data } = await this.profileApi.getUserCourses('me');
     return data.sort((a, b) => b.id - a.id);
   }
 

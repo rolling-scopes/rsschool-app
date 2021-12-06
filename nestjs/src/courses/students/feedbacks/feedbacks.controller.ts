@@ -1,29 +1,28 @@
 import {
-  ForbiddenException,
   Body,
-  Get,
   Controller,
+  ForbiddenException,
+  Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Req,
   UseGuards,
-  NotFoundException,
-  Patch,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard } from 'src/auth';
-import { CourseAccessService } from '../../course-access.service';
+import { StudentsService } from '../students.service';
 import { CreateStudentFeedbackDto, StudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
 import { FeedbacksService } from './feedbacks.service';
 
 @Controller('students/:studentId/feedbacks')
 @ApiTags('students feedbacks')
+@UseGuards(DefaultGuard)
 export class FeedbacksController {
-  constructor(private courseAccessService: CourseAccessService, private feedbackService: FeedbacksService) {}
+  constructor(private stundentsService: StudentsService, private feedbackService: FeedbacksService) {}
 
   @Post('/')
-  @UseGuards(DefaultGuard)
   @ApiOperation({ operationId: 'createStudentFeedback' })
   @ApiCreatedResponse({ type: StudentFeedbackDto })
   public async createStudentFeedback(
@@ -31,7 +30,7 @@ export class FeedbacksController {
     @Body() body: CreateStudentFeedbackDto,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
+    const hasAccess = await this.stundentsService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
@@ -40,14 +39,15 @@ export class FeedbacksController {
   }
 
   @Patch('/:id')
-  @UseGuards(DefaultGuard)
+  @ApiOperation({ operationId: 'updateStudentFeedback' })
+  @ApiOkResponse({ type: StudentFeedbackDto })
   public async updateStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateStudentFeedbackDto,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
+    const hasAccess = await this.stundentsService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }
@@ -56,14 +56,14 @@ export class FeedbacksController {
   }
 
   @Get('/:id')
-  @UseGuards(DefaultGuard)
-  @ApiResponse({ status: 200, type: StudentFeedbackDto })
+  @ApiOperation({ operationId: 'getStudentFeedback' })
+  @ApiOkResponse({ type: StudentFeedbackDto })
   public async getStudentFeedback(
     @Param('studentId', ParseIntPipe) studentId: number,
     @Param('id', ParseIntPipe) id: number,
     @Req() req: CurrentRequest,
   ) {
-    const hasAccess = await this.courseAccessService.canAccessStudent(req.user, studentId);
+    const hasAccess = await this.stundentsService.canAccessStudent(req.user, studentId);
     if (!hasAccess) {
       throw new ForbiddenException();
     }

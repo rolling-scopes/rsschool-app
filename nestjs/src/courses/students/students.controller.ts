@@ -6,11 +6,11 @@ import { StudentsService } from './students.service';
 
 @Controller('students')
 @ApiTags('students')
+@UseGuards(DefaultGuard)
 export class StudentsController {
   constructor(private studentsService: StudentsService) {}
 
   @Get(':studentId')
-  @UseGuards(DefaultGuard)
   @ApiOkResponse({ type: StudentDto })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()

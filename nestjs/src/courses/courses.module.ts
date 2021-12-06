@@ -11,7 +11,6 @@ import { FeedbacksService, FeedbacksController } from './students/feedbacks';
 import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
-import { CourseAccessService } from './course-access.service';
 import { MentorsService, MentorsController } from './mentors';
 
 @Module({
@@ -31,7 +30,6 @@ import { MentorsService, MentorsController } from './mentors';
   ],
   controllers: [FeedbacksController, CoursesController, StudentsController, MentorsController],
   providers: [
-    CourseAccessService,
     CourseTasksService,
     CourseUsersService,
     FeedbacksService,
@@ -39,6 +37,6 @@ import { MentorsService, MentorsController } from './mentors';
     StudentsService,
     MentorsService,
   ],
-  exports: [CourseAccessService, CourseTasksService, CourseUsersService],
+  exports: [CourseTasksService, CourseUsersService],
 })
 export class CoursesModule {}

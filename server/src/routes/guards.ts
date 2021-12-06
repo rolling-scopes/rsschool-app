@@ -20,16 +20,16 @@ export const userGuards = (user: IUserSession) => {
     isAdmin: () => user.isAdmin,
     isHirer: () => user.isHirer,
     hasRole: (courseId: number) => !!user.roles[courseId] || (user.coursesRoles?.[courseId] ?? false),
-    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.manager)),
+    isAnyManager: () => courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.Manager)),
     isAnySupervisor: () =>
-      courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)),
-    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.manager) ?? false,
+      courses.some((courseId: string) => user.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)),
+    isManager: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ?? false,
     isMentor: (courseId: number) => user.roles[courseId] === 'mentor',
     isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
-    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner) ?? false,
+    isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner) ?? false,
     isLoggedIn: (ctx: RouterContext) => user != null && (ctx.isAuthenticated?.() || config.isDevMode),
-    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.supervisor) ?? false,
+    isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor) ?? false,
   };
   return {
     ...guards,
