@@ -1,0 +1,19 @@
+version: '3'
+services:
+  rs-bumblebee:
+    image: node:lts-gallium
+    command: 'bash -c "cd /mnt/rs-bumblebee && npm install && npm start"'
+    environment:
+      RS_BUMBLEBEE_TELEGRAM_TOKEN: ${RS_BUMBLEBEE_TELEGRAM_TOKEN}
+      RS_BUMBLEBEE_TELEGRAM_ADMIN_CHANNEL_ID: ${RS_BUMBLEBEE_TELEGRAM_ADMIN_CHANNEL_ID}
+      RS_BUMBLEBEE_TELEGRAM_CHANNEL_ID: ${RS_BUMBLEBEE_TELEGRAM_CHANNEL_ID}
+      RS_BUMBLEBEE_DISCORD_TOKEN: ${RS_BUMBLEBEE_DISCORD_TOKEN}
+      RS_BUMBLEBEE_DISCORD_CHANNEL_NAMES: ${RS_BUMBLEBEE_DISCORD_CHANNEL_NAMES}
+      RS_BUMBLEBEE_LIMIT_INITIAL_MESSAGES_COUNT: ${RS_BUMBLEBEE_LIMIT_INITIAL_MESSAGES_COUNT}
+      RS_BUMBLEBEE_PAUSE_BETWEEN_TELEGRAM_SENDS: ${RS_BUMBLEBEE_PAUSE_BETWEEN_TELEGRAM_SENDS}
+    volumes:
+      - type: bind
+        source: ./
+        target: /mnt/rs-bumblebee
+    ports:
+      - "7000:7000"
