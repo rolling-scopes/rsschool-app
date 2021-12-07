@@ -19,8 +19,8 @@ export function Students(props: CoursePageProps) {
   const service = useMemo(() => new MentorsApi(undefined, ''), []);
   useAsync(
     withLoading(async () => {
-      const r = await service.getMentorStudents(mentorId);
-      setStudents(r.data);
+      const { data } = await service.getMentorStudents(mentorId);
+      setStudents(data);
     }),
     [],
   );
