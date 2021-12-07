@@ -1,0 +1,30 @@
+{
+  "name": "rs-bumblebee",
+  "version": "0.1.0",
+  "description": "RS Bumblebee is a bridge bot for transfer messages from Discord to Telegram created especially for the Rolling Scopes School",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "forever src/index.js",
+    "lint": "eslint ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikhama/rs-bumblebee.git"
+  },
+  "author": "Dzmitry Tsebruk <mikhama@tut.by>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.0.0",
+    "forever": "^4.0.1",
+    "moment-timezone": "^0.5.26",
+    "node-telegram-bot-api": "^0.30.0",
+    "punycode": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
