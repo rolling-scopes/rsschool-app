@@ -250,6 +250,54 @@ export interface CreateDisciplineDto {
 /**
  * 
  * @export
+ * @interface CreateStudentFeedbackDto
+ */
+export interface CreateStudentFeedbackDto {
+    /**
+     * 
+     * @type {StudentFeedbackContentDto}
+     * @memberof CreateStudentFeedbackDto
+     */
+    'content': StudentFeedbackContentDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStudentFeedbackDto
+     */
+    'recommendation': CreateStudentFeedbackDtoRecommendationEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStudentFeedbackDto
+     */
+    'englishLevel': CreateStudentFeedbackDtoEnglishLevelEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateStudentFeedbackDtoRecommendationEnum {
+    Hire = 'hire',
+    NotHire = 'not-hire'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateStudentFeedbackDtoEnglishLevelEnum {
+    Unknown = 'unknown',
+    A1 = 'a1',
+    A2 = 'a2',
+    B1 = 'b1',
+    B2 = 'b2',
+    C1 = 'c1',
+    C2 = 'c2'
+}
+
+/**
+ * 
+ * @export
  * @interface DisciplineDto
  */
 export interface DisciplineDto {
@@ -328,10 +376,10 @@ export interface MentorStudentDto {
     'rank': number;
     /**
      * 
-     * @type {boolean}
+     * @type {Array<StudentFeedback>}
      * @memberof MentorStudentDto
      */
-    'hasFeedback': boolean;
+    'feedbacks': Array<StudentFeedback>;
 }
 /**
  * 
@@ -377,6 +425,48 @@ export interface ProfileCourseDto {
      */
     'alias': string;
 }
+/**
+ * 
+ * @export
+ * @interface SoftSkillEntry
+ */
+export interface SoftSkillEntry {
+    /**
+     * 
+     * @type {string}
+     * @memberof SoftSkillEntry
+     */
+    'id': SoftSkillEntryIdEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SoftSkillEntry
+     */
+    'value': SoftSkillEntryValueEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SoftSkillEntryIdEnum {
+    Responsible = 'skill.soft.responsible',
+    TeamPlayer = 'skill.soft.team-player',
+    Communicable = 'skill.soft.communicable'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SoftSkillEntryValueEnum {
+    None = 'None',
+    Poor = 'Poor',
+    Fair = 'Fair',
+    Good = 'Good',
+    Great = 'Great',
+    Excellent = 'Excellent'
+}
+
 /**
  * 
  * @export
@@ -429,6 +519,19 @@ export interface StudentDto {
 /**
  * 
  * @export
+ * @interface StudentFeedback
+ */
+export interface StudentFeedback {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentFeedback
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
  * @interface StudentFeedbackContentDto
  */
 export interface StudentFeedbackContentDto {
@@ -452,10 +555,10 @@ export interface StudentFeedbackContentDto {
     'recommendationComment': string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SoftSkillEntry>}
      * @memberof StudentFeedbackContentDto
      */
-    'softSkills': Array<string>;
+    'softSkills': Array<SoftSkillEntry>;
 }
 /**
  * 
@@ -492,7 +595,7 @@ export interface StudentFeedbackDto {
      * @type {string}
      * @memberof StudentFeedbackDto
      */
-    'recommendation': string;
+    'recommendation': StudentFeedbackDtoRecommendationEnum;
     /**
      * 
      * @type {PersonDto}
@@ -510,8 +613,31 @@ export interface StudentFeedbackDto {
      * @type {string}
      * @memberof StudentFeedbackDto
      */
-    'englishLevel': string;
+    'englishLevel': StudentFeedbackDtoEnglishLevelEnum;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum StudentFeedbackDtoRecommendationEnum {
+    Hire = 'hire',
+    NotHire = 'not-hire'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum StudentFeedbackDtoEnglishLevelEnum {
+    Unknown = 'unknown',
+    A1 = 'a1',
+    A2 = 'a2',
+    B1 = 'b1',
+    B2 = 'b2',
+    C1 = 'c1',
+    C2 = 'c2'
+}
+
 /**
  * 
  * @export
@@ -525,6 +651,54 @@ export interface UpdateDisciplineDto {
      */
     'name': string;
 }
+/**
+ * 
+ * @export
+ * @interface UpdateStudentFeedbackDto
+ */
+export interface UpdateStudentFeedbackDto {
+    /**
+     * 
+     * @type {StudentFeedbackContentDto}
+     * @memberof UpdateStudentFeedbackDto
+     */
+    'content': StudentFeedbackContentDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStudentFeedbackDto
+     */
+    'recommendation': UpdateStudentFeedbackDtoRecommendationEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStudentFeedbackDto
+     */
+    'englishLevel': UpdateStudentFeedbackDtoEnglishLevelEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum UpdateStudentFeedbackDtoRecommendationEnum {
+    Hire = 'hire',
+    NotHire = 'not-hire'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
+    Unknown = 'unknown',
+    A1 = 'a1',
+    A2 = 'a2',
+    B1 = 'b1',
+    B2 = 'b2',
+    C1 = 'c1',
+    C2 = 'c2'
+}
+
 
 /**
  * AlertsApi - axios parameter creator
@@ -1743,15 +1917,15 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} studentId 
-         * @param {object} body 
+         * @param {CreateStudentFeedbackDto} createStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createStudentFeedback: async (studentId: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createStudentFeedback: async (studentId: number, createStudentFeedbackDto: CreateStudentFeedbackDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'studentId' is not null or undefined
             assertParamExists('createStudentFeedback', 'studentId', studentId)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('createStudentFeedback', 'body', body)
+            // verify required parameter 'createStudentFeedbackDto' is not null or undefined
+            assertParamExists('createStudentFeedback', 'createStudentFeedbackDto', createStudentFeedbackDto)
             const localVarPath = `/api/v2/students/{studentId}/feedbacks`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1772,7 +1946,7 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createStudentFeedbackDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1820,17 +1994,17 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
          * 
          * @param {number} studentId 
          * @param {number} id 
-         * @param {object} body 
+         * @param {UpdateStudentFeedbackDto} updateStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateStudentFeedback: async (studentId: number, id: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateStudentFeedback: async (studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'studentId' is not null or undefined
             assertParamExists('updateStudentFeedback', 'studentId', studentId)
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateStudentFeedback', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateStudentFeedback', 'body', body)
+            // verify required parameter 'updateStudentFeedbackDto' is not null or undefined
+            assertParamExists('updateStudentFeedback', 'updateStudentFeedbackDto', updateStudentFeedbackDto)
             const localVarPath = `/api/v2/students/{studentId}/feedbacks/{id}`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -1852,7 +2026,7 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateStudentFeedbackDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1872,12 +2046,12 @@ export const StudentsFeedbacksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} studentId 
-         * @param {object} body 
+         * @param {CreateStudentFeedbackDto} createStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createStudentFeedback(studentId: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentFeedbackDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createStudentFeedback(studentId, body, options);
+        async createStudentFeedback(studentId: number, createStudentFeedbackDto: CreateStudentFeedbackDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createStudentFeedback(studentId, createStudentFeedbackDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1895,12 +2069,12 @@ export const StudentsFeedbacksApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} studentId 
          * @param {number} id 
-         * @param {object} body 
+         * @param {UpdateStudentFeedbackDto} updateStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateStudentFeedback(studentId: number, id: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentFeedbackDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStudentFeedback(studentId, id, body, options);
+        async updateStudentFeedback(studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StudentFeedbackDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStudentFeedback(studentId, id, updateStudentFeedbackDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1916,12 +2090,12 @@ export const StudentsFeedbacksApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} studentId 
-         * @param {object} body 
+         * @param {CreateStudentFeedbackDto} createStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createStudentFeedback(studentId: number, body: object, options?: any): AxiosPromise<StudentFeedbackDto> {
-            return localVarFp.createStudentFeedback(studentId, body, options).then((request) => request(axios, basePath));
+        createStudentFeedback(studentId: number, createStudentFeedbackDto: CreateStudentFeedbackDto, options?: any): AxiosPromise<StudentFeedbackDto> {
+            return localVarFp.createStudentFeedback(studentId, createStudentFeedbackDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1937,12 +2111,12 @@ export const StudentsFeedbacksApiFactory = function (configuration?: Configurati
          * 
          * @param {number} studentId 
          * @param {number} id 
-         * @param {object} body 
+         * @param {UpdateStudentFeedbackDto} updateStudentFeedbackDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateStudentFeedback(studentId: number, id: number, body: object, options?: any): AxiosPromise<StudentFeedbackDto> {
-            return localVarFp.updateStudentFeedback(studentId, id, body, options).then((request) => request(axios, basePath));
+        updateStudentFeedback(studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options?: any): AxiosPromise<StudentFeedbackDto> {
+            return localVarFp.updateStudentFeedback(studentId, id, updateStudentFeedbackDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1957,13 +2131,13 @@ export class StudentsFeedbacksApi extends BaseAPI {
     /**
      * 
      * @param {number} studentId 
-     * @param {object} body 
+     * @param {CreateStudentFeedbackDto} createStudentFeedbackDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StudentsFeedbacksApi
      */
-    public createStudentFeedback(studentId: number, body: object, options?: AxiosRequestConfig) {
-        return StudentsFeedbacksApiFp(this.configuration).createStudentFeedback(studentId, body, options).then((request) => request(this.axios, this.basePath));
+    public createStudentFeedback(studentId: number, createStudentFeedbackDto: CreateStudentFeedbackDto, options?: AxiosRequestConfig) {
+        return StudentsFeedbacksApiFp(this.configuration).createStudentFeedback(studentId, createStudentFeedbackDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1982,13 +2156,13 @@ export class StudentsFeedbacksApi extends BaseAPI {
      * 
      * @param {number} studentId 
      * @param {number} id 
-     * @param {object} body 
+     * @param {UpdateStudentFeedbackDto} updateStudentFeedbackDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StudentsFeedbacksApi
      */
-    public updateStudentFeedback(studentId: number, id: number, body: object, options?: AxiosRequestConfig) {
-        return StudentsFeedbacksApiFp(this.configuration).updateStudentFeedback(studentId, id, body, options).then((request) => request(this.axios, this.basePath));
+    public updateStudentFeedback(studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options?: AxiosRequestConfig) {
+        return StudentsFeedbacksApiFp(this.configuration).updateStudentFeedback(studentId, id, updateStudentFeedbackDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

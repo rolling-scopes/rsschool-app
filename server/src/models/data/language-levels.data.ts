@@ -1,4 +1,5 @@
 export enum LanguageLevel {
+  Unkwown = 'unknown',
   A1 = 'a1',
   A2 = 'a2',
   B1 = 'b1',

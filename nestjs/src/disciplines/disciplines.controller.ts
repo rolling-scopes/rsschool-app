@@ -1,13 +1,13 @@
 import { Discipline } from '@entities/discipline';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredAppRoles, Role } from '../auth';
+import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from '../auth';
 import { DisciplinesService } from './disciplines.service';
 import { CreateDisciplineDto, DisciplineDto, UpdateDisciplineDto } from './dto';
 
 @Controller('disciplines')
 @ApiTags('disciplines')
-@UseGuards(DefaultGuard)
+@UseGuards(DefaultGuard, RoleGuard)
 export class DisciplinesController {
   constructor(private readonly service: DisciplinesService) {}
 
@@ -21,7 +21,6 @@ export class DisciplinesController {
   }
 
   @Get('/')
-  @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'getDisciplines' })
   @ApiOkResponse({ type: [DisciplineDto] })
   public async getAll() {

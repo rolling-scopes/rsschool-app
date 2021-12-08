@@ -51,7 +51,7 @@ export class FeedbacksController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const feedback = await this.feedbackService.updateStudentFeedback(id, body);
+    const feedback = await this.feedbackService.update(id, body);
     return new StudentFeedbackDto(feedback);
   }
 
@@ -67,7 +67,7 @@ export class FeedbacksController {
     if (!hasAccess) {
       throw new ForbiddenException();
     }
-    const feedback = await this.feedbackService.getStudentFeedback(id);
+    const feedback = await this.feedbackService.getById(id);
     if (feedback.studentId !== studentId) {
       throw new ForbiddenException();
     }

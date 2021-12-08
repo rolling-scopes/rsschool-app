@@ -1,7 +1,6 @@
 import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNotEmptyObject } from 'class-validator';
-import { LanguageLevel } from 'src/data';
+import { LanguageLevel } from '@entities/data';
 import { PersonDto } from '../../../../core/dto';
 import { StudentFeedbackContentDto } from './create-student-feedback.dto';
 
@@ -11,7 +10,9 @@ export class StudentFeedbackDto {
     this.content = studentFeedback.content;
     this.recommendation = studentFeedback.recommendation;
     this.author = new PersonDto(studentFeedback.author);
-    this.mentor = studentFeedback.mentor ? new PersonDto(studentFeedback.mentor) : null;
+    this.mentor = studentFeedback.mentor
+      ? new PersonDto({ id: studentFeedback.mentor.id, ...studentFeedback.mentor.user })
+      : null;
     this.id = studentFeedback.id;
     this.createdDate = studentFeedback.createdDate;
     this.updatedDate = studentFeedback.updatedDate;
@@ -27,18 +28,18 @@ export class StudentFeedbackDto {
   @ApiProperty()
   updatedDate: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: StudentFeedbackContentDto })
   content: StudentFeedbackContentDto;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Recommendation })
   recommendation: Recommendation;
 
-  @ApiProperty()
+  @ApiProperty({ type: PersonDto })
   author: PersonDto;
 
-  @ApiProperty()
+  @ApiProperty({ type: PersonDto })
   mentor?: PersonDto;
 
-  @ApiProperty()
+  @ApiProperty({ enum: LanguageLevel })
   englishLevel: LanguageLevel;
 }

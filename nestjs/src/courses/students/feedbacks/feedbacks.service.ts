@@ -1,7 +1,7 @@
 import { Mentor } from '@entities/mentor';
 import { Student } from '@entities/student';
 import { StudentFeedback } from '@entities/student-feedback';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentFeedbackDto, UpdateStudentFeedbackDto } from './dto';
@@ -25,6 +25,11 @@ export class FeedbacksService {
   ): Promise<StudentFeedback> {
     const student = await this.studentsRepository.findOne(studentId);
     const mentor = await this.mentorsRepository.findOne({ userId: authorId, courseId: student.courseId });
+    const current = await this.getByStudentAndMentor(student.id, mentor.id);
+
+    if (current) {
+      throw new BadRequestException('Feedback already exists');
+    }
 
     const { id } = await this.studentFeedbacksRepository.save<Partial<StudentFeedback>>({
       studentId: student.id,
@@ -35,10 +40,10 @@ export class FeedbacksService {
       englishLevel: feedback.englishLevel,
     });
 
-    return this.getStudentFeedback(id);
+    return this.getById(id);
   }
 
-  public async updateStudentFeedback(id: number, feedback: UpdateStudentFeedbackDto): Promise<StudentFeedback> {
+  public async update(id: number, feedback: UpdateStudentFeedbackDto): Promise<StudentFeedback> {
     await this.studentFeedbacksRepository.save({
       id,
       content: feedback.content,
@@ -46,17 +51,28 @@ export class FeedbacksService {
       englishLevel: feedback.englishLevel,
     });
 
-    return this.getStudentFeedback(id);
+    return this.getById(id);
   }
 
-  public async getStudentFeedback(id: number): Promise<StudentFeedback> {
+  public async getById(id: number): Promise<StudentFeedback> {
+    return this.getStudentFeedbackQuery().where('f.id = :id', { id }).getOneOrFail();
+  }
+
+  public async getByStudentAndMentor(studentId: number, mentorId: number): Promise<StudentFeedback> {
+    return this.getStudentFeedbackQuery()
+      .where('f.studentId = :studentId', { studentId })
+      .andWhere('f.mentorId = :mentorId', { mentorId })
+      .getOne();
+  }
+
+  private getStudentFeedbackQuery() {
     return this.studentFeedbacksRepository
       .createQueryBuilder('f')
       .leftJoin('f.mentor', 'mentor')
-      .addSelect(['mentor.id'])
+      .leftJoin('mentor.user', 'user')
+      .addSelect(['mentor.id', 'mentor.userId'])
       .leftJoin('f.author', 'author')
       .addSelect(PersonDto.getQueryFields('author'))
-      .where('f.id = :id', { id })
-      .getOneOrFail();
+      .addSelect(PersonDto.getQueryFields('user'));
   }
 }

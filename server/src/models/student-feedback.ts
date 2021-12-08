@@ -65,7 +65,7 @@ export class StudentFeedback {
 
   @ManyToOne(_ => Mentor, { nullable: true })
   @JoinColumn({ name: 'mentor_id' })
-  public mentor: Pick<Mentor, 'id'>;
+  public mentor: Pick<Mentor, 'id' | 'user'>;
 
   @Column({ name: 'mentor_id', nullable: true })
   @Index()

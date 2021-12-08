@@ -29,6 +29,9 @@ export function Students(props: CoursePageProps) {
     <PageLayoutSimple title="Your students" loading={loading} githubId={githubId}>
       <List itemLayout="vertical">
         {students.concat(students).map(student => {
+          const [feedback] = student.feedbacks;
+          const id = feedback ? `/${feedback.id}` : '';
+          const url = `/course/mentor/feedback${id}?course=${alias}&studentId=${student.id}`;
           return (
             <List.Item
               key={student.githubId}
@@ -39,9 +42,9 @@ export function Students(props: CoursePageProps) {
                 </div>
               }
               actions={[
-                <Link href={`/course/mentor/feedback?course=${alias}&studentId=${student.id}`}>
+                <Link href={url}>
                   <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
-                    {student.hasFeedback ? `Edit Feedback` : `Give Feedback`}
+                    {feedback ? `Edit Feedback` : `Give Feedback`}
                   </Button>
                 </Link>,
               ]}
