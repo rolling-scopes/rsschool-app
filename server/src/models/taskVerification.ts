@@ -1,4 +1,4 @@
-import { Entity, CreateDateColumn, ManyToOne, Column, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, CreateDateColumn, ManyToOne, Column, UpdateDateColumn, PrimaryGeneratedColumn, Index } from 'typeorm';
 import { Student } from './student';
 import { CourseTask } from './courseTask';
 
@@ -10,18 +10,21 @@ export class TaskVerification {
   createdDate: number;
 
   @UpdateDateColumn()
+  @Index()
   updatedDate: number;
 
   @ManyToOne(_ => Student)
   student: Student;
 
   @Column()
+  @Index()
   studentId: number;
 
   @ManyToOne(_ => CourseTask)
   courseTask: CourseTask;
 
   @Column()
+  @Index()
   courseTaskId: number;
 
   @Column({ nullable: true })
