@@ -88,6 +88,7 @@ export class CourseTask {
   type: TaskType;
 
   @Column({ default: false, type: 'boolean' })
+  @Index()
   disabled: boolean;
 
   @Column({ default: '' })

@@ -15,6 +15,7 @@ export async function getAvailableStudents(courseId: number) {
       'si.id',
       'si.isGoodCandidate',
       'si.isCompleted',
+      'si.isCanceled',
       'sif.json',
       'sif.updatedDate',
     ])
@@ -33,7 +34,11 @@ export async function getAvailableStudents(courseId: number) {
 
   const result = students
     .filter(s => {
-      return !s.stageInterviews || s.stageInterviews.length === 0 || s.stageInterviews.every(i => i.isCompleted);
+      return (
+        !s.stageInterviews ||
+        s.stageInterviews.length === 0 ||
+        s.stageInterviews.every(i => i.isCompleted || i.isCanceled)
+      );
     })
     .map(student => {
       const { id, user, totalScore } = student;

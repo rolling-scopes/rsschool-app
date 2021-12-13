@@ -3,7 +3,7 @@ import { RequestError } from '@octokit/types';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { config } from '../config';
 import { ILogger } from '../logger';
-import { Course, Student } from '../models';
+import { Course, CourseUser, Student } from '../models';
 import { courseService } from '../services';
 import { StudentRepository } from '../repositories/student.repository';
 import { MentorRepository } from '../repositories/mentor.repository';
@@ -133,13 +133,21 @@ export class RepositoryService {
   }
 
   public async inviteAllMentors() {
-    const mentors = await getCustomRepository(MentorRepository).findActive(this.courseId);
     const course = await getRepository(Course).findOne(this.courseId);
     if (course == null) {
       return;
     }
-    for (const mentor of mentors) {
-      await this.addMentorToTeam(this.github, course, mentor.githubId);
+    const mentors = await getCustomRepository(MentorRepository).findActive(this.courseId);
+    const courseUsers = await getRepository(CourseUser).find({
+      where: { courseId: this.courseId },
+      relations: ['user'],
+    });
+    const githubIds = mentors
+      .map(m => m.githubId)
+      .concat(courseUsers.filter(u => u.isManager || u.isSupervisor).map(cu => cu.user?.githubId))
+      .filter(Boolean);
+    for (const githubId of githubIds) {
+      await this.addMentorToTeam(this.github, course, githubId);
     }
   }
 
@@ -297,22 +305,34 @@ export class RepositoryService {
 
   async createTeam(github: Octokit, teamName: string, courseId: number) {
     const { org } = config.github;
-    const { data: team } = await github.rest.teams.getByName({ org, team_slug: teamName });
+    const exists = await this.checkIfTeamExists(github, org, teamName);
 
-    if (!team.slug) {
-      const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
-      this.logger?.info('Creating team', teamName);
-      const response = await github.rest.teams.create({ privacy: 'secret', name: teamName, org });
-      const courseTeamSlug = response.data?.slug;
-      for (const maintainer of mentors) {
-        this.logger?.info(`Inviting ${maintainer.githubId}`);
-        await github.rest.teams.addOrUpdateMembershipForUserInOrg({
-          org,
-          team_slug: courseTeamSlug,
-          username: maintainer.githubId,
-        });
-        await this.timeout(1000);
-      }
+    if (exists) {
+      this.logger?.info(`Team ${teamName} exists`);
+      return;
+    }
+
+    const mentors = await getCustomRepository(MentorRepository).findActive(courseId);
+    this.logger?.info('Creating team', teamName);
+    const response = await github.rest.teams.create({ privacy: 'secret', name: teamName, org });
+    const courseTeamSlug = response.data?.slug;
+    for (const maintainer of mentors) {
+      this.logger?.info(`Inviting ${maintainer.githubId}`);
+      await github.rest.teams.addOrUpdateMembershipForUserInOrg({
+        org,
+        team_slug: courseTeamSlug,
+        username: maintainer.githubId,
+      });
+      await this.timeout(1000);
+    }
+  }
+
+  async checkIfTeamExists(github: Octokit, org: string, teamName: string) {
+    try {
+      const { data: team } = await github.rest.teams.getByName({ org, team_slug: teamName });
+      return !!team.slug;
+    } catch (err) {
+      return false;
     }
   }
 
