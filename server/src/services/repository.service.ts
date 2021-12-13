@@ -3,7 +3,7 @@ import { RequestError } from '@octokit/types';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { config } from '../config';
 import { ILogger } from '../logger';
-import { Course, Student } from '../models';
+import { Course, CourseUser, Student } from '../models';
 import { courseService } from '../services';
 import { StudentRepository } from '../repositories/student.repository';
 import { MentorRepository } from '../repositories/mentor.repository';
@@ -133,13 +133,21 @@ export class RepositoryService {
   }
 
   public async inviteAllMentors() {
-    const mentors = await getCustomRepository(MentorRepository).findActive(this.courseId);
     const course = await getRepository(Course).findOne(this.courseId);
     if (course == null) {
       return;
     }
-    for (const mentor of mentors) {
-      await this.addMentorToTeam(this.github, course, mentor.githubId);
+    const mentors = await getCustomRepository(MentorRepository).findActive(this.courseId);
+    const courseUsers = await getRepository(CourseUser).find({
+      where: { courseId: this.courseId },
+      relations: ['user'],
+    });
+    const githubIds = mentors
+      .map(m => m.githubId)
+      .concat(courseUsers.filter(u => u.isManager || u.isSupervisor).map(cu => cu.user?.githubId))
+      .filter(Boolean);
+    for (const githubId of githubIds) {
+      await this.addMentorToTeam(this.github, course, githubId);
     }
   }
 
