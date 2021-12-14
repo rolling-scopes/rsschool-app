@@ -1,0 +1,50 @@
+name: Deploy Bumblebee bot
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'tools/bumblebee/**'
+
+concurrency:
+  group: deploy-bumblebee
+  cancel-in-progress: true
+
+jobs:
+  deploy_build_bumblebee:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tools/bumblebee
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Build container
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-bot-bumblebee:master .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish container
+        run: docker push ghcr.io/rolling-scopes/rsschool-bot-bumblebee:master

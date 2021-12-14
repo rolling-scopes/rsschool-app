@@ -3,6 +3,8 @@ name: Deploy RS School App
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'tools/bumblebee/**'
 
 concurrency:
   group: deploy

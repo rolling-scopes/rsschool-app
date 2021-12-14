@@ -3,6 +3,8 @@ name: Pull Request CI
 on:
   pull_request:
     branches: [master]
+    paths-ignore:
+      - 'tools/bumblebee/**'
 
 concurrency:
   group: pr_${{ github.head_ref }}
