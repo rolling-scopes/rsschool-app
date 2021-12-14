@@ -1,6 +1,5 @@
 import { Alert, Button, Col, Form, Input, message, Radio, Rate, Row, Typography } from 'antd';
 import {
-  Configuration,
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
   StudentsFeedbacksApi,
@@ -9,7 +8,8 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { getApiCfg } from 'services/api';
 import { CoursePageProps } from 'services/models';
 import { softSkills } from '../../data/softSkills';
 
@@ -40,12 +40,11 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
   const router = useRouter();
 
   const [students, loading] = useMentorStudents(mentorId);
-  const [noData, setNoData] = useState(false);
-  const service = useMemo(() => new StudentsFeedbacksApi(new Configuration({ basePath: '' })), []);
+  const service = useMemo(() => new StudentsFeedbacksApi(getApiCfg()), []);
+  const noData = students?.length === 0;
 
   useEffect(() => {
-    if (students.length === 0) {
-      setNoData(true);
+    if (noData) {
       return;
     }
     const studentId = router.query['studentId'] ? Number(router.query['studentId']) : null;

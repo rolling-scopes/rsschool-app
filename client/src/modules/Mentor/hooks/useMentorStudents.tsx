@@ -1,20 +1,14 @@
-import { MentorsApi, MentorStudentDto } from 'api';
-import { useMemo, useState } from 'react';
+import { MentorsApi } from 'api';
+import { useMemo } from 'react';
 import { useAsync } from 'react-use';
+import { getApiCfg } from 'services/api';
 
 export function useMentorStudents(mentorId: number) {
-  const [students, setStudents] = useState<MentorStudentDto[]>([]);
-  const service = useMemo(() => new MentorsApi(undefined, ''), []);
-  const [loading, setLoading] = useState(false);
+  const service = useMemo(() => new MentorsApi(getApiCfg()), []);
 
-  useAsync(async () => {
-    try {
-      setLoading(true);
-      const { data } = await service.getMentorStudents(mentorId);
-      setStudents(data);
-    } finally {
-      setLoading(false);
-    }
+  const { value: students, loading } = useAsync(async () => {
+    const { data } = await service.getMentorStudents(mentorId);
+    return data;
   }, []);
 
   return [students, loading] as const;

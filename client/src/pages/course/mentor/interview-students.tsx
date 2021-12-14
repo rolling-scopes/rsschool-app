@@ -16,10 +16,11 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { isCourseManager } from 'domain/user';
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
-  const isPowerUser = props.session.isAdmin || props.session.coursesRoles?.[courseId]?.includes('manager');
+function Page({ session, course }: CoursePageProps) {
+  const courseId = course.id;
+  const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session]);
 
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState([] as any[]);
@@ -31,7 +32,7 @@ function Page(props: CoursePageProps) {
   };
 
   const inviteStudent = withLoading(async (githubId: string) => {
-    await courseService.createInterview(githubId, props.session.githubId);
+    await courseService.createInterview(githubId, session.githubId);
     await loadData();
   });
 
@@ -46,8 +47,8 @@ function Page(props: CoursePageProps) {
     <PageLayout
       loading={loading}
       title="Technical Screening: Available Students"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
+      githubId={session.githubId}
+      courseName={course.name}
     >
       <Table
         pagination={{ pageSize: 100 }}
