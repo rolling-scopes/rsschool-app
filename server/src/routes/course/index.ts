@@ -63,6 +63,7 @@ import {
   getStudent,
   updateStudent,
   postFeedback,
+  updateMentoringAvailability,
 } from './student';
 import * as crossCheck from './crossCheck';
 import { getUsers, putUsers, putUser } from './user';
@@ -257,6 +258,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   );
 
   router.get('/student/:githubId/summary', courseGuard, ...validators, getStudentSummary(logger));
+  router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));

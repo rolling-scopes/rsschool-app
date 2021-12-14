@@ -130,4 +130,7 @@ export class Student {
 
   @OneToOne(() => Certificate, certificate => certificate.student)
   certificate: Certificate | null;
+
+  @Column({ nullable: true, default: true })
+  mentoring: boolean;
 }
