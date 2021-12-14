@@ -1,7 +1,4 @@
-import {
-  MentorsApi,
-  MentorStudentDto
-} from 'api';
+import { MentorsApi, MentorStudentDto } from 'api';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 

@@ -6,7 +6,6 @@ import { UserService } from 'services/user';
 import { Session } from './withSession';
 import { getTokenFromContext } from 'utils/server';
 
-
 function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: number) {
   return class extends React.PureComponent<{ course?: Course | null; session: Session }> {
     static async getInitialProps(ctx: NextPageContext) {

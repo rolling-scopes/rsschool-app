@@ -12,7 +12,6 @@ import { UserGroup } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupService } from 'services/userGroup';
 
-
 const { Content } = Layout;
 type Props = { session: Session };
 

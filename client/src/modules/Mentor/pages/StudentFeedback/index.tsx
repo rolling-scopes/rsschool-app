@@ -3,7 +3,7 @@ import {
   Configuration,
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
-  StudentsFeedbacksApi
+  StudentsFeedbacksApi,
 } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';

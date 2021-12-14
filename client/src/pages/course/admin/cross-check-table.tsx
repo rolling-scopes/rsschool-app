@@ -13,7 +13,6 @@ import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/cour
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 
-
 const { Text } = Typography;
 
 export type CrossCheckFieldsTypes = {
