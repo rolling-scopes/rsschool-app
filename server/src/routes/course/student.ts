@@ -200,6 +200,19 @@ export const getCrossMentors = (_: ILogger) => async (ctx: Router.RouterContext)
   setResponse(ctx, OK, taskCheckers);
 };
 
+export const updateMentoringAvailability = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  const { mentoring = false } = ctx.request.body as { mentoring: boolean };
+  if (student == null || mentoring === undefined) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  const studentRepository = getCustomRepository(StudentRepository);
+  await studentRepository.updateMentoringAvailability(student.id, mentoring);
+  setResponse(ctx, OK, {});
+};
+
 type InterviewResultInput = {
   score: number | string;
   comment: string;

@@ -282,6 +282,10 @@ export class StudentRepository extends AbstractRepository<Student> {
     );
   }
 
+  public async updateMentoringAvailability(studentId: number, value: boolean) {
+    await getRepository(Student).update(studentId, { mentoring: value });
+  }
+
   private async findByGithubId(courseId: number, githubId: string): Promise<UserBasic | null> {
     const record = await getRepository(Student)
       .createQueryBuilder('student')
