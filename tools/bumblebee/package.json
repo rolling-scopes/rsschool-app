@@ -7,10 +7,6 @@
     "start": "forever src/index.js",
     "lint": "eslint ./src"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mikhama/rs-bumblebee.git"
-  },
   "author": "Dzmitry Tsebruk <mikhama@tut.by>",
   "license": "MIT",
   "dependencies": {
