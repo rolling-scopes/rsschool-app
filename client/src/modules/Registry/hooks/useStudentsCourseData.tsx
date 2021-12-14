@@ -3,6 +3,7 @@ import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentStats } from 'common/models';
+import { useState } from 'react';
 
 type IdName = {
   id: number;
@@ -10,11 +11,9 @@ type IdName = {
 };
 
 export function useStudentCourseData(githubId: string, courseAlias: string | undefined) {
-  const {
-    value: student,
-    loading: studentLoading,
-    error: studentError,
-  } = useAsync(async () => {
+  const [registered, setRegistered] = useState<boolean | null>(null);
+
+  const { value: student, loading } = useAsync(async () => {
     const userService = new UserService();
     const courseService = new CoursesService();
     const [profile, profileInfo, courses] = await Promise.all([
@@ -22,9 +21,19 @@ export function useStudentCourseData(githubId: string, courseAlias: string | und
       userService.getProfileInfo(githubId),
       courseService.getCourses(),
     ]);
+
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
+    if (courseAlias) {
+      const currentCourse = courses.find(course => course.alias === courseAlias);
+      const value = registeredForCourses.some(({ id }) => id === currentCourse?.id);
+      if (value) {
+        setRegistered(registeredForCourses.some(({ id }) => id === currentCourse?.id));
+        return;
+      }
+    }
+    setRegistered(false);
     const activeCourses = courseAlias
-      ? courses.filter(isCourseOpenForRegistryWithAlias(registeredForCourses, courseAlias))
+      ? courses.filter(isCourseOpenForRegistryWithAlias(courseAlias))
       : courses.filter(isCourseOpenForRegistry(registeredForCourses)).sort(sortByStartDate);
     return {
       profile,
@@ -33,7 +42,7 @@ export function useStudentCourseData(githubId: string, courseAlias: string | und
     };
   }, [githubId, courseAlias]);
 
-  return { student, studentLoading, studentError };
+  return [student, loading, registered] as const;
 }
 
 function enrolledOtherCourses(studentStats: StudentStats[] | undefined, courses: Course[]) {
@@ -58,9 +67,8 @@ function isCourseOpenForRegistry(registeredCourses: IdName[]) {
   };
 }
 
-function isCourseOpenForRegistryWithAlias(registeredCourses: IdName[], courseAlias?: string) {
-  return (course: Course) =>
-    courseAlias === course.alias && isCourseAvailableForRegistration(course, registeredCourses);
+function isCourseOpenForRegistryWithAlias(courseAlias?: string) {
+  return (course: Course) => courseAlias === course.alias && isCourseAvailableForRegistration(course, []);
 }
 
 function isCourseAvailableForRegistration(course: Course, registeredCourses: IdName[]) {

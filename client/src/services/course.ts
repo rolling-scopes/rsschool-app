@@ -444,6 +444,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async updateMentoringAvailability(githubId: string, mentoring: boolean) {
+    const result = await this.axios.post<any>(`/student/${githubId}/availability`, { mentoring });
+    return result.data.data;
+  }
+
   async deleteStageInterview(interviewId: number) {
     const result = await this.axios.delete<any>(`/interview/stage/${interviewId}`);
     return result.data.data;

@@ -7,8 +7,8 @@ import { ResumeMigration1632333725126 } from './1632333725126-ResumeMigration';
 import { User1635365797478 } from './1635365797478-User';
 import { StageInterview1637591194886 } from './1637591194886-StageInterview';
 import { Indicies1639418471577 } from './1639418471577-Indicies';
+import { Student1639502600339 } from './1639502600339-Student';
 import { CourseMigration1638302439645 } from './1638302439645-CourseMigration';
-
 
 export const migrations = [
   UserMigration1630340371992,
@@ -20,5 +20,6 @@ export const migrations = [
   User1635365797478,
   StageInterview1637591194886,
   Indicies1639418471577,
-  CourseMigration1638302439645
+  Student1639502600339,
+  CourseMigration1638302439645,
 ];

@@ -465,8 +465,13 @@ export async function getCourseTasksWithOwner(courseId: number) {
 }
 
 export async function updateScoreStudents(data: { id: number; totalScore: number }[]) {
-  const result = await getRepository(Student).save(data);
-  return result;
+  const chuncks = _.chunk(data, 500);
+
+  // update score in chunks with delays.
+  for (const chunck of chuncks) {
+    await getRepository(Student).save(chunck);
+    await timeout(10000);
+  }
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
@@ -719,3 +724,5 @@ export async function createCourseFromCopy(courseId: number, details: any) {
 
   throw new Error(`not valid course to copy id: ${courseId}`);
 }
+
+const timeout = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

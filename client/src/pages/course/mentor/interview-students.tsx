@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import { PageLayout, withSession, Rating } from 'components';
 import {
   getColumnSearchProps,
@@ -17,6 +17,7 @@ import { CoursePageProps } from 'services/models';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
+  const isPowerUser = props.session.isAdmin || props.session.coursesRoles?.[courseId]?.includes('manager');
 
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState([] as any[]);
@@ -29,6 +30,11 @@ function Page(props: CoursePageProps) {
 
   const inviteStudent = withLoading(async (githubId: string) => {
     await courseService.createInterview(githubId, props.session.githubId);
+    await loadData();
+  });
+
+  const removeFromList = withLoading(async (githubId: string) => {
+    await courseService.updateMentoringAvailability(githubId, false);
     await loadData();
   });
 
@@ -84,7 +90,18 @@ function Page(props: CoursePageProps) {
           {
             title: 'Actions',
             dataIndex: 'actions',
-            render: (_, record) => <a onClick={() => inviteStudent(record.githubId)}>Want to interview</a>,
+            render: (_, record) => (
+              <>
+                <Button type="link" onClick={() => inviteStudent(record.githubId)}>
+                  Want to interview
+                </Button>
+                {isPowerUser ? (
+                  <Button type="link" onClick={() => removeFromList(record.githubId)}>
+                    Remove from list
+                  </Button>
+                ) : null}
+              </>
+            ),
           },
         ]}
       />

@@ -16,6 +16,7 @@ import { Info } from 'modules/Registry/components';
 import css from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
+import { useRouter } from 'next/router';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -31,12 +32,20 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const { githubId } = props.session;
   const [form] = Form.useForm();
   const update = useUpdate();
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [location, setLocation] = useState(null as Location | null);
 
   const [loading, setLoading] = useState(false);
 
-  const { student, studentLoading } = useStudentCourseData(githubId, props.courseAlias);
+  const [student, studentLoading, registered] = useStudentCourseData(githubId, props.courseAlias);
+
+  useEffect(() => {
+    if (registered) {
+      message.success('You are already registered to the course. Redirecting to Home page in 5 seconds...');
+      setTimeout(() => router.push('/'), 5000);
+    }
+  }, [registered]);
 
   useEffect(() => {
     setLocation({
@@ -114,7 +123,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   );
 
   let content: React.ReactNode;
-  if (loading || studentLoading) {
+  if (loading || studentLoading || registered) {
     content = undefined;
   } else if (!student?.courses.length) {
     content = <NoCourses />;
