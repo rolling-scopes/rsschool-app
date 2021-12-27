@@ -16,6 +16,7 @@ export class StudentDto extends PersonDto {
   }
 
   @IsNotEmpty()
+  @ApiProperty()
   active: boolean;
 
   @ApiProperty()

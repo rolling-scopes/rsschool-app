@@ -1,13 +1,15 @@
-import { Button, Form, Input, message, Typography, Radio } from 'antd';
+import { Button, Form, Input, message, Radio, Typography } from 'antd';
+import { MentorsApi, MentorStudentDto } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
+import { isStudent } from 'domain/user';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
+import { getApiCfg } from 'services/api';
 import { CourseService } from 'services/course';
-import { CoursePageProps, StudentBasic } from 'services/models';
-import { isStudent } from 'domain/user';
+import { CoursePageProps } from 'services/models';
 
 type ActionOnStudent = 'expel' | 'unassign';
 
@@ -18,8 +20,9 @@ function Page(props: CoursePageProps) {
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+  const mentorsService = useMemo(() => new MentorsApi(getApiCfg()), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState([] as StudentBasic[]);
+  const [students, setStudents] = useState<Pick<MentorStudentDto, 'id' | 'githubId' | 'name'>[]>([]);
   const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
@@ -35,8 +38,8 @@ function Page(props: CoursePageProps) {
         ]);
       }
     } else {
-      const students = await courseService.getMentorStudents(mentorId);
-      const activeStudents = students.filter(student => student.isActive);
+      const students = await mentorsService.getMentorStudents(mentorId);
+      const activeStudents = students.data.filter(student => student.active);
       setStudents(activeStudents);
     }
   }, [courseId]);

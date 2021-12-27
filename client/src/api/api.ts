@@ -346,6 +346,12 @@ export interface MentorStudentDto {
     'id': number;
     /**
      * 
+     * @type {boolean}
+     * @memberof MentorStudentDto
+     */
+    'active': boolean;
+    /**
+     * 
      * @type {string}
      * @memberof MentorStudentDto
      */
@@ -485,6 +491,12 @@ export interface StudentDto {
      * @memberof StudentDto
      */
     'id': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentDto
+     */
+    'active': boolean;
     /**
      * 
      * @type {string}
