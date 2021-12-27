@@ -172,57 +172,35 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <Typography
-                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                        component="h2"
-                        style={
-                          Object {
-                            "WebkitLineClamp": undefined,
-                            "fontSize": 16,
-                            "marginBottom": 0,
-                          }
-                        }
+                      <SingleObserver
+                        disabled={true}
+                        key="rc-observer-key-0"
+                        onResize={[Function]}
                       >
-                        <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                          style={
-                            Object {
-                              "WebkitLineClamp": undefined,
-                              "fontSize": 16,
-                              "marginBottom": 0,
+                        <DomWrapper>
+                          <Typography
+                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                            component="h2"
+                            style={
+                              Object {
+                                "WebkitLineClamp": undefined,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
                             }
-                          }
-                        >
-                          <ForwardRef(ContactsOutlined)>
-                            <AntdIcon
-                              icon={
+                          >
+                            <h2
+                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              style={
                                 Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "contacts",
-                                  "theme": "outlined",
+                                  "WebkitLineClamp": undefined,
+                                  "fontSize": 16,
+                                  "marginBottom": 0,
                                 }
                               }
                             >
-                              <span
-                                aria-label="contacts"
-                                className="anticon anticon-contacts"
-                                role="img"
-                              >
-                                <IconReact
+                              <ForwardRef(ContactsOutlined)>
+                                <AntdIcon
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -245,29 +223,59 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                     }
                                   }
                                 >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="contacts"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-contacts"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
+                                  <span
+                                    aria-label="contacts"
+                                    className="anticon anticon-contacts"
+                                    role="img"
                                   >
-                                    <path
-                                      d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                      key="svg-contacts-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(ContactsOutlined)>
-                           
-                          Contacts
-                        </h2>
-                      </Typography>
+                                    <IconReact
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "contacts",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        data-icon="contacts"
+                                        fill="currentColor"
+                                        focusable="false"
+                                        height="1em"
+                                        key="svg-contacts"
+                                        viewBox="64 64 896 896"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                          key="svg-contacts-svg-0"
+                                        />
+                                      </svg>
+                                    </IconReact>
+                                  </span>
+                                </AntdIcon>
+                              </ForwardRef(ContactsOutlined)>
+                               
+                              Contacts
+                            </h2>
+                          </Typography>
+                        </DomWrapper>
+                      </SingleObserver>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -358,29 +366,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        EPAM E-mail
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            EPAM E-mail
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -407,29 +423,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        E-mail
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            E-mail
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -456,29 +480,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Telegram
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Telegram
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -505,29 +537,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Phone
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Phone
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -554,29 +594,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Skype
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Skype
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -603,29 +651,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Notes
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Notes
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -652,29 +708,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        LinkedIn
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            LinkedIn
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -865,57 +929,35 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <Typography
-                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                        component="h2"
-                        style={
-                          Object {
-                            "WebkitLineClamp": undefined,
-                            "fontSize": 16,
-                            "marginBottom": 0,
-                          }
-                        }
+                      <SingleObserver
+                        disabled={true}
+                        key="rc-observer-key-0"
+                        onResize={[Function]}
                       >
-                        <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                          style={
-                            Object {
-                              "WebkitLineClamp": undefined,
-                              "fontSize": 16,
-                              "marginBottom": 0,
+                        <DomWrapper>
+                          <Typography
+                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                            component="h2"
+                            style={
+                              Object {
+                                "WebkitLineClamp": undefined,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
                             }
-                          }
-                        >
-                          <ForwardRef(ContactsOutlined)>
-                            <AntdIcon
-                              icon={
+                          >
+                            <h2
+                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              style={
                                 Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "contacts",
-                                  "theme": "outlined",
+                                  "WebkitLineClamp": undefined,
+                                  "fontSize": 16,
+                                  "marginBottom": 0,
                                 }
                               }
                             >
-                              <span
-                                aria-label="contacts"
-                                className="anticon anticon-contacts"
-                                role="img"
-                              >
-                                <IconReact
+                              <ForwardRef(ContactsOutlined)>
+                                <AntdIcon
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -938,29 +980,59 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     }
                                   }
                                 >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="contacts"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-contacts"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
+                                  <span
+                                    aria-label="contacts"
+                                    className="anticon anticon-contacts"
+                                    role="img"
                                   >
-                                    <path
-                                      d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                      key="svg-contacts-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(ContactsOutlined)>
-                           
-                          Contacts
-                        </h2>
-                      </Typography>
+                                    <IconReact
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "contacts",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        data-icon="contacts"
+                                        fill="currentColor"
+                                        focusable="false"
+                                        height="1em"
+                                        key="svg-contacts"
+                                        viewBox="64 64 896 896"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                          key="svg-contacts-svg-0"
+                                        />
+                                      </svg>
+                                    </IconReact>
+                                  </span>
+                                </AntdIcon>
+                              </ForwardRef(ContactsOutlined)>
+                               
+                              Contacts
+                            </h2>
+                          </Typography>
+                        </DomWrapper>
+                      </SingleObserver>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -1036,29 +1108,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        EPAM E-mail
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            EPAM E-mail
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -1085,29 +1165,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        E-mail
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            E-mail
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -1134,29 +1222,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Phone
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Phone
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -1183,29 +1279,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                   disabled={true}
                                   onResize={[Function]}
                                 >
-                                  <Typography
-                                    className=""
-                                    component="span"
-                                    style={
-                                      Object {
-                                        "WebkitLineClamp": undefined,
-                                      }
-                                    }
+                                  <SingleObserver
+                                    disabled={true}
+                                    key="rc-observer-key-0"
+                                    onResize={[Function]}
                                   >
-                                    <span
-                                      className="ant-typography"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
+                                    <DomWrapper>
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
                                         }
-                                      }
-                                    >
-                                      <strong>
-                                        Skype
-                                        :
-                                      </strong>
-                                    </span>
-                                  </Typography>
+                                      >
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
+                                          }
+                                        >
+                                          <strong>
+                                            Skype
+                                            :
+                                          </strong>
+                                        </span>
+                                      </Typography>
+                                    </DomWrapper>
+                                  </SingleObserver>
                                 </ResizeObserver>
                               </LocaleReceiver>
                             </Base>
@@ -1542,9 +1646,24 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
-            <JSXStyle
-              id="261503908"
-            />
+            <style
+              jsx={true}
+            >
+              
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+            </style>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -1596,7 +1715,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
             isSettingsVisible={false}
           >
             <DrawerWrapper
-              className="jsx-2583821679"
               closable={true}
               getContainer={false}
               onClose={[Function]}
@@ -1611,7 +1729,6 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
               visible={false}
             >
               <Drawer
-                className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
                 onClose={[Function]}
@@ -1628,7 +1745,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  className="jsx-2583821679"
+                  className=""
                   defaultOpen={false}
                   duration=".3s"
                   ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
@@ -1661,7 +1778,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      className="jsx-2583821679"
+                      className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
@@ -1688,7 +1805,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                       }
                     >
                       <div
-                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        className="ant-drawer ant-drawer-top"
                         onTransitionEnd={[Function]}
                         style={
                           Object {
@@ -1913,29 +2030,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  EPAM E-mail
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      EPAM E-mail
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2035,29 +2160,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  E-mail
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      E-mail
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2157,29 +2290,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Telegram
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Telegram
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2279,29 +2420,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Phone
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Phone
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2401,29 +2550,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Skype
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Skype
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2523,29 +2680,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Notes
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Notes
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2645,29 +2810,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  LinkedIn
-                                                                  :
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      LinkedIn
+                                                                      :
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -2740,9 +2913,24 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                     </Spin>
                                   </div>
                                 </List>
-                                <JSXStyle
-                                  id="2583821679"
-                                />
+                                <style
+                                  jsx={true}
+                                >
+                                  
+              :global(.ant-drawer-content-wrapper) {
+                height: inherit !important;
+              }
+
+              :global(.ant-drawer-wrapper-body) {
+                overflow: hidden;
+              }
+
+              :global(.ant-drawer-body) {
+                height: calc(100% - 55px);
+                overflow: auto;
+              }
+            
+                                </style>
                               </div>
                             </div>
                           </div>

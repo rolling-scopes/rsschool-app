@@ -85,10 +85,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-12-01T12:12:01.000Z"
+            title="2018-12-01 15:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -161,10 +161,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01T11:12:01.000Z"
+            title="2018-11-01 14:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -237,10 +237,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-09-01T11:12:01.000Z"
+            title="2018-09-01 14:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -313,10 +313,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-10-01T11:12:01.000Z"
+            title="2018-10-01 14:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -389,10 +389,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01T12:12:01.000Z"
+            title="2018-11-01 15:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -465,10 +465,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2019-12-01T12:12:01.000Z"
+            title="2019-12-01 15:12:01"
           >
             <span>
-              fromNow
+              2 years ago
             </span>
           </Tooltip>
         }

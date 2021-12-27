@@ -1,5 +1,4 @@
 import { GithubFilled } from '@ant-design/icons';
-import css from 'styled-jsx/css';
 import { CDN_AVATARS_URL } from 'configs/cdn';
 
 export function GithubUserLink(props: { value: string }) {
@@ -17,23 +16,21 @@ export function GithubUserLink(props: { value: string }) {
       <a target="_blank" className="link-user-github" href={`https://github.com/${props.value}`}>
         <GithubFilled />
       </a>
-      <style jsx>{styles}</style>
+      <style jsx>{`
+        .link-user {
+          display: inline-block;
+        }
+        .link-user,
+        .link-user-profile {
+          white-space: nowrap;
+        }
+        .link-user-github {
+          visibility: hidden;
+        }
+        .link-user:hover .link-user-github {
+          visibility: visible;
+        }
+      `}</style>
     </div>
   );
 }
-
-const styles = css`
-  .link-user {
-    display: inline-block;
-  }
-  .link-user,
-  .link-user-profile {
-    white-space: nowrap;
-  }
-  .link-user-github {
-    visibility: hidden;
-  }
-  .link-user:hover .link-user-github {
-    visibility: visible;
-  }
-`;
