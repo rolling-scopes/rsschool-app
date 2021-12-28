@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 
-const { serverRuntimeConfig } = getConfig() ?? {};
+const { serverRuntimeConfig = {} } = getConfig() ?? {};
 
 export function getServerAxiosProps(token?: string, baseUrl = ''): Partial<AxiosRequestConfig> {
   const { rsHost } = serverRuntimeConfig;

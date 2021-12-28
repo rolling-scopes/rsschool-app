@@ -453,17 +453,28 @@ export class ProfilePage extends React.Component<Props, State> {
                     700: 2,
                     500: 1,
                   }}
-                  className={masonryClassName}
-                  columnClassName={masonryColumnClassName}
+                  className="masonry"
+                  columnClassName="masonry-column"
                 >
                   {cards.map((card, idx) => (
-                    <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
+                    <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
                       {card}
                     </div>
                   ))}
                 </Masonry>
-                {masonryStyles}
-                {masonryColumnStyles}
+                <style jsx>{`
+                  .masonry div {
+                    display: flex;
+                    margin-left: -16px;
+                    width: auto;
+                  }
+                `}</style>
+                <style jsx>{`
+                  .masonry-column div {
+                    padding-left: 16px;
+                    background-clip: padding-box;
+                  }
+                `}</style>
               </div>
             ) : (
               <>
@@ -476,20 +487,5 @@ export class ProfilePage extends React.Component<Props, State> {
     );
   }
 }
-
-const gapSize = 16;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default withGoogleMaps(withRouter(withSession(ProfilePage)));

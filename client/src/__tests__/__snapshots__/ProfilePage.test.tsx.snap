@@ -35,8 +35,8 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               "default": 4,
             }
           }
-          className="jsx-3803498300"
-          columnClassName="jsx-110195169"
+          className="masonry"
+          columnClassName="masonry-column"
         >
           <div
             key="card-0"
@@ -765,16 +765,27 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
         </Masonry>
-        <JSXStyle
-          id="3803498300"
+        <style
+          jsx={true}
         >
-          div.jsx-3803498300{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;margin-left:-16px;width:auto;}
-        </JSXStyle>
-        <JSXStyle
-          id="110195169"
+          
+                  .masonry div {
+                    display: flex;
+                    margin-left: -16px;
+                    width: auto;
+                  }
+                
+        </style>
+        <style
+          jsx={true}
         >
-          div.jsx-110195169{padding-left:16px;background-clip:padding-box;}
-        </JSXStyle>
+          
+                  .masonry-column div {
+                    padding-left: 16px;
+                    background-clip: padding-box;
+                  }
+                
+        </style>
       </div>
     </Spin>
   </LoadingScreen>
