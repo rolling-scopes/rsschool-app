@@ -1,6 +1,6 @@
-## RS APP Shedule
+##  RS School App Shedule
 
-To successfully complete the selected course, the **RS APP** has a **schedule**, which can be accessed from the main menu
+To successfully complete the selected course, the **RS School App** has a **schedule**, which can be accessed from the main menu
 
 1. Select the desired course
 2. Follow the link

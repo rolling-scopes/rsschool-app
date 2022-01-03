@@ -1,10 +1,10 @@
-# Submission of tasks in the RS APP
-Most of the tasks after they are completed have to be submitted to RS APP **before the deadline**:
+# Submission of tasks in the  RS School App
+Most of the tasks after they are completed have to be submitted to  RS School App **before the deadline**:
 - Auto-checkable tasks are to be submitted on the AutoTest page. Tasks that are checked automatically: tests, algorithmic tasks, codewars tasks.
 - In the case of Cross-Check task checking, you need to submit a link to your work on the Cross-check: Submit page before the deadline. The link can be submitted several times - the last one is saved. After submitting a link to the completed work, it can be completed until the deadline. If you not submit your work, you will get 0.
 
 ## Tests
-- Tests submitted in [rs app](https://app.rs.school /) could be solved after authorization in the application.
+- Tests submitted in [ RS School App](https://app.rs.school /) could be solved after authorization in the application.
 - The minimum passing score is usually 90% of the maximum possible number of points.
 - You can take the test as many times as specified, the last result is counted.
 - If specified, you can take the test more times, but the score for the test will be reduced by 2 times.
@@ -33,11 +33,11 @@ You can submit, as many times as you want, but before the deadline.
 ## Codewars
 Some tasks require solving several tasks on the site https://www.codewars.com/
 
-After you fullfilling the task, log in to the rs app  https://app.rs.school/, select **Auto-Test**, select **Codewars {Task Name}** from the drop-down list, click **Submit**. The result of the check is displayed on the right.
+After you fullfilling the task, log in to the  RS School App  https://app.rs.school/, select **Auto-Test**, select **Codewars {Task Name}** from the drop-down list, click **Submit**. The result of the check is displayed on the right.
 
 You can submit a task as many times as you want, each subsequent submission overwrites the previous one.
 
-Your username on the Codewars website should be the same as the GitHub nickname  you had registered in the rs app. If the specified username on Codewars is busy, add the ending -rss to your GitHub nickname. You can change the username to codewars by following the link https://www.codewars.com/users/edit
+Your username on the Codewars website should be the same as the GitHub nickname  you had registered in the  RS School App. If the specified username on Codewars is busy, add the ending -rss to your GitHub nickname. You can change the username to codewars by following the link https://www.codewars.com/users/edit
 
 ![edit username](images/rs-app-tasks-1.jpg)
 
