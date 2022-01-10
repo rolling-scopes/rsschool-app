@@ -94,8 +94,8 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./letsencrypt:/etc/letsencrypt
-      - ./certbot:/var/www/certbot
+      - ./letsencrypt:/etc/letsencrypt:rw
+      - ./certbot:/var/www/certbot:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     depends_on:
       - nginx
