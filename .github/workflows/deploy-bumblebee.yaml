@@ -1,7 +1,7 @@
 name: Deploy Bumblebee bot
 on:
   push:
-    branches: [master] # TODO: delete rs-bumblebee branch for now
+    branches: [master]
     paths:
       - 'tools/bumblebee/**'
 

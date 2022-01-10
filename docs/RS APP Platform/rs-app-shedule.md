@@ -1,4 +1,4 @@
-##  RS School App Shedule
+## RS School App Shedule
 
 To successfully complete the selected course, the **RS School App** has a **schedule**, which can be accessed from the main menu
 
@@ -37,7 +37,7 @@ The event/task details page displays the most detailed data.
 
 #### Using the schedule by students
 
-Search is possible  by the name of the event / task or the organizer.  Sort is possible by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
+Search is possible by the name of the event / task or the organizer. Sort is possible by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
 
 ### Additional schedule features for the administration
 
@@ -66,6 +66,6 @@ For the convenient usage of the schedule, the following editing options are prov
 
 #### Some features of filling out the schedule
 
-- The main fields in events/tasks change immediately **in all courses**. E.g.  **Name**, **Type**, **Url**.
+- The main fields in events/tasks change immediately **in all courses**. E.g. **Name**, **Type**, **Url**.
 
-- The  field **Special** allows you to specify the type of event/task. For example, make it optional using the _optional_ tag. It is possible to add tags not only from the provided list.
+- The field **Special** allows you to specify the type of event/task. For example, make it optional using the _optional_ tag. It is possible to add tags not only from the provided list.
