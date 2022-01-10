@@ -76,6 +76,10 @@ describe('PublicFeedbackModal', () => {
     },
   ];
 
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2022-01-01').getTime());
+  });
+
   it('Should render correctly', () => {
     const output = shallow(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
     expect(shallowToJson(output)).toMatchSnapshot();
