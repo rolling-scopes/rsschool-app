@@ -1,7 +1,7 @@
 name: Deploy Bumblebee bot
 on:
   push:
-    branches: [master]
+    branches: [master] # TODO: delete rs-bumblebee branch for now
     paths:
       - 'tools/bumblebee/**'
 
@@ -48,3 +48,54 @@ jobs:
 
       - name: Publish container
         run: docker push ghcr.io/rolling-scopes/rsschool-bot-bumblebee:master
+
+  deploy_aws:
+    name: Deploy to AWS
+    needs: [deploy_build_bumblebee]
+    runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+      HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
+      USERNAME: ${{ secrets.EC2_USERNAME  }}
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Pull AWS SSM Params
+        uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        with:
+          ssm-path: /prod/bumblebee
+          format: dotenv
+          output: .env
+
+      - name: Pull the latest images
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} 'mkdir -p ~/tools/bumblebee/'
+          scp -o StrictHostKeyChecking=no -i private_key ./tools/bumblebee/.env ${USERNAME}@${HOSTNAME}:~/tools/bumblebee/.env
+          scp -o StrictHostKeyChecking=no -i private_key ./tools/bumblebee/docker-compose.yml ${USERNAME}@${HOSTNAME}:~/tools/bumblebee/docker-compose.yml
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            sleep 10
+            docker pull ghcr.io/rolling-scopes/rsschool-bot-bumblebee:master
+          '
+
+      - name: Restart
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            cd ~/tools/bumblebee/
+            docker-compose up -d
+          '
+
+      - name: Clean up
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            cd ~/tools/bumblebee/
+            docker system prune -f
+          '
