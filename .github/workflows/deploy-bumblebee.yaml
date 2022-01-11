@@ -4,6 +4,7 @@ on:
     branches: [master]
     paths:
       - 'tools/bumblebee/**'
+      - '.github/workflows/deploy-bumblebee.yaml'
 
 concurrency:
   group: deploy-bumblebee
