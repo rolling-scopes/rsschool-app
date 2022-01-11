@@ -40,7 +40,7 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "7.4.0",
-    "typeorm": "0.2.38",
+    "typeorm": "0.2.41",
     "winston": "3.3.3"
   },
   "devDependencies": {
