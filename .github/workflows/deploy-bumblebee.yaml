@@ -71,7 +71,7 @@ jobs:
         with:
           ssm-path: /prod/bumblebee
           format: dotenv
-          output: .env
+          output: ./tools/bumblebee/.env
 
       - name: Pull the latest images
         run: |
