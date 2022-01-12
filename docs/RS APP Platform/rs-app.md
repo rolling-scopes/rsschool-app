@@ -16,18 +16,18 @@ Links:
 - **Schedule** - course schedule, as well as task start dates, deadlines and links to task descriptions
 - **Cross-Check: Submit** - a section for submitting links to solutions that are checked using cross-check
 - **Cross-Check: Review** - a section with solutions that the student must check during cross-check
-- **Interviews** - list of scheduled mentor interviews and its results
+- **Interviews** - list of scheduled mentor interviews and their results
 - **Auto-Test** - a section for automatic check of tasks (tests, algorithmic tasks and codewars tasks)
-- **Gratitute** (<span style="color:green_apple">https://app.rs.school/gratitude</span>) — a section for expressing gratitude. Have you been helped with solving the problem, found a bug, or just checked the work qualitatively? Feel free to write thanks!
+- **Gratitude** (<span style="color:green_apple">https://app.rs.school/gratitude</span>) — a section for expressing gratitude. Have you been helped with solving the problem, found a bug, or just checked the work qualitatively? Feel free to write thanks!
 - **Heroes page** (<span style="color:green_apple">https://app.rs.school/heroes</span>) — a list of students who are trying not only to gain knowledge, but also ready to share it! Thanks from the Gratitude page are here.
 
 ## Q&A
 
-### How to enroll to the course in the RS School App?
+### How to enroll in the course in the RS School App?
 
 You can sign up for the upcoming courses by following <span style="color:green_apple">[the link](https://app.rs.school/registry/student)</span>.
 
-### How to understand that I have enrolled to the course successfully??
+### How to understand that I have enrolled in the course successfully??
 
 Go to <span style="color:green_apple">[RS School App](https://app.rs.school/)</span>, check that the course is displayed in the course list. Then, open the score tab.
 In the header of the table after the inscription Github, click on the magnifying glass icon, enter your nickname on Github and press 'Enter'
@@ -41,7 +41,7 @@ If the desired course is available in the list of courses <span style="color:gre
 
 To leave the course, click "Leave course" button in <span style="color:green_apple">[your profile](https://app.rs.school/profile)</span>, in the "Student Statistics" section.
 The course remains in the list, but you will not be able to complete tasks and track statistics.
-**Attention!** Click "Leave course" button excludes the student from the course without any possibility of self-recovery.
+**Attention!** Clicking the "Leave course" button excludes the student from the course without any possibility of self-recovery.
 
 #### My progress in the <span style="color:orange">`Total`</span> field at the Score page after passing the test has not been updated , what should I do?
 
