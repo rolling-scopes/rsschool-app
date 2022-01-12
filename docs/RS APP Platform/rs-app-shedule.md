@@ -1,6 +1,6 @@
-## RS School App Shedule
+## RS School App Schedule
 
-To successfully complete the selected course, the **RS School App** has a **schedule**, which can be accessed from the main menu
+To successfully complete the selected course, **RS School App** has a **schedule**, which can be accessed from the main menu
 
 1. Select the desired course
 2. Follow the link
@@ -21,11 +21,11 @@ To successfully complete the selected course, the **RS School App** has a **sche
    - **List** - the most compact view for mobile devices (opens by default on mobile)
    - **Calendar** - common calendar for schedule review
 
-2. Time zone select
+2. Time zone selection
 3. Switch to hide past events
-4. Customizing event tag colors. For each event/task, you can choose a color from a predefined set of colors. The selection is saved for the device/browse
+4. Customizing event tag colors. For each event/task, you can choose a color from a predefined set of colors. The selection is saved for the device/browser
 
-**Table** has advanced settings, where you can hide part of the columns and events/tasks by type
+**Table** has some more advanced settings, where you can hide some columns and events/tasks by type
 
 ![table customizing](images/schedule-4.png)
 
@@ -37,7 +37,7 @@ The event/task details page displays the most detailed data.
 
 #### Using the schedule by students
 
-Search is possible by the name of the event / task or the organizer. Sort is possible by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
+Search is possible by the name of the event/task or the organizer. Sort is possible by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
 
 ### Additional schedule features for the administration
 
@@ -47,11 +47,11 @@ For the convenient usage of the schedule, the following editing options are prov
 
 ![schedule control panel admin](images/schedule-6.png)
 
-    **1** - The button for export the course schedule to a csv file for editing the whole course
-    **2** - The button for import the course schedule from a csv file (new events/tasks are added or existing ones are updated)
-    **3** - Button for add a single event/task
+    **1** - a button to export the course schedule to a csv file for editing the whole course
+    **2** - a button to import the course schedule from a csv file (new events/tasks are added or existing ones are updated)
+    **3** - a button to add a single event/task
 
-2. Quick edit for the **Table view**
+2. Quick edit of the **Table view**
 
 ![schedule table edit](images/schedule-7.png)
 ![schedule table edit](images/schedule-9.png)
