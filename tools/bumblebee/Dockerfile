@@ -8,6 +8,9 @@ ENV TZ utc
 
 WORKDIR /app
 
+RUN mkdir -p /tmp/timestamp
+VOLUME /tmp/timestamp
+
 COPY package.json /app
 COPY package-lock.json /app
 RUN npm install --production --no-optional
