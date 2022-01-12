@@ -78,7 +78,7 @@ services:
       - ./nginx:/etc/nginx
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
-    command: 'nginx -g "daemon off;"'
+    command: "/bin/sh -c 'while :; do sleep 12h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
       - 80:8080
       - 443:443
@@ -96,7 +96,7 @@ services:
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done;'"
     depends_on:
       - nginx
 
