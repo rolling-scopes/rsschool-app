@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getNestServerProps } from 'utils/axios';
+import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
-import { Configuration, ProfileApi } from 'api';
+import { ProfileApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -19,9 +19,9 @@ export class UserService {
   private opts: AxiosRequestConfig;
 
   constructor(private token?: string) {
-    this.opts = getNestServerProps(this.token);
+    this.opts = getServerAxiosProps(this.token);
     this.axios = axios.create(this.opts);
-    this.profileApi = new ProfileApi(new Configuration({ basePath: this.opts.baseURL, baseOptions: this.opts }));
+    this.profileApi = new ProfileApi(getApiConfiguration(this.token));
   }
 
   async getDiscordIds() {
