@@ -1,15 +1,15 @@
-import { Button, Card, Form, Input, Pagination, Row, Select, Typography, Avatar } from 'antd';
-import css from 'styled-jsx/css';
+import { Avatar, Button, Card, Form, Input, Pagination, Row, Select, Typography } from 'antd';
+import { IGratitudeGetRequest, IGratitudeGetResponse } from 'common/interfaces/gratitude';
 import { useCallback, useEffect, useState } from 'react';
-import { Course } from '../../../services/models';
-import { IGratitudeGetResponse, IGratitudeGetRequest } from 'common/interfaces/gratitude';
-import { GratitudeService } from '../../../services/gratitude';
+import Masonry from 'react-masonry-css';
 import { useAsync } from 'react-use';
-import { CoursesService } from '../../../services/courses';
-import { onlyDefined } from '../../../utils/onlyDefined';
+import css from 'styled-jsx/css';
 import { HeroesFormData } from '../../../../../common/interfaces/gratitude';
 import heroesBadges from '../../../configs/heroes-badges';
-import Masonry from 'react-masonry-css';
+import { CoursesService } from '../../../services/courses';
+import { GratitudeService } from '../../../services/gratitude';
+import { Course } from '../../../services/models';
+import { onlyDefined } from '../../../utils/onlyDefined';
 
 const { Text, Link, Paragraph } = Typography;
 

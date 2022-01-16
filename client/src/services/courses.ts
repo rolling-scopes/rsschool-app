@@ -1,10 +1,14 @@
 import axios from 'axios';
+import { CoursesApi } from 'api';
 import { Course } from './models';
 
 type CourseResponse = { data: Course };
 type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
+
+  private coursesApi = new CoursesApi();
+
   async updateCourse(id: number, data: Partial<Course>) {
     const result = await axios.put<CourseResponse>(`/api/course/${id}`, data);
     return result.data.data;
@@ -26,7 +30,7 @@ export class CoursesService {
   }
 
   async getCourse(idOrAlias: number | string) {
-    const result = await axios.get<CourseResponse>(`/api/v2/courses/${idOrAlias}`);
-    return result.data.data;
+    const result = await this.coursesApi.getCourse(idOrAlias.toString());
+    return result.data as any;
   }
 }

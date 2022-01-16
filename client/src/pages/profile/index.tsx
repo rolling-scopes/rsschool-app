@@ -206,7 +206,7 @@ export class ProfilePage extends React.Component<Props, State> {
       })) as CoreJsInterviewData[];
 
   private fetchData = async () => {
-    await this.setState({ isLoading: true });
+    this.setState({ isLoading: true });
 
     const { router } = this.props;
 
@@ -234,7 +234,8 @@ export class ProfilePage extends React.Component<Props, State> {
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      await this.setState({
+      console.log('setting profile');
+      this.setState({
         isLoading: false,
         profile: updateProfile,
         isProfileOwner,
@@ -243,7 +244,8 @@ export class ProfilePage extends React.Component<Props, State> {
         initialProfileSettings,
       });
     } catch (e) {
-      await this.setState({
+      console.log(e);
+      this.setState({
         isLoading: false,
         profile: null,
         initialPermissionsSettings: null,
@@ -321,7 +323,7 @@ export class ProfilePage extends React.Component<Props, State> {
     await this.setState({ isLoading: false });
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     // it's a dirty hack to fix an issue with empty query params
     // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
     //
@@ -330,7 +332,7 @@ export class ProfilePage extends React.Component<Props, State> {
     setTimeout(async () => {
       await this.fetchData();
       await this.authorizeDiscord();
-    }, 200);
+    }, 100);
   }
 
   render() {
@@ -462,15 +464,15 @@ export class ProfilePage extends React.Component<Props, State> {
                     </div>
                   ))}
                 </Masonry>
-                <style jsx>{`
-                  .masonry div {
+                <style jsx global>{`
+                  .masonry {
                     display: flex;
                     margin-left: -16px;
                     width: auto;
                   }
                 `}</style>
-                <style jsx>{`
-                  .masonry-column div {
+                <style jsx global>{`
+                  .masonry-column {
                     padding-left: 16px;
                     background-clip: padding-box;
                   }
