@@ -9,12 +9,12 @@ import { getRepository } from 'typeorm';
 import { ScoreService } from '../../services/score';
 
 const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
-  const stageId = Number(ctx.params.id);
-  if (isNaN(stageId)) {
+  const id = Number(ctx.params.id);
+  if (isNaN(id)) {
     setResponse(ctx, BAD_REQUEST, 'Incorrect [Task Id]');
     return;
   }
-  ctx.params.id = stageId;
+  ctx.params.id = id;
   await next();
 };
 

@@ -233,7 +233,6 @@ function createRecord(values: any, courseId: number) {
     place: values.place,
     dateTime: values.dateTime ? formatTimezoneToUTC(values.dateTime, values.timeZone) : undefined,
     eventId: values.eventId,
-    stageId: values.stageId,
     comment: values.comment,
 
     coordinator: values.coordinator,

@@ -84,7 +84,6 @@ export interface SelfEducationQuestionWithIndex extends SelfEducationQuestion {
 }
 
 export interface CourseTaskDetails extends CourseTask {
-  stageId: number;
   description: string | null;
   resultsCount: number;
   taskOwner: { id: number; githubId: string; name: string } | null;
@@ -99,7 +98,6 @@ export interface CourseEvent {
   dateTime: string;
   place: string;
   comment: string;
-  stageId: number;
   eventId: number;
   owner: string;
   coordinator: string;
@@ -129,7 +127,6 @@ export interface CreateCourseTask {
   taskId: number;
   maxScore?: number;
   scoreWeight?: number;
-  stageId: number;
 }
 
 export interface MentorWithContacts {

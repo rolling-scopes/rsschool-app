@@ -6,6 +6,7 @@ import { CourseTasksService, CourseUsersService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { JwtService } from './jwt.service';
+import { ConfigService } from '../config';
 
 export type CurrentRequest = Request & {
   user: AuthUser;
@@ -14,14 +15,16 @@ export type CurrentRequest = Request & {
 @Injectable()
 export class AuthService {
   private readonly admins: string[] = [];
-  private readonly hirers: string[] = [];
 
   constructor(
     private readonly jwtService: JwtService,
     readonly courseTaskService: CourseTasksService,
     readonly courseUserService: CourseUsersService,
     readonly userService: UsersService,
-  ) {}
+    readonly configService: ConfigService,
+  ) {
+    this.admins = configService.users.admins;
+  }
 
   public async createAuthUser(profile: Profile, admin = false): Promise<AuthUser> {
     const username = profile.username?.toLowerCase();
@@ -41,7 +44,6 @@ export class AuthService {
     }
 
     const isAdmin = this.admins.includes(username) || admin;
-    // const isHirer = this.hirers.includes(username);
 
     if (result == null) {
       const [email] = profile.emails?.filter((email: any) => !!email.primary) ?? [];

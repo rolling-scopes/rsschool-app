@@ -12,7 +12,6 @@ export class CoursesController {
   constructor(private courseService: CoursesService) {}
 
   @Get('/')
-  @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'getCourses' })
   @ApiOkResponse({ type: [CourseDto] })
   public async getCourses() {
@@ -21,7 +20,6 @@ export class CoursesController {
   }
 
   @Get('/:aliasOrId')
-  @RequiredAppRoles([Role.Admin])
   @ApiOperation({ operationId: 'getCourse' })
   public async getCourse(@Param('aliasOrId') aliasOrId: string) {
     const id = Number(aliasOrId);

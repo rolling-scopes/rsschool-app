@@ -322,7 +322,6 @@ function createRecord(values: any, courseId: number) {
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
     taskId: values.taskId,
-    stageId: values.stageId,
     taskOwnerId: values.taskOwnerId,
     checker: values.checker,
     scoreWeight: values.scoreWeight,
