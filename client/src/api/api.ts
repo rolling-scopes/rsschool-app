@@ -1080,6 +1080,35 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        githubLogout: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v2/auth/github/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1108,6 +1137,15 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.githubLogin(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async githubLogout(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.githubLogout(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -1133,6 +1171,14 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         githubLogin(options?: any): AxiosPromise<void> {
             return localVarFp.githubLogin(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        githubLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.githubLogout(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1162,6 +1208,16 @@ export class AuthApi extends BaseAPI {
      */
     public githubLogin(options?: AxiosRequestConfig) {
         return AuthApiFp(this.configuration).githubLogin(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public githubLogout(options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).githubLogout(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1250,7 +1306,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCourse(aliasOrId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getCourse(aliasOrId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourse(aliasOrId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1279,7 +1335,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourse(aliasOrId: string, options?: any): AxiosPromise<void> {
+        getCourse(aliasOrId: string, options?: any): AxiosPromise<CourseDto> {
             return localVarFp.getCourse(aliasOrId, options).then((request) => request(axios, basePath));
         },
         /**

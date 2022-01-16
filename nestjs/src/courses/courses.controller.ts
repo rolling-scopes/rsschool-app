@@ -21,6 +21,7 @@ export class CoursesController {
 
   @Get('/:aliasOrId')
   @ApiOperation({ operationId: 'getCourse' })
+  @ApiOkResponse({ type: CourseDto })
   public async getCourse(@Param('aliasOrId') aliasOrId: string) {
     const id = Number(aliasOrId);
     let data: Course | null = null;

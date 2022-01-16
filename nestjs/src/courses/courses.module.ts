@@ -37,6 +37,6 @@ import { MentorsService, MentorsController } from './mentors';
     StudentsService,
     MentorsService,
   ],
-  exports: [CourseTasksService, CourseUsersService],
+  exports: [CourseTasksService, CourseUsersService, CoursesService],
 })
 export class CoursesModule {}
