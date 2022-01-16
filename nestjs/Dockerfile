@@ -14,4 +14,4 @@ RUN npm install --production --no-optional
 
 COPY dist /app/dist
 
-CMD [ "node", "dist/nestjs/src/main" ]
+CMD [ "node", "dist/main" ]
