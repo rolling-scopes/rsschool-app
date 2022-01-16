@@ -181,6 +181,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Typography
                             className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                             component="h2"
+                            onClick={[Function]}
                             style={
                               Object {
                                 "WebkitLineClamp": undefined,
@@ -191,6 +192,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <h2
                               className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              onClick={[Function]}
                               style={
                                 Object {
                                   "WebkitLineClamp": undefined,
@@ -375,6 +377,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -383,6 +386,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -432,6 +436,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -440,6 +445,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -489,6 +495,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -497,6 +504,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -546,6 +554,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -554,6 +563,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -603,6 +613,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -611,6 +622,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -660,6 +672,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -668,6 +681,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -717,6 +731,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -725,6 +740,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -938,6 +954,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           <Typography
                             className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                             component="h2"
+                            onClick={[Function]}
                             style={
                               Object {
                                 "WebkitLineClamp": undefined,
@@ -948,6 +965,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           >
                             <h2
                               className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              onClick={[Function]}
                               style={
                                 Object {
                                   "WebkitLineClamp": undefined,
@@ -1117,6 +1135,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1125,6 +1144,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -1174,6 +1194,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1182,6 +1203,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -1231,6 +1253,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1239,6 +1262,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -1288,6 +1312,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       <Typography
                                         className=""
                                         component="span"
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1296,6 +1321,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
+                                          onClick={[Function]}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
@@ -1360,6 +1386,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
+                  autoFocus={true}
                   className=""
                   defaultOpen={false}
                   duration=".3s"
@@ -1367,7 +1394,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -1393,12 +1420,13 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
+                      autoFocus={true}
                       className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -1441,7 +1469,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -1460,93 +1488,92 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Visibility settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Visibility settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -1745,6 +1772,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
+                  autoFocus={true}
                   className=""
                   defaultOpen={false}
                   duration=".3s"
@@ -1752,7 +1780,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -1778,12 +1806,13 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
+                      autoFocus={true}
                       className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -1826,7 +1855,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -1845,93 +1874,92 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Profile settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Profile settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -2039,6 +2067,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2047,6 +2076,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2104,6 +2134,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value="vasya@epam.com"
@@ -2169,6 +2200,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2177,6 +2209,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2234,6 +2267,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value="vasya@tut.by"
@@ -2299,6 +2333,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2307,6 +2342,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2364,6 +2400,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value=""
@@ -2429,6 +2466,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2437,6 +2475,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2494,6 +2533,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value="1232422"
@@ -2559,6 +2599,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2567,6 +2608,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2624,6 +2666,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value="skype_vasya"
@@ -2689,6 +2732,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2697,6 +2741,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2754,6 +2799,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value=""
@@ -2819,6 +2865,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
+                                                                  onClick={[Function]}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2827,6 +2874,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
+                                                                    onClick={[Function]}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
@@ -2884,6 +2932,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                           "width": "100%",
                                                         }
                                                       }
+                                                      suffix={null}
                                                       triggerFocus={[Function]}
                                                       type="text"
                                                       value=""

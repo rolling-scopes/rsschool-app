@@ -6,16 +6,7 @@ import { Session } from 'components/withSession';
 import { ProfilePage } from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
-jest.mock('services/user', () => ({
-  UserService: class UserService {
-    getProfileInfo() {
-      return jest.fn();
-    }
-    saveProfileInfo() {
-      return jest.fn();
-    }
-  },
-}));
+jest.mock('api', () => ({}));
 
 const profile = {
   permissionsSettings: {
@@ -252,6 +243,10 @@ describe('ProfilePage', () => {
   });
   describe('saveProfile', () => {
     it('Should set state correctly', async () => {
+      const saveProfileMock = jest
+        .spyOn(instance['userService'], 'saveProfileInfo')
+        .mockImplementation(() => Promise.resolve());
+
       const profile = {
         generalInfo: {
           aboutMyself: 'Hello',
@@ -291,12 +286,14 @@ describe('ProfilePage', () => {
         isInitialPermissionsSettingsChanged: true,
         isInitialProfileSettingsChanged: true,
       });
+
       await instance.saveProfile();
       expect((wrapper.state() as any).isSaving).toBe(false);
       expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(false);
       expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(false);
       expect((wrapper.state() as any).initialPermissionsSettings).toEqual(profile.permissionsSettings);
       expect((wrapper.state() as any).initialProfileSettings).toEqual(profile);
+      saveProfileMock.mockReset();
     });
   });
   describe('hadStudentCoreJSInterview', () => {

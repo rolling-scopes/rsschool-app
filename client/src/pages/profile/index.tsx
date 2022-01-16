@@ -267,7 +267,7 @@ export class ProfilePage extends React.Component<Props, State> {
   private saveProfile = async () => {
     const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
 
-    await this.setState({ isSaving: true });
+    this.setState({ isSaving: true });
 
     if (profile) {
       try {
@@ -284,7 +284,7 @@ export class ProfilePage extends React.Component<Props, State> {
 
         const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
         const initialProfileSettings = profile ? cloneDeep(profile) : null;
-        await this.setState({
+        this.setState({
           isSaving: false,
           initialPermissionsSettings,
           initialProfileSettings,
@@ -293,7 +293,7 @@ export class ProfilePage extends React.Component<Props, State> {
         });
         this.onSaveSuccess();
       } catch (e) {
-        await this.setState({ isSaving: false });
+        this.setState({ isSaving: false });
         this.onSaveError();
       }
     }
