@@ -2,3 +2,4 @@ client/src/.next
 client/.next
 server/dist
 nestjs/dist
+client/src/api/

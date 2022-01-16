@@ -8,8 +8,6 @@ import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
 import { discordServerRoute } from './discordServer';
 import { userGroupRoute } from './userGroup';
-import { stageRoute } from './stage';
-import { stagesRoute } from './stages';
 import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
@@ -71,8 +69,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, profileRoute(logger));
   applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
-  applyRouter(router, stageRoute(logger));
-  applyRouter(router, stagesRoute(logger));
   applyRouter(router, interviewQuestionRoute(logger));
   applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));

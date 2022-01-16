@@ -119,5 +119,5 @@ export const config: IConfig = {
     max: 100,
   },
   sessionAge: 1000 * 60 * 60 * 24 * 2,
-  sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret-session-key',
+  sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret',
 };

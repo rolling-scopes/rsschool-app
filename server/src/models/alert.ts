@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-export enum AlertTypes {
+export enum AlertType {
   INFO = 'info',
   ERROR = 'error',
   WARN = 'warn',
@@ -11,10 +11,10 @@ export class Alert {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @Column()
   text: string;
@@ -25,6 +25,6 @@ export class Alert {
   @Column({ default: false })
   enabled: boolean;
 
-  @Column({ default: AlertTypes.INFO })
-  type: AlertTypes;
+  @Column({ default: AlertType.INFO })
+  type: AlertType;
 }

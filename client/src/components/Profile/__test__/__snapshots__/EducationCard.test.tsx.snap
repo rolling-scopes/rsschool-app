@@ -133,57 +133,37 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <Typography
-                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                        component="h2"
-                        style={
-                          Object {
-                            "WebkitLineClamp": undefined,
-                            "fontSize": 16,
-                            "marginBottom": 0,
-                          }
-                        }
+                      <SingleObserver
+                        disabled={true}
+                        key="rc-observer-key-0"
+                        onResize={[Function]}
                       >
-                        <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                          style={
-                            Object {
-                              "WebkitLineClamp": undefined,
-                              "fontSize": 16,
-                              "marginBottom": 0,
+                        <DomWrapper>
+                          <Typography
+                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                            component="h2"
+                            onClick={[Function]}
+                            style={
+                              Object {
+                                "WebkitLineClamp": undefined,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
                             }
-                          }
-                        >
-                          <ForwardRef(ReadOutlined)>
-                            <AntdIcon
-                              icon={
+                          >
+                            <h2
+                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              onClick={[Function]}
+                              style={
                                 Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "read",
-                                  "theme": "outlined",
+                                  "WebkitLineClamp": undefined,
+                                  "fontSize": 16,
+                                  "marginBottom": 0,
                                 }
                               }
                             >
-                              <span
-                                aria-label="read"
-                                className="anticon anticon-read"
-                                role="img"
-                              >
-                                <IconReact
+                              <ForwardRef(ReadOutlined)>
+                                <AntdIcon
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -206,29 +186,59 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                     }
                                   }
                                 >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="read"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-read"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
+                                  <span
+                                    aria-label="read"
+                                    className="anticon anticon-read"
+                                    role="img"
                                   >
-                                    <path
-                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                      key="svg-read-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(ReadOutlined)>
-                           
-                          Education
-                        </h2>
-                      </Typography>
+                                    <IconReact
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "read",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        data-icon="read"
+                                        fill="currentColor"
+                                        focusable="false"
+                                        height="1em"
+                                        key="svg-read"
+                                        viewBox="64 64 896 896"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                          key="svg-read-svg-0"
+                                        />
+                                      </svg>
+                                    </IconReact>
+                                  </span>
+                                </AntdIcon>
+                              </ForwardRef(ReadOutlined)>
+                               
+                              Education
+                            </h2>
+                          </Typography>
+                        </DomWrapper>
+                      </SingleObserver>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -322,6 +332,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
+                  autoFocus={true}
                   className=""
                   defaultOpen={false}
                   duration=".3s"
@@ -329,7 +340,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -355,12 +366,13 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
+                      autoFocus={true}
                       className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -403,7 +415,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -422,93 +434,92 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Visibility settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Visibility settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -608,9 +619,24 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
-            <JSXStyle
-              id="261503908"
-            />
+            <style
+              jsx={true}
+            >
+              
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+            </style>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -646,7 +672,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
             isSettingsVisible={false}
           >
             <DrawerWrapper
-              className="jsx-2583821679"
               closable={true}
               getContainer={false}
               onClose={[Function]}
@@ -661,7 +686,6 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               visible={false}
             >
               <Drawer
-                className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
                 onClose={[Function]}
@@ -678,14 +702,15 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  className="jsx-2583821679"
+                  autoFocus={true}
+                  className=""
                   defaultOpen={false}
                   duration=".3s"
                   ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -711,12 +736,13 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      className="jsx-2583821679"
+                      autoFocus={true}
+                      className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -738,7 +764,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                       }
                     >
                       <div
-                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        className="ant-drawer ant-drawer-top"
                         onTransitionEnd={[Function]}
                         style={
                           Object {
@@ -759,7 +785,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -778,93 +804,92 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Profile settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Profile settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -932,7 +957,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       size="small"
                                                       type="dashed"
                                                     >
-                                                      <Wave>
+                                                      <Wave
+                                                        disabled={false}
+                                                      >
                                                         <button
                                                           className="ant-btn ant-btn-dashed ant-btn-sm"
                                                           onClick={[Function]}
@@ -1061,28 +1088,38 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  University:
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      University:
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -1134,6 +1171,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
@@ -1177,28 +1215,38 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Faculty
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Faculty
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -1250,6 +1298,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
@@ -1293,28 +1342,38 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Graduation year:
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Graduation year:
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -1366,6 +1425,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
                                                         value=""
@@ -1405,7 +1465,9 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                   }
                                   type="dashed"
                                 >
-                                  <Wave>
+                                  <Wave
+                                    disabled={false}
+                                  >
                                     <button
                                       className="ant-btn ant-btn-dashed"
                                       onClick={[Function]}
@@ -1516,9 +1578,24 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                     </button>
                                   </Wave>
                                 </Button>
-                                <JSXStyle
-                                  id="2583821679"
-                                />
+                                <style
+                                  jsx={true}
+                                >
+                                  
+              :global(.ant-drawer-content-wrapper) {
+                height: inherit !important;
+              }
+
+              :global(.ant-drawer-wrapper-body) {
+                overflow: hidden;
+              }
+
+              :global(.ant-drawer-body) {
+                height: calc(100% - 55px);
+                overflow: auto;
+              }
+            
+                                </style>
                               </div>
                             </div>
                           </div>
@@ -1786,57 +1863,37 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <Typography
-                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                        component="h2"
-                        style={
-                          Object {
-                            "WebkitLineClamp": undefined,
-                            "fontSize": 16,
-                            "marginBottom": 0,
-                          }
-                        }
+                      <SingleObserver
+                        disabled={true}
+                        key="rc-observer-key-0"
+                        onResize={[Function]}
                       >
-                        <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                          style={
-                            Object {
-                              "WebkitLineClamp": undefined,
-                              "fontSize": 16,
-                              "marginBottom": 0,
+                        <DomWrapper>
+                          <Typography
+                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                            component="h2"
+                            onClick={[Function]}
+                            style={
+                              Object {
+                                "WebkitLineClamp": undefined,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
                             }
-                          }
-                        >
-                          <ForwardRef(ReadOutlined)>
-                            <AntdIcon
-                              icon={
+                          >
+                            <h2
+                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              onClick={[Function]}
+                              style={
                                 Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "read",
-                                  "theme": "outlined",
+                                  "WebkitLineClamp": undefined,
+                                  "fontSize": 16,
+                                  "marginBottom": 0,
                                 }
                               }
                             >
-                              <span
-                                aria-label="read"
-                                className="anticon anticon-read"
-                                role="img"
-                              >
-                                <IconReact
+                              <ForwardRef(ReadOutlined)>
+                                <AntdIcon
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -1859,29 +1916,59 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                     }
                                   }
                                 >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="read"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-read"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
+                                  <span
+                                    aria-label="read"
+                                    className="anticon anticon-read"
+                                    role="img"
                                   >
-                                    <path
-                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                      key="svg-read-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(ReadOutlined)>
-                           
-                          Education
-                        </h2>
-                      </Typography>
+                                    <IconReact
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "read",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        data-icon="read"
+                                        fill="currentColor"
+                                        focusable="false"
+                                        height="1em"
+                                        key="svg-read"
+                                        viewBox="64 64 896 896"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                          key="svg-read-svg-0"
+                                        />
+                                      </svg>
+                                    </IconReact>
+                                  </span>
+                                </AntdIcon>
+                              </ForwardRef(ReadOutlined)>
+                               
+                              Education
+                            </h2>
+                          </Typography>
+                        </DomWrapper>
+                      </SingleObserver>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -1943,28 +2030,38 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
                                     disabled={true}
                                     onResize={[Function]}
                                   >
-                                    <Typography
-                                      className=""
-                                      component="span"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
-                                        }
-                                      }
+                                    <SingleObserver
+                                      disabled={true}
+                                      key="rc-observer-key-0"
+                                      onResize={[Function]}
                                     >
-                                      <span
-                                        className="ant-typography"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
+                                      <DomWrapper>
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          onClick={[Function]}
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
                                           }
-                                        }
-                                      >
-                                        <strong>
-                                          2002
-                                        </strong>
-                                      </span>
-                                    </Typography>
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            onClick={[Function]}
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": undefined,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              2002
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </DomWrapper>
+                                    </SingleObserver>
                                   </ResizeObserver>
                                 </LocaleReceiver>
                               </Base>
@@ -2120,57 +2217,37 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <Typography
-                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                        component="h2"
-                        style={
-                          Object {
-                            "WebkitLineClamp": undefined,
-                            "fontSize": 16,
-                            "marginBottom": 0,
-                          }
-                        }
+                      <SingleObserver
+                        disabled={true}
+                        key="rc-observer-key-0"
+                        onResize={[Function]}
                       >
-                        <h2
-                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                          style={
-                            Object {
-                              "WebkitLineClamp": undefined,
-                              "fontSize": 16,
-                              "marginBottom": 0,
+                        <DomWrapper>
+                          <Typography
+                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                            component="h2"
+                            onClick={[Function]}
+                            style={
+                              Object {
+                                "WebkitLineClamp": undefined,
+                                "fontSize": 16,
+                                "marginBottom": 0,
+                              }
                             }
-                          }
-                        >
-                          <ForwardRef(ReadOutlined)>
-                            <AntdIcon
-                              icon={
+                          >
+                            <h2
+                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                              onClick={[Function]}
+                              style={
                                 Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "read",
-                                  "theme": "outlined",
+                                  "WebkitLineClamp": undefined,
+                                  "fontSize": 16,
+                                  "marginBottom": 0,
                                 }
                               }
                             >
-                              <span
-                                aria-label="read"
-                                className="anticon anticon-read"
-                                role="img"
-                              >
-                                <IconReact
+                              <ForwardRef(ReadOutlined)>
+                                <AntdIcon
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -2193,29 +2270,59 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     }
                                   }
                                 >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="read"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-read"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
+                                  <span
+                                    aria-label="read"
+                                    className="anticon anticon-read"
+                                    role="img"
                                   >
-                                    <path
-                                      d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
-                                      key="svg-read-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(ReadOutlined)>
-                           
-                          Education
-                        </h2>
-                      </Typography>
+                                    <IconReact
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "read",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        data-icon="read"
+                                        fill="currentColor"
+                                        focusable="false"
+                                        height="1em"
+                                        key="svg-read"
+                                        viewBox="64 64 896 896"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M928 161H699.2c-49.1 0-97.1 14.1-138.4 40.7L512 233l-48.8-31.3A255.2 255.2 0 00324.8 161H96c-17.7 0-32 14.3-32 32v568c0 17.7 14.3 32 32 32h228.8c49.1 0 97.1 14.1 138.4 40.7l44.4 28.6c1.3.8 2.8 1.3 4.3 1.3s3-.4 4.3-1.3l44.4-28.6C602 807.1 650.1 793 699.2 793H928c17.7 0 32-14.3 32-32V193c0-17.7-14.3-32-32-32zM324.8 721H136V233h188.8c35.4 0 69.8 10.1 99.5 29.2l48.8 31.3 6.9 4.5v462c-47.6-25.6-100.8-39-155.2-39zm563.2 0H699.2c-54.4 0-107.6 13.4-155.2 39V298l6.9-4.5 48.8-31.3c29.7-19.1 64.1-29.2 99.5-29.2H888v488zM396.9 361H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm223.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c0-4.1-3.2-7.5-7.1-7.5H627.1c-3.9 0-7.1 3.4-7.1 7.5zM396.9 501H211.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5zm416 0H627.1c-3.9 0-7.1 3.4-7.1 7.5v45c0 4.1 3.2 7.5 7.1 7.5h185.7c3.9 0 7.1-3.4 7.1-7.5v-45c.1-4.1-3.1-7.5-7-7.5z"
+                                          key="svg-read-svg-0"
+                                        />
+                                      </svg>
+                                    </IconReact>
+                                  </span>
+                                </AntdIcon>
+                              </ForwardRef(ReadOutlined)>
+                               
+                              Education
+                            </h2>
+                          </Typography>
+                        </DomWrapper>
+                      </SingleObserver>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -2277,28 +2384,38 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     disabled={true}
                                     onResize={[Function]}
                                   >
-                                    <Typography
-                                      className=""
-                                      component="span"
-                                      style={
-                                        Object {
-                                          "WebkitLineClamp": undefined,
-                                        }
-                                      }
+                                    <SingleObserver
+                                      disabled={true}
+                                      key="rc-observer-key-0"
+                                      onResize={[Function]}
                                     >
-                                      <span
-                                        className="ant-typography"
-                                        style={
-                                          Object {
-                                            "WebkitLineClamp": undefined,
+                                      <DomWrapper>
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          onClick={[Function]}
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                            }
                                           }
-                                        }
-                                      >
-                                        <strong>
-                                          2002
-                                        </strong>
-                                      </span>
-                                    </Typography>
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            onClick={[Function]}
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": undefined,
+                                              }
+                                            }
+                                          >
+                                            <strong>
+                                              2002
+                                            </strong>
+                                          </span>
+                                        </Typography>
+                                      </DomWrapper>
+                                    </SingleObserver>
                                   </ResizeObserver>
                                 </LocaleReceiver>
                               </Base>
@@ -2350,6 +2467,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
+                  autoFocus={true}
                   className=""
                   defaultOpen={false}
                   duration=".3s"
@@ -2357,7 +2475,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -2383,12 +2501,13 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
+                      autoFocus={true}
                       className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -2431,7 +2550,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -2450,93 +2569,92 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Visibility settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Visibility settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -2636,9 +2754,24 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
-            <JSXStyle
-              id="261503908"
-            />
+            <style
+              jsx={true}
+            >
+              
+        :global(.ant-drawer-content-wrapper) {
+          height: inherit !important;
+        }
+
+        :global(.ant-drawer-wrapper-body) {
+          overflow: hidden;
+        }
+
+        :global(.ant-drawer-body) {
+          height: calc(100% - 55px);
+          overflow: auto;
+        }
+      
+            </style>
           </PermissionsSettingsDrawer>
           <ProfileSettingsDrawer
             content={
@@ -2674,7 +2807,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
             isSettingsVisible={false}
           >
             <DrawerWrapper
-              className="jsx-2583821679"
               closable={true}
               getContainer={false}
               onClose={[Function]}
@@ -2689,7 +2821,6 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               visible={false}
             >
               <Drawer
-                className="jsx-2583821679"
                 closable={true}
                 getContainer={false}
                 onClose={[Function]}
@@ -2706,14 +2837,15 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  className="jsx-2583821679"
+                  autoFocus={true}
+                  className=""
                   defaultOpen={false}
                   duration=".3s"
                   ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={256}
+                  height={378}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -2739,12 +2871,13 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      className="jsx-2583821679"
+                      autoFocus={true}
+                      className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={256}
+                      height={378}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -2766,7 +2899,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                       }
                     >
                       <div
-                        className="ant-drawer ant-drawer-top jsx-2583821679"
+                        className="ant-drawer ant-drawer-top"
                         onTransitionEnd={[Function]}
                         style={
                           Object {
@@ -2787,7 +2920,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "256px",
+                              "height": "378px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -2806,93 +2939,92 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-title"
+                                  className="ant-drawer-header-title"
                                 >
-                                  Profile settings
-                                </div>
-                                <button
-                                  aria-label="Close"
-                                  className="ant-drawer-close"
-                                  onClick={[Function]}
-                                  style={
-                                    Object {
-                                      "--scroll-bar": "0px",
-                                    }
-                                  }
-                                  type="button"
-                                >
-                                  <ForwardRef(CloseOutlined)>
-                                    <AntdIcon
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                },
-                                                "tag": "path",
+                                  <button
+                                    aria-label="Close"
+                                    className="ant-drawer-close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <ForwardRef(CloseOutlined)>
+                                      <AntdIcon
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "close",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        aria-label="close"
-                                        className="anticon anticon-close"
-                                        role="img"
-                                      >
-                                        <IconReact
-                                          icon={
-                                            Object {
-                                              "icon": Object {
-                                                "attrs": Object {
-                                                  "focusable": "false",
-                                                  "viewBox": "64 64 896 896",
-                                                },
-                                                "children": Array [
-                                                  Object {
-                                                    "attrs": Object {
-                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                    },
-                                                    "tag": "path",
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
                                                   },
-                                                ],
-                                                "tag": "svg",
-                                              },
-                                              "name": "close",
-                                              "theme": "outlined",
-                                            }
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "close",
+                                            "theme": "outlined",
                                           }
+                                        }
+                                      >
+                                        <span
+                                          aria-label="close"
+                                          className="anticon anticon-close"
+                                          role="img"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            data-icon="close"
-                                            fill="currentColor"
-                                            focusable="false"
-                                            height="1em"
-                                            key="svg-close"
-                                            viewBox="64 64 896 896"
-                                            width="1em"
+                                          <IconReact
+                                            icon={
+                                              Object {
+                                                "icon": Object {
+                                                  "attrs": Object {
+                                                    "focusable": "false",
+                                                    "viewBox": "64 64 896 896",
+                                                  },
+                                                  "children": Array [
+                                                    Object {
+                                                      "attrs": Object {
+                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                      },
+                                                      "tag": "path",
+                                                    },
+                                                  ],
+                                                  "tag": "svg",
+                                                },
+                                                "name": "close",
+                                                "theme": "outlined",
+                                              }
+                                            }
                                           >
-                                            <path
-                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                              key="svg-close-svg-0"
-                                            />
-                                          </svg>
-                                        </IconReact>
-                                      </span>
-                                    </AntdIcon>
-                                  </ForwardRef(CloseOutlined)>
-                                </button>
+                                            <svg
+                                              aria-hidden="true"
+                                              data-icon="close"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-close"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                                key="svg-close-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </span>
+                                      </AntdIcon>
+                                    </ForwardRef(CloseOutlined)>
+                                  </button>
+                                  <div
+                                    className="ant-drawer-title"
+                                  >
+                                    Profile settings
+                                  </div>
+                                </div>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -2960,28 +3092,38 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  2002
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      2002
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -3001,7 +3143,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       size="small"
                                                       type="dashed"
                                                     >
-                                                      <Wave>
+                                                      <Wave
+                                                        disabled={false}
+                                                      >
                                                         <button
                                                           className="ant-btn ant-btn-dashed ant-btn-sm"
                                                           onClick={[Function]}
@@ -3130,28 +3274,38 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  University:
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      University:
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -3203,6 +3357,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
                                                         value="MIT"
@@ -3246,28 +3401,38 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Faculty
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Faculty
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -3319,6 +3484,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
                                                         value="POIT"
@@ -3362,28 +3528,38 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             disabled={true}
                                                             onResize={[Function]}
                                                           >
-                                                            <Typography
-                                                              className=""
-                                                              component="span"
-                                                              style={
-                                                                Object {
-                                                                  "WebkitLineClamp": undefined,
-                                                                }
-                                                              }
+                                                            <SingleObserver
+                                                              disabled={true}
+                                                              key="rc-observer-key-0"
+                                                              onResize={[Function]}
                                                             >
-                                                              <span
-                                                                className="ant-typography"
-                                                                style={
-                                                                  Object {
-                                                                    "WebkitLineClamp": undefined,
+                                                              <DomWrapper>
+                                                                <Typography
+                                                                  className=""
+                                                                  component="span"
+                                                                  onClick={[Function]}
+                                                                  style={
+                                                                    Object {
+                                                                      "WebkitLineClamp": undefined,
+                                                                    }
                                                                   }
-                                                                }
-                                                              >
-                                                                <strong>
-                                                                  Graduation year:
-                                                                </strong>
-                                                              </span>
-                                                            </Typography>
+                                                                >
+                                                                  <span
+                                                                    className="ant-typography"
+                                                                    onClick={[Function]}
+                                                                    style={
+                                                                      Object {
+                                                                        "WebkitLineClamp": undefined,
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <strong>
+                                                                      Graduation year:
+                                                                    </strong>
+                                                                  </span>
+                                                                </Typography>
+                                                              </DomWrapper>
+                                                            </SingleObserver>
                                                           </ResizeObserver>
                                                         </LocaleReceiver>
                                                       </Base>
@@ -3435,9 +3611,10 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             "width": "100%",
                                                           }
                                                         }
+                                                        suffix={null}
                                                         triggerFocus={[Function]}
                                                         type="text"
-                                                        value={2002}
+                                                        value="2002"
                                                       >
                                                         <input
                                                           className="ant-input"
@@ -3451,7 +3628,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             }
                                                           }
                                                           type="text"
-                                                          value={2002}
+                                                          value="2002"
                                                         />
                                                       </ClearableLabeledInput>
                                                     </Input>
@@ -3474,7 +3651,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                   }
                                   type="dashed"
                                 >
-                                  <Wave>
+                                  <Wave
+                                    disabled={false}
+                                  >
                                     <button
                                       className="ant-btn ant-btn-dashed"
                                       onClick={[Function]}
@@ -3585,9 +3764,24 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                     </button>
                                   </Wave>
                                 </Button>
-                                <JSXStyle
-                                  id="2583821679"
-                                />
+                                <style
+                                  jsx={true}
+                                >
+                                  
+              :global(.ant-drawer-content-wrapper) {
+                height: inherit !important;
+              }
+
+              :global(.ant-drawer-wrapper-body) {
+                overflow: hidden;
+              }
+
+              :global(.ant-drawer-body) {
+                height: calc(100% - 55px);
+                overflow: auto;
+              }
+            
+                                </style>
                               </div>
                             </div>
                           </div>

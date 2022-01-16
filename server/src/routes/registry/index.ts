@@ -80,7 +80,7 @@ export function registryRouter(logger?: ILogger) {
     } else {
       const coursesRoles = state.coursesRoles ?? {};
       const coursesIds = Object.entries(coursesRoles)
-        .filter(([_, value = []]) => value.includes(CourseRole.manager) || value.includes(CourseRole.supervisor))
+        .filter(([_, value = []]) => value.includes(CourseRole.Manager) || value.includes(CourseRole.Supervisor))
         .map(([key]) => Number(key));
       mentorRegistries = await repository.findByCoursesIds(coursesIds);
     }

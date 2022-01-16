@@ -1,5 +1,8 @@
 import { Layout, Button, Checkbox, Spin, Col, Form, Row, Table, Tag, Modal } from 'antd';
-import { Header, withSession, GithubAvatar } from 'components';
+import withSession from 'components/withSession';
+import { Header } from 'components/Header';
+
+import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';

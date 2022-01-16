@@ -1,6 +1,6 @@
 import { Button, Modal, Row, Typography, message } from 'antd';
 import * as React from 'react';
-import { StudentSearch } from 'components';
+import { StudentSearch } from 'components/StudentSearch';
 import { CourseService } from 'services/course';
 
 const { Text } = Typography;

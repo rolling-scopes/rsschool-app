@@ -25,8 +25,8 @@ export class CoursesService {
     return result.data.data;
   }
 
-  async getCourse(id: number) {
-    const result = await axios.get<CourseResponse>(`/api/course/${id}`);
+  async getCourse(idOrAlias: number | string) {
+    const result = await axios.get<CourseResponse>(`/api/v2/courses/${idOrAlias}`);
     return result.data.data;
   }
 }

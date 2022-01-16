@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { sign, verify } from 'jsonwebtoken';
+import { ConfigService } from '../config';
 import { JWT_TOKEN_EXPIRATION } from './constants';
 
 @Injectable()
 export class JwtService {
-  private readonly secretKey = '';
+  private readonly secretKey: string = '';
 
   constructor(readonly configService: ConfigService) {
-    this.secretKey = configService.get('RSSHCOOL_JWT_SECRET_KEY');
+    this.secretKey = configService.auth.jwt.secretKey;
   }
 
   public createToken(payload: any) {
-    const jwt: string = sign(payload, this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
+    const jwt: string = sign(JSON.parse(JSON.stringify(payload)), this.secretKey, { expiresIn: JWT_TOKEN_EXPIRATION });
     return jwt;
   }
 

@@ -46,7 +46,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   }
 
   if (courseTask.checker === 'jury') {
-    if (!coursesRoles?.[courseId]?.includes(CourseRole.juryActivist)) {
+    if (!coursesRoles?.[courseId]?.includes(CourseRole.JuryActivist)) {
       setResponse(ctx, BAD_REQUEST, { message: 'not jury activist' });
       return;
     }
@@ -89,11 +89,11 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   const mentor = await courseService.getMentorByUserId(courseId, authorId);
   const session = ctx.state.user as IUserSession;
 
-  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner);
+  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner);
   if (
     mentor == null &&
     !session.isAdmin &&
-    !session.coursesRoles?.[courseId]?.includes(CourseRole.manager) &&
+    !session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) &&
     isNotTaskOwner
   ) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });

@@ -13,7 +13,6 @@ import {
   CourseUser,
   TaskSolutionChecker,
   TaskChecker,
-  Stage,
   TaskSolutionResult,
   IUserSession,
   CourseRole,
@@ -477,8 +476,8 @@ export async function updateScoreStudents(data: { id: number; totalScore: number
 export function isPowerUser(courseId: number, session: IUserSession) {
   return (
     session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
   );
 }
 
@@ -656,33 +655,17 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
   return students;
 }
 
-export async function getStages(courseId: number) {
-  return await getRepository(Stage)
-    .createQueryBuilder('stage')
-    .where('stage."courseId" = :courseId ', { courseId })
-    .getMany();
-}
-
 function shiftDate(date: string, shift: number, format: string): string {
   return moment(date).add(shift, 'days').format(format);
 }
 
-function adjustStage(stage: any, startDateDaysDiff: number, courseId: number) {
-  stage.oldId = stage.id;
-  delete stage.id;
-  stage.startDate = shiftDate(stage.startDate, startDateDaysDiff, 'YYYY-MM-DD');
-  stage.endDate = shiftDate(stage.endDate, startDateDaysDiff, 'YYYY-MM-DD');
-  stage.courseId = courseId;
-}
-
-function adjustEvent(event: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
   delete event.id;
   event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   event.courseId = courseId;
-  event.stageId = stages.find((s: any) => s.oldId === event.stageId);
 }
 
-function adjustTask(task: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
   delete task.id;
   task.studentStartDate = shiftDate(task.studentStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   task.studentEndDate = shiftDate(task.studentEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
@@ -693,7 +676,6 @@ function adjustTask(task: any, startDateDaysDiff: number, courseId: number, stag
     task.mentorEndDate = shiftDate(task.mentorEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   }
   task.courseId = courseId;
-  task.stageId = stages.find((s: any) => s.oldId === task.stageId);
 }
 
 export async function createCourseFromCopy(courseId: number, details: any) {
@@ -702,7 +684,6 @@ export async function createCourseFromCopy(courseId: number, details: any) {
   if (courseToCopy && courseToCopy.id) {
     const events: any = await getEvents(courseId);
     const tasks: any = await getCourseTasks(courseId);
-    const stages: any = await getStages(courseId);
     const { id, ...couseWithoutId } = courseToCopy;
     const courseCopy: Course = { ...couseWithoutId, ...details };
     const courseData = await getRepository(Course).insert(courseCopy);
@@ -710,16 +691,13 @@ export async function createCourseFromCopy(courseId: number, details: any) {
     const startDateDaysDiff = moment(details.startDate).diff(moment(courseToCopy.startDate), 'days');
     courseCopy.id = courseData.identifiers[0].id;
 
-    stages.forEach((s: any) => adjustStage(s, startDateDaysDiff, courseCopy.id));
-    const savedStagesData = await getRepository(Stage).insert(stages);
-
-    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id, stages));
+    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id));
     const savedEventsData = await getRepository(CourseEvent).insert(events);
 
-    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id, stages));
+    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id));
     const savedTasksData = await getRepository(CourseTask).insert(tasks);
 
-    return { savedStagesData, courseCopy, savedEventsData, savedTasksData };
+    return { courseCopy, savedEventsData, savedTasksData };
   }
 
   throw new Error(`not valid course to copy id: ${courseId}`);

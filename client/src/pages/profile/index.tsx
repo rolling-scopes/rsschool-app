@@ -7,7 +7,6 @@ import mapValues from 'lodash/mapValues';
 import clone from 'lodash/clone';
 import pullAt from 'lodash/pullAt';
 import { Result, Spin, message } from 'antd';
-import css from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
@@ -28,7 +27,7 @@ import {
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
-import EnglishCard from 'components/Profile/EnglishCard';
+// import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import ConsentsCard from 'components/Profile/ConsentsCard';
@@ -268,7 +267,7 @@ export class ProfilePage extends React.Component<Props, State> {
   private saveProfile = async () => {
     const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
 
-    await this.setState({ isSaving: true });
+    this.setState({ isSaving: true });
 
     if (profile) {
       try {
@@ -285,7 +284,7 @@ export class ProfilePage extends React.Component<Props, State> {
 
         const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
         const initialProfileSettings = profile ? cloneDeep(profile) : null;
-        await this.setState({
+        this.setState({
           isSaving: false,
           initialPermissionsSettings,
           initialProfileSettings,
@@ -294,7 +293,7 @@ export class ProfilePage extends React.Component<Props, State> {
         });
         this.onSaveSuccess();
       } catch (e) {
-        await this.setState({ isSaving: false });
+        this.setState({ isSaving: false });
         this.onSaveError();
       }
     }
@@ -365,15 +364,16 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
-      profile?.generalInfo?.englishLevel !== undefined && (
-        <EnglishCard
-          data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
+      // TODO: Temporary disabled
+      // profile?.generalInfo?.englishLevel !== undefined && (
+      //   <EnglishCard
+      //     data={profile.generalInfo}
+      //     isEditingModeEnabled={isEditingModeVisible}
+      //     permissionsSettings={profile.permissionsSettings}
+      //     onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+      //     onProfileSettingsChange={this.onProfileSettingsChange}
+      //   />
+      // ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo}
@@ -453,17 +453,28 @@ export class ProfilePage extends React.Component<Props, State> {
                     700: 2,
                     500: 1,
                   }}
-                  className={masonryClassName}
-                  columnClassName={masonryColumnClassName}
+                  className="masonry"
+                  columnClassName="masonry-column"
                 >
                   {cards.map((card, idx) => (
-                    <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
+                    <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
                       {card}
                     </div>
                   ))}
                 </Masonry>
-                {masonryStyles}
-                {masonryColumnStyles}
+                <style jsx>{`
+                  .masonry div {
+                    display: flex;
+                    margin-left: -16px;
+                    width: auto;
+                  }
+                `}</style>
+                <style jsx>{`
+                  .masonry-column div {
+                    padding-left: 16px;
+                    background-clip: padding-box;
+                  }
+                `}</style>
               </div>
             ) : (
               <>
@@ -476,20 +487,5 @@ export class ProfilePage extends React.Component<Props, State> {
     );
   }
 }
-
-const gapSize = 16;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default withGoogleMaps(withRouter(withSession(ProfilePage)));
