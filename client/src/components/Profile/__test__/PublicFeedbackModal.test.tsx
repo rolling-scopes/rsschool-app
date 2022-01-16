@@ -77,7 +77,7 @@ describe('PublicFeedbackModal', () => {
   ];
 
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2022-01-01').getTime());
+    jest.useFakeTimers().setSystemTime(new Date('2022-01-01T00:00:00Z').getTime());
   });
 
   it('Should render correctly', () => {

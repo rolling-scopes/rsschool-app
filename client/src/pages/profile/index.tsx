@@ -27,7 +27,7 @@ import {
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
-import EnglishCard from 'components/Profile/EnglishCard';
+// import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
 import ConsentsCard from 'components/Profile/ConsentsCard';
@@ -364,15 +364,16 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
-      profile?.generalInfo?.englishLevel !== undefined && (
-        <EnglishCard
-          data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
+      // TODO: Temporary disabled
+      // profile?.generalInfo?.englishLevel !== undefined && (
+      //   <EnglishCard
+      //     data={profile.generalInfo}
+      //     isEditingModeEnabled={isEditingModeVisible}
+      //     permissionsSettings={profile.permissionsSettings}
+      //     onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+      //     onProfileSettingsChange={this.onProfileSettingsChange}
+      //   />
+      // ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo}
