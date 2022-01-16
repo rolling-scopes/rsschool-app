@@ -28,7 +28,7 @@ export const userGuards = (user: IUserSession) => {
     isAnyMentor: () => Object.keys(user.roles).some((role: string) => user.roles[role].includes('mentor')),
     isStudent: (courseId: number) => user.roles[courseId] === 'student',
     isTaskOwner: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner) ?? false,
-    isLoggedIn: (ctx: RouterContext) => user != null && (ctx.isAuthenticated?.() || config.isDevMode),
+    isLoggedIn: (_: RouterContext) => user != null || config.isDevMode,
     isSupervisor: (courseId: number) => user.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor) ?? false,
   };
   return {

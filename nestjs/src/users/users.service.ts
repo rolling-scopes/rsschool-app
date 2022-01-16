@@ -27,8 +27,8 @@ export class UsersService {
         'students',
         'mentors.course',
         'students.course',
-        'courseManagers',
-        'courseManagers.course',
+        'courseUsers',
+        'courseUsers.course',
       ],
     });
   }

@@ -9,7 +9,7 @@ export function getUserByGithubId(id: string) {
 export function getUserByProvider(provider: string, providerUserId: string) {
   return getRepository(User).findOne({
     where: { provider, providerUserId },
-    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseManagers', 'courseManagers.course'],
+    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseUsers', 'courseUsers.course'],
   });
 }
 
@@ -18,7 +18,7 @@ export function getFullUserByGithubId(id: string) {
 
   return getRepository(User).findOne({
     where: { githubId },
-    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseManagers', 'courseManagers.course'],
+    relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseUsers', 'courseUsers.course'],
   });
 }
 
