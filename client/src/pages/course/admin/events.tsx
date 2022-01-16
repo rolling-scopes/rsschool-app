@@ -107,7 +107,9 @@ function Page(props: Props) {
             showSearch
             placeholder="Please select an event"
             optionFilterProp={'children'}
-            filterOption={(input, option) => option && option.children.toLowerCase().includes(input.toLowerCase())}
+            filterOption={(input, option) =>
+              option && (option.children as any).toLowerCase().includes(input.toLowerCase())
+            }
           >
             {events.map(event => (
               <Select.Option key={event.id} value={event.id}>
