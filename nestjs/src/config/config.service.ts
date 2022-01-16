@@ -50,11 +50,11 @@ export class ConfigService {
 
     this.users = {
       root: {
-        username: conf.get('RSSHCOOL_USERS_ADMIN_USERNAME'),
-        password: conf.get('RSSHCOOL_USERS_ADMIN_PASSWORD'),
+        username: conf.get('RSSHCOOL_USERS_ROOT_USERNAME'),
+        password: conf.get('RSSHCOOL_USERS_ROOT_PASSWORD'),
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
-      admins: [],
+      admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
     };
   }
 }
