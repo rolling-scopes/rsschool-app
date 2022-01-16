@@ -3,7 +3,7 @@ import { Typography, List } from 'antd';
 import CommonCard from './CommonDashboardCard';
 import { TeamOutlined, GithubFilled, EnvironmentFilled } from '@ant-design/icons';
 import { MentorBasic } from 'common/models';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from 'components';
 
 interface MentorContact {
   contactsEmail?: string;

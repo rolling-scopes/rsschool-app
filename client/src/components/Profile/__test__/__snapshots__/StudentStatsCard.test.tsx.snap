@@ -370,37 +370,57 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <SingleObserver
-                        disabled={true}
-                        key="rc-observer-key-0"
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": undefined,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <DomWrapper>
-                          <Typography
-                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                            component="h2"
-                            onClick={[Function]}
-                            style={
-                              Object {
-                                "WebkitLineClamp": undefined,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                          style={
+                            Object {
+                              "WebkitLineClamp": undefined,
+                              "fontSize": 16,
+                              "marginBottom": 0,
                             }
-                          >
-                            <h2
-                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={[Function]}
-                              style={
+                          }
+                        >
+                          <ForwardRef(BookOutlined)>
+                            <AntdIcon
+                              icon={
                                 Object {
-                                  "WebkitLineClamp": undefined,
-                                  "fontSize": 16,
-                                  "marginBottom": 0,
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "book",
+                                  "theme": "outlined",
                                 }
                               }
                             >
-                              <ForwardRef(BookOutlined)>
-                                <AntdIcon
+                              <span
+                                aria-label="book"
+                                className="anticon anticon-book"
+                                role="img"
+                              >
+                                <IconReact
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -423,59 +443,29 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                     }
                                   }
                                 >
-                                  <span
-                                    aria-label="book"
-                                    className="anticon anticon-book"
-                                    role="img"
+                                  <svg
+                                    aria-hidden="true"
+                                    data-icon="book"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-book"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <IconReact
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                                },
-                                                "tag": "path",
-                                              },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "book",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <svg
-                                        aria-hidden="true"
-                                        data-icon="book"
-                                        fill="currentColor"
-                                        focusable="false"
-                                        height="1em"
-                                        key="svg-book"
-                                        viewBox="64 64 896 896"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                                          key="svg-book-svg-0"
-                                        />
-                                      </svg>
-                                    </IconReact>
-                                  </span>
-                                </AntdIcon>
-                              </ForwardRef(BookOutlined)>
-                               
-                              Student Statistics
-                            </h2>
-                          </Typography>
-                        </DomWrapper>
-                      </SingleObserver>
+                                    <path
+                                      d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                      key="svg-book-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(BookOutlined)>
+                           
+                          Student Statistics
+                        </h2>
+                      </Typography>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -655,39 +645,29 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2018-q1
-                                                 / Minsk
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2018-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -859,38 +839,28 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                32
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -919,38 +889,28 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <mark>
-                                                1201
-                                              </mark>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <mark>
+                                            1201
+                                          </mark>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -961,9 +921,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}
@@ -1111,39 +1069,29 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2019-q1
-                                                 / Minsk
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2019-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -1315,38 +1263,28 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                32
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -1375,38 +1313,28 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <mark>
-                                                101
-                                              </mark>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <mark>
+                                            101
+                                          </mark>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -1417,9 +1345,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}
@@ -1906,37 +1832,57 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <SingleObserver
-                        disabled={true}
-                        key="rc-observer-key-0"
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": undefined,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <DomWrapper>
-                          <Typography
-                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                            component="h2"
-                            onClick={[Function]}
-                            style={
-                              Object {
-                                "WebkitLineClamp": undefined,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                          style={
+                            Object {
+                              "WebkitLineClamp": undefined,
+                              "fontSize": 16,
+                              "marginBottom": 0,
                             }
-                          >
-                            <h2
-                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={[Function]}
-                              style={
+                          }
+                        >
+                          <ForwardRef(BookOutlined)>
+                            <AntdIcon
+                              icon={
                                 Object {
-                                  "WebkitLineClamp": undefined,
-                                  "fontSize": 16,
-                                  "marginBottom": 0,
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "book",
+                                  "theme": "outlined",
                                 }
                               }
                             >
-                              <ForwardRef(BookOutlined)>
-                                <AntdIcon
+                              <span
+                                aria-label="book"
+                                className="anticon anticon-book"
+                                role="img"
+                              >
+                                <IconReact
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -1959,59 +1905,29 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                     }
                                   }
                                 >
-                                  <span
-                                    aria-label="book"
-                                    className="anticon anticon-book"
-                                    role="img"
+                                  <svg
+                                    aria-hidden="true"
+                                    data-icon="book"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-book"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <IconReact
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z",
-                                                },
-                                                "tag": "path",
-                                              },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "book",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <svg
-                                        aria-hidden="true"
-                                        data-icon="book"
-                                        fill="currentColor"
-                                        focusable="false"
-                                        height="1em"
-                                        key="svg-book"
-                                        viewBox="64 64 896 896"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
-                                          key="svg-book-svg-0"
-                                        />
-                                      </svg>
-                                    </IconReact>
-                                  </span>
-                                </AntdIcon>
-                              </ForwardRef(BookOutlined)>
-                               
-                              Student Statistics
-                            </h2>
-                          </Typography>
-                        </DomWrapper>
-                      </SingleObserver>
+                                    <path
+                                      d="M832 64H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32zm-260 72h96v209.9L621.5 312 572 347.4V136zm220 752H232V136h280v296.9c0 3.3 1 6.6 3 9.3a15.9 15.9 0 0022.3 3.7l83.8-59.9 81.4 59.4c2.7 2 6 3.1 9.4 3.1 8.8 0 16-7.2 16-16V136h64v752z"
+                                      key="svg-book-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(BookOutlined)>
+                           
+                          Student Statistics
+                        </h2>
+                      </Typography>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -2191,39 +2107,29 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2018-q1
-                                                 / Minsk
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2018-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2395,38 +2301,28 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                32
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2455,38 +2351,28 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <mark>
-                                                1201
-                                              </mark>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <mark>
+                                            1201
+                                          </mark>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2497,9 +2383,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}
@@ -2647,39 +2531,29 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2019-q1
-                                                 / Minsk
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2019-q1
+                                             / Minsk
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2851,38 +2725,28 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                32
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            32
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2911,38 +2775,28 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <mark>
-                                                101
-                                              </mark>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <mark>
+                                            101
+                                          </mark>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2953,9 +2807,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}
@@ -3100,7 +2952,6 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
               >
                 <DrawerWrapper
                   afterVisibleChange={[Function]}
-                  autoFocus={true}
                   className=""
                   defaultOpen={false}
                   duration=".3s"
@@ -3108,7 +2959,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   forceRender={false}
                   getContainer={false}
                   handler={false}
-                  height={378}
+                  height={256}
                   keyboard={true}
                   level={null}
                   maskClosable={true}
@@ -3134,13 +2985,12 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                   >
                     <DrawerChild
                       afterVisibleChange={[Function]}
-                      autoFocus={true}
                       className=""
                       duration=".3s"
                       ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
                       getContainer={[Function]}
                       handler={false}
-                      height={378}
+                      height={256}
                       keyboard={true}
                       level={null}
                       maskClosable={true}
@@ -3183,7 +3033,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                           className="ant-drawer-content-wrapper"
                           style={
                             Object {
-                              "height": "378px",
+                              "height": "256px",
                               "msTransform": "translateY(-100%)",
                               "transform": "translateY(-100%)",
                               "width": undefined,
@@ -3202,92 +3052,93 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                                 className="ant-drawer-header"
                               >
                                 <div
-                                  className="ant-drawer-header-title"
+                                  className="ant-drawer-title"
                                 >
-                                  <button
-                                    aria-label="Close"
-                                    className="ant-drawer-close"
-                                    onClick={[Function]}
-                                    type="button"
-                                  >
-                                    <ForwardRef(CloseOutlined)>
-                                      <AntdIcon
-                                        icon={
-                                          Object {
-                                            "icon": Object {
-                                              "attrs": Object {
-                                                "focusable": "false",
-                                                "viewBox": "64 64 896 896",
-                                              },
-                                              "children": Array [
-                                                Object {
-                                                  "attrs": Object {
-                                                    "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                  },
-                                                  "tag": "path",
-                                                },
-                                              ],
-                                              "tag": "svg",
-                                            },
-                                            "name": "close",
-                                            "theme": "outlined",
-                                          }
-                                        }
-                                      >
-                                        <span
-                                          aria-label="close"
-                                          className="anticon anticon-close"
-                                          role="img"
-                                        >
-                                          <IconReact
-                                            icon={
-                                              Object {
-                                                "icon": Object {
-                                                  "attrs": Object {
-                                                    "focusable": "false",
-                                                    "viewBox": "64 64 896 896",
-                                                  },
-                                                  "children": Array [
-                                                    Object {
-                                                      "attrs": Object {
-                                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                                      },
-                                                      "tag": "path",
-                                                    },
-                                                  ],
-                                                  "tag": "svg",
-                                                },
-                                                "name": "close",
-                                                "theme": "outlined",
-                                              }
-                                            }
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              data-icon="close"
-                                              fill="currentColor"
-                                              focusable="false"
-                                              height="1em"
-                                              key="svg-close"
-                                              viewBox="64 64 896 896"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                                key="svg-close-svg-0"
-                                              />
-                                            </svg>
-                                          </IconReact>
-                                        </span>
-                                      </AntdIcon>
-                                    </ForwardRef(CloseOutlined)>
-                                  </button>
-                                  <div
-                                    className="ant-drawer-title"
-                                  >
-                                    Visibility settings
-                                  </div>
+                                  Visibility settings
                                 </div>
+                                <button
+                                  aria-label="Close"
+                                  className="ant-drawer-close"
+                                  onClick={[Function]}
+                                  style={
+                                    Object {
+                                      "--scroll-bar": "0px",
+                                    }
+                                  }
+                                  type="button"
+                                >
+                                  <ForwardRef(CloseOutlined)>
+                                    <AntdIcon
+                                      icon={
+                                        Object {
+                                          "icon": Object {
+                                            "attrs": Object {
+                                              "focusable": "false",
+                                              "viewBox": "64 64 896 896",
+                                            },
+                                            "children": Array [
+                                              Object {
+                                                "attrs": Object {
+                                                  "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                },
+                                                "tag": "path",
+                                              },
+                                            ],
+                                            "tag": "svg",
+                                          },
+                                          "name": "close",
+                                          "theme": "outlined",
+                                        }
+                                      }
+                                    >
+                                      <span
+                                        aria-label="close"
+                                        className="anticon anticon-close"
+                                        role="img"
+                                      >
+                                        <IconReact
+                                          icon={
+                                            Object {
+                                              "icon": Object {
+                                                "attrs": Object {
+                                                  "focusable": "false",
+                                                  "viewBox": "64 64 896 896",
+                                                },
+                                                "children": Array [
+                                                  Object {
+                                                    "attrs": Object {
+                                                      "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                                    },
+                                                    "tag": "path",
+                                                  },
+                                                ],
+                                                "tag": "svg",
+                                              },
+                                              "name": "close",
+                                              "theme": "outlined",
+                                            }
+                                          }
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            data-icon="close"
+                                            fill="currentColor"
+                                            focusable="false"
+                                            height="1em"
+                                            key="svg-close"
+                                            viewBox="64 64 896 896"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                              key="svg-close-svg-0"
+                                            />
+                                          </svg>
+                                        </IconReact>
+                                      </span>
+                                    </AntdIcon>
+                                  </ForwardRef(CloseOutlined)>
+                                </button>
                               </div>
                               <div
                                 className="ant-drawer-body"
@@ -3387,24 +3238,9 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
                 </DrawerWrapper>
               </Drawer>
             </DrawerWrapper>
-            <style
-              jsx={true}
-            >
-              
-        :global(.ant-drawer-content-wrapper) {
-          height: inherit !important;
-        }
-
-        :global(.ant-drawer-wrapper-body) {
-          overflow: hidden;
-        }
-
-        :global(.ant-drawer-body) {
-          height: calc(100% - 55px);
-          overflow: auto;
-        }
-      
-            </style>
+            <JSXStyle
+              id="261503908"
+            />
           </PermissionsSettingsDrawer>
         </div>
       </div>

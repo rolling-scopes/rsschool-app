@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
-import { models } from '@entities/index';
+import { entities } from './entities';
 import { migrations } from './migrations';
 
 const config: ConnectionOptions = {
@@ -9,7 +9,7 @@ const config: ConnectionOptions = {
   username: process.env.RSSHCOOL_PG_USERNAME,
   password: process.env.RSSHCOOL_PG_PASSWORD,
   database: process.env.RSSHCOOL_PG_DATABASE,
-  entities: models,
+  entities,
   migrations,
   synchronize: false,
   migrationsRun: false,
@@ -19,4 +19,4 @@ const config: ConnectionOptions = {
   logging: ['migration', 'error', 'warn'],
 };
 
-export default config;
+export = config;

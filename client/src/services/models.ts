@@ -34,5 +34,4 @@ export interface PageWithModalState<T> {
 export interface CoursePageProps {
   session: Session;
   course: Course;
-  params: Record<string, string>;
 }

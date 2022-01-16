@@ -249,37 +249,63 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                       disabled={true}
                       onResize={[Function]}
                     >
-                      <SingleObserver
-                        disabled={true}
-                        key="rc-observer-key-0"
-                        onResize={[Function]}
+                      <Typography
+                        className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                        component="h2"
+                        style={
+                          Object {
+                            "WebkitLineClamp": undefined,
+                            "fontSize": 16,
+                            "marginBottom": 0,
+                          }
+                        }
                       >
-                        <DomWrapper>
-                          <Typography
-                            className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                            component="h2"
-                            onClick={[Function]}
-                            style={
-                              Object {
-                                "WebkitLineClamp": undefined,
-                                "fontSize": 16,
-                                "marginBottom": 0,
-                              }
+                        <h2
+                          className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
+                          style={
+                            Object {
+                              "WebkitLineClamp": undefined,
+                              "fontSize": 16,
+                              "marginBottom": 0,
                             }
-                          >
-                            <h2
-                              className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={[Function]}
-                              style={
+                          }
+                        >
+                          <ForwardRef(QuestionCircleOutlined)>
+                            <AntdIcon
+                              icon={
                                 Object {
-                                  "WebkitLineClamp": undefined,
-                                  "fontSize": 16,
-                                  "marginBottom": 0,
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "question-circle",
+                                  "theme": "outlined",
                                 }
                               }
                             >
-                              <ForwardRef(QuestionCircleOutlined)>
-                                <AntdIcon
+                              <span
+                                aria-label="question-circle"
+                                className="anticon anticon-question-circle"
+                                role="img"
+                              >
+                                <IconReact
                                   icon={
                                     Object {
                                       "icon": Object {
@@ -308,69 +334,33 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                     }
                                   }
                                 >
-                                  <span
-                                    aria-label="question-circle"
-                                    className="anticon anticon-question-circle"
-                                    role="img"
+                                  <svg
+                                    aria-hidden="true"
+                                    data-icon="question-circle"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-question-circle"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
                                   >
-                                    <IconReact
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z",
-                                                },
-                                                "tag": "path",
-                                              },
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z",
-                                                },
-                                                "tag": "path",
-                                              },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "question-circle",
-                                          "theme": "outlined",
-                                        }
-                                      }
-                                    >
-                                      <svg
-                                        aria-hidden="true"
-                                        data-icon="question-circle"
-                                        fill="currentColor"
-                                        focusable="false"
-                                        height="1em"
-                                        key="svg-question-circle"
-                                        viewBox="64 64 896 896"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-                                          key="svg-question-circle-svg-0"
-                                        />
-                                        <path
-                                          d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z"
-                                          key="svg-question-circle-svg-1"
-                                        />
-                                      </svg>
-                                    </IconReact>
-                                  </span>
-                                </AntdIcon>
-                              </ForwardRef(QuestionCircleOutlined)>
-                               
-                              Pre-Screening Interviews
-                            </h2>
-                          </Typography>
-                        </DomWrapper>
-                      </SingleObserver>
+                                    <path
+                                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                                      key="svg-question-circle-svg-0"
+                                    />
+                                    <path
+                                      d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z"
+                                      key="svg-question-circle-svg-1"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(QuestionCircleOutlined)>
+                           
+                          Pre-Screening Interviews
+                        </h2>
+                      </Typography>
                     </ResizeObserver>
                   </LocaleReceiver>
                 </Base>
@@ -503,38 +493,28 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2018-q1
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2018-q1
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -1515,38 +1495,28 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className="ant-rate-text"
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                            "fontWeight": "bold",
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className="ant-rate-text"
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                                "fontWeight": "bold",
-                                              }
+                                        <span
+                                          className="ant-typography ant-rate-text"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                              "fontWeight": "bold",
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography ant-rate-text"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                  "fontWeight": "bold",
-                                                }
-                                              }
-                                            >
-                                              3.43
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          3.43
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -1607,9 +1577,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}
@@ -1757,38 +1725,28 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className=""
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className=""
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                              }
+                                        <span
+                                          className="ant-typography"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                }
-                                              }
-                                            >
-                                              <strong>
-                                                rs-2019-q1
-                                              </strong>
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          <strong>
+                                            rs-2019-q1
+                                          </strong>
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2769,38 +2727,28 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                                       disabled={true}
                                       onResize={[Function]}
                                     >
-                                      <SingleObserver
-                                        disabled={true}
-                                        key="rc-observer-key-0"
-                                        onResize={[Function]}
+                                      <Typography
+                                        className="ant-rate-text"
+                                        component="span"
+                                        style={
+                                          Object {
+                                            "WebkitLineClamp": undefined,
+                                            "fontWeight": "bold",
+                                          }
+                                        }
                                       >
-                                        <DomWrapper>
-                                          <Typography
-                                            className="ant-rate-text"
-                                            component="span"
-                                            onClick={[Function]}
-                                            style={
-                                              Object {
-                                                "WebkitLineClamp": undefined,
-                                                "fontWeight": "bold",
-                                              }
+                                        <span
+                                          className="ant-typography ant-rate-text"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": undefined,
+                                              "fontWeight": "bold",
                                             }
-                                          >
-                                            <span
-                                              className="ant-typography ant-rate-text"
-                                              onClick={[Function]}
-                                              style={
-                                                Object {
-                                                  "WebkitLineClamp": undefined,
-                                                  "fontWeight": "bold",
-                                                }
-                                              }
-                                            >
-                                              4.23
-                                            </span>
-                                          </Typography>
-                                        </DomWrapper>
-                                      </SingleObserver>
+                                          }
+                                        >
+                                          4.23
+                                        </span>
+                                      </Typography>
                                     </ResizeObserver>
                                   </LocaleReceiver>
                                 </Base>
@@ -2861,9 +2809,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
                             onClick={[Function]}
                             type="dashed"
                           >
-                            <Wave
-                              disabled={false}
-                            >
+                            <Wave>
                               <button
                                 className="ant-btn ant-btn-dashed"
                                 onClick={[Function]}

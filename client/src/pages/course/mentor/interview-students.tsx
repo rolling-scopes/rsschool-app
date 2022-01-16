@@ -1,7 +1,5 @@
 import { Button, Table } from 'antd';
-import withSession from 'components/withSession';
-import { Rating } from 'components/Rating';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, withSession, Rating } from 'components';
 import {
   getColumnSearchProps,
   numberSorter,
@@ -16,11 +14,10 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { isCourseManager } from 'domain/user';
 
-function Page({ session, course }: CoursePageProps) {
-  const courseId = course.id;
-  const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session]);
+function Page(props: CoursePageProps) {
+  const courseId = props.course.id;
+  const isPowerUser = props.session.isAdmin || props.session.coursesRoles?.[courseId]?.includes('manager');
 
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState([] as any[]);
@@ -32,7 +29,7 @@ function Page({ session, course }: CoursePageProps) {
   };
 
   const inviteStudent = withLoading(async (githubId: string) => {
-    await courseService.createInterview(githubId, session.githubId);
+    await courseService.createInterview(githubId, props.session.githubId);
     await loadData();
   });
 
@@ -47,8 +44,8 @@ function Page({ session, course }: CoursePageProps) {
     <PageLayout
       loading={loading}
       title="Technical Screening: Available Students"
-      githubId={session.githubId}
-      courseName={course.name}
+      githubId={props.session.githubId}
+      courseName={props.course.name}
     >
       <Table
         pagination={{ pageSize: 100 }}

@@ -1,6 +1,5 @@
 import { Button, Form, Input, message, Alert } from 'antd';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
+import { PageLayoutSimple, UserSearch } from 'components';
 import withSession, { Session } from 'components/withSession';
 import { NextRouter, withRouter } from 'next/router';
 import { useMemo, useState } from 'react';

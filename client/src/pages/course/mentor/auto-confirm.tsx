@@ -1,5 +1,5 @@
 import { Button, Col, Result, Row, Typography } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from 'components';
 import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
 import { useState } from 'react';

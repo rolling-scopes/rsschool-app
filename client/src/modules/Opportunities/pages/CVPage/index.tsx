@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
 import { Session } from 'components/withSession';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import CVInfo from 'modules/Opportunities/components/CVPage';
 
 import { OpportunitiesService } from '../../services/opportunities';

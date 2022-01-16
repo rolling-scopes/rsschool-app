@@ -1,6 +1,5 @@
-import { message, Table, Typography } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
+import { Table, Typography, message } from 'antd';
+import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';

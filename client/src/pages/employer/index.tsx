@@ -1,7 +1,7 @@
 import { DeleteOutlined, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Avatar, Badge, Col, Layout, List, Popconfirm, Result, Row, Switch, Table, Tooltip, Typography } from 'antd';
 import { SwitchChangeEventHandler } from 'antd/lib/switch';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { getColumnSearchProps } from 'components/Table';
 import withSession, { Session } from 'components/withSession';

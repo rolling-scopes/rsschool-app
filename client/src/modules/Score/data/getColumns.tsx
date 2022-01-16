@@ -1,6 +1,6 @@
 import { SettingFilled } from '@ant-design/icons';
 import { Typography } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from 'components';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
 import { isArray } from 'lodash';
 import Link from 'next/link';

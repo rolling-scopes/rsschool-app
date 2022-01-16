@@ -49,9 +49,9 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
       ...acc,
       [item.courseId]: uniq(
         (user.coursesRoles?.[item.courseId] ?? ([] as CourseRole[]))
-          .concat(item.isJuryActivist ? [CourseRole.JuryActivist] : [])
-          .concat(item.isManager ? [CourseRole.Manager] : [])
-          .concat(item.isSupervisor ? [CourseRole.Supervisor] : []),
+          .concat(item.isJuryActivist ? [CourseRole.juryActivist] : [])
+          .concat(item.isManager ? [CourseRole.manager] : [])
+          .concat(item.isSupervisor ? [CourseRole.supervisor] : []),
       ),
     }),
     {},
@@ -60,7 +60,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
     if (!courseRoles[courseId]) {
       courseRoles[courseId] = [];
     }
-    courseRoles[courseId]?.push(CourseRole.TaskOwner);
+    courseRoles[courseId]?.push(CourseRole.taskOwner);
   });
   user.coursesRoles = courseRoles;
   await next();

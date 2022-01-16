@@ -5,7 +5,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import moment from 'moment-timezone';
 import mergeWith from 'lodash/mergeWith';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { GithubUserLink } from 'components';
 import {
   dateSorter,
   getColumnSearchProps,

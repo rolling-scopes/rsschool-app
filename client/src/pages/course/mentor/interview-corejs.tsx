@@ -1,9 +1,8 @@
 import { Button, Checkbox, Form, Input, message, Rate, Typography } from 'antd';
 import _ from 'lodash';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
+import { UserSearch, PageLayoutSimple } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
 import { useMemo, useState, useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
@@ -201,4 +200,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, CourseRole.Mentor));
+export default withCourseData(withSession(Page, 'mentor'));

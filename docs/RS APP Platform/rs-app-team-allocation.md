@@ -39,10 +39,11 @@ If you have not found the team, you need to register in the app and we will find
 
 If the number of students in the team is less than required, other members will be assigned to this team automatically.
 
-After being assigned to the team you will see the following:
+After being assigned to the team you will see the following: 
 
 ![team](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2012.39.26.png)
 
 To leave the team just click <span style="color:orange">`Leave team`</span>. Or you need someone to expel you from the team:
 
 ![expel team member](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2012.39.43.png)
+

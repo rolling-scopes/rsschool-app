@@ -1,11 +1,13 @@
 import cors from '@koa/cors';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
+import session from 'koa-session';
 import serve from 'koa-static';
 import koaJwt from 'koa-jwt';
 import { paginateMiddleware } from 'koa-typeorm-pagination';
 import { Server } from 'net';
 
+import { setupPassport } from './auth';
 import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
@@ -28,9 +30,15 @@ export class App {
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
     this.koa.use(cors());
 
-    this.koa.use(
-      koaJwt({ key: 'user', cookie: 'auth-token', secret: config.sessionKey, debug: true, passthrough: true }),
-    );
+    this.koa.keys = [config.sessionKey];
+
+    this.koa.use(session({ maxAge: config.sessionAge, renew: true }, this.koa));
+
+    const passport = setupPassport(this.appLogger.child({ module: 'passport' }));
+    this.koa.use(passport.initialize());
+    this.koa.use(passport.session());
+
+    this.koa.use(koaJwt({ key: 'user', secret: config.sessionKey, passthrough: true }));
 
     process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
   }

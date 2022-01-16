@@ -1,7 +1,5 @@
 import { Button, Row, Select, Table } from 'antd';
-import { withSession } from 'components/withSession';
-import { StudentMentorModal } from 'components/StudentMentorModal';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, StudentMentorModal, withSession } from 'components';
 import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
@@ -99,7 +97,7 @@ function Page(props: CoursePageProps) {
             dataIndex: 'actions',
             width: 80,
             render: (_, record) => {
-              if (isCourseManager(props.session, props.course.id)) {
+              if (isCourseManager(props.session, props.course)) {
                 return (
                   <Button type="link" onClick={() => deleteInterview(record)}>
                     Cancel

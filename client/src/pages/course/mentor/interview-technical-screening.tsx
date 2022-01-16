@@ -2,10 +2,7 @@ import React, { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useAsync } from 'react-use';
 import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
 import withCourseData from 'components/withCourseData';
-import { PageLayoutSimple } from 'components/PageLayout';
-import withSession, { CourseRole } from 'components/withSession';
-import { UserSearch } from 'components/UserSearch';
-
+import { withSession, UserSearch, PageLayoutSimple } from 'components';
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
@@ -432,4 +429,4 @@ function deserializeFromJson(json: any) {
     }, {} as any);
 }
 
-export default withCourseData(withSession(Page, CourseRole.Mentor));
+export default withCourseData(withSession(Page, 'mentor'));

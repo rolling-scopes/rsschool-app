@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task, TaskService } from 'services/task';
 import { CourseEvent, CourseService } from 'services/course';
-import { withSession } from 'components/withSession';
+import { withSession } from 'components';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { formatTimezoneToUTC } from 'services/formatter';

@@ -385,7 +385,7 @@ describe('defineRole', () => {
           studentCourses: null,
           roles: {},
           coursesRoles: {
-            1: [CourseRole.Manager],
+            1: [CourseRole.manager],
           },
           userGithubId: 'denis',
         }),

@@ -4,15 +4,13 @@ import * as React from 'react';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { Session } from './withSession';
-import { getTokenFromContext } from 'utils/server';
 
 function withCourseData(WrappedComponent: React.ComponentType<any>, courseId?: number) {
   return class extends React.PureComponent<{ course?: Course | null; session: Session }> {
-    static async getInitialProps(ctx: NextPageContext) {
+    static async getInitialProps(context: NextPageContext) {
       try {
-        const alias = ctx.query.course;
-        const token = getTokenFromContext(ctx);
-        const courses = await new UserService(token).getCourses();
+        const alias = context.query.course;
+        const courses = await new UserService(context).getCourses();
         const course = courses.find(c => (courseId ? c.id === courseId : c.alias === alias)) || null;
         return { course };
       } catch (err) {

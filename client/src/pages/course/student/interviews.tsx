@@ -1,7 +1,6 @@
 import { message, Card, Row, List, Col, Button, Modal, Tag, Descriptions } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, GithubUserLink } from 'components';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';

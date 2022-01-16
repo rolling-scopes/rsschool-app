@@ -1,32 +1,27 @@
-import { Button, Form, Input, message, Radio, Typography } from 'antd';
-import { MentorsApi, MentorStudentDto } from 'api';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
+import { Button, Form, Input, message, Typography, Radio } from 'antd';
+import { PageLayoutSimple, UserSearch } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { CourseRole } from 'components/withSession';
-import { isStudent } from 'domain/user';
+import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { getApiCfg } from 'services/api';
 import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
+import { CoursePageProps, StudentBasic } from 'services/models';
 
 type ActionOnStudent = 'expel' | 'unassign';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-  const mentorId = Number(props.session.courses[courseId].mentorId);
+  const roles = props.session.roles;
   const userGithubId = props.session.githubId;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const mentorsService = useMemo(() => new MentorsApi(getApiCfg()), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState<Pick<MentorStudentDto, 'id' | 'githubId' | 'name'>[]>([]);
+  const [students, setStudents] = useState([] as StudentBasic[]);
   const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
-    if (isStudent(props.session, courseId)) {
+    if (roles[courseId] === 'student') {
       const student = await courseService.getStudentSummary(userGithubId);
       if (student.isActive) {
         setStudents([
@@ -38,8 +33,8 @@ function Page(props: CoursePageProps) {
         ]);
       }
     } else {
-      const students = await mentorsService.getMentorStudents(mentorId);
-      const activeStudents = students.data.filter(student => student.active);
+      const students = await courseService.getMentorStudents();
+      const activeStudents = students.filter(student => student.isActive);
       setStudents(activeStudents);
     }
   }, [courseId]);
@@ -136,4 +131,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, CourseRole.Mentor));
+export default withCourseData(withSession(Page, 'mentor'));

@@ -11,6 +11,7 @@ import {
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { Mentor } from './mentor';
 import { Student } from './student';
+import { Stage } from './stage';
 import { Course, CourseTask } from '.';
 
 @Entity()
@@ -42,6 +43,9 @@ export class StageInterview {
   @Column()
   @Index()
   mentorId: number;
+
+  @ManyToOne(_ => Stage, { nullable: true })
+  stage: Stage;
 
   @Column({ nullable: true })
   stageId: number;

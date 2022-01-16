@@ -1,8 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance } from 'axios';
+import { NextPageContext, GetServerSidePropsContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
-import { Configuration, ProfileApi } from 'api';
+import { Course } from './models';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -15,13 +16,9 @@ type SearchResponse = { data: UserBasic[] };
 
 export class UserService {
   private axios: AxiosInstance;
-  private profileApi: ProfileApi;
-  private opts: AxiosRequestConfig;
 
-  constructor(private token?: string) {
-    this.opts = getServerAxiosProps(this.token);
-    this.axios = axios.create(this.opts);
-    this.profileApi = new ProfileApi(new Configuration({ basePath: this.opts.baseURL, baseOptions: this.opts }));
+  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
   }
 
   async getDiscordIds() {
@@ -50,8 +47,8 @@ export class UserService {
   }
 
   async getCourses() {
-    const { data } = await this.profileApi.getUserCourses('me');
-    return data.sort((a, b) => b.id - a.id);
+    const result = await this.axios.get<{ data: Course[] }>(`/api/user/me/courses`);
+    return result.data.data.sort((a, b) => b.id - a.id);
   }
 
   async searchUser(query: string | null) {

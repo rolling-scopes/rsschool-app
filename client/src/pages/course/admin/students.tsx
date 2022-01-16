@@ -9,8 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Button, message, Row, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { PageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
+import { PageLayout, withSession } from 'components';
 import { DashboardDetails, ExpelCriteria, CertificateCriteria } from 'components/Student';
 import {
   boolIconRenderer,
@@ -38,7 +37,7 @@ function Page(props: Props) {
   const courseId = props.course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [courseManagerRole] = useState(isCourseManager(props.session, courseId));
+  const [courseManagerRole] = useState(isCourseManager(props.session, props.course));
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
   const [stats, setStats] = useState(null as Stats | null);

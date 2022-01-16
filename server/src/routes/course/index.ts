@@ -27,6 +27,7 @@ import {
 } from './mentor';
 import * as mentors from './mentors';
 import * as score from './score';
+import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates, postStudentCertificate } from './certificates';
 import {
   getStudents,
@@ -90,6 +91,7 @@ export function courseRoute(logger: ILogger) {
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
   addInterviewsApi(router, logger);
+  addStageApi(router, logger);
   addEventApi(router, logger);
   addTaskApi(router, logger);
   addMentorApi(router, logger);
@@ -116,6 +118,11 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
   router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
+}
+
+function addStageApi(router: Router<any, any>, logger: ILogger) {
+  router.get('/stages', guard, getCourseStages(logger));
+  router.post('/stages', adminGuard, postCourseStages(logger));
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {

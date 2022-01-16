@@ -86,7 +86,7 @@ exports[`StudentStatsModal Should render correctly 1`] = `
       </p>
     </Col>
   </Row>
-  <ForwardRef(InternalTable)
+  <Table
     columns={
       Array [
         Object {

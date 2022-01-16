@@ -1,8 +1,6 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Dropdown, Form, InputNumber, Menu, message, Row, Select, Table } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
+import { GithubUserLink, PageLayout, withSession } from 'components';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, idFromArrayRenderer, stringSorter, tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';

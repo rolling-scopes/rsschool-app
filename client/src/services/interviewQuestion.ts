@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { NextPageContext, GetServerSidePropsContext } from 'next';
 import { getServerAxiosProps } from 'utils/axios';
 import { InterviewQuestion, InterviewQuestionCategory } from './models';
 
@@ -10,8 +11,8 @@ type InterviewQuestionCategoriesResponse = { data: InterviewQuestionCategory[] }
 export class InterviewQuestionService {
   private axios: AxiosInstance;
 
-  constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token));
+  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
   }
 
   async createInterviewQuestion(data: Partial<InterviewQuestion>) {
@@ -38,8 +39,8 @@ export class InterviewQuestionService {
 export class InterviewQuestionCategoryService {
   private axios: AxiosInstance;
 
-  constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token));
+  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx));
   }
 
   async createInterviewQuestionCategory(data: Partial<InterviewQuestionCategory>) {

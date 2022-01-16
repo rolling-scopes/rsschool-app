@@ -1,7 +1,5 @@
 import { Button, Row, Table, Modal, Checkbox } from 'antd';
-import { PageLayout } from 'components/PageLayout';
-import { withSession } from 'components/withSession';
-import { StudentMentorModal } from 'components/StudentMentorModal';
+import { PageLayout, StudentMentorModal, withSession } from 'components';
 import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
@@ -21,7 +19,7 @@ function Page(props: CoursePageProps) {
   const [noRegistration, setNoRegistration] = useState(false);
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const courseManagerRole = useMemo(() => isCourseManager(props.session, courseId), [course, session]);
+  const courseManagerRole = useMemo(() => isCourseManager(props.session, props.course), [course, session]);
 
   const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
 

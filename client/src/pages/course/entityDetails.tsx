@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import { useRouter } from 'next/router';
 import { useAsync } from 'react-use';
 import withCourseData from 'components/withCourseData';
-import { withSession } from 'components/withSession';
+import { withSession } from 'components';
 import { useLoading } from 'components/useLoading';
 import { CourseService, CourseTaskDetails, CourseEvent } from '../../services/course';
 import { CoursePageProps } from 'services/models';
@@ -23,7 +23,7 @@ export function EntityDetailsPage(props: CoursePageProps) {
   const [editableRecord, setEditableRecord] = useState<CourseTaskDetails | CourseEvent | null>(null);
   const [, withLoading] = useLoading(false);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
-  const isAdmin = useMemo(() => isCourseManager(session, course.id), [session, course]);
+  const isAdmin = useMemo(() => isCourseManager(session, course), [session, course]);
 
   const loadData = async () => {
     if (entityType === 'task') {

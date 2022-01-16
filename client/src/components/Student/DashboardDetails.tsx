@@ -1,10 +1,9 @@
 import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Drawer } from 'antd';
-import { MentorBasic } from 'common/models';
-import { CommentModal } from 'components/CommentModal';
-import { MentorSearch } from 'components/MentorSearch';
+import { CommentModal, MentorSearch } from 'components';
 import { useState } from 'react';
 import { StudentDetails } from 'services/course';
+import { MentorBasic } from 'common/models';
 import css from 'styled-jsx/css';
 
 type Props = {

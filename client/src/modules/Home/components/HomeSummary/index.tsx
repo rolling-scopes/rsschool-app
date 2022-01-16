@@ -1,5 +1,5 @@
 import { Card, Col, Row, Statistic, Typography } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { GithubUserLink } from 'components';
 import * as React from 'react';
 import { StudentSummary } from 'services/course';
 

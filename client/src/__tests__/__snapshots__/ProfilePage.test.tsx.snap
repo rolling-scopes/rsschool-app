@@ -35,8 +35,8 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               "default": 4,
             }
           }
-          className="masonry"
-          columnClassName="masonry-column"
+          className="jsx-3803498300"
+          columnClassName="jsx-110195169"
         >
           <div
             key="card-0"
@@ -228,7 +228,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               }
             }
           >
-            <EducationCard
+            <EnglishCard
               data={
                 Object {
                   "aboutMyself": "Test",
@@ -319,6 +319,97 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               }
             }
           >
+            <EducationCard
+              data={
+                Object {
+                  "aboutMyself": "Test",
+                  "educationHistory": Array [
+                    Object {
+                      "faculty": "TT",
+                      "graduationYear": "2019",
+                      "university": "Test",
+                    },
+                  ],
+                  "englishLevel": "a2+",
+                  "location": Object {
+                    "cityName": "Minsk",
+                    "countryName": "Belarus",
+                  },
+                }
+              }
+              isEditingModeEnabled={false}
+              onPermissionsSettingsChange={[Function]}
+              onProfileSettingsChange={[Function]}
+              permissionsSettings={
+                Object {
+                  "isAboutVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isContactsNotesVisible": Object {
+                    "all": false,
+                    "student": true,
+                  },
+                  "isEducationVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isEmailVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isEnglishVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isLinkedInVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": false,
+                  },
+                  "isMentorStatsVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isPhoneVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isProfileVisible": Object {
+                    "all": true,
+                  },
+                  "isPublicFeedbackVisible": Object {
+                    "all": false,
+                    "mentor": true,
+                    "student": true,
+                  },
+                  "isSkypeVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isStudentStatsVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                  "isTelegramVisible": Object {
+                    "all": false,
+                    "student": false,
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            key="card-4"
+            style={
+              Object {
+                "marginBottom": 16,
+              }
+            }
+          >
             <ContactsCard
               data={Object {}}
               isEditingModeEnabled={false}
@@ -387,7 +478,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
           <div
-            key="card-4"
+            key="card-5"
             style={
               Object {
                 "marginBottom": 16,
@@ -465,7 +556,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
           <div
-            key="card-5"
+            key="card-6"
             style={
               Object {
                 "marginBottom": 16,
@@ -554,7 +645,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
           <div
-            key="card-6"
+            key="card-7"
             style={
               Object {
                 "marginBottom": 16,
@@ -632,7 +723,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
           <div
-            key="card-7"
+            key="card-8"
             style={
               Object {
                 "marginBottom": 16,
@@ -658,7 +749,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
           <div
-            key="card-8"
+            key="card-9"
             style={
               Object {
                 "marginBottom": 16,
@@ -674,27 +765,16 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
             />
           </div>
         </Masonry>
-        <style
-          jsx={true}
+        <JSXStyle
+          id="3803498300"
         >
-          
-                  .masonry div {
-                    display: flex;
-                    margin-left: -16px;
-                    width: auto;
-                  }
-                
-        </style>
-        <style
-          jsx={true}
+          div.jsx-3803498300{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;margin-left:-16px;width:auto;}
+        </JSXStyle>
+        <JSXStyle
+          id="110195169"
         >
-          
-                  .masonry-column div {
-                    padding-left: 16px;
-                    background-clip: padding-box;
-                  }
-                
-        </style>
+          div.jsx-110195169{padding-left:16px;background-clip:padding-box;}
+        </JSXStyle>
       </div>
     </Spin>
   </LoadingScreen>

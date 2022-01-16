@@ -1,12 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
+import { NextPageContext } from 'next';
 import { JobSeekerData, GetFullCVData, AllUserCVData, EditCVData } from '../models';
 
 export class OpportunitiesService {
   private axios: AxiosInstance;
 
-  constructor(token?: string) {
-    this.axios = axios.create(getServerAxiosProps(token, '/api/opportunities'));
+  constructor(ctx?: NextPageContext) {
+    this.axios = axios.create(getServerAxiosProps(ctx, '/api/opportunities'));
   }
 
   public async getConsent(githubId: string) {

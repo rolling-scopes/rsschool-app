@@ -17,7 +17,7 @@ import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
-import { StudentFeedback } from './student-feedback';
+import { StudentFeedback } from './studentFeedback';
 import { StageInterview } from './stageInterview';
 
 @Entity()
@@ -117,7 +117,7 @@ export class Student {
   totalScoreChangeDate: Date;
 
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
-  feedbacks: StudentFeedback[] | null;
+  feedback: StudentFeedback[] | null;
 
   @Column({ default: () => "'1970-01-01 00:00:00+00'", type: 'timestamptz' })
   startDate: Date;

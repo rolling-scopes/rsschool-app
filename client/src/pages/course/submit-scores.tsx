@@ -1,8 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { withSession } from 'components/withSession';
-import { PageLayoutSimple } from 'components/PageLayout';
+import { PageLayoutSimple, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import csv from 'csvtojson';
@@ -12,7 +11,6 @@ import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { filterLogin } from 'utils/text-utils';
-import { isCourseManager } from 'domain/user';
 
 interface SubmitResult {
   status: string;
@@ -32,7 +30,12 @@ export function Page(props: CoursePageProps) {
   useAsync(async () => {
     const data = await courseService.getCourseTasks();
     setCourseTasks(
-      data.filter(item => item.taskOwnerId === props.session.id || isCourseManager(props.session, courseId)),
+      data.filter(
+        item =>
+          item.taskOwnerId === props.session.id ||
+          props.session.isAdmin ||
+          props.session.coursesRoles?.[courseId]?.includes('manager'),
+      ),
     );
   }, [courseService]);
 

@@ -1,24 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Router from 'next/router';
-import React, { useState } from 'react';
-import { useAsync } from 'react-use';
 import { LoadingScreen } from './LoadingScreen';
-import { useLoading } from './useLoading';
+import Router from 'next/router';
 
-export const enum CourseRole {
-  TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
-  Manager = 'manager',
-  Supervisor = 'supervisor',
-  Student = 'student',
-  Mentor = 'mentor',
-}
-
-export interface CourseInfo {
-  mentorId?: number;
-  studentId?: number;
-  roles: CourseRole[];
-}
+export type Role = 'student' | 'mentor' | 'coursemanager';
 
 export interface Session {
   id: number;
@@ -26,39 +11,46 @@ export interface Session {
   isAdmin: boolean;
   isHirer: boolean;
   isActivist: boolean;
-  courses: { [courseId: number | string]: CourseInfo };
+  roles: { [key: number]: Role };
+  coursesRoles?: { [key: string]: ('taskOwner' | 'juryActivist' | 'manager' | 'supervisor')[] | undefined };
 }
 
 let sessionCache: Session | undefined;
 
-function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: CourseRole) {
+function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: Role) {
   return (props: any) => {
-    const [isLoading, withLoading] = useLoading(true);
+    const [isLoading, setLoading] = useState(true);
     const [session, setSession] = useState<Session | undefined>();
 
-    useAsync(
-      withLoading(async () => {
+    useEffect(() => {
+      const load = async () => {
         if (sessionCache != null) {
+          setLoading(false);
           setSession(sessionCache);
           return;
         }
         try {
-          const response = await axios.get<{ data: Session }>(`/api/session`);
+          const response = await axios.get<any>(`/api/session`);
+          setLoading(false);
           sessionCache = response.data.data;
           setSession(sessionCache);
         } catch (e) {
-          const { pathname, search } = document.location;
-          const redirectUrl = encodeURIComponent(`${pathname}${search}`);
-          Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+          setLoading(false);
+          Router.push('/login', {
+            pathname: '/login',
+            query: {
+              url: encodeURIComponent(document.location.pathname + document.location.search),
+            },
+          });
         }
-      }),
-      [],
-    );
+      };
+
+      load();
+    }, []);
 
     if (session && requiredRole) {
-      const { courses, isAdmin } = session;
-      const { id } = props.course;
-      if (courses[id].roles.includes(requiredRole) && !isAdmin) {
+      const { roles, isAdmin } = session;
+      if (roles[props.course.id] !== requiredRole && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
             You are not [{requiredRole}] in {props.course.alias}

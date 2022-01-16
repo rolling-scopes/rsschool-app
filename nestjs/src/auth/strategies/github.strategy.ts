@@ -1,24 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ConfigService } from '../../config';
-import { Strategy, Profile } from 'passport-github2';
-import { AuthService } from '../auth.service';
+import { ConfigService } from '@nestjs/config';
+import { Strategy } from 'passport-github2';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   private readonly logger = new Logger(GithubStrategy.name);
 
-  constructor(private config: ConfigService, private readonly authService: AuthService) {
+  constructor(readonly configService: ConfigService) {
     super({
-      clientID: config.auth.github.clientId,
-      clientSecret: config.auth.github.clientSecret,
-      callbackURL: config.auth.github.callbackUrl,
-      scope: config.auth.github.scope,
+      clientID: configService.get('RSSHCOOL_AUTH_GITHUB_CLIENT_ID'),
+      clientSecret: configService.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
+      callbackURL: configService.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
+      scope: ['user:email'],
     });
   }
 
-  public async validate(_accessToken: string, _refreshToken: string, profile: Profile, done: any): Promise<void> {
-    const user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
+  public async validate(_accessToken: string, _refreshToken: string, profile: any, done: any): Promise<any> {
+    const { email, login } = profile._json;
+
+    const user = {
+      primaryEmail: email,
+      githubId: login,
+    };
 
     this.logger.log({ message: `Logged in: [${user.githubId}]`, githubId: user.githubId });
 

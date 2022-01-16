@@ -15,8 +15,8 @@ export interface CourseRoles {
 }
 
 export const enum CourseRole {
-  TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
-  Manager = 'manager',
-  Supervisor = 'supervisor',
+  taskOwner = 'taskOwner',
+  juryActivist = 'juryActivist',
+  manager = 'manager',
+  supervisor = 'supervisor',
 }

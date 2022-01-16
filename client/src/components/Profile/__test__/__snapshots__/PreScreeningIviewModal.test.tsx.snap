@@ -116,7 +116,7 @@ exports[`PreScreeningIviewModal Should render correctly 1`] = `
     Estimated English level: 
     A2+
   </p>
-  <ForwardRef(InternalTable)
+  <Table
     columns={
       Array [
         Object {

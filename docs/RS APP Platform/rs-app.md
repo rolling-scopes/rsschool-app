@@ -1,6 +1,6 @@
 ## Rolling Scopes School Application
 
-`Rolling Scopes School Application`, or `RS School App` is an open-source platform used in the learning process at RS School and developed by community activists.
+Rolling Scopes School Application, or RS School App— is an open-source platform used in the learning process at RS School and developed by community activists.
 
 Links:
 

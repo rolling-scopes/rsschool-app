@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
+import { RegistrationPageLayout } from 'components';
 import { LocationSelect } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import { Session } from 'components/withSession';

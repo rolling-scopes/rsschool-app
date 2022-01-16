@@ -1,9 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { Header } from 'components/Header';
-import { AdminSider } from 'components/AdminSider';
-import { Session, withSession } from 'components/withSession';
+import { GithubAvatar, Header, Session, withSession, AdminSider } from 'components';
 import { UserService, UserFull } from 'services/user';
 
 const { Content } = Layout;

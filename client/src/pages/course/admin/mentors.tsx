@@ -1,6 +1,5 @@
 import { Button, Divider, message, Row, Statistic, Table, Popconfirm } from 'antd';
-import { withSession } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, withSession } from 'components';
 import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import withCourseData from 'components/withCourseData';

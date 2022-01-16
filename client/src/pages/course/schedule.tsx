@@ -10,8 +10,7 @@ import {
   CheckSquareOutlined,
   BorderOutlined,
 } from '@ant-design/icons';
-import { withSession } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
+import { withSession, PageLayout } from 'components';
 import { TableView, CalendarView, ListView } from 'components/Schedule';
 import withCourseData from 'components/withCourseData';
 import { useState, useMemo } from 'react';
@@ -53,7 +52,7 @@ export function SchedulePage(props: CoursePageProps) {
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const courseService = useMemo(() => new CourseService(props.course.id), [props.course.id]);
   const isAdmin = useMemo(
-    () => isCourseManager(props.session, props.course.id),
+    () => isCourseManager(props.session, props.course),
     [props.session, props.course.id],
   ) as boolean;
   const filteredData = useMemo(() => {

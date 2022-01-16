@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import withSession, { Session } from 'components/withSession';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from 'components';
 import { Row } from 'antd';
 
 type IProps = {

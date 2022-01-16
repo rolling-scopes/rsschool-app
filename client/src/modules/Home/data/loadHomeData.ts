@@ -1,9 +1,9 @@
 import { Session } from 'components/withSession';
 import { CourseService } from 'services/course';
-import { isStudent } from 'domain/user';
 
 export async function loadHomeData(courseId: number, session: Session) {
-  if (!isStudent(session, courseId)) {
+  const isStudent = courseId && session.roles[courseId] === 'student';
+  if (!isStudent) {
     return null;
   }
   const courseService = new CourseService(courseId);

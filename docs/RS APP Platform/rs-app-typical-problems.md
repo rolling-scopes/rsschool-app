@@ -12,11 +12,11 @@
    ![No Access Error](https://docs.rs.school/images/no-access.png)
 
    **Solution**: register to the course you need via <span style="color:green_apple">[link](https://app.rs.school/registry/student)</span>.
-
+   
 2. I do not know how to see my mistakes in the task after **Auto-test**.
 
    **Solution**: enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the **Auto-test** section and choose the task you need in the drop-down list. Details of the check are shown in the **Details** column of the **Verification Results table**:
-
+   
    ![Auto-test details](https://docs.rs.school/images/autotest-details.jpg)
 
 3. I submitted the task and got my mark, but the score has not changed yet.

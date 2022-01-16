@@ -1,4 +1,5 @@
 import * as React from 'react';
+import css from 'styled-jsx/css';
 import { Spin } from 'antd';
 
 // const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -20,14 +21,16 @@ export const LoadingScreen = (props: React.PropsWithChildren<{ show: boolean }>)
       }}
     >
       <Spin tip="Loading..." style={{ fontSize: 20 }} />
-      <style jsx>{`
-        .loading-screen {
-          z-index: 1;
-          top: 0;
-          left: 0;
-          background-color: #fff;
-        }
-      `}</style>
+      <style jsx>{styles}</style>
     </div>
   );
 };
+
+const styles = css`
+  .loading-screen {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+  }
+`;

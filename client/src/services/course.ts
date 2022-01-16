@@ -312,6 +312,11 @@ export class CourseService {
     return result.data.data;
   }
 
+  async getMentorStudents() {
+    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/students`);
+    return result.data.data;
+  }
+
   async getInterviewStudents(courseTaskId: number) {
     const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
     return result.data.data;

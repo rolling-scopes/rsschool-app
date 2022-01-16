@@ -1,7 +1,6 @@
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { Button, List } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, GithubUserLink } from 'components';
 import { useLoading } from 'components/useLoading';
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';

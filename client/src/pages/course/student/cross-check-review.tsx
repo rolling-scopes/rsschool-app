@@ -1,10 +1,9 @@
 import { ClockCircleOutlined, StarTwoTone, EyeTwoTone, EyeInvisibleTwoTone } from '@ant-design/icons';
 import { Button, Col, Form, message, Row, Spin, Timeline, Typography, Checkbox } from 'antd';
-import { UserSearch } from 'components/UserSearch';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout, UserSearch } from 'components';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTask } from 'services/course';
 import { formatDateTime } from 'services/formatter';
@@ -202,4 +201,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, CourseRole.Student));
+export default withCourseData(withSession(Page, 'student'));

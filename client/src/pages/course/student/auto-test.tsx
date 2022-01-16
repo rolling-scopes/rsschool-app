@@ -16,8 +16,7 @@ import {
 import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
-import { PageLayout } from 'components/PageLayout';
-import withSession from 'components/withSession';
+import { PageLayout, withSession } from 'components';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';

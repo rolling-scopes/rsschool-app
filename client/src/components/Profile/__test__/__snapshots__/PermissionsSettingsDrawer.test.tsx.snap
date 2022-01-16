@@ -97,7 +97,6 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
     >
       <DrawerWrapper
         afterVisibleChange={[Function]}
-        autoFocus={true}
         className=""
         defaultOpen={false}
         duration=".3s"
@@ -105,7 +104,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
         forceRender={false}
         getContainer={false}
         handler={false}
-        height={378}
+        height={256}
         keyboard={true}
         level={null}
         maskClosable={true}
@@ -131,13 +130,12 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
         >
           <DrawerChild
             afterVisibleChange={[Function]}
-            autoFocus={true}
             className=""
             duration=".3s"
             ease="cubic-bezier(0.78, 0.14, 0.15, 0.86)"
             getContainer={[Function]}
             handler={false}
-            height={378}
+            height={256}
             keyboard={true}
             level={null}
             maskClosable={true}
@@ -181,7 +179,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                 className="ant-drawer-content-wrapper"
                 style={
                   Object {
-                    "height": "378px",
+                    "height": "256px",
                     "msTransform": "",
                     "transform": "",
                     "width": undefined,
@@ -190,6 +188,8 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
               >
                 <div
                   className="ant-drawer-content"
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
                 >
                   <div
                     className="ant-drawer-wrapper-body"
@@ -200,92 +200,93 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                       className="ant-drawer-header"
                     >
                       <div
-                        className="ant-drawer-header-title"
+                        className="ant-drawer-title"
                       >
-                        <button
-                          aria-label="Close"
-                          className="ant-drawer-close"
-                          onClick={[MockFunction]}
-                          type="button"
-                        >
-                          <ForwardRef(CloseOutlined)>
-                            <AntdIcon
-                              icon={
-                                Object {
-                                  "icon": Object {
-                                    "attrs": Object {
-                                      "focusable": "false",
-                                      "viewBox": "64 64 896 896",
-                                    },
-                                    "children": Array [
-                                      Object {
-                                        "attrs": Object {
-                                          "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                        },
-                                        "tag": "path",
-                                      },
-                                    ],
-                                    "tag": "svg",
-                                  },
-                                  "name": "close",
-                                  "theme": "outlined",
-                                }
-                              }
-                            >
-                              <span
-                                aria-label="close"
-                                className="anticon anticon-close"
-                                role="img"
-                              >
-                                <IconReact
-                                  icon={
-                                    Object {
-                                      "icon": Object {
-                                        "attrs": Object {
-                                          "focusable": "false",
-                                          "viewBox": "64 64 896 896",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "attrs": Object {
-                                              "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
-                                            },
-                                            "tag": "path",
-                                          },
-                                        ],
-                                        "tag": "svg",
-                                      },
-                                      "name": "close",
-                                      "theme": "outlined",
-                                    }
-                                  }
-                                >
-                                  <svg
-                                    aria-hidden="true"
-                                    data-icon="close"
-                                    fill="currentColor"
-                                    focusable="false"
-                                    height="1em"
-                                    key="svg-close"
-                                    viewBox="64 64 896 896"
-                                    width="1em"
-                                  >
-                                    <path
-                                      d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                                      key="svg-close-svg-0"
-                                    />
-                                  </svg>
-                                </IconReact>
-                              </span>
-                            </AntdIcon>
-                          </ForwardRef(CloseOutlined)>
-                        </button>
-                        <div
-                          className="ant-drawer-title"
-                        >
-                          Visibility settings
-                        </div>
+                        Visibility settings
                       </div>
+                      <button
+                        aria-label="Close"
+                        className="ant-drawer-close"
+                        onClick={[MockFunction]}
+                        style={
+                          Object {
+                            "--scroll-bar": "0px",
+                          }
+                        }
+                        type="button"
+                      >
+                        <ForwardRef(CloseOutlined)>
+                          <AntdIcon
+                            icon={
+                              Object {
+                                "icon": Object {
+                                  "attrs": Object {
+                                    "focusable": "false",
+                                    "viewBox": "64 64 896 896",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "attrs": Object {
+                                        "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                      },
+                                      "tag": "path",
+                                    },
+                                  ],
+                                  "tag": "svg",
+                                },
+                                "name": "close",
+                                "theme": "outlined",
+                              }
+                            }
+                          >
+                            <span
+                              aria-label="close"
+                              className="anticon anticon-close"
+                              role="img"
+                            >
+                              <IconReact
+                                icon={
+                                  Object {
+                                    "icon": Object {
+                                      "attrs": Object {
+                                        "focusable": "false",
+                                        "viewBox": "64 64 896 896",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "attrs": Object {
+                                            "d": "M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z",
+                                          },
+                                          "tag": "path",
+                                        },
+                                      ],
+                                      "tag": "svg",
+                                    },
+                                    "name": "close",
+                                    "theme": "outlined",
+                                  }
+                                }
+                              >
+                                <svg
+                                  aria-hidden="true"
+                                  data-icon="close"
+                                  fill="currentColor"
+                                  focusable="false"
+                                  height="1em"
+                                  key="svg-close"
+                                  viewBox="64 64 896 896"
+                                  width="1em"
+                                >
+                                  <path
+                                    d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                                    key="svg-close-svg-0"
+                                  />
+                                </svg>
+                              </IconReact>
+                            </span>
+                          </AntdIcon>
+                        </ForwardRef(CloseOutlined)>
+                      </button>
                     </div>
                     <div
                       className="ant-drawer-body"
@@ -415,8 +416,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -438,44 +442,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Who can see my profile?
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Who can see my profile?
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isProfileVisible-all"
                                           style={
                                             Object {
@@ -547,8 +542,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -570,44 +568,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            About
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        About
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-all"
                                           style={
                                             Object {
@@ -673,6 +662,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-mentor"
                                           style={
                                             Object {
@@ -738,6 +728,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isAboutVisible-student"
                                           style={
                                             Object {
@@ -809,8 +800,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -832,44 +826,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Education info
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Education info
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-all"
                                           style={
                                             Object {
@@ -935,6 +920,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-mentor"
                                           style={
                                             Object {
@@ -1000,6 +986,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEducationVisible-student"
                                           style={
                                             Object {
@@ -1071,8 +1058,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1094,44 +1084,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            English level
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        English level
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEnglishVisible-all"
                                           style={
                                             Object {
@@ -1197,6 +1178,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEnglishVisible-student"
                                           style={
                                             Object {
@@ -1268,8 +1250,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1291,44 +1276,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Email
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Email
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEmailVisible-all"
                                           style={
                                             Object {
@@ -1394,6 +1370,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isEmailVisible-student"
                                           style={
                                             Object {
@@ -1465,8 +1442,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1488,44 +1468,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Telegram
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Telegram
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isTelegramVisible-all"
                                           style={
                                             Object {
@@ -1591,6 +1562,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isTelegramVisible-student"
                                           style={
                                             Object {
@@ -1662,8 +1634,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1685,44 +1660,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Skype
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Skype
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isSkypeVisible-all"
                                           style={
                                             Object {
@@ -1788,6 +1754,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isSkypeVisible-student"
                                           style={
                                             Object {
@@ -1859,8 +1826,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -1882,44 +1852,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Phone
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Phone
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPhoneVisible-all"
                                           style={
                                             Object {
@@ -1985,6 +1946,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPhoneVisible-student"
                                           style={
                                             Object {
@@ -2056,8 +2018,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2079,44 +2044,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Contact notes
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Contact notes
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isContactsNotesVisible-all"
                                           style={
                                             Object {
@@ -2182,6 +2138,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isContactsNotesVisible-student"
                                           style={
                                             Object {
@@ -2253,8 +2210,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2276,44 +2236,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Link to LinkedIn profile
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Link to LinkedIn profile
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-all"
                                           style={
                                             Object {
@@ -2379,6 +2330,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-mentor"
                                           style={
                                             Object {
@@ -2444,6 +2396,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isLinkedInVisible-student"
                                           style={
                                             Object {
@@ -2515,8 +2468,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2538,44 +2494,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Public feedback
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Public feedback
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-all"
                                           style={
                                             Object {
@@ -2641,6 +2588,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-mentor"
                                           style={
                                             Object {
@@ -2706,6 +2654,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isPublicFeedbackVisible-student"
                                           style={
                                             Object {
@@ -2777,8 +2726,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -2800,44 +2752,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Mentor statistics
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Mentor statistics
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-all"
                                           style={
                                             Object {
@@ -2903,6 +2846,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-mentor"
                                           style={
                                             Object {
@@ -2968,6 +2912,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isMentorStatsVisible-student"
                                           style={
                                             Object {
@@ -3039,8 +2984,11 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                     <li
                                       className="ant-list-item"
                                     >
-                                      <div>
+                                      <div
+                                        className="jsx-261503908"
+                                      >
                                         <p
+                                          className="jsx-261503908"
                                           style={
                                             Object {
                                               "fontSize": 18,
@@ -3062,44 +3010,35 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                   disabled={true}
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
+                                                  <Typography
+                                                    className=""
+                                                    component="span"
+                                                    style={
+                                                      Object {
+                                                        "WebkitLineClamp": undefined,
+                                                      }
+                                                    }
                                                   >
-                                                    <DomWrapper>
-                                                      <Typography
-                                                        className=""
-                                                        component="span"
-                                                        onClick={[Function]}
-                                                        style={
-                                                          Object {
-                                                            "WebkitLineClamp": undefined,
-                                                          }
+                                                    <span
+                                                      className="ant-typography"
+                                                      style={
+                                                        Object {
+                                                          "WebkitLineClamp": undefined,
                                                         }
-                                                      >
-                                                        <span
-                                                          className="ant-typography"
-                                                          onClick={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "WebkitLineClamp": undefined,
-                                                            }
-                                                          }
-                                                        >
-                                                          <strong>
-                                                            Student statistics
-                                                          </strong>
-                                                        </span>
-                                                      </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
+                                                      }
+                                                    >
+                                                      <strong>
+                                                        Student statistics
+                                                      </strong>
+                                                    </span>
+                                                  </Typography>
                                                 </ResizeObserver>
                                               </LocaleReceiver>
                                             </Base>
                                           </Text>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isStudentStatsVisible-all"
                                           style={
                                             Object {
@@ -3165,6 +3104,7 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           </Checkbox>
                                         </p>
                                         <p
+                                          className="jsx-261503908"
                                           key="visibility-settings-isStudentStatsVisible-student"
                                           style={
                                             Object {
@@ -3248,23 +3188,8 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
       </DrawerWrapper>
     </Drawer>
   </DrawerWrapper>
-  <style
-    jsx={true}
-  >
-    
-        :global(.ant-drawer-content-wrapper) {
-          height: inherit !important;
-        }
-
-        :global(.ant-drawer-wrapper-body) {
-          overflow: hidden;
-        }
-
-        :global(.ant-drawer-body) {
-          height: calc(100% - 55px);
-          overflow: auto;
-        }
-      
-  </style>
+  <JSXStyle
+    id="261503908"
+  />
 </PermissionsSettingsDrawer>
 `;

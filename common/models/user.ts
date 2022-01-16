@@ -18,5 +18,4 @@ export interface StudentBasic extends UserBasic {
   mentor: MentorBasic | { id: number } | null;
   discord: string;
   totalScore: number;
-  rank?: number;
 }

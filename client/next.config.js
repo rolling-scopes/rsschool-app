@@ -10,10 +10,7 @@ const nextConfig = {
       ? []
       : [
           { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
-          { source: '/swagger', destination: `${nestjs}/swagger/` },
-          { source: '/swagger-json', destination: `${nestjs}/swagger-json` },
-          { source: '/swagger:path', destination: `${nestjs}/swagger/swagger:path` },
-          { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
+          { source: '/api/alerts/:path*', destination: `${nestjs}/alerts/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
   serverRuntimeConfig: {

@@ -1,10 +1,8 @@
 import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { CrossCheckComments } from 'components/CrossCheckComments';
-import { PageLayout } from 'components/PageLayout';
-
+import { PageLayout, CrossCheckComments } from 'components';
 import withCourseData from 'components/withCourseData';
-import withSession, { CourseRole } from 'components/withSession';
+import withSession from 'components/withSession';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { useMemo, useState } from 'react';
 import {
@@ -217,7 +215,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, CourseRole.Student));
+export default withCourseData(withSession(Page, 'student'));
 
 function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
   return review?.reduce((acc, r) => {
