@@ -219,9 +219,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:~/nginx/nginx.conf
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             sleep 10
-            docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
-            docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
-            docker pull ghcr.io/rolling-scopes/rsschool-app-nestjs:master
+            docker-compose pull
           '
 
       - name: Restart

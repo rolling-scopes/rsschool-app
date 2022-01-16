@@ -17,7 +17,6 @@ export function authRoute() {
   );
 
   router.get('/logout', async (ctx: any) => {
-    await ctx.logout();
     ctx.session = null;
     ctx.redirect('/');
   });

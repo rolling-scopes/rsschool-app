@@ -55,7 +55,7 @@ export function Header(props: Props) {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3">
-        <Button type="link" href={'/api/auth/logout'} style={{ textAlign: 'left' }}>
+        <Button type="link" href={'/api/v2/auth/github/logout'} style={{ textAlign: 'left' }}>
           <LogoutOutlined /> Logout
         </Button>
       </Menu.Item>

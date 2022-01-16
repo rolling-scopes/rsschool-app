@@ -10,19 +10,27 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 @Controller('auth')
 @ApiTags('auth')
-@UseGuards(AuthGuard(isDev ? 'dev' : 'github'))
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('github/login')
   @ApiOperation({ operationId: 'githubLogin' })
+  @UseGuards(AuthGuard(isDev ? 'dev' : 'github'))
   githubLogin() {}
 
   @Get('github/callback')
   @ApiOperation({ operationId: 'githubCallback' })
+  @UseGuards(AuthGuard(isDev ? 'dev' : 'github'))
   githubCallback(@Req() req: CurrentRequest, @Res() res: Response) {
     const token = this.authService.validateGithub(req);
     res.cookie(JWT_COOKIE_NAME, token);
     res.redirect('/');
+  }
+
+  @Get('github/logout')
+  @ApiOperation({ operationId: 'githubLogout' })
+  githubLogout(@Res() res: Response) {
+    res.clearCookie(JWT_COOKIE_NAME);
+    res.redirect('/login');
   }
 }

@@ -14,7 +14,7 @@ export function PageLayout(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
       <Header title={props.title} username={props.githubId} courseName={props.courseName} />
-      <Layout.Content>
+      <Layout.Content style={{ margin: 16 }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
       </Layout.Content>
     </Layout>
