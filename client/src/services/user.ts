@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getServerAxiosProps } from 'utils/axios';
+import { getNestServerProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
 import { Configuration, ProfileApi } from 'api';
@@ -19,7 +19,7 @@ export class UserService {
   private opts: AxiosRequestConfig;
 
   constructor(private token?: string) {
-    this.opts = getServerAxiosProps(this.token);
+    this.opts = getNestServerProps(this.token);
     this.axios = axios.create(this.opts);
     this.profileApi = new ProfileApi(new Configuration({ basePath: this.opts.baseURL, baseOptions: this.opts }));
   }

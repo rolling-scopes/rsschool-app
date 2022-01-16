@@ -7,7 +7,6 @@ import withSession, { CourseRole } from 'components/withSession';
 import { isStudent } from 'domain/user';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { getApiCfg } from 'services/api';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 
@@ -20,7 +19,7 @@ function Page(props: CoursePageProps) {
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const mentorsService = useMemo(() => new MentorsApi(getApiCfg()), [courseId]);
+  const mentorsService = useMemo(() => new MentorsApi(), [courseId]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<Pick<MentorStudentDto, 'id' | 'githubId' | 'name'>[]>([]);
   const [action, setAction] = useState<ActionOnStudent>('expel');

@@ -18,7 +18,7 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export const BASE_PATH = "";
+export const BASE_PATH = "/api/v2".replace(/\/+$/, "");
 
 /**
  *

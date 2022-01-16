@@ -727,7 +727,7 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
         createAlert: async (createAlertDto: CreateAlertDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createAlertDto' is not null or undefined
             assertParamExists('createAlert', 'createAlertDto', createAlertDto)
-            const localVarPath = `/api/v2/alerts`;
+            const localVarPath = `/alerts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -762,7 +762,7 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
         deleteAlert: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteAlert', 'id', id)
-            const localVarPath = `/api/v2/alerts/{id}`
+            const localVarPath = `/alerts/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -795,7 +795,7 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
         getAlerts: async (enabled: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'enabled' is not null or undefined
             assertParamExists('getAlerts', 'enabled', enabled)
-            const localVarPath = `/api/v2/alerts`;
+            const localVarPath = `/alerts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -834,7 +834,7 @@ export const AlertsApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('updateAlert', 'id', id)
             // verify required parameter 'body' is not null or undefined
             assertParamExists('updateAlert', 'body', body)
-            const localVarPath = `/api/v2/alerts/{id}`
+            const localVarPath = `/alerts/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1028,7 +1028,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         githubCallback: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/auth/github/callback`;
+            const localVarPath = `/auth/github/callback`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1057,7 +1057,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         githubLogin: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/auth/github/login`;
+            const localVarPath = `/auth/github/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1086,7 +1086,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         githubLogout: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/auth/github/logout`;
+            const localVarPath = `/auth/github/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1237,7 +1237,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         getCourse: async (aliasOrId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'aliasOrId' is not null or undefined
             assertParamExists('getCourse', 'aliasOrId', aliasOrId)
-            const localVarPath = `/api/v2/courses/{aliasOrId}`
+            const localVarPath = `/courses/{aliasOrId}`
                 .replace(`{${"aliasOrId"}}`, encodeURIComponent(String(aliasOrId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1267,7 +1267,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getCourses: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/courses`;
+            const localVarPath = `/courses`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1394,7 +1394,7 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
         createDiscipline: async (createDisciplineDto: CreateDisciplineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createDisciplineDto' is not null or undefined
             assertParamExists('createDiscipline', 'createDisciplineDto', createDisciplineDto)
-            const localVarPath = `/api/v2/disciplines`;
+            const localVarPath = `/disciplines`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1429,7 +1429,7 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
         deleteDiscipline: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteDiscipline', 'id', id)
-            const localVarPath = `/api/v2/disciplines/{id}`
+            const localVarPath = `/disciplines/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1459,7 +1459,7 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
          * @throws {RequiredError}
          */
         getDisciplines: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v2/disciplines`;
+            const localVarPath = `/disciplines`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1494,7 +1494,7 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
             assertParamExists('updateDiscipline', 'id', id)
             // verify required parameter 'updateDisciplineDto' is not null or undefined
             assertParamExists('updateDiscipline', 'updateDisciplineDto', updateDisciplineDto)
-            const localVarPath = `/api/v2/disciplines/{id}`
+            const localVarPath = `/disciplines/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1688,7 +1688,7 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
         getMentorStudents: async (mentorId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'mentorId' is not null or undefined
             assertParamExists('getMentorStudents', 'mentorId', mentorId)
-            const localVarPath = `/api/v2/mentors/{mentorId}/students`
+            const localVarPath = `/mentors/{mentorId}/students`
                 .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1789,7 +1789,7 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         getUserCourses: async (username: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
             assertParamExists('getUserCourses', 'username', username)
-            const localVarPath = `/api/v2/profile/{username}/courses`
+            const localVarPath = `/profile/{username}/courses`
                 .replace(`{${"username"}}`, encodeURIComponent(String(username)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1890,7 +1890,7 @@ export const StudentsApiAxiosParamCreator = function (configuration?: Configurat
         getStudent: async (studentId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'studentId' is not null or undefined
             assertParamExists('getStudent', 'studentId', studentId)
-            const localVarPath = `/api/v2/students/{studentId}`
+            const localVarPath = `/students/{studentId}`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1994,7 +1994,7 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
             assertParamExists('createStudentFeedback', 'studentId', studentId)
             // verify required parameter 'createStudentFeedbackDto' is not null or undefined
             assertParamExists('createStudentFeedback', 'createStudentFeedbackDto', createStudentFeedbackDto)
-            const localVarPath = `/api/v2/students/{studentId}/feedbacks`
+            const localVarPath = `/students/{studentId}/feedbacks`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2033,7 +2033,7 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
             assertParamExists('getStudentFeedback', 'studentId', studentId)
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getStudentFeedback', 'id', id)
-            const localVarPath = `/api/v2/students/{studentId}/feedbacks/{id}`
+            const localVarPath = `/students/{studentId}/feedbacks/{id}`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2073,7 +2073,7 @@ export const StudentsFeedbacksApiAxiosParamCreator = function (configuration?: C
             assertParamExists('updateStudentFeedback', 'id', id)
             // verify required parameter 'updateStudentFeedbackDto' is not null or undefined
             assertParamExists('updateStudentFeedback', 'updateStudentFeedbackDto', updateStudentFeedbackDto)
-            const localVarPath = `/api/v2/students/{studentId}/feedbacks/{id}`
+            const localVarPath = `/students/{studentId}/feedbacks/{id}`
                 .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.

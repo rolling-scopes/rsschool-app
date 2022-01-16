@@ -9,7 +9,6 @@ import { UserSearch } from 'components/UserSearch';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
-import { getApiCfg } from 'services/api';
 import { CoursePageProps } from 'services/models';
 import { softSkills } from '../../data/softSkills';
 
@@ -40,7 +39,7 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
   const router = useRouter();
 
   const [students, loading] = useMentorStudents(mentorId);
-  const service = useMemo(() => new StudentsFeedbacksApi(getApiCfg()), []);
+  const service = useMemo(() => new StudentsFeedbacksApi(), []);
   const noData = students?.length === 0;
 
   useEffect(() => {
