@@ -675,10 +675,11 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
           </div>
         </Masonry>
         <style
+          global={true}
           jsx={true}
         >
           
-                  .masonry div {
+                  .masonry {
                     display: flex;
                     margin-left: -16px;
                     width: auto;
@@ -686,10 +687,11 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                 
         </style>
         <style
+          global={true}
           jsx={true}
         >
           
-                  .masonry-column div {
+                  .masonry-column {
                     padding-left: 16px;
                     background-clip: padding-box;
                   }

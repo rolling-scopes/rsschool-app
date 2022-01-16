@@ -22,14 +22,7 @@ export class UsersService {
   public getUserByProvider(provider: string, providerUserId: string) {
     return this.userRepository.findOne({
       where: { provider, providerUserId },
-      relations: [
-        'mentors',
-        'students',
-        'mentors.course',
-        'students.course',
-        'courseUsers',
-        'courseUsers.course',
-      ],
+      relations: ['mentors', 'students', 'mentors.course', 'students.course', 'courseUsers', 'courseUsers.course'],
     });
   }
 

@@ -6,7 +6,6 @@ type CourseResponse = { data: Course };
 type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
-
   private coursesApi = new CoursesApi();
 
   async updateCourse(id: number, data: Partial<Course>) {
