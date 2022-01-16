@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAsync } from 'react-use';
 import Link from 'next/link';
+import type { AlertDto } from 'api';
 import { ToolTwoTone } from '@ant-design/icons';
 import { Alert, Button, Col, Layout, List, Row, Select, Typography } from 'antd';
 import { AdminSider } from 'components/AdminSider';
@@ -20,7 +21,6 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
-import { Alert as AlertType } from 'domain/alerts';
 import { isAdmin, isAnyCoursePowerUserManager, isHirer } from 'domain/user';
 import { isAnyMentor } from 'domain/user';
 
@@ -52,7 +52,7 @@ export function HomePage(props: Props) {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [preselectedCourses, setPreselectedCourses] = useState<Course[]>([]);
   const [courseTasks, setCourseTasks] = useState<{ id: number }[]>([]);
-  const [alerts, setAlerts] = useState<AlertType[]>([]);
+  const [alerts, setAlerts] = useState<AlertDto[]>([]);
   const courseLinks = activeCourse
     ? links
         .filter(

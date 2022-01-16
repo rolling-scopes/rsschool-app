@@ -1,9 +1,9 @@
 import { Alert } from 'antd';
-import { Alert as AlertType } from 'domain/alerts';
+import type { AlertDto } from 'api';
 import React from 'react';
 
 type Props = {
-  alerts: AlertType[];
+  alerts: AlertDto[];
 };
 
 export function SystemAlerts({ alerts }: Props) {
@@ -11,7 +11,7 @@ export function SystemAlerts({ alerts }: Props) {
     <>
       {alerts.map(({ text, type }) => {
         const alertType = type === 'warn' ? 'warning' : type;
-        return <Alert key={text} style={{ margin: '8px 0' }} type={alertType} showIcon message={text} />;
+        return <Alert key={text} style={{ margin: '8px 0' }} type={alertType as any} showIcon message={text} />;
       })}
     </>
   );
