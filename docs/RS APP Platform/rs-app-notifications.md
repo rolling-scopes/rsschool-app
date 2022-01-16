@@ -5,7 +5,7 @@
 - As a mentor, you are approved to take part in the course (contains links of approval, **does not require subscription**)
 - Your task has been checked by mentor/cross-check (contains the score, task's maximum score, and weight of the task)
 
-## Channels 
+## Channels
 
 - Telegram: Notifications come from <span style="color:orange">`@rsschool_bot`</span>
 - Email: Notifications come to the email

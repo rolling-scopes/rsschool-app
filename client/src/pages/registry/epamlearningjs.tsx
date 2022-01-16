@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
-import { PageLayout } from 'components';
+import { PageLayout } from 'components/PageLayout';
 import { GdprCheckbox, LocationSelect } from 'components/Forms';
 import withSession from 'components/withSession';
 import { withGoogleMaps } from 'components/withGoogleMaps';

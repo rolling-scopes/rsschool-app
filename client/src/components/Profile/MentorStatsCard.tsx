@@ -124,7 +124,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                           />
                         )
                       ) : (
-                        <p>Doesn't have students at this course yet</p>
+                        <p>Does not have students at this course yet</p>
                       )}
                     </div>
                     {students && (

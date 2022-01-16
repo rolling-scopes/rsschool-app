@@ -1,5 +1,7 @@
 import { Button, Col, Form, Input, Layout, message, Row, Table, Popconfirm } from 'antd';
-import { AdminSider, Header, Session, withSession } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
+import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';

@@ -8,7 +8,6 @@ import {
   SaveTwoTone,
   SolutionOutlined,
 } from '@ant-design/icons';
-import css from 'styled-jsx/css';
 import { GithubAvatar } from 'components/GithubAvatar';
 import * as React from 'react';
 
@@ -104,21 +103,19 @@ export function Header(props: Props) {
           </Button>
         </Dropdown>
       </div>
-      <style jsx>{styles}</style>
+      <style jsx>{`
+        .title {
+          font-size: 120%;
+          align-self: center;
+        }
+        @media all and (max-width: 540px) {
+          .title {
+            width: 100%;
+            order: 3;
+            margin-top: 16px;
+          }
+        }
+      `}</style>
     </nav>
   );
 }
-
-const styles = css`
-  .title {
-    font-size: 120%;
-    align-self: center;
-  }
-  @media all and (max-width: 540px) {
-    .title {
-      width: 100%;
-      order: 3;
-      margin-top: 16px;
-    }
-  }
-`;

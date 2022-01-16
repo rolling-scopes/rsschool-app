@@ -3,7 +3,9 @@ import { message } from 'antd';
 
 export function useLoading(
   value = false,
-  catchHandler = (_: Error) => message.error('An unexpected error occured. Please try later.'),
+  catchHandler = (_: Error): void => {
+    message.error('An unexpected error occured. Please try later.');
+  },
 ) {
   const [loading, setLoading] = useState(value);
   const wrapper =

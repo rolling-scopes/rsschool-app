@@ -52,7 +52,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       activist: false,
       lastActivityTime: Date.now(),
       isActive: true,
-      courseManagers: [],
+      courseUsers: [],
       profilePermissions: null,
       opportunitiesConsent: false,
     };
@@ -93,14 +93,14 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
   const coursesRoles = flatMap(courseUsers, u => {
     const result = [];
     if (u.isJuryActivist) {
-      result.push({ courseId: u.courseId, role: CourseRole.juryActivist });
+      result.push({ courseId: u.courseId, role: CourseRole.JuryActivist });
     }
     if (u.isManager) {
-      result.push({ courseId: u.courseId, role: CourseRole.manager });
+      result.push({ courseId: u.courseId, role: CourseRole.Manager });
     }
     return result;
   })
-    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.taskOwner })))
+    .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.TaskOwner })))
     .reduce((acc, item) => {
       if (!acc[item.courseId]) {
         acc[item.courseId] = [];

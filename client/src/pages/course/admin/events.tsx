@@ -1,8 +1,11 @@
 import { Button, DatePicker, Form, Input, message, Popconfirm, Select, Table } from 'antd';
-import { GithubUserLink, UserSearch, withSession, PageLayout } from 'components';
 import { CommentInput, ModalForm } from 'components/Forms';
+import { GithubUserLink } from 'components/GithubUserLink';
+import { PageLayout } from 'components/PageLayout';
 import { dateRenderer, idFromArrayRenderer } from 'components/Table';
+import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
+import withSession from 'components/withSession';
 import moment from 'moment';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -104,7 +107,9 @@ function Page(props: Props) {
             showSearch
             placeholder="Please select an event"
             optionFilterProp={'children'}
-            filterOption={(input, option) => option && option.children.toLowerCase().includes(input.toLowerCase())}
+            filterOption={(input, option) =>
+              option && (option.children as any).toLowerCase().includes(input.toLowerCase())
+            }
           >
             {events.map(event => (
               <Select.Option key={event.id} value={event.id}>

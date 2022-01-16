@@ -1,4 +1,4 @@
-import { Alert, AlertTypes } from './alert';
+import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
 import { Consent, ChannelType } from './consent';
 import { Course } from './course';
@@ -20,12 +20,11 @@ import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Registry } from './registry';
 import { RepositoryEvent } from './repositoryEvent';
-import { Stage } from './stage';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { StageInterviewStudent } from './stageInterviewStudent';
 import { Student } from './student';
-import { StudentFeedback } from './studentFeedback';
+import { StudentFeedback } from './student-feedback';
 import { Task } from './task';
 import { TaskArtefact } from './taskArtefact';
 import { TaskChecker } from './taskChecker';
@@ -40,7 +39,7 @@ import { TaskVerification } from './taskVerification';
 export * from './session';
 export {
   Alert,
-  AlertTypes,
+  AlertType as AlertTypes,
   Certificate,
   Course,
   CourseEvent,
@@ -60,7 +59,6 @@ export {
   ProfilePermissions,
   Registry,
   RepositoryEvent,
-  Stage,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,
@@ -102,7 +100,6 @@ export const models = [
   ProfilePermissions,
   Registry,
   RepositoryEvent,
-  Stage,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,

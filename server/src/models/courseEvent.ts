@@ -1,7 +1,6 @@
 import { Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Event } from './event';
 import { Course } from './course';
-import { Stage } from './stage';
 import { User } from './user';
 
 @Entity()
@@ -20,14 +19,11 @@ export class CourseEvent {
   @Column()
   eventId: number;
 
-  @ManyToOne(_ => Course, (course: Course) => course.stages)
+  @ManyToOne(_ => Course)
   course: Course;
 
   @Column()
   courseId: number;
-
-  @ManyToOne(_ => Stage, { nullable: true })
-  stage: Stage;
 
   @Column({ nullable: true })
   stageId: number;

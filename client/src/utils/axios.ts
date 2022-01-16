@@ -1,19 +1,15 @@
 import { AxiosRequestConfig } from 'axios';
-import { NextPageContext, GetServerSidePropsContext } from 'next';
 import getConfig from 'next/config';
 
-const { serverRuntimeConfig } = getConfig();
+const { serverRuntimeConfig = {} } = getConfig() ?? {};
 
-export function getServerAxiosProps(
-  ctx?: NextPageContext | GetServerSidePropsContext,
-  baseUrl = '',
-): Partial<AxiosRequestConfig> {
+export function getServerAxiosProps(token?: string, baseUrl = ''): Partial<AxiosRequestConfig> {
   const { rsHost } = serverRuntimeConfig;
   return {
     baseURL: rsHost ? serverRuntimeConfig.rsHost + baseUrl : baseUrl,
-    headers: ctx?.req?.headers?.cookie
+    headers: token
       ? {
-          cookie: ctx.req.headers.cookie,
+          Authorization: `Bearer ${token}`,
         }
       : undefined,
   };

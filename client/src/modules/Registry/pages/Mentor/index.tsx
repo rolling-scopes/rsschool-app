@@ -5,7 +5,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import css from 'styled-jsx/css';
 
-import { RegistrationPageLayout } from 'components';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
 import { CoursesService } from 'services/courses';
 import { UserFull, UserService } from 'services/user';

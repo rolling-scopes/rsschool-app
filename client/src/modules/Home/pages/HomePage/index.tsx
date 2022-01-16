@@ -3,7 +3,9 @@ import { useAsync } from 'react-use';
 import Link from 'next/link';
 import { ToolTwoTone } from '@ant-design/icons';
 import { Alert, Button, Col, Layout, List, Row, Select, Typography } from 'antd';
-import { AdminSider, FooterLayout, Header } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { FooterLayout } from 'components/Footer';
+import { Header } from 'components/Header';
 import { Session } from 'components/withSession';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
@@ -20,6 +22,7 @@ import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
 import { Alert as AlertType } from 'domain/alerts';
 import { isAdmin, isAnyCoursePowerUserManager, isHirer } from 'domain/user';
+import { isAnyMentor } from 'domain/user';
 
 const { Content } = Layout;
 
@@ -34,9 +37,9 @@ const mentorRegistryService = new MentorRegistryService();
 
 export function HomePage(props: Props) {
   const plannedCourses = (props.courses || []).filter(course => course.planned && !course.inviteOnly);
-  const wasMentor = Object.values(props.session.roles).some(v => v === 'mentor');
+  const wasMentor = isAnyMentor(props.session);
   const hasRegistryBanner =
-    wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.roles[course.id] == null);
+    wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.courses[course.id] == null);
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
 
   const isAdminUser = isAdmin(props.session);
@@ -52,16 +55,26 @@ export function HomePage(props: Props) {
   const [alerts, setAlerts] = useState<AlertType[]>([]);
   const courseLinks = activeCourse
     ? links
-        .filter(route => isAdminUser || route.access(props.session, activeCourse))
+        .filter(
+          route =>
+            isAdminUser ||
+            (route.access(props.session, activeCourse.id) &&
+              (route.courseAccess?.(props.session, activeCourse) ?? true)),
+        )
         .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
     : [];
   const adminLinks = activeCourse
     ? courseManagementLinks
-        .filter(route => isAdminUser || route.access(props.session, activeCourse))
+        .filter(
+          route =>
+            isAdminUser ||
+            (route.access(props.session, activeCourse.id) &&
+              (route.courseAccess?.(props.session, activeCourse) ?? true)),
+        )
         .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
     : [];
 
-  const [approvedCourse] = preselectedCourses.filter(course => !props.session.roles?.[course.id]);
+  const [approvedCourse] = preselectedCourses.filter(course => !props.session.courses?.[course.id]);
 
   const handleChange = async (courseId: number) => {
     saveActiveCouseId(courseId);

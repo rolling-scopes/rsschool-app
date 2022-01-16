@@ -16,18 +16,18 @@ After the deadline of the assignment, peers for cross-checking are generated. Ev
 
 All who send their works for cross-checking, check each other's works. To do so, enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the link <span style="color:orange">`Cross-Check: Review`</span>. How to check:
 
-  1. Select the task (For example, Portfolio).
-  2. Select the student.
-  3. After selecting the student, the link to one's work will appear. If the link is not working, please contact the student and ask for the working link.
-  4. Check the work according to the assessment criteria of the task.
-  5. Enter the mark in the form.
-  6. Leave a comment, explaining the mark given.
-  7. Send the form.
-  8. Every student checks 4 other works performed by other students.
+1. Select the task (For example, Portfolio).
+2. Select the student.
+3. After selecting the student, the link to one's work will appear. If the link is not working, please contact the student and ask for the working link.
+4. Check the work according to the assessment criteria of the task.
+5. Enter the mark in the form.
+6. Leave a comment, explaining the mark given.
+7. Send the form.
+8. Every student checks 4 other works performed by other students.
 
 ### Step #4 Receiving the score and the comment
 
-Cross-check score is an average of all marks given by reviewers. If the number of students who checked the work is 4, the lowest mark is tossed away, and the average of the remaining three marks is calculated as an overall score of the work. If there are fewer than 4 students, who checked the work, all scores contribute to the final score of the work. If you **do not check all 4 works before the deadline, your work gets 0**. 
+Cross-check score is an average of all marks given by reviewers. If the number of students who checked the work is 4, the lowest mark is tossed away, and the average of the remaining three marks is calculated as an overall score of the work. If there are fewer than 4 students, who checked the work, all scores contribute to the final score of the work. If you **do not check all 4 works before the deadline, your work gets 0**.
 
 ## Quality of cross-checking
 
@@ -49,7 +49,7 @@ The goal of the cross-check is not only about checking others' works and giving 
 - **If the score you are giving is not the highest possible, be polite and**
   - leave a detailed comment on why the score is reduced
   - leave any contacts (Discord, Telegram, etc.) so that reviewer could change your mark
-  - you may always set a new score before the deadline with a comment why you have changed it 
+  - you may always set a new score before the deadline with a comment why you have changed it
 - If you think the work is copied, you need to:
   - inform the moderator of the course (with a private message)
   - mark it as 0
@@ -65,6 +65,7 @@ This is about comments such as:
 3. "just many spaces" etc.
 
 Administrators can check the reasons for the score reduction during the appeal (administrators can see names of anonymous reviewers). Those cross-checkers, who leave the above-mentioned comments, get:
+
 1. Warning in the #moderation channel - for the first time.
 2. Expulsion from the course - for the second time.
 
@@ -87,7 +88,7 @@ Messages in the channel #cross-check must be directed towards the discussion of 
 - takes place if there are any activists, who want to drive the process.
 - takes place if you changed your work after the deadline.
 - takes place after all checks of your work and step #4 completion (see above).
-- takes place if your expected score and obtained average score (step #4) differ by 10 or more percent.  
+- takes place if your expected score and obtained average score (step #4) differ by 10 or more percent.
 - the score can be increased as well as reduced without any further discussion.
 - in case the difference between the score after the appeal and the score obtained in step #4 is less than 10%, the final score will not be increased.
 
@@ -96,13 +97,14 @@ To appeal:
 1. Wait for all the checks of your work and completion of step #4 (see above). Check if all criteria are met in order to appeal (see above).
 2. Create a new issue <span style="color:green_apple">[github.com/rolling-scopes-school/support/issues](https://github.com/rolling-scopes-school/support/issues)</span>. Call it by the following template: Cross-Check 'task title' - 'Your Github name'.
 3. Fill in the issue with the following template (if the issue has a title, but is not filled correctly, it will not be reviewed):
-  - A link to your deployed project.
-  - A link to the project repository on Github.
-  - A link to the task.
-  - A link to the assessment form (if there are any).
-  - A screenshot of cross-checking marks (reviewers' contacts must be hidden).
-  - A final score after self-assessment with comments.
-  - A cross-check score of your Score. 
+
+- A link to your deployed project.
+- A link to the project repository on Github.
+- A link to the task.
+- A link to the assessment form (if there are any).
+- A screenshot of cross-checking marks (reviewers' contacts must be hidden).
+- A final score after self-assessment with comments.
+- A cross-check score of your Score.
 
 ## Appeal process
 

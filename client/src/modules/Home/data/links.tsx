@@ -28,20 +28,26 @@ const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;
 
 const every =
+  (...checks: ((session: Session, courseId: number) => boolean)[]) =>
+  (session: Session, courseId: number) =>
+    checks.every(check => check(session, courseId));
+
+const everyCourse =
   (...checks: ((session: Session, course: Course) => boolean)[]) =>
   (session: Session, course: Course) =>
     checks.every(check => check(session, course));
 
 const some =
-  (...checks: ((session: Session, course: Course) => boolean)[]) =>
-  (session: Session, course: Course) =>
-    checks.some(check => check(session, course));
+  (...checks: ((session: Session, courseId: number) => boolean)[]) =>
+  (session: Session, courseId: number) =>
+    checks.some(check => check(session, courseId));
 
 export type LinkData = {
   name: string;
   icon?: JSX.Element;
   getUrl: (course: Course) => string;
-  access: (session: Session, course: Course) => boolean;
+  access: (session: Session, courseId: number) => boolean;
+  courseAccess?: (session: Session, course: Course) => boolean;
   newTab?: boolean;
 };
 
@@ -50,7 +56,8 @@ export const links: LinkData[] = [
     name: 'Dashboard',
     icon: <DashboardTwoTone />,
     getUrl: (course: Course) => `/course/student/dashboard?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isStudent),
+    access: every(isStudent),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Score',
@@ -68,19 +75,22 @@ export const links: LinkData[] = [
     name: 'Submit Review',
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
-    access: every(isCourseNotCompleted, some(isMentor, isTaskOwner, isCourseManager)),
+    access: every(some(isMentor, isTaskOwner, isCourseManager)),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Submit Review By Jury',
     icon: <CheckCircleTwoTone />,
     getUrl: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
-    access: every(isCourseNotCompleted, some(isAdmin, isJuryActivist)),
+    access: every(some(isAdmin, isJuryActivist)),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Submit Scores',
     icon: <CheckSquareTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
-    access: every(isCourseNotCompleted, some(isTaskOwner, isAdmin, isCourseManager)),
+    access: every(some(isTaskOwner, isAdmin, isCourseManager)),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
 
   {
@@ -93,43 +103,50 @@ export const links: LinkData[] = [
     name: 'Cross-Check: Submit',
     icon: <CodeTwoTone />,
     getUrl: (course: Course) => `/course/student/cross-check-submit?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isStudent),
+    access: every(isStudent),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Cross-Check: Review',
     icon: <CheckCircleTwoTone twoToneColor="#f56161" />,
     getUrl: (course: Course) => `/course/student/cross-check-review?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isStudent),
+    access: every(isStudent),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Interviews',
     icon: <AudioTwoTone />,
     getUrl: (course: Course) => `/course/student/interviews?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isStudent),
+    access: every(isStudent),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Interviews',
     icon: <AudioTwoTone twoToneColor="orange" />,
     getUrl: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isMentor),
+    access: every(isMentor),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Cross Mentors',
     icon: <CompassTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isStudent),
+    access: every(isStudent),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Auto-Test',
     icon: <PlayCircleTwoTone twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/student/auto-test?course=${course.alias}`,
-    access: every(isCourseNotCompleted, some(isStudent, isCourseManager)),
+    access: some(isStudent, isCourseManager),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Expel/Unassign Student',
     icon: <StopTwoTone twoToneColor="red" />,
     getUrl: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
-    access: every(isCourseNotCompleted, isMentor),
+    access: every(isMentor),
+    courseAccess: everyCourse(isCourseNotCompleted),
   },
 ];
 

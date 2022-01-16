@@ -150,13 +150,13 @@ export const defineRole = ({
   roles: StudentMentorRoles;
   userGithubId: string;
 }): RelationRole => {
-  if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
+  if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Manager))) {
     return 'coursemanager';
-  } else if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
+  } else if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Supervisor))) {
     return 'coursesupervisor';
-  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.manager))) {
+  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Manager))) {
     return 'coursemanager';
-  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.supervisor))) {
+  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Supervisor))) {
     return 'coursemanager';
   } else if (relationsRoles) {
     const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;

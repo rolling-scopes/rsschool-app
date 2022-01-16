@@ -52,7 +52,7 @@ exports[`CoreJsIviewsModal Should render correctly 1`] = `
     </Text>
     test
   </p>
-  <Table
+  <ForwardRef(InternalTable)
     columns={
       Array [
         Object {

@@ -1,7 +1,9 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Layout, Row, Select, Spin, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
-import { AdminSider, GithubUserLink, Header } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
+import { GithubUserLink } from 'components/GithubUserLink';
 import { stringSorter } from 'components/Table';
 import withCourses from 'components/withCourses';
 import withSession, { Session } from 'components/withSession';

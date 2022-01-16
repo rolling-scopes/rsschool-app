@@ -1,15 +1,17 @@
 import { Button, Layout, Modal, Spin, Table, Typography } from 'antd';
-import { GithubAvatar, Header, withSession } from 'components';
-import { omit } from 'lodash';
+import { IPaginationInfo } from 'common/types/pagination';
+import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
+import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
+import { GithubAvatar } from 'components/GithubAvatar';
+import { Header } from 'components/Header';
 import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
 import withCourseData from 'components/withCourseData';
+import { withSession } from 'components/withSession';
+import { omit } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails, CrossCheckPairs } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
-import { IPaginationInfo } from 'common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
-import { BadReviewControllers } from 'components/BadReview/BadReviewControllers';
 
 const { Text } = Typography;
 
