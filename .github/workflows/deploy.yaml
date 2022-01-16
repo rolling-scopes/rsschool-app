@@ -159,10 +159,10 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: |
-          npm ci
-          cd ../server && npm ci
-          cd ../nestjs
+        run:
+          - npm ci
+          - cd ../server && npm ci
+          - cd ../nestjs
 
       # - name: Test (npm test)
       #   run: npm test
