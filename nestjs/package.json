@@ -24,6 +24,7 @@
     "openapi:sdk": "sh openapi.sh"
   },
   "dependencies": {
+    "@apalchys/pino-cloudwatch": "0.8.6",
     "@nestjs/common": "8.2.5",
     "@nestjs/config": "1.1.2",
     "@nestjs/core": "8.2.5",
