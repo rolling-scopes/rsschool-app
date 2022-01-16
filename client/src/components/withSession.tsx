@@ -58,7 +58,7 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
     if (session && requiredRole) {
       const { courses, isAdmin } = session;
       const { id } = props.course;
-      if (courses[id].roles.includes(requiredRole) && !isAdmin) {
+      if (!courses[id].roles.includes(requiredRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
             You are not [{requiredRole}] in {props.course.alias}
