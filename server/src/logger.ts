@@ -76,6 +76,7 @@ export function createDefaultLogger() {
       aws_secret_access_key: secretAccessKey,
       aws_region: region,
       group: '/app/rsschool-api',
+      stream: `${new Date().toISOString().split('T')[0]}-server`,
     });
     streams.push(writeStream);
   }
