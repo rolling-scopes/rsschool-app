@@ -234,7 +234,6 @@ export class ProfilePage extends React.Component<Props, State> {
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      console.log('setting profile');
       this.setState({
         isLoading: false,
         profile: updateProfile,
@@ -244,7 +243,6 @@ export class ProfilePage extends React.Component<Props, State> {
         initialProfileSettings,
       });
     } catch (e) {
-      console.log(e);
       this.setState({
         isLoading: false,
         profile: null,

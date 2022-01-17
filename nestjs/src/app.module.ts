@@ -1,25 +1,22 @@
 import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule } from 'nestjs-pino';
+import { LoggerModule, Params } from 'nestjs-pino';
+
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
 import { LoggingMiddleware } from './core/middlewares';
+import { getPinoHttp } from './core/pino';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
 import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 
-const devMode = process.env.NODE_ENV !== 'production';
-
 @Module({
   imports: [
     LoggerModule.forRoot({
-      pinoHttp: {
-        autoLogging: false,
-        prettyPrint: devMode ? { ignore: 'time,hostname,pid,host,remoteAddress,req' } : false,
-      },
+      pinoHttp: getPinoHttp(),
     }),
     TypeOrmModule.forRoot({
       ...config,
