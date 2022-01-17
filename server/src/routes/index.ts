@@ -11,6 +11,7 @@ import { userGroupRoute } from './userGroup';
 import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
+import { filesRoute } from './file';
 import { taskResultRoute } from './taskResult';
 import { studentRoute } from './student';
 import { tasksRoute } from './tasks';
@@ -72,6 +73,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, interviewQuestionRoute(logger));
   applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));
+  applyRouter(router, filesRoute(logger));
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));

@@ -15,6 +15,5 @@ export function getServerAxiosProps(token?: string, baseUrl = ''): Partial<Axios
 
 export function getApiConfiguration(token?: string): Configuration {
   const props = getServerAxiosProps(token, BASE_PATH);
-  console.log(props.baseURL);
   return new Configuration({ basePath: props.baseURL, baseOptions: props });
 }
