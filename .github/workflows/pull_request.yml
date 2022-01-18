@@ -151,6 +151,11 @@ jobs:
         if: success() || failure()
         working-directory: server
 
+      - name: Test (nestjs)
+        run: npm run test:ci
+        if: success() || failure()
+        working-directory: nestjs
+
       - name: Upload test report (client)
         uses: actions/upload-artifact@v2
         if: success() || failure()
@@ -164,6 +169,13 @@ jobs:
         with:
           name: test-report-server
           path: reports/jest-junit-server.xml
+
+      - name: Upload test report (nestjs)
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: test-report-nestjs
+          path: reports/jest-junit-nestjs.xml
 
   pr_auto_label:
     name: Auto Label

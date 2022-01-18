@@ -34,7 +34,7 @@ export class AuthUser {
   public readonly githubId: string;
   public readonly courses: Record<number, CourseInfo>;
 
-  constructor(user: Partial<User>, courseTasks: CourseTask[], admin: boolean) {
+  constructor(user: Partial<User>, courseTasks: CourseTask[] = [], admin: boolean = false) {
     const roles: { [key: string]: 'student' | 'mentor' } = {};
     const courseRoles: CourseRoles = {};
     const courses: Record<number, CourseInfo> = {};
@@ -85,6 +85,9 @@ export class AuthUser {
         }
         if (u.isManager) {
           result.push({ courseId: u.courseId, role: CourseRole.Manager });
+        }
+        if (u.isSupervisor) {
+          result.push({ courseId: u.courseId, role: CourseRole.Supervisor });
         }
         return result;
       })
