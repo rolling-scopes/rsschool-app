@@ -5,7 +5,7 @@ import { LoggerModule, Params } from 'nestjs-pino';
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
-import { LoggingMiddleware } from './core/middlewares';
+import { LoggingMiddleware, NoCacheMiddleware } from './core/middlewares';
 import { getPinoHttp } from './core/pino';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
@@ -36,5 +36,6 @@ import { UsersModule } from './users';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(NoCacheMiddleware).forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }
