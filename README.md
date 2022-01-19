@@ -46,6 +46,10 @@ Please install the following software before starting development:
   - Run `npm start` (starts application by running Next.js and REST API server)
   - Open `https://localhost:3000` in a browser
 
+### Running docs locally
+  - Install docsify globally: `npm i -g docsify`
+  - Run `docsify serve -p 4000 docs`
+
 ## Contributing
 
 See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide

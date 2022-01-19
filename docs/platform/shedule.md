@@ -5,15 +5,15 @@ To successfully complete the selected course, **RS School App** has a **schedule
 1. Select the desired course
 2. Follow the link
 
-![schedule](images/schedule-1.png)
+![schedule](./img/schedule-1.png)
 
 #### General view of the schedule
 
-![schedule view](images/schedule-2.png)
+![schedule view](./img/schedule-2.png)
 
 #### Schedule Control Panel
 
-![schedule control panel](images/schedule-3.png)
+![schedule control panel](./img/schedule-3.png)
 
 1. Select the type of schedule. The selection is saved for the device/browser
 
@@ -27,13 +27,13 @@ To successfully complete the selected course, **RS School App** has a **schedule
 
 **Table** has some more advanced settings, where you can hide some columns and events/tasks by type
 
-![table customizing](images/schedule-4.png)
+![table customizing](./img/schedule-4.png)
 
 #### Event/Task Details
 
 The event/task details page displays the most detailed data.
 
-![event/task details](images/schedule-5.png)
+![event/task details](./img/schedule-5.png)
 
 #### Using the schedule by students
 
@@ -45,7 +45,7 @@ For the convenient usage of the schedule, the following editing options are prov
 
 1. Extended Control Panel
 
-![schedule control panel admin](images/schedule-6.png)
+![schedule control panel admin](./img/schedule-6.png)
 
     **1** - a button to export the course schedule to a csv file for editing the whole course
     **2** - a button to import the course schedule from a csv file (new events/tasks are added or existing ones are updated)
@@ -53,16 +53,16 @@ For the convenient usage of the schedule, the following editing options are prov
 
 2. Quick edit of the **Table view**
 
-![schedule table edit](images/schedule-7.png)
-![schedule table edit](images/schedule-9.png)
+![schedule table edit](./img/schedule-7.png)
+![schedule table edit](./img/schedule-9.png)
 
 3. Add a new event/task
 
-![add new entity](images/schedule-8.png)
+![add new entity](./img/schedule-8.png)
 
 4. Event/task edit is also available on the event/task details page.
 
-![edit entity](images/schedule-10.png)
+![edit entity](./img/schedule-10.png)
 
 #### Some features of filling out the schedule
 
