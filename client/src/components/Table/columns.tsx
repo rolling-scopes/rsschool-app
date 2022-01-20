@@ -25,7 +25,14 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
         >
           Search
         </Button>
-        <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+        <Button
+          onClick={() => {
+            clearFilters();
+            confirm();
+          }}
+          size="small"
+          style={{ width: 90 }}
+        >
           Reset
         </Button>
       </div>

@@ -427,27 +427,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -456,23 +457,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Who can see my profile?
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Who can see my profile?"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Who can see my profile?
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -559,27 +568,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -588,23 +598,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            About
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="About"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              About
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -821,27 +839,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -850,23 +869,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Education info
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Education info"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Education info
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -1083,27 +1110,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -1112,23 +1140,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            English level
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="English level"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              English level
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -1280,27 +1316,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -1309,23 +1346,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Email
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Email"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Email
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -1477,27 +1522,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -1506,23 +1552,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Telegram
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Telegram"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Telegram
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -1674,27 +1728,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -1703,23 +1758,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Skype
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Skype"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Skype
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -1871,27 +1934,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -1900,23 +1964,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Phone
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Phone"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Phone
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -2068,27 +2140,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -2097,23 +2170,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Contact notes
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Contact notes"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Contact notes
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -2265,27 +2346,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -2294,23 +2376,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Link to LinkedIn profile
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Link to LinkedIn profile"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Link to LinkedIn profile
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -2527,27 +2617,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -2556,23 +2647,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Public feedback
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Public feedback"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Public feedback
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -2789,27 +2888,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -2818,23 +2918,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Mentor statistics
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Mentor statistics"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Mentor statistics
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
@@ -3051,27 +3159,28 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                           <Text
                                             strong={true}
                                           >
-                                            <Base
+                                            <ForwardRef
                                               component="span"
                                               strong={true}
                                             >
-                                              <LocaleReceiver
-                                                componentName="Text"
+                                              <ResizeObserver
+                                                disabled={true}
+                                                onResize={[Function]}
                                               >
-                                                <ResizeObserver
+                                                <SingleObserver
                                                   disabled={true}
+                                                  key="rc-observer-key-0"
                                                   onResize={[Function]}
                                                 >
-                                                  <SingleObserver
-                                                    disabled={true}
-                                                    key="rc-observer-key-0"
-                                                    onResize={[Function]}
-                                                  >
-                                                    <DomWrapper>
+                                                  <DomWrapper>
+                                                    <EllipsisTooltip
+                                                      enabledEllipsis={false}
+                                                      isEllipsis={false}
+                                                    >
                                                       <Typography
                                                         className=""
                                                         component="span"
-                                                        onClick={[Function]}
+                                                        onClick={null}
                                                         style={
                                                           Object {
                                                             "WebkitLineClamp": undefined,
@@ -3080,23 +3189,31 @@ exports[`PermissionsSettingsDrawer Should render correctly 1`] = `
                                                       >
                                                         <span
                                                           className="ant-typography"
-                                                          onClick={[Function]}
+                                                          onClick={null}
                                                           style={
                                                             Object {
                                                               "WebkitLineClamp": undefined,
                                                             }
                                                           }
                                                         >
-                                                          <strong>
-                                                            Student statistics
-                                                          </strong>
+                                                          <Ellipsis
+                                                            enabledMeasure={false}
+                                                            onEllipsis={[Function]}
+                                                            rows={1}
+                                                            text="Student statistics"
+                                                            width={0}
+                                                          >
+                                                            <strong>
+                                                              Student statistics
+                                                            </strong>
+                                                          </Ellipsis>
                                                         </span>
                                                       </Typography>
-                                                    </DomWrapper>
-                                                  </SingleObserver>
-                                                </ResizeObserver>
-                                              </LocaleReceiver>
-                                            </Base>
+                                                    </EllipsisTooltip>
+                                                  </DomWrapper>
+                                                </SingleObserver>
+                                              </ResizeObserver>
+                                            </ForwardRef>
                                           </Text>
                                         </p>
                                         <p
