@@ -17,13 +17,6 @@ export class StudentsService {
     });
   }
 
-  public getByMentorId(mentorId: number) {
-    return this.studentRepository.find({
-      where: { mentorId },
-      relations: ['user', 'feedbacks'],
-    });
-  }
-
   public async canAccessStudent(user: AuthUser, studentId: number): Promise<boolean> {
     const student = await this.getById(studentId);
     if (student == null) {
@@ -39,6 +32,10 @@ export class StudentsService {
     const currentMentorId = user.courses?.[courseId]?.mentorId;
 
     if (courseInfo?.roles.includes(CourseRole.Manager)) {
+      return true;
+    }
+
+    if (courseInfo?.roles.includes(CourseRole.Supervisor)) {
       return true;
     }
 
