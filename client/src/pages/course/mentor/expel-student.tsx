@@ -14,7 +14,7 @@ type ActionOnStudent = 'expel' | 'unassign';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
-  const mentorId = Number(props.session.courses[courseId].mentorId);
+
   const userGithubId = props.session.githubId;
 
   const [form] = Form.useForm();
@@ -37,6 +37,10 @@ function Page(props: CoursePageProps) {
         ]);
       }
     } else {
+      const mentorId = props.session.courses[courseId]?.mentorId;
+      if (!mentorId) {
+        return null;
+      }
       const students = await mentorsService.getMentorStudents(mentorId);
       const activeStudents = students.data.filter(student => student.active);
       setStudents(activeStudents);

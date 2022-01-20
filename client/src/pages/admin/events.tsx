@@ -9,7 +9,7 @@ import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
 import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
-import { isAnyCoursePowerUserManager } from '../../domain/user';
+import { isAnyCoursePowerUser } from '../../domain/user';
 
 const { Content } = Layout;
 
@@ -120,7 +120,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUserManager(props.session)} />
+      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUser(props.session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Events" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>

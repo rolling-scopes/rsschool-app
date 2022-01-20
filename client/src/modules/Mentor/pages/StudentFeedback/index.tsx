@@ -33,7 +33,7 @@ const englishLevels = [
 export function StudentFeedback({ session, course }: CoursePageProps) {
   const { githubId, courses } = session;
   const { id: courseId, alias } = course;
-  const mentorId = Number(courses[courseId].mentorId);
+  const mentorId = courses[courseId]?.mentorId;
 
   const [form] = Form.useForm();
   const router = useRouter();
