@@ -21,7 +21,7 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
-import { isAdmin, isAnyCoursePowerUserManager, isHirer } from 'domain/user';
+import { isAdmin, isAnyCoursePowerUser, isHirer } from 'domain/user';
 import { isAnyMentor } from 'domain/user';
 
 const { Content } = Layout;
@@ -43,7 +43,7 @@ export function HomePage(props: Props) {
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
 
   const isAdminUser = isAdmin(props.session);
-  const isCoursePowerUser = isAnyCoursePowerUserManager(props.session);
+  const isCoursePowerUser = isAnyCoursePowerUser(props.session);
   const isHirerUser = isHirer(props.session);
   const isPowerUser = isAdminUser || isCoursePowerUser;
 

@@ -26,7 +26,7 @@ export interface Session {
   isAdmin: boolean;
   isHirer: boolean;
   isActivist: boolean;
-  courses: { [courseId: number | string]: CourseInfo };
+  courses: { [courseId: number | string]: CourseInfo | undefined };
 }
 
 let sessionCache: Session | undefined;
@@ -57,8 +57,8 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
 
     if (session && requiredRole) {
       const { courses, isAdmin } = session;
-      const { id } = props.course;
-      if (!courses?.[id].roles.includes(requiredRole) && !isAdmin) {
+      const id = props.course.id;
+      if (!courses?.[id]?.roles.includes(requiredRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
             You are not [{requiredRole}] in {props.course.alias}

@@ -33,7 +33,7 @@ export function PageLayoutSimple(props: Props) {
             <Row style={{ marginTop: 16 }}></Row>
             <Row gutter={24}>
               <Col flex={1} />
-              <Col xs={20} sm={16} md={12} lg={8} xl={8}>
+              <Col xs={20} sm={16} md={16} lg={12} xl={12}>
                 {props.children}
               </Col>
               <Col flex={1} />

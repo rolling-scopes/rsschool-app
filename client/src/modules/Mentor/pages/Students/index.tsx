@@ -9,7 +9,7 @@ import { CoursePageProps } from 'services/models';
 export function Students(props: CoursePageProps) {
   const { githubId } = props.session;
   const { id: courseId, alias, completed } = props.course;
-  const mentorId = Number(props.session.courses[courseId].mentorId);
+  const mentorId = props.session.courses[courseId]?.mentorId;
 
   const [students, loading] = useMentorStudents(mentorId);
 
