@@ -46,7 +46,7 @@ You can submit a task as many times as you want, each subsequent submission over
 
 Your username on the Codewars website should be the same as the GitHub nickname you had registered in the RS School App. If the specified username on Codewars is busy, add the ending -rss to your GitHub nickname. You can change the username to codewars by following the link <span style="color:green_apple">[https://www.codewars.com/users/edit](https://www.codewars.com/users/edit)</span>
 
-![edit username](images/rs-app-tasks-1.jpg)
+![edit username](./img/tasks-1.jpg)
 
 ## Cross-check
 

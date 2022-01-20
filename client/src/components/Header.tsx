@@ -92,7 +92,15 @@ export function Header(props: Props) {
         <Link href="https://docs.app.rs.school">
           <a>
             <Tooltip title="RS School App docs">
-              <QuestionCircleFilled style={{ fontSize: '150%', marginRight: '15px' }} />
+              <Button
+                type="primary"
+                shape="round"
+                size="large"
+                icon={<QuestionCircleFilled />}
+                style={{ marginRight: 16 }}
+              >
+                Help
+              </Button>
             </Tooltip>
           </a>
         </Link>
