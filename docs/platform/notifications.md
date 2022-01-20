@@ -1,4 +1,4 @@
-## Rolling Scopes School Notifications
+## RS School App Notifications
 
 ## Notification types
 

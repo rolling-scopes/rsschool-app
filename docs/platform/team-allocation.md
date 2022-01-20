@@ -6,7 +6,7 @@ The process of allocation is totally automated. It is done via <span style="colo
 
 The app will offer you to fill in the registration form after you have been authorized in the system:
 
-![registration form](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2011.52.06.png)
+![registration form](./img/team-allocation-1.png)
 
 NB:
 
@@ -16,7 +16,7 @@ The score is filled by your score in the main course in RS School. If you have n
 
 There are 2 available buttons in the Teams page: <span style="color:orange">`Join team`</span> or <span style="color:orange">`Create team`</span>.
 
-![teams page](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2012.06.39.png)
+![teams page](./img/team-allocation-2.png)
 
 #### Create a team
 
@@ -41,8 +41,8 @@ If the number of students in the team is less than required, other members will 
 
 After being assigned to the team you will see the following:
 
-![team](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2012.39.26.png)
+![team](./img/team-allocation-3.png)
 
 To leave the team just click <span style="color:orange">`Leave team`</span>. Or you need someone to expel you from the team:
 
-![expel team member](https://github.com/yuliaHope/rs-images/blob/main/Screenshot%202021-02-22%20at%2012.39.43.png)
+![expel team member](./img/team-allocation-4.png)
