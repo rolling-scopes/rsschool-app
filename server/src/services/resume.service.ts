@@ -34,27 +34,39 @@ export class ResumeService {
     return dataToSend;
   }
 
-  public async getData(full: boolean) {
+  public async getViewData() {
     const resume = await this.resumeRepository.find(this.githubId);
-
-    if (!full) {
-      return resume;
-    }
 
     const [feedback, courses] = await Promise.all([
       this.feedbackRespository.getResumeFeedback(this.githubId),
       this.studentRepository.findAndIncludeStatsForResume(this.githubId),
     ]);
 
+    //TODO: add filtration for chosen courses
     const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
 
-    const fullData = {
+    const viewData = {
       ...resume,
       feedback,
       courses: realCourses,
     };
 
-    return fullData;
+    return viewData;
+  }
+
+  public async getFormData() {
+    const resume = await this.resumeRepository.find(this.githubId);
+
+    const courses = await this.studentRepository.findStudentCourses(this.githubId);
+
+    const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+
+    const formData = {
+      ...resume,
+      courses: realCourses,
+    };
+
+    return formData;
   }
 
   public async getConsent() {
