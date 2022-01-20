@@ -3,12 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser, Role, CourseRole } from '../../auth';
 import { Repository } from 'typeorm';
+import { Student } from '@entities/student';
 
 @Injectable()
 export class MentorsService {
   constructor(
     @InjectRepository(Mentor)
     readonly mentorsRepository: Repository<Mentor>,
+    @InjectRepository(Student)
+    readonly studentRepository: Repository<Student>,
   ) {}
 
   public getById(mentorId: number) {
@@ -20,6 +23,13 @@ export class MentorsService {
   public getByUserId(courseId: number, userId: number) {
     return this.mentorsRepository.findOne({
       where: { courseId, userId },
+    });
+  }
+
+  public getStudents(mentorId: number) {
+    return this.studentRepository.find({
+      where: { mentorId },
+      relations: ['user', 'feedbacks'],
     });
   }
 
