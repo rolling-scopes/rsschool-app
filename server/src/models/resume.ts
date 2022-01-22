@@ -66,4 +66,7 @@ export class Resume {
 
   @Column({ default: false })
   isHidden: boolean;
+  
+  @Column('int', { array: true, default: [] })
+  visibleCourses: number[];
 }
