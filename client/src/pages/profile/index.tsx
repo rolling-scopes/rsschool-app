@@ -41,6 +41,7 @@ import { withGoogleMaps } from 'components/withGoogleMaps';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { checkIsProfileOwner } from 'utils/profile-check';
+import { featureToggles } from 'services/features';
 
 type Props = {
   router: NextRouter;
@@ -393,7 +394,7 @@ export class ProfilePage extends React.Component<Props, State> {
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      profile?.consents && (
+      !featureToggles.notifications && profile?.consents && (
         <ConsentsCard
           data={profile.consents}
           isEditingModeEnabled={isEditingModeVisible}

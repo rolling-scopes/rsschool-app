@@ -1,5 +1,8 @@
 import { Header } from './Header';
 import { Spin, Row, Col, Layout } from 'antd';
+import { PropsWithChildren } from 'react';
+import { Session } from './withSession';
+import { AdminSider } from './AdminSider';
 
 type Props = {
   loading: boolean;
@@ -41,6 +44,18 @@ export function PageLayoutSimple(props: Props) {
           </Spin>
         )}
       </Layout.Content>
+    </Layout>
+  );
+}
+
+export function AdminPageLayout({ session, children }: PropsWithChildren<{ session: Session }>) {
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <AdminSider isAdmin={session.isAdmin} />
+      <Layout style={{ background: '#fff' }}>
+        <Header title="Notifications" username={session.githubId} />
+        <Layout.Content>{children}</Layout.Content>
+      </Layout>
     </Layout>
   );
 }

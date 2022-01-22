@@ -8,3 +8,4 @@ dist/
 coverage
 reports/*.xml
 setup/backup.sql
+.history/

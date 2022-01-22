@@ -11,10 +11,12 @@ import {
   RobotFilled,
   UserOutlined,
   ProfileFilled,
+  NotificationFilled,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
+import { featureToggles } from 'services/features';
 
 const { Sider } = Layout;
 
@@ -136,6 +138,17 @@ export function AdminSider(props: Props) {
               <ProfileFilled />
               <span>Employer Page</span>
             </a>
+          </Menu.Item>
+        ) : null}
+
+        {featureToggles.notifications && (props.isAdmin || props.isCoursePowerUser) ? (
+          <Menu.Item key="11">
+            <Link prefetch={false} href="/admin/notifications">
+              <a>
+                <NotificationFilled />
+                <span>Notifications</span>
+              </a>
+            </Link>
           </Menu.Item>
         ) : null}
       </Menu>
