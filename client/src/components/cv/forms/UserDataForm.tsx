@@ -38,7 +38,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
   React.useEffect(() => {
     form.setFieldsValue(formValues);
     form.validateFields();
-  }, [formValues]);
+  }, [userData]);
 
   const itemStyle = {
     maxWidth: '314px',
