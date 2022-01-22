@@ -5,6 +5,7 @@ import { User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
+import omit from 'lodash/omit';
 
 export class ResumeService {
   private resumeRepository = getCustomRepository(ResumeRepository);
@@ -12,7 +13,7 @@ export class ResumeService {
   private studentRepository = getCustomRepository(StudentRepository);
   private userRepository = getRepository(User);
 
-  constructor(private githubId: string) {}
+  constructor(private githubId: string) { }
 
   public async updateStatus() {
     const resume = await this.resumeRepository.find(this.githubId);
@@ -42,13 +43,13 @@ export class ResumeService {
       this.studentRepository.findAndIncludeStatsForResume(this.githubId),
     ]);
 
-    //TODO: add filtration for chosen courses
-    const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+    const selectedCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+      .map(course => omit(course, ['courseId']));
 
     const viewData = {
-      ...resume,
+      ...omit(resume, ['visibleCourses']),
       feedback,
-      courses: realCourses,
+      courses: selectedCourses,
     };
 
     return viewData;

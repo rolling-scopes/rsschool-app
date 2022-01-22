@@ -4,7 +4,6 @@ import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
 import { getFullName } from '../rules';
-import { omit } from 'lodash';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -264,7 +263,7 @@ export class StudentRepository extends AbstractRepository<Student> {
       },
     );
 
-    return studentStats.map(stats => ({ ...omit(stats, ['courseId']) }));
+    return studentStats;
   }
 
   public async findStudentCourses(githubId: string) {
