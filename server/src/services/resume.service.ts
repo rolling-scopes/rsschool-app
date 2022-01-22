@@ -31,7 +31,9 @@ export class ResumeService {
       ...cv,
       ...data,
     });
-    const { id, expires, githubId: omittedGithubId, isHidden, ...dataToSend } = result;
+    
+    const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
+    
     return dataToSend;
   }
 
