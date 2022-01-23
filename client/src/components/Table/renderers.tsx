@@ -5,7 +5,6 @@ import {
   YoutubeOutlined,
   ChromeOutlined,
   GithubOutlined,
-  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
@@ -106,19 +105,6 @@ export const urlRenderer = (url: string) =>
       </a>
     </Tooltip>
   );
-
-export const placeRenderer = (value: string) => {
-  return value === 'Youtube Live' ? (
-    <div>
-      <YoutubeOutlined /> {value}{' '}
-      <Tooltip title="Ссылка будет в Discord">
-        <QuestionCircleOutlined />
-      </Tooltip>
-    </div>
-  ) : (
-    <Tooltip title={value}>{<div style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{value}</div>}</Tooltip>
-  );
-};
 
 export const scoreRenderer = (score: string) => {
   if (!score) {
