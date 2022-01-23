@@ -15,6 +15,15 @@ export interface CourseData {
   };
 }
 
+export interface CourseDataShortened {
+  courseId: number;
+  courseFullName: string;
+}
+
+export interface CourseToShow extends CourseDataShortened {
+  isVisible: boolean;
+}
+
 export type EnglishLevel = typeof ENGLISH_LEVELS[number];
 export type MilitaryServiceStatus = 'served' | 'liable' | 'notLiable';
 
@@ -60,19 +69,24 @@ export interface FieldData {
 
 export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
   githubUsername: string | null;
+  visibleCourses: number[];
 }
 
 export interface UserDataToSubmit extends Omit<UserData, 'startFrom'> {
   startFrom: Moment;
+  visibleCourses: number[];
 }
 
 export interface AllDataToSubmit extends UserDataToSubmit, Contacts {}
 
 export interface EditCVData extends AllUserCVData {
   expires: number | null;
+  courses: CourseDataShortened[];
+  visibleCourses: number[];
 }
 
-export interface GetFullCVData extends EditCVData {
+export interface GetFullCVData extends AllUserCVData {
+  expires: number | null;
   courses: CVStudentStats[];
   feedback: CVFeedback[];
 }

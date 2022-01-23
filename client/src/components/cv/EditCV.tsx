@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
+import { SelectedCoursesModal } from 'components/cv/SelectedCoursesModal';
 import { ContactsForm, UserDataForm } from './forms';
 import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
@@ -14,6 +15,7 @@ import {
   DeleteOutlined,
   FieldTimeOutlined,
   CopyOutlined,
+  FullscreenOutlined,
 } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 
@@ -23,6 +25,12 @@ const { Paragraph, Text, Title } = Typography;
 type Props = {
   ownerGithubId: string;
   withdrawConsent: () => void;
+};
+
+type CourseToShow = {
+  isVisible: boolean;
+  courseId: number;
+  courseFullName: string;
 };
 
 const cvService = new OpportunitiesService();
@@ -35,6 +43,8 @@ function EditCV(props: Props) {
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
+  const [isCoursesModalVisible, setIsCoursesModalVisible] = useState<boolean>(false);
+  const [coursesToShow, setCoursesToShow] = useState<CourseToShow[] | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
@@ -102,6 +112,8 @@ function EditCV(props: Props) {
       startFrom,
       fullTime,
       expires,
+      courses,
+      visibleCourses,
     } = cvData;
 
     const userData = {
@@ -127,9 +139,18 @@ function EditCV(props: Props) {
       website,
     };
 
+    const visibleCoursesData = courses.map(course => {
+      const isVisible = visibleCourses.includes(course.courseId);
+      return {
+        ...course,
+        isVisible,
+      };
+    });
+
     setContactsList(contactsList);
     setUserData(userData);
     setExpiration(Number(expires));
+    setCoursesToShow(visibleCoursesData);
 
     setLoading(false);
   }, []);
@@ -155,6 +176,7 @@ function EditCV(props: Props) {
       startFrom,
       telegram,
       website,
+      visibleCourses,
     } = data;
 
     const LOCATIONS_COUNT = 3;
@@ -179,6 +201,7 @@ function EditCV(props: Props) {
       website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
+      visibleCourses,
     };
 
     const newCVData = await cvService.saveResumeData(cvData);
@@ -265,7 +288,7 @@ function EditCV(props: Props) {
       const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
       return (
         <Text>
-          Expiration date: <Text strong>{expirationDateFormatted}</Text>
+          CV expiration date: <Text strong>{expirationDateFormatted}</Text>
         </Text>
       );
     }
@@ -284,8 +307,16 @@ function EditCV(props: Props) {
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
     const contactsFormData: Contacts = contactsFormRef?.current?.getFieldsValue();
+
+    const visibleCourses = coursesToShow!.reduce((acc, course) => {
+      const { isVisible, courseId } = course;
+      if (isVisible) acc.push(courseId);
+      return acc;
+    }, [] as number[]);
+
     return {
       ...userFormData,
+      visibleCourses,
       ...contactsFormData,
     };
   };
@@ -380,6 +411,11 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
+  const handleCurrentSelection = (values: CourseToShow[]) => {
+    setCoursesToShow(values);
+    setIsCoursesModalVisible(false);
+  };
+
   return (
     <LoadingScreen show={loading}>
       <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
@@ -390,21 +426,32 @@ function EditCV(props: Props) {
               align="start"
               style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
             >
-              {userData && <UserDataForm ref={userFormRef} userData={userData} />}
+              <Col>
+                <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
+                <Card size="small" style={{ width: '100%' }}>
+                  <Button
+                    style={{ ...buttonStyle, width: '100%' }}
+                    size="large"
+                    type="dashed"
+                    onClick={() => setIsCoursesModalVisible(true)}
+                  >
+                    Select visible courses <FullscreenOutlined />
+                  </Button>
+                </Card>
+              </Col>
               <Col>
                 <Row>{contactsList && <ContactsForm ref={contactsFormRef} contactsList={contactsList} />}</Row>
-                <br />
                 <Row>
-                  <Card size="small" style={{ width: '100%' }} title="CV expiration status">
+                  <Card size="small" style={{ width: '100%' }}>
                     {formatDate(expires)}
                   </Card>
                 </Row>
               </Col>
             </Space>
-            <Row justify="center" style={{ paddingTop: 24 }}>
+            <Row justify="center" style={{ paddingTop: '15px' }}>
               <Button
                 size="large"
-                style={{ ...buttonStyle, minWidth: 300 }}
+                style={{ ...buttonStyle, minWidth: '300px' }}
                 type="primary"
                 htmlType="button"
                 onClick={() => handleSave()}
@@ -413,7 +460,7 @@ function EditCV(props: Props) {
                 Save
               </Button>
             </Row>
-            <Row justify="center" style={{ paddingTop: 24 }}>
+            <Row justify="center" style={{ paddingTop: '10px' }}>
               <Popconfirm
                 title="Are you sure? Unsaved fields data will be reaplced with profile data."
                 onConfirm={fillFromProfile}
@@ -455,6 +502,14 @@ function EditCV(props: Props) {
               </Button>
             </Row>
           </Card>
+          {coursesToShow && (
+            <SelectedCoursesModal
+              isVisible={isCoursesModalVisible}
+              courses={coursesToShow}
+              onOk={handleCurrentSelection}
+              onCancel={() => setIsCoursesModalVisible(false)}
+            />
+          )}
         </Content>
       </Layout>
     </LoadingScreen>
