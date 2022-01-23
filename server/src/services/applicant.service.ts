@@ -3,6 +3,7 @@ import { Resume } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
+import omit from 'lodash/omit';
 
 export class ApplicantService {
   private resumeRepository = getCustomRepository(ResumeRepository);
@@ -13,20 +14,21 @@ export class ApplicantService {
     const profiles = await this.resumeRepository.findActive(visibleOnly);
 
     const data = await Promise.all(
-      profiles.map(async (cv: Resume) => {
-        const { githubId } = cv;
+      profiles.map(async (resume: Resume) => {
+        const { githubId } = resume;
 
         const [feedback, courses] = await Promise.all([
           this.feedbackRespository.getApplicantFeedback(githubId),
           this.studentRepository.findAndIncludeStatsForResume(githubId),
         ]);
 
-        const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+        const selectedCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+          .map(course => omit(course, ['courseId']));
 
         return {
-          ...cv,
+          ...omit(resume, ['visibleCourses']),
           feedback,
-          courses: realCourses,
+          courses: selectedCourses,
         };
       }),
     );

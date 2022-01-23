@@ -41,6 +41,7 @@ export class ResumeRepository extends AbstractRepository<Resume> {
         'cv.startFrom',
         'cv.expires',
         'cv.isHidden',
+        'cv.visibleCourses',
       ])
       .leftJoin(User, 'user', 'cv.githubId = user.githubId')
       .where('user.opportunitiesConsent = true')
