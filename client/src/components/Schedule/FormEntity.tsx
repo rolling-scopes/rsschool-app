@@ -12,7 +12,6 @@ import {
   Button,
   DatePicker,
   Select,
-  Alert,
   Row,
   Col,
   message,
@@ -67,7 +66,6 @@ const FormEntity: React.FC<Props> = ({
   refreshData,
 }) => {
   const checker = editableRecord?.isTask && editableRecord.checker === 'crossCheck' ? true : false;
-  const [isFormSubmitted, setFormSubmitted] = useState(false);
   const [isCrossCheckChecker, setIsCrossCheckChecker] = useState(checker);
   const isUpdateMode = editableRecord ? true : false;
 
@@ -78,13 +76,13 @@ const FormEntity: React.FC<Props> = ({
       } else {
         await createEvent(courseId, values, isUpdateMode, editableRecord);
       }
+      await refreshData();
+      message.success(`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`);
     } catch (error) {
       message.error('An error occurred. Please try later.');
-      return;
+    } finally {
+      handleCancel();
     }
-
-    setFormSubmitted(true);
-    await refreshData();
   };
 
   const handleFormChange = (_changedValues: any, allValues: any) => {
@@ -95,10 +93,6 @@ const FormEntity: React.FC<Props> = ({
 
     onFieldsChange(allValues);
   };
-
-  if (isFormSubmitted) {
-    return <Alert message={`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`} type="success" showIcon />;
-  }
 
   const typesList = entityType === 'task' ? TASK_TYPES : EVENT_TYPES;
   const entityTypes = typesList.map(tag => {
@@ -363,7 +357,7 @@ const loadUsers = async (searchText: string) => {
 
 const createTask = async (courseId: number, values: any, isUpdateMode: boolean, editableRecord: CourseEvent | null) => {
   const taskService = new TaskService();
-  const serviceCouseTask = new CourseService(courseId);
+  const serviceCourseTask = new CourseService(courseId);
 
   const templateTaskData = {
     name: values.name,
@@ -404,9 +398,9 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
   };
 
   if (isUpdateMode && editableRecord) {
-    await serviceCouseTask.updateCourseTask(editableRecord.id, values);
+    await serviceCourseTask.updateCourseTask(editableRecord.id, values);
   } else {
-    await serviceCouseTask.createCourseTask(values);
+    await serviceCourseTask.createCourseTask(values);
   }
 };
 
