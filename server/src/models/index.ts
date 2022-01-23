@@ -35,6 +35,7 @@ import { TaskSolution } from './taskSolution';
 import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
+import { LoginState } from './loginState';
 
 export * from './session';
 export {
@@ -53,6 +54,7 @@ export {
   Feedback,
   InterviewQuestion,
   InterviewQuestionCategory,
+  LoginState,
   Mentor,
   MentorRegistry,
   PrivateFeedback,
@@ -94,6 +96,7 @@ export const models = [
   Feedback,
   InterviewQuestion,
   InterviewQuestionCategory,
+  LoginState,
   Mentor,
   MentorRegistry,
   PrivateFeedback,

@@ -7,9 +7,16 @@ import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { JwtService } from './jwt.service';
 import { ConfigService } from '../config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LoginData, LoginState } from '@entities/loginState';
+import { MoreThanOrEqual, Repository } from 'typeorm';
+import { customAlphabet } from 'nanoid/async';
+
+const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export type CurrentRequest = Request & {
   user: AuthUser;
+  loginState?: LoginData;
 };
 
 @Injectable()
@@ -22,6 +29,8 @@ export class AuthService {
     readonly courseUserService: CourseUsersService,
     readonly userService: UsersService,
     readonly configService: ConfigService,
+    @InjectRepository(LoginState)
+    private readonly loginStateRepository: Repository<LoginState>,
   ) {
     this.admins = configService.users.admins;
   }
@@ -71,5 +80,31 @@ export class AuthService {
     }
 
     return this.jwtService.createToken(req.user);
+  }
+
+  public async createLoginState(data: LoginData) {
+    const id = await nanoid();
+
+    await this.loginStateRepository.save({
+      id,
+      data,
+    });
+
+    return id;
+  }
+
+  public getLoginState(id: string) {
+    const date = new Date();
+    date.setHours(date.getHours() - 1);
+    return this.loginStateRepository.findOne({
+      where: {
+        id,
+        createdDate: MoreThanOrEqual(date.toISOString()),
+      },
+    });
+  }
+
+  getRedirectUrl(loginData?: LoginData) {
+    return loginData?.redirectUrl ? decodeURIComponent(loginData.redirectUrl) : '/';
   }
 }

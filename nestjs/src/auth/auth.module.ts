@@ -1,5 +1,7 @@
+import { LoginState } from '@entities/loginState';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '../config/config.module';
 import { CoursesModule } from '../courses/courses.module';
 import { UsersModule } from '../users/users.module';
@@ -12,7 +14,13 @@ import { GithubStrategy } from './strategies/github.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [PassportModule.register({}), UsersModule, CoursesModule, ConfigModule],
+  imports: [
+    PassportModule.register({}),
+    UsersModule,
+    CoursesModule,
+    ConfigModule,
+    TypeOrmModule.forFeature([LoginState]),
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy],
 })
