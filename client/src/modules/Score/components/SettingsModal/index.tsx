@@ -1,9 +1,9 @@
 import { Button, Checkbox, Form, Modal } from 'antd';
 import { Store } from 'rc-field-form/lib/interface';
-import { CourseTask } from 'services/course';
+import type { CourseTaskDto } from 'api';
 
 type Props = {
-  courseTasks: CourseTask[];
+  courseTasks: (CourseTaskDto & { isVisible?: boolean })[];
   isVisible: boolean;
   onCancel: () => void;
   onOk: (values: Store) => void;

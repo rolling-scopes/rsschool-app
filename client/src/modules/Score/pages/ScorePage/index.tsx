@@ -1,5 +1,5 @@
 import { Row, Switch, Typography } from 'antd';
-import { CourseNoAccess } from 'components/CourseNoAccess';
+import { CourseNoAccess } from 'modules/Course/components/CourseNoAccess';
 import { CoursePageLayout } from 'components/CoursePageLayout';
 import { ExportCsvButton } from 'modules/Score/components/ExportCsvButton';
 import { ScoreTable } from 'modules/Score/components/ScoreTable';

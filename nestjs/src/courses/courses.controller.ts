@@ -1,15 +1,16 @@
 import { Course } from '@entities/course';
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Role } from '../auth';
+import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CurrentRequest, Role } from '../auth';
 import { DefaultGuard, RequiredAppRoles, RoleGuard } from '../auth';
+import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto } from './dto';
 @Controller('courses')
 @ApiTags('courses')
 @UseGuards(DefaultGuard, RoleGuard)
 export class CoursesController {
-  constructor(private courseService: CoursesService) {}
+  constructor(private courseService: CoursesService, private courseAccessService: CourseAccessService) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getCourses' })
@@ -19,17 +20,15 @@ export class CoursesController {
     return data.map(it => new CourseDto(it));
   }
 
-  @Get('/:aliasOrId')
+  @Get('/:courseId')
   @ApiOperation({ operationId: 'getCourse' })
+  @ApiForbiddenResponse()
   @ApiOkResponse({ type: CourseDto })
-  public async getCourse(@Param('aliasOrId') aliasOrId: string) {
-    const id = Number(aliasOrId);
-    let data: Course | null = null;
-    if (!Number.isNaN(id)) {
-      data = await this.courseService.getById(id);
-    } else {
-      data = await this.courseService.getByAlias(aliasOrId.toString());
+  public async getCourse(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+    if (!this.courseAccessService.canAccessCourse(req.user, courseId)) {
+      throw new ForbiddenException();
     }
+    const data = await this.courseService.getById(courseId);
     return new CourseDto(data);
   }
 }
