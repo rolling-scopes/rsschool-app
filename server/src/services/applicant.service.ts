@@ -22,7 +22,8 @@ export class ApplicantService {
           this.studentRepository.findAndIncludeStatsForResume(githubId),
         ]);
 
-        const selectedCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+        const selectedCourses = courses
+          .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
           .map(course => omit(course, ['courseId']));
 
         return {

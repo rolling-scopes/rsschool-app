@@ -13,7 +13,7 @@ export class ResumeService {
   private studentRepository = getCustomRepository(StudentRepository);
   private userRepository = getRepository(User);
 
-  constructor(private githubId: string) { }
+  constructor(private githubId: string) {}
 
   public async updateStatus() {
     const resume = await this.resumeRepository.find(this.githubId);
@@ -31,9 +31,9 @@ export class ResumeService {
       ...cv,
       ...data,
     });
-    
+
     const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
-    
+
     return dataToSend;
   }
 
@@ -45,7 +45,8 @@ export class ResumeService {
       this.studentRepository.findAndIncludeStatsForResume(this.githubId),
     ]);
 
-    const selectedCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+    const selectedCourses = courses
+      .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
       .map(course => omit(course, ['courseId']));
 
     const viewData = {
