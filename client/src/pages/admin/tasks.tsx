@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
-import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
+import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { isAnyCoursePowerUser } from '../../domain/user';
 
 const { Content } = Layout;

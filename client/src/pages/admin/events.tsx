@@ -8,7 +8,7 @@ import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
+import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { isAnyCoursePowerUser } from '../../domain/user';
 
 const { Content } = Layout;
