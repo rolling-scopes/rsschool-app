@@ -107,12 +107,6 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
             <Typography.Title level={4}>{category.name}</Typography.Title>
             {category.questions.map(question => {
               switch (question.type) {
-                case InputType.Checkbox:
-                  return (
-                    <Form.Item name={question.id} key={question.id} valuePropName="checked">
-                      <Checkbox>{question.name}</Checkbox>
-                    </Form.Item>
-                  );
                 case InputType.Input:
                   return (
                     <Form.Item label={question.name} name={question.id} key={question.id}>
@@ -120,7 +114,11 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
                     </Form.Item>
                   );
                 default:
-                  return null;
+                  return (
+                    <Form.Item name={question.id} key={question.id} valuePropName="checked">
+                      <Checkbox>{question.name}</Checkbox>
+                    </Form.Item>
+                  );
               }
             })}
           </Fragment>
