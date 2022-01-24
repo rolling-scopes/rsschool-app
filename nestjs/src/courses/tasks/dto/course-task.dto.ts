@@ -24,7 +24,7 @@ export class CourseTaskDto {
     this.id = courseTask.id;
     this.type = courseTask.type;
     this.name = courseTask.task.name;
-    this.studentEndDate = courseTask.studentEndDate?.toISOString();
+    this.studentEndDate = (courseTask.studentEndDate as Date)?.toISOString();
     this.attributes = courseTask.task.attributes;
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
