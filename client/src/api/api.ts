@@ -257,12 +257,6 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'scoreWeight': number;
-    /**
-     * 
-     * @type {object}
-     * @memberof CourseTaskDto
-     */
-    'attributes': object;
 }
 
 /**

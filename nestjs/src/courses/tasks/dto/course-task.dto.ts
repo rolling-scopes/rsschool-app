@@ -25,7 +25,6 @@ export class CourseTaskDto {
     this.type = courseTask.type;
     this.name = courseTask.task.name;
     this.studentEndDate = (courseTask.studentEndDate as Date)?.toISOString();
-    this.attributes = courseTask.task.attributes;
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
@@ -59,7 +58,4 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
-
-  @ApiProperty({ type: Object })
-  attributes: Record<string, string>;
 }
