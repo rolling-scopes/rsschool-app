@@ -8,6 +8,6 @@ export class CourseAccessService {
       return true;
     }
 
-    return !user.courses[courseId];
+    return !!user.courses[courseId];
   }
 }
