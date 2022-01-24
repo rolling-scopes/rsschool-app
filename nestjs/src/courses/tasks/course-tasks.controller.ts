@@ -1,35 +1,34 @@
-import { Controller, ForbiddenException, Get, Header, Param, ParseIntPipe, Req, Res, UseGuards } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
-  ApiForbiddenResponse,
-  ApiHeader,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from '../../auth';
-import { CourseAccessService } from '../course-access.service';
-import { CourseTaskDto } from './dto';
+  CacheInterceptor,
+  CacheTTL,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
+import { DEFAULT_CACHE_TTL } from '../../constants';
 import { CourseTasksService } from './course-tasks.service';
-import { Response } from 'express';
+import { CourseTaskDto } from './dto';
 
 @Controller('courses/:courseId/tasks')
 @ApiTags('courses tasks')
-@UseGuards(DefaultGuard)
+@UseGuards(DefaultGuard, CourseGuard)
 export class CourseTasksController {
-  constructor(private courseAccessService: CourseAccessService, private courseTasksService: CourseTasksService) {}
+  constructor(private courseTasksService: CourseTasksService) {}
 
   @Get()
-  @Header('Cache-Control', 'max-age=60')
+  @CacheTTL(DEFAULT_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
   @ApiOkResponse({ type: [CourseTaskDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getCourseTasks' })
-  public async getOne(@Param('courseId', ParseIntPipe) courseId: number, @Req() req: CurrentRequest) {
-    const hasAccess = await this.courseAccessService.canAccessCourse(req.user, courseId);
-    if (!hasAccess) {
-      throw new ForbiddenException();
-    }
+  public async getOne(@Param('courseId', ParseIntPipe) courseId: number) {
     const data = await this.courseTasksService.getAll(courseId);
     return data.map(item => new CourseTaskDto(item));
   }

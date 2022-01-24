@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { CourseUsersService } from './course-users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from '@entities/course';
@@ -17,6 +17,7 @@ import { InterviewsController, InterviewsService } from './interviews';
 
 @Module({
   imports: [
+    CacheModule.register(),
     TypeOrmModule.forFeature([
       Student,
       Mentor,
