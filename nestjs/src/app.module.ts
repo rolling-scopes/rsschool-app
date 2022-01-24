@@ -1,6 +1,6 @@
 import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule, Params } from 'nestjs-pino';
+import { LoggerModule } from 'nestjs-pino';
 
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';

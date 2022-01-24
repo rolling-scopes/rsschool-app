@@ -1,26 +1,34 @@
-import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import {
+  CacheInterceptor,
+  CacheTTL,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard } from '../../auth';
-import { CourseAccessService } from '../course-access.service';
+import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
+import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { InterviewsService } from './interviews.service';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
-@UseGuards(DefaultGuard)
+@UseGuards(DefaultGuard, CourseGuard)
 export class InterviewsController {
-  constructor(private courseAccessService: CourseAccessService, private courseTasksService: InterviewsService) {}
+  constructor(private courseTasksService: InterviewsService) {}
 
   @Get()
+  @CacheTTL(DEFAULT_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
   @ApiOkResponse({ type: [InterviewDto] })
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getInterviews' })
-  public async getOne(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
-    const hasAccess = await this.courseAccessService.canAccessCourse(req.user, courseId);
-    if (!hasAccess) {
-      throw new ForbiddenException();
-    }
+  public async getOne(@Param('courseId', ParseIntPipe) courseId: number) {
     const data = await this.courseTasksService.getAll(courseId);
     return data.map(item => new InterviewDto(item));
   }

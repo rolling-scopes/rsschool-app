@@ -61,7 +61,7 @@ function Page(props: CoursePageProps) {
             footer={renderFooter(name, props.course.alias)}
             itemLayout="horizontal"
             dataSource={data[name]}
-            renderItem={renderItem(props.course, showMentorModal)}
+            renderItem={renderItem(props.course, interview, showMentorModal)}
           />
         );
       })}
@@ -75,7 +75,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-function renderItem(course: Course, showMentorModal: (id: number) => void) {
+function renderItem(course: Course, interview: { template: string | null }, showMentorModal: (id: number) => void) {
   return (item: any) => {
     return (
       <List.Item>
@@ -95,7 +95,7 @@ function renderItem(course: Course, showMentorModal: (id: number) => void) {
           </Button>
         )}
         {!item.completed && (
-          <Button href={getURL(item, course)} type="link" size="small">
+          <Button href={getURL(item, course, interview.template)} type="link" size="small">
             Provide Feedback
           </Button>
         )}
@@ -109,11 +109,11 @@ function renderItem(course: Course, showMentorModal: (id: number) => void) {
   };
 }
 
-function getURL(item: any, course: Course) {
+function getURL(item: any, course: Course, template?: string | null) {
   if (isTechnicalScreening(item)) {
     return `/course/mentor/interview-technical-screening?course=${course.alias}&githubId=${item.student.githubId}`;
   }
-  return `/course/mentor/interview-corejs?course=${course.alias}&githubId=${item.student.githubId}`;
+  return `/course/interview/${template}/feedback?course=${course.alias}&githubId=${item.student.githubId}`;
 }
 
 function isTechnicalScreening(item: { name: string }) {

@@ -93,7 +93,6 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
 
       <Form
         form={form}
-        size="small"
         layout="vertical"
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
