@@ -5,12 +5,11 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
+import { CourseGuard, DefaultGuard } from '../../auth';
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { CourseTasksService } from './course-tasks.service';
 import { CourseTaskDto } from './dto';

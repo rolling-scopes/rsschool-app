@@ -1,8 +1,6 @@
-import { Course } from '@entities/course';
 import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, Role } from '../auth';
-import { DefaultGuard, RequiredAppRoles, RoleGuard } from '../auth';
+import { CurrentRequest, DefaultGuard, RoleGuard } from '../auth';
 import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto } from './dto';
