@@ -6,7 +6,7 @@ export enum InputType {
 export type Question = {
   id: number;
   name: string;
-  type: InputType;
+  type?: InputType;
 };
 
 export type QuestionCategory = {

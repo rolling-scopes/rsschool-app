@@ -1,6 +1,6 @@
-import { corejsTemplate } from './corejs';
+import { corejs1Template } from './corejs1';
 export * from './types';
 
 export const templates = {
-  corejs: corejsTemplate,
+  corejs1: corejs1Template,
 };
