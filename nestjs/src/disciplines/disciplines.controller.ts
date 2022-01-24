@@ -1,4 +1,3 @@
-import { Discipline } from '@entities/discipline';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from '../auth';

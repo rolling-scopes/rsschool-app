@@ -11,6 +11,6 @@ export class CourseGuard implements CanActivate {
       return true;
     }
 
-    return Boolean(user.courses[params.courseId]);
+    return Boolean(user.courses[Number(params.courseId)]);
   }
 }

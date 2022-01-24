@@ -14,11 +14,13 @@
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
-    "noImplicitAny": false,
     "strict": true,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "strictBindCallApply": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": false,
+    "forceConsistentCasingInFileNames": false
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

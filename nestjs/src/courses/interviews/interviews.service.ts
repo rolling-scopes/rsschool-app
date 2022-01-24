@@ -1,9 +1,7 @@
-import { CourseTask, Checker } from '@entities/courseTask';
-import { Student } from '@entities/student';
+import { CourseTask } from '@entities/courseTask';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@entities/user';
 
 @Injectable()
 export class InterviewsService {
