@@ -21,6 +21,7 @@ export class CourseDto {
     this.inviteOnly = course.inviteOnly;
     this.usePrivateRepositories = course.usePrivateRepositories;
     this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
+    this.personalMentoring = course.personalMentoring;
   }
 
   @ApiProperty()
@@ -85,4 +86,7 @@ export class CourseDto {
 
   @ApiProperty()
   usePrivateRepositories: boolean;
+
+  @ApiProperty()
+  personalMentoring: boolean;
 }

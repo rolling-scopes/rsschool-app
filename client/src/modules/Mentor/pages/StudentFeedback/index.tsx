@@ -6,10 +6,11 @@ import {
 } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
+import { SessionContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
-import { CoursePageProps } from 'services/models';
+import { useContext, useEffect, useMemo } from 'react';
+import { CourseOnlyPageProps } from 'services/models';
 import { softSkills } from '../../data/softSkills';
 
 type FormValues = {
@@ -30,7 +31,8 @@ const englishLevels = [
   EnglishLevelEnum.C2,
 ];
 
-export function StudentFeedback({ session, course }: CoursePageProps) {
+export function StudentFeedback({ course }: CourseOnlyPageProps) {
+  const session = useContext(SessionContext);
   const { githubId, courses } = session;
   const { id: courseId, alias } = course;
   const mentorId = courses[courseId]?.mentorId;

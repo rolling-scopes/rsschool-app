@@ -28,8 +28,8 @@ export class CoursesService {
     return result.data.data;
   }
 
-  async getCourse(idOrAlias: number | string) {
-    const result = await this.coursesApi.getCourse(idOrAlias.toString());
-    return result.data as any;
+  async getCourse(id: number) {
+    const result = await this.coursesApi.getCourse(id);
+    return result.data;
   }
 }

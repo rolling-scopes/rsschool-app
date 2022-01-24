@@ -202,7 +202,89 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'usePrivateRepositories': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseDto
+     */
+    'personalMentoring': boolean;
 }
+/**
+ * 
+ * @export
+ * @interface CourseTaskDto
+ */
+export interface CourseTaskDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'type': CourseTaskDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
+    'maxScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
+    'scoreWeight': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseTaskDto
+     */
+    'attributes': object;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CourseTaskDtoTypeEnum {
+    Jstask = 'jstask',
+    Kotlintask = 'kotlintask',
+    Objctask = 'objctask',
+    Htmltask = 'htmltask',
+    Ipynb = 'ipynb',
+    Selfeducation = 'selfeducation',
+    Codewars = 'codewars',
+    Test = 'test',
+    Codejam = 'codejam',
+    Interview = 'interview',
+    StageInterview = 'stage-interview',
+    Cvhtml = 'cv:html',
+    Cvmarkdown = 'cv:markdown'
+}
+
 /**
  * 
  * @export
@@ -329,6 +411,25 @@ export interface DisciplineDto {
 /**
  * 
  * @export
+ * @interface InterviewDto
+ */
+export interface InterviewDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof InterviewDto
+     */
+    'attributes': object;
+}
+/**
+ * 
+ * @export
  * @interface MentorStudentDto
  */
 export interface MentorStudentDto {
@@ -423,13 +524,127 @@ export interface ProfileCourseDto {
      * @type {string}
      * @memberof ProfileCourseDto
      */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'updatedDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
     'name': string;
     /**
      * 
      * @type {string}
      * @memberof ProfileCourseDto
      */
+    'fullName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
     'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'descriptionUrl': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProfileCourseDto
+     */
+    'year': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'registrationEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'primarySkillId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'primarySkillName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'locationName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProfileCourseDto
+     */
+    'discordServerId': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileCourseDto
+     */
+    'completed': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileCourseDto
+     */
+    'planned': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileCourseDto
+     */
+    'inviteOnly': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'certificateIssuer': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileCourseDto
+     */
+    'usePrivateRepositories': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileCourseDto
+     */
+    'personalMentoring': boolean;
 }
 /**
  * 
@@ -1230,15 +1445,15 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {string} aliasOrId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourse: async (aliasOrId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'aliasOrId' is not null or undefined
-            assertParamExists('getCourse', 'aliasOrId', aliasOrId)
-            const localVarPath = `/courses/{aliasOrId}`
-                .replace(`{${"aliasOrId"}}`, encodeURIComponent(String(aliasOrId)));
+        getCourse: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourse', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1302,12 +1517,12 @@ export const CoursesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} aliasOrId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCourse(aliasOrId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourse(aliasOrId, options);
+        async getCourse(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourse(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1331,12 +1546,12 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {string} aliasOrId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourse(aliasOrId: string, options?: any): AxiosPromise<CourseDto> {
-            return localVarFp.getCourse(aliasOrId, options).then((request) => request(axios, basePath));
+        getCourse(courseId: number, options?: any): AxiosPromise<CourseDto> {
+            return localVarFp.getCourse(courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1358,13 +1573,13 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 export class CoursesApi extends BaseAPI {
     /**
      * 
-     * @param {string} aliasOrId 
+     * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public getCourse(aliasOrId: string, options?: AxiosRequestConfig) {
-        return CoursesApiFp(this.configuration).getCourse(aliasOrId, options).then((request) => request(this.axios, this.basePath));
+    public getCourse(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesApiFp(this.configuration).getCourse(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1375,6 +1590,208 @@ export class CoursesApi extends BaseAPI {
      */
     public getCourses(options?: AxiosRequestConfig) {
         return CoursesApiFp(this.configuration).getCourses(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesInterviewsApi - axios parameter creator
+ * @export
+ */
+export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInterviews: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getInterviews', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/interviews`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesInterviewsApi - functional programming interface
+ * @export
+ */
+export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesInterviewsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getInterviews(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInterviews(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesInterviewsApi - factory interface
+ * @export
+ */
+export const CoursesInterviewsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesInterviewsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInterviews(courseId: number, options?: any): AxiosPromise<Array<InterviewDto>> {
+            return localVarFp.getInterviews(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesInterviewsApi - object-oriented interface
+ * @export
+ * @class CoursesInterviewsApi
+ * @extends {BaseAPI}
+ */
+export class CoursesInterviewsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesInterviewsApi
+     */
+    public getInterviews(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).getInterviews(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CoursesTasksApi - axios parameter creator
+ * @export
+ */
+export const CoursesTasksApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTasks: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseTasks', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/tasks`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CoursesTasksApi - functional programming interface
+ * @export
+ */
+export const CoursesTasksApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CoursesTasksApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseTasks(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasks(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CoursesTasksApi - factory interface
+ * @export
+ */
+export const CoursesTasksApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CoursesTasksApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseTasks(courseId: number, options?: any): AxiosPromise<Array<CourseTaskDto>> {
+            return localVarFp.getCourseTasks(courseId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CoursesTasksApi - object-oriented interface
+ * @export
+ * @class CoursesTasksApi
+ * @extends {BaseAPI}
+ */
+export class CoursesTasksApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getCourseTasks(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCourseTasks(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

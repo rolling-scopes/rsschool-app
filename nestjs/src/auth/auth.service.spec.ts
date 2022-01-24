@@ -12,6 +12,7 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
+        { provide: JwtService, useValue: {} },
         { provide: CourseTasksService, useValue: {} },
         { provide: CourseUsersService, useValue: {} },
         { provide: UsersService, useValue: {} },
@@ -19,7 +20,6 @@ describe('AuthService', () => {
           provide: ConfigService,
           useValue: { users: { admins: [] } },
         },
-        { provide: JwtService, useValue: {} },
       ],
     }).compile();
 

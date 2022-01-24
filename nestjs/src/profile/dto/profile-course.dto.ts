@@ -1,17 +1,8 @@
 import { Course } from '@entities/course';
-import { ApiProperty } from '@nestjs/swagger';
+import { CourseDto } from '../../courses/dto';
 
-export class ProfileCourseDto {
+export class ProfileCourseDto extends CourseDto {
   constructor(course: Course) {
-    this.id = course.id;
-    this.name = course.name;
-    this.alias = course.alias;
+    super(course);
   }
-
-  @ApiProperty()
-  public id: number;
-  @ApiProperty()
-  public name: string;
-  @ApiProperty()
-  public alias: string;
 }
