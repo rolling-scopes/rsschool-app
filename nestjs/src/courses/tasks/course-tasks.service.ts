@@ -14,7 +14,7 @@ export class CourseTasksService {
 
   public getAll(courseId: number) {
     return this.courseTaskRepository.find({
-      where: { courseId },
+      where: { courseId, disabled: false },
       relations: ['task'],
     });
   }
