@@ -93,6 +93,7 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
 
       <Form
         form={form}
+        size="small"
         layout="vertical"
         onFinish={handleSubmit}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
@@ -115,7 +116,12 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
                   );
                 default:
                   return (
-                    <Form.Item name={question.id} key={question.id} valuePropName="checked">
+                    <Form.Item
+                      style={{ marginBottom: 16 }}
+                      name={question.id}
+                      key={question.id}
+                      valuePropName="checked"
+                    >
                       <Checkbox>{question.name}</Checkbox>
                     </Form.Item>
                   );
