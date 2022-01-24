@@ -51,6 +51,7 @@ export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) =
         endDate: interview.studentEndDate,
         descriptionUrl: interview.task.descriptionUrl,
         type: interview.type || interview.task.type,
+        template: interview.task?.attributes?.['template'] ?? null,
       };
     });
   setResponse(ctx, StatusCodes.OK, result);
