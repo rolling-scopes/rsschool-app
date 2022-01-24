@@ -9,10 +9,6 @@
   "repositories": ["rolling-scopes/rsschool-app"],
   "packageRules": [
     {
-      "matchPackagePatterns": [ "koa" ],
-      "groupName": "koa"
-    },
-    {
       "matchPackagePatterns": [ "react-" ],
       "groupName": "react libs"
     }
