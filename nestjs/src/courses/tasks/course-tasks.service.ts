@@ -15,6 +15,9 @@ export class CourseTasksService {
     return this.courseTaskRepository.find({
       where: { courseId, disabled: false },
       relations: ['task'],
+      order: {
+        studentEndDate: 'ASC',
+      },
     });
   }
 
