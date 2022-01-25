@@ -2,6 +2,7 @@ import { Alert, Button, Col, Form, Input, message, Radio, Rate, Row, Typography 
 import {
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
+  SoftSkillEntryIdEnum,
   StudentsFeedbacksApi,
 } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
@@ -11,9 +12,10 @@ import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo } from 'react';
 import { CourseOnlyPageProps } from 'services/models';
-import { softSkills } from '../../data/softSkills';
+import * as routes from 'services/routes';
+import { convertSoftSkillValueToEnum, softSkills } from '../../data/softSkills';
 
-type FormValues = {
+type FormValues = Record<SoftSkillEntryIdEnum, number> & {
   studentId: number;
   impression: string;
   recommendation: RecommendationEnum;
@@ -55,18 +57,21 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
   const handleSubmit = async (values: FormValues) => {
     try {
       const { studentId, ...rest } = values;
-      await service.createStudentFeedback(studentId, {
+
+      const payload = {
         recommendation: rest.recommendation,
         content: {
           gaps: rest.gaps,
           impression: rest.impression,
           recommendationComment: rest.recommendationComment,
-          softSkills: [],
+          softSkills: softSkills.map(({ id }) => ({ id, value: convertSoftSkillValueToEnum(rest[id]) })),
         },
-        englishLevel: rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex] : EnglishLevelEnum.Unknown,
-      });
+        englishLevel:
+          rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex - 1] : EnglishLevelEnum.Unknown,
+      };
+      await service.createStudentFeedback(studentId, payload);
       message.success('Feedback successfully sent');
-      router.push(`/course/mentor/students?course=${alias}`);
+      router.push(routes.getMentorStudentsRoute(alias));
     } catch (e) {
       message.error('Error occurred while creating feedback. Please try later.');
     }

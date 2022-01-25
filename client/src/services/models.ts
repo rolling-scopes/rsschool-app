@@ -39,5 +39,5 @@ export interface CoursePageProps {
 
 export type CourseOnlyPageProps = {
   course: Course;
-  params: Record<string, string>;
+  params?: Record<string, string>;
 };

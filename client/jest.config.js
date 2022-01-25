@@ -16,6 +16,7 @@ const customJestConfig = {
   moduleNameMapper: {
     '^api$': '<rootDir>/api',
     '^api(.*)$': '<rootDir>/api/$1',
+    '^data(.*)$': '<rootDir>/data/$1',
     '^components(.*)$': '<rootDir>/components/$1',
     '^services(.*)$': '<rootDir>/services/$1',
     '^utils(.*)$': '<rootDir>/utils/$1',

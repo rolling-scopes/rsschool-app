@@ -2,14 +2,17 @@ import { MessageOutlined, MessageTwoTone } from '@ant-design/icons';
 import { Button, List } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
+import { SessionContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
-import { CoursePageProps } from 'services/models';
+import { useContext } from 'react';
+import type { CourseOnlyPageProps } from 'services/models';
 
-export function Students(props: CoursePageProps) {
-  const { githubId } = props.session;
+export function Students(props: CourseOnlyPageProps) {
+  const session = useContext(SessionContext);
+  const { githubId } = session;
   const { id: courseId, alias, completed } = props.course;
-  const mentorId = props.session.courses[courseId]?.mentorId;
+  const mentorId = session.courses[courseId]?.mentorId;
 
   const [students, loading] = useMentorStudents(mentorId);
 

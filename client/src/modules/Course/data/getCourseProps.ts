@@ -10,6 +10,8 @@ export const noAccessResponse: GetServerSidePropsResult<any> = {
   },
 };
 
+export type PageProps = { course: ProfileCourseDto };
+
 export const getCourseProps: GetServerSideProps<{ course: ProfileCourseDto }> = async ctx => {
   try {
     const alias = ctx.query.course as string;
