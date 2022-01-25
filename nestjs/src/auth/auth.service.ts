@@ -1,8 +1,8 @@
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { Profile } from 'passport';
-import { Request } from 'express';
-import { CourseTasksService, CourseUsersService } from '../courses';
+import type { Request } from 'express';
+import { CourseUsersService, CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { JwtService } from './jwt.service';

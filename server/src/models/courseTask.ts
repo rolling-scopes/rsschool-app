@@ -54,10 +54,10 @@ export class CourseTask {
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentStartDate: string;
+  studentStartDate: Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentEndDate: string;
+  studentEndDate: Date | string;
 
   @Column({ type: 'timestamp', nullable: true })
   mentorStartDate: string;

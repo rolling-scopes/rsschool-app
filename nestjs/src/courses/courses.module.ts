@@ -1,5 +1,4 @@
-import { Module } from '@nestjs/common';
-import { CourseTasksService } from './course-tasks.service';
+import { CacheModule, Module } from '@nestjs/common';
 import { CourseUsersService } from './course-users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from '@entities/course';
@@ -12,9 +11,13 @@ import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
 import { MentorsService, MentorsController } from './mentors';
+import { CourseAccessService } from './course-access.service';
+import { CourseTasksController, CourseTasksService } from './tasks';
+import { InterviewsController, InterviewsService } from './interviews';
 
 @Module({
   imports: [
+    CacheModule.register(),
     TypeOrmModule.forFeature([
       Student,
       Mentor,
@@ -28,7 +31,14 @@ import { MentorsService, MentorsController } from './mentors';
       StudentFeedback,
     ]),
   ],
-  controllers: [FeedbacksController, CoursesController, StudentsController, MentorsController],
+  controllers: [
+    FeedbacksController,
+    CoursesController,
+    StudentsController,
+    MentorsController,
+    CourseTasksController,
+    InterviewsController,
+  ],
   providers: [
     CourseTasksService,
     CourseUsersService,
@@ -36,6 +46,8 @@ import { MentorsService, MentorsController } from './mentors';
     CoursesService,
     StudentsService,
     MentorsService,
+    CourseAccessService,
+    InterviewsService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService],
 })

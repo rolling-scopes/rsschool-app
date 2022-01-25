@@ -13,7 +13,8 @@ import {
 import { LocationSelect } from 'components/Forms';
 import { formatMonthFriendly } from 'services/formatter';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
-import { Course, Location } from 'common/models';
+import { Location } from 'common/models';
+import type { Course } from 'services/models';
 import { Info } from 'modules/Registry/components/Info';
 
 export type Props = {

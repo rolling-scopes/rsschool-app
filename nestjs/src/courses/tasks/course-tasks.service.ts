@@ -1,8 +1,8 @@
+import { Checker, CourseTask } from '@entities/courseTask';
+import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
-import { CourseTask, Checker } from '@entities/courseTask';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@entities/user';
 
 @Injectable()
 export class CourseTasksService {
@@ -10,6 +10,13 @@ export class CourseTasksService {
     @InjectRepository(CourseTask)
     readonly courseTaskRepository: Repository<CourseTask>,
   ) {}
+
+  public getAll(courseId: number) {
+    return this.courseTaskRepository.find({
+      where: { courseId, disabled: false },
+      relations: ['task'],
+    });
+  }
 
   public getByOwner(username: string) {
     return this.courseTaskRepository

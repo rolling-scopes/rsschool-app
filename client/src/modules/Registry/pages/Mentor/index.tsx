@@ -4,12 +4,12 @@ import axios from 'axios';
 import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import css from 'styled-jsx/css';
-
 import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
 import { CoursesService } from 'services/courses';
 import { UserFull, UserService } from 'services/user';
-import { Course, Location } from 'common/models';
+import type { Course } from 'services/models';
+import { Location } from 'common/models';
 import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { GeneralMentor, Mentorship } from 'modules/Registry/components';
 
