@@ -1,8 +1,8 @@
 import type { UrlObject } from 'url';
 
-export const getMentorStudentsRoute = (alias: string): UrlObject => {
+export const getMentorStudentsRoute = (course: string): UrlObject => {
   return {
     pathname: `/course/mentor/students`,
-    query: { alias },
+    query: { course },
   };
 };
