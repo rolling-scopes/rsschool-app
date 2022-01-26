@@ -63,7 +63,7 @@ export function getColumns(props: Props) {
       ...getSearchProps('name'),
     },
     {
-      title: 'Location',
+      title: 'City',
       dataIndex: 'cityName',
       width: 150,
       sorter: 'cityName',
