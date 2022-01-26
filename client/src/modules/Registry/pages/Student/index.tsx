@@ -226,7 +226,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 <Col xs={24} sm={24} md={20} lg={20} xl={20}>
                   <Row>
                     <Typography.Title level={5}>
-                      Location <Info title={TEXT_LOCATION_STUDENT_TOOLTIP} />
+                      City <Info title={TEXT_LOCATION_STUDENT_TOOLTIP} />
                     </Typography.Title>
                   </Row>
                   <Row>

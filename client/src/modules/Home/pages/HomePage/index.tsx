@@ -152,20 +152,22 @@ export function HomePage(props: Props) {
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
-              <List
-                size="small"
-                bordered
-                dataSource={courseLinks}
-                renderItem={(linkInfo: LinkRenderData) => (
-                  <List.Item key={linkInfo.url}>
-                    <Link prefetch={false} href={linkInfo.url}>
-                      <a>
-                        {linkInfo.icon} {linkInfo.name}
-                      </a>
-                    </Link>
-                  </List.Item>
-                )}
-              />
+              {courseLinks.length ? (
+                <List
+                  size="small"
+                  bordered
+                  dataSource={courseLinks}
+                  renderItem={(linkInfo: LinkRenderData) => (
+                    <List.Item key={linkInfo.url}>
+                      <Link prefetch={false} href={linkInfo.url}>
+                        <a>
+                          {linkInfo.icon} {linkInfo.name}
+                        </a>
+                      </Link>
+                    </List.Item>
+                  )}
+                />
+              ) : null}
 
               {adminLinks.length ? (
                 <List
