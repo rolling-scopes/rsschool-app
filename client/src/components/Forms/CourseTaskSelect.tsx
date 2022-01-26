@@ -20,45 +20,26 @@ export function CourseTaskSelect(props: Props) {
   const dataSubmitted = dataActive.filter(task => task.id % 2 === 0);
   const dataNotSubmitted = dataActive.filter(task => task.id % 2 === 1);
   const dataExpired = data.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? ''));
+  const selectGroups = [
+    { type: isSubmitted, data: dataSubmitted, title: 'Submitted' },
+    { type: isSubmitted, data: dataNotSubmitted, title: 'Not submitted' },
+    { type: isActive, data: dataActive, title: 'Active' },
+    { type: isExpired, data: dataExpired, title: 'Expired' },
+  ];
 
   return (
     <Form.Item {...rest} name="courseTaskId" label="Task" rules={[{ required: true, message: 'Please select a task' }]}>
       <Select placeholder="Select task" {...selectProps}>
-        {isSubmitted && dataSubmitted.length > 0 && (
-          <Select.OptGroup label="Submitted">
-            {dataSubmitted.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
-              </Select.Option>
-            ))}
-          </Select.OptGroup>
-        )}
-        {isSubmitted && dataNotSubmitted.length > 0 && (
-          <Select.OptGroup label="Not submitted">
-            {dataNotSubmitted.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
-              </Select.Option>
-            ))}
-          </Select.OptGroup>
-        )}
-        {isActive && dataActive.length > 0 && (
-          <Select.OptGroup label="Active">
-            {dataActive.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
-              </Select.Option>
-            ))}
-          </Select.OptGroup>
-        )}
-        {isExpired && dataExpired.length > 0 && (
-          <Select.OptGroup label="Expired">
-            {dataExpired.map(task => (
-              <Select.Option key={task.id} value={task.id}>
-                {task.name}
-              </Select.Option>
-            ))}
-          </Select.OptGroup>
+        {selectGroups.map(group => 
+          group.type && group.data.length > 0 && (
+            <Select.OptGroup label={group.title}>
+              {group.data.map(task => (
+                <Select.Option key={task.id} value={task.id}>
+                  {task.name}
+                </Select.Option>
+              ))}
+            </Select.OptGroup>
+          )
         )}
       </Select>
     </Form.Item>
