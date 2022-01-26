@@ -17,6 +17,10 @@ export function isMentor(session: Session, courseId: number) {
   return !!courseId && hasRole(session, courseId, CourseRole.Mentor);
 }
 
+export function getMentorId(session: Session, courseId: number) {
+  return session.courses[courseId]?.mentorId ?? null;
+}
+
 export function isAnyMentor(session: Session, _?: number) {
   return hasRoleInAny(session, CourseRole.Mentor);
 }
