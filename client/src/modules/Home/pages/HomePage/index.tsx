@@ -86,10 +86,7 @@ export function HomePage(props: Props) {
     }
     const data = await loadHomeData(activeCourse.id, props.session);
     setStudentSummary(data?.studentSummary ?? null);
-
-    if (data?.courseTasks) {
-      setCourseTasks(data.courseTasks);
-    }
+    setCourseTasks(data?.courseTasks ?? []);
   };
 
   useAsync(async () => {
