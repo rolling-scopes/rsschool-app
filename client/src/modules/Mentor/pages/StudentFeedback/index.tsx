@@ -78,7 +78,7 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
   };
 
   return (
-    <PageLayoutSimple noData={noData} title="Student Feedback" loading={loading} githubId={githubId}>
+    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading} githubId={githubId}>
       <Alert
         showIcon
         type="info"
@@ -93,18 +93,18 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
         <Form.Item name="studentId" label="Student">
           <UserSearch allowClear={false} clearIcon={false} defaultValues={students} keyField="id" />
         </Form.Item>
-        <Form.Item name="impression" required label="General Impression">
-          <Input.TextArea rows={7} />
-        </Form.Item>
-        <Form.Item name="gaps" label="Gaps">
-          <Input.TextArea rows={3} />
-        </Form.Item>
-        <Typography.Title level={5}>Recommendation</Typography.Title>
+        <Typography.Title level={5}>Recommended To</Typography.Title>
         <Form.Item name="recommendation" required>
           <Radio.Group>
             <Radio.Button value={RecommendationEnum.Hire}>Hire</Radio.Button>
             <Radio.Button value={RecommendationEnum.NotHire}>Not Hire</Radio.Button>
           </Radio.Group>
+        </Form.Item>
+        <Form.Item name="impression" required label="General Impression">
+          <Input.TextArea rows={7} />
+        </Form.Item>
+        <Form.Item name="gaps" label="Gaps">
+          <Input.TextArea rows={3} />
         </Form.Item>
         <Form.Item name="recommendationComment" required label="Comment">
           <Input.TextArea placeholder="Please tell us why you made such recommendation" rows={3} />
