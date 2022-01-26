@@ -2,7 +2,7 @@ import { MentorsApi } from 'api';
 import { useMemo } from 'react';
 import { useAsync } from 'react-use';
 
-export function useMentorStudents(mentorId: number | undefined) {
+export function useMentorStudents(mentorId: number | null) {
   const service = useMemo(() => new MentorsApi(), []);
 
   const { value: students, loading } = useAsync(async () => {

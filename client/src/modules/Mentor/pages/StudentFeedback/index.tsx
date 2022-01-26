@@ -7,10 +7,11 @@ import {
 } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
+import { getMentorId } from 'domain/user';
 import { SessionContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect } from 'react';
 import { CourseOnlyPageProps } from 'services/models';
 import * as routes from 'services/routes';
 import { convertSoftSkillValueToEnum, softSkills } from '../../data/softSkills';
@@ -35,15 +36,14 @@ const englishLevels = [
 
 export function StudentFeedback({ course }: CourseOnlyPageProps) {
   const session = useContext(SessionContext);
-  const { githubId, courses } = session;
+  const { githubId } = session;
   const { id: courseId, alias } = course;
-  const mentorId = courses[courseId]?.mentorId;
+  const mentorId = getMentorId(session, courseId);
 
   const [form] = Form.useForm();
   const router = useRouter();
 
   const [students, loading] = useMentorStudents(mentorId);
-  const service = useMemo(() => new StudentsFeedbacksApi(), []);
   const noData = students?.length === 0;
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
         englishLevel:
           rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex - 1] : EnglishLevelEnum.Unknown,
       };
-      await service.createStudentFeedback(studentId, payload);
+      await new StudentsFeedbacksApi().createStudentFeedback(studentId, payload);
       message.success('Feedback successfully sent');
       router.push(routes.getMentorStudentsRoute(alias));
     } catch (e) {

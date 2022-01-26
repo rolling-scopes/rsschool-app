@@ -4,7 +4,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import withSession, { CourseRole } from 'components/withSession';
-import { isStudent } from 'domain/user';
+import { isMentor, getMentorId } from 'domain/user';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
@@ -19,13 +19,20 @@ function Page(props: CoursePageProps) {
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const mentorsService = useMemo(() => new MentorsApi(), [courseId]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<Pick<MentorStudentDto, 'id' | 'githubId' | 'name'>[]>([]);
   const [action, setAction] = useState<ActionOnStudent>('expel');
 
   useAsync(async () => {
-    if (isStudent(props.session, courseId)) {
+    if (isMentor(props.session, courseId)) {
+      const mentorId = getMentorId(props.session, courseId);
+      if (!mentorId) {
+        return null;
+      }
+      const students = await new MentorsApi().getMentorStudents(mentorId);
+      const activeStudents = students.data.filter(student => student.active);
+      setStudents(activeStudents);
+    } else {
       const student = await courseService.getStudentSummary(userGithubId);
       if (student.isActive) {
         setStudents([
@@ -36,14 +43,6 @@ function Page(props: CoursePageProps) {
           }),
         ]);
       }
-    } else {
-      const mentorId = props.session.courses[courseId]?.mentorId;
-      if (!mentorId) {
-        return null;
-      }
-      const students = await mentorsService.getMentorStudents(mentorId);
-      const activeStudents = students.data.filter(student => student.active);
-      setStudents(activeStudents);
     }
   }, [courseId]);
 
