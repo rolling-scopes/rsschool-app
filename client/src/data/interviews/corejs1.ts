@@ -2,7 +2,7 @@ import { InterviewTemplate } from './types';
 
 export const corejs1Template: InterviewTemplate = {
   name: 'CoreJS',
-  examplesUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-corejs.md',
+  examplesUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-basic-coreJS.md',
   categories: [
     {
       id: 1000,
@@ -81,11 +81,6 @@ export const corejs1Template: InterviewTemplate = {
       questions: [{ id: 1081, name: 'Document' }],
     },
     {
-      id: 1090,
-      name: 'Global object window',
-      questions: [{ id: 1091, name: 'Document' }],
-    },
-    {
       id: 1100,
       name: 'Events Basics',
       questions: [
@@ -95,18 +90,6 @@ export const corejs1Template: InterviewTemplate = {
         { id: 1104, name: 'Know basic Event types' },
         { id: 1105, name: 'Mouse / Keyboard Events' },
         { id: 1106, name: 'Form / Input Events' },
-      ],
-    },
-    {
-      id: 1110,
-      name: 'Events Basics',
-      questions: [
-        { id: 1111, name: 'Event Phases' },
-        { id: 1112, name: 'Event Listeners' },
-        { id: 1113, name: 'DOM Events' },
-        { id: 1114, name: 'Know basic Event types' },
-        { id: 1115, name: 'Mouse / Keyboard Events' },
-        { id: 1116, name: 'Form / Input Events' },
       ],
     },
     {
