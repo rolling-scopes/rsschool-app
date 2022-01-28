@@ -2,9 +2,17 @@ import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { SelectedCoursesModal } from 'components/cv/SelectedCoursesModal';
-import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from 'modules/Opportunities/models';
+import { ContactsForm, UserDataForm, VisibleCoursesForm } from './forms';
+import {
+  Contacts,
+  UserData,
+  AllUserCVData,
+  AllDataToSubmit,
+  UserDataToSubmit,
+  CourseDataShortened,
+  VisibleCoursesFormData,
+  VisibleCourses,
+} from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -15,7 +23,6 @@ import {
   DeleteOutlined,
   FieldTimeOutlined,
   CopyOutlined,
-  FullscreenOutlined,
 } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 
@@ -25,12 +32,6 @@ const { Paragraph, Text, Title } = Typography;
 type Props = {
   ownerGithubId: string;
   withdrawConsent: () => void;
-};
-
-type CourseToShow = {
-  isVisible: boolean;
-  courseId: number;
-  courseFullName: string;
 };
 
 const cvService = new OpportunitiesService();
@@ -43,11 +44,12 @@ function EditCV(props: Props) {
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
-  const [isCoursesModalVisible, setIsCoursesModalVisible] = useState<boolean>(false);
-  const [coursesToShow, setCoursesToShow] = useState<CourseToShow[] | null>(null);
+  const [visibleCourses, setVisibleCourses] = useState<VisibleCourses | null>(null);
+  const [allCourses, setAllCourses] = useState<CourseDataShortened[] | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
+  const visibleCoursesFormRef: RefObject<FormInstance> = React.createRef();
 
   const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -139,18 +141,11 @@ function EditCV(props: Props) {
       website,
     };
 
-    const visibleCoursesData = courses.map(course => {
-      const isVisible = visibleCourses.includes(course.courseId);
-      return {
-        ...course,
-        isVisible,
-      };
-    });
-
     setContactsList(contactsList);
     setUserData(userData);
     setExpiration(Number(expires));
-    setCoursesToShow(visibleCoursesData);
+    setVisibleCourses(visibleCourses);
+    setAllCourses(courses);
 
     setLoading(false);
   }, []);
@@ -224,6 +219,7 @@ function EditCV(props: Props) {
       locations: newLocations,
       githubUsername: newGithub,
       website: newWebsite,
+      visibleCourses: newVisibleCourses,
     } = newCVData;
 
     const newUserData: UserData = {
@@ -251,6 +247,7 @@ function EditCV(props: Props) {
 
     setUserData(newUserData);
     setContactsList(newContacts);
+    setVisibleCourses(newVisibleCourses);
 
     setLoading(false);
   };
@@ -306,18 +303,18 @@ function EditCV(props: Props) {
 
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
-    const contactsFormData: Contacts = contactsFormRef?.current?.getFieldsValue();
+    const contactsFormData: Contacts = contactsFormRef.current?.getFieldsValue();
+    const visibleCoursesFormData: VisibleCoursesFormData = visibleCoursesFormRef.current?.getFieldsValue();
 
-    const visibleCourses = coursesToShow!.reduce((acc, course) => {
-      const { isVisible, courseId } = course;
-      if (isVisible) acc.push(courseId);
+    const visibleCourses = Object.entries(visibleCoursesFormData).reduce((acc: VisibleCourses, [id, isVisible]) => {
+      if (isVisible) acc.push(Number(id));
       return acc;
-    }, [] as number[]);
+    }, []);
 
     return {
       ...userFormData,
-      visibleCourses,
       ...contactsFormData,
+      visibleCourses,
     };
   };
 
@@ -411,11 +408,6 @@ function EditCV(props: Props) {
     setLoading(false);
   };
 
-  const handleCurrentSelection = (values: CourseToShow[]) => {
-    setCoursesToShow(values);
-    setIsCoursesModalVisible(false);
-  };
-
   return (
     <LoadingScreen show={loading}>
       <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
@@ -428,16 +420,15 @@ function EditCV(props: Props) {
             >
               <Col>
                 <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
-                <Card size="small" style={{ width: '100%' }}>
-                  <Button
-                    style={{ ...buttonStyle, width: '100%' }}
-                    size="large"
-                    type="dashed"
-                    onClick={() => setIsCoursesModalVisible(true)}
-                  >
-                    Select visible courses <FullscreenOutlined />
-                  </Button>
-                </Card>
+                <Row>
+                  {visibleCourses && (
+                    <VisibleCoursesForm
+                      ref={visibleCoursesFormRef}
+                      courses={allCourses}
+                      visibleCourses={visibleCourses}
+                    />
+                  )}
+                </Row>
               </Col>
               <Col>
                 <Row>{contactsList && <ContactsForm ref={contactsFormRef} contactsList={contactsList} />}</Row>
@@ -502,14 +493,6 @@ function EditCV(props: Props) {
               </Button>
             </Row>
           </Card>
-          {coursesToShow && (
-            <SelectedCoursesModal
-              isVisible={isCoursesModalVisible}
-              courses={coursesToShow}
-              onOk={handleCurrentSelection}
-              onCancel={() => setIsCoursesModalVisible(false)}
-            />
-          )}
         </Content>
       </Layout>
     </LoadingScreen>
