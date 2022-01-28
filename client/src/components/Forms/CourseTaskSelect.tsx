@@ -17,9 +17,11 @@ export function CourseTaskSelect(props: Props) {
   });
   const selectProps = onChange ? { onChange } : {};
   const dataActive = data.filter(task => Date.now() < Date.parse(task.studentEndDate ?? ''));
-  const dataSubmitted = dataActive.filter(task => task.id % 2 === 0);
-  const dataNotSubmitted = dataActive.filter(task => task.id % 2 === 1);
   const dataExpired = data.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? ''));
+
+  const dataSubmitted = dataActive.filter(task => task.id % 2 === 0);// hardcode just for testing purposes, not in use now
+  const dataNotSubmitted = dataActive.filter(task => task.id % 2 === 1);
+
   const selectGroups = [
     { type: isSubmitted, data: dataSubmitted, title: 'Submitted' },
     { type: isSubmitted, data: dataNotSubmitted, title: 'Not submitted' },
