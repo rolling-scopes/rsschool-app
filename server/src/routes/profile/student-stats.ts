@@ -13,6 +13,7 @@ import {
   Certificate,
 } from '../../models';
 import { Permissions } from './permissions';
+import omit from 'lodash/omit';
 
 const getStudentStatsWithPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
   const { isCoreJsFeedbackVisible, isExpellingReasonVisible } = permissions;
@@ -33,6 +34,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
     .addSelect('"certificate"."publicId" AS "certificateId"')
     .addSelect('ARRAY_AGG ("courseTask"."maxScore") AS "taskMaxScores"')
     .addSelect('ARRAY_AGG ("courseTask"."scoreWeight") AS "taskScoreWeights"')
+    .addSelect('ARRAY_AGG ("courseTask"."studentEndDate") AS "taskEndDates"')
     .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
     .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
     .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
@@ -103,6 +105,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       mentorGithubId,
       taskMaxScores,
       taskScoreWeights,
+      taskEndDates,
       taskNames,
       taskDescriptionUris,
       taskGithubPrUris,
@@ -115,8 +118,9 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       certificateId,
       rank,
     }: any) => {
-      const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
+      const tasksWithDates = taskMaxScores.map((maxScore: number, idx: number) => ({
         maxScore,
+        endDate: new Date(taskEndDates[idx]).getTime(),
         scoreWeight: taskScoreWeights[idx],
         name: taskNames[idx],
         descriptionUri: taskDescriptionUris[idx],
@@ -132,6 +136,9 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
               }
             : undefined,
       }));
+      const orderedTasks = tasksWithDates
+        .sort((a: any, b: any) => a.endDate - b.endDate)
+        .map((task: any) => omit(task, 'endDate'));
       return {
         courseId,
         courseName,
@@ -141,7 +148,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
         expellingReason,
         isCourseCompleted,
         totalScore,
-        tasks,
+        tasks: orderedTasks,
         certificateId,
         rank,
         mentor: {
