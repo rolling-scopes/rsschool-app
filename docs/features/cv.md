@@ -26,7 +26,7 @@ This is how CV `View` looks like:
 
 <kbd>![Filled CV View](./img/cv/cv-view-filled.JPG)</kbd>
 
-There are 2 types of data presented in the CV:
+There are 3 types of data presented in the CV:
 
 - Information that the user can freely change directly
   - `General info`
@@ -39,6 +39,7 @@ There are 2 types of data presented in the CV:
     - `Ready to start work from` - the date from which the user is ready to start work
     - `Ready to work full time` - is the user ready to work full time
     - `About me` - a few sentences to tell about yourself
+
   - `Contacts`
     - `Phone` - phone number (international format)
     - `Email` - email address
@@ -48,8 +49,9 @@ There are 2 types of data presented in the CV:
     - `Locations` - locations where the user is able to work (3 locations can be added, each from a new line, the extra ones will be truncated)
     - `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
     - `Website` - a link to a website (with a portfolio, some profile etc.)
+  - `Visible courses` - the courses user wants to show in his CV and on the Employer page (he can only select courses for which he has registered). User should explicitly choose which courses to show, no courses are shown by default. 
 - Information that is pulled from RS School App and cannot be changed directly
-  - `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken):
+  - `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken and decided to show):
     - `Course name` - course name
     - `Course status` - user's status on the course (in progress, completed, completed with certificate, etc.)
     - `Mentor` - mentor's name and a link to his profile, if the student had a mentor, "No mentor" otherwise
@@ -106,7 +108,7 @@ For each record, the following columns are displayed:
 - `English level` - user's English level
 - `Full time` - is the user ready to work full time
 - `Start from` - the date from which the user is ready to start work
-- `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken):
+- `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken and decided to show):
   - `Course name` - the name of the course
   - `Course status` - current user's status on the course (in progress, completed, completed with certificate, etc.)
   - `Mentor` - the name of the mentor and a link to his profile, if the user had a mentor, "No mentor" otherwise
