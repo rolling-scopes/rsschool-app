@@ -1,6 +1,6 @@
-import * as React from 'react';
+import { forwardRef, useEffect, ForwardedRef } from 'react';
 import moment from 'moment';
-import { Form, Input, Select, DatePicker, Checkbox, Card } from 'antd';
+import { Form, Input, Select, DatePicker, Checkbox, Card, FormInstance } from 'antd';
 import { UserData } from 'modules/Opportunities/models';
 import { ENGLISH_LEVELS } from '../../../services/reference-data/english';
 import { userDataValidationRules as validationRules } from './form-validation';
@@ -13,7 +13,7 @@ type Props = {
   userData: UserData;
 };
 
-const UserDataForm = React.forwardRef((props: Props, ref: any) => {
+const UserDataForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
   const { userData } = props;
 
   const { avatarLink, name, desiredPosition, selfIntroLink, englishLevel, militaryService, notes } = userData;
@@ -35,7 +35,7 @@ const UserDataForm = React.forwardRef((props: Props, ref: any) => {
 
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
+  useEffect(() => {
     form.setFieldsValue(formValues);
     form.validateFields();
   }, [userData]);

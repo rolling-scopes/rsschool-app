@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, ForwardedRef } from 'react';
 import { Checkbox, Form, Typography, Card, FormInstance } from 'antd';
 import { CourseDataShortened, VisibleCourses } from 'modules/Opportunities/models';
 
@@ -9,7 +9,7 @@ type Props = {
   visibleCourses: VisibleCourses;
 };
 
-const VisibleCoursesForm = forwardRef((props: Props, ref: React.ForwardedRef<FormInstance>) => {
+const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
   const { courses, visibleCourses } = props;
 
   if (!courses || !courses.length) return <Typography.Text>No courses to show</Typography.Text>;
