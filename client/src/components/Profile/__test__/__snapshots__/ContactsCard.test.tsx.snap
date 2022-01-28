@@ -155,7 +155,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                   }
                 }
               >
-                <Base
+                <ForwardRef
                   component="h2"
                   ellipsis={true}
                   style={
@@ -165,23 +165,24 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                     }
                   }
                 >
-                  <LocaleReceiver
-                    componentName="Text"
+                  <ResizeObserver
+                    disabled={true}
+                    onResize={[Function]}
                   >
-                    <ResizeObserver
+                    <SingleObserver
                       disabled={true}
+                      key="rc-observer-key-0"
                       onResize={[Function]}
                     >
-                      <SingleObserver
-                        disabled={true}
-                        key="rc-observer-key-0"
-                        onResize={[Function]}
-                      >
-                        <DomWrapper>
+                      <DomWrapper>
+                        <EllipsisTooltip
+                          enabledEllipsis={true}
+                          isEllipsis={false}
+                        >
                           <Typography
                             className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                             component="h2"
-                            onClick={[Function]}
+                            onClick={null}
                             style={
                               Object {
                                 "WebkitLineClamp": undefined,
@@ -192,7 +193,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           >
                             <h2
                               className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={[Function]}
+                              onClick={null}
                               style={
                                 Object {
                                   "WebkitLineClamp": undefined,
@@ -201,86 +202,100 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                 }
                               }
                             >
-                              <ForwardRef(ContactsOutlined)>
-                                <AntdIcon
-                                  icon={
-                                    Object {
-                                      "icon": Object {
-                                        "attrs": Object {
-                                          "focusable": "false",
-                                          "viewBox": "64 64 896 896",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "attrs": Object {
-                                              "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                            },
-                                            "tag": "path",
+                              <Ellipsis
+                                enabledMeasure={false}
+                                onEllipsis={[Function]}
+                                rows={1}
+                                text={
+                                  Array [
+                                    <ForwardRef(ContactsOutlined) />,
+                                    " ",
+                                    "Contacts",
+                                  ]
+                                }
+                                width={0}
+                              >
+                                <ForwardRef(ContactsOutlined)>
+                                  <AntdIcon
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
                                           },
-                                        ],
-                                        "tag": "svg",
-                                      },
-                                      "name": "contacts",
-                                      "theme": "outlined",
-                                    }
-                                  }
-                                >
-                                  <span
-                                    aria-label="contacts"
-                                    className="anticon anticon-contacts"
-                                    role="img"
-                                  >
-                                    <IconReact
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                                },
-                                                "tag": "path",
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "contacts",
-                                          "theme": "outlined",
-                                        }
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "contacts",
+                                        "theme": "outlined",
                                       }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="contacts"
+                                      className="anticon anticon-contacts"
+                                      role="img"
                                     >
-                                      <svg
-                                        aria-hidden="true"
-                                        data-icon="contacts"
-                                        fill="currentColor"
-                                        focusable="false"
-                                        height="1em"
-                                        key="svg-contacts"
-                                        viewBox="64 64 896 896"
-                                        width="1em"
+                                      <IconReact
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "contacts",
+                                            "theme": "outlined",
+                                          }
+                                        }
                                       >
-                                        <path
-                                          d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                          key="svg-contacts-svg-0"
-                                        />
-                                      </svg>
-                                    </IconReact>
-                                  </span>
-                                </AntdIcon>
-                              </ForwardRef(ContactsOutlined)>
-                               
-                              Contacts
+                                        <svg
+                                          aria-hidden="true"
+                                          data-icon="contacts"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-contacts"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                            key="svg-contacts-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </AntdIcon>
+                                </ForwardRef(ContactsOutlined)>
+                                 
+                                Contacts
+                              </Ellipsis>
                             </h2>
                           </Typography>
-                        </DomWrapper>
-                      </SingleObserver>
-                    </ResizeObserver>
-                  </LocaleReceiver>
-                </Base>
+                        </EllipsisTooltip>
+                      </DomWrapper>
+                    </SingleObserver>
+                  </ResizeObserver>
+                </ForwardRef>
               </Title>
             </div>
           </div>
@@ -357,27 +372,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -386,24 +402,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            EPAM E-mail
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "EPAM E-mail",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              EPAM E-mail
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           vasya@epam.com
@@ -416,27 +445,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -445,24 +475,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            E-mail
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "E-mail",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              E-mail
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           vasya@tut.by
@@ -475,27 +518,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -504,24 +548,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Telegram
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Telegram",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Telegram
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           televasya
@@ -534,27 +591,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -563,24 +621,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Phone
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Phone",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Phone
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           1232422
@@ -593,27 +664,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -622,24 +694,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Skype
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Skype",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Skype
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           skype_vasya
@@ -652,27 +737,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -681,24 +767,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Notes
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Notes",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Notes
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           vasya
@@ -711,27 +810,28 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -740,24 +840,37 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            LinkedIn
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "LinkedIn",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              LinkedIn
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           <a
@@ -928,7 +1041,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                   }
                 }
               >
-                <Base
+                <ForwardRef
                   component="h2"
                   ellipsis={true}
                   style={
@@ -938,23 +1051,24 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                     }
                   }
                 >
-                  <LocaleReceiver
-                    componentName="Text"
+                  <ResizeObserver
+                    disabled={true}
+                    onResize={[Function]}
                   >
-                    <ResizeObserver
+                    <SingleObserver
                       disabled={true}
+                      key="rc-observer-key-0"
                       onResize={[Function]}
                     >
-                      <SingleObserver
-                        disabled={true}
-                        key="rc-observer-key-0"
-                        onResize={[Function]}
-                      >
-                        <DomWrapper>
+                      <DomWrapper>
+                        <EllipsisTooltip
+                          enabledEllipsis={true}
+                          isEllipsis={false}
+                        >
                           <Typography
                             className="ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
                             component="h2"
-                            onClick={[Function]}
+                            onClick={null}
                             style={
                               Object {
                                 "WebkitLineClamp": undefined,
@@ -965,7 +1079,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           >
                             <h2
                               className="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line"
-                              onClick={[Function]}
+                              onClick={null}
                               style={
                                 Object {
                                   "WebkitLineClamp": undefined,
@@ -974,86 +1088,100 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                 }
                               }
                             >
-                              <ForwardRef(ContactsOutlined)>
-                                <AntdIcon
-                                  icon={
-                                    Object {
-                                      "icon": Object {
-                                        "attrs": Object {
-                                          "focusable": "false",
-                                          "viewBox": "64 64 896 896",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "attrs": Object {
-                                              "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                            },
-                                            "tag": "path",
+                              <Ellipsis
+                                enabledMeasure={false}
+                                onEllipsis={[Function]}
+                                rows={1}
+                                text={
+                                  Array [
+                                    <ForwardRef(ContactsOutlined) />,
+                                    " ",
+                                    "Contacts",
+                                  ]
+                                }
+                                width={0}
+                              >
+                                <ForwardRef(ContactsOutlined)>
+                                  <AntdIcon
+                                    icon={
+                                      Object {
+                                        "icon": Object {
+                                          "attrs": Object {
+                                            "focusable": "false",
+                                            "viewBox": "64 64 896 896",
                                           },
-                                        ],
-                                        "tag": "svg",
-                                      },
-                                      "name": "contacts",
-                                      "theme": "outlined",
-                                    }
-                                  }
-                                >
-                                  <span
-                                    aria-label="contacts"
-                                    className="anticon anticon-contacts"
-                                    role="img"
-                                  >
-                                    <IconReact
-                                      icon={
-                                        Object {
-                                          "icon": Object {
-                                            "attrs": Object {
-                                              "focusable": "false",
-                                              "viewBox": "64 64 896 896",
-                                            },
-                                            "children": Array [
-                                              Object {
-                                                "attrs": Object {
-                                                  "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
-                                                },
-                                                "tag": "path",
+                                          "children": Array [
+                                            Object {
+                                              "attrs": Object {
+                                                "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
                                               },
-                                            ],
-                                            "tag": "svg",
-                                          },
-                                          "name": "contacts",
-                                          "theme": "outlined",
-                                        }
+                                              "tag": "path",
+                                            },
+                                          ],
+                                          "tag": "svg",
+                                        },
+                                        "name": "contacts",
+                                        "theme": "outlined",
                                       }
+                                    }
+                                  >
+                                    <span
+                                      aria-label="contacts"
+                                      className="anticon anticon-contacts"
+                                      role="img"
                                     >
-                                      <svg
-                                        aria-hidden="true"
-                                        data-icon="contacts"
-                                        fill="currentColor"
-                                        focusable="false"
-                                        height="1em"
-                                        key="svg-contacts"
-                                        viewBox="64 64 896 896"
-                                        width="1em"
+                                      <IconReact
+                                        icon={
+                                          Object {
+                                            "icon": Object {
+                                              "attrs": Object {
+                                                "focusable": "false",
+                                                "viewBox": "64 64 896 896",
+                                              },
+                                              "children": Array [
+                                                Object {
+                                                  "attrs": Object {
+                                                    "d": "M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z",
+                                                  },
+                                                  "tag": "path",
+                                                },
+                                              ],
+                                              "tag": "svg",
+                                            },
+                                            "name": "contacts",
+                                            "theme": "outlined",
+                                          }
+                                        }
                                       >
-                                        <path
-                                          d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
-                                          key="svg-contacts-svg-0"
-                                        />
-                                      </svg>
-                                    </IconReact>
-                                  </span>
-                                </AntdIcon>
-                              </ForwardRef(ContactsOutlined)>
-                               
-                              Contacts
+                                        <svg
+                                          aria-hidden="true"
+                                          data-icon="contacts"
+                                          fill="currentColor"
+                                          focusable="false"
+                                          height="1em"
+                                          key="svg-contacts"
+                                          viewBox="64 64 896 896"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"
+                                            key="svg-contacts-svg-0"
+                                          />
+                                        </svg>
+                                      </IconReact>
+                                    </span>
+                                  </AntdIcon>
+                                </ForwardRef(ContactsOutlined)>
+                                 
+                                Contacts
+                              </Ellipsis>
                             </h2>
                           </Typography>
-                        </DomWrapper>
-                      </SingleObserver>
-                    </ResizeObserver>
-                  </LocaleReceiver>
-                </Base>
+                        </EllipsisTooltip>
+                      </DomWrapper>
+                    </SingleObserver>
+                  </ResizeObserver>
+                </ForwardRef>
               </Title>
             </div>
           </div>
@@ -1115,27 +1243,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1144,24 +1273,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            EPAM E-mail
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "EPAM E-mail",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              EPAM E-mail
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           vasya@epam.com
@@ -1174,27 +1316,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1203,24 +1346,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            E-mail
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "E-mail",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              E-mail
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           vasya@tut.by
@@ -1233,27 +1389,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1262,24 +1419,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Phone
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Phone",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Phone
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           1232422
@@ -1292,27 +1462,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                           <Text
                             strong={true}
                           >
-                            <Base
+                            <ForwardRef
                               component="span"
                               strong={true}
                             >
-                              <LocaleReceiver
-                                componentName="Text"
+                              <ResizeObserver
+                                disabled={true}
+                                onResize={[Function]}
                               >
-                                <ResizeObserver
+                                <SingleObserver
                                   disabled={true}
+                                  key="rc-observer-key-0"
                                   onResize={[Function]}
                                 >
-                                  <SingleObserver
-                                    disabled={true}
-                                    key="rc-observer-key-0"
-                                    onResize={[Function]}
-                                  >
-                                    <DomWrapper>
+                                  <DomWrapper>
+                                    <EllipsisTooltip
+                                      enabledEllipsis={false}
+                                      isEllipsis={false}
+                                    >
                                       <Typography
                                         className=""
                                         component="span"
-                                        onClick={[Function]}
+                                        onClick={null}
                                         style={
                                           Object {
                                             "WebkitLineClamp": undefined,
@@ -1321,24 +1492,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                       >
                                         <span
                                           className="ant-typography"
-                                          onClick={[Function]}
+                                          onClick={null}
                                           style={
                                             Object {
                                               "WebkitLineClamp": undefined,
                                             }
                                           }
                                         >
-                                          <strong>
-                                            Skype
-                                            :
-                                          </strong>
+                                          <Ellipsis
+                                            enabledMeasure={false}
+                                            onEllipsis={[Function]}
+                                            rows={1}
+                                            text={
+                                              Array [
+                                                "Skype",
+                                                ":",
+                                              ]
+                                            }
+                                            width={0}
+                                          >
+                                            <strong>
+                                              Skype
+                                              :
+                                            </strong>
+                                          </Ellipsis>
                                         </span>
                                       </Typography>
-                                    </DomWrapper>
-                                  </SingleObserver>
-                                </ResizeObserver>
-                              </LocaleReceiver>
-                            </Base>
+                                    </EllipsisTooltip>
+                                  </DomWrapper>
+                                </SingleObserver>
+                              </ResizeObserver>
+                            </ForwardRef>
                           </Text>
                            
                           skype_vasya
@@ -2047,27 +2231,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2076,24 +2261,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      EPAM E-mail
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "EPAM E-mail",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        EPAM E-mail
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2180,27 +2378,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2209,24 +2408,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      E-mail
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "E-mail",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        E-mail
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2313,27 +2525,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2342,24 +2555,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      Telegram
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "Telegram",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        Telegram
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2446,27 +2672,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2475,24 +2702,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      Phone
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "Phone",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        Phone
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2579,27 +2819,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2608,24 +2849,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      Skype
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "Skype",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        Skype
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2712,27 +2966,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2741,24 +2996,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      Notes
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "Notes",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        Notes
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input
@@ -2845,27 +3113,28 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                     <Text
                                                       strong={true}
                                                     >
-                                                      <Base
+                                                      <ForwardRef
                                                         component="span"
                                                         strong={true}
                                                       >
-                                                        <LocaleReceiver
-                                                          componentName="Text"
+                                                        <ResizeObserver
+                                                          disabled={true}
+                                                          onResize={[Function]}
                                                         >
-                                                          <ResizeObserver
+                                                          <SingleObserver
                                                             disabled={true}
+                                                            key="rc-observer-key-0"
                                                             onResize={[Function]}
                                                           >
-                                                            <SingleObserver
-                                                              disabled={true}
-                                                              key="rc-observer-key-0"
-                                                              onResize={[Function]}
-                                                            >
-                                                              <DomWrapper>
+                                                            <DomWrapper>
+                                                              <EllipsisTooltip
+                                                                enabledEllipsis={false}
+                                                                isEllipsis={false}
+                                                              >
                                                                 <Typography
                                                                   className=""
                                                                   component="span"
-                                                                  onClick={[Function]}
+                                                                  onClick={null}
                                                                   style={
                                                                     Object {
                                                                       "WebkitLineClamp": undefined,
@@ -2874,24 +3143,37 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                                                                 >
                                                                   <span
                                                                     className="ant-typography"
-                                                                    onClick={[Function]}
+                                                                    onClick={null}
                                                                     style={
                                                                       Object {
                                                                         "WebkitLineClamp": undefined,
                                                                       }
                                                                     }
                                                                   >
-                                                                    <strong>
-                                                                      LinkedIn
-                                                                      :
-                                                                    </strong>
+                                                                    <Ellipsis
+                                                                      enabledMeasure={false}
+                                                                      onEllipsis={[Function]}
+                                                                      rows={1}
+                                                                      text={
+                                                                        Array [
+                                                                          "LinkedIn",
+                                                                          ":",
+                                                                        ]
+                                                                      }
+                                                                      width={0}
+                                                                    >
+                                                                      <strong>
+                                                                        LinkedIn
+                                                                        :
+                                                                      </strong>
+                                                                    </Ellipsis>
                                                                   </span>
                                                                 </Typography>
-                                                              </DomWrapper>
-                                                            </SingleObserver>
-                                                          </ResizeObserver>
-                                                        </LocaleReceiver>
-                                                      </Base>
+                                                              </EllipsisTooltip>
+                                                            </DomWrapper>
+                                                          </SingleObserver>
+                                                        </ResizeObserver>
+                                                      </ForwardRef>
                                                     </Text>
                                                   </p>
                                                   <Input

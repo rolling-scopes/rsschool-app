@@ -21,7 +21,7 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { AlertsService } from 'services/alerts';
-import { isAdmin, isAnyCoursePowerUserManager, isHirer } from 'domain/user';
+import { isAdmin, isAnyCoursePowerUser, isHirer } from 'domain/user';
 import { isAnyMentor } from 'domain/user';
 
 const { Content } = Layout;
@@ -43,7 +43,7 @@ export function HomePage(props: Props) {
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
 
   const isAdminUser = isAdmin(props.session);
-  const isCoursePowerUser = isAnyCoursePowerUserManager(props.session);
+  const isCoursePowerUser = isAnyCoursePowerUser(props.session);
   const isHirerUser = isHirer(props.session);
   const isPowerUser = isAdminUser || isCoursePowerUser;
 
@@ -86,10 +86,7 @@ export function HomePage(props: Props) {
     }
     const data = await loadHomeData(activeCourse.id, props.session);
     setStudentSummary(data?.studentSummary ?? null);
-
-    if (data?.courseTasks) {
-      setCourseTasks(data.courseTasks);
-    }
+    setCourseTasks(data?.courseTasks ?? []);
   };
 
   useAsync(async () => {
@@ -152,20 +149,22 @@ export function HomePage(props: Props) {
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
-              <List
-                size="small"
-                bordered
-                dataSource={courseLinks}
-                renderItem={(linkInfo: LinkRenderData) => (
-                  <List.Item key={linkInfo.url}>
-                    <Link prefetch={false} href={linkInfo.url}>
-                      <a>
-                        {linkInfo.icon} {linkInfo.name}
-                      </a>
-                    </Link>
-                  </List.Item>
-                )}
-              />
+              {courseLinks.length ? (
+                <List
+                  size="small"
+                  bordered
+                  dataSource={courseLinks}
+                  renderItem={(linkInfo: LinkRenderData) => (
+                    <List.Item key={linkInfo.url}>
+                      <Link prefetch={false} href={linkInfo.url}>
+                        <a>
+                          {linkInfo.icon} {linkInfo.name}
+                        </a>
+                      </Link>
+                    </List.Item>
+                  )}
+                />
+              ) : null}
 
               {adminLinks.length ? (
                 <List

@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.2.14",
-    "antd": "4.18.3",
+    "antd": "4.18.4",
     "axios": "0.24.0",
     "cookie": "0.4.1",
     "csvtojson": "2.0.10",
@@ -31,7 +31,7 @@
     "react-color": "2.19.3",
     "react-dom": "17.0.2",
     "react-masonry-css": "1.0.16",
-    "react-use": "17.3.1",
+    "react-use": "17.3.2",
     "styled-jsx": "4.0.1",
     "use-places-autocomplete": "1.10.0"
   },

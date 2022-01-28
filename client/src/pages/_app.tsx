@@ -4,10 +4,12 @@ import Head from 'next/head';
 
 import 'antd/dist/antd.css';
 import '../styles/main.css';
+import { initializeFeatures } from 'services/features';
 
 class RsSchoolApp extends App {
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, router } = this.props;
+    initializeFeatures(router.query);
     return (
       <>
         <Head>

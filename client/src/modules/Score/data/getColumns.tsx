@@ -15,6 +15,11 @@ type Props = {
   handleSettings: () => void;
 };
 
+const getSearchProps = (key: string) => ({
+  ...getColumnSearchProps(key),
+  onFilter: undefined,
+});
+
 export function getColumns(props: Props) {
   const { cityName, mentor, handleSettings, taskColumns } = props;
   return [
@@ -43,7 +48,7 @@ export function getColumns(props: Props) {
           </a>
         </div>
       ),
-      ...getColumnSearchProps('githubId'),
+      ...getSearchProps('githubId'),
     },
     {
       title: 'Name',
@@ -55,15 +60,15 @@ export function getColumns(props: Props) {
           <a>{value}</a>
         </Link>
       ),
-      ...getColumnSearchProps('name'),
+      ...getSearchProps('name'),
     },
     {
-      title: 'Location',
+      title: 'City',
       dataIndex: 'cityName',
       width: 150,
       sorter: 'cityName',
       defaultFilteredValue: cityName ? (isArray(cityName) ? cityName : [cityName]) : undefined,
-      ...getColumnSearchProps('cityName'),
+      ...getSearchProps('cityName'),
     },
     {
       title: 'Total',
@@ -105,7 +110,7 @@ export function getColumns(props: Props) {
           <a>{value}</a>
         </Link>
       ),
-      ...getColumnSearchProps('mentor.githubId'),
+      ...getSearchProps('mentor.githubId'),
     },
     {
       title: () => <SettingFilled onClick={handleSettings} />,

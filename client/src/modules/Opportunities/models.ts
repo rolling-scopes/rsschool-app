@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ENGLISH_LEVELS } from '../../services/reference-data/english';
+import { ENGLISH_LEVELS } from 'data/english';
 
 export interface CourseData {
   locationName: string;

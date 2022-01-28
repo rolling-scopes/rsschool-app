@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, HttpException, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
@@ -21,12 +21,13 @@ export class ProfileController {
   ): Promise<ProfileCourseDto[]> {
     const user = req.user;
     if (user.isAdmin) {
-      return await this.coursesService.getAll();
+      const data = await this.coursesService.getAll();
+      return data.map(course => new ProfileCourseDto(course));
     }
     if (username !== user.githubId && username !== 'me') {
       throw new ForbiddenException();
     }
     const data = await this.profileService.getCourses(user.githubId);
-    return data;
+    return data.map(course => new ProfileCourseDto(course));
   }
 }

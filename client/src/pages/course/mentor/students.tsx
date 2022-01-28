@@ -1,7 +1,14 @@
-import { withSession } from 'components/withSession';
+import { CourseRole } from 'components/withSession';
+import { SessionProvider } from 'modules/Course/contexts';
+import { getCourseProps as getServerSideProps, PageProps } from 'modules/Course/data/getCourseProps';
 import { Students } from 'modules/Mentor/pages/Students';
-import { withCourse } from 'components/withCourse';
-import { getServerSideProps } from 'modules/Mentor/data/getServerSideProps';
 
 export { getServerSideProps };
-export default withCourse(withSession(Students));
+
+export default function (props: PageProps) {
+  return (
+    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+      <Students {...props} />
+    </SessionProvider>
+  );
+}

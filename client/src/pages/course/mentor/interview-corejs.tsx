@@ -38,10 +38,10 @@ const questions: { questionId: string; questionText: string }[] = [
 ];
 
 const section1 = ['let-const', 'hoisting', 'closure', 'scope'];
-export const section2 = ['capturing', 'bubbling', 'event-delegation', 'event-prevention', 'event-listener'];
-export const section3 = ['eventloop', 'async', 'promises-microtask'];
+const section2 = ['capturing', 'bubbling', 'event-delegation', 'event-prevention', 'event-listener'];
+const section3 = ['eventloop', 'async', 'promises-microtask'];
 
-export const initialValues: any = {
+const initialValues: any = {
   'call-bind-apply': '',
   'event-delegation': false,
   'event-listener': false,

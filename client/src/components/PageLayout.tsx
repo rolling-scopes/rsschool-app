@@ -1,5 +1,8 @@
 import { Header } from './Header';
 import { Spin, Row, Col, Layout } from 'antd';
+import { PropsWithChildren } from 'react';
+import { Session } from './withSession';
+import { AdminSider } from './AdminSider';
 
 type Props = {
   loading: boolean;
@@ -24,7 +27,7 @@ export function PageLayout(props: Props) {
 export function PageLayoutSimple(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header title={props.title} username={props.githubId} courseName={props.courseName} />
+      <Header isProfilePage title={props.title} username={props.githubId} courseName={props.courseName} />
       <Layout.Content>
         {props.noData ? (
           <div>no data</div>
@@ -33,7 +36,7 @@ export function PageLayoutSimple(props: Props) {
             <Row style={{ marginTop: 16 }}></Row>
             <Row gutter={24}>
               <Col flex={1} />
-              <Col xs={20} sm={16} md={12} lg={8} xl={8}>
+              <Col xs={20} sm={16} md={16} lg={12} xl={12}>
                 {props.children}
               </Col>
               <Col flex={1} />
@@ -41,6 +44,18 @@ export function PageLayoutSimple(props: Props) {
           </Spin>
         )}
       </Layout.Content>
+    </Layout>
+  );
+}
+
+export function AdminPageLayout({ session, children }: PropsWithChildren<{ session: Session }>) {
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <AdminSider isAdmin={session.isAdmin} />
+      <Layout style={{ background: '#fff' }}>
+        <Header title="Notifications" username={session.githubId} />
+        <Layout.Content>{children}</Layout.Content>
+      </Layout>
     </Layout>
   );
 }

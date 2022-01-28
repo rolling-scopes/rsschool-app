@@ -2,17 +2,21 @@ import { Alert, Button, Col, Form, Input, message, Radio, Rate, Row, Typography 
 import {
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
+  SoftSkillEntryIdEnum,
   StudentsFeedbacksApi,
 } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
+import { getMentorId } from 'domain/user';
+import { SessionContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
-import { CoursePageProps } from 'services/models';
-import { softSkills } from '../../data/softSkills';
+import { useContext, useEffect } from 'react';
+import { CourseOnlyPageProps } from 'services/models';
+import * as routes from 'services/routes';
+import { convertSoftSkillValueToEnum, softSkills } from '../../data/softSkills';
 
-type FormValues = {
+type FormValues = Record<SoftSkillEntryIdEnum, number> & {
   studentId: number;
   impression: string;
   recommendation: RecommendationEnum;
@@ -30,16 +34,16 @@ const englishLevels = [
   EnglishLevelEnum.C2,
 ];
 
-export function StudentFeedback({ session, course }: CoursePageProps) {
-  const { githubId, courses } = session;
+export function StudentFeedback({ course }: CourseOnlyPageProps) {
+  const session = useContext(SessionContext);
+  const { githubId } = session;
   const { id: courseId, alias } = course;
-  const mentorId = Number(courses[courseId].mentorId);
+  const mentorId = getMentorId(session, courseId);
 
   const [form] = Form.useForm();
   const router = useRouter();
 
   const [students, loading] = useMentorStudents(mentorId);
-  const service = useMemo(() => new StudentsFeedbacksApi(), []);
   const noData = students?.length === 0;
 
   useEffect(() => {
@@ -53,25 +57,28 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
   const handleSubmit = async (values: FormValues) => {
     try {
       const { studentId, ...rest } = values;
-      await service.createStudentFeedback(studentId, {
+
+      const payload = {
         recommendation: rest.recommendation,
         content: {
           gaps: rest.gaps,
           impression: rest.impression,
           recommendationComment: rest.recommendationComment,
-          softSkills: [],
+          softSkills: softSkills.map(({ id }) => ({ id, value: convertSoftSkillValueToEnum(rest[id]) })),
         },
-        englishLevel: rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex] : EnglishLevelEnum.Unknown,
-      });
+        englishLevel:
+          rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex - 1] : EnglishLevelEnum.Unknown,
+      };
+      await new StudentsFeedbacksApi().createStudentFeedback(studentId, payload);
       message.success('Feedback successfully sent');
-      router.push(`/course/mentor/students?course=${alias}`);
+      router.push(routes.getMentorStudentsRoute(alias));
     } catch (e) {
       message.error('Error occurred while creating feedback. Please try later.');
     }
   };
 
   return (
-    <PageLayoutSimple noData={noData} title="Student Feedback" loading={loading} githubId={githubId}>
+    <PageLayoutSimple noData={noData} title="Recommendation Letter" loading={loading} githubId={githubId}>
       <Alert
         showIcon
         type="info"
@@ -86,18 +93,18 @@ export function StudentFeedback({ session, course }: CoursePageProps) {
         <Form.Item name="studentId" label="Student">
           <UserSearch allowClear={false} clearIcon={false} defaultValues={students} keyField="id" />
         </Form.Item>
-        <Form.Item name="impression" required label="General Impression">
-          <Input.TextArea rows={7} />
-        </Form.Item>
-        <Form.Item name="gaps" label="Gaps">
-          <Input.TextArea rows={3} />
-        </Form.Item>
-        <Typography.Title level={5}>Recommendation</Typography.Title>
+        <Typography.Title level={5}>Recommended To</Typography.Title>
         <Form.Item name="recommendation" required>
           <Radio.Group>
             <Radio.Button value={RecommendationEnum.Hire}>Hire</Radio.Button>
             <Radio.Button value={RecommendationEnum.NotHire}>Not Hire</Radio.Button>
           </Radio.Group>
+        </Form.Item>
+        <Form.Item name="impression" required label="General Impression">
+          <Input.TextArea rows={7} />
+        </Form.Item>
+        <Form.Item name="gaps" label="Gaps">
+          <Input.TextArea rows={3} />
         </Form.Item>
         <Form.Item name="recommendationComment" required label="Comment">
           <Input.TextArea placeholder="Please tell us why you made such recommendation" rows={3} />

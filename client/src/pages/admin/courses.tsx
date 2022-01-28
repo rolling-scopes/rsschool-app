@@ -10,7 +10,7 @@ import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { DiscordServerService } from 'services/discordServer';
 import { Course, DiscordServer } from 'services/models';
-import { PRIMARY_SKILLS } from 'services/reference-data';
+import { PRIMARY_SKILLS } from 'data/primarySkills';
 
 const { Content } = Layout;
 type Props = { session: Session };
