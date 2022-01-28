@@ -29,7 +29,9 @@ This is how CV `View` looks like:
 There are 3 types of data presented in the CV:
 
 - Information that the user can freely change directly
+
   - `General info`
+
     - `Name` - name (required field)
     - `Desired position` - prefered position
     - `Self introduction video` - link to a video with a short self-presentation
@@ -49,7 +51,8 @@ There are 3 types of data presented in the CV:
     - `Locations` - locations where the user is able to work (3 locations can be added, each from a new line, the extra ones will be truncated)
     - `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
     - `Website` - a link to a website (with a portfolio, some profile etc.)
-  - `Visible courses` - the courses user wants to show in his CV and on the Employer page (he can only select courses for which he has registered). User should explicitly choose which courses to show, no courses are shown by default. 
+  - `Visible courses` - the courses user wants to show in his CV and on the Employer page (he can only select courses for which he has registered). User should explicitly choose which courses to show, no courses are shown by default.
+
 - Information that is pulled from RS School App and cannot be changed directly
   - `Courses` - information about the user's RSS courses, includes (for each course that the student is currently taking or has taken and decided to show):
     - `Course name` - course name
