@@ -1,12 +1,12 @@
-import { Entity, Column, CreateDateColumn, PrimaryColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryColumn, Index } from 'typeorm';
 
 @Entity()
 export class LoginState {
-  @Column()
   @PrimaryColumn()
   id: string;
 
   @CreateDateColumn()
+  @Index()
   createdDate: number;
 
   @Column({ type: 'simple-json' })
@@ -15,5 +15,4 @@ export class LoginState {
 
 export type LoginData = Partial<{
   redirectUrl: string;
-  telegramId: number;
 }>;
