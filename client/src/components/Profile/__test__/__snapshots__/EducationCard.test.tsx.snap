@@ -68,7 +68,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
     }
     title="Education"
   >
-    <Card
+    <ForwardRef
       actions={
         Array [
           <ForwardRef(EditOutlined)
@@ -1743,7 +1743,7 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
           </li>
         </ul>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </EducationCard>
 `;
@@ -1847,7 +1847,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
     }
     title="Education"
   >
-    <Card
+    <ForwardRef
       title={
         <Title
           ellipsis={true}
@@ -2145,7 +2145,7 @@ exports[`EducationCard Should render correctly if editing mode is disabled 1`] =
           </List>
         </div>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </EducationCard>
 `;
@@ -2218,7 +2218,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
     }
     title="Education"
   >
-    <Card
+    <ForwardRef
       actions={
         Array [
           <ForwardRef(EditOutlined)
@@ -4013,7 +4013,7 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
           </li>
         </ul>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </EducationCard>
 `;
