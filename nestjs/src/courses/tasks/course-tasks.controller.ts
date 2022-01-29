@@ -4,14 +4,23 @@ import {
   Controller,
   Get,
   Param,
+  ParseEnumPipe,
   ParseIntPipe,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CourseGuard, DefaultGuard } from '../../auth';
 import { DEFAULT_CACHE_TTL } from '../../constants';
-import { CourseTasksService } from './course-tasks.service';
+import { CourseTasksService, Status } from './course-tasks.service';
 import { CourseTaskDto } from './dto';
 
 @Controller('courses/:courseId/tasks')
@@ -27,8 +36,12 @@ export class CourseTasksController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'getCourseTasks' })
-  public async getOne(@Param('courseId', ParseIntPipe) courseId: number) {
-    const data = await this.courseTasksService.getAll(courseId);
+  @ApiQuery({ name: 'status', enum: ['started', 'inprogress', 'finished'], required: false })
+  public async getAll(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query('status', new ParseEnumPipe(Status)) status?: Status,
+  ): Promise<CourseTaskDto[]> {
+    const data = await this.courseTasksService.getAll(courseId, status);
     return data.map(item => new CourseTaskDto(item));
   }
 }

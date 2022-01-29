@@ -238,6 +238,24 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
+    'checker': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'githubRepoName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'sourceGithubRepoUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
     'studentEndDate': string;
     /**
      * 
@@ -250,6 +268,12 @@ export interface CourseTaskDto {
      * @type {number}
      * @memberof CourseTaskDto
      */
+    'taskOwnerId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskDto
+     */
     'maxScore': number;
     /**
      * 
@@ -257,6 +281,18 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'scoreWeight': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof CourseTaskDto
+     */
+    'publicAttributes': object;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseTaskDto
+     */
+    'useJury': boolean;
 }
 
 /**
@@ -1698,10 +1734,11 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {number} courseId 
+         * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourseTasks: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCourseTasks: async (courseId: number, status?: 'started' | 'inprogress' | 'finished', options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCourseTasks', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/tasks`
@@ -1716,6 +1753,10 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
 
 
     
@@ -1741,11 +1782,12 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCourseTasks(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasks(courseId, options);
+        async getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasks(courseId, status, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1761,11 +1803,12 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {number} courseId 
+         * @param {'started' | 'inprogress' | 'finished'} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCourseTasks(courseId: number, options?: any): AxiosPromise<Array<CourseTaskDto>> {
-            return localVarFp.getCourseTasks(courseId, options).then((request) => request(axios, basePath));
+        getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: any): AxiosPromise<Array<CourseTaskDto>> {
+            return localVarFp.getCourseTasks(courseId, status, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1780,12 +1823,13 @@ export class CoursesTasksApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
+     * @param {'started' | 'inprogress' | 'finished'} [status] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesTasksApi
      */
-    public getCourseTasks(courseId: number, options?: AxiosRequestConfig) {
-        return CoursesTasksApiFp(this.configuration).getCourseTasks(courseId, options).then((request) => request(this.axios, this.basePath));
+    public getCourseTasks(courseId: number, status?: 'started' | 'inprogress' | 'finished', options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getCourseTasks(courseId, status, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
