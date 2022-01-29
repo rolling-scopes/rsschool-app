@@ -12,6 +12,7 @@ import { CourseEvent, CourseService, CourseTaskDetails } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import css from 'styled-jsx/css';
 import { TIMEZONES } from '../../configs/timezones';
+import { TASK_TYPES } from 'data/taskTypes';
 
 enum EventTypeColor {
   deadline = '#ff0000',
@@ -49,14 +50,7 @@ const EventTypeToName: Record<string, string> = {
   lecture_mixed: 'mixed lecture',
   lecture_self_study: 'self study',
   warmup: 'warm-up',
-  jstask: 'js task',
-  kotlintask: 'kotlin task',
-  objctask: 'objc task',
-  htmltask: 'html task',
-  codejam: 'code jam',
-  externaltask: 'external task',
-  codewars: 'codewars',
-  selfeducation: 'self education',
+  ...TASK_TYPES.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {} as Record<string, string>),
 };
 
 export function SchedulePage(props: CoursePageProps) {

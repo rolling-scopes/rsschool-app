@@ -101,7 +101,7 @@ export default withCourseData(withSession(Page));
 
 const isCheckedByMentor = (task: CourseTask) => task.checker === 'mentor';
 const isCheckedByAssigned = (task: CourseTask) => task.checker === 'assigned';
-const isNotAutoChecked = (task: CourseTask) => task.verification !== 'auto' && task.checker !== 'auto-test';
+const isNotAutoChecked = (task: CourseTask) => task.checker !== 'auto-test';
 const isCheckedByTaskOwner = (task: CourseTask) => task.checker === 'taskOwner';
 const hasStudentEndDate = (task: CourseTask) => Boolean(task.studentEndDate);
 const isNotUseJury = (task: CourseTask) => !task.useJury;

@@ -17,7 +17,6 @@ export interface CourseTask {
   name: string;
   maxScore: number | null;
   scoreWeight: number;
-  verification: 'auto' | 'manual';
   type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
