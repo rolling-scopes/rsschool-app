@@ -4,7 +4,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseEnumPipe,
   ParseIntPipe,
   Query,
   UseGuards,
@@ -39,7 +38,7 @@ export class CourseTasksController {
   @ApiQuery({ name: 'status', enum: ['started', 'inprogress', 'finished'], required: false })
   public async getAll(
     @Param('courseId', ParseIntPipe) courseId: number,
-    @Query('status', new ParseEnumPipe(Status)) status?: Status,
+    @Query('status') status?: Status,
   ): Promise<CourseTaskDto[]> {
     const data = await this.courseTasksService.getAll(courseId, status);
     return data.map(item => new CourseTaskDto(item));
