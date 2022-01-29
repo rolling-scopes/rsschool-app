@@ -1,4 +1,4 @@
-import { CourseRole } from '../../../models';
+import { CourseRole, IUserSession } from '../../../models';
 import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
 
 describe('getPermissions', () => {
@@ -384,9 +384,9 @@ describe('defineRole', () => {
           registryCourses: [{ courseId: 1 }],
           studentCourses: null,
           roles: {},
-          coursesRoles: {
-            1: [CourseRole.Manager],
-          },
+          session: {
+            courses: { 1: { roles: [CourseRole.Manager] } },
+          } as unknown as IUserSession,
           userGithubId: 'denis',
         }),
       ).toBe('coursemanager');

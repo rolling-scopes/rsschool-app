@@ -4,7 +4,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
-import { IUserSession, CourseRole } from '../../models';
+import { IUserSession, NewCourseRole } from '../../models';
 import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
@@ -67,9 +67,11 @@ export function registryRouter(logger?: ILogger) {
     if (state.isAdmin) {
       mentorRegistries = await repository.findAll();
     } else {
-      const coursesRoles = state.coursesRoles ?? {};
+      const coursesRoles = state.courses ?? {};
       const coursesIds = Object.entries(coursesRoles)
-        .filter(([_, value = []]) => value.includes(CourseRole.Manager) || value.includes(CourseRole.Supervisor))
+        .filter(
+          ([_, value]) => value.roles.includes(NewCourseRole.Manager) || value.roles.includes(NewCourseRole.Supervisor),
+        )
         .map(([key]) => Number(key));
       mentorRegistries = await repository.findByCoursesIds(coursesIds);
     }

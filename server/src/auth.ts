@@ -14,7 +14,7 @@ export function setupPassport(logger: ILogger) {
         scope: ['read:user', 'user:email'],
       },
       (_1: string, _2: any, profile: Profile, cb: (err: any, value: any) => void) => {
-        logger.info('request user');
+        logger.error('Obsolete "Create User" method');
         createUser(profile)
           .then(result => {
             logger.info({ userId: result.id }, 'Created user');

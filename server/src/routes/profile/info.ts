@@ -22,7 +22,8 @@ import {
 } from './permissions';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId: userGithubId, roles, coursesRoles, isAdmin } = ctx.state!.user as IUserSession;
+  const session = ctx.state!.user as IUserSession;
+  const { githubId: userGithubId, roles, isAdmin } = ctx.state!.user as IUserSession;
   const { githubId: requestedGithubId = userGithubId } = ctx.query as { githubId: string | undefined };
 
   if (!requestedGithubId) {
@@ -45,7 +46,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     const [studentCourses, registryCourses] = !relationsRoles
       ? await Promise.all([getStudentCourses(requestedGithubId), getMentorRegistryCourses(requestedGithubId)])
       : [null, null];
-    role = defineRole({ relationsRoles, studentCourses, registryCourses, roles, coursesRoles, userGithubId });
+    role = defineRole({ relationsRoles, studentCourses, registryCourses, roles, session, userGithubId });
     permissions = getPermissions({ isAdmin, isProfileOwner, role, permissions: profilePermissions });
   }
 

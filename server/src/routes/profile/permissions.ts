@@ -11,10 +11,11 @@ import {
   TaskChecker,
   TaskInterviewResult,
   StageInterview,
-  CourseRoles,
   StundetMentorRoles as StudentMentorRoles,
-  CourseRole,
   MentorRegistry,
+  isManager,
+  IUserSession,
+  isSupervisor,
 } from '../../models';
 import { defaultProfilePermissionsSettings } from '../../models/profilePermissions';
 import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
@@ -140,23 +141,23 @@ export const defineRole = ({
   studentCourses,
   registryCourses,
   roles,
-  coursesRoles,
+  session,
   userGithubId,
 }: {
   relationsRoles: Relations | null;
   registryCourses: { courseId: number }[] | null;
   studentCourses: { courseId: number }[] | null;
-  coursesRoles?: CourseRoles;
+  session?: IUserSession;
   roles: StudentMentorRoles;
   userGithubId: string;
 }): RelationRole => {
-  if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Manager))) {
+  if (registryCourses?.some(({ courseId }) => isManager(session, courseId))) {
     return 'coursemanager';
-  } else if (registryCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Supervisor))) {
+  } else if (registryCourses?.some(({ courseId }) => isSupervisor(session, courseId))) {
     return 'coursesupervisor';
-  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Manager))) {
+  } else if (studentCourses?.some(({ courseId }) => isManager(session, courseId))) {
     return 'coursemanager';
-  } else if (studentCourses?.some(({ courseId }) => coursesRoles?.[courseId]?.includes(CourseRole.Supervisor))) {
+  } else if (studentCourses?.some(({ courseId }) => isSupervisor(session, courseId))) {
     return 'coursemanager';
   } else if (relationsRoles) {
     const { student, mentors, interviewers, stageInterviewers, checkers } = relationsRoles;

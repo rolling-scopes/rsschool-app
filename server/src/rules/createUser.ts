@@ -65,6 +65,7 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
       isHirer,
       roles: {},
       coursesRoles: {},
+      courses: {},
     };
   }
   const roles: { [key: string]: 'student' | 'mentor' } = {};
@@ -116,5 +117,6 @@ export async function createUser(profile: Profile, admin: boolean = false): Prom
     id: userId,
     coursesRoles,
     githubId: username,
+    courses: {},
   };
 }
