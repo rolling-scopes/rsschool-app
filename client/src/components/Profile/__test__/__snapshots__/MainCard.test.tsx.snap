@@ -2,7 +2,7 @@
 
 exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
 <Fragment>
-  <Card>
+  <ForwardRef>
     <GithubAvatar
       githubId="piter"
       size={96}
@@ -68,13 +68,13 @@ exports[`MainCard Should render correctly if is editing mode disabled 1`] = `
         Minsk, Belarus
       </span>
     </Paragraph>
-  </Card>
+  </ForwardRef>
 </Fragment>
 `;
 
 exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
 <Fragment>
-  <Card
+  <ForwardRef
     actions={
       Array [
         <ForwardRef(EditOutlined)
@@ -222,6 +222,6 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
       hideSettings={[Function]}
       isSettingsVisible={false}
     />
-  </Card>
+  </ForwardRef>
 </Fragment>
 `;

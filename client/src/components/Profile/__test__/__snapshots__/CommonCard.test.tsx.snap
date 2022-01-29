@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CommonCard Should render correctly if is editing mode enabled 1`] = `
-<Card
+<ForwardRef
   actions={
     Array [
       <ForwardRef(EditOutlined)
@@ -44,11 +44,11 @@ exports[`CommonCard Should render correctly if is editing mode enabled 1`] = `
     hideSettings={[Function]}
     isSettingsVisible={false}
   />
-</Card>
+</ForwardRef>
 `;
 
 exports[`CommonCard Should render correctly if is null content passed 1`] = `
-<Card
+<ForwardRef
   title={
     <Title
       ellipsis={true}
@@ -71,11 +71,11 @@ exports[`CommonCard Should render correctly if is null content passed 1`] = `
   <Empty
     image={<Simple />}
   />
-</Card>
+</ForwardRef>
 `;
 
 exports[`CommonCard Should render correctly if just basic props is present 1`] = `
-<Card
+<ForwardRef
   title={
     <Title
       ellipsis={true}
@@ -98,5 +98,5 @@ exports[`CommonCard Should render correctly if just basic props is present 1`] =
   <p>
     Card body
   </p>
-</Card>
+</ForwardRef>
 `;
