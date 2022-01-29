@@ -23,6 +23,7 @@ import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
 import { useLocalStorage } from 'react-use';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Text } = Typography;
 
@@ -100,7 +101,7 @@ const getColumns = (
   {
     title: 'Type',
     dataIndex: ['event', 'type'],
-    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors),
+    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors, TASK_TYPES_MAP),
     editable: true,
   },
   {

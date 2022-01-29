@@ -6,6 +6,7 @@ import moment from 'moment-timezone';
 import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -147,7 +148,7 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
       <tbody key={id}>
         <tr>
           <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
-          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors)}</th>
+          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors, TASK_TYPES_MAP)}</th>
           <th style={{ width: '80%' }}>
             <Link
               prefetch={false}

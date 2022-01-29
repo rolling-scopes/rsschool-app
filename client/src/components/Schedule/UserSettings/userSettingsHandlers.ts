@@ -2,6 +2,7 @@ import { ColorState as IColorState } from 'react-color';
 import { CSSProperties } from 'react';
 import _ from 'lodash';
 import { EVENT_TYPES, TASK_TYPES } from '../model';
+import { CourseTaskDtoTypeEnum } from 'api';
 
 export const DEADLINE_COLOR = '#ff0000';
 export const DEFAULT_COLOR = '#308e00';
@@ -25,32 +26,32 @@ export const pickerColors = [
 ];
 
 export const DEFAULT_COLORS = {
-  'CV HTML': '#004dcf',
-  'CV Markdown': '#2db7f5',
-  'Code Jam': '#fa28ff',
+  [CourseTaskDtoTypeEnum.Cvhtml]: '#004dcf',
+  [CourseTaskDtoTypeEnum.Cvmarkdown]: '#2db7f5',
+  [CourseTaskDtoTypeEnum.Codejam]: '#fa28ff',
   'Code review': '#b04df0',
-  Codewars: '#b04df0',
+  [CourseTaskDtoTypeEnum.Codewars]: '#b04df0',
   'Cross-check': '#004dcf',
-  'HTML task': DEFAULT_COLOR,
+  [CourseTaskDtoTypeEnum.Htmltask]: DEFAULT_COLOR,
   Info: '#13c2c2',
-  Interview: '#13c2c2',
-  'JS task': '#4b5a59',
-  'Kotlin task': '#ffa940',
+  [CourseTaskDtoTypeEnum.Interview]: '#13c2c2',
+  [CourseTaskDtoTypeEnum.Jstask]: '#4b5a59',
+  [CourseTaskDtoTypeEnum.Kotlintask]: '#ffa940',
   Meetup: '#2db7f5',
-  'ObjC task': '#13c2c2',
+  [CourseTaskDtoTypeEnum.Objctask]: '#13c2c2',
   'Offline Lecture': '#fa28ff',
   'Online Lecture': '#b04df0',
   'Online/Offline Lecture': '#959e3c',
-  'Self Education': '#959e3c',
+  [CourseTaskDtoTypeEnum.Selfeducation]: '#959e3c',
   'Self-studying': '#4b5a59',
   Special: DEFAULT_COLOR,
   Task: '#2db7f5',
-  'Technical Screening': '#ffa940',
-  Test: '#4b5a59',
+  [CourseTaskDtoTypeEnum.StageInterview]: '#ffa940',
+  [CourseTaskDtoTypeEnum.Test]: '#4b5a59',
   'Warm-up': '#ffa940',
   Webinar: '#004dcf',
   Workshop: DEFAULT_COLOR,
-  'Jupyter Notebook': '#fa28ff',
+  [CourseTaskDtoTypeEnum.Ipynb]: '#fa28ff',
   deadline: DEADLINE_COLOR,
   default: DEFAULT_COLOR,
   'Cross-Check deadline': DEADLINE_COLOR,
