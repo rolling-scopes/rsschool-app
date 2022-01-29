@@ -15,3 +15,8 @@ export const TASK_TYPES = [
   { id: CourseTaskDtoTypeEnum.Interview, name: 'Interview' },
   { id: CourseTaskDtoTypeEnum.StageInterview, name: 'Technical Screening' },
 ];
+
+export const TASK_TYPES_MAP = TASK_TYPES.reduce(
+  (acc, { id, name }) => ({ ...acc, [id]: name }),
+  {} as Record<string, string>,
+);
