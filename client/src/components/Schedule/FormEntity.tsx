@@ -17,7 +17,6 @@ import {
   message,
   Divider,
   Collapse,
-  Radio,
   Checkbox,
 } from 'antd';
 import moment from 'moment-timezone';
@@ -236,13 +235,6 @@ const FormEntity: React.FC<Props> = ({
 
           <Divider />
 
-          <Form.Item name="verification" label="Verification (deprecated)">
-            <Radio.Group>
-              <Radio value="manual">Manual</Radio>
-              <Radio value="auto">Auto</Radio>
-            </Radio.Group>
-          </Form.Item>
-
           <Collapse>
             <Collapse.Panel header="Github" key="1">
               <Form.Item name="githubPrRequired" label="" valuePropName="checked">
@@ -310,7 +302,6 @@ const getInitialValues = (entityType: string, data: any) => {
       scoreWeight: 1,
       timeZone,
       checker: 'mentor',
-      verification: 'manual',
     };
   }
 
@@ -325,7 +316,6 @@ const getInitialValues = (entityType: string, data: any) => {
       scoreWeight: (data && data.scoreWeight) ?? 1,
       description: data.description ? data.description : '',
       checker: data.checker || 'mentor',
-      verification: data.verification || 'manual',
       range:
         data && data.studentStartDate && data.studentEndDate
           ? [
@@ -364,7 +354,6 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
     type: values.type,
     descriptionUrl: values.descriptionUrl || '',
     description: values.description || '',
-    verification: values.verification,
     githubPrRequired: values.githubPrRequired,
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     githubRepoName: values.githubRepoName,

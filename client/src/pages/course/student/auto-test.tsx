@@ -538,12 +538,7 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 }
 
 function filterAutoTestTasks(tasks: CourseTask[]) {
-  return tasks.filter(
-    task =>
-      (task.verification === 'auto' || task.checker === 'auto-test') &&
-      task.checker !== 'taskOwner' &&
-      task.type !== 'test',
-  );
+  return tasks.filter(task => task.checker === 'auto-test' && task.type !== 'test');
 }
 
 function getRandomQuestions(questions: SelfEducationQuestion[]) {

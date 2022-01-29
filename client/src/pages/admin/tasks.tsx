@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Radio, Select, Table } from 'antd';
+import { Button, Checkbox, Form, Row, Col, Input, Collapse, Layout, message, Select, Table } from 'antd';
 import { AdminSider } from 'components/AdminSider';
 import { Header } from 'components/Header';
 import withSession, { Session } from 'components/withSession';
@@ -10,6 +10,8 @@ import { Task, TaskService } from 'services/task';
 import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
+import { SKILLS } from 'data/skills';
+
 import { isAnyCoursePowerUser } from '../../domain/user';
 
 const { Content } = Layout;
@@ -65,6 +67,13 @@ function Page(props: Props) {
 
   const renderModal = useCallback(() => {
     const allTags = union(...data.map(d => d.tags || []));
+    const allSkills = union(
+      data
+        .map(d => d.skills || [])
+        .concat(SKILLS)
+        .flat()
+        .sort(),
+    );
     return (
       <ModalForm
         data={modalData}
@@ -144,12 +153,15 @@ function Page(props: Props) {
         </Form.Item>
 
         <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item name="verification" label="Verification (deprecated)">
-              <Radio.Group>
-                <Radio value="manual">Manual</Radio>
-                <Radio value="auto">Auto</Radio>
-              </Radio.Group>
+          <Col span={24}>
+            <Form.Item name="skills" label="Skills">
+              <Select mode="tags">
+                {allSkills.map(skill => (
+                  <Select.Option key={skill} value={skill}>
+                    {skill}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>
@@ -211,12 +223,12 @@ function createRecord(values: any) {
   const data: Partial<Task> = {
     type: values.type,
     name: values.name,
-    verification: values.verification,
     githubPrRequired: !!values.githubPrRequired,
     descriptionUrl: values.descriptionUrl,
     githubRepoName: values.githubRepoName,
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     tags: values.tags,
+    skills: values.skills?.map((skill: string) => skill.toLowerCase()),
     discipline: values.discipline,
     attributes: JSON.parse(values.attributes ?? '{}'),
   };
@@ -256,6 +268,11 @@ function getColumns(handleEditItem: any) {
       render: tagsRenderer,
     },
     {
+      title: 'Skills',
+      dataIndex: 'skills',
+      render: tagsRenderer,
+    },
+    {
       title: 'Type',
       dataIndex: 'type',
       sorter: stringSorter<Task>('type'),
@@ -282,10 +299,6 @@ function getColumns(handleEditItem: any) {
       dataIndex: 'githubRepoName',
     },
     {
-      title: 'Verification',
-      dataIndex: 'verification',
-    },
-    {
       title: 'Actions',
       dataIndex: 'actions',
       render: (_: any, record: Task) => <a onClick={() => handleEditItem(record)}>Edit</a>,
@@ -294,10 +307,7 @@ function getColumns(handleEditItem: any) {
 }
 
 function getInitialValues(modalData: Partial<Task>) {
-  return {
-    ...modalData,
-    verification: modalData.verification || 'manual',
-  };
+  return modalData;
 }
 
 export default withSession(Page);

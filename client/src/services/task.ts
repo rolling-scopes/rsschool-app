@@ -23,11 +23,11 @@ export interface Task {
   descriptionUrl: string | null;
   description: string | null;
   githubPrRequired: boolean | null;
-  verification: 'manual' | 'auto';
   type: TaskType;
   githubRepoName: string;
   sourceGithubRepoUrl: string;
   tags: string[];
+  skills: string[];
   discipline: string;
   attributes: Record<string, any>;
 }
