@@ -1,19 +1,7 @@
 import axios from 'axios';
+import { CourseTaskDtoTypeEnum } from 'api';
 
-export type TaskType =
-  | 'jstask'
-  | 'kotlintask'
-  | 'objctask'
-  | 'htmltask'
-  | 'ipynb'
-  | 'cv:markdown'
-  | 'cv:html'
-  | 'selfeducation'
-  | 'codewars'
-  | 'test'
-  | 'interview'
-  | 'stage-interview'
-  | 'codejam';
+export type TaskType = CourseTaskDtoTypeEnum;
 
 export interface Task {
   id: number;

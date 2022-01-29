@@ -1,18 +1,4 @@
-import {
-  Button,
-  Col,
-  Table,
-  Form,
-  Input,
-  message,
-  Row,
-  Typography,
-  notification,
-  Radio,
-  Checkbox,
-  Upload,
-  Spin,
-} from 'antd';
+import { Button, Col, Table, Form, Input, message, Row, Typography, notification, Radio, Checkbox, Upload } from 'antd';
 import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
@@ -36,6 +22,7 @@ import { AxiosError } from 'axios';
 import shuffle from 'lodash/shuffle';
 import snakeCase from 'lodash/snakeCase';
 import { FilesService } from 'services/files';
+import { CourseTaskDtoTypeEnum } from 'api';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -279,51 +266,40 @@ function readFile(file: any) {
 
 function UploadJupyterNotebook() {
   const [uploadFile, setUploadFile] = useState<UploadFile | null>(null);
-  const [loading, setLoading] = useState(false);
-  const handleFileChose = async (info: any) => {
-    switch (info.file.status) {
-      case 'done': {
-        setUploadFile(info.file);
-        setLoading(false);
-        break;
-      }
-    }
-  };
+  const handleFileChose = async (info: any) => setUploadFile(info.file);
   return (
-    <Spin spinning={loading}>
-      <Form.Item name="upload">
-        <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
-          <Button>
-            <UploadOutlined /> Select Jupyter Notebook
-          </Button>
-        </Upload>
-      </Form.Item>
-    </Spin>
+    <Form.Item name="upload">
+      <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
+        <Button>
+          <UploadOutlined /> Select Jupyter Notebook
+        </Button>
+      </Upload>
+    </Form.Item>
   );
 }
 
 function renderTaskFields(githubId: string, courseTask: CourseTask | undefined, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
-    case 'jstask':
+    case CourseTaskDtoTypeEnum.Jstask:
       return renderJsTaskFields(repoUrl);
-    case 'kotlintask':
-    case 'objctask':
+    case CourseTaskDtoTypeEnum.Kotlintask:
+    case CourseTaskDtoTypeEnum.Objctask:
       return renderKotlinTaskFields(repoUrl);
-    case 'ipynb':
+    case CourseTaskDtoTypeEnum.Ipynb:
       return (
         <Row>
           <UploadJupyterNotebook />
         </Row>
       );
-    case 'selfeducation':
+    case CourseTaskDtoTypeEnum.Selfeducation:
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
           {renderSelfEducation(courseTask, verifications)}
         </>
       );
-    case 'codewars': {
+    case CourseTaskDtoTypeEnum.Codewars: {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -549,7 +525,7 @@ function getRandomQuestions(questions: SelfEducationQuestion[]) {
 function getSubmitData(task: CourseTask, values: any) {
   let data: object = {};
   switch (task.type) {
-    case 'selfeducation':
+    case CourseTaskDtoTypeEnum.Selfeducation:
       data = Object.entries(values)
         .filter(([key]) => /answer/.test(key))
         .map(([key, value]) => {
@@ -557,7 +533,7 @@ function getSubmitData(task: CourseTask, values: any) {
           return { index: Number(index), value };
         });
       break;
-    case 'codewars':
+    case CourseTaskDtoTypeEnum.Codewars:
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -569,17 +545,17 @@ function getSubmitData(task: CourseTask, values: any) {
       };
       break;
 
-    case 'jstask':
-    case 'kotlintask':
-    case 'objctask':
+    case CourseTaskDtoTypeEnum.Jstask:
+    case CourseTaskDtoTypeEnum.Kotlintask:
+    case CourseTaskDtoTypeEnum.Objctask:
       data = {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
       };
       break;
 
-    case 'cv:markdown':
-    case 'cv:html':
+    case CourseTaskDtoTypeEnum.Cvmarkdown:
+    case CourseTaskDtoTypeEnum.Cvhtml:
     case null:
       data = {};
       break;

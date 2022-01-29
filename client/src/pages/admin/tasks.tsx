@@ -11,6 +11,7 @@ import { githubRepoUrl, urlPattern } from 'services/validators';
 import { ModalForm } from 'components/Forms';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 import { SKILLS } from 'data/skills';
+import { TASK_TYPES } from 'data/taskTypes';
 
 import { isAnyCoursePowerUser } from '../../domain/user';
 
@@ -93,19 +94,11 @@ function Page(props: Props) {
           <Col span={12}>
             <Form.Item name="type" label="Task Type" rules={[{ required: true, message: 'Please select a type' }]}>
               <Select>
-                <Select.Option value="jstask">JS task</Select.Option>
-                <Select.Option value="kotlintask">Kotlin task</Select.Option>
-                <Select.Option value="objctask">ObjC task</Select.Option>
-                <Select.Option value="htmltask">HTML task</Select.Option>
-                <Select.Option value="ipynb">Jupyter Notebook</Select.Option>
-                <Select.Option value="cv:markdown">CV Markdown</Select.Option>
-                <Select.Option value="cv:html">CV HTML</Select.Option>
-                <Select.Option value="selfeducation">RS School App Test</Select.Option>
-                <Select.Option value="codewars">Codewars</Select.Option>
-                <Select.Option value="test">Google Form Test</Select.Option>
-                <Select.Option value="codejam">Code Jam</Select.Option>
-                <Select.Option value="interview">Interview</Select.Option>
-                <Select.Option value="stage-interview">Technical Screening</Select.Option>
+                {TASK_TYPES.map(({ id, name }) => (
+                  <Select.Option key={id} value={id}>
+                    {name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
