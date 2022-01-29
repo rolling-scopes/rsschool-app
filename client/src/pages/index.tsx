@@ -1,5 +1,5 @@
 import { withSession } from 'components/withSession';
-import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
+import { getServerSideProps } from 'modules/Home/data/getServerSideProps';
 import { HomePage } from 'modules/Home/pages/HomePage';
 
 export { getServerSideProps };
