@@ -5,6 +5,13 @@ import type { ProfileCourseDto } from 'api';
 
 export const noAccessResponse: GetServerSidePropsResult<any> = {
   redirect: {
+    destination: '/login',
+    permanent: false,
+  },
+};
+
+export const notAuthorizedResponse: GetServerSidePropsResult<any> = {
+  redirect: {
     destination: '/course/403',
     permanent: false,
   },
@@ -16,10 +23,13 @@ export const getCourseProps: GetServerSideProps<{ course: ProfileCourseDto }> = 
   try {
     const alias = ctx.query.course as string;
     const token = getTokenFromContext(ctx);
+    if (token == null) {
+      return noAccessResponse;
+    }
     const courses = await new UserService(token).getCourses();
     const course = courses.find(course => course.alias === alias) ?? null;
     if (course == null) {
-      return noAccessResponse;
+      return notAuthorizedResponse;
     }
     return {
       props: { course },

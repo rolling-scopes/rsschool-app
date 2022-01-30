@@ -8,6 +8,9 @@ function withCourses(WrappedComponent: React.ComponentType<any>) {
     static async getInitialProps(ctx: NextPageContext) {
       try {
         const token = getTokenFromContext(ctx);
+        if (token == null) {
+          return { courses: [] };
+        }
         const courses = await new UserService(token).getCourses();
         return { courses };
       } catch (err) {

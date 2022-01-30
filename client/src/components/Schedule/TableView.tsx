@@ -11,8 +11,6 @@ import {
   getColumnSearchProps,
   tagsRenderer,
   dateWithTimeZoneRenderer,
-  urlRenderer,
-  placeRenderer,
   renderTagWithStyle,
   scoreRenderer,
 } from 'components/Table';
@@ -25,6 +23,7 @@ import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
 import { useLocalStorage } from 'react-use';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Text } = Typography;
 
@@ -102,7 +101,7 @@ const getColumns = (
   {
     title: 'Type',
     dataIndex: ['event', 'type'],
-    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors),
+    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors, TASK_TYPES_MAP),
     editable: true,
   },
   {
@@ -130,33 +129,12 @@ const getColumns = (
     ...getColumnSearchProps('event.name'),
     editable: true,
   },
-  {
-    title: 'Url',
-    dataIndex: ['event', 'descriptionUrl'],
-    render: urlRenderer,
-    editable: true,
-  },
   { title: 'Duration', width: 60, dataIndex: 'duration', editable: true },
   {
     title: 'Organizer',
     dataIndex: ['organizer', 'githubId'],
     render: (value: string) => !!value && <GithubUserLink value={value} />,
     ...getColumnSearchProps('organizer.githubId'),
-    editable: true,
-  },
-  {
-    title: 'Place',
-    dataIndex: 'place',
-    render: placeRenderer,
-    onCell: () => {
-      return {
-        style: {
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          maxWidth: 250,
-        },
-      };
-    },
     editable: true,
   },
   {
@@ -414,12 +392,16 @@ const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitF
     return 'table-row-done';
   }
 
-  if (!isSplitedByWeek) {
-    return '';
+  if (moment(record.dateTime).year() === moment().year() && moment(record.dateTime).isoWeek() === moment().isoWeek()) {
+    if (moment(record.dateTime).isoWeekday() === moment().isoWeekday()) {
+      return 'table-row-current-day';
+    } else {
+      return 'table-row-current';
+    }
   }
 
-  if (moment(record.dateTime).week() === moment().week()) {
-    return 'table-row-current';
+  if (!isSplitedByWeek) {
+    return '';
   }
 
   return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-odd';

@@ -114,7 +114,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
     }
     title="Contacts"
   >
-    <Card
+    <ForwardRef
       title={
         <Title
           ellipsis={true}
@@ -889,7 +889,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
           </List>
         </div>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </ContactsCard>
 `;
@@ -993,7 +993,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
     }
     title="Contacts"
   >
-    <Card
+    <ForwardRef
       actions={
         Array [
           <ForwardRef(EditOutlined)
@@ -3367,7 +3367,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           </li>
         </ul>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </ContactsCard>
 `;

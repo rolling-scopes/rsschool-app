@@ -191,7 +191,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
     icon={<ForwardRef(QuestionCircleOutlined) />}
     title="Pre-Screening Interviews"
   >
-    <Card
+    <ForwardRef
       title={
         <Title
           ellipsis={true}
@@ -3025,7 +3025,7 @@ exports[`PreScreeningIviewCard Should render correctly 1`] = `
           </List>
         </div>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </PreScreeningIviewsCard>
 `;

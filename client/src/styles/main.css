@@ -83,7 +83,11 @@ thead.ant-table-thead > tr > th {
 
 /* table-row-* are used for Schedule Table view - Split by week feature */
 .table-row-current {
-  background-color: #edfaf8;
+  background-color: #2f8e0017;
+}
+
+.table-row-current-day {
+  background-color: #2f8e002d;
 }
 
 .table-row-odd {
