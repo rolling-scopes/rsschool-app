@@ -1,28 +1,25 @@
-import React, { useState } from 'react';
-import { useAsync } from 'react-use';
-import Link from 'next/link';
-import type { AlertDto } from 'api';
 import { ToolTwoTone } from '@ant-design/icons';
 import { Alert, Button, Col, Layout, List, Row, Select, Typography } from 'antd';
+import type { AlertDto } from 'api';
 import { AdminSider } from 'components/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
 import { Session } from 'components/withSession';
+import { isAdmin, isAnyCoursePowerUser, isAnyMentor, isHirer } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
 import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
-import { courseManagementLinks, LinkData, links } from 'modules/Home/data/links';
-import { loadHomeData } from 'modules/Home/data/loadHomeData';
-import { getCourses } from 'modules/Home/data/getCourses';
+import { getAdminLinks, getCourseLinks } from 'modules/Home/data/links';
 import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
-import { StudentSummary } from 'services/course';
+import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
+import Link from 'next/link';
+import React, { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { AlertsService } from 'services/alerts';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
-import { AlertsService } from 'services/alerts';
-import { isAdmin, isAnyCoursePowerUser, isHirer } from 'domain/user';
-import { isAnyMentor } from 'domain/user';
 
 const { Content } = Layout;
 
@@ -31,8 +28,6 @@ type Props = {
   session: Session;
 };
 
-type LinkRenderData = Pick<LinkData, 'icon' | 'name'> & { url: string };
-
 const mentorRegistryService = new MentorRegistryService();
 
 export function HomePage(props: Props) {
@@ -40,72 +35,40 @@ export function HomePage(props: Props) {
   const wasMentor = isAnyMentor(props.session);
   const hasRegistryBanner =
     wasMentor && plannedCourses.length > 0 && plannedCourses.every(course => props.session.courses[course.id] == null);
-  const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
 
   const isAdminUser = isAdmin(props.session);
-  const isCoursePowerUser = isAnyCoursePowerUser(props.session);
+  const isPowerUser = isAnyCoursePowerUser(props.session);
   const isHirerUser = isHirer(props.session);
-  const isPowerUser = isAdminUser || isCoursePowerUser;
 
-  const courses = getCourses(props.session, props.courses ?? []);
+  const courses = props.courses ?? [];
   const [activeCourse, saveActiveCouseId] = useActiveCourse(courses);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [preselectedCourses, setPreselectedCourses] = useState<Course[]>([]);
-  const [courseTasks, setCourseTasks] = useState<{ id: number }[]>([]);
   const [alerts, setAlerts] = useState<AlertDto[]>([]);
-  const courseLinks = activeCourse
-    ? links
-        .filter(
-          route =>
-            isAdminUser ||
-            (route.access(props.session, activeCourse.id) &&
-              (route.courseAccess?.(props.session, activeCourse) ?? true)),
-        )
-        .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
-    : [];
-  const adminLinks = activeCourse
-    ? courseManagementLinks
-        .filter(
-          route =>
-            isAdminUser ||
-            (route.access(props.session, activeCourse.id) &&
-              (route.courseAccess?.(props.session, activeCourse) ?? true)),
-        )
-        .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
-    : [];
+
+  const courseLinks = useMemo(() => getCourseLinks(props.session, activeCourse), [activeCourse]);
+  const adminLinks = useMemo(() => getAdminLinks(props.session, activeCourse), [activeCourse]);
 
   const [approvedCourse] = preselectedCourses.filter(course => !props.session.courses?.[course.id]);
 
-  const handleChange = async (courseId: number) => {
-    saveActiveCouseId(courseId);
-  };
+  useAsync(async () => setAlerts(await new AlertsService().getAll()));
 
-  const loadCourseData = async () => {
-    if (!activeCourse) {
+  useAsync(async () => {
+    const mentor = await mentorRegistryService.getMentor().catch(() => null);
+    if (mentor == null) {
       return;
     }
-    const data = await loadHomeData(activeCourse.id, props.session);
-    setStudentSummary(data?.studentSummary ?? null);
-    setCourseTasks(data?.courseTasks ?? []);
-  };
-
-  useAsync(async () => {
-    await loadCourseData();
-  }, [activeCourse]);
-
-  useAsync(async () => {
-    const [allCourses, alerts] = await Promise.all([new CoursesService().getCourses(), new AlertsService().getAll()]);
-    setAllCourses(allCourses);
-    setAlerts(alerts);
-
-    const mentor = await mentorRegistryService.getMentor().catch(() => null);
+    const allCourses = await new CoursesService().getCourses();
     const preselectedCourses = allCourses.filter(c => mentor?.preselectedCourses.includes(c.id));
+    setAllCourses(allCourses);
     setPreselectedCourses(preselectedCourses);
-  }, []);
+  });
+
+  const { courseTasks, studentSummary } = useStudentSummary(props.session, activeCourse);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isCoursePowerUser} isHirer={isHirerUser} />}
+      {isPowerUser && <AdminSider isAdmin={isAdminUser} isCoursePowerUser={isPowerUser} isHirer={isHirerUser} />}
 
       <Layout style={{ background: '#fff' }}>
         <Header username={props.session.githubId} />
@@ -137,7 +100,7 @@ export function HomePage(props: Props) {
               optionFilterProp="children"
               style={{ width: 250, marginBottom: 16 }}
               defaultValue={activeCourse.id}
-              onChange={handleChange}
+              onChange={saveActiveCouseId}
             >
               {courses.map(course => (
                 <Select.Option key={course.id} value={course.id}>
@@ -154,7 +117,7 @@ export function HomePage(props: Props) {
                   size="small"
                   bordered
                   dataSource={courseLinks}
-                  renderItem={(linkInfo: LinkRenderData) => (
+                  renderItem={linkInfo => (
                     <List.Item key={linkInfo.url}>
                       <Link prefetch={false} href={linkInfo.url}>
                         <a>
@@ -177,7 +140,7 @@ export function HomePage(props: Props) {
                   }
                   bordered
                   dataSource={adminLinks}
-                  renderItem={(linkInfo: LinkRenderData) => (
+                  renderItem={linkInfo => (
                     <List.Item key={linkInfo.url}>
                       <Link prefetch={false} href={linkInfo.url}>
                         <a>
