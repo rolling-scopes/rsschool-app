@@ -10,13 +10,14 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  public getFullUserByGithubId(id: string) {
+  public async getByGithubId(id: string) {
     const githubId = id.toLowerCase();
 
-    return this.userRepository.findOne({
-      where: { githubId },
-      relations: ['mentors', 'students', 'courseUsers'],
-    });
+    const [user] = await this.userRepository.find({ where: { githubId } });
+    if (user == null) {
+      return null;
+    }
+    return user;
   }
 
   public getUserByProvider(provider: string, providerUserId: string) {

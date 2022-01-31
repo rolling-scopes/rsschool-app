@@ -1,16 +1,17 @@
+import { LoginData } from '@entities/loginState';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
-import { Profile } from 'passport';
+import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
-import { CourseUsersService, CourseTasksService } from '../courses';
+import { customAlphabet } from 'nanoid/async';
+import type { Profile } from 'passport';
+import { MoreThanOrEqual } from 'typeorm';
+import { ConfigService } from '../config';
+import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
+import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
-import { ConfigService } from '../config';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LoginData, LoginState } from '@entities/loginState';
-import { MoreThanOrEqual, Repository } from 'typeorm';
-import { customAlphabet } from 'nanoid/async';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -26,11 +27,10 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     readonly courseTaskService: CourseTasksService,
-    readonly courseUserService: CourseUsersService,
     readonly userService: UsersService,
     readonly configService: ConfigService,
-    @InjectRepository(LoginState)
-    private readonly loginStateRepository: Repository<LoginState>,
+    @InjectRepository(AuthRepository)
+    private readonly authRepository: AuthRepository,
   ) {
     this.admins = configService.users.admins;
   }
@@ -41,7 +41,7 @@ export class AuthService {
     const provider = profile.provider.toString();
     const result =
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
-      (await this.userService.getFullUserByGithubId(username));
+      (await this.userService.getByGithubId(username));
 
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({
@@ -51,8 +51,6 @@ export class AuthService {
         githubId: username,
       });
     }
-
-    const isAdmin = this.admins.includes(username) || admin;
 
     if (result == null) {
       const [email] = profile.emails?.filter((email: any) => !!email.primary) ?? [];
@@ -66,12 +64,20 @@ export class AuthService {
         lastName: profile.name ? profile.name.familyName : '',
         lastActivityTime: Date.now(),
       };
-      const createdUser = await this.userService.saveUser(user);
-      return new AuthUser(createdUser, [], isAdmin);
+      await this.userService.saveUser(user);
     }
 
-    const courseTasks = await this.courseTaskService.getByOwner(username);
-    return new AuthUser(result, courseTasks, isAdmin);
+    const authUser = await this.getAuthUser(username, admin);
+    return authUser;
+  }
+
+  public async getAuthUser(username: string, admin = false) {
+    const [authInfo, courseTasks] = await Promise.all([
+      this.authRepository.getAuthDetails(username),
+      this.courseTaskService.getByOwner(username),
+    ]);
+    const isAdmin = this.admins.includes(username) || admin;
+    return new AuthUser(authInfo, courseTasks, isAdmin);
   }
 
   public validateGithub(req: CurrentRequest) {
@@ -85,7 +91,7 @@ export class AuthService {
   public async createLoginState(data: LoginData) {
     const id = await nanoid();
 
-    await this.loginStateRepository.save({
+    await this.authRepository.save({
       id,
       data,
     });
@@ -96,7 +102,7 @@ export class AuthService {
   public getLoginState(id: string) {
     const date = new Date();
     date.setHours(date.getHours() - 1);
-    return this.loginStateRepository.findOne({
+    return this.authRepository.findOne({
       where: {
         id,
         createdDate: MoreThanOrEqual(date.toISOString()),

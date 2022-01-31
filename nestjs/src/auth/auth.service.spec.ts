@@ -4,8 +4,8 @@ import { CourseTasksService, CourseUsersService } from '../courses';
 import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { ConfigService } from '../config';
-import { LoginState } from '@entities/loginState';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { AuthRepository } from './auth.repository';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -22,7 +22,7 @@ describe('AuthService', () => {
           provide: ConfigService,
           useValue: { users: { admins: [] } },
         },
-        { provide: getRepositoryToken(LoginState), useValue: {} },
+        { provide: getRepositoryToken(AuthRepository), useValue: {} },
       ],
     }).compile();
 
