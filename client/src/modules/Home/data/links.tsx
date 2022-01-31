@@ -51,7 +51,9 @@ export type LinkData = {
   newTab?: boolean;
 };
 
-export const links: LinkData[] = [
+export type LinkRenderData = Pick<LinkData, 'icon' | 'name'> & { url: string };
+
+const links: LinkData[] = [
   {
     name: 'Dashboard',
     icon: <DashboardTwoTone />,
@@ -150,7 +152,7 @@ export const links: LinkData[] = [
   },
 ];
 
-export const courseManagementLinks: LinkData[] = [
+const courseManagementLinks: LinkData[] = [
   {
     name: 'Course Events',
     getUrl: (course: Course) => `/course/admin/events?course=${course.alias}`,
@@ -192,3 +194,27 @@ export const courseManagementLinks: LinkData[] = [
     access: isCourseManager,
   },
 ];
+
+export function getCourseLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {
+  return activeCourse
+    ? links
+        .filter(
+          route =>
+            isAdmin(session) ||
+            (route.access(session, activeCourse.id) && (route.courseAccess?.(session, activeCourse) ?? true)),
+        )
+        .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
+    : [];
+}
+
+export function getAdminLinks(session: Session, activeCourse: Course | null): LinkRenderData[] {
+  return activeCourse
+    ? courseManagementLinks
+        .filter(
+          route =>
+            isAdmin(session) ||
+            (route.access(session, activeCourse.id) && (route.courseAccess?.(session, activeCourse) ?? true)),
+        )
+        .map(({ name, icon, getUrl }) => ({ name, icon, url: getUrl(activeCourse) }))
+    : [];
+}
