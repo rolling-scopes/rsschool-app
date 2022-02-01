@@ -1,6 +1,6 @@
 import { CoursesInterviewsApi } from 'api';
 import { templates } from 'data/interviews';
-import { noAccessResponse } from 'modules/Course/data';
+import { notAuthorizedResponse, noAccessResponse } from 'modules/Course/data';
 import { GetServerSideProps } from 'next';
 import type { CourseOnlyPageProps } from 'services/models';
 import { UserService } from 'services/user';
@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     const course = courses.find(course => course.alias === alias) ?? null;
 
     if (course == null) {
-      return noAccessResponse;
+      return notAuthorizedResponse;
     }
 
     const response = await new CoursesInterviewsApi(getApiConfiguration(token)).getInterviews(course.id);
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       response.data.find(interview => (interview.attributes as { template?: string })?.template === type) ?? null;
 
     if (interview == null) {
-      return noAccessResponse;
+      return notAuthorizedResponse;
     }
     return {
       props: { course, interviewId: interview.id, type },

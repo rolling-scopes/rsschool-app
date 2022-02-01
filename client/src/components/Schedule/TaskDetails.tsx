@@ -37,7 +37,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
     duration,
     checker,
     pairsCount,
-    verification,
     githubRepoName,
     sourceGithubRepoUrl,
     githubPrRequired,
@@ -150,14 +149,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
         {isAdmin && (
           <>
             <Divider />
-            {verification && (
-              <Row justify="center" align="middle" gutter={[16, 16]}>
-                <Col>
-                  <Text>Verification: </Text>
-                  <Text strong>{verification} </Text>
-                </Col>
-              </Row>
-            )}
             {githubPrRequired && (
               <Row justify="center" align="middle" gutter={[16, 16]}>
                 <Col>

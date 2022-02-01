@@ -312,7 +312,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
     onPermissionsSettingsChange={[MockFunction]}
     title="Student Statistics"
   >
-    <Card
+    <ForwardRef
       title={
         <Title
           ellipsis={true}
@@ -1609,7 +1609,7 @@ exports[` Should render correctly if is editing mode disabled 1`] = `
           </List>
         </div>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </StudentStatsCard>
 `;
@@ -1926,7 +1926,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
     onPermissionsSettingsChange={[MockFunction]}
     title="Student Statistics"
   >
-    <Card
+    <ForwardRef
       actions={Array []}
       title={
         <Title
@@ -3566,7 +3566,7 @@ exports[` Should render correctly if is editing mode enabled 1`] = `
           </PermissionsSettingsDrawer>
         </div>
       </div>
-    </Card>
+    </ForwardRef>
   </CommonCard>
 </StudentStatsCard>
 `;

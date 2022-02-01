@@ -9,6 +9,7 @@ import { CourseEvent } from 'services/course';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Title, Text } = Typography;
 
@@ -43,7 +44,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, o
 
         {event.type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(event.type, storedTagColors)}</Col>
+            <Col>{renderTagWithStyle(event.type, storedTagColors, TASK_TYPES_MAP)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}

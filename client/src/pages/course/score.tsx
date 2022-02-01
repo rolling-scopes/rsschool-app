@@ -1,5 +1,5 @@
 import { withSession } from 'components/withSession';
-import { getServerSideProps } from 'modules/Score/data/getServerSideProps';
+import { getCourseProps as getServerSideProps } from 'modules/Course/data/getCourseProps';
 import { ScorePage } from 'modules/Score/pages/ScorePage';
 
 export { getServerSideProps };

@@ -28,6 +28,13 @@ export class CourseTaskDto {
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
+    this.publicAttributes = courseTask.task?.attributes?.['public'] ?? {};
+    this.checker = courseTask.checker;
+
+    this.githubRepoName = courseTask.task.githubRepoName;
+    this.sourceGithubRepoUrl = courseTask.task.sourceGithubRepoUrl;
+    this.taskOwnerId = courseTask.taskOwnerId;
+    this.useJury = courseTask.task.useJury;
   }
 
   @IsNotEmpty()
@@ -44,10 +51,23 @@ export class CourseTaskDto {
   name: string;
 
   @ApiProperty()
+  checker: string;
+
+  @ApiProperty()
+  githubRepoName: string;
+
+  @ApiProperty()
+  sourceGithubRepoUrl: string;
+
+  @ApiProperty()
   studentEndDate: string;
 
   @ApiProperty()
   descriptionUrl: string;
+
+  @IsNumber()
+  @ApiProperty()
+  taskOwnerId: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -58,4 +78,10 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
+
+  @ApiProperty()
+  publicAttributes: any;
+
+  @ApiProperty()
+  useJury: boolean;
 }

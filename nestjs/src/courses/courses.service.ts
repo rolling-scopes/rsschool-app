@@ -15,7 +15,7 @@ export class CoursesService {
   }
 
   public async getAll() {
-    return this.repository.find();
+    return this.repository.find({ order: { startDate: 'DESC' } });
   }
 
   public async getById(id: number) {
