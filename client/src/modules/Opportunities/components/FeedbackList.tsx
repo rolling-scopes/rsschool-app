@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function FeedbackList({ feedback, showCount }: Props) {
-  if (feedback == null) {
+  if (feedback == null || !feedback.length) {
     return null;
   }
 

@@ -5,6 +5,7 @@ import { User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
+import omit from 'lodash/omit';
 
 export class ResumeService {
   private resumeRepository = getCustomRepository(ResumeRepository);
@@ -30,31 +31,46 @@ export class ResumeService {
       ...cv,
       ...data,
     });
-    const { id, expires, githubId: omittedGithubId, isHidden, ...dataToSend } = result;
+
+    const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
+
     return dataToSend;
   }
 
-  public async getData(full: boolean) {
+  public async getViewData() {
     const resume = await this.resumeRepository.find(this.githubId);
-
-    if (!full) {
-      return resume;
-    }
 
     const [feedback, courses] = await Promise.all([
       this.feedbackRespository.getResumeFeedback(this.githubId),
       this.studentRepository.findAndIncludeStatsForResume(this.githubId),
     ]);
 
+    const selectedCourses = courses
+      .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+      .map(course => omit(course, ['courseId']));
+
+    const viewData = {
+      ...omit(resume, ['visibleCourses']),
+      feedback,
+      courses: selectedCourses,
+    };
+
+    return viewData;
+  }
+
+  public async getFormData() {
+    const resume = await this.resumeRepository.find(this.githubId);
+
+    const courses = await this.studentRepository.findStudentCourses(this.githubId);
+
     const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
 
-    const fullData = {
+    const formData = {
       ...resume,
-      feedback,
       courses: realCourses,
     };
 
-    return fullData;
+    return formData;
   }
 
   public async getConsent() {

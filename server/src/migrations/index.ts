@@ -10,6 +10,7 @@ import { Indicies1639418471577 } from './1639418471577-Indicies';
 import { Student1639502600339 } from './1639502600339-Student';
 import { CourseMigration1638302439645 } from './1638302439645-CourseMigration';
 import { Update1639427578702 } from './1639427578702-Update';
+import { ResumeSelectCourses1642884123347 } from './1642884123347-ResumeSelectCourses';
 import { Task1643481312933 } from './1643481312933-Task';
 
 export const migrations = [
@@ -25,5 +26,6 @@ export const migrations = [
   Student1639502600339,
   CourseMigration1638302439645,
   Update1639427578702,
+  ResumeSelectCourses1642884123347,
   Task1643481312933,
 ];

@@ -2,8 +2,17 @@ import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import moment from 'moment';
 import { Layout, Space, Button, Card, Modal, Typography, Row, Col, Popconfirm } from 'antd';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { ContactsForm, UserDataForm } from './forms';
-import { Contacts, UserData, AllUserCVData, AllDataToSubmit, UserDataToSubmit } from 'modules/Opportunities/models';
+import { ContactsForm, UserDataForm, VisibleCoursesForm } from './forms';
+import {
+  Contacts,
+  UserData,
+  AllUserCVData,
+  AllDataToSubmit,
+  UserDataToSubmit,
+  CourseDataShortened,
+  VisibleCoursesFormData,
+  VisibleCourses,
+} from 'modules/Opportunities/models';
 import { OpportunitiesService } from 'modules/Opportunities/services/opportunities';
 import { UserService } from 'services/user';
 import { CSSProperties, RefObject } from 'react';
@@ -35,9 +44,12 @@ function EditCV(props: Props) {
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
+  const [visibleCourses, setVisibleCourses] = useState<VisibleCourses | null>(null);
+  const [allCourses, setAllCourses] = useState<CourseDataShortened[] | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
+  const visibleCoursesFormRef: RefObject<FormInstance> = React.createRef();
 
   const showDeletionConfirmationModal = () => {
     const textStyle: CSSProperties = { textAlign: 'center' };
@@ -102,6 +114,8 @@ function EditCV(props: Props) {
       startFrom,
       fullTime,
       expires,
+      courses,
+      visibleCourses,
     } = cvData;
 
     const userData = {
@@ -130,6 +144,8 @@ function EditCV(props: Props) {
     setContactsList(contactsList);
     setUserData(userData);
     setExpiration(Number(expires));
+    setVisibleCourses(visibleCourses);
+    setAllCourses(courses);
 
     setLoading(false);
   }, []);
@@ -155,6 +171,7 @@ function EditCV(props: Props) {
       startFrom,
       telegram,
       website,
+      visibleCourses,
     } = data;
 
     const LOCATIONS_COUNT = 3;
@@ -179,6 +196,7 @@ function EditCV(props: Props) {
       website: nullifyConditional(website),
       startFrom: startFrom && moment(startFrom).format('YYYY-MM-DD'),
       fullTime,
+      visibleCourses,
     };
 
     const newCVData = await cvService.saveResumeData(cvData);
@@ -201,6 +219,7 @@ function EditCV(props: Props) {
       locations: newLocations,
       githubUsername: newGithub,
       website: newWebsite,
+      visibleCourses: newVisibleCourses,
     } = newCVData;
 
     const newUserData: UserData = {
@@ -228,6 +247,7 @@ function EditCV(props: Props) {
 
     setUserData(newUserData);
     setContactsList(newContacts);
+    setVisibleCourses(newVisibleCourses);
 
     setLoading(false);
   };
@@ -265,7 +285,7 @@ function EditCV(props: Props) {
       const expirationDateFormatted = `${year}-${addZeroPadding(month)}-${addZeroPadding(date)}`;
       return (
         <Text>
-          Expiration date: <Text strong>{expirationDateFormatted}</Text>
+          CV expiration date: <Text strong>{expirationDateFormatted}</Text>
         </Text>
       );
     }
@@ -283,10 +303,18 @@ function EditCV(props: Props) {
 
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
-    const contactsFormData: Contacts = contactsFormRef?.current?.getFieldsValue();
+    const contactsFormData: Contacts = contactsFormRef.current?.getFieldsValue();
+    const visibleCoursesFormData: VisibleCoursesFormData = visibleCoursesFormRef.current?.getFieldsValue();
+
+    const visibleCourses = Object.entries(visibleCoursesFormData).reduce((acc: VisibleCourses, [id, isVisible]) => {
+      if (isVisible) acc.push(Number(id));
+      return acc;
+    }, []);
+
     return {
       ...userFormData,
       ...contactsFormData,
+      visibleCourses,
     };
   };
 
@@ -390,21 +418,31 @@ function EditCV(props: Props) {
               align="start"
               style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
             >
-              {userData && <UserDataForm ref={userFormRef} userData={userData} />}
+              <Col>
+                <Row>{userData && <UserDataForm ref={userFormRef} userData={userData} />}</Row>
+                <Row>
+                  {visibleCourses && (
+                    <VisibleCoursesForm
+                      ref={visibleCoursesFormRef}
+                      courses={allCourses}
+                      visibleCourses={visibleCourses}
+                    />
+                  )}
+                </Row>
+              </Col>
               <Col>
                 <Row>{contactsList && <ContactsForm ref={contactsFormRef} contactsList={contactsList} />}</Row>
-                <br />
                 <Row>
-                  <Card size="small" style={{ width: '100%' }} title="CV expiration status">
+                  <Card size="small" style={{ width: '100%' }}>
                     {formatDate(expires)}
                   </Card>
                 </Row>
               </Col>
             </Space>
-            <Row justify="center" style={{ paddingTop: 24 }}>
+            <Row justify="center" style={{ paddingTop: '15px' }}>
               <Button
                 size="large"
-                style={{ ...buttonStyle, minWidth: 300 }}
+                style={{ ...buttonStyle, minWidth: '300px' }}
                 type="primary"
                 htmlType="button"
                 onClick={() => handleSave()}
@@ -413,7 +451,7 @@ function EditCV(props: Props) {
                 Save
               </Button>
             </Row>
-            <Row justify="center" style={{ paddingTop: 24 }}>
+            <Row justify="center" style={{ paddingTop: '10px' }}>
               <Popconfirm
                 title="Are you sure? Unsaved fields data will be reaplced with profile data."
                 onConfirm={fillFromProfile}

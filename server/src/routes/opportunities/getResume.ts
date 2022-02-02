@@ -8,12 +8,20 @@ const { NOT_FOUND, OK } = StatusCodes;
 
 export const getResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { mod, githubId } = ctx.query;
-  const isFullDataNeeded = mod === 'all';
 
   const service = new ResumeService(githubId);
-  const data = await service.getData(isFullDataNeeded);
 
-  if (data == null) {
+  let data = null;
+
+  if (mod === 'view') {
+    data = await service.getViewData();
+  }
+
+  if (mod === 'form') {
+    data = await service.getFormData();
+  }
+
+  if (data === null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }
