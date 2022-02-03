@@ -4,7 +4,6 @@ import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
 import { getFullName } from '../rules';
-import { omit } from 'lodash';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -264,7 +263,34 @@ export class StudentRepository extends AbstractRepository<Student> {
       },
     );
 
-    return studentStats.map(stats => ({ ...omit(stats, ['courseId']) }));
+    return studentStats;
+  }
+
+  public async findStudentCourses(githubId: string) {
+    const query = await getRepository(Student)
+      .createQueryBuilder('student')
+      .addSelect('"course"."id" AS "courseId"')
+      .addSelect('"course"."fullName" AS "courseFullName"');
+
+    query
+      .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
+      .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"');
+
+    query
+      .where('"user"."githubId" = :githubId', { githubId })
+      .andWhere('"student"."isExpelled" != :expelled', { expelled: true })
+      .orderBy('"course"."endDate"', 'DESC');
+
+    const rawStats = await query.getRawMany();
+
+    const studentStats = rawStats.map(({ courseId, courseFullName }: any) => {
+      return {
+        courseId,
+        courseFullName,
+      };
+    });
+
+    return studentStats;
   }
 
   public async save(students: Partial<Student>[]) {

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Form, Input, Card } from 'antd';
+import { forwardRef, useEffect, ForwardedRef } from 'react';
+import { Form, Input, Card, FormInstance } from 'antd';
 import { Contacts } from 'modules/Opportunities/models';
 import { contactsValidationRules as validationRules } from './form-validation';
 
@@ -10,12 +10,12 @@ type Props = {
   contactsList: Contacts;
 };
 
-const ContactsForm = React.forwardRef((props: Props, ref: any) => {
+const ContactsForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
   const { contactsList } = props;
 
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
+  useEffect(() => {
     form.setFieldsValue(contactsList);
     form.validateFields();
   }, [contactsList]);
