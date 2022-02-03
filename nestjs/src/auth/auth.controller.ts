@@ -29,7 +29,8 @@ export class AuthController {
       httpOnly: true,
       secure: true,
     });
-    res.redirect('/');
+
+    res.redirect(this.authService.getRedirectUrl(req.loginState));
   }
 
   @Get('github/logout')

@@ -40,6 +40,7 @@
     "cookie-parser": "1.4.6",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.21",
+    "nanoid": "3.2.0",
     "nestjs-pino": "2.5.0",
     "passport": "0.5.2",
     "passport-custom": "1.1.1",

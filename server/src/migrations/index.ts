@@ -12,6 +12,7 @@ import { CourseMigration1638302439645 } from './1638302439645-CourseMigration';
 import { Update1639427578702 } from './1639427578702-Update';
 import { ResumeSelectCourses1642884123347 } from './1642884123347-ResumeSelectCourses';
 import { Task1643481312933 } from './1643481312933-Task';
+import { LoginState1643550350939 } from './1643550350939-LoginState';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -28,4 +29,5 @@ export const migrations = [
   Update1639427578702,
   ResumeSelectCourses1642884123347,
   Task1643481312933,
+  LoginState1643550350939,
 ];
