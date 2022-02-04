@@ -126,4 +126,8 @@ export class AuthUser {
         return acc;
       }, courseRoles);
   }
+
+  public static getCourseDistinctRoles(user: AuthUser) {
+    return [...new Set(Object.values(user.roles))];
+  }
 }

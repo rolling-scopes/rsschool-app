@@ -1,56 +1,80 @@
-import { useState, useMemo, ChangeEvent, useCallback } from 'react';
-import { Button, message, Space, Spin } from 'antd';
-import { NotificationsService, Notification } from 'modules/Notifications/services/notifications';
-import { set } from 'lodash';
+import { useState, useMemo, useCallback, ReactNode } from 'react';
+import { Button, message, Spin } from 'antd';
+import { NotificationsService } from 'modules/Notifications/services/notifications';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
-import { NotificationsTable } from '../../components/NotificationsTable';
+import { NotificationSettingsTable } from 'modules/Notifications/components/NotificationSettingsTable';
+import { NotificationSettingsModal } from 'modules/Notifications/components/NotificationSettingsModal';
+import { NotificationDto } from 'api';
 
 export function AdminNotificationsPage() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
+  const [modal, setModal] = useState<ReactNode>();
 
   const loadData = useCallback(
     withLoading(async () => {
-      setNotifications(await service.getNotificationsSettings());
+      setNotifications(await service.getNotifications());
     }),
     [],
   );
 
   useAsync(loadData, []);
 
-  const onCheck = useCallback(
-    async (dataIndex: string[], record: Notification, event: ChangeEvent<HTMLInputElement>) => {
-      const newData = [...notifications];
-      const index = notifications.findIndex(item => record.id === item.id);
-      newData[index] = { ...newData[index] };
-      const notification = newData[index];
-
-      set(notification, dataIndex, event.target.checked);
-
-      setNotifications(newData);
+  const edit = useCallback(
+    (notification: NotificationDto) => {
+      setModal(
+        <NotificationSettingsModal
+          notification={notification}
+          onCancel={() => setModal(undefined)}
+          onOk={saveNotification}
+        />,
+      );
     },
-    [notifications],
+    [saveNotification],
   );
+
+  const create = useCallback(() => {
+    setModal(<NotificationSettingsModal onCancel={() => setModal(undefined)} onOk={saveNotification} />);
+  }, []);
 
   return (
     <Spin spinning={loading}>
-      <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
-        <Button type="primary" onClick={saveSettings}>
-          Save
-        </Button>
-      </Space>
-      <NotificationsTable notifications={notifications} onCheck={onCheck} />
+      <Button type="primary" onClick={create}>
+        Add Notification
+      </Button>
+      <NotificationSettingsTable onEdit={edit} onDelete={deleteNotification} notifications={notifications} />
+      {modal}
     </Spin>
   );
 
-  async function saveSettings() {
+  async function saveNotification(notification: NotificationDto) {
     try {
-      await service.saveNotificationSettings(notifications);
+      const isSave = notifications.find(({ id }) => notification.id === id);
+      const { data } = await (isSave
+        ? service.saveNotification(notification)
+        : service.createNotification(notification));
+
+      setNotifications(notifications => {
+        return isSave
+          ? notifications.map(notification => (notification.id === data.id ? data : notification))
+          : [...notifications, data];
+      });
+      setModal(null);
       message.success('New notification settings saved.');
     } catch {
       message.error('Failed to save settings.');
+    }
+  }
+
+  async function deleteNotification(notification: NotificationDto) {
+    try {
+      await service.deleteNotification(notification.id);
+      setNotifications(notifications => notifications.filter(n => n.id !== notification.id));
+      message.success('Notification is deleted.');
+    } catch {
+      message.error('Failed to delete notification.');
     }
   }
 }

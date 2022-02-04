@@ -54,7 +54,7 @@ export function AdminPageLayout({ session, children }: PropsWithChildren<{ sessi
       <AdminSider isAdmin={session.isAdmin} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Notifications" username={session.githubId} />
-        <Layout.Content>{children}</Layout.Content>
+        <Layout.Content style={{ margin: 8 }}>{children}</Layout.Content>
       </Layout>
     </Layout>
   );
