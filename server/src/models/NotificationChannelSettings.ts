@@ -24,6 +24,7 @@ export class NotificationChannelSettings {
   channel: NotificationChannel;
 
   @PrimaryColumn()
+  @Index()
   channelId: string;
 
   @Column({ type: 'simple-json', nullable: true })

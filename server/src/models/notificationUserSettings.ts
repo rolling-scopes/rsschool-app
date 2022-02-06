@@ -42,5 +42,6 @@ export class NotificationUserSettings {
   channel: NotificationChannel;
 
   @PrimaryColumn()
+  @Index()
   channelId: string;
 }
