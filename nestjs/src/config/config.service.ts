@@ -26,10 +26,17 @@ type UsersConfig = {
   hirers: string[];
 };
 
+type AWSServices = {
+  restApiUrl: string;
+  restApiKey: string;
+};
+
 @Injectable()
 export class ConfigService {
   public readonly auth: AuthConfig;
   public readonly users: UsersConfig;
+  public readonly awsServices: AWSServices;
+  public isDev = process.env.NODE_ENV !== 'production';
 
   constructor(conf: NestConfigService) {
     this.auth = {
@@ -46,6 +53,11 @@ export class ConfigService {
       jwt: {
         secretKey: conf.get('RSSHCOOL_AUTH_JWT_SECRET_KEY') ?? 'secret',
       },
+    };
+
+    this.awsServices = {
+      restApiUrl: process.env.RSSHCOOL_API_AWS_REST_API_URL || '',
+      restApiKey: process.env.RSSHCOOL_API_AWS_REST_API_KEY || '',
     };
 
     this.users = {

@@ -16,7 +16,7 @@ export class UsersController {
   @ApiOperation({ operationId: 'getUserNotifications' })
   @ApiOkResponse({ type: [NotificationUserSettingsDto] })
   public async getUserNotifications(@Req() req: CurrentRequest) {
-    const notifications = await this.notificationsService.getUserNotificationSettings(
+    const notifications = await this.notificationsService.getUserNotificationsSettings(
       req.user.id,
       AuthUser.getCourseDistinctRoles(req.user),
     );

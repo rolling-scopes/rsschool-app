@@ -9,6 +9,7 @@ import { LoggingMiddleware, NoCacheMiddleware } from './core/middlewares';
 import { getPinoHttp } from './core/pino';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
+import { RegistryModule } from './registry/registry.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import config from './ormconfig';
 import { ProfileModule } from './profile';
@@ -31,6 +32,7 @@ import { UsersModule } from './users';
     ProfileModule,
     DisciplinesModule,
     NotificationsModule,
+    RegistryModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

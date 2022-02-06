@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.8.6",
+    "@nestjs/axios": "0.0.5",
     "@nestjs/common": "8.2.6",
     "@nestjs/config": "1.1.6",
     "@nestjs/core": "8.2.6",
@@ -38,6 +39,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",
     "cookie-parser": "1.4.6",
+    "handlebars": "4.7.7",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.21",
     "nanoid": "3.2.0",
