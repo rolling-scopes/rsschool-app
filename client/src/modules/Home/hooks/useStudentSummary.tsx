@@ -11,10 +11,8 @@ export function useStudentSummary(session: Session, course: Course | null) {
   const [courseTasks, setCourseTasks] = useState<{ id: number }[]>([]);
 
   useAsync(async () => {
-    if (!course || !isStudent(session, course.id)) {
-      return;
-    }
-    const data = await loadHomeData(course.id);
+    const showData = course && isStudent(session, course.id);
+    const data = showData ? await loadHomeData(course.id) : null;
     setStudentSummary(data?.studentSummary ?? null);
     setCourseTasks(data?.courseTasks ?? []);
   }, [course]);
