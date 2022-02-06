@@ -102,19 +102,23 @@ jobs:
 
       - name: Package Next.js
         working-directory: ./client
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
           npm run build:lambda
+          printenv
           export IMAGE_TAG=$(node ../setup/deploy/branch-hash.js)
           docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG} .
 
       - name: Login to ECR
         uses: docker/login-action@v1
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           registry: 511361162520.dkr.ecr.eu-central-1.amazonaws.com
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Publish Next.js
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
           export IMAGE_TAG=$(node ./setup/deploy/branch-hash.js)
           docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG}
