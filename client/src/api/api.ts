@@ -797,13 +797,7 @@ export interface StudentFeedbackContentDto {
      * @type {string}
      * @memberof StudentFeedbackContentDto
      */
-    'impression': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof StudentFeedbackContentDto
-     */
-    'gaps': string;
+    'suggestions': string;
     /**
      * 
      * @type {string}
