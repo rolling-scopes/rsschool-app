@@ -10,6 +10,7 @@ import { DockerFunction, DockerFunctionProps } from './DockerFunctionConstruct';
 
 type Props = cdk.StackProps & {
   branch: string;
+  deployId: string;
   certificateArn: string;
 };
 
@@ -19,7 +20,7 @@ export class RsSchoolAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const { branch, certificateArn } = props;
+    const { branch, certificateArn, deployId } = props;
 
     this.fqdn = `env-${branch}.app.rs.school`;
 
@@ -29,6 +30,7 @@ export class RsSchoolAppStack extends cdk.Stack {
 
     const nextAppProps: DockerFunctionProps = {
       branch,
+      deployId,
       httpApi: httpApi,
       repository: Repository.fromRepositoryName(this, 'Repository', 'rsschool-ui'),
     };
@@ -40,7 +42,7 @@ export class RsSchoolAppStack extends cdk.Stack {
       maxTtl: cdk.Duration.seconds(0),
       forwardedValues: {
         queryString: true,
-        headers: ['Origin', 'Authorization', 'Cookie'],
+        headers: ['Origin', 'Authorization'],
         cookies: {
           forward: 'all',
         },

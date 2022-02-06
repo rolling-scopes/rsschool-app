@@ -8,7 +8,7 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "build:lambda": "tsc --skipLibCheck --moduleResolution node --target es2018 --outDir dist lambda/app.ts",
+    "build:lambda": "tsc --skipLibCheck --module commonjs --target es2018 --outDir dist lambda/app.ts",
     "ci:build": "tsc",
     "prod": "next start -p 8080",
     "lint": "eslint src",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.2.14",
-    "@apalchys/next-aws-lambda": "^3.6.0",
+    "@apalchys/next-aws-lambda": "3.6.0",
     "antd": "4.18.5",
     "axios": "0.25.0",
     "cookie": "0.4.1",
@@ -28,7 +28,7 @@
     "mobile-device-detect": "0.4.3",
     "moment": "2.29.1",
     "moment-timezone": "0.5.34",
-    "next": "12.0.9",
+    "next": "12.0.8",
     "react": "17.0.2",
     "react-color": "2.19.3",
     "react-dom": "17.0.2",
