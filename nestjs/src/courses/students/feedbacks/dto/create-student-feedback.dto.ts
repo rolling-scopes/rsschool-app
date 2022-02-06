@@ -16,15 +16,9 @@ class SoftSkillEntry {
 }
 
 export class StudentFeedbackContentDto implements StudentFeedbackContent {
-  @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  impression: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  gaps: string;
+  suggestions: string;
 
   @IsNotEmpty()
   @IsString()
