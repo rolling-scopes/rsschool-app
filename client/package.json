@@ -8,6 +8,7 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
+    "build:lambda": "tsc --skipLibCheck --moduleResolution node --target es2018 --outDir dist lambda/app.ts",
     "ci:build": "tsc",
     "prod": "next start -p 8080",
     "lint": "eslint src",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.2.14",
+    "@apalchys/next-aws-lambda": "^3.6.0",
     "antd": "4.18.5",
     "axios": "0.25.0",
     "cookie": "0.4.1",
