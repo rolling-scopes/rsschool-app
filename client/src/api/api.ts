@@ -505,6 +505,12 @@ export interface CourseTaskDto {
      * @type {string}
      * @memberof CourseTaskDto
      */
+    'studentStartDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
     'studentEndDate': string;
     /**
      * 

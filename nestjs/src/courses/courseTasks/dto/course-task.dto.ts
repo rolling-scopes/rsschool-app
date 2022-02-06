@@ -24,6 +24,7 @@ export class CourseTaskDto {
     this.id = courseTask.id;
     this.type = courseTask.type;
     this.name = courseTask.task.name;
+    this.studentStartDate = (courseTask.studentStartDate as Date)?.toISOString();
     this.studentEndDate = (courseTask.studentEndDate as Date)?.toISOString();
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
@@ -58,6 +59,9 @@ export class CourseTaskDto {
 
   @ApiProperty()
   sourceGithubRepoUrl: string;
+
+  @ApiProperty()
+  studentStartDate: string;
 
   @ApiProperty()
   studentEndDate: string;

@@ -11,6 +11,7 @@ jest.mock('api', () => ({
   UsersNotificationsApi: jest.fn(),
   NotificationsApi: jest.fn(),
   CoursesApi: jest.fn(),
+  CoursesTasksApi: jest.fn(),
 }));
 
 const profile = {

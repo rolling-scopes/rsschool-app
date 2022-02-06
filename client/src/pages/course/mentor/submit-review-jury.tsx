@@ -1,4 +1,5 @@
 import { Button, Form, message } from 'antd';
+import { CoursesTasksApi } from 'api';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { StudentSearch } from 'components/StudentSearch';
@@ -6,8 +7,10 @@ import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CourseTask } from 'services/course';
+import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
+
+const courseTasksApi = new CoursesTasksApi();
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -16,12 +19,10 @@ function Page(props: CoursePageProps) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
 
-  useAsync(async () => {
-    const data = await courseService.getCourseTasks();
-    const courseTasks = data.filter(task => task.checker === 'jury');
-    setCourseTasks(courseTasks);
+  const { value: courseTasks = [] } = useAsync(async () => {
+    const { data } = await courseTasksApi.getCourseTasks(courseId);
+    return data.filter(courseTask => courseTask.checker === 'jury');
   }, []);
 
   const fieldsToClear: string[] = ['githubId', 'score', 'comment'];
