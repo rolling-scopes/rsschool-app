@@ -52,12 +52,7 @@ export const corejs1Template: InterviewTemplate = {
       id: 1020,
       name: 'Function',
       description: `20 points`,
-      questions: [
-        { id: 1021, name: 'arrow func/ func expression/ func declaration' },
-        { id: 1022, name: 'Strict comparison' },
-        { id: 1023, name: 'Object.is(optional)' },
-        { id: 1024, name: 'what is polyfills' },
-      ],
+      questions: [{ id: 1021, name: 'arrow func/ func expression/ func declaration' }],
     },
     {
       id: 1030,
