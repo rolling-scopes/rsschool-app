@@ -1,5 +1,6 @@
 import { ConnectionOptions } from 'typeorm';
 import { models } from './models';
+import { migrations } from './migrations';
 
 const config: ConnectionOptions = {
   type: 'postgres',
@@ -9,7 +10,7 @@ const config: ConnectionOptions = {
   password: process.env.RSSHCOOL_API_PG_PASSWORD,
   database: process.env.RSSHCOOL_API_PG_DATABASE,
   entities: models,
-  migrations: ['src/migrations/*.ts'],
+  migrations,
   cli: {
     migrationsDir: 'src/migrations',
   },
