@@ -105,7 +105,7 @@ jobs:
 
       - name: Set Image Tag
         run: |
-          export IMAGE_TAG=$(node ./setup/deploy/branch-hash.js)
+          echo "IMAGE_TAG=$(node ./setup/deploy/branch-hash.js)" >> $GITHUB_ENV
 
       - name: Upload to CDN
         working-directory: ./client
