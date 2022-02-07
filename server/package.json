@@ -16,6 +16,7 @@
     "@apalchys/pino-cloudwatch": "0.8.0",
     "@koa/cors": "3.0.0",
     "@koa/router": "8.0.8",
+    "@vendia/serverless-express": "^4.5.3",
     "aws-sdk": "2.1022.0",
     "axios": "0.24.0",
     "http-status-codes": "2.1.4",
