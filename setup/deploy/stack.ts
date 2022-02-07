@@ -28,13 +28,25 @@ export class RsSchoolAppStack extends cdk.Stack {
       apiName: branch,
     });
 
-    const nextAppProps: DockerFunctionProps = {
+    const nextApp = new DockerFunction(this, 'nextApp', {
       branch,
       deployId,
       httpApi: httpApi,
-      repository: Repository.fromRepositoryName(this, 'Repository', 'rsschool-ui'),
-    };
-    const nextApp = new DockerFunction(this, 'nextApp', nextAppProps);
+      repository: Repository.fromRepositoryName(this, 'UiRepository', 'rsschool-ui'),
+    });
+
+    const serverApi = new DockerFunction(this, 'ServerApi', {
+      branch,
+      deployId,
+      httpApi: httpApi,
+      memorySize: 2048,
+      basePath: '/api/{proxy+}',
+      variables: {
+        NODE_ENV: 'development',
+      },
+      repository: Repository.fromRepositoryName(this, 'ServerRepository', 'rsschool-server'),
+    });
+
     const noCacheBehavior: cloudfront.Behavior = {
       allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
       defaultTtl: cdk.Duration.seconds(0),
@@ -51,6 +63,13 @@ export class RsSchoolAppStack extends cdk.Stack {
 
     const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
       originConfigs: [
+        {
+          customOriginSource: {
+            domainName: serverApi.domainName,
+            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+          },
+          behaviors: [{ pathPattern: '/api/*', ...noCacheBehavior }],
+        },
         {
           customOriginSource: {
             domainName: nextApp.domainName,

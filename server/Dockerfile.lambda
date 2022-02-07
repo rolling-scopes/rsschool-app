@@ -7,10 +7,10 @@ WORKDIR /container_out
 
 COPY tsconfig.json tsconfig.json
 COPY package.json package.json
-COPY package-lock.json package.json
+COPY package-lock.json package-lock.json
 COPY .env .env
 
-RUN npm install --production --no-optional
+RUN npm ci --production --no-optional
 
 COPY dist /container_out
 COPY lambda /container_out
