@@ -5,6 +5,8 @@ WORKDIR /container_out
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
+COPY public public
+
 # next.js config
 COPY next.config.prod.js next.config.js
 
