@@ -97,8 +97,19 @@ jobs:
         run: npm install
 
       - name: Build (npm run build)
+        env:
+          NODE_ENV: production
+          RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
         run: |
           npm run build
+
+      - name: Upload to CDN
+        working-directory: ./client
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
+          AWS_DEFAULT_REGION: eu-central-1
+        run: aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Package Next.js
         working-directory: ./client
