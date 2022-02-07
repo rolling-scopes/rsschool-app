@@ -1,3 +1,4 @@
+require('dotenv').config();
 const serverlessExpress = require('@vendia/serverless-express');
 const server = require('./server/src/app');
 

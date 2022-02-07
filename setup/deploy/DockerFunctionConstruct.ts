@@ -14,6 +14,7 @@ export type DockerFunctionProps = cdk.StackProps & {
   repository: IRepository;
   httpApi: apiv2.HttpApi;
   basePath?: string;
+  memorySize?: number;
 };
 
 export class DockerFunction extends Construct {
@@ -23,13 +24,13 @@ export class DockerFunction extends Construct {
 
   constructor(scope: Construct, id: string, props: DockerFunctionProps) {
     super(scope, id);
-    const { branch, variables, httpApi, basePath, deployId } = props;
+    const { branch, variables, httpApi, basePath, deployId, memorySize } = props;
 
     const tag = branch;
     const dockerImageFunction = new lambda.DockerImageFunction(this, 'DockerImageFunction', {
       description: tag,
       code: lambda.DockerImageCode.fromEcr(props.repository, { tag }),
-      memorySize: 1024,
+      memorySize: memorySize ?? 1024,
       timeout: cdk.Duration.seconds(30),
       environment: variables,
     });

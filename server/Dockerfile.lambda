@@ -1,25 +1,3 @@
-FROM node:16-alpine
-
-EXPOSE 8080
-
-ENV NODE_ENV production
-ENV NODE_PORT 8080
-ENV TZ utc
-
-WORKDIR /src
-
-COPY tsconfig.json /src
-COPY package.json /src
-COPY package-lock.json /src
-
-RUN npm install --production --no-optional
-
-COPY public /src/public
-COPY dist /src
-
-CMD [ "node", "./server/src/index.js" ]
-
-
 FROM node:14-bullseye-slim as builder
 
 ENV NODE_ENV production
@@ -30,11 +8,13 @@ WORKDIR /container_out
 COPY tsconfig.json tsconfig.json
 COPY package.json package.json
 COPY package-lock.json package.json
+COPY .env .env
 
 RUN npm install --production --no-optional
 
 COPY dist /container_out
 COPY lambda /container_out
+
 
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14

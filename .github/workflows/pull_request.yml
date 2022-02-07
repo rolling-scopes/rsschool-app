@@ -123,6 +123,17 @@ jobs:
           npm run build:lambda
           docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG} .
 
+      - name: Pull AWS SSM Params
+        uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        with:
+          ssm-path: /staging/app
+          format: dotenv
+          output: server/.env
+
       - name: Package Server
         working-directory: ./server
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
