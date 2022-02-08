@@ -10,10 +10,10 @@ COPY public public
 # next.js config
 COPY next.config.prod.js next.config.js
 
+RUN npm ci --production --no-optional
+
 # lambda entry handler (app.js)
 COPY dist .
-
-COPY node_modules node_modules
 
 # .next build folder
 COPY .next .next

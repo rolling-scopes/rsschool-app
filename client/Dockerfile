@@ -15,7 +15,8 @@ COPY public /client/public
 COPY package.json /client
 COPY package-lock.json /client
 
-COPY node_modules /client/node_modules
+RUN npm ci --production --no-optional
+
 COPY .next /client/.next
 
 CMD [ "npm", "run", "prod" ]
