@@ -38,6 +38,7 @@
     "use-places-autocomplete": "1.10.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "8.10.92",
     "@types/cookie": "0.4.1",
     "@types/csvtojson": "2.0.0",
     "@types/enzyme": "3.10.11",

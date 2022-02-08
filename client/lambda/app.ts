@@ -2,12 +2,13 @@
  Entry file should be in the root and called "app"
 */
 import next from 'next';
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 import { eventToReqRes } from './eventToReqRes';
 
 const app = next({ dev: false });
 const nextHandler = app.getRequestHandler();
 
-export const handler = async (event: any): Promise<any> => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<any> => {
   // eslint-disable-next-line no-console
   console.log('event', event);
 
