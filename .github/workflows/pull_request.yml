@@ -94,6 +94,16 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
+      - name: Restore next cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-next
+        with:
+          path: client/.next/cache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
       - name: Restore Docker layers
         uses: actions/cache@v2
         with:
