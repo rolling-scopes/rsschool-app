@@ -47,6 +47,18 @@ export class RsSchoolAppStack extends cdk.Stack {
       repository: Repository.fromRepositoryName(this, 'ServerRepository', 'rsschool-server'),
     });
 
+    const nestjsApi = new DockerFunction(this, 'NestjsApi', {
+      branch,
+      deployId,
+      httpApi: httpApi,
+      memorySize: 2048,
+      basePath: '/api/v2/{proxy+}',
+      variables: {
+        NODE_ENV: 'development',
+      },
+      repository: Repository.fromRepositoryName(this, 'NestjsRepository', 'rsschool-nestjs'),
+    });
+
     const noCacheBehavior: cloudfront.Behavior = {
       allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
       defaultTtl: cdk.Duration.seconds(0),
@@ -63,6 +75,13 @@ export class RsSchoolAppStack extends cdk.Stack {
 
     const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
       originConfigs: [
+        {
+          customOriginSource: {
+            domainName: nestjsApi.domainName,
+            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+          },
+          behaviors: [{ pathPattern: '/api/v2/*', ...noCacheBehavior }],
+        },
         {
           customOriginSource: {
             domainName: serverApi.domainName,
