@@ -94,6 +94,25 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
+      - name: Restore Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to ECR
+        uses: docker/login-action@v1
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        with:
+          registry: 511361162520.dkr.ecr.eu-central-1.amazonaws.com
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Install dependencies
         run: npm install
 
@@ -117,12 +136,22 @@ jobs:
         run: |
           aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
-      - name: Package UI
+      - name: Build client lambda
         working-directory: ./client
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
           npm run build:lambda
-          docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG} .
+
+      - name: Package client
+        uses: docker/build-push-action@v2
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        with:
+          context: client
+          file: Dockerfile.lambda
+          push: true
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -158,23 +187,18 @@ jobs:
         run: |
           docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${IMAGE_TAG} .
 
-      - name: Login to ECR
-        uses: docker/login-action@v1
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        with:
-          registry: 511361162520.dkr.ecr.eu-central-1.amazonaws.com
-          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Publish
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
-          docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${IMAGE_TAG}
           docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${IMAGE_TAG}
           docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${IMAGE_TAG}
 
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
   pr_deploy:
-    needs: [pr_build]
     name: Deploy
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -209,6 +233,7 @@ jobs:
         working-directory: ./setup/deploy
         run: |
           npm ci
+          ls -a
           npx cdk deploy --profile rsschool --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
 
   pr_test:
