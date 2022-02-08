@@ -8,9 +8,10 @@ import { AppModule } from './app.module';
 import { setupApp } from './setup';
 
 const port = process.env.NODE_PORT || 3002;
+const isLambda = !process.env.AWS_LAMBDA;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule, { bufferLogs: true, logger: isLambda ? console : undefined });
 
   setupApp(app);
 
