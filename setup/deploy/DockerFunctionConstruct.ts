@@ -42,6 +42,16 @@ export class DockerFunction extends Construct {
     this.domainName = domainName ?? '';
 
     const dockerImageUpdater = new custom.AwsCustomResource(this, 'dockerImageUpdater', {
+      installLatestAwsSdk: false,
+      onCreate: {
+        physicalResourceId: custom.PhysicalResourceId.of(branch),
+        service: 'Lambda',
+        action: 'updateFunctionCode',
+        parameters: {
+          FunctionName: dockerImageFunction.functionName,
+          ImageUri: props.repository.repositoryUriForTag(tag),
+        },
+      },
       onUpdate: {
         service: 'Lambda',
         action: 'updateFunctionCode',
@@ -49,7 +59,7 @@ export class DockerFunction extends Construct {
           FunctionName: dockerImageFunction.functionName,
           ImageUri: props.repository.repositoryUriForTag(tag),
         },
-        physicalResourceId: custom.PhysicalResourceId.of(deployId),
+        physicalResourceId: custom.PhysicalResourceId.of(branch),
       },
       policy: custom.AwsCustomResourcePolicy.fromStatements([
         new iam.PolicyStatement({
