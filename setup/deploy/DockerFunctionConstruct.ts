@@ -41,7 +41,7 @@ export class DockerFunction extends Construct {
     const [domainName] = httpApi.url?.replace('https://', '').split('/') ?? [];
     this.domainName = domainName ?? '';
 
-    const dockerImageUpdater = new custom.AwsCustomResource(this, 'dockerImageUpdater', {
+    const dockerImageUpdater = new custom.AwsCustomResource(this, 'DockerImageUpdater', {
       installLatestAwsSdk: false,
       onCreate: {
         physicalResourceId: custom.PhysicalResourceId.of(branch),

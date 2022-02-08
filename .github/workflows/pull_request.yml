@@ -127,6 +127,8 @@ jobs:
         id: image-tag
         working-directory: ./setup/deploy
         run: |
+          mkdir -p /tmp/.buildx-cache
+          mkdir -p /tmp/.buildx-cache-new
           echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
           echo ::set-output name=IMAGE_TAG::$(node branch-hash.js)
 

@@ -6,7 +6,7 @@ import { Repository } from 'aws-cdk-lib/aws-ecr';
 
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
-import { DockerFunction, DockerFunctionProps } from './DockerFunctionConstruct';
+import { DockerFunction } from './DockerFunctionConstruct';
 import { CfnOutput } from 'aws-cdk-lib';
 
 type Props = cdk.StackProps & {
@@ -29,7 +29,7 @@ export class RsSchoolAppStack extends cdk.Stack {
       apiName: branch,
     });
 
-    const nextApp = new DockerFunction(this, 'nextApp', {
+    const nextApp = new DockerFunction(this, 'Next', {
       branch,
       deployId,
       httpApi: httpApi,
