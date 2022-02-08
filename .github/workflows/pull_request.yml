@@ -147,7 +147,7 @@ jobs:
         run: |
           npm run build:lambda
 
-      - name: Package client
+      - name: Package Сlient
         uses: docker/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
@@ -170,10 +170,15 @@ jobs:
           output: server/.env
 
       - name: Package Server
-        working-directory: ./server
+        uses: docker/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${IMAGE_TAG} .
+        with:
+          context: ./server
+          file: ./server/Dockerfile.lambda
+          push: true
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${{ steps.image-tag.outputs.IMAGE_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -187,16 +192,15 @@ jobs:
           output: nestjs/.env
 
       - name: Package Nestjs
-        working-directory: ./nestjs
+        uses: docker/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          docker build -f Dockerfile.lambda -t 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${IMAGE_TAG} .
-
-      - name: Publish
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${IMAGE_TAG}
-          docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${IMAGE_TAG}
+        with:
+          context: ./nestjs
+          file: ./nestjs/Dockerfile.lambda
+          push: true
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${{ steps.image-tag.outputs.IMAGE_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
         run: |
@@ -204,6 +208,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   pr_deploy:
+    needs: [pr_build]
     name: Deploy
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
