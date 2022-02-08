@@ -21,6 +21,9 @@ COPY .next .next
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14
 
+ENV NODE_ENV production
+ENV TZ utc
+
 WORKDIR /var/task
 
 COPY --from=builder /container_out .

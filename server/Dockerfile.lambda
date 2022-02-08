@@ -1,8 +1,5 @@
 FROM node:14-bullseye-slim as builder
 
-ENV NODE_ENV production
-ENV TZ utc
-
 WORKDIR /container_out
 
 COPY tsconfig.json tsconfig.json
@@ -15,9 +12,11 @@ RUN npm ci --production --no-optional
 COPY dist /container_out
 COPY lambda /container_out
 
-
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14
+
+ENV NODE_ENV production
+ENV TZ utc
 
 WORKDIR /var/task
 

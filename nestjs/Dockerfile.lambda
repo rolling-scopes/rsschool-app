@@ -1,8 +1,6 @@
 FROM node:14-bullseye-slim as builder
 
-ENV NODE_ENV production
-ENV TZ utc
-ENV AWS_LAMBDA true
+
 
 WORKDIR /container_out
 
@@ -18,6 +16,10 @@ COPY lambda /container_out
 
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14
+
+ENV NODE_ENV production
+ENV TZ utc
+ENV AWS_LAMBDA true
 
 WORKDIR /var/task
 
