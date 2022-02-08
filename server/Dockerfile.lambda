@@ -3,14 +3,13 @@ FROM node:14-bullseye-slim as builder
 WORKDIR /container_out
 
 COPY tsconfig.json tsconfig.json
+COPY .env .env
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-COPY .env .env
-
 RUN npm ci --production --no-optional
 
-COPY dist /container_out
 COPY lambda /container_out
+COPY dist /container_out
 
 # Lambda Container
 FROM public.ecr.aws/lambda/nodejs:14
