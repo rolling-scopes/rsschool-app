@@ -124,8 +124,11 @@ jobs:
           npm run build
 
       - name: Set Image Tag
+        id: image-tag
+        working-directory: ./setup/deploy
         run: |
-          echo "IMAGE_TAG=$(node ./setup/deploy/branch-hash.js)" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
+          echo ::set-output name=IMAGE_TAG::$(node branch-hash.js)
 
       - name: Upload to CDN
         working-directory: ./client
@@ -149,7 +152,7 @@ jobs:
           context: client
           file: Dockerfile.lambda
           push: true
-          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${{IMAGE_TAG}}
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${{ steps.image-tag.outputs.IMAGE_TAG }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 

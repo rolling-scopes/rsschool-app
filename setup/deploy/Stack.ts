@@ -7,6 +7,7 @@ import { Repository } from 'aws-cdk-lib/aws-ecr';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 import { DockerFunction, DockerFunctionProps } from './DockerFunctionConstruct';
+import { CfnOutput } from 'aws-cdk-lib';
 
 type Props = cdk.StackProps & {
   branch: string;
@@ -117,5 +118,7 @@ export class RsSchoolAppStack extends cdk.Stack {
       }),
       recordName: this.fqdn,
     });
+
+    new CfnOutput(this, 'Url', { value: `https://${this.fqdn}` });
   }
 }
