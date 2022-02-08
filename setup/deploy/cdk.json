@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node app.ts",
+  "app": "npx ts-node App.ts",
   "context": {
     "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
     "@aws-cdk/core:stackRelativeExports": true,

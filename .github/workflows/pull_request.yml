@@ -88,6 +88,7 @@ jobs:
             node_modules
             client/node_modules
             server/node_modules
+            nestjs/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
@@ -179,6 +180,43 @@ jobs:
           npm ci
           npx cdk deploy --profile rsschool --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
 
+  pr_deploy:
+    needs: [pr_build]
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Set Image Tag
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        working-directory: ./setup/deploy
+        run: |
+          echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
+
+      - name: Deploy
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        working-directory: ./setup/deploy
+        run: |
+          npm ci
+          npx cdk deploy --profile rsschool --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
 
   pr_test:
     name: Test
