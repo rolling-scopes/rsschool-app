@@ -172,6 +172,14 @@ jobs:
           docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${IMAGE_TAG}
           docker push 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${IMAGE_TAG}
 
+      - name: Deploy
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        working-directory: ./setup/deploy
+        run: |
+          npm ci
+          npx cdk deploy --profile rsschool --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
+
+
   pr_test:
     name: Test
     runs-on: ubuntu-latest
