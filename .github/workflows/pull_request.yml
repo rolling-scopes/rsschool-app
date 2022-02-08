@@ -243,10 +243,11 @@ jobs:
             ${{ runner.os }}-
 
       - name: Set Image Tag
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        id: image-tag
         working-directory: ./setup/deploy
         run: |
           echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
+          echo ::set-output name=IMAGE_TAG::$(node branch-hash.js)
 
       - name: Deploy
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
