@@ -17,6 +17,7 @@ type Props = cdk.StackProps & {
 
 export class RsSchoolAppStack extends cdk.Stack {
   fqdn: string;
+  url: string;
 
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
@@ -24,6 +25,7 @@ export class RsSchoolAppStack extends cdk.Stack {
     const { branch, certificateArn, deployId } = props;
 
     this.fqdn = `env-${branch}.app.rs.school`;
+    this.url = `https://${this.fqdn}`;
 
     const httpApi = new apiv2.HttpApi(this, 'HttpApi', {
       apiName: branch,
@@ -34,6 +36,10 @@ export class RsSchoolAppStack extends cdk.Stack {
       deployId,
       httpApi: httpApi,
       repository: Repository.fromRepositoryName(this, 'UiRepository', 'rsschool-ui'),
+      variables: {
+        NODE_ENV: 'production',
+        RS_HOST: this.url,
+      },
     });
 
     const serverApi = new DockerFunction(this, 'ServerApi', {
@@ -119,6 +125,6 @@ export class RsSchoolAppStack extends cdk.Stack {
       recordName: this.fqdn,
     });
 
-    new CfnOutput(this, 'Url', { value: `https://${this.fqdn}` });
+    new CfnOutput(this, 'Url', { value: this.url });
   }
 }
