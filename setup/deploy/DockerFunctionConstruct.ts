@@ -59,7 +59,7 @@ export class DockerFunction extends Construct {
           FunctionName: dockerImageFunction.functionName,
           ImageUri: props.repository.repositoryUriForTag(tag),
         },
-        physicalResourceId: custom.PhysicalResourceId.of(branch),
+        physicalResourceId: custom.PhysicalResourceId.of(deployId),
       },
       policy: custom.AwsCustomResourcePolicy.fromStatements([
         new iam.PolicyStatement({

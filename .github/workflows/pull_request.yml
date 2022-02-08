@@ -151,7 +151,7 @@ jobs:
         uses: docker/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
-          context: "{{defaultContext}}:client"
+          context: ./client
           file: Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${{ steps.image-tag.outputs.IMAGE_TAG }}
