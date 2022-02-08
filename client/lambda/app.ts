@@ -8,6 +8,9 @@ const app = next({ dev: false });
 const nextHandler = app.getRequestHandler();
 
 export const handler = async (event: any): Promise<any> => {
+  // eslint-disable-next-line no-console
+  console.log('event', event);
+
   const { req, res, responsePromise } = eventToReqRes(event);
 
   // eslint-disable-next-line no-console
