@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import serverlessExpress from '@vendia/serverless-express';
 import * as express from 'express';
 import { setupApp } from './setup';
 import { AppModule } from './app.module';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const serverlessExpress = require('@vendia/serverless-express');
 
 let cachedServer: any;
 
