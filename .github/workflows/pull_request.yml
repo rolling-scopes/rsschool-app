@@ -260,32 +260,16 @@ jobs:
           npm ci
           npx cdk deploy --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
 
-      - name: Create Deployment
-        id: create_deployment
-        uses: octokit/request-action@v2.x
+      - uses: altinukshini/deployment-action@releases/v1
+        name: Create GitHub deployment
+        id: deployment
         with:
-          route: POST /repos/:repository/deployments
-          repository: ${{ github.repository }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          pr: true,
+          pr_id: ${{ github.event.pull_request.id }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
           environment: staging
-          auto_merge: false
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
-      - name: Deployment status
-        id: successful_deployment
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/:repository/deployments/:deployment/statuses
-          repository: ${{ github.repository }}
-          deployment: ${{ fromJson(steps.create_deployment.outputs.data).id }}
-          environment: staging
-          environment_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          mediaType: '{"previews": ["ant-man"]}'
-          state: success
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          initial_status: success
 
   pr_test:
     name: Test
