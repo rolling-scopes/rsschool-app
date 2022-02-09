@@ -1,4 +1,4 @@
-name: Feature Pull Request
+name: Pull Request
 
 on:
   pull_request:

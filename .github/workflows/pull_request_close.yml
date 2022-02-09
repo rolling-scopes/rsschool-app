@@ -1,4 +1,4 @@
-name: Delete Feature Deployment
+name: Pull Request Delete
 
 on:
   pull_request:
