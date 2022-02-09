@@ -10,7 +10,7 @@ import { DockerFunction } from './DockerFunctionConstruct';
 import { CfnOutput } from 'aws-cdk-lib';
 
 type Props = cdk.StackProps & {
-  branch: string;
+  feature: string;
   deployId: string;
   certificateArn: string;
 };
@@ -22,17 +22,17 @@ export class RsSchoolAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const { branch, certificateArn, deployId } = props;
+    const { feature, certificateArn, deployId } = props;
 
-    this.fqdn = `env-${branch}.app.rs.school`;
+    this.fqdn = `${feature}.app.rs.school`;
     this.url = `https://${this.fqdn}`;
 
     const httpApi = new apiv2.HttpApi(this, 'HttpApi', {
-      apiName: branch,
+      apiName: feature,
     });
 
     const nextApp = new DockerFunction(this, 'Next', {
-      branch,
+      feature,
       deployId,
       httpApi: httpApi,
       repository: Repository.fromRepositoryName(this, 'UiRepository', 'rsschool-ui'),
@@ -43,7 +43,7 @@ export class RsSchoolAppStack extends cdk.Stack {
     });
 
     const serverApi = new DockerFunction(this, 'ServerApi', {
-      branch,
+      feature,
       deployId,
       httpApi: httpApi,
       memorySize: 2048,
@@ -55,7 +55,7 @@ export class RsSchoolAppStack extends cdk.Stack {
     });
 
     const nestjsApi = new DockerFunction(this, 'NestjsApi', {
-      branch,
+      feature,
       deployId,
       httpApi: httpApi,
       memorySize: 2048,

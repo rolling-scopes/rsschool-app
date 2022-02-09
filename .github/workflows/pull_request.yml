@@ -133,14 +133,11 @@ jobs:
         run: |
           npm run build
 
-      - name: Set Image Tag
-        id: image-tag
+      - name: Prepare
         working-directory: ./setup/deploy
         run: |
           mkdir -p /tmp/.buildx-cache
           mkdir -p /tmp/.buildx-cache-new
-          echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
-          echo ::set-output name=IMAGE_TAG::$(node branch-hash.js)
 
       - name: Upload to CDN
         working-directory: ./client
@@ -164,7 +161,7 @@ jobs:
           context: ./client
           file: ./client/Dockerfile.lambda
           push: true
-          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:${{ steps.image-tag.outputs.IMAGE_TAG }}
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -186,7 +183,7 @@ jobs:
           context: ./server
           file: ./server/Dockerfile.lambda
           push: true
-          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:${{ steps.image-tag.outputs.IMAGE_TAG }}
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -208,7 +205,7 @@ jobs:
           context: ./nestjs
           file: ./nestjs/Dockerfile.lambda
           push: true
-          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:${{ steps.image-tag.outputs.IMAGE_TAG }}
+          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:pr${{ github.event.pull_request.number }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -242,13 +239,6 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
-      - name: Set Image Tag
-        id: image-tag
-        working-directory: ./setup/deploy
-        run: |
-          echo "IMAGE_TAG=$(node branch-hash.js)" >> $GITHUB_ENV
-          echo ::set-output name=IMAGE_TAG::$(node branch-hash.js)
-
       - name: Deploy
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         env:
@@ -258,7 +248,7 @@ jobs:
         working-directory: ./setup/deploy
         run: |
           npm ci
-          npx cdk deploy --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
+          npx cdk deploy --require-approval never -c branch=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
 
       - uses: apalchys/deployment-action@v1.2.6
         name: Create GitHub deployment
@@ -268,8 +258,8 @@ jobs:
           pr: true
           pr_id: ${{ github.event.pull_request.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.app.rs.school
-          environment: staging
+          target_url: https://pr${{ github.event.pull_request.number }}.app.rs.school
+          environment: pr${{ github.event.pull_request.number }}
           initial_status: success
 
   pr_test:

@@ -8,7 +8,7 @@ import * as apiv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 
 export type DockerFunctionProps = cdk.StackProps & {
-  branch: string;
+  feature: string;
   deployId: string;
   variables?: Record<string, string>;
   repository: IRepository;
@@ -24,9 +24,9 @@ export class DockerFunction extends Construct {
 
   constructor(scope: Construct, id: string, props: DockerFunctionProps) {
     super(scope, id);
-    const { branch, variables, httpApi, basePath, deployId, memorySize } = props;
+    const { feature, variables, httpApi, basePath, deployId, memorySize } = props;
 
-    const tag = branch;
+    const tag = feature;
     const dockerImageFunction = new lambda.DockerImageFunction(this, 'DockerImageFunction', {
       description: tag,
       code: lambda.DockerImageCode.fromEcr(props.repository, { tag }),
@@ -44,7 +44,7 @@ export class DockerFunction extends Construct {
     const dockerImageUpdater = new custom.AwsCustomResource(this, 'DockerImageUpdater', {
       installLatestAwsSdk: false,
       onCreate: {
-        physicalResourceId: custom.PhysicalResourceId.of(branch),
+        physicalResourceId: custom.PhysicalResourceId.of(feature),
         service: 'Lambda',
         action: 'updateFunctionCode',
         parameters: {
