@@ -25,9 +25,9 @@ async function bootstrap() {
 
 export const handler = async (event: any, context: any, callback: any) => {
   const server = await bootstrap();
-  const log = (error: any, result: any) => {
-    console.log(error, result);
-    callback(error, result);
-  };
-  return server(event, context, log);
+
+  const result = await server(event, context, callback);
+
+  console.log(result);
+  return result;
 };
