@@ -264,7 +264,7 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          ref: $${ github.event.pull_request.head.ref } }}
+          ref: ${{ github.event.pull_request.head.ref }}
           pr: true
           pr_id: ${{ github.event.pull_request.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
