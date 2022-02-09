@@ -28,6 +28,9 @@ export const handler = async (event: any, context: any, callback: any) => {
 
   const result = await server(event, context, callback);
 
-  console.log(result);
+  // it's a ditry fix for dev login redirect
+  if (result && result.statusCode === 200 && !result.body && result.multiValueHeaders?.location?.[0] === '/') {
+    result.statusCode = 307;
+  }
   return result;
 };
