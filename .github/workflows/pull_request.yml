@@ -248,7 +248,7 @@ jobs:
         working-directory: ./setup/deploy
         run: |
           npm ci
-          npx cdk deploy --require-approval never -c branch=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
+          npx cdk deploy --require-approval never -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
 
       - uses: apalchys/deployment-action@v1.2.6
         name: Create GitHub deployment
