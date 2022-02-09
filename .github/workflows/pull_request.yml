@@ -265,7 +265,7 @@ jobs:
         id: deployment
         with:
           pr: true
-          pr_id: ${{ github.event.pull_request.number }}
+          pr_id: ${{ github.event.pull_request.id }}
           token: ${{ secrets.GITHUB_TOKEN }}
           target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
           environment: staging
