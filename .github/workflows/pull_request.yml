@@ -264,10 +264,11 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
+          ref: $${ github.event.pull_request.head.ref } }}
           pr: true
           pr_id: ${{ github.event.pull_request.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
+          target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.app.rs.school
           environment: staging
           initial_status: success
 
