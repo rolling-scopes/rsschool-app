@@ -260,12 +260,12 @@ jobs:
           npm ci
           npx cdk deploy --require-approval never -c branch=${IMAGE_TAG} -c deployId=${GITHUB_RUN_ID}
 
-      - uses: altinukshini/deployment-action@releases/v1
+      - uses: apalchys/deployment-action@v1.2.6
         name: Create GitHub deployment
         id: deployment
         with:
           pr: true
-          pr_id: ${{ github.event.pull_request.id }}
+          pr_id: ${{ github.event.pull_request.number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
           environment: staging
