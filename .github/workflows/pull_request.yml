@@ -264,7 +264,7 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          pr: true,
+          pr: true
           pr_id: ${{ github.event.pull_request.id }}
           token: ${{ secrets.GITHUB_TOKEN }}
           target_url: https://env-${{ steps.image-tag.outputs.IMAGE_TAG }}.rs.school
