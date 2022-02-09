@@ -1,4 +1,4 @@
-name: Delete Deployment
+name: Delete Feature Deployment
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - 'tools/bumblebee/**'
 
 jobs:
-  delete:
+  pr_delete:
     runs-on: ubuntu-latest
     steps:
       - name: Delete Stack
