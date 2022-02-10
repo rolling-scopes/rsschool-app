@@ -1,10 +1,10 @@
 import Router from '@koa/router';
 import { BAD_REQUEST } from 'http-status-codes';
-import { getRepository } from 'typeorm';
+import { createQueryBuilder, getRepository } from 'typeorm';
 import { uniq } from 'lodash';
 import { Next } from 'koa';
 import { setResponse } from './utils';
-import { IUserSession, CourseUser, CourseRoles, CourseRole, CourseTask } from '../models';
+import { IUserSession, CourseUser, CourseRoles, CourseRole, CourseTask, User } from '../models';
 
 export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   if (!ctx.params.courseId) {
@@ -31,11 +31,8 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
     return;
   }
 
-  const [items, taskOwnerCourses] = await Promise.all([
-    getRepository(CourseUser)
-      .createQueryBuilder('courseUser')
-      .where('courseUser.userId = :userId', { userId: user.id })
-      .getMany(),
+  const [authDetails, taskOwnerCourses] = await Promise.all([
+    getAuthDetails(user.id),
     getRepository(CourseTask)
       .createQueryBuilder()
       .select('"courseId"')
@@ -44,7 +41,7 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
       .getRawMany(),
   ]);
 
-  const courseRoles: CourseRoles = items.reduce(
+  const courseRoles: CourseRoles = authDetails.courseUsers.reduce(
     (acc, item) => ({
       ...acc,
       [item.courseId]: uniq(
@@ -62,6 +59,58 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
     }
     courseRoles[courseId]?.push(CourseRole.TaskOwner);
   });
+  authDetails.students.forEach(student => {
+    user.roles[student.courseId] = 'student';
+  });
+  authDetails.mentors.forEach(mentor => {
+    user.roles[mentor.courseId] = 'mentor';
+  });
   user.coursesRoles = courseRoles;
   await next();
 };
+
+type AuthDetails = {
+  id: number;
+  githubId: string;
+  students: { courseId: number; id: number }[];
+  mentors: { courseId: number; id: number }[];
+  courseUsers: CourseUser[];
+};
+
+// TODO: copy/paste from nestjs. Temporary
+async function getAuthDetails(id: number): Promise<AuthDetails> {
+  const query = createQueryBuilder(User, 'user')
+    .select('user.id', 'id')
+    .addSelect('user.githubId', 'githubId')
+    .addSelect(
+      qb =>
+        qb
+          .select(`jsonb_agg(json_build_object('id', mentor.id, 'courseId', mentor."courseId"))`)
+          .from('mentor', 'mentor')
+          .where('mentor.userId = :id', { id }),
+      'mentors',
+    )
+    .addSelect(
+      qb =>
+        qb
+          .select(`jsonb_agg(json_build_object('id', student.id, 'courseId', student."courseId"))`)
+          .from('student', 'student')
+          .where('student.userId = :id', { id }),
+      'students',
+    )
+    .addSelect(
+      qb =>
+        qb.select('jsonb_agg("courseUser")').from(CourseUser, 'courseUser').where('courseUser.userId = :id', { id }),
+      'courseUsers',
+    )
+    .where({ id });
+
+  const result = await query.getRawOne();
+  return {
+    id: result.id,
+    githubId: result.githubId,
+    students: result.students ?? [],
+    mentors: result.mentors ?? [],
+    courseUsers: result.courseUsers ?? [],
+  };
+}
