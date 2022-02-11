@@ -16,7 +16,7 @@ export class RegistryService {
   ) {}
 
   public async approveMentor(githubId: string, preselectedCourses: string[]): Promise<User> {
-    const user = await this.usersService.getFullUserByGithubId(githubId);
+    const user = await this.usersService.getByGithubId(githubId);
     if (!user) return;
 
     await this.mentorsRegistryRepository.update({ userId: user.id }, { preselectedCourses });
