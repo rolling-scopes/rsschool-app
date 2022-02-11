@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from 'src/auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { NotificationDto } from './dto/notification.dto';
 import { SendNotificationDto } from './dto/send-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -10,13 +10,13 @@ import { NotificationsService } from './notifications.service';
 @Controller('notifications')
 @ApiTags('notifications')
 @UseGuards(DefaultGuard, RoleGuard)
+@RequiredRoles([Role.Admin])
 export class NotificationsController {
   constructor(private notificationsService: NotificationsService) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getNotifications' })
   @ApiForbiddenResponse()
-  @RequiredAppRoles([Role.Admin])
   @ApiOkResponse({ type: [NotificationDto] })
   public async getNotifications() {
     const notifications = await this.notificationsService.getNotifications();
@@ -27,7 +27,6 @@ export class NotificationsController {
   @ApiOperation({ operationId: 'updateNotification' })
   @ApiOkResponse({ type: NotificationDto })
   @ApiForbiddenResponse()
-  @RequiredAppRoles([Role.Admin])
   public async updateNotification(@Body() dto: UpdateNotificationDto) {
     const notification = await this.notificationsService.saveNotification(dto);
     return new NotificationDto(notification);
@@ -46,7 +45,6 @@ export class NotificationsController {
   @ApiOperation({ operationId: 'deleteNotification' })
   @ApiOkResponse()
   @ApiForbiddenResponse()
-  @RequiredAppRoles([Role.Admin])
   public async deleteNotification(@Param('id') id: string) {
     await this.notificationsService.deleteNotification(id);
   }
@@ -55,7 +53,6 @@ export class NotificationsController {
   @ApiOperation({ operationId: 'sendNotification' })
   @ApiOkResponse()
   @ApiForbiddenResponse()
-  @RequiredAppRoles([Role.Admin])
   public async sendNotification(@Body() dto: SendNotificationDto) {
     await this.notificationsService.sendNotification(dto);
   }
@@ -64,7 +61,6 @@ export class NotificationsController {
   @ApiOperation({ operationId: 'sendNotificationBulk' })
   @ApiOkResponse()
   @ApiForbiddenResponse()
-  @RequiredAppRoles([Role.Admin])
   public async sendNotificationBulk() {
     throw new Error('not implemented');
   }

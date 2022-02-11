@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from '../auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { DisciplinesService } from './disciplines.service';
 import { CreateDisciplineDto, DisciplineDto, UpdateDisciplineDto } from './dto';
 
@@ -11,7 +11,7 @@ export class DisciplinesController {
   constructor(private readonly service: DisciplinesService) {}
 
   @Post('/')
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'createDiscipline' })
   @ApiOkResponse({ type: DisciplineDto })
   public async create(@Body() dto: CreateDisciplineDto) {
@@ -28,14 +28,14 @@ export class DisciplinesController {
   }
 
   @Delete('/:id')
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'deleteDiscipline' })
   public async delete(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id);
   }
 
   @Patch('/:id')
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'updateDiscipline' })
   @ApiOkResponse({ type: DisciplineDto })
   public async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDisciplineDto) {
