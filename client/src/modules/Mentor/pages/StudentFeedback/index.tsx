@@ -18,11 +18,10 @@ import { convertSoftSkillValueToEnum, softSkills } from '../../data/softSkills';
 
 type FormValues = Record<SoftSkillEntryIdEnum, number> & {
   studentId: number;
-  impression: string;
+  suggestions: string;
   recommendation: RecommendationEnum;
-  gaps: string;
   recommendationComment: string;
-  englishLevelIndex: number;
+  englishLevel: EnglishLevelEnum;
 };
 
 const englishLevels = [
@@ -61,13 +60,11 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
       const payload = {
         recommendation: rest.recommendation,
         content: {
-          gaps: rest.gaps,
-          impression: rest.impression,
+          suggestions: rest.suggestions ?? '',
           recommendationComment: rest.recommendationComment,
           softSkills: softSkills.map(({ id }) => ({ id, value: convertSoftSkillValueToEnum(rest[id]) })),
         },
-        englishLevel:
-          rest.englishLevelIndex != null ? englishLevels[rest.englishLevelIndex - 1] : EnglishLevelEnum.Unknown,
+        englishLevel: rest.englishLevel ? rest.englishLevel : EnglishLevelEnum.Unknown,
       };
       await new StudentsFeedbacksApi().createStudentFeedback(studentId, payload);
       message.success('Feedback successfully sent');
@@ -89,30 +86,42 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
           </>
         }
       />
+      <Alert
+        style={{ marginTop: 8 }}
+        showIcon
+        type="warning"
+        message={
+          <div>If you recommend to "Hire", we will attach the feedback to student's CV and it will be public.</div>
+        }
+      />
       <Form style={{ margin: '24px 0' }} onFinish={handleSubmit} form={form} layout="vertical">
         <Form.Item name="studentId" label="Student">
           <UserSearch allowClear={false} clearIcon={false} defaultValues={students} keyField="id" />
         </Form.Item>
         <Typography.Title level={5}>Recommended To</Typography.Title>
-        <Form.Item name="recommendation" required>
+        <Form.Item name="recommendation" rules={[{ required: true, message: 'Required' }]}>
           <Radio.Group>
             <Radio.Button value={RecommendationEnum.Hire}>Hire</Radio.Button>
             <Radio.Button value={RecommendationEnum.NotHire}>Not Hire</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        <Form.Item name="impression" required label="General Impression">
+        <Form.Item name="recommendationComment" rules={[{ required: true, message: 'Required' }]} label="What was good">
           <Input.TextArea rows={7} />
         </Form.Item>
-        <Form.Item name="gaps" label="Gaps">
+        <Form.Item name="suggestions" label="What could be improved">
           <Input.TextArea rows={3} />
         </Form.Item>
-        <Form.Item name="recommendationComment" required label="Comment">
-          <Input.TextArea placeholder="Please tell us why you made such recommendation" rows={3} />
-        </Form.Item>
         <Typography.Title level={5}>English</Typography.Title>
-        <Form.Item label="Approximate English level" name="englishLevelIndex">
-          <Rate tooltips={englishLevels} count={englishLevels.length} />
+        <Form.Item label="Approximate English level" name="englishLevel">
+          <Radio.Group>
+            {englishLevels.map(level => (
+              <Radio.Button key={level} value={level}>
+                {level.toUpperCase()}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
         </Form.Item>
+
         <Typography.Title level={5}>Soft Skills</Typography.Title>
         <Row wrap={true}>
           {softSkills.map(({ id, name }) => (

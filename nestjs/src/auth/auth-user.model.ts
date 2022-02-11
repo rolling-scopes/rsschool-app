@@ -1,6 +1,6 @@
 import { CourseTask } from '@entities/courseTask';
 import { CourseUser } from '@entities/courseUser';
-import { User } from '@entities/user';
+import { AuthDetails } from './auth.repository';
 
 export enum Role {
   Admin = 'admin',
@@ -34,7 +34,7 @@ export class AuthUser {
   public readonly githubId: string;
   public readonly courses: Record<number, CourseInfo>;
 
-  constructor(user: Partial<User>, courseTasks: CourseTask[] = [], admin: boolean = false) {
+  constructor(user: AuthDetails, courseTasks: CourseTask[] = [], admin: boolean = false) {
     const roles: { [key: string]: 'student' | 'mentor' } = {};
     const courseRoles: CourseRoles = {};
     const courses: Record<number, CourseInfo> = {};

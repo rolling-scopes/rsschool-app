@@ -91,6 +91,10 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
         <div>4) Ask the next question</div>
       </Typography>
 
+      <Typography>
+        <div style={{ marginBottom: 8 }} dangerouslySetInnerHTML={{ __html: template.descriptionHtml ?? '' }} />
+      </Typography>
+
       <Form
         form={form}
         layout="vertical"
@@ -104,7 +108,10 @@ export function InterviewFeedback({ course, type, interviewId }: PageProps) {
 
         {template.categories.map(category => (
           <Fragment key={category.id}>
-            <Typography.Title level={4}>{category.name}</Typography.Title>
+            <Typography.Title level={4}>
+              {category.name}
+              {category.description ? <Typography.Title level={5}>{category.description}</Typography.Title> : null}
+            </Typography.Title>
             {category.questions.map(question => {
               switch (question.type) {
                 case InputType.Input:

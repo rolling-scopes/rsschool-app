@@ -15,8 +15,7 @@ import { Mentor } from './mentor';
 import { Student } from './student';
 
 export interface StudentFeedbackContent {
-  impression: string;
-  gaps: string;
+  suggestions: string;
   recommendationComment: string;
   softSkills: { id: SoftSkill; value: Rate }[];
 }

@@ -27,7 +27,7 @@ export class ProfileController {
     if (username !== user.githubId && username !== 'me') {
       throw new ForbiddenException();
     }
-    const data = await this.profileService.getCourses(user.githubId);
+    const data = await this.profileService.getCourses(user);
     return data.map(course => new ProfileCourseDto(course));
   }
 }

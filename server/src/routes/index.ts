@@ -8,7 +8,6 @@ import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
 import { discordServerRoute } from './discordServer';
 import { userGroupRoute } from './userGroup';
-import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
 import { filesRoute } from './file';
@@ -51,7 +50,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
 
   // public routes
   applyRouter(router, certificateRoute(logger));
-  applyRouter(router, authRoute());
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));

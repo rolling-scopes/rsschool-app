@@ -18,7 +18,7 @@ export function getPinoHttp(): Params['pinoHttp'] {
     return [
       pinoOptions,
       cloudwatchStream({
-        interval: 4000,
+        interval: 2000,
         aws_access_key_id: awsAccessKeyId,
         aws_secret_access_key: awsSecretAccessKey,
         aws_region: awsRegion,

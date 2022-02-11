@@ -34,25 +34,20 @@ export function Students(props: CourseOnlyPageProps) {
                   </span>
                 </>
               }
-              actions={
-                feedback
-                  ? []
-                  : [
-                      <Link href={routes.getStudentFeedbackRoute(alias, student.id)}>
-                        <Button
-                          type="link"
-                          icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}
-                        >
-                          {feedback ? `Edit Feedback` : `Give Feedback`}
-                        </Button>
-                      </Link>,
-                      <Link href={routes.getExpelRoute(alias)}>
-                        <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
-                          Expel
-                        </Button>
-                      </Link>,
-                    ]
-              }
+              actions={[
+                !feedback ? (
+                  <Link href={routes.getStudentFeedbackRoute(alias, student.id)}>
+                    <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
+                      {feedback ? `Edit Feedback` : `Give Feedback`}
+                    </Button>
+                  </Link>
+                ) : null,
+                <Link href={routes.getExpelRoute(alias)}>
+                  <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
+                    Expel
+                  </Button>
+                </Link>,
+              ].filter(Boolean)}
               extra={`${student.cityName}, ${student.countryName}`}
             >
               <Row gutter={16}>
