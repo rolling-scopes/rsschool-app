@@ -9,12 +9,13 @@ export function initializeFeatures(query: Record<string, string | string[] | und
     const featureName = key as FeatureName;
     const value = query[featureName] as string;
 
-    featureToggles[featureName] = value === 'on';
+    featureToggles[featureName] = value ? value === 'on' : featureToggles[key as FeatureName];
   }
 }
 
 function getInitialFeatureToggles() {
   return {
     notifications: false,
+    adminMessenger: false,
   };
 }
