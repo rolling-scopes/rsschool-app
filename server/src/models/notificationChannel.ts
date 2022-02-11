@@ -3,7 +3,7 @@ import { Entity, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from 'typeo
 @Entity()
 export class NotificationChannel {
   @PrimaryColumn()
-  id: string;
+  id: NotificationChannelId;
 
   @CreateDateColumn()
   createdDate: number;
@@ -11,3 +11,5 @@ export class NotificationChannel {
   @UpdateDateColumn()
   updatedDate: number;
 }
+
+export type NotificationChannelId = 'telegram' | 'email';

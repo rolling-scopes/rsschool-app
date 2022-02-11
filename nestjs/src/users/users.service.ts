@@ -30,4 +30,10 @@ export class UsersService {
   public saveUser(user: Partial<User>) {
     return this.userRepository.save(user);
   }
+
+  public getUserByUserId(userId: number) {
+    return this.userRepository.findOne({
+      where: { id: userId },
+    });
+  }
 }

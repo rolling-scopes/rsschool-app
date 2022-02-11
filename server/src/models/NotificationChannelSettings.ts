@@ -31,11 +31,11 @@ export class NotificationChannelSettings {
   template: EmailTemplate | TelegramTemplate;
 }
 
-type EmailTemplate = {
+export type EmailTemplate = {
   subject: string;
   body: string;
 };
 
-type TelegramTemplate = {
+export type TelegramTemplate = {
   body: string;
 };
