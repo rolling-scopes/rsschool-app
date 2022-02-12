@@ -8,7 +8,7 @@ import { In, Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { HttpService } from '@nestjs/axios';
 import { SendNotificationDto } from './dto/send-notification.dto';
-import { EmailTemplate, NotificationChannelSettings } from '@entities/NotificationChannelSettings';
+import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@entities/NotificationChannelSettings';
 import { compile } from 'handlebars';
 import { UsersService } from 'src/users/users.service';
 import { Consent } from '@entities/consent';
@@ -83,15 +83,27 @@ export class NotificationsService {
       .execute();
   }
   public async sendNotification(notification: SendNotificationDto) {
-    const { userId, notificationId, data } = notification;
+    const { userId, notificationId, data, expireDate } = notification;
     const [channels, contacts] = await Promise.all([
       this.getUserNotificationSettings(userId, notificationId),
       this.getUserContacts(userId),
     ]);
 
-    const notifications = channels.map(channel => this.buildChannelMessage(channel, data, contacts)).filter(Boolean);
+    const channelMap = new Map<NotificationChannelId, NotificationData>();
+    channels.forEach(channel => {
+      const message = this.buildChannelMessage(channel, data, contacts);
+      if (message) {
+        const { channelId, template, to } = message;
+        channelMap.set(channelId, { template, to });
+      }
+    });
 
-    this.publishNotifications(notifications);
+    await this.publishNotification({
+      channelId: Array.from(channelMap.keys()),
+      userId,
+      expireDate,
+      data: Object.fromEntries(channelMap) as Record<NotificationChannelId, NotificationData>,
+    });
   }
 
   private async getUserNotificationSettings(userId: number, notificationId: string) {
@@ -159,19 +171,25 @@ export class NotificationsService {
     return tgConsent?.channelValue;
   }
 
-  private async publishNotifications(notifications: NotificationPayload[]) {
-    console.log(JSON.stringify(notifications));
+  private async publishNotification(notification: NotificationPayload) {
     if (this.configService.isDev) return;
+
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
-    await this.httpService.post(`${restApiUrl}/v2/notification`, notifications, {
+    await this.httpService.post(`${restApiUrl}/v2/notification`, notification, {
       headers: { 'x-api-key': restApiKey },
     });
   }
 }
 
 type NotificationPayload = {
-  channelId: NotificationChannelId;
+  channelId: NotificationChannelId[];
+  userId: number;
+  expireDate?: number;
+  data: Record<NotificationChannelId, NotificationData>;
+};
+
+type NotificationData = {
   to: string;
-  template: object;
+  template: EmailTemplate | TelegramTemplate;
 };

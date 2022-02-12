@@ -1,3 +1,4 @@
+import { NotificationChannelId } from '@entities/notificationChannel';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean } from 'class-validator';
 
@@ -10,5 +11,5 @@ export class UpdateNotificationUserSettingsDto {
   public enabled: boolean;
 
   @ApiProperty()
-  public channelId: string;
+  public channelId: NotificationChannelId;
 }

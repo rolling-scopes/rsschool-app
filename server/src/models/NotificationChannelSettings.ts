@@ -1,6 +1,6 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn, ManyToOne, Index } from 'typeorm';
 import { Notification } from '.';
-import { NotificationChannel } from './notificationChannel';
+import { NotificationChannel, NotificationChannelId } from './notificationChannel';
 
 @Entity()
 export class NotificationChannelSettings {
@@ -25,8 +25,7 @@ export class NotificationChannelSettings {
 
   @PrimaryColumn()
   @Index()
-  channelId: string;
-
+  channelId: NotificationChannelId;
   @Column({ type: 'simple-json', nullable: true })
   template: EmailTemplate | TelegramTemplate;
 }
