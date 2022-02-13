@@ -28,6 +28,7 @@ export class UsersNotificationsController {
   }
 
   @Put('/')
+  @ApiOperation({ operationId: 'updateUserNotifications' })
   @ApiOkResponse({ type: [UpdateNotificationUserSettingsDto] })
   public async updateUserNotifications(@Req() req: CurrentRequest, @Body() dto: UpdateNotificationUserSettingsDto[]) {
     return await this.userNotificationsService.saveUserNotificationSettings(req.user.id, dto);

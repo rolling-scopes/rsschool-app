@@ -60,8 +60,7 @@ function buildColumns(
   ];
 
   return columns.concat(
-    Object.keys(NotificationChannel)
-    .map<ColumnType<UserNotificationSettings>>(channel => {
+    Object.keys(NotificationChannel).map<ColumnType<UserNotificationSettings>>(channel => {
       const dataIndex = ['settings', channel];
       return {
         align: 'center',
