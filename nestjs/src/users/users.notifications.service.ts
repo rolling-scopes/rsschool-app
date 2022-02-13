@@ -100,7 +100,7 @@ export class UserNotificationsService {
     const user = await this.usersService.getUserByUserId(userId);
     return {
       telegram: await this.getUserTelegramChatId(user),
-      email: user.primaryEmail,
+      email: user.contactsEmail,
     };
   }
 

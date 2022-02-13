@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { HttpService } from '@nestjs/axios';
 import { SendNotificationDto } from './dto/send-notification.dto';
-import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@entities/NotificationChannelSettings';
+import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@entities/notificationChannelSettings';
 import { compile } from 'handlebars';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { UserNotificationsService } from 'src/users/users.notifications.service';
