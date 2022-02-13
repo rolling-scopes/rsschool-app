@@ -18,5 +18,6 @@ export class SendNotificationDto {
   @ApiProperty()
   @IsNumber()
   @IsOptional()
+  // date in ms
   public expireDate?: number;
 }

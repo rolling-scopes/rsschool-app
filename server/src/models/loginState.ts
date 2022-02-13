@@ -1,4 +1,5 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, Index } from 'typeorm';
+import { NotificationChannelId } from './notificationChannel';
 
 @Entity()
 export class LoginState {
@@ -15,4 +16,7 @@ export class LoginState {
 
 export type LoginData = Partial<{
   redirectUrl: string;
+
+  channelId?: NotificationChannelId;
+  externalId?: string;
 }>;
