@@ -6,8 +6,6 @@ import { UpdateNotificationUserSettingsDto } from 'src/users/dto/update-notifica
 import { In, Repository } from 'typeorm';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
 import { UsersService } from 'src/users/users.service';
-import { Consent } from '@entities/consent';
-import { User } from '@entities/user';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { NotificationConnectionExistsDto } from 'src/users/dto/notification-connection-exists.dto';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
@@ -20,8 +18,6 @@ export class UserNotificationsService {
     private notificationsRepository: Repository<Notification>,
     @InjectRepository(NotificationUserSettings)
     private userNotificationsRepository: Repository<NotificationUserSettings>,
-    @InjectRepository(Consent)
-    private consentRepository: Repository<Consent>,
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private usersService: UsersService,
@@ -78,43 +74,46 @@ export class UserNotificationsService {
   }
 
   public async getUserNotificationSettings(userId: number, notificationId: string) {
-    const notificationChannels = (await this.userNotificationsRepository
-      .createQueryBuilder('userNotifications')
-      .where({
-        notificationId,
-        enabled: true,
-        userId,
+    const [notificationChannels, user] = await Promise.all([
+      this.userNotificationsRepository
+        .createQueryBuilder('userNotifications')
+        .where({
+          notificationId,
+          enabled: true,
+          userId,
+        })
+        .innerJoinAndMapOne(
+          'userNotifications.connection',
+          NotificationUserConnection,
+          'connection',
+          `userNotifications.userId = connection.userId and
+        (userNotifications.channelId = connection.channelId or userNotifications.channelId = 'email' ) and
+        connection.enabled = true
+        `,
+        )
+        .innerJoinAndMapOne(
+          'userNotifications.settings',
+          NotificationChannelSettings,
+          'channelSettings',
+          'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
+        )
+        .getMany() as unknown as {
+        id: string;
+        channelId: NotificationChannelId;
+        settings: NotificationChannelSettings;
+        connection: NotificationUserConnection;
+      }[],
+      this.usersService.getUserByUserId(userId),
+    ]);
+
+    return notificationChannels
+      .flatMap(notification => {
+        const { connection, settings } = notification;
+        return {
+          ...settings,
+          externalId: notification.channelId === 'email' ? user.contactsEmail : connection.externalId,
+        };
       })
-      .innerJoinAndMapMany(
-        'userNotifications.settings',
-        NotificationChannelSettings,
-        'channelSettings',
-        'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
-      )
-      .getMany()) as unknown as { id: string; settings: NotificationChannelSettings[] }[];
-
-    return notificationChannels.flatMap(notification => notification.settings);
-  }
-
-  public async getUserContacts(userId: number) {
-    const user = await this.usersService.getUserByUserId(userId);
-    return {
-      telegram: await this.getUserTelegramChatId(user),
-      email: user.contactsEmail,
-    };
-  }
-
-  public async getUserTelegramChatId(user: User) {
-    if (!user.contactsTelegram) return;
-
-    // temporary zone: for now we will get contacts from existing consent. TODO: remove consent model and create separate entity for storing just contact channels.
-    const [tgConsent] = await this.consentRepository.find({
-      where: {
-        username: user.contactsTelegram,
-        channelType: 'tg',
-      },
-    });
-
-    return tgConsent?.channelValue;
+      .filter(notification => !!notification.externalId);
   }
 }

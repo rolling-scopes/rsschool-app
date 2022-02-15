@@ -45,19 +45,18 @@ export class NotificationsService {
 
   public async sendNotification(notification: SendNotificationDto) {
     const { userId, data, notificationId, expireDate } = notification;
-    const [channels, contacts] = await Promise.all([
-      this.userNotificationsService.getUserNotificationSettings(userId, notificationId),
-      this.userNotificationsService.getUserContacts(userId),
-    ]);
+    const channels = await this.userNotificationsService.getUserNotificationSettings(userId, notificationId);
 
     const channelMap = new Map<NotificationChannelId, NotificationData>();
-    channels.forEach(channel => {
-      const message = this.buildChannelMessage(channel, data, contacts);
+    channels.forEach((channel: any) => {
+      const message = this.buildChannelMessage(channel, data);
       if (message) {
         const { channelId, template, to } = message;
         channelMap.set(channelId, { template, to });
       }
     });
+
+    if (channelMap.size === 0) return;
 
     await this.publishNotification({
       channelId: Array.from(channelMap.keys()),
@@ -67,18 +66,13 @@ export class NotificationsService {
     });
   }
 
-  private buildChannelMessage(
-    channel: NotificationChannelSettings,
-    data: object,
-    contacts: Record<NotificationChannelId, string>,
-  ) {
-    const channelId = channel.channelId as NotificationChannelId;
-    const to = contacts[channelId];
-    if (!to || !channel.template) return;
+  private buildChannelMessage(channel: NotificationChannelSettings & { externalId: string }, data: object) {
+    const { channelId, externalId, template } = channel;
+    if (!externalId || !template) return;
 
     const channelMessage = {
       channelId,
-      to,
+      to: externalId,
       template: {
         body: compile(channel.template.body)(data),
       },

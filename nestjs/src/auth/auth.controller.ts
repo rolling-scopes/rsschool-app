@@ -52,7 +52,10 @@ export class AuthController {
   @Post('github/connect')
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin])
-  createConnectViaGitHubLink(@Body() dto: AuthConnectionDto) {
-    return this.githubStrategy.getAuthorizeUrl(dto);
+  async createConnectViaGitHubLink(@Body() dto: AuthConnectionDto) {
+    const link = await this.githubStrategy.getAuthorizeUrl(dto);
+    return {
+      link,
+    };
   }
 }
