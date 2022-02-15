@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateNotificationUserSettingsDto } from 'src/users/dto/update-notification-user-settings.dto';
 import { In, Repository } from 'typeorm';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from './users.service';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { NotificationConnectionExistsDto } from 'src/users/dto/notification-connection-exists.dto';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
@@ -61,6 +61,15 @@ export class UserNotificationsService {
       where: {
         channelId,
         externalId,
+      },
+    });
+  }
+
+  public getUserActiveConnections(userId: number) {
+    return this.notificationUserConnectionRepository.find({
+      where: {
+        userId,
+        enabled: true,
       },
     });
   }

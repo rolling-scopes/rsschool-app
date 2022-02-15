@@ -1,5 +1,5 @@
 import { NotificationChannelId } from '@entities/notificationChannel';
-import { NotificationUserConnection } from '@entities/NotificationUserConnection';
+import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 

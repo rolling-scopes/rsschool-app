@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
 import type { Profile } from 'passport';
-import { UserNotificationsService } from 'src/users/users.notifications.service';
+import { UserNotificationsService } from '../users/users.notifications.service';
 import { MoreThanOrEqual } from 'typeorm';
 import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
