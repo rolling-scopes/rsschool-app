@@ -5,6 +5,9 @@ import { Role, CourseRole } from './auth-user.model';
 import { CurrentRequest } from './auth.service';
 import { REQUIRED_ROLES_KEY } from './role.decorator';
 
+const appRoles = Object.values(Role);
+const courseRoles = Object.values(CourseRole);
+
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
@@ -22,10 +25,8 @@ export class RoleGuard implements CanActivate {
     const req = context.getArgs<[CurrentRequest]>()[0];
     const { user, params } = req;
 
-    const requiredAppRoles = roles.filter(role => Object.values(Role).includes(role as Role)) as Role[];
-    const requiredCourseRoles = roles.filter(role =>
-      Object.values(CourseRole).includes(role as CourseRole),
-    ) as CourseRole[];
+    const requiredAppRoles = roles.filter(role => appRoles.includes(role as Role)) as Role[];
+    const requiredCourseRoles = roles.filter(role => courseRoles.includes(role as CourseRole)) as CourseRole[];
 
     if (requiredAppRoles.length === 0 && requiredCourseRoles.length === 0) {
       return true;
@@ -49,14 +50,13 @@ export class RoleGuard implements CanActivate {
 
 function checkUserHasCourseRole(requiredCourseRoles: CourseRole[], user: AuthUser, courseId: string) {
   if (!courseId) {
-    throw false;
+    return false;
   }
   return requiredCourseRoles.some(courseRole => user.coursesRoles[courseId]?.includes(courseRole));
 }
 
 function checkUserHasRoleInAnyCourse(requiredCourseRoles: CourseRole[], user: AuthUser) {
-  const hasRole = requiredCourseRoles.some(requiredRole =>
-    Object.values(user.coursesRoles).some(roles => roles.includes(requiredRole)),
-  );
+  const allCourseRoles = Object.values(user.coursesRoles);
+  const hasRole = requiredCourseRoles.some(requiredRole => allCourseRoles.some(roles => roles.includes(requiredRole)));
   return hasRole;
 }
