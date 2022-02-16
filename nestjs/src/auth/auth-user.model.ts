@@ -9,7 +9,7 @@ export enum Role {
 
 export type CourseRoles = Record<string, CourseRole[]>;
 
-export const enum CourseRole {
+export enum CourseRole {
   TaskOwner = 'taskOwner',
   JuryActivist = 'juryActivist',
   Manager = 'manager',

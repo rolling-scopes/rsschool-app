@@ -52,9 +52,9 @@ export function HomeSummary({ summary, courseTasks }: Props) {
                 <GithubUserLink value={githubId!} />
               </div>
             </div>
-            {contacts.map(({ label, value }) =>
+            {contacts.map(({ label, value }, index) =>
               value ? (
-                <Typography.Paragraph>
+                <Typography.Paragraph key={index}>
                   <Typography.Text type="secondary">{label}:</Typography.Text> {value}
                 </Typography.Paragraph>
               ) : null,
