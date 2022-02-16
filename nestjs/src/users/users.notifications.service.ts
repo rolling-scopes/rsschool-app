@@ -91,13 +91,13 @@ export class UserNotificationsService {
           enabled: true,
           userId,
         })
-        .innerJoinAndMapOne(
+        .leftJoinAndMapOne(
           'userNotifications.connection',
           NotificationUserConnection,
           'connection',
           `userNotifications.userId = connection.userId and
-        (userNotifications.channelId = connection.channelId or userNotifications.channelId = 'email' ) and
-        connection.enabled = true
+           userNotifications.channelId = connection.channelId and
+           connection.enabled = true
         `,
         )
         .innerJoinAndMapOne(
@@ -114,13 +114,12 @@ export class UserNotificationsService {
       }[],
       this.usersService.getUserByUserId(userId),
     ]);
-
     return notificationChannels
       .flatMap(notification => {
         const { connection, settings } = notification;
         return {
           ...settings,
-          externalId: notification.channelId === 'email' ? user.contactsEmail : connection.externalId,
+          externalId: notification.channelId === 'email' ? user.contactsEmail : connection?.externalId,
         };
       })
       .filter(notification => !!notification.externalId);

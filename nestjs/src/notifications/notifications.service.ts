@@ -10,7 +10,9 @@ import { EmailTemplate, NotificationChannelSettings, TelegramTemplate } from '@e
 import { compile } from 'handlebars';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { UserNotificationsService } from 'src/users/users.notifications.service';
+import { emailTemplate } from './email-template';
 
+const compiledTemplate = compile(emailTemplate);
 @Injectable()
 export class NotificationsService {
   constructor(
@@ -74,7 +76,9 @@ export class NotificationsService {
       channelId,
       to: externalId,
       template: {
-        body: compile(channel.template.body)(data),
+        body: compiledTemplate({
+          emailBody: compile(channel.template.body)(data),
+        }),
       },
     };
     if (channel.channelId === 'email') {
