@@ -1,4 +1,5 @@
 import { Notification, NotificationScope } from '@entities/notification';
+import { NotificationChannelId } from '@entities/notificationChannel';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 
@@ -16,7 +17,7 @@ export class EmailTemplate {
 
 export class ChannelSettings {
   @ApiProperty()
-  channelId: string;
+  channelId: NotificationChannelId;
   @ApiProperty()
   template: EmailTemplate | TelegramTemplate;
 }

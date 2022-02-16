@@ -4,6 +4,8 @@ import { ConfigService } from '../../config';
 import { Strategy, Profile } from 'passport-github2';
 import { AuthService } from '../auth.service';
 import { AuthUser, CurrentRequest } from '..';
+import { AuthConnectionDto } from '../dto/AuthConnectionDto';
+import passport from 'passport';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -19,15 +21,18 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     });
   }
 
-  async authenticate(req: CurrentRequest, options: object) {
-    const { url } = req.query;
-    const id = await this.authService.createLoginState({
-      redirectUrl: url as string,
-    });
-    super.authenticate(req, {
-      ...options,
-      state: id,
-    });
+  async authenticate(req: CurrentRequest, options: passport.AuthenticateOptions) {
+    const { url, code } = req.query;
+    const opts = { ...options };
+
+    if (!code) {
+      const id = await this.authService.createLoginState({
+        redirectUrl: url as string,
+      });
+      opts.state = id;
+    }
+
+    super.authenticate(req, opts);
   }
 
   public async validate(
@@ -40,12 +45,26 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     if (!state) {
       throw new UnauthorizedException();
     }
-    const user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
+    const [user] = await Promise.all([
+      this.authService.createAuthUser(profile, this.config.auth.dev.admin),
+      this.authService.deleteLoginState(state.id),
+    ]);
 
     this.logger.log({ message: `Logged in: [${user.githubId}]`, githubId: user.githubId });
 
     request.loginState = state.data;
 
     return user;
+  }
+
+  public async getAuthorizeUrl(dto: AuthConnectionDto) {
+    const id = await this.authService.createLoginState(dto);
+
+    const url = this._oauth2.getAuthorizeUrl({
+      redirect_uri: this.config.auth.github.callbackUrl,
+      state: id,
+      scope: this.config.auth.github.scope,
+    });
+    return url;
   }
 }

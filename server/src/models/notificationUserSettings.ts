@@ -8,8 +8,9 @@ import {
   JoinColumn,
   Index,
 } from 'typeorm';
-import { Notification, User } from '.';
-import { NotificationChannel } from './notificationChannel';
+import { Notification } from './notification';
+import { User } from './user';
+import { NotificationChannel, NotificationChannelId } from './notificationChannel';
 
 @Entity()
 @Index(['notificationId', 'userId'])
@@ -43,5 +44,5 @@ export class NotificationUserSettings {
 
   @PrimaryColumn()
   @Index()
-  channelId: string;
+  channelId: NotificationChannelId;
 }

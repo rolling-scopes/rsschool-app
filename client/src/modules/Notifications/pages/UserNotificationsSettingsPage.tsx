@@ -11,7 +11,6 @@ import { useAsync } from 'react-use';
 import { Session } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
-import { UserService } from 'services/user';
 import { Consents } from '../components/Consents';
 import { UpdateNotificationUserSettingsDto } from 'api';
 
@@ -27,16 +26,11 @@ export function UserNotificationsPage(props: Props) {
 
   const loadData = useCallback(
     withLoading(async () => {
-      const userService = new UserService();
-      const [profile, notifications] = await Promise.all([
-        userService.getProfileInfo(props.session.githubId),
-        service.getUserNotificationSettings(),
-      ]);
+      const { contacts, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
-
-      const { contacts } = profile;
-      const hasEmail = !!contacts?.email;
-      const hasTelegram = !!contacts?.telegram;
+      const { email, telegram } = contacts as Record<NotificationChannel, string>;
+      const hasEmail = !!email;
+      const hasTelegram = !!telegram;
       setHasEmail(hasEmail);
       setHasTelegram(hasTelegram);
 

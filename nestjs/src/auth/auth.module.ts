@@ -1,4 +1,5 @@
 import { LoginState } from '@entities/loginState';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -20,6 +21,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     UsersModule,
     CoursesModule,
     ConfigModule,
+    HttpModule,
     TypeOrmModule.forFeature([LoginState, AuthRepository]),
   ],
   controllers: [AuthController],
