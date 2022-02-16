@@ -72,6 +72,10 @@ export class AuthUser {
     return this;
   }
 
+  static createAdmin() {
+    return new AuthUser({ courseUsers: [], githubId: '', id: 0, mentors: [], students: [] }, [], true);
+  }
+
   private populateCourseInfo(
     courseInfo: Record<number, CourseInfo>,
     courseUsers: CourseUser[],
