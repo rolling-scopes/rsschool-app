@@ -48,7 +48,7 @@ export class NotificationsService {
     const channels = await this.userNotificationsService.getUserNotificationSettings(userId, notificationId);
 
     const channelMap = new Map<NotificationChannelId, NotificationData>();
-    channels.forEach((channel: any) => {
+    channels.forEach(channel => {
       const message = this.buildChannelMessage(channel, data);
       if (message) {
         const { channelId, template, to } = message;

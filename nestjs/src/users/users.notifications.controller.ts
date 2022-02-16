@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthUser, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { Response } from 'express';
 import { UpdateNotificationUserSettingsDto } from './dto/update-notification-user-settings.dto';
 import { NotificationUserSettingsDto, UserNotificationsDto } from './dto/notification-user-settings.dto';
@@ -12,7 +12,7 @@ import { UserNotificationsService } from './users.notifications.service';
 import { UsersService } from './users.service';
 
 @Controller('users/notifications')
-@ApiTags('users')
+@ApiTags('users notifications')
 @UseGuards(DefaultGuard)
 export class UsersNotificationsController {
   constructor(private userNotificationsService: UserNotificationsService, private userService: UsersService) {}
@@ -25,7 +25,7 @@ export class UsersNotificationsController {
       user: { id },
     } = req;
     const [notifications, connections, profile] = await Promise.all([
-      this.userNotificationsService.getUserNotificationsSettings(id, AuthUser.getCourseDistinctRoles(req.user)),
+      this.userNotificationsService.getUserNotificationsSettings(id),
       this.userNotificationsService.getUserActiveConnections(id),
       this.userService.getUserByUserId(id),
     ]);

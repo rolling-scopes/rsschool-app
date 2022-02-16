@@ -1591,9 +1591,9 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerCreateConnectViaGitHubLink: async (authConnectionDto: AuthConnectionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        authControllerCreateConnectLinkViaGithub: async (authConnectionDto: AuthConnectionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'authConnectionDto' is not null or undefined
-            assertParamExists('authControllerCreateConnectViaGitHubLink', 'authConnectionDto', authConnectionDto)
+            assertParamExists('authControllerCreateConnectLinkViaGithub', 'authConnectionDto', authConnectionDto)
             const localVarPath = `/auth/github/connect`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1723,8 +1723,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerCreateConnectViaGitHubLink(authConnectionDto: AuthConnectionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerCreateConnectViaGitHubLink(authConnectionDto, options);
+        async authControllerCreateConnectLinkViaGithub(authConnectionDto: AuthConnectionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerCreateConnectLinkViaGithub(authConnectionDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1770,8 +1770,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerCreateConnectViaGitHubLink(authConnectionDto: AuthConnectionDto, options?: any): AxiosPromise<void> {
-            return localVarFp.authControllerCreateConnectViaGitHubLink(authConnectionDto, options).then((request) => request(axios, basePath));
+        authControllerCreateConnectLinkViaGithub(authConnectionDto: AuthConnectionDto, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerCreateConnectLinkViaGithub(authConnectionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1814,8 +1814,8 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerCreateConnectViaGitHubLink(authConnectionDto: AuthConnectionDto, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerCreateConnectViaGitHubLink(authConnectionDto, options).then((request) => request(this.axios, this.basePath));
+    public authControllerCreateConnectLinkViaGithub(authConnectionDto: AuthConnectionDto, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerCreateConnectLinkViaGithub(authConnectionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3592,10 +3592,10 @@ export class StudentsFeedbacksApi extends BaseAPI {
 
 
 /**
- * UsersApi - axios parameter creator
+ * UsersNotificationsApi - axios parameter creator
  * @export
  */
-export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
+export const UsersNotificationsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -3768,11 +3768,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 };
 
 /**
- * UsersApi - functional programming interface
+ * UsersNotificationsApi - functional programming interface
  * @export
  */
-export const UsersApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
+export const UsersNotificationsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersNotificationsApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -3827,11 +3827,11 @@ export const UsersApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * UsersApi - factory interface
+ * UsersNotificationsApi - factory interface
  * @export
  */
-export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = UsersApiFp(configuration)
+export const UsersNotificationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersNotificationsApiFp(configuration)
     return {
         /**
          * 
@@ -3881,20 +3881,20 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
 };
 
 /**
- * UsersApi - object-oriented interface
+ * UsersNotificationsApi - object-oriented interface
  * @export
- * @class UsersApi
+ * @class UsersNotificationsApi
  * @extends {BaseAPI}
  */
-export class UsersApi extends BaseAPI {
+export class UsersNotificationsApi extends BaseAPI {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
+     * @memberof UsersNotificationsApi
      */
     public getUserNotifications(options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).getUserNotifications(options).then((request) => request(this.axios, this.basePath));
+        return UsersNotificationsApiFp(this.configuration).getUserNotifications(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3902,10 +3902,10 @@ export class UsersApi extends BaseAPI {
      * @param {Array<UpdateNotificationUserSettingsDto>} updateNotificationUserSettingsDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
+     * @memberof UsersNotificationsApi
      */
     public updateUserNotifications(updateNotificationUserSettingsDto: Array<UpdateNotificationUserSettingsDto>, options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).updateUserNotifications(updateNotificationUserSettingsDto, options).then((request) => request(this.axios, this.basePath));
+        return UsersNotificationsApiFp(this.configuration).updateUserNotifications(updateNotificationUserSettingsDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3913,10 +3913,10 @@ export class UsersApi extends BaseAPI {
      * @param {UpsertNotificationConnectionDto} upsertNotificationConnectionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
+     * @memberof UsersNotificationsApi
      */
     public usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto: UpsertNotificationConnectionDto, options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto, options).then((request) => request(this.axios, this.basePath));
+        return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerCreateUserConnection(upsertNotificationConnectionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3924,10 +3924,10 @@ export class UsersApi extends BaseAPI {
      * @param {string} channelId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
+     * @memberof UsersNotificationsApi
      */
     public usersNotificationsControllerDeleteUserConnection(channelId: string, options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).usersNotificationsControllerDeleteUserConnection(channelId, options).then((request) => request(this.axios, this.basePath));
+        return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerDeleteUserConnection(channelId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3935,10 +3935,10 @@ export class UsersApi extends BaseAPI {
      * @param {NotificationConnectionExistsDto} notificationConnectionExistsDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
+     * @memberof UsersNotificationsApi
      */
     public usersNotificationsControllerFindConnection(notificationConnectionExistsDto: NotificationConnectionExistsDto, options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).usersNotificationsControllerFindConnection(notificationConnectionExistsDto, options).then((request) => request(this.axios, this.basePath));
+        return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerFindConnection(notificationConnectionExistsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

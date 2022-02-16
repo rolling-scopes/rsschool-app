@@ -16,7 +16,6 @@ export function Consents({ hasEmail, hasTelegram }: { hasEmail: boolean; hasTele
             </div>
           }
           type="info"
-          closable
         />
       )}
       {!hasEmail && (
@@ -27,7 +26,6 @@ export function Consents({ hasEmail, hasTelegram }: { hasEmail: boolean; hasTele
             </div>
           }
           type="info"
-          closable
         />
       )}
     </Space>

@@ -5,6 +5,7 @@ import { Strategy, Profile } from 'passport-github2';
 import { AuthService } from '../auth.service';
 import { AuthUser, CurrentRequest } from '..';
 import { AuthConnectionDto } from '../dto/AuthConnectionDto';
+import passport from 'passport';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -20,15 +21,18 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     });
   }
 
-  async authenticate(req: CurrentRequest, options: object) {
-    const { url } = req.query;
-    const id = await this.authService.createLoginState({
-      redirectUrl: url as string,
-    });
-    super.authenticate(req, {
-      ...options,
-      state: id,
-    });
+  async authenticate(req: CurrentRequest, options: passport.AuthenticateOptions) {
+    const { url, code } = req.query;
+    const opts = { ...options };
+
+    if (!code) {
+      const id = await this.authService.createLoginState({
+        redirectUrl: url as string,
+      });
+      opts.state = id;
+    }
+
+    super.authenticate(req, opts);
   }
 
   public async validate(

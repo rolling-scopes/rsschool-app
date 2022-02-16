@@ -4,7 +4,7 @@ import {
   NotificationUserSettingsDto,
   UpdateNotificationDto,
   UpdateNotificationUserSettingsDto,
-  UsersApi,
+  UsersNotificationsApi,
 } from 'api';
 import axiosFactory from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
@@ -13,7 +13,7 @@ export class NotificationsService {
   constructor(
     private axios = axiosFactory.create(getServerAxiosProps()),
     private notificationsApi = new NotificationsApi(getApiConfiguration()),
-    private usersApi = new UsersApi(getApiConfiguration()),
+    private usersApi = new UsersNotificationsApi(getApiConfiguration()),
   ) {}
 
   // System notifications settings

@@ -3,7 +3,7 @@ import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateNotificationUserSettingsDto } from 'src/users/dto/update-notification-user-settings.dto';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
 import { UsersService } from './users.service';
 import { NotificationChannelId } from '@entities/notificationChannel';
@@ -23,7 +23,7 @@ export class UserNotificationsService {
     private usersService: UsersService,
   ) {}
 
-  public getUserNotificationsSettings(userId: number, roles: string[]) {
+  public getUserNotificationsSettings(userId: number) {
     return this.notificationsRepository
       .createQueryBuilder('notification')
       .leftJoinAndMapMany(
@@ -33,7 +33,7 @@ export class UserNotificationsService {
         'userSettings.notificationId = notification.id and userSettings.userId = :userId',
         { userId },
       )
-      .where({ scope: In(roles), enabled: true })
+      .where({ enabled: true })
       .orderBy('name')
       .getMany() as Promise<(Notification & { settings: NotificationUserSettings[] })[]>;
   }
