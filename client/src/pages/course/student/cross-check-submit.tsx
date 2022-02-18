@@ -147,7 +147,7 @@ function Page(props: CoursePageProps) {
       <Row gutter={24}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} isSubmitted={false} isActive={true} isExpired={true} />
+            <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
             <SubmittedStatus
               taskExists={taskExists}
               solution={submittedSolution}

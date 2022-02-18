@@ -5,15 +5,12 @@ import { CourseTask } from 'services/course';
 type Props = {
   data: CourseTask[];
   onChange?: (id: number) => void;
-  isSubmitted: boolean;
-  isActive: boolean;
-  isExpired: boolean;
 };
 
 const MAX_DATE = '+275760-09-13T00:00:00.000Z';
 
 export function CourseTaskSelect(props: Props) {
-  const { data, onChange, isSubmitted, isActive, isExpired, ...options } = props;
+  const { data, onChange, ...options } = props;
   data.sort(function (firstTask, secondTask) {
     return Date.parse(secondTask.studentEndDate ?? MAX_DATE) - Date.parse(firstTask.studentEndDate ?? MAX_DATE);
   });
@@ -22,8 +19,8 @@ export function CourseTaskSelect(props: Props) {
   const dataExpired = data.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));
 
   const selectGroups = [
-    { type: isActive, data: dataActive, title: 'Active' },
-    { type: isExpired, data: dataExpired, title: 'Expired' },
+    { data: dataActive, title: 'Active' },
+    { data: dataExpired, title: 'Expired' },
   ];
 
   return (
@@ -36,7 +33,6 @@ export function CourseTaskSelect(props: Props) {
       <Select placeholder="Select task" {...selectProps}>
         {selectGroups.map(
           group =>
-            group.type &&
             group.data.length > 0 && (
               <Select.OptGroup label={group.title}>
                 {group.data.map(task => (
