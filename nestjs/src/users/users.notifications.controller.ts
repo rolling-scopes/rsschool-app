@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { Response } from 'express';
@@ -58,8 +71,7 @@ export class UsersNotificationsController {
   ): Promise<NotificationConnectionDto> {
     const connection = await this.userNotificationsService.getUserConnection(dto);
     if (!connection) {
-      response.status(404);
-      return;
+      throw new NotFoundException('no such connection');
     }
     return new NotificationConnectionDto(connection);
   }
