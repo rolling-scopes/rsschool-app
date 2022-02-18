@@ -62,8 +62,8 @@ export class ConfigService {
 
     this.users = {
       root: {
-        username: conf.get('RSSHCOOL_USERS_ROOT_USERNAME'),
-        password: conf.get('RSSHCOOL_USERS_ROOT_PASSWORD'),
+        username: conf.get('RSSHCOOL_API_USERS_CLOUD_USERNAME'),
+        password: conf.get('RSSHCOOL_API_USERS_CLOUD_PASSWORD'),
       },
       hirers: conf.get('RSSHCOOL_USERS_HIRERS')?.split(',') ?? [],
       admins: conf.get('RSSHCOOL_USERS_ADMINS')?.split(',') ?? [],
