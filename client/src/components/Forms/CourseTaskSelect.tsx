@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Select, Form } from 'antd';
+import _ from 'lodash';
 
 import { CourseTask } from 'services/course';
 
@@ -15,7 +16,7 @@ export function CourseTaskSelect(props: Props) {
   data.sort(function (firstTask, secondTask) {
     return Date.parse(secondTask.studentEndDate ?? MAX_DATE) - Date.parse(firstTask.studentEndDate ?? MAX_DATE);
   });
-  const selectProps = { onChange } || {};
+  const selectProps = _.omitBy({ onChange }, _.isNil);
   const dataActive = data.filter(task => Date.now() < Date.parse(task.studentEndDate ?? MAX_DATE));
   const dataExpired = data.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));
 
