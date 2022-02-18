@@ -17,7 +17,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-central-1
-        working-directory: ./setup/deploy
+        working-directory: ./setup/cdk
         run: |
           npm ci
           npx cdk destroy --require-approval never -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}

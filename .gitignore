@@ -9,4 +9,4 @@ coverage
 reports/*.xml
 setup/backup.sql
 .history/
-setup/deploy/cdk.out
+setup/cdk/cdk.out
