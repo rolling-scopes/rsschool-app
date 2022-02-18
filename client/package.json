@@ -19,10 +19,10 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.2.14",
-    "@apalchys/next-aws-lambda": "3.6.6",
+    "@apalchys/next-aws-lambda": "3.6.7",
     "antd": "4.18.7",
-    "axios": "0.25.0",
-    "cookie": "0.4.1",
+    "axios": "0.26.0",
+    "cookie": "0.4.2",
     "csvtojson": "2.0.10",
     "lodash": "4.17.21",
     "mobile-device-detect": "0.4.3",
