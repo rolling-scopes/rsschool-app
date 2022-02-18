@@ -125,6 +125,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
 
       - name: Build (npm run build)
         env:
@@ -284,13 +286,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
+      - name: Restore browsers cache
+        uses: actions/cache@v2
+        with:
+          path: '~/.cache/ms-playwright/'
+          key: ${{ runner.os }}-browsers
       - name: Install Dependencies
         working-directory: ./client
         run: |
           npm ci
       - name: Install Playwright
+        working-directory: ./client
         run: npx playwright install --with-deps
       - name: Run Playwright tests
+        working-directory: ./client
         env:
           CI: 'true'
           BASE_URL: https://pr${{ github.event.pull_request.number }}.app.rs.school
