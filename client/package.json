@@ -20,7 +20,7 @@
   "dependencies": {
     "@ant-design/charts": "1.2.14",
     "@apalchys/next-aws-lambda": "3.6.1",
-    "antd": "4.18.5",
+    "antd": "4.18.7",
     "axios": "0.25.0",
     "cookie": "0.4.1",
     "csvtojson": "2.0.10",
