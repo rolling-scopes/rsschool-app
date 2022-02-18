@@ -308,7 +308,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/
+          path: client/playwright-report/
           retention-days: 30
 
   pr_test:
