@@ -33,7 +33,7 @@ export class App {
     process.on('unhandledRejection', reason => this.appLogger.error(reason as any));
   }
 
-  public start(skipListen = false) {
+  public start(listen = false) {
     const routes = routesMiddleware(this.appLogger);
 
     this.koa.use(routes.publicRouter.routes());
@@ -42,7 +42,7 @@ export class App {
     this.koa.use(routeLoggerMiddleware);
     this.koa.use(serve('public'));
 
-    if (skipListen) {
+    if (listen) {
       this.koa.listen(config.port);
       this.appLogger.info(`Service is running on ${config.port} port`);
     }

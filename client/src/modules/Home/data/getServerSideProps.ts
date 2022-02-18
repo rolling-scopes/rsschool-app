@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
       props: { courses },
     };
   } catch (e) {
-    console.error(e);
+    console.error(e.message);
     return noAccessResponse;
   }
 };
