@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
       props: { courses },
     };
   } catch (err) {
-    const error = err as AxiosError
+    const error = err as AxiosError;
     console.error(error.message, error.response?.data);
     return noAccessResponse;
   }
