@@ -11,6 +11,7 @@ import { compile } from 'handlebars';
 import { NotificationChannelId } from '@entities/notificationChannel';
 import { UserNotificationsService } from 'src/users/users.notifications.service';
 import { emailTemplate } from './email-template';
+import { lastValueFrom } from 'rxjs';
 
 const compiledTemplate = compile(emailTemplate);
 @Injectable()
@@ -93,9 +94,11 @@ export class NotificationsService {
 
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
-    await this.httpService.post(`${restApiUrl}/v2/notification`, notification, {
-      headers: { 'x-api-key': restApiKey },
-    });
+    await lastValueFrom(
+      this.httpService.post(`${restApiUrl}/v2/notification`, notification, {
+        headers: { 'x-api-key': restApiKey },
+      }),
+    );
   }
 }
 

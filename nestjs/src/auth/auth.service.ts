@@ -14,6 +14,7 @@ import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
+import { lastValueFrom } from 'rxjs';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -133,15 +134,17 @@ export class AuthService {
     });
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
-    await this.httpService.post(
-      `${restApiUrl}/connection/complete`,
-      {
-        channelId,
-        externalId,
-      },
-      {
-        headers: { 'x-api-key': restApiKey },
-      },
+    await lastValueFrom(
+      this.httpService.post(
+        `${restApiUrl}/connection/complete`,
+        {
+          channelId,
+          externalId,
+        },
+        {
+          headers: { 'x-api-key': restApiKey },
+        },
+      ),
     );
   }
 }
