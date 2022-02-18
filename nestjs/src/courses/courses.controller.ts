@@ -1,12 +1,12 @@
 import { Controller, ForbiddenException, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard, RoleGuard } from '../auth';
+import { CurrentRequest, DefaultGuard } from '../auth';
 import { CourseAccessService } from './course-access.service';
 import { CoursesService } from './courses.service';
 import { CourseDto } from './dto';
 @Controller('courses')
 @ApiTags('courses')
-@UseGuards(DefaultGuard, RoleGuard)
+@UseGuards(DefaultGuard)
 export class CoursesController {
   constructor(private courseService: CoursesService, private courseAccessService: CourseAccessService) {}
 

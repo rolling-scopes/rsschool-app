@@ -36,6 +36,11 @@ import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
 import { LoginState } from './loginState';
+import { NotificationUserSettings } from './notificationUserSettings';
+import { NotificationChannel } from './notificationChannel';
+import { Notification } from './notification';
+import { NotificationChannelSettings } from './notificationChannelSettings';
+import { NotificationUserConnection } from './notificationUserConnection';
 
 export * from './session';
 export {
@@ -80,6 +85,11 @@ export {
   Consent,
   ChannelType,
   Resume,
+  NotificationUserSettings,
+  NotificationChannel,
+  Notification,
+  NotificationChannelSettings,
+  NotificationUserConnection,
 };
 
 export const models = [
@@ -121,6 +131,11 @@ export const models = [
   User,
   Consent,
   Resume,
+  NotificationUserSettings,
+  NotificationChannel,
+  Notification,
+  NotificationChannelSettings,
+  NotificationUserConnection,
 ];
 
 export interface IApiResponse<T> {

@@ -1,63 +1,67 @@
+import {
+  NotificationDto,
+  NotificationsApi,
+  NotificationUserSettingsDto,
+  UpdateNotificationDto,
+  UpdateNotificationUserSettingsDto,
+  UsersNotificationsApi,
+} from 'api';
 import axiosFactory from 'axios';
-import { getServerAxiosProps } from 'utils/axios';
+import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 
 export class NotificationsService {
-  constructor(private axios = axiosFactory.create(getServerAxiosProps())) {}
+  constructor(
+    private axios = axiosFactory.create(getServerAxiosProps()),
+    private notificationsApi = new NotificationsApi(getApiConfiguration()),
+    private usersApi = new UsersNotificationsApi(getApiConfiguration()),
+  ) {}
 
-  getNotificationsSettings(): Promise<Notification[]> {
-    return Promise.resolve([
-      {
-        id: 1,
-        name: 'Cross-check mark',
-        channels: {
-          email: true,
-          telegram: false,
-        },
-      },
-    ]);
+  // System notifications settings
+  async getNotifications(): Promise<NotificationDto[]> {
+    const { data } = await this.notificationsApi.getNotifications();
+
+    return data;
   }
 
-  async saveNotificationSettings(notification: Notification[]) {
-    await Promise.resolve(notification);
+  async saveNotification(notification: UpdateNotificationDto) {
+    return this.notificationsApi.updateNotification(notification);
   }
 
-  async saveUserNotifications(notification: Notification[]) {
-    await Promise.resolve(notification);
+  async createNotification(notification: UpdateNotificationDto) {
+    return this.notificationsApi.createNotification(notification);
   }
 
-  getUserNotificationSettings() {
-    return Promise.resolve([
-      {
-        id: 1,
-        name: 'Cross-check mark',
-        channels: {
-          email: true,
-          telegram: false,
-        },
-      },
-    ]);
+  deleteNotification(id: string) {
+    return this.notificationsApi.deleteNotification(id);
   }
 
-  async sendMessage(channel: NotificationChannel, payload: NotificationPayload) {
-    await this.axios.post('/api/notification/send', {
+  // user notification settings
+  async saveUserNotifications(notifications: UpdateNotificationUserSettingsDto[]) {
+    return this.usersApi.updateUserNotifications(notifications);
+  }
+
+  async getUserNotificationSettings() {
+    const { data } = await this.usersApi.getUserNotifications();
+    return data;
+  }
+
+  // messenger
+  async sendMessage(channel: NotificationChannel, payload: MessagePayload) {
+    await this.axios.post('/api/v2/notification/send', {
       payload,
       channel,
     });
   }
 }
 
-export type Notification = {
-  id: number;
-  name: string;
-  channels: Partial<Record<NotificationChannel, boolean>>;
-};
+export type UserNotificationSettings = NotificationUserSettingsDto;
 
 export enum NotificationChannel {
   email = 'email',
   telegram = 'telegram',
 }
 
-export type NotificationPayload = EmailPayload | TelegramPayload;
+export type MessagePayload = EmailPayload | TelegramPayload;
 
 export type EmailPayload = {
   subject: string;
@@ -67,5 +71,16 @@ export type EmailPayload = {
 
 export type TelegramPayload = {
   userIds: number[];
+  body: string;
+};
+
+export type NotificationTemlate = TelegramTemplate | EmailTemplate;
+
+type TelegramTemplate = {
+  body: string;
+};
+
+type EmailTemplate = {
+  subject: string;
   body: string;
 };

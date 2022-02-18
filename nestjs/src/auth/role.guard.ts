@@ -1,8 +1,12 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthUser } from '.';
 import { Role, CourseRole } from './auth-user.model';
 import { CurrentRequest } from './auth.service';
-import { APP_ROLE_KEY, COURSE_ROLE_KEY } from './role.decorator';
+import { REQUIRED_ROLES_KEY } from './role.decorator';
+
+const appRoles = Object.values(Role);
+const courseRoles = Object.values(CourseRole);
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -12,21 +16,47 @@ export class RoleGuard implements CanActivate {
     const handler = context.getHandler();
     const cls = context.getClass();
 
-    const appRoles = this.reflector.getAllAndOverride<Role[]>(APP_ROLE_KEY, [handler, cls]) ?? [];
-    const courseRoles = this.reflector.getAllAndOverride<CourseRole[]>(COURSE_ROLE_KEY, [handler, cls]) ?? [];
+    const { requireCourseMatch, roles = [] } =
+      this.reflector.getAllAndOverride<{ roles: (CourseRole | Role)[]; requireCourseMatch: boolean }>(
+        REQUIRED_ROLES_KEY,
+        [handler, cls],
+      ) ?? {};
+
     const req = context.getArgs<[CurrentRequest]>()[0];
     const { user, params } = req;
 
-    if (appRoles.includes(Role.Admin) && !user.isAdmin) {
-      throw new ForbiddenException();
+    const requiredAppRoles = roles.filter(role => appRoles.includes(role as Role)) as Role[];
+    const requiredCourseRoles = roles.filter(role => courseRoles.includes(role as CourseRole)) as CourseRole[];
+
+    if (requiredAppRoles.length === 0 && requiredCourseRoles.length === 0) {
+      return true;
     }
 
-    if (courseRoles.length > 0 && params.courseId != null) {
-      const allowed = courseRoles.some(courseRole => user.coursesRoles[params.courseId]?.includes(courseRole));
-      if (!allowed) {
-        throw new ForbiddenException();
-      }
+    if (requiredAppRoles.length && requiredAppRoles.some(requiredRole => user.appRoles.includes(requiredRole))) {
+      return true;
     }
-    return true;
+
+    if (requiredCourseRoles.length) {
+      if (requireCourseMatch) {
+        return checkUserHasCourseRole(requiredCourseRoles, user, params.courseId);
+      }
+
+      return checkUserHasRoleInAnyCourse(requiredCourseRoles, user);
+    }
+
+    return false;
   }
+}
+
+function checkUserHasCourseRole(requiredCourseRoles: CourseRole[], user: AuthUser, courseId: string) {
+  if (!courseId) {
+    return false;
+  }
+  return requiredCourseRoles.some(courseRole => user.coursesRoles[courseId]?.includes(courseRole));
+}
+
+function checkUserHasRoleInAnyCourse(requiredCourseRoles: CourseRole[], user: AuthUser) {
+  const allCourseRoles = Object.values(user.coursesRoles);
+  const hasRole = requiredCourseRoles.some(requiredRole => allCourseRoles.some(roles => roles.includes(requiredRole)));
+  return hasRole;
 }

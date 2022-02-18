@@ -39,10 +39,8 @@ export function buildCheckBoxRenderer<T>(
   dataIndex: string[],
   onChange: (id: string[], record: T, event: ChangeEvent<HTMLInputElement>) => void,
 ) {
-  return function (value: boolean, record: T) {
-    return value === undefined ? null : (
-      <input type="checkbox" checked={value} onChange={event => onChange(dataIndex, record, event)} />
-    );
+  return function (value: boolean = false, record: T) {
+    return <input type="checkbox" checked={value} onChange={event => onChange(dataIndex, record, event)} />;
   };
 }
 

@@ -19,6 +19,7 @@ import { Feedback } from './feedback';
 import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
 import { CourseUser } from './courseUser';
+import { NotificationUserConnection } from '.';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -203,4 +204,11 @@ export class User {
   beforeUpdate?() {
     this.githubId = this.githubId.toLowerCase();
   }
+
+  @OneToMany(
+    () => NotificationUserConnection,
+    (noitificationConnection: NotificationUserConnection) => noitificationConnection.user,
+    { nullable: true },
+  )
+  notificationConnections: NotificationUserConnection[] | null;
 }

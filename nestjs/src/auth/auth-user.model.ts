@@ -9,7 +9,7 @@ export enum Role {
 
 export type CourseRoles = Record<string, CourseRole[]>;
 
-export const enum CourseRole {
+export enum CourseRole {
   TaskOwner = 'taskOwner',
   JuryActivist = 'juryActivist',
   Manager = 'manager',
@@ -72,6 +72,10 @@ export class AuthUser {
     return this;
   }
 
+  static createAdmin() {
+    return new AuthUser({ courseUsers: [], githubId: '', id: 0, mentors: [], students: [] }, [], true);
+  }
+
   private populateCourseInfo(
     courseInfo: Record<number, CourseInfo>,
     courseUsers: CourseUser[],
@@ -125,5 +129,9 @@ export class AuthUser {
         }
         return acc;
       }, courseRoles);
+  }
+
+  public static getCourseDistinctRoles(user: AuthUser) {
+    return [...new Set(Object.values(user.roles))];
   }
 }

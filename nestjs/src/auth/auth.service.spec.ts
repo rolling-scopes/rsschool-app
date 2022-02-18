@@ -6,6 +6,8 @@ import { JwtService } from './jwt.service';
 import { ConfigService } from '../config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AuthRepository } from './auth.repository';
+import { UserNotificationsService } from '../users/users.notifications.service';
+import { HttpService } from '@nestjs/axios';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -23,6 +25,8 @@ describe('AuthService', () => {
           useValue: { users: { admins: [] } },
         },
         { provide: getRepositoryToken(AuthRepository), useValue: {} },
+        { provide: UserNotificationsService, useValue: {} },
+        { provide: HttpService, useValue: {} },
       ],
     }).compile();
 

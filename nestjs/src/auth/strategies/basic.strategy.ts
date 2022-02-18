@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { BasicStrategy as Strategy } from 'passport-http';
+import { AuthUser } from '..';
 
 @Injectable()
 export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
@@ -9,12 +10,12 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
     super({ passReqToCallback: true });
   }
 
-  public async validate(_: any, username: string, password: string): Promise<boolean> {
+  public async validate(_: any, username: string, password: string) {
     if (
       this.configService.get<string>('RSSHCOOL_USERS_ROOT_USERNAME') === username &&
       this.configService.get<string>('RSSHCOOL_USERS_ROOT_PASSWORD') === password
     ) {
-      return true;
+      return AuthUser.createAdmin();
     }
     throw new UnauthorizedException();
   }

@@ -1,19 +1,23 @@
 import { useState, useMemo, ChangeEvent, useCallback } from 'react';
 import { Button, message, Space } from 'antd';
-import { NotificationsService, Notification, NotificationChannel } from 'modules/Notifications/services/notifications';
+import {
+  NotificationsService,
+  NotificationChannel,
+  UserNotificationSettings,
+} from 'modules/Notifications/services/notifications';
 import { set } from 'lodash';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
 import { Session } from 'components/withSession';
 import { PageLayout } from 'components/PageLayout';
-import { NotificationsTable } from '../components/NotificationsTable';
-import { UserService } from 'services/user';
+import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents } from '../components/Consents';
+import { UpdateNotificationUserSettingsDto } from 'api';
 
 type Props = { session: Session };
 
 export function UserNotificationsPage(props: Props) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<UserNotificationSettings[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
   const [hasEmail, setHasEmail] = useState(false);
@@ -22,16 +26,11 @@ export function UserNotificationsPage(props: Props) {
 
   const loadData = useCallback(
     withLoading(async () => {
-      const userService = new UserService();
-      const [profile, notifications] = await Promise.all([
-        userService.getProfileInfo(props.session.githubId),
-        service.getUserNotificationSettings(),
-      ]);
+      const { contacts, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
-
-      const { contacts } = profile;
-      const hasEmail = !!contacts?.email;
-      const hasTelegram = !!contacts?.telegram;
+      const { email, telegram } = contacts as Record<NotificationChannel, string>;
+      const hasEmail = !!email;
+      const hasTelegram = !!telegram;
       setHasEmail(hasEmail);
       setHasTelegram(hasTelegram);
 
@@ -50,7 +49,7 @@ export function UserNotificationsPage(props: Props) {
   useAsync(loadData, []);
 
   const onCheck = useCallback(
-    async (dataIndex: string[], record: Notification, event: ChangeEvent<HTMLInputElement>) => {
+    async (dataIndex: string[], record: UserNotificationSettings, event: ChangeEvent<HTMLInputElement>) => {
       const newData = [...notifications];
       const index = notifications.findIndex(item => record.id === item.id);
       newData[index] = { ...newData[index] };
@@ -68,7 +67,7 @@ export function UserNotificationsPage(props: Props) {
   return (
     <PageLayout loading={loading} title="Notifications" githubId={props.session.githubId}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Consents hasEmail={hasEmail} hasTelegram={hasTelegram} />
+        {!loading && <Consents hasEmail={hasEmail} hasTelegram={hasTelegram} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
             Save
@@ -81,7 +80,18 @@ export function UserNotificationsPage(props: Props) {
 
   async function saveSettings() {
     try {
-      await service.saveUserNotifications(notifications);
+      await service.saveUserNotifications(
+        notifications.reduce((raw: UpdateNotificationUserSettingsDto[], notification) => {
+          Object.keys(notification.settings).forEach(channelId => {
+            raw.push({
+              channelId,
+              enabled: (notification.settings as Record<string, boolean>)[channelId],
+              notificationId: notification.id,
+            });
+          });
+          return raw;
+        }, []),
+      );
       message.success('New notification settings saved.');
     } catch {
       message.error('Failed to save settings.');
