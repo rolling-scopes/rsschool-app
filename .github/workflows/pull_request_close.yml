@@ -1,0 +1,29 @@
+name: Pull Request Delete
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+    paths-ignore:
+      - 'tools/bumblebee/**'
+
+jobs:
+  pr_delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Stack
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        working-directory: ./setup/cdk
+        run: |
+          npm ci
+          npx cdk destroy --require-approval never -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
+
+      - name: Delete Deployment
+        uses: strumwolf/delete-deployment-environment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: pr${{ github.event.pull_request.number }}

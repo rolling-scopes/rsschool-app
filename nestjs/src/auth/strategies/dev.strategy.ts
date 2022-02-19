@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { CurrentRequest } from '../auth.service';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '../../config';
 
@@ -12,7 +13,7 @@ export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
     super();
   }
 
-  public async validate(req: any): Promise<any> {
+  public async validate(req: CurrentRequest): Promise<any> {
     const profile = {
       provider: '',
       id: '',

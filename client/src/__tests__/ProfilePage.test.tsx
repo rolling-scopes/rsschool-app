@@ -6,7 +6,10 @@ import { Session } from 'components/withSession';
 import { ProfilePage } from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
-jest.mock('api', () => ({}));
+jest.mock('api', () => ({
+  ProfileApi: jest.fn(),
+  CoursesApi: jest.fn(),
+}));
 
 const profile = {
   permissionsSettings: {
