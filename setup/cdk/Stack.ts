@@ -31,10 +31,10 @@ export class RsSchoolAppStack extends cdk.Stack {
       apiName: feature,
     });
 
+    const defaultProps = { feature, deployId, httpApi, memorySize: 1024 };
+
     const nextApp = new DockerFunction(this, 'Next', {
-      feature,
-      deployId,
-      httpApi: httpApi,
+      ...defaultProps,
       repository: Repository.fromRepositoryName(this, 'UiRepository', 'rsschool-ui'),
       variables: {
         NODE_ENV: 'production',
@@ -43,10 +43,7 @@ export class RsSchoolAppStack extends cdk.Stack {
     });
 
     const serverApi = new DockerFunction(this, 'ServerApi', {
-      feature,
-      deployId,
-      httpApi: httpApi,
-      memorySize: 2048,
+      ...defaultProps,
       basePath: '/api/{proxy+}',
       variables: {
         NODE_ENV: 'development',
@@ -55,10 +52,7 @@ export class RsSchoolAppStack extends cdk.Stack {
     });
 
     const nestjsApi = new DockerFunction(this, 'NestjsApi', {
-      feature,
-      deployId,
-      httpApi: httpApi,
-      memorySize: 2048,
+      ...defaultProps,
       basePath: '/api/v2/{proxy+}',
       variables: {
         NODE_ENV: 'development',

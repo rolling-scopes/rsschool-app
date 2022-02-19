@@ -1,6 +1,5 @@
 import { Params } from 'nestjs-pino';
 import cloudwatchStream from '@apalchys/pino-cloudwatch';
-import { Logger } from '@nestjs/common';
 
 const devMode = process.env.NODE_ENV !== 'production' && !process.env.AWS_LAMBDA;
 
@@ -15,7 +14,6 @@ export function getPinoHttp(): Params['pinoHttp'] {
     quietReqLogger: true,
     prettyPrint: devMode ? { ignore: 'time,remoteAddress,req,reqId' } : false,
   };
-  Logger.log(`Pino: ${JSON.stringify(pinoOptions)}`);
 
   if (!devMode && awsAccessKeyId && awsSecretAccessKey) {
     return [

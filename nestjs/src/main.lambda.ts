@@ -12,23 +12,18 @@ async function bootstrap() {
   if (!cachedServer) {
     const expressApp = express();
     const nestApp = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
-
     setupApp(nestApp);
-
     await nestApp.init();
-
     cachedServer = serverlessExpress({ app: expressApp });
   }
-
   return cachedServer;
 }
 
 export const handler = async (event: any, context: any, callback: any) => {
   const server = await bootstrap();
-
   const result = await server(event, context, callback);
 
-  // it's a ditry fix for dev login redirect
+  // it's a dirty fix for dev login redirect
   if (result && result.statusCode === 200 && !result.body && result.multiValueHeaders?.location?.[0] === '/') {
     result.statusCode = 307;
   }
