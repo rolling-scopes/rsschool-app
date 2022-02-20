@@ -36,7 +36,7 @@ jobs:
         working-directory: setup/cdk
         run: |
           npm ci
-          npx cdk destroy --require-approval never -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
+          npx cdk destroy --force --all -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
 
       - name: Delete Deployment
         uses: strumwolf/delete-deployment-environment@v2
