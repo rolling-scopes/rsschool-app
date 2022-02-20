@@ -27,6 +27,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
+
+      - name: Install Dependencies
+        working-directory: setup/cdk
+        run: npm ci
+
       - name: Delete Stack
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         env:
@@ -35,7 +40,6 @@ jobs:
           AWS_DEFAULT_REGION: eu-central-1
         working-directory: setup/cdk
         run: |
-          npm ci
           npx cdk destroy --force --all -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
 
       - name: Delete Deployment
