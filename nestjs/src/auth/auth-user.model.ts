@@ -29,7 +29,6 @@ export class AuthUser {
   public readonly isAdmin: boolean;
   public readonly isHirer: boolean;
   public readonly id: number;
-  public readonly coursesRoles: CourseRoles;
   public readonly appRoles: Role[];
   public readonly githubId: string;
   public readonly courses: Record<number, CourseInfo>;
@@ -59,7 +58,6 @@ export class AuthUser {
 
     const userId = user.id;
 
-    const coursesRoles = this.populateCourseRoles(courseRoles, user.courseUsers ?? [], courseTasks);
     const coursesInfo = this.populateCourseInfo(courses, user.courseUsers ?? [], courseTasks);
 
     this.id = userId;
@@ -67,7 +65,6 @@ export class AuthUser {
     this.githubId = user.githubId;
     this.appRoles = [admin ? Role.Admin : Role.User];
     this.roles = roles;
-    this.coursesRoles = coursesRoles;
     this.courses = coursesInfo;
     return this;
   }
@@ -105,30 +102,6 @@ export class AuthUser {
         }
         return acc;
       }, courseInfo);
-  }
-
-  private populateCourseRoles(courseRoles: CourseRoles, courseUsers: CourseUser[], taskOwner: CourseTask[]) {
-    return courseUsers
-      .flatMap(u => {
-        const result: { courseId: number; role: CourseRole }[] = [];
-        if (u.isJuryActivist) {
-          result.push({ courseId: u.courseId, role: CourseRole.JuryActivist });
-        }
-        if (u.isManager) {
-          result.push({ courseId: u.courseId, role: CourseRole.Manager });
-        }
-        return result;
-      })
-      .concat(taskOwner.map(t => ({ courseId: t.courseId, role: CourseRole.TaskOwner })))
-      .reduce((acc, item) => {
-        if (!acc[item.courseId]) {
-          acc[item.courseId] = [];
-        }
-        if (!acc[item.courseId]?.includes(item.role)) {
-          acc[item.courseId]?.push(item.role);
-        }
-        return acc;
-      }, courseRoles);
   }
 
   public static getCourseDistinctRoles(user: AuthUser) {

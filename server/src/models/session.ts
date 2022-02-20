@@ -4,8 +4,6 @@ export interface IUserSession {
   isHirer: boolean;
   githubId: string;
   roles: StundetMentorRoles;
-  coursesRoles?: CourseRoles;
-  isGuest?: boolean;
   courses: Record<number, CourseInfo>;
 }
 
