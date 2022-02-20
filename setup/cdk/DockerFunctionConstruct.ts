@@ -1,5 +1,6 @@
 import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as custom from 'aws-cdk-lib/custom-resources';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -33,6 +34,10 @@ export class DockerFunction extends Construct {
       memorySize: memorySize ?? 1024,
       timeout: cdk.Duration.seconds(30),
       environment: variables,
+    });
+    new logs.LogRetention(this, 'LogRetention', {
+      logGroupName: dockerImageFunction.logGroup.logGroupName,
+      retention: logs.RetentionDays.TWO_WEEKS,
     });
     const integration = new HttpLambdaIntegration('LambdaIntegration', dockerImageFunction, {
       payloadFormatVersion: apiv2.PayloadFormatVersion.VERSION_1_0,

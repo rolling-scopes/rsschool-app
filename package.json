@@ -31,7 +31,7 @@
     "db:down": "docker-compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
-    "concurrently": "6.3.0",
+    "concurrently": "7.0.0",
     "prettier": "2.5.1"
   }
 }

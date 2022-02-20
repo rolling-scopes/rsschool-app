@@ -130,6 +130,7 @@ jobs:
 
       - name: Build (npm run build)
         env:
+          AWS_LAMBDA: 'true'
           NODE_ENV: production
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
         run: |
@@ -242,6 +243,10 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
 
+      - name: Install dependencies
+        working-directory: ./setup/cdk
+        run: npm ci
+
       - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -249,11 +254,10 @@ jobs:
           AWS_DEFAULT_REGION: eu-central-1
         working-directory: ./setup/cdk
         run: |
-          npm ci
           npx cdk deploy --require-approval never -c feature=pr${{ github.event.pull_request.number }} -c deployId=${GITHUB_RUN_ID}
 
-      - uses: apalchys/deployment-action@v1.2.6
-        name: Create GitHub deployment
+      - name: Create GitHub deployment
+        uses: apalchys/deployment-action@v1.2.6
         id: deployment
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -271,11 +275,14 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
           node-version: '16'
+
       - name: Restore npm cache
         uses: actions/cache@v2
         env:
@@ -286,30 +293,35 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
             ${{ runner.os }}-
+
       - name: Restore browsers cache
         uses: actions/cache@v2
         with:
           path: '~/.cache/ms-playwright/'
           key: ${{ runner.os }}-browsers
+
       - name: Install Dependencies
         working-directory: ./client
-        run: |
-          npm ci
+        run: npm ci
+
       - name: Install Playwright
         working-directory: ./client
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         working-directory: ./client
         env:
           CI: 'true'
           BASE_URL: https://pr${{ github.event.pull_request.number }}.app.rs.school
         run: npx playwright test
-      - uses: actions/upload-artifact@v2
+
+      - name: Save Report
+        uses: actions/upload-artifact@v2
         if: always()
         with:
           name: playwright-report
           path: client/playwright-report/
-          retention-days: 30
+          retention-days: 15
 
   pr_test:
     name: Test
