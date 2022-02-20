@@ -94,7 +94,7 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
         <Form.Item name={fields.name} label="Name" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
-        <Form.Item name={fields.githubId} label="GithubId" style={{ marginBottom: 16 }}>
+        <Form.Item name={fields.githubId} label="Github Username" style={{ marginBottom: 16 }}>
           <Input />
         </Form.Item>
         <Form.Item name={fields.courseId} label="Courses" style={{ minWidth: 300, marginBottom: 16 }}>
