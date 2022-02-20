@@ -1,5 +1,5 @@
 import { Col, Form, Input, Row, Select, Typography, Tag, Alert } from 'antd';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import {
   TEXT_EPAM_EMAIL_TOOLTIP,
@@ -17,7 +17,7 @@ import { Location } from 'common/models';
 import type { Course } from 'services/models';
 import { Info } from 'modules/Registry/components/Info';
 
-export type Props = {
+type Props = {
   courses: Course[];
   checkedList: number[];
   location: Location | null;
@@ -26,7 +26,7 @@ export type Props = {
   setIsAvailableContact: Dispatch<SetStateAction<boolean>>;
 };
 
-export function GeneralMentor({
+export function MentorRegistrationGeneral({
   courses,
   checkedList,
   location,
@@ -34,10 +34,12 @@ export function GeneralMentor({
   setIsAvailableContact,
   setLocation,
 }: Props) {
-  const checkKeyMatch = (e: any) => {
-    // The length of the nickname in telegrams or skype must be more than 2 or more characters
-    setIsAvailableContact(e.target.value.length >= 2);
-  };
+  const [skype, setSkype] = useState('');
+  const [telegram, setTelegram] = useState('');
+
+  useEffect(() => {
+    setIsAvailableContact(skype.length > 1 || telegram.length > 1);
+  }, [skype, telegram, isAvailableContact]);
 
   return (
     <>
@@ -176,7 +178,7 @@ export function GeneralMentor({
                 style={{ marginBottom: '0' }}
                 rules={[{ required: !isAvailableContact }]}
               >
-                <Input addonBefore="@" placeholder="durov" onChange={checkKeyMatch} />
+                <Input addonBefore="@" placeholder="durov" onChange={e => setTelegram(e.target.value)} />
               </Form.Item>
               <Typography.Paragraph style={{ margin: '12px 0 0 0' }}>
                 <Alert
@@ -202,7 +204,7 @@ export function GeneralMentor({
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
               <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailableContact }]}>
-                <Input placeholder="johnsmith" onChange={checkKeyMatch} />
+                <Input placeholder="johnsmith" onChange={e => setSkype(e.target.value)} />
               </Form.Item>
             </Col>
           </Row>

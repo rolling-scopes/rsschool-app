@@ -38,8 +38,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const update = useUpdate();
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
-  const [location, setLocation] = useState(null as Location | null);
-
+  const [location, setLocation] = useState<Location | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [student, studentLoading, registered] = useStudentCourseData(githubId, props.courseAlias);
@@ -52,10 +51,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   }, [registered]);
 
   useEffect(() => {
-    setLocation({
-      countryName: student?.profile.countryName,
-      cityName: student?.profile.cityName,
-    } as Location);
+    setLocation(student ? { countryName: student.profile.countryName, cityName: student.profile.cityName } : null);
   }, [student?.profile]);
 
   const handleSubmit = useCallback(
@@ -295,13 +291,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
 }
 
 function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, courses: Course[]) {
-  const location =
-    countryName &&
-    cityName &&
-    ({
-      countryName,
-      cityName,
-    } as Location | null);
+  const location: Location | null = countryName && cityName ? { countryName, cityName } : null;
   return {
     ...initialData,
     courseId: courses[0].id,

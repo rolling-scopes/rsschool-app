@@ -1,11 +1,11 @@
 import { Checkbox, Col, Form, Input, Row, Select, Typography } from 'antd';
 import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, TECHNOLOGIES } from 'modules/Registry/constants';
 
-export type Props = {
+type Props = {
   checkedList: number[];
 };
 
-export function Mentorship({ checkedList }: Props) {
+export function MentorRegistrationMentorship({ checkedList }: Props) {
   return (
     <>
       <Row>
