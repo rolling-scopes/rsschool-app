@@ -1,13 +1,7 @@
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import {
-  CoursesTasksApi,
-  CourseTaskDetailedDto,
-  CourseTaskDetailedDtoTypeEnum,
-  CourseTaskDto,
-  CourseTaskDtoTypeEnum,
-} from 'api';
+import { CoursesTasksApi, CourseTaskDetailedDto, CourseTaskDetailedDtoTypeEnum, CourseTaskDto } from 'api';
 import { AxiosError } from 'axios';
 import { CourseTaskSelect } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
@@ -79,23 +73,21 @@ function Page(props: CoursePageProps) {
   }, [courseTaskId]);
 
   const handleSubmit = async (values: any) => {
-    const { courseTaskId } = values;
-    const task = courseTasks.find(t => t.id === courseTaskId);
-    if (!task) {
+    if (!courseTask || !courseTaskId) {
       return;
     }
     try {
       let data: any = {};
-      if (task.type === 'ipynb') {
+      if (courseTask.type === CourseTaskDetailedDtoTypeEnum.Ipynb) {
         const filesService = new FilesService();
         const fileData = await readFile(values.upload.file);
         const { s3Key } = await filesService.uploadFile('', fileData);
         data = {
           s3Key,
-          taskName: snakeCase(task.name),
+          taskName: snakeCase(courseTask.name),
         };
       } else {
-        data = getSubmitData(task, values);
+        data = getSubmitData(courseTask, values);
         if (data == null) {
           return;
         }
@@ -181,7 +173,7 @@ function Page(props: CoursePageProps) {
         <Col style={{ marginBottom: 32 }} xs={24} sm={18} md={12} lg={10}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect onChange={handleCourseTaskChange} data={courseTasks} />
-            {renderTaskFields(props.session.githubId, courseTask, verifications)}
+            {courseTask ? renderTaskFields(props.session.githubId, courseTask, verifications) : null}
             <Row>
               <Button size="large" type="primary" htmlType="submit">
                 Submit
@@ -290,7 +282,7 @@ function UploadJupyterNotebook() {
   );
 }
 
-function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto | null, verifications: Verification[]) {
+function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
     case CourseTaskDetailedDtoTypeEnum.Jstask:
@@ -535,10 +527,10 @@ function getRandomQuestions(questions: SelfEducationQuestion[]) {
   return shuffle(questionsWithIndex);
 }
 
-function getSubmitData(task: CourseTaskDto, values: any) {
+function getSubmitData(task: CourseTaskDetailedDto, values: any) {
   let data: object = {};
   switch (task.type) {
-    case CourseTaskDtoTypeEnum.Selfeducation:
+    case CourseTaskDetailedDtoTypeEnum.Selfeducation:
       data = Object.entries(values)
         .filter(([key]) => /answer/.test(key))
         .map(([key, value]) => {
@@ -546,7 +538,7 @@ function getSubmitData(task: CourseTaskDto, values: any) {
           return { index: Number(index), value };
         });
       break;
-    case CourseTaskDtoTypeEnum.Codewars:
+    case CourseTaskDetailedDtoTypeEnum.Codewars:
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -558,17 +550,17 @@ function getSubmitData(task: CourseTaskDto, values: any) {
       };
       break;
 
-    case CourseTaskDtoTypeEnum.Jstask:
-    case CourseTaskDtoTypeEnum.Kotlintask:
-    case CourseTaskDtoTypeEnum.Objctask:
+    case CourseTaskDetailedDtoTypeEnum.Jstask:
+    case CourseTaskDetailedDtoTypeEnum.Kotlintask:
+    case CourseTaskDetailedDtoTypeEnum.Objctask:
       data = {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
       };
       break;
 
-    case CourseTaskDtoTypeEnum.Cvmarkdown:
-    case CourseTaskDtoTypeEnum.Cvhtml:
+    case CourseTaskDetailedDtoTypeEnum.Cvmarkdown:
+    case CourseTaskDetailedDtoTypeEnum.Cvhtml:
     case null:
       data = {};
       break;

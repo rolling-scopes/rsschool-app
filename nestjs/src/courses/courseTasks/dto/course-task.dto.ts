@@ -31,8 +31,6 @@ export class CourseTaskDto {
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.checker = courseTask.checker;
 
-    this.githubRepoName = courseTask.task.githubRepoName;
-    this.sourceGithubRepoUrl = courseTask.task.sourceGithubRepoUrl;
     this.taskOwnerId = courseTask.taskOwnerId ?? undefined;
     this.useJury = courseTask.task.useJury;
   }
@@ -52,12 +50,6 @@ export class CourseTaskDto {
 
   @ApiProperty()
   checker: string;
-
-  @ApiProperty()
-  githubRepoName: string;
-
-  @ApiProperty()
-  sourceGithubRepoUrl: string;
 
   @ApiProperty()
   studentStartDate: string;
