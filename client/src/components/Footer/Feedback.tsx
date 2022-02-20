@@ -15,12 +15,12 @@ const publicRoutes = [
     link: `/heroes`,
     newTab: false,
   },
-  {
-    icon: <FireTwoTone twoToneColor="#ffa500" />,
-    name: 'Feedback on Student/Mentor',
-    link: `/private-feedback`,
-    newTab: false,
-  },
+  // {
+  //   icon: <FireTwoTone twoToneColor="#ffa500" />,
+  //   name: 'Feedback on Student/Mentor',
+  //   link: `/private-feedback`,
+  //   newTab: false,
+  // },
   {
     icon: <HeartTwoTone twoToneColor="#eb2f96" />,
     name: 'Feedback on RS School',
