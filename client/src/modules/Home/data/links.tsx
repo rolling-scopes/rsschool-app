@@ -5,7 +5,6 @@ import {
   GoldTwoTone,
   CheckSquareTwoTone,
   CodeTwoTone,
-  CompassTwoTone,
   DashboardTwoTone,
   FireTwoTone,
   PlayCircleTwoTone,
@@ -126,13 +125,6 @@ const links: LinkData[] = [
     icon: <AudioTwoTone twoToneColor="orange" />,
     getUrl: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
     access: every(isMentor),
-    courseAccess: everyCourse(isCourseNotCompleted),
-  },
-  {
-    name: 'Cross Mentors',
-    icon: <CompassTwoTone twoToneColor="#52c41a" />,
-    getUrl: (course: Course) => `/course/student/cross-mentors?course=${course.alias}`,
-    access: every(isStudent),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {

@@ -570,11 +570,6 @@ export class CourseService {
     return result.data.data as InterviewDetails[];
   }
 
-  async getStudentCrossMentors(githubId: string) {
-    const result = await this.axios.get<any>(`/student/${githubId}/tasks/cross-mentors`);
-    return result.data.data as { name: string; mentor: any }[];
-  }
-
   async getCrossCheckPairs(
     pagination: IPaginationInfo,
     filter: Partial<Record<keyof CrossCheckFieldsTypes, string>>,
