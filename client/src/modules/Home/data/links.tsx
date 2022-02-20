@@ -2,6 +2,7 @@ import {
   AudioTwoTone,
   CalendarTwoTone,
   CheckCircleTwoTone,
+  GoldTwoTone,
   CheckSquareTwoTone,
   CodeTwoTone,
   CompassTwoTone,
@@ -72,6 +73,12 @@ const links: LinkData[] = [
     icon: <CalendarTwoTone twoToneColor="#eb2f96" />,
     getUrl: (course: Course) => `/course/schedule?course=${course.alias}`,
     access: anyAccess,
+  },
+  {
+    name: 'My Students',
+    icon: <GoldTwoTone twoToneColor="#7f00ff" />,
+    getUrl: (course: Course) => `/course/mentor/students?course=${course.alias}`,
+    access: every(isMentor),
   },
   {
     name: 'Submit Review',
