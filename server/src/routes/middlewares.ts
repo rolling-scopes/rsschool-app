@@ -61,9 +61,11 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
   });
   authDetails.students.forEach(student => {
     user.roles[student.courseId] = 'student';
+    courseRoles[student.courseId] = (courseRoles[student.courseId] ?? []).concat(CourseRole.Student);
   });
   authDetails.mentors.forEach(mentor => {
     user.roles[mentor.courseId] = 'mentor';
+    courseRoles[mentor.courseId] = (courseRoles[mentor.courseId] ?? []).concat(CourseRole.Mentor);
   });
   user.coursesRoles = courseRoles;
   await next();

@@ -19,4 +19,6 @@ export const enum CourseRole {
   JuryActivist = 'juryActivist',
   Manager = 'manager',
   Supervisor = 'supervisor',
+  Student = 'student',
+  Mentor = 'mentor',
 }
