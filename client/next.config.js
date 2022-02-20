@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const prodConfig = require('./next.config.prod');
 
 const isProd = process.env.NODE_ENV === 'production';
-const isAwsLambda = !!process.env.AWS_LAMBDA;
 
 const server = process.env.SERVER_HOST || 'http://localhost:3001';
 const nestjs = process.env.NESTJS_HOST || 'http://localhost:3002';
