@@ -8,7 +8,6 @@ import {
   CompassTwoTone,
   DashboardTwoTone,
   FireTwoTone,
-  LikeOutlined,
   PlayCircleTwoTone,
   StopTwoTone,
 } from '@ant-design/icons';
@@ -100,13 +99,6 @@ const links: LinkData[] = [
     getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: every(some(isTaskOwner, isAdmin, isCourseManager)),
     courseAccess: everyCourse(isCourseNotCompleted),
-  },
-
-  {
-    name: 'Feedback on student',
-    icon: <LikeOutlined />,
-    getUrl: () => `/feedback`,
-    access: isMentor,
   },
   {
     name: 'Cross-Check: Submit',
