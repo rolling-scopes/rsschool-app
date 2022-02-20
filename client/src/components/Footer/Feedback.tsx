@@ -1,5 +1,5 @@
 import React from 'react';
-import { LikeTwoTone, FireTwoTone, HeartTwoTone, TrophyTwoTone } from '@ant-design/icons';
+import { LikeTwoTone, HeartTwoTone, TrophyTwoTone } from '@ant-design/icons';
 import { Menu } from './Menu';
 
 const publicRoutes = [
