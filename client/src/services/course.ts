@@ -28,7 +28,6 @@ export interface CourseTask {
   useJury: boolean;
   checker: Checker;
   taskOwnerId: number | null;
-  publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
   special?: string;
   duration?: number;

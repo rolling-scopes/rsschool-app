@@ -1,7 +1,13 @@
 import { CheckSquareTwoTone, CloseSquareTwoTone, ReloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Input, message, notification, Radio, Row, Table, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { CoursesTasksApi, CourseTaskDto, CourseTaskDtoTypeEnum } from 'api';
+import {
+  CoursesTasksApi,
+  CourseTaskDetailedDto,
+  CourseTaskDetailedDtoTypeEnum,
+  CourseTaskDto,
+  CourseTaskDtoTypeEnum,
+} from 'api';
 import { AxiosError } from 'axios';
 import { CourseTaskSelect } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
@@ -26,32 +32,30 @@ import { notUrlPattern } from 'services/validators';
 
 const courseTasksApi = new CoursesTasksApi();
 
+const parseCourseTask = (courseTask: CourseTaskDetailedDto) => {
+  if (courseTask?.type === CourseTaskDetailedDtoTypeEnum.Selfeducation) {
+    const pubAttrs = (courseTask.publicAttributes ?? {}) as Record<string, any>;
+    return {
+      ...courseTask,
+      publicAttributes: {
+        ...pubAttrs,
+        questions: getRandomQuestions(pubAttrs.questions || []).slice(0, pubAttrs.numberOfQuestions),
+      },
+    };
+  }
+  return courseTask;
+};
+
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
-  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
+  const [courseTask, setCourseTask] = useState<CourseTaskDetailedDto | null>(null);
   const [verifications, setVerifications] = useState<Verification[]>([]);
   const [courseTaskId, setCourseTaskId] = useState(null as number | null);
-
-  const courseTask = useMemo(() => {
-    const courseTask = courseTasks.find(t => t.id === courseTaskId);
-
-    if (courseTask?.type === 'selfeducation') {
-      const pubAttrs = (courseTask.publicAttributes ?? {}) as Record<string, any>;
-      return {
-        ...courseTask,
-        publicAttributes: {
-          ...pubAttrs,
-          questions: getRandomQuestions(pubAttrs.questions || []).slice(0, pubAttrs.numberOfQuestions),
-        },
-      };
-    }
-
-    return courseTask;
-  }, [courseTaskId]);
 
   useAsync(async () => {
     try {
@@ -66,6 +70,13 @@ function Page(props: CoursePageProps) {
       setLoading(false);
     }
   }, []);
+
+  useAsync(async () => {
+    const { data: couseTask } = courseTaskId
+      ? await courseTasksApi.getCourseTask(courseId, courseTaskId)
+      : { data: null };
+    setCourseTask(couseTask ? parseCourseTask(couseTask) : couseTask);
+  }, [courseTaskId]);
 
   const handleSubmit = async (values: any) => {
     const { courseTaskId } = values;
@@ -279,28 +290,28 @@ function UploadJupyterNotebook() {
   );
 }
 
-function renderTaskFields(githubId: string, courseTask: CourseTaskDto | undefined, verifications: Verification[]) {
+function renderTaskFields(githubId: string, courseTask: CourseTaskDetailedDto | null, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
-    case CourseTaskDtoTypeEnum.Jstask:
+    case CourseTaskDetailedDtoTypeEnum.Jstask:
       return renderJsTaskFields(repoUrl);
-    case CourseTaskDtoTypeEnum.Kotlintask:
-    case CourseTaskDtoTypeEnum.Objctask:
+    case CourseTaskDetailedDtoTypeEnum.Kotlintask:
+    case CourseTaskDetailedDtoTypeEnum.Objctask:
       return renderKotlinTaskFields(repoUrl);
-    case CourseTaskDtoTypeEnum.Ipynb:
+    case CourseTaskDetailedDtoTypeEnum.Ipynb:
       return (
         <Row>
           <UploadJupyterNotebook />
         </Row>
       );
-    case CourseTaskDtoTypeEnum.Selfeducation:
+    case CourseTaskDetailedDtoTypeEnum.Selfeducation:
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
           {renderSelfEducation(courseTask, verifications)}
         </>
       );
-    case CourseTaskDtoTypeEnum.Codewars: {
+    case CourseTaskDetailedDtoTypeEnum.Codewars: {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -344,7 +355,7 @@ function formatMiliseconds(ms: number) {
   return moment.utc(ms).format('HH:mm:ss');
 }
 
-function renderSelfEducation(courseTask: CourseTaskDto, verifications: Verification[]) {
+function renderSelfEducation(courseTask: CourseTaskDetailedDto, verifications: Verification[]) {
   const pubAtts = (courseTask?.publicAttributes ?? {}) as Record<string, any>;
   const questions = (pubAtts.questions as SelfEducationQuestionWithIndex[]) || [];
   const {

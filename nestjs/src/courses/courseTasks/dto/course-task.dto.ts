@@ -2,7 +2,7 @@ import { CourseTask } from '@entities/courseTask';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-const typeEnum = [
+export const typeEnum = [
   'jstask',
   'kotlintask',
   'objctask',
@@ -29,7 +29,6 @@ export class CourseTaskDto {
     this.maxScore = courseTask.maxScore;
     this.scoreWeight = courseTask.scoreWeight;
     this.descriptionUrl = courseTask.task.descriptionUrl;
-    this.publicAttributes = courseTask.task?.attributes?.['public'] ?? {};
     this.checker = courseTask.checker;
 
     this.githubRepoName = courseTask.task.githubRepoName;
@@ -83,9 +82,6 @@ export class CourseTaskDto {
   @IsNumber()
   @ApiProperty()
   scoreWeight: number;
-
-  @ApiProperty()
-  publicAttributes: any;
 
   @ApiProperty()
   useJury: boolean;

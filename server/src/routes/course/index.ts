@@ -134,7 +134,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.put('/task/:id', courseManagerGuard, createPutRoute(CourseTask, logger));
   router.delete('/task/:id', courseManagerGuard, createDisableRoute(CourseTask, logger));
 
-  router.get('/tasks', courseGuard, tasks.getCourseTasks(logger));
   router.get('/tasks/details', courseGuard, tasks.getCourseTasksDetails(logger));
   router.get('/tasks/schedule', courseGuard, tasks.getCourseTasksDetailsForSchedule(logger));
 

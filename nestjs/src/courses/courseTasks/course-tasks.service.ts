@@ -37,6 +37,12 @@ export class CourseTasksService {
     });
   }
 
+  public getById(courseTaskId: number) {
+    return this.courseTaskRepository.findOne(courseTaskId, {
+      relations: ['task'],
+    });
+  }
+
   public getByOwner(username: string) {
     return this.courseTaskRepository
       .createQueryBuilder('t')
