@@ -27,8 +27,5 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    outputStandalone: !isAwsLambda,
-  },
 };
 module.exports = nextConfig;
