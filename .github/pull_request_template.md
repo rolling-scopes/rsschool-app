@@ -1,4 +1,4 @@
-**🟢 NOTE: Add `deploy` label if you want to deploy your Pull Request**
+**🟢 Add `deploy` label if you want to deploy this Pull Request to staging environment**
 
 #### 🧑‍⚖️ Pull Request Naming Convention
 
