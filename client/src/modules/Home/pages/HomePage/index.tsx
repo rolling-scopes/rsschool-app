@@ -91,7 +91,7 @@ export function HomePage(props: Props) {
           )}
 
           <SystemAlerts alerts={alerts} />
-
+          <h1>THIS IS TEST</h1>
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
           {activeCourse && (
