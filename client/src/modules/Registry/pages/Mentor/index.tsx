@@ -1,18 +1,19 @@
-import { Button, Steps, Col, Form, message, Result, Row, Typography } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
+import { Button, Col, Form, message, Result, Row, Steps, Typography } from 'antd';
 import axios from 'axios';
-import { useCallback, useState, useEffect } from 'react';
-import { useAsync, useUpdate } from 'react-use';
-import css from 'styled-jsx/css';
-import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
-import { Session } from 'components/withSession';
-import { UserFull, UserService } from 'services/user';
-import type { Course } from 'services/models';
 import { Location } from 'common/models';
-import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
-import { GeneralMentor, Mentorship } from 'modules/Registry/components';
-import { CdnService } from 'services/cdn';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { SolidarityUkraine } from 'components/SolidarityUkraine';
+import { Session } from 'components/withSession';
+import { GeneralMentor } from 'modules/Registry/components/GeneralMentor';
+import { Mentorship } from 'modules/Registry/components/Mentorship';
+import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
+import { useCallback, useEffect, useState } from 'react';
+import { useAsync, useUpdate } from 'react-use';
+import { CdnService } from 'services/cdn';
+import type { Course } from 'services/models';
+import { UserFull, UserService } from 'services/user';
+import css from 'styled-jsx/css';
 
 export type Props = {
   courses?: Course[];
