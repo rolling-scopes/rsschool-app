@@ -61,9 +61,25 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
   });
   authDetails.students.forEach(student => {
     user.roles[student.courseId] = 'student';
+    if (user.courses) {
+      const current = user.courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [] };
+      user.courses[student.courseId] = {
+        ...current,
+        studentId: student.id,
+        roles: current.roles.includes(CourseRole.Student) ? current.roles : current.roles.concat([CourseRole.Student]),
+      };
+    }
   });
   authDetails.mentors.forEach(mentor => {
     user.roles[mentor.courseId] = 'mentor';
+    if (user.courses) {
+      const current = user.courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [] };
+      user.courses[mentor.courseId] = {
+        ...current,
+        mentorId: mentor.id,
+        roles: current.roles.includes(CourseRole.Mentor) ? current.roles : current.roles.concat([CourseRole.Mentor]),
+      };
+    }
   });
   user.coursesRoles = courseRoles;
   await next();

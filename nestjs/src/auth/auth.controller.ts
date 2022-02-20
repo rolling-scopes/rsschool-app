@@ -27,6 +27,7 @@ export class AuthController {
   @UseGuards(AuthGuard(isDev ? 'dev' : 'github'))
   async githubCallback(@Req() req: CurrentRequest, @Res() res: Response) {
     const token = this.authService.validateGithub(req);
+
     res.cookie(JWT_COOKIE_NAME, token, {
       expires: new Date(Date.now() + twoDaysMs),
       httpOnly: true,

@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { UserService } from 'services/user';
 import { getTokenFromContext } from 'utils/server';
@@ -19,7 +20,9 @@ export const getServerSideProps: GetServerSideProps<any> = async ctx => {
     return {
       props: { courses },
     };
-  } catch (e) {
+  } catch (err) {
+    const error = err as AxiosError;
+    console.error(error.message, error.response?.data);
     return noAccessResponse;
   }
 };

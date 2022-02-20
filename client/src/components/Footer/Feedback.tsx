@@ -1,5 +1,5 @@
 import React from 'react';
-import { LikeTwoTone, FireTwoTone, HeartTwoTone, TrophyTwoTone } from '@ant-design/icons';
+import { LikeTwoTone, HeartTwoTone, TrophyTwoTone } from '@ant-design/icons';
 import { Menu } from './Menu';
 
 const publicRoutes = [
@@ -15,12 +15,12 @@ const publicRoutes = [
     link: `/heroes`,
     newTab: false,
   },
-  {
-    icon: <FireTwoTone twoToneColor="#ffa500" />,
-    name: 'Feedback on Student/Mentor',
-    link: `/private-feedback`,
-    newTab: false,
-  },
+  // {
+  //   icon: <FireTwoTone twoToneColor="#ffa500" />,
+  //   name: 'Feedback on Student/Mentor',
+  //   link: `/private-feedback`,
+  //   newTab: false,
+  // },
   {
     icon: <HeartTwoTone twoToneColor="#eb2f96" />,
     name: 'Feedback on RS School',

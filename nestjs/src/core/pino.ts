@@ -1,7 +1,8 @@
 import { Params } from 'nestjs-pino';
 import cloudwatchStream from '@apalchys/pino-cloudwatch';
 
-const devMode = process.env.NODE_ENV !== 'production';
+const devMode = process.env.NODE_ENV !== 'production' && !process.env.AWS_LAMBDA;
+
 const awsAccessKeyId = process.env.RSSHCOOL_AWS_ACCESS_KEY_ID;
 const awsSecretAccessKey = process.env.RSSHCOOL_AWS_SECRET_ACCESS_KEY;
 const awsRegion = process.env.RSSHCOOL_AWS_REGION;

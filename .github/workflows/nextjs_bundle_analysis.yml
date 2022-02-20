@@ -94,22 +94,22 @@ jobs:
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
-        if: success() && github.event.number
+        if: success() && github.event.number && github.event.pull_request.head.repo.full_name == github.repository
         id: fc
         with:
           issue-number: ${{ github.event.number }}
           body-includes: '<!-- __NEXTJS_BUNDLE -->'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v1.4.4
-        if: success() && github.event.number && steps.fc.outputs.comment-id == 0
+        uses: peter-evans/create-or-update-comment@v1.4.5
+        if: success() && github.event.number && steps.fc.outputs.comment-id == 0 && github.event.pull_request.head.repo.full_name == github.repository
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
 
       - name: Update Comment
-        uses: peter-evans/create-or-update-comment@v1.4.4
-        if: success() && github.event.number && steps.fc.outputs.comment-id != 0
+        uses: peter-evans/create-or-update-comment@v1.4.5
+        if: success() && github.event.number && steps.fc.outputs.comment-id != 0 && github.event.pull_request.head.repo.full_name == github.repository
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}

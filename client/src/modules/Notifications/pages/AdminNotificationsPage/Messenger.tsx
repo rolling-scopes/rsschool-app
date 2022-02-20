@@ -1,8 +1,8 @@
 import { Button, Form, Input, Select, Spin, message } from 'antd';
-import { Course } from 'common/models';
 import { useLoading } from 'components/useLoading';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
+import { CourseDto as Course } from 'api';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { NotificationChannel, NotificationsService } from '../../services/notifications';
