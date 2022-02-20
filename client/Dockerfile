@@ -9,8 +9,8 @@ WORKDIR /client
 
 COPY next.config.prod.js next.config.js
 
-COPY public /client/public
+COPY public public
 
-COPY .next/standalone /client/
+COPY .next/standalone .
 
 CMD ["node", "server.js"]
