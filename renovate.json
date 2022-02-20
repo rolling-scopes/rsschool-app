@@ -1,5 +1,6 @@
 {
   "extends": ["config:base"],
+  "ignorePaths": ["tools/**"],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
   "lockFileMaintenance": { "enabled": true },
