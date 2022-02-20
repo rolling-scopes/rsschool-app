@@ -984,7 +984,8 @@ CREATE TABLE public.repository_event (
     action character varying NOT NULL,
     "githubId" character varying NOT NULL,
     "createdDate" timestamp without time zone DEFAULT now() NOT NULL,
-    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL
+    "updatedDate" timestamp without time zone DEFAULT now() NOT NULL,
+    "userId" integer
 );
 
 
@@ -2689,6 +2690,7 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 15	1643550350939	LoginState1643550350939
 16	1643926895264	Notifications1643926895264
 17	1644695410918	NotificationConnection1644695410918
+18	1645364514538	RepositoryEvent1645364514538
 \.
 
 
@@ -2767,7 +2769,7 @@ COPY public.registry (id, type, status, "createdDate", "updatedDate", "userId", 
 -- Data for Name: repository_event; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdDate", "updatedDate") FROM stdin;
+COPY public.repository_event (id, "repositoryUrl", action, "githubId", "createdDate", "updatedDate", "userId") FROM stdin;
 \.
 
 
@@ -3372,6 +3374,7 @@ COPY public.task_verification (id, "createdDate", "updatedDate", "studentId", "c
 --
 
 COPY public."user" (id, "githubId", "firstName", "lastName", "createdDate", "updatedDate", "firstNameNative", "lastNameNative", "tshirtSize", "tshirtFashion", "dateOfBirth", "locationName", "locationId", "educationHistory", "employmentHistory", "contactsEpamEmail", "contactsPhone", "contactsEmail", "externalAccounts", "epamApplicantId", activist, "englishLevel", "lastActivityTime", "isActive", "primaryEmail", "contactsTelegram", "contactsSkype", "contactsNotes", "aboutMyself", "contactsLinkedIn", "profilePermissionsId", "countryName", "cityName", "opportunitiesConsent", "cvLink", "militaryService", discord, "providerUserId", provider) FROM stdin;
+11564	dyexplode			2022-02-18 22:02:49.245928	2022-02-18 22:02:49.245928	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	\N	\N	1645221769228	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	f	\N	\N	\N		
 11563	apalchys			2020-04-06 15:12:34.19737	2020-04-06 15:15:02.729722	\N	\N	\N	\N	\N	\N	\N	[]	[]	\N	\N	\N	[]	\N	f	\N	1586185954173	t	test@example.com	\N	\N	\N	\N	\N	\N	Belarus	Minsk	f	\N	\N	\N	11563	github
 2693	viktoriyavorozhun	\N	\N	2019-04-24 13:42:45.500139	2019-10-18 08:07:58.858658	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	0	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2693	github
 2098	yauhenkavalchuk	\N	\N	2019-04-17 11:41:21.396686	2019-11-12 11:22:33.350237	\N	\N	m	\N	\N	Minsk	12158	[]	[]	hello@epam.com	+375297777777	hello@example.com	[]	\N	\N	a1	1567594678450	t	primary@example.com	pavel_durov	\N	do not call me	i am a bad guy	\N	\N	Belarus	Minsk	f	\N	\N	\N	2098	github
@@ -3528,7 +3531,7 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 289, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 17, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 18, true);
 
 
 --
@@ -3689,7 +3692,7 @@ SELECT pg_catalog.setval('public.user_group_id_seq', 1, false);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 11563, true);
+SELECT pg_catalog.setval('public.user_id_seq', 11564, true);
 
 
 --
