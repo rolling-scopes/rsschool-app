@@ -4,7 +4,7 @@ import { CDN_AVATARS_URL } from 'configs/cdn';
 
 type Props = {
   githubId?: string;
-  size: 24 | 32 | 48 | 96;
+  size: 16 | 24 | 32 | 48 | 96;
   style?: React.CSSProperties;
   alt?: string;
 };

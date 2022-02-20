@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
   await page.context().clearCookies();
   await page.goto(url);
   await page.locator('.ant-btn-primary').click();
-  await page.waitForSelector('.profile');
+  await page.waitForSelector('.top-menu');
 });
 
 test.describe('Home', () => {

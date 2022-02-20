@@ -3,6 +3,7 @@ import { Spin, Row, Col, Layout } from 'antd';
 import { PropsWithChildren } from 'react';
 import { Session } from './withSession';
 import { AdminSider } from './AdminSider';
+import { TopMenu } from './TopMenu';
 
 type Props = {
   loading: boolean;
@@ -16,7 +17,7 @@ type Props = {
 export function PageLayout(props: Props) {
   return (
     <Layout style={{ background: 'transparent' }}>
-      <Header title={props.title} username={props.githubId} courseName={props.courseName} />
+      <TopMenu {...props} />
       <Layout.Content style={{ margin: 16 }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
       </Layout.Content>
