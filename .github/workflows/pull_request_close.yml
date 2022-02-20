@@ -15,8 +15,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
+
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Restore npm cache
         uses: actions/cache@v2
         env:
@@ -45,5 +47,5 @@ jobs:
       - name: Delete Deployment
         uses: strumwolf/delete-deployment-environment@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.DELETE_ENV_TOKEN }}
           environment: pr${{ github.event.pull_request.number }}
