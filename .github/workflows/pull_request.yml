@@ -56,6 +56,83 @@ jobs:
           npm run ci:format
           npm run lint
 
+  pr_test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: |
+            node_modules
+            client/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test (client)
+        run: npm run test:ci
+        working-directory: client
+
+      - name: Test (server)
+        run: npm run test:ci
+        if: success() || failure()
+        working-directory: server
+
+      - name: Test (nestjs)
+        run: npm run test:ci
+        if: success() || failure()
+        working-directory: nestjs
+
+      - name: Upload test report (client)
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: test-report-client
+          path: reports/jest-junit-client.xml
+
+      - name: Upload test report (server)
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: test-report-server
+          path: reports/jest-junit-server.xml
+
+      - name: Upload test report (nestjs)
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: test-report-nestjs
+          path: reports/jest-junit-nestjs.xml
+
   pr_build:
     name: Build
     runs-on: ubuntu-latest
@@ -106,6 +183,7 @@ jobs:
 
       - name: Restore Docker layers
         uses: actions/cache@v2
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
@@ -114,6 +192,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
 
       - name: Login to ECR
         uses: docker/login-action@v1
@@ -138,11 +217,13 @@ jobs:
 
       - name: Prepare
         working-directory: ./setup/cdk
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
           mkdir -p /tmp/.buildx-cache
           mkdir -p /tmp/.buildx-cache-new
 
       - name: Upload to CDN
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         working-directory: ./client
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
@@ -152,10 +233,9 @@ jobs:
           aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Build client lambda
-        working-directory: ./client
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          npm run build:lambda
+        working-directory: ./client
+        run: npm run build:lambda
 
       - name: Package Сlient
         uses: docker/build-push-action@v2
@@ -170,6 +250,7 @@ jobs:
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -192,6 +273,7 @@ jobs:
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -213,6 +295,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
@@ -322,100 +405,3 @@ jobs:
           name: playwright-report
           path: client/playwright-report/
           retention-days: 15
-
-  pr_test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Restore npm cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node_modules
-        with:
-          path: |
-            node_modules
-            client/node_modules
-            server/node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Test (client)
-        run: npm run test:ci
-        working-directory: client
-
-      - name: Test (server)
-        run: npm run test:ci
-        if: success() || failure()
-        working-directory: server
-
-      - name: Test (nestjs)
-        run: npm run test:ci
-        if: success() || failure()
-        working-directory: nestjs
-
-      - name: Upload test report (client)
-        uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-report-client
-          path: reports/jest-junit-client.xml
-
-      - name: Upload test report (server)
-        uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-report-server
-          path: reports/jest-junit-server.xml
-
-      - name: Upload test report (nestjs)
-        uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-report-nestjs
-          path: reports/jest-junit-nestjs.xml
-
-  pr_auto_label:
-    name: Auto Label
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Auto Label
-        uses: banyan/auto-label@1.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
