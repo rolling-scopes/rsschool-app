@@ -9,12 +9,10 @@ import {
   Post,
   Put,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { Response } from 'express';
 import { UpdateNotificationUserSettingsDto } from './dto/update-notification-user-settings.dto';
 import { NotificationUserSettingsDto, UserNotificationsDto } from './dto/notification-user-settings.dto';
 import { NotificationConnectionExistsDto } from './dto/notification-connection-exists.dto';
@@ -65,10 +63,7 @@ export class UsersNotificationsController {
   @RequiredRoles([Role.Admin])
   @ApiOkResponse({ type: NotificationConnectionDto })
   @HttpCode(200)
-  public async findConnection(
-    @Body() dto: NotificationConnectionExistsDto,
-    @Res() response: Response,
-  ): Promise<NotificationConnectionDto> {
+  public async findConnection(@Body() dto: NotificationConnectionExistsDto): Promise<NotificationConnectionDto> {
     const connection = await this.userNotificationsService.getUserConnection(dto);
     if (!connection) {
       throw new NotFoundException('no such connection');
