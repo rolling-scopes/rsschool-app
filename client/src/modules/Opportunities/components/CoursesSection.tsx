@@ -41,32 +41,33 @@ export function CoursesSection({ courses }: Props) {
               <Row justify="space-between" style={{ marginTop: 8, width: '100%' }}>
                 <Col flex={1}>
                   <Row>
-                    <span className="course-data-key">Status: </span>
-                    <StudentStatus certificateId={certificateId} isCourseCompleted={isCourseCompleted} />
+                    <span className="course-data-key">
+                      Status: <StudentStatus certificateId={certificateId} isCourseCompleted={isCourseCompleted} />
+                    </span>
                   </Row>
                   <Row>
-                    <span className="course-data-key">Mentor: </span>
-                    {mentorName ? (
-                      <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
-                        {mentorName}
-                      </a>
-                    ) : (
-                      <Text>No mentor</Text>
-                    )}
+                    <span className="course-data-key">
+                      Mentor:{' '}
+                      {mentorName ? (
+                        <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
+                          {mentorName}
+                        </a>
+                      ) : (
+                        <Text>No mentor</Text>
+                      )}
+                    </span>
                   </Row>
                 </Col>
                 <Col style={{ minWidth: 130, maxWidth: 130 }}>
                   <Row>
                     <span className="course-data-key">
-                      <TrophyOutlined /> Position:{' '}
+                      <TrophyOutlined /> Position: {rank}
                     </span>
-                    {rank}
                   </Row>
                   <Row>
                     <span className="course-data-key">
-                      <StarOutlined /> Score:{' '}
+                      <StarOutlined /> Score: {totalScore}
                     </span>
-                    {totalScore}
                   </Row>
                 </Col>
               </Row>
