@@ -13,7 +13,7 @@ import { UserNotificationsService } from 'src/users/users.notifications.service'
 import { emailTemplate } from './email-template';
 import { lastValueFrom } from 'rxjs';
 
-const compiledTemplate = compile(emailTemplate);
+const compiledTemplate = compile(emailTemplate, { noEscape: true });
 @Injectable()
 export class NotificationsService {
   constructor(
@@ -73,13 +73,12 @@ export class NotificationsService {
     const { channelId, externalId, template } = channel;
     if (!externalId || !template) return;
 
+    const body = compile(channel.template.body, { noEscape: true })(data);
     const channelMessage = {
       channelId,
       to: externalId,
       template: {
-        body: compiledTemplate({
-          emailBody: compile(channel.template.body)(data),
-        }),
+        body: channel.channelId === 'email' ? compiledTemplate({ emailBody: body }) : body,
       },
     };
     if (channel.channelId === 'email') {
