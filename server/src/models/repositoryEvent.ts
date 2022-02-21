@@ -15,6 +15,9 @@ export class RepositoryEvent {
   @Column()
   githubId: string;
 
+  @Column({ nullable: true })
+  userId?: number;
+
   @CreateDateColumn()
   createdDate: number;
 

@@ -9,7 +9,7 @@ export enum Role {
 
 export type CourseRoles = Record<string, CourseRole[]>;
 
-export const enum CourseRole {
+export enum CourseRole {
   TaskOwner = 'taskOwner',
   JuryActivist = 'juryActivist',
   Manager = 'manager',
@@ -70,6 +70,10 @@ export class AuthUser {
     this.coursesRoles = coursesRoles;
     this.courses = coursesInfo;
     return this;
+  }
+
+  static createAdmin() {
+    return new AuthUser({ courseUsers: [], githubId: '', id: 0, mentors: [], students: [] }, [], true);
   }
 
   private populateCourseInfo(

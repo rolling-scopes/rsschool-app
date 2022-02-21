@@ -1,10 +1,12 @@
 import { LoginData } from '@entities/loginState';
 import { User } from '@entities/user';
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
 import type { Profile } from 'passport';
+import { UserNotificationsService } from '../users/users.notifications.service';
 import { MoreThanOrEqual } from 'typeorm';
 import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
@@ -12,6 +14,7 @@ import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
+import { lastValueFrom } from 'rxjs';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -31,6 +34,8 @@ export class AuthService {
     readonly configService: ConfigService,
     @InjectRepository(AuthRepository)
     private readonly authRepository: AuthRepository,
+    readonly userNotificationsService: UserNotificationsService,
+    private httpService: HttpService,
   ) {
     this.admins = configService.users.admins;
   }
@@ -110,7 +115,36 @@ export class AuthService {
     });
   }
 
-  getRedirectUrl(loginData?: LoginData) {
+  public deleteLoginState(id: string) {
+    return this.authRepository.delete(id);
+  }
+
+  public getRedirectUrl(loginData?: LoginData) {
     return loginData?.redirectUrl ? decodeURIComponent(loginData.redirectUrl) : '/';
+  }
+
+  public async onConnectionComplete(loginData: LoginData, userId: number) {
+    const { channelId, externalId } = loginData;
+
+    await this.userNotificationsService.saveUserConnection({
+      channelId,
+      enabled: true,
+      externalId,
+      userId,
+    });
+    const { restApiKey, restApiUrl } = this.configService.awsServices;
+
+    await lastValueFrom(
+      this.httpService.post(
+        `${restApiUrl}/connection/complete`,
+        {
+          channelId,
+          externalId,
+        },
+        {
+          headers: { 'x-api-key': restApiKey },
+        },
+      ),
+    );
   }
 }

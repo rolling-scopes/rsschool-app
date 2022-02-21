@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from '../auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { AlertsService } from './alerts.service';
 import { AlertDto, CreateAlertDto, UpdateAlertDto } from './dto';
 
@@ -24,7 +24,7 @@ export class AlertsController {
 
   @Post('/')
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'createAlert' })
   @ApiOkResponse({ type: AlertDto })
   public async create(@Body() createAlertDto: CreateAlertDto) {
@@ -45,7 +45,7 @@ export class AlertsController {
 
   @Delete('/:id')
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'deleteAlert' })
   @ApiOkResponse({})
   public async remove(@Param('id', ParseIntPipe) id: number) {
@@ -54,7 +54,7 @@ export class AlertsController {
 
   @Patch('/:id')
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredAppRoles([Role.Admin])
+  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'updateAlert' })
   @ApiOkResponse({ type: AlertDto })
   public async update(@Param('id', ParseIntPipe) id: number, @Body() updateAlertDto: UpdateAlertDto) {

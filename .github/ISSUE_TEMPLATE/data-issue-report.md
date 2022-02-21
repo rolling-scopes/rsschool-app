@@ -3,7 +3,6 @@ name: Data issue report
 about: Create a report to fix data
 title: ''
 labels: data issue
-
 ---
 
 **Course**

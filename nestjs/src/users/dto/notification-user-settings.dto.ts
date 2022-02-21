@@ -1,7 +1,8 @@
 import { Notification } from '@entities/notification';
+import { NotificationChannelId } from '@entities/notificationChannel';
 import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsArray, IsBoolean } from 'class-validator';
 
 export class NotificationUserSettingsDto {
   constructor(notification: Notification & { settings: NotificationUserSettings[] }) {
@@ -26,4 +27,13 @@ export class NotificationUserSettingsDto {
 
   @ApiProperty({ type: Map })
   public settings: Record<string, boolean>;
+}
+
+export class UserNotificationsDto {
+  @ApiProperty({ type: [NotificationUserSettingsDto] })
+  @IsArray()
+  public notifications: NotificationUserSettingsDto[];
+
+  @ApiProperty({ type: Map })
+  public contacts: Record<NotificationChannelId, string>;
 }

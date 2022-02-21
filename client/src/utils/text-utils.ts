@@ -1,4 +1,4 @@
-const githubIdMatch = '[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}';
+const githubIdMatch = '[a-z\\d](?:[a-z\\d]|-*(?=[a-z\\d])){0,38}';
 const stringStartMatch = '(https?:\\/*\\/)?github.com(\\/)?|https?:\\/*\\/|^';
 
 const LOGIN_FIND_REGEXP = new RegExp(`(${stringStartMatch})(${githubIdMatch})?`, 'i');

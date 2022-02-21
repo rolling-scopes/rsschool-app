@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredAppRoles, Role, RoleGuard } from 'src/auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { RegistryService } from './registry.service';
@@ -13,7 +13,7 @@ export class RegistryController {
 
   @Put('mentor/:githubId')
   @ApiOperation({ operationId: 'approveMentor' })
-  @RequiredAppRoles([Role.Admin]) // TODO: discuss with @apalchys
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiOkResponse()
   public async approveMentor(@Param('githubId') githubId: string, @Body() body: ApproveMentorDto) {
     const { preselectedCourses } = body;

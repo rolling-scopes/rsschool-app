@@ -1,9 +1,9 @@
-## Adding tests into RS School App (for trainers and admins only)
+## Adding tests into the RS School App (for trainers and admins only)
 
-1. To add tests enter "Manage Tasks" page:
+1. To add tests, enter the "Manage Tasks" page:
    ![Manage Tasks Page](./img/adding-tests-1.png)
 
-2. Then click "Add Task" button:
+2. Then click the "Add Task" button:
    ![Add Task Button1](./img/adding-tests-2.png)
 
 3. Fill in the form and save it:
@@ -13,14 +13,14 @@
    - "Discipline" - select course-related discipline;
    - "Tags" - set tags (optional) to highlight which aspect of the course it is related to. For example, "javascript", "html/css", etc.;
    - "Description URL" - link to the task description;
-   - "JSON Attributes" - copy JSON file's content with test settings, questions and possible answers (<span style="color:green_apple">[see below](https://docs.app.rs.school/#/adding-tests?id=json-attributes)</span>).
+   - "JSON Attributes" - copy the JSON file's content with test settings, questions and possible answers (<span style="color:green_apple">[see below](https://docs.app.rs.school/#/adding-tests?id=json-attributes)</span>).
 
    ![RS School App Test Form](./img/adding-tests-3.png)
 
-4. In the course menu select "Course Tasks":
+4. In the course menu, select "Course Tasks":
    ![Course Tasks](./img/adding-tests-4.png)
 
-5. Click "Add Task" button too:
+5. Click the "Add Task" button too:
    ![Add Task Button2](./img/adding-tests-5.png)
 
 6. Fill in the form again and save it:
@@ -28,30 +28,30 @@
    - "Task" - select the task you have just created;
    - "Task Type" - select "RS School App Test";
    - "Checker" - select "Auto-Test";
-   - "Task Owner" - select a person, who is responsible for this task;
+   - "Task Owner" - select the person who is responsible for this task;
    - "Start Date - End Date" - set a date of issuing the task and the deadline;
    - "Score" - set a maximum score a student can get for this task;
-   - "Score Weight" - task weight (1 by default). It is needed for the manager of the course to correct it later, so do not change it.
+   - "Score Weight" - task weight (1 by default). It is necessary for the manager of the course to correct it later, so do not change it.
      ![Adding Task Details](./img/adding-tests-6.png)
 
 7. The task is added! Go back to the course menu and select "Auto-Test" in order to check if the task has been added or not.
    ![Auto-Test Menu](./img/adding-tests-7.png)
-8. Select the test you have created in the drop-down list and check if anything wrong:
+8. Select the test you have created in the drop-down list and check if anything is wrong:
    ![Auto-Test Test Course](./img/adding-tests-8.png)
 
 ### JSON Attributes
 
 #### Parameters:
 
-- "strictAttemptsMode" - strict mode by default, set "false" to switch off the strict mode.
-- "maxAttemptsNumber" - in the strict mode, after a certain amount of submissions, a student gets 0; otherwise, a student can submit it as many times as possible, but the score will be divided by 2.
+- "strictAttemptsMode" - strict mode by default, set "false" to switch off strict mode.
+- "maxAttemptsNumber" - in strict mode, after a certain amount of submissions, a student gets 0; otherwise, a student can submit it as many times as possible, but their final score will be divided by 2 after the max attempts have been exceeded.
 - "numberOfQuestions" - number of questions (it must be equal to the length of arrays of "answers" and "public"."questions").
-- "tresholdPercentage" - the percentage a student needs to reach for the task to be accepted (otherwise he gets 0 and loses 1 trial).
-- "oneAttemptPerNumberOfHours" - if number is positive integer than submit will be restricted by 1 attempt per amount of the given number of hours, 0 is used by default and means that this option is disabled.
-- "public"."questions" - questions and answers. To add a multi-choice question, set "true" for "multiple".
+- "tresholdPercentage" - the percentage a student needs to reach for the task to be accepted (otherwise they get 0 and loses 1 trial).
+- "oneAttemptPerNumberOfHours" - if the number is positive integer, then submission will be restricted by 1 attempt per amount of the given number of hours, 0 is used by default and means that this option is disabled.
+- "public"."questions" - questions and answers. To add a multiple choice question, set "true" for "multiple".
 - "answers" - an array of numbers of correct answers (the order of numbers must be equal to the order in "public"."questions"!).
 
-NB! student's resubmission implies he/she gets the last score obtained; it is possible to get 0, finally.
+NB! student's resubmission implies they get the last score obtained; it is possible to get 0, finally.
 
 #### An Example:
 

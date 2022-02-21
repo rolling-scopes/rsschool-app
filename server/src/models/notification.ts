@@ -1,5 +1,5 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn, OneToMany, Index } from 'typeorm';
-import { NotificationChannelSettings } from './NotificationChannelSettings';
+import { NotificationChannelSettings } from '.';
 
 export enum NotificationScope {
   general = 'general',

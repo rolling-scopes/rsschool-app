@@ -2,12 +2,12 @@ import {
   AudioTwoTone,
   CalendarTwoTone,
   CheckCircleTwoTone,
+  GoldTwoTone,
   CheckSquareTwoTone,
   CodeTwoTone,
   CompassTwoTone,
   DashboardTwoTone,
   FireTwoTone,
-  LikeOutlined,
   PlayCircleTwoTone,
   StopTwoTone,
 } from '@ant-design/icons';
@@ -74,6 +74,12 @@ const links: LinkData[] = [
     access: anyAccess,
   },
   {
+    name: 'My Students',
+    icon: <GoldTwoTone twoToneColor="#7f00ff" />,
+    getUrl: (course: Course) => `/course/mentor/students?course=${course.alias}`,
+    access: every(isMentor),
+  },
+  {
     name: 'Submit Review',
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
@@ -93,13 +99,6 @@ const links: LinkData[] = [
     getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
     access: every(some(isTaskOwner, isAdmin, isCourseManager)),
     courseAccess: everyCourse(isCourseNotCompleted),
-  },
-
-  {
-    name: 'Feedback on student',
-    icon: <LikeOutlined />,
-    getUrl: () => `/feedback`,
-    access: isMentor,
   },
   {
     name: 'Cross-Check: Submit',

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { NotificationId } from '../notificationIds';
 
 export class SendNotificationDto {
@@ -14,4 +14,10 @@ export class SendNotificationDto {
   @ApiProperty()
   @IsNotEmpty()
   public data: object;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  // date in ms
+  public expireDate?: number;
 }
