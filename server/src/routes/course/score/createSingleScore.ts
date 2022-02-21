@@ -16,7 +16,6 @@ type ScoreInput = {
 
 export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, courseTaskId, githubId } = ctx.params;
-  const { newNotification } = ctx.query ?? {};
   const { coursesRoles } = ctx.state!.user as IUserSession;
 
   const inputData: ScoreInput = ctx.request.body;
@@ -105,22 +104,17 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
 
-  if (newNotification) {
-    try {
-      await notificationService.sendNotificationV2({
-        userId: student.userId,
-        notificationId: 'taskGrade',
-        data: {
-          courseTask,
-          score: data.score,
-          comment: data.comment,
-        },
-      });
-    } catch (e) {
-      logger.error(`Failed to publish notification ${(e as AxiosError).message}`);
-    }
-  } else {
-    const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
-    await notificationService.sendNotification([githubId], taskResultText);
+  try {
+    await notificationService.sendNotificationV2({
+      userId: student.userId,
+      notificationId: 'taskGrade',
+      data: {
+        courseTask,
+        score: data.score,
+        comment: data.comment,
+      },
+    });
+  } catch (e) {
+    logger.error(`Failed to publish notification ${(e as AxiosError).message}`);
   }
 };
