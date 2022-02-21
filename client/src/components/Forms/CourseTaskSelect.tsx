@@ -6,24 +6,29 @@ import { CourseTask } from 'services/course';
 
 type Props = {
   data: CourseTask[];
+  groupBy: string;
   onChange?: (id: number) => void;
 };
 
 const MAX_DATE = '+275760-09-13T00:00:00.000Z';
 
 export function CourseTaskSelect(props: Props) {
-  const { data, onChange, ...options } = props;
-  data.sort(function (firstTask, secondTask) {
-    return Date.parse(secondTask.studentEndDate ?? MAX_DATE) - Date.parse(firstTask.studentEndDate ?? MAX_DATE);
+  const { data, groupBy, onChange, ...options } = props;
+  const sortedData = data.sort(function (firstTask, secondTask) {
+    return (secondTask.studentEndDate ?? MAX_DATE).localeCompare(firstTask.studentEndDate ?? MAX_DATE);
   });
   const selectProps = _.omitBy({ onChange }, _.isNil);
-  const dataActive = data.filter(task => Date.now() < Date.parse(task.studentEndDate ?? MAX_DATE));
-  const dataExpired = data.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));
 
-  const selectGroups = [
-    { data: dataActive, title: 'Active' },
-    { data: dataExpired, title: 'Expired' },
-  ];
+  const dataActive = sortedData.filter(task => Date.now() < Date.parse(task.studentEndDate ?? MAX_DATE));
+  const dataExpired = sortedData.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));
+
+  const selectGroups =
+    groupBy === 'deadline'
+      ? [
+          { data: dataActive, title: 'Active' },
+          { data: dataExpired, title: 'Expired' },
+        ]
+      : [{ data: sortedData, title: 'All tasks' }];
 
   return (
     <Form.Item

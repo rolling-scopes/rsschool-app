@@ -174,7 +174,7 @@ function Page(props: CoursePageProps) {
       <Row gutter={24} style={{ margin: 16 }}>
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
-            <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
+            <CourseTaskSelect data={courseTasks} groupBy="deadline" onChange={handleTaskChange} />
             <Form.Item name="githubId" label="Student" rules={[{ required: true, message: 'Please select a student' }]}>
               <UserSearch
                 keyField="githubId"
