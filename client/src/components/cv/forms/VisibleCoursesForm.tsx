@@ -12,7 +12,7 @@ type Props = {
 const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
   const { courses, visibleCourses } = props;
 
-  if (!courses || !courses?.length) return <Typography.Text>No courses to show</Typography.Text>;
+  if (!courses?.length) return <Typography.Text>No courses to show</Typography.Text>;
 
   const [form] = Form.useForm();
 
