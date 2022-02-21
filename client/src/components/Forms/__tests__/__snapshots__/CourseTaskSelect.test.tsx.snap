@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CourseTaskSelect should render empty 1`] = `
+<FormItem
+  label="Task"
+  name="courseTaskId"
+  rules={
+    Array [
+      Object {
+        "message": "Please select a task",
+        "required": true,
+      },
+    ]
+  }
+>
+  <ForwardRef(InternalSelect)
+    placeholder="Select task"
+  />
+</FormItem>
+`;
+
+exports[`CourseTaskSelect should render with both groups 1`] = `
+<FormItem
+  label="Task"
+  name="courseTaskId"
+  rules={
+    Array [
+      Object {
+        "message": "Please select a task",
+        "required": true,
+      },
+    ]
+  }
+>
+  <ForwardRef(InternalSelect)
+    placeholder="Select task"
+  >
+    <OptGroup
+      label="Active"
+    >
+      <Option
+        key="432"
+        value={432}
+      >
+        Flex / Grid test
+      </Option>
+      <Option
+        key="431"
+        value={431}
+      >
+        Drum Kit
+      </Option>
+    </OptGroup>
+    <OptGroup
+      label="Expired"
+    >
+      <Option
+        key="978"
+        value={978}
+      >
+        Chess S1E2. Cross-check
+      </Option>
+      <Option
+        key="821"
+        value={821}
+      >
+        CV. Cross-Check
+      </Option>
+    </OptGroup>
+  </ForwardRef(InternalSelect)>
+</FormItem>
+`;
+
+exports[`CourseTaskSelect should render with one group 1`] = `
+<FormItem
+  label="Task"
+  name="courseTaskId"
+  rules={
+    Array [
+      Object {
+        "message": "Please select a task",
+        "required": true,
+      },
+    ]
+  }
+>
+  <ForwardRef(InternalSelect)
+    placeholder="Select task"
+  >
+    <OptGroup
+      label="Expired"
+    >
+      <Option
+        key="978"
+        value={978}
+      >
+        Chess S1E2. Cross-check
+      </Option>
+      <Option
+        key="821"
+        value={821}
+      >
+        CV. Cross-Check
+      </Option>
+    </OptGroup>
+  </ForwardRef(InternalSelect)>
+</FormItem>
+`;
