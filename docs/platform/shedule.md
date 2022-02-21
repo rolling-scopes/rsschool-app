@@ -1,6 +1,6 @@
 ## RS School App Schedule
 
-To successfully complete the selected course, **RS School App** has a **schedule**, which can be accessed from the main menu
+To help you successfully complete the selected course, the **RS School App** has a **schedule** which can be accessed from the main menu
 
 1. Select the desired course
 2. Follow the link
@@ -37,7 +37,7 @@ The event/task details page displays the most detailed data.
 
 #### Using the schedule by students
 
-Search is possible by the name of the event/task or the organizer. Sort is possible by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
+It is possible to search by the name of the event/task or the organizer. It is possible to sort by date (type **Table**). To open the details of the event/task, click on the name of the event/task.
 
 ### Additional schedule features for the administration
 
