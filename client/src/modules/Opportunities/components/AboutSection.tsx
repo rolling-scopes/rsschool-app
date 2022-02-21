@@ -18,7 +18,7 @@ function AboutSection(props: Props) {
   const sectionContent = (
     <Row>
       <Col>
-        <Text style={{ fontSize: 16 }}>{notes}</Text>
+        <Text style={{ fontSize: 16, whiteSpace: 'pre-line' }}>{notes}</Text>
       </Col>
     </Row>
   );
