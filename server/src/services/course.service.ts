@@ -243,17 +243,17 @@ export async function getStudentByGithubId(courseId: number, githubId: string): 
 export async function queryStudentByGithubId(
   courseId: number,
   githubId: string,
-): Promise<{ id: number; name: string; githubId: string } | null> {
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
   const record = await studentQuery()
     .innerJoin('student.user', 'user')
-    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
     .where('user.githubId = :githubId', { githubId })
     .andWhere('student.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
     return null;
   }
-  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
 }
 
 export async function queryMentorByGithubId(

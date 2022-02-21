@@ -28,13 +28,6 @@ export class RegistryService {
 
     return {
       courses,
-      names: courses.map(course => course.name).join(', '),
-      confirmationLinks: courses.map(
-        ({ alias, name }) => `${name}: https://app.rs.school/course/mentor/confirm?course=${alias}`,
-      ),
-      mentorChatLinks: courses
-        .map(({ discordServer, name }) => (discordServer ? `${name}: ${discordServer.mentorsChatUrl}` : ''))
-        .join('\n'),
     };
   }
 }
