@@ -107,3 +107,19 @@ export async function sendNotification(githubIds: string[], text: string, isIgno
     throw error.response?.data ?? error.message;
   }
 }
+
+export async function sendNotificationV2(notification: NotificationV2) {
+  const { password, username } = config.users.cloud;
+
+  await axios.post(`${config.host}/api/v2/notifications/send`, notification, {
+    headers: {
+      Authorization: `Basic ${Buffer.from(username + ':' + password).toString('base64')}`,
+    },
+  });
+}
+
+type NotificationV2 = {
+  notificationId: 'mentorRegistrationApproval' | 'taskGrade';
+  userId: number;
+  data: object;
+};

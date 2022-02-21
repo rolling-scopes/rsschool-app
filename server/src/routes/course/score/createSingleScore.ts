@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import { AxiosError } from 'axios';
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
@@ -15,6 +16,7 @@ type ScoreInput = {
 
 export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, courseTaskId, githubId } = ctx.params;
+  const { newNotification } = ctx.query ?? {};
   const { coursesRoles } = ctx.state!.user as IUserSession;
 
   const inputData: ScoreInput = ctx.request.body;
@@ -102,6 +104,23 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
 
   const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
-  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
-  await notificationService.sendNotification([githubId], taskResultText);
+
+  if (newNotification) {
+    try {
+      await notificationService.sendNotificationV2({
+        userId: student.userId,
+        notificationId: 'taskGrade',
+        data: {
+          courseTask,
+          score: data.score,
+          comment: data.comment,
+        },
+      });
+    } catch (e) {
+      logger.error(`Failed to publish notification ${(e as AxiosError).message}`);
+    }
+  } else {
+    const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
+    await notificationService.sendNotification([githubId], taskResultText);
+  }
 };
