@@ -59,7 +59,7 @@ services:
       RSSHCOOL_PG_USERNAME: ${RSSHCOOL_API_PG_USERNAME}
       RSSHCOOL_PG_PASSWORD: ${RSSHCOOL_API_PG_PASSWORD}
       RSSHCOOL_PG_DATABASE: ${RSSHCOOL_API_PG_DATABASE}
-      RSSHCOOL_USERS_ADMINS: "apalchys,dzmitry-varabei,mikhama,sonejka,aaliakseyenka"
+      RSSHCOOL_USERS_ADMINS: 'apalchys,dzmitry-varabei,mikhama,sonejka,aaliakseyenka'
       RSSHCOOL_AUTH_GITHUB_CALLBACK: ${RSSHCOOL_API_AUTH_CALLBACK}
       RSSHCOOL_AUTH_GITHUB_CLIENT_ID: ${RSSHCOOL_API_AUTH_CLIENT_ID}
       RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET: ${RSSHCOOL_API_AUTH_CLIENT_SECRET}
@@ -79,13 +79,13 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:1.14-alpine
+    image: nginx:1.21-alpine
     restart: unless-stopped
     volumes:
       - ./nginx:/etc/nginx
       - ./letsencrypt:/etc/letsencrypt
       - ./certbot:/var/www/certbot
-    command: "/bin/sh -c 'while :; do sleep 12h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    command: '/bin/sh -c ''while :; do sleep 12h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     ports:
       - 80:8080
       - 443:443
