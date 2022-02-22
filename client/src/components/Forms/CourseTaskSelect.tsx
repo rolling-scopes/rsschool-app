@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Select, Form } from 'antd';
-import _ from 'lodash';
 
 import { CourseTask } from 'services/course';
 
 type Props = {
   data: CourseTask[];
-  groupBy: string;
+  groupBy?: string;
   onChange?: (id: number) => void;
 };
 
@@ -14,10 +13,10 @@ const MAX_DATE = '+275760-09-13T00:00:00.000Z';
 
 export function CourseTaskSelect(props: Props) {
   const { data, groupBy, onChange, ...options } = props;
-  const sortedData = data.sort(function (firstTask, secondTask) {
-    return (secondTask.studentEndDate ?? MAX_DATE).localeCompare(firstTask.studentEndDate ?? MAX_DATE);
-  });
-  const selectProps = _.omitBy({ onChange }, _.isNil);
+  const sortedData = data.sort((firstTask, secondTask) =>
+    (secondTask.studentEndDate ?? MAX_DATE).localeCompare(firstTask.studentEndDate ?? MAX_DATE),
+  );
+  const selectProps = onChange ? { onChange } : {};
 
   const dataActive = sortedData.filter(task => Date.now() < Date.parse(task.studentEndDate ?? MAX_DATE));
   const dataExpired = sortedData.filter(task => Date.now() >= Date.parse(task.studentEndDate ?? MAX_DATE));

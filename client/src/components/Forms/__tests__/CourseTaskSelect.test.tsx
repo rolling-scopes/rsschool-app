@@ -124,9 +124,9 @@ const onlyExpired = [
 ] as CourseTask[];
 
 describe('CourseTaskSelect', () => {
-  const outputFull = shallow(<CourseTaskSelect data={fullData}></CourseTaskSelect>);
-  const outputOnlyExpired = shallow(<CourseTaskSelect data={onlyExpired}></CourseTaskSelect>);
-  const outputEmpty = shallow(<CourseTaskSelect data={[]}></CourseTaskSelect>);
+  const outputFull = shallow(<CourseTaskSelect data={fullData} groupBy='deadline'></CourseTaskSelect>);
+  const outputOnlyExpired = shallow(<CourseTaskSelect data={onlyExpired} groupBy='deadline'></CourseTaskSelect>);
+  const outputEmpty = shallow(<CourseTaskSelect data={[]} groupBy='deadline'></CourseTaskSelect>);
 
   it('should render with both groups', () => {
     expect(shallowToJson(outputFull)).toMatchSnapshot();
@@ -149,7 +149,7 @@ describe('CourseTaskSelect', () => {
     ).toBe(true);
   });
 
-  it('outputFull contains active option', () => {
+  it('outputFull contains expired option', () => {
     expect(
       outputFull.containsMatchingElement(
         <Select.Option key={fullData[2].id} value={fullData[2].id}>
@@ -169,7 +169,7 @@ describe('CourseTaskSelect', () => {
     ).toBe(false);
   });
 
-  it('outputoutputOnlyExpiredFull contains active option', () => {
+  it('outputOnlyExpired contains expired option', () => {
     expect(
       outputOnlyExpired.containsMatchingElement(
         <Select.Option key={fullData[2].id} value={fullData[2].id}>
