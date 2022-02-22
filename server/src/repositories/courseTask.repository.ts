@@ -1,5 +1,13 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import { CourseTask, TaskResult, Task, TaskInterviewResult, Student } from '../models';
+import {
+  CourseTask,
+  TaskResult,
+  Task,
+  TaskInterviewResult,
+  StageInterview,
+  StageInterviewFeedback,
+  Student,
+} from '../models';
 
 type Status = 'started' | 'inprogress' | 'finished';
 @EntityRepository(CourseTask)
@@ -65,14 +73,26 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       .andWhere('"user"."id" = :userId', { userId })
       .getOne();
 
+    if (!student) {
+      return [];
+    }
+
+    const studentId = student.id;
     const courseTasks = await getRepository(CourseTask)
       .createQueryBuilder('courseTask')
       .addSelect('COUNT(taskResult.id)', 'taskResultCount')
       .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
-      .leftJoin(TaskResult, 'tr', '"tr"."courseTaskId" = "courseTask"."id" AND "tr"."studentId" = :studentId', {
-        studentId: student?.id,
+      .leftJoin(TaskInterviewResult, 'tir', 'tir.courseTaskId = courseTask.id AND "tir"."studentId" = :studentId', {
+        studentId,
       })
-      .addSelect('tr.score', 'score')
+      .leftJoin(TaskResult, 'tr', '"tr"."courseTaskId" = "courseTask"."id" AND "tr"."studentId" = :studentId', {
+        studentId,
+      })
+      .leftJoin(StageInterview, 'si', '"si"."studentId" = :studentId AND "si"."courseTaskId" = "courseTask"."id"', {
+        studentId,
+      })
+      .leftJoin(StageInterviewFeedback, 'sif', '"sif"."stageInterviewId" = "si"."id"')
+      .addSelect(`COALESCE(tr.score, tir.score, ("sif"."json"::json -> 'resume' ->> 'score')::int)`, 'score')
       .innerJoinAndSelect('courseTask.task', 'task')
       .leftJoin('courseTask.taskOwner', 'taskOwner')
       .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
@@ -82,7 +102,9 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       .addGroupBy('task.id')
       .addGroupBy('taskOwner.id')
       .addGroupBy('tr.score')
+      .addGroupBy('tir.score')
       .addGroupBy('tr.id')
+      .addGroupBy('sif.json')
       .getRawAndEntities();
 
     const data = courseTasks.entities.map(item => {

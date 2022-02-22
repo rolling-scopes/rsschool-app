@@ -11,6 +11,8 @@ import {
   TaskResult,
   TaskInterviewResult,
   Certificate,
+  StageInterview,
+  StageInterviewFeedback,
 } from '../../models';
 import { Permissions } from './permissions';
 import omit from 'lodash/omit';
@@ -37,7 +39,11 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
     .addSelect('ARRAY_AGG ("courseTask"."studentEndDate") AS "taskEndDates"')
     .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
     .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
-    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
+    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"').addSelect(`ARRAY_AGG (COALESCE(
+      "taskResult"."score",
+      "taskInterview"."score",
+      ("stageInterviewFeedback"."json"::json -> 'resume' ->> 'score')::int
+    )) AS "taskScores"`);
 
   if (isExpellingReasonVisible) {
     query.addSelect('"student"."expellingReason" AS "expellingReason"');
@@ -45,16 +51,13 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
 
   if (isCoreJsFeedbackVisible) {
     query
-      .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
       .addSelect('ARRAY_AGG (COALESCE("taskResult"."comment", "taskInterview"."comment")) AS "taskComments"')
       .addSelect('ARRAY_AGG ("taskInterview"."formAnswers") AS "taskInterviewFormAnswers"')
       .addSelect('ARRAY_AGG ("interviewer"."githubId") AS "interviewerGithubId"')
       .addSelect('ARRAY_AGG ("interviewer"."firstName") AS "interviewerFirstName"')
       .addSelect('ARRAY_AGG ("interviewer"."lastName") AS "interviewerLastName"');
   } else {
-    query
-      .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
-      .addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
+    query.addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
   }
 
   query
@@ -74,6 +77,16 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
       TaskInterviewResult,
       'taskInterview',
       '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"',
+    )
+    .leftJoin(
+      StageInterview,
+      'stageInterview',
+      '"stageInterview"."studentId" = "student"."id" AND "stageInterview"."courseTaskId" = "courseTask"."id"',
+    )
+    .leftJoin(
+      StageInterviewFeedback,
+      'stageInterviewFeedback',
+      '"stageInterviewFeedback"."stageInterviewId" = "stageInterview"."id"',
     );
 
   if (isCoreJsFeedbackVisible) {
