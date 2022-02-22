@@ -73,18 +73,23 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       .andWhere('"user"."id" = :userId', { userId })
       .getOne();
 
+    if (!student) {
+      return [];
+    }
+
+    const studentId = student.id;
     const courseTasks = await getRepository(CourseTask)
       .createQueryBuilder('courseTask')
       .addSelect('COUNT(taskResult.id)', 'taskResultCount')
       .leftJoin(TaskResult, 'taskResult', '"taskResult"."courseTaskId" = "courseTask"."id"')
       .leftJoin(TaskInterviewResult, 'tir', 'tir.courseTaskId = courseTask.id AND "tir"."studentId" = :studentId', {
-        studentId: student?.id,
+        studentId,
       })
       .leftJoin(TaskResult, 'tr', '"tr"."courseTaskId" = "courseTask"."id" AND "tr"."studentId" = :studentId', {
-        studentId: student?.id,
+        studentId,
       })
       .leftJoin(StageInterview, 'si', '"si"."studentId" = :studentId AND "si"."courseTaskId" = "courseTask"."id"', {
-        studentId: student?.id,
+        studentId,
       })
       .leftJoin(StageInterviewFeedback, 'sif', '"sif"."stageInterviewId" = "si"."id"')
       .addSelect(`COALESCE(tr.score, tir.score, ("sif"."json"::json -> 'resume' ->> 'score')::int)`, 'score')
