@@ -15,7 +15,7 @@ export function initializeFeatures(query: Record<string, string | string[] | und
 
 function getInitialFeatureToggles() {
   return {
-    notifications: false,
+    notifications: true,
     adminMessenger: false,
   };
 }
