@@ -26,7 +26,7 @@ type Props = {
 };
 
 export function Header(props: Props) {
-  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible, username } = props;
+  const { isProfilePage, onChangeProfilePageMode, isProfileEditingModeEnabled, isSaveButtonVisible } = props;
 
   const menuActiveItemStyle = { backgroundColor: '#e0f2ff' };
   const menu = (
@@ -59,7 +59,7 @@ export function Header(props: Props) {
         </Menu.Item>
       )}
       <Menu.Item key="3">
-        <Button type="link" href={`/cv/${username}`} style={{ textAlign: 'left' }}>
+        <Button type="link" href={`/cv/edit`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
         </Button>
       </Menu.Item>

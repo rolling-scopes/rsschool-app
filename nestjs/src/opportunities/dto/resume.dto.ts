@@ -131,6 +131,7 @@ class ResumeCourseDto {
 
 export class ResumeDto {
   constructor(resume: Resume, students: Student[], gratitudes: Feedback[], feedbacks: StudentFeedback[]) {
+    this.uuid = resume.uuid;
     this.avatarLink = resume.avatarLink;
     this.desiredPosition = resume.desiredPosition;
     this.email = resume.email;
@@ -153,7 +154,8 @@ export class ResumeDto {
     this.courses = students.map(item => new ResumeCourseDto(item));
     this.feedbacks = feedbacks.map(item => new FeedbackDto(item));
   }
-
+  @ApiProperty()
+  public uuid: string;
   @ApiProperty()
   public avatarLink: string;
   @ApiProperty({ type: [ResumeCourseDto] })

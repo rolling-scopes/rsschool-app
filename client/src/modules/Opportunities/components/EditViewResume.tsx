@@ -18,7 +18,7 @@ type ResumeProps = {
   giveConsent: (ownerGithubId: string) => void;
 };
 
-export function Resume(props: ResumeProps) {
+export function EditViewResume(props: ResumeProps) {
   const {
     hasPriorityRole,
     ownerGithubId,
@@ -57,6 +57,7 @@ export function Resume(props: ResumeProps) {
               unCheckedChildren="Edit view"
             />
           </Divider>
+
           {editMode ? (
             <EditCV ownerGithubId={ownerGithubId} withdrawConsent={() => withdrawConsent(ownerGithubId as string)} />
           ) : (

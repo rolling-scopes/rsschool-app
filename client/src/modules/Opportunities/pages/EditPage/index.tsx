@@ -2,10 +2,9 @@ import React, { useState, PropsWithChildren } from 'react';
 import { Layout } from 'antd';
 import Head from 'next/head';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { useRouter } from 'next/router';
 import { Session } from 'components/withSession';
 import { Header } from 'components/Header';
-import { Resume } from 'modules/Opportunities/components/Resume';
+import { EditViewResume } from 'modules/Opportunities/components/EditViewResume';
 
 import { OpportunitiesService } from '../../services/opportunities';
 import { useAsync } from 'react-use';
@@ -16,10 +15,8 @@ const service = new OpportunitiesService();
 
 type Props = { session: Session };
 
-export function ResumePage({ session }: PropsWithChildren<Props>) {
-  const router = useRouter();
-
-  const githubId = (router?.query?.githubId as string)?.toLowerCase();
+export function EditPage({ session }: PropsWithChildren<Props>) {
+  const githubId = session.githubId;
 
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState(false);
@@ -50,7 +47,8 @@ export function ResumePage({ session }: PropsWithChildren<Props>) {
         <Header username={session.githubId} />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
-            <Resume
+
+            <EditViewResume
               hasPriorityRole={hasPriorityRole}
               ownerGithubId={githubId}
               isOwner={isOwner}

@@ -1,15 +1,16 @@
-import { FeedbackDto, GratitudeDto, OpportunitiesApi, ResumeCourseDto } from 'api';
+import { FeedbackDto, GratitudeDto, OpportunitiesApi, ResumeCourseDto, ResumeDto } from 'api';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Contacts, UserData } from '../models';
 
 type Props = {
-  githubId: string;
+  githubId?: string;
+  initialData?: ResumeDto;
 };
 
 const opportunitiesService = new OpportunitiesApi();
 
-export function useViewData({ githubId }: Props) {
+export function useViewData({ githubId, initialData: resume }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -20,7 +21,11 @@ export function useViewData({ githubId }: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const { data } = await opportunitiesService.getResume(githubId);
+    const { data } = githubId ? await opportunitiesService.getResume(githubId) : { data: resume };
+
+    if (!data) {
+      return;
+    }
 
     const {
       notes,
@@ -43,6 +48,7 @@ export function useViewData({ githubId }: Props) {
       courses,
       gratitudes,
       feedbacks,
+      uuid,
     } = data;
 
     const userData = {
@@ -55,6 +61,7 @@ export function useViewData({ githubId }: Props) {
       englishLevel,
       startFrom,
       fullTime,
+      uuid,
     };
 
     const contactsList = {

@@ -6,7 +6,7 @@ const { Paragraph, Title } = Typography;
 const { Item } = List;
 
 type Props = {
-  isOwner: boolean;
+  isOwner?: boolean;
   giveConsent?: () => void;
 };
 

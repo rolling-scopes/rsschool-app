@@ -40,6 +40,7 @@ export interface UserData {
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
+  uuid: string;
 }
 
 export type Contacts = {
