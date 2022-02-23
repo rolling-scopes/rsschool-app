@@ -128,7 +128,7 @@ const getColumns = ({
               {value}
             </a>
           ) : (
-            { value }
+            <span>{value}</span>
           )}
         </Text>
       );
