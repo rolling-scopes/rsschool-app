@@ -46,7 +46,7 @@ export class ResumeService {
     ]);
 
     const selectedCourses = courses
-      .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+      .filter(course => resume?.visibleCourses.includes(course.courseId))
       .map(course => omit(course, ['courseId']));
 
     const viewData = {
@@ -63,7 +63,7 @@ export class ResumeService {
 
     const courses = await this.studentRepository.findStudentCourses(this.githubId);
 
-    const realCourses = courses.filter(course => course.courseFullName !== 'TEST COURSE');
+    const realCourses = courses;
 
     const formData = {
       ...resume,

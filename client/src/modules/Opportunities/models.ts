@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ENGLISH_LEVELS } from 'data/english';
+import { ResumeDtoEnglishLevelEnum } from 'api';
 
 export interface CourseData {
   locationName: string;
@@ -26,7 +26,6 @@ export interface VisibleCoursesFormData {
   [id: string]: boolean;
 }
 
-export type EnglishLevel = typeof ENGLISH_LEVELS[number];
 export type MilitaryServiceStatus = 'served' | 'liable' | 'notLiable';
 
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
@@ -36,7 +35,7 @@ export interface UserData {
   name: string | null;
   desiredPosition: string | null;
   selfIntroLink: string | null;
-  englishLevel: EnglishLevel | null;
+  englishLevel: ResumeDtoEnglishLevelEnum | null;
   militaryService: MilitaryServiceStatus | null;
   notes: string | null;
   startFrom: string | null;
@@ -114,11 +113,10 @@ export interface JobSeekerData {
   name: string | null;
   desiredPosition: string | null;
   githubId: string;
-  englishlevel: EnglishLevel | null;
+  englishLevel: ResumeDtoEnglishLevelEnum | null;
   fullTime: boolean;
   locations: string | null;
   startFrom: string | null;
-  englishLevel: EnglishLevel;
   courses: JobSeekerStudentStats[];
   feedback: JobSeekerFeedback[];
   expires: number;

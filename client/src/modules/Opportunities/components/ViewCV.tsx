@@ -6,15 +6,16 @@ import AboutSection from './AboutSection';
 import { ContactsSection } from './ContactsSection';
 import { CoursesSection } from './CoursesSection';
 import { FeedbackSection } from './FeedbackSection';
+import { GratitudeSection } from './GratitudeSection';
 import { NameTitle } from './NameTitle';
 import { PersonalSection } from './PersonalSection';
 
 type Props = {
-  ownerGithubId: string;
+  githubId: string;
 };
 
-function ViewCV({ ownerGithubId }: Props) {
-  const { loading, userData, contacts, courses, feedback } = useViewData({ githubId: ownerGithubId });
+function ViewCV({ githubId }: Props) {
+  const { loading, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ githubId });
 
   return (
     <LoadingScreen show={loading}>
@@ -36,7 +37,8 @@ function ViewCV({ ownerGithubId }: Props) {
           <Col xl={16} lg={16} md={14} sm={24} xs={24}>
             <AboutSection notes={userData.notes} />
             <CoursesSection courses={courses ?? []} />
-            <FeedbackSection feedback={feedback} />
+            <FeedbackSection data={feedbacks} />
+            <GratitudeSection data={gratitudes} />
           </Col>
         </Row>
       )}

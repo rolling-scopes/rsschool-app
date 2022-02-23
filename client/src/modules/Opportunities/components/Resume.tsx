@@ -6,7 +6,7 @@ import NoConsentViewCV from '../../../components/cv/NoConsentViewCV';
 
 const { Text } = Typography;
 
-type CVInfoProps = {
+type ResumeProps = {
   hasPriorityRole: boolean;
   ownerGithubId?: string;
   isOwner: boolean;
@@ -18,7 +18,7 @@ type CVInfoProps = {
   giveConsent: (ownerGithubId: string) => void;
 };
 
-function CVInfo(props: CVInfoProps) {
+export function Resume(props: ResumeProps) {
   const {
     hasPriorityRole,
     ownerGithubId,
@@ -60,7 +60,7 @@ function CVInfo(props: CVInfoProps) {
           {editMode ? (
             <EditCV ownerGithubId={ownerGithubId} withdrawConsent={() => withdrawConsent(ownerGithubId as string)} />
           ) : (
-            <ViewCV ownerGithubId={ownerGithubId} />
+            <ViewCV githubId={ownerGithubId} />
           )}
         </>
       );
@@ -69,9 +69,7 @@ function CVInfo(props: CVInfoProps) {
   }
 
   if (consent) {
-    return <ViewCV ownerGithubId={ownerGithubId} />;
+    return <ViewCV githubId={ownerGithubId} />;
   }
   return <NoConsentViewCV isOwner={false} />;
 }
-
-export default CVInfo;

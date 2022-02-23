@@ -5,7 +5,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
 import { Session } from 'components/withSession';
 import { Header } from 'components/Header';
-import CVInfo from 'modules/Opportunities/components/CVPage';
+import { Resume } from 'modules/Opportunities/components/Resume';
 
 import { OpportunitiesService } from '../../services/opportunities';
 import { useAsync } from 'react-use';
@@ -16,15 +16,15 @@ const service = new OpportunitiesService();
 
 type Props = { session: Session };
 
-export function CVPage({ session }: PropsWithChildren<Props>) {
+export function ResumePage({ session }: PropsWithChildren<Props>) {
   const router = useRouter();
 
   const githubId = (router?.query?.githubId as string)?.toLowerCase();
 
   const [loading, withLoading] = useLoading(false);
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const [consent, setConsent] = useState<boolean>(false);
-  const [notFound] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [notFound] = useState(false);
 
   const switchView = async (checked: boolean) => setEditMode(!checked);
 
@@ -50,7 +50,7 @@ export function CVPage({ session }: PropsWithChildren<Props>) {
         <Header username={session.githubId} />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
-            <CVInfo
+            <Resume
               hasPriorityRole={hasPriorityRole}
               ownerGithubId={githubId}
               isOwner={isOwner}

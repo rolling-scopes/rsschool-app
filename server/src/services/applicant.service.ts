@@ -23,7 +23,7 @@ export class ApplicantService {
         ]);
 
         const selectedCourses = courses
-          .filter(course => course.courseFullName !== 'TEST COURSE' && resume?.visibleCourses.includes(course.courseId))
+          .filter(course => resume?.visibleCourses.includes(course.courseId))
           .map(course => omit(course, ['courseId']));
 
         return {

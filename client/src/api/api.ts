@@ -475,6 +475,7 @@ export enum CreateStudentFeedbackDtoRecommendationEnum {
     */
 export enum CreateStudentFeedbackDtoEnglishLevelEnum {
     Unknown = 'unknown',
+    A0 = 'a0',
     A1 = 'a1',
     A2 = 'a2',
     B1 = 'b1',
@@ -556,6 +557,141 @@ export interface DiscordServerDto {
      * @memberof DiscordServerDto
      */
     'mentorsChatUrl': string;
+}
+/**
+ * 
+ * @export
+ * @interface FeedbackCourseDto
+ */
+export interface FeedbackCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FeedbackCourseDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface FeedbackDto
+ */
+export interface FeedbackDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackDto
+     */
+    'date': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackDto
+     */
+    'recommendation': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackDto
+     */
+    'englishLevel': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackDto
+     */
+    'recommendationComment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackDto
+     */
+    'suggestions': string;
+    /**
+     * 
+     * @type {Array<FeedbackSoftSkill>}
+     * @memberof FeedbackDto
+     */
+    'softSkills': Array<FeedbackSoftSkill>;
+    /**
+     * 
+     * @type {ResumeCourseMentor}
+     * @memberof FeedbackDto
+     */
+    'mentor': ResumeCourseMentor;
+    /**
+     * 
+     * @type {FeedbackCourseDto}
+     * @memberof FeedbackDto
+     */
+    'course': FeedbackCourseDto;
+}
+/**
+ * 
+ * @export
+ * @interface FeedbackSoftSkill
+ */
+export interface FeedbackSoftSkill {
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackSoftSkill
+     */
+    'value': FeedbackSoftSkillValueEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof FeedbackSoftSkill
+     */
+    'id': FeedbackSoftSkillIdEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum FeedbackSoftSkillValueEnum {
+    None = 'None',
+    Poor = 'Poor',
+    Fair = 'Fair',
+    Good = 'Good',
+    Great = 'Great',
+    Excellent = 'Excellent'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum FeedbackSoftSkillIdEnum {
+    Responsible = 'skill.soft.responsible',
+    TeamPlayer = 'skill.soft.team-player',
+    Communicable = 'skill.soft.communicable'
+}
+
+/**
+ * 
+ * @export
+ * @interface GratitudeDto
+ */
+export interface GratitudeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeDto
+     */
+    'date': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeDto
+     */
+    'comment': string;
 }
 /**
  * 
@@ -928,6 +1064,241 @@ export interface ProfileCourseDto {
 /**
  * 
  * @export
+ * @interface ResumeCourseDto
+ */
+export interface ResumeCourseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseDto
+     */
+    'fullName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeCourseDto
+     */
+    'rank': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeCourseDto
+     */
+    'totalScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseDto
+     */
+    'certificateId': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ResumeCourseDto
+     */
+    'completed': boolean;
+    /**
+     * 
+     * @type {ResumeCourseMentor}
+     * @memberof ResumeCourseDto
+     */
+    'mentor': ResumeCourseMentor;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseDto
+     */
+    'locationName': string;
+}
+/**
+ * 
+ * @export
+ * @interface ResumeCourseMentor
+ */
+export interface ResumeCourseMentor {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseMentor
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeCourseMentor
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeCourseMentor
+     */
+    'githubId': string;
+}
+/**
+ * 
+ * @export
+ * @interface ResumeDto
+ */
+export interface ResumeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'avatarLink': string;
+    /**
+     * 
+     * @type {Array<ResumeCourseDto>}
+     * @memberof ResumeDto
+     */
+    'courses': Array<ResumeCourseDto>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'desiredPosition': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'englishLevel': ResumeDtoEnglishLevelEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeDto
+     */
+    'expires': number;
+    /**
+     * 
+     * @type {Array<GratitudeDto>}
+     * @memberof ResumeDto
+     */
+    'gratitudes': Array<GratitudeDto>;
+    /**
+     * 
+     * @type {Array<FeedbackDto>}
+     * @memberof ResumeDto
+     */
+    'feedbacks': Array<FeedbackDto>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ResumeDto
+     */
+    'fullTime': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'githubUsername': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResumeDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'linkedin': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'locations': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'militaryService': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'notes': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'phone': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'selfIntroLink': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'skype': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'startFrom': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'telegram': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResumeDto
+     */
+    'website': string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ResumeDtoEnglishLevelEnum {
+    Unknown = 'unknown',
+    A0 = 'a0',
+    A1 = 'a1',
+    A2 = 'a2',
+    B1 = 'b1',
+    B2 = 'b2',
+    C1 = 'c1',
+    C2 = 'c2'
+}
+
+/**
+ * 
+ * @export
  * @interface SaveCertificateDto
  */
 export interface SaveCertificateDto {
@@ -1198,6 +1569,7 @@ export enum StudentFeedbackDtoRecommendationEnum {
     */
 export enum StudentFeedbackDtoEnglishLevelEnum {
     Unknown = 'unknown',
+    A0 = 'a0',
     A1 = 'a1',
     A2 = 'a2',
     B1 = 'b1',
@@ -1346,6 +1718,7 @@ export enum UpdateStudentFeedbackDtoRecommendationEnum {
     */
 export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
     Unknown = 'unknown',
+    A0 = 'a0',
     A1 = 'a1',
     A2 = 'a2',
     B1 = 'b1',
@@ -3606,6 +3979,107 @@ export class NotificationsApi extends BaseAPI {
      */
     public updateNotification(updateNotificationDto: UpdateNotificationDto, options?: AxiosRequestConfig) {
         return NotificationsApiFp(this.configuration).updateNotification(updateNotificationDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * OpportunitiesApi - axios parameter creator
+ * @export
+ */
+export const OpportunitiesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResume: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('getResume', 'githubId', githubId)
+            const localVarPath = `/opportunities/{githubId}/resume`
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * OpportunitiesApi - functional programming interface
+ * @export
+ */
+export const OpportunitiesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = OpportunitiesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getResume(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResumeDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getResume(githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * OpportunitiesApi - factory interface
+ * @export
+ */
+export const OpportunitiesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = OpportunitiesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getResume(githubId: string, options?: any): AxiosPromise<ResumeDto> {
+            return localVarFp.getResume(githubId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * OpportunitiesApi - object-oriented interface
+ * @export
+ * @class OpportunitiesApi
+ * @extends {BaseAPI}
+ */
+export class OpportunitiesApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OpportunitiesApi
+     */
+    public getResume(githubId: string, options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).getResume(githubId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

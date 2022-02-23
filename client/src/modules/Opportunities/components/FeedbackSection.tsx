@@ -1,30 +1,80 @@
-import { Typography } from 'antd';
+import { Badge, Card, Col, List, Typography } from 'antd';
+import { FeedbackDto, FeedbackSoftSkillIdEnum } from 'api';
 import * as React from 'react';
-import { CVFeedback } from '../models';
+import { DataTextValue } from './DataTextValue';
 import Section from './Section';
-import { FeedbackList } from './FeedbackList';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 type Props = {
-  feedback: CVFeedback[] | null;
+  data: FeedbackDto[] | null;
 };
 
-export function FeedbackSection({ feedback }: Props) {
-  if (!feedback) {
+export function FeedbackSection({ data }: Props) {
+  if (!data?.length) {
     return null;
   }
 
-  const feedbackAvailable = feedback !== null && feedback.length !== 0;
-  const title = feedbackAvailable ? `Total count: ${feedback!.length}` : 'No feedback yet';
+  return (
+    <Section title="Mentor's Feedback">
+      <List
+        dataSource={data}
+        size="small"
+        renderItem={({ recommendationComment, suggestions, softSkills, englishLevel, course, mentor }, i) => (
+          <List.Item key={i}>
+            <Col flex={1} style={{ paddingRight: 16 }}>
+              <Badge.Ribbon text="Recommend To Hire" color="green">
+                <Card
+                  bordered={false}
+                  title={
+                    <DataTextValue>
+                      <div>
+                        Mentor:{' '}
+                        <a className="black-on-print" href={`https://github.com/${mentor.githubId}`}>
+                          {mentor.name}
+                        </a>
+                      </div>
+                      <div>Course: {course.name}</div>
+                    </DataTextValue>
+                  }
+                  size="small"
+                >
+                  <Paragraph italic>{recommendationComment}</Paragraph>
+                  <Text type="secondary">Suggestions</Text>
+                  <Paragraph italic>{suggestions}</Paragraph>
 
-  const sectionContent = (
-    <>
-      <Text>{title}</Text>
-      <br />
-      <FeedbackList feedback={feedback as CVFeedback[]} showCount={5} />
-    </>
+                  <Text type="secondary">Estimated English Level</Text>
+                  <Paragraph italic>{englishLevel?.toUpperCase()}</Paragraph>
+
+                  <Text type="secondary">Soft Skills</Text>
+                  <Paragraph italic>
+                    <ul>
+                      {softSkills.map(skill => (
+                        <li>
+                          {formatSoftSkill(skill.id)}: {skill.value}
+                        </li>
+                      ))}
+                    </ul>
+                  </Paragraph>
+                </Card>
+              </Badge.Ribbon>
+            </Col>
+          </List.Item>
+        )}
+      />
+    </Section>
   );
+}
 
-  return <Section content={sectionContent} title="Feedback" />;
+function formatSoftSkill(skillId: FeedbackSoftSkillIdEnum) {
+  switch (skillId) {
+    case FeedbackSoftSkillIdEnum.Communicable:
+      return 'Communication';
+    case FeedbackSoftSkillIdEnum.Responsible:
+      return 'Responsibility';
+    case FeedbackSoftSkillIdEnum.TeamPlayer:
+      return 'Team Player';
+    default:
+      return 'Unknown';
+  }
 }

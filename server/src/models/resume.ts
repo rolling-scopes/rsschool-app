@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
-type EnglishLevel = 'A0' | 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1' | 'B1+' | 'B2' | 'B2+' | 'C1' | 'C1+' | 'C2';
+import { LanguageLevel } from './data';
 
 @Entity()
 export class Resume {
@@ -29,7 +28,7 @@ export class Resume {
   militaryService: string;
 
   @Column({ nullable: true, type: 'text' })
-  englishLevel: EnglishLevel;
+  englishLevel: LanguageLevel;
 
   @Column({ nullable: true, type: 'text' })
   avatarLink: string;
