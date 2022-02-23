@@ -6,6 +6,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { setupApp } from './setup';
+import './core/templates';
 
 const port = process.env.NODE_PORT || 3002;
 const isLambda = !!process.env.AWS_LAMBDA;
