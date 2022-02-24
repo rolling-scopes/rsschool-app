@@ -11,7 +11,7 @@ describe('CoreJsIviewsModal', () => {
           courseFullName: 'rs-2019',
           courseName: 'rs-2019',
           locationName: 'minsk',
-          interview: {
+          interviews: [{
             answers: [
               {
                 answer: 'true',
@@ -30,10 +30,11 @@ describe('CoreJsIviewsModal', () => {
             },
             comment: 'test',
             score: 4,
-          },
+          }]
         }}
         isVisible={true}
         onHide={jest.fn()}
+        interviewIndex={0}
       />,
     );
     expect(shallowToJson(wrapper)).toMatchSnapshot();

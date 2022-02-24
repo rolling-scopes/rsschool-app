@@ -59,7 +59,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
     const stats = this.props.data;
     const { isCoreJsIviewModalVisible, interviewIndex } = this.state;
     const { courseIndex } = this.state;
-    
+
     return (
       <>
         <CoreJsIviewsModal
@@ -77,7 +77,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
               dataSource={stats}
               renderItem={({ courseName, locationName, interviews }, idx) => (
                 interviews.map(({ score, interviewer }, interviewIndex) =>
-                  <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={interviewIndex}>
                     <div style={{ flexGrow: 2 }}>
                       <p style={{ marginBottom: 5 }}>
                         <Text strong>

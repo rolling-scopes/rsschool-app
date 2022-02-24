@@ -11,7 +11,7 @@ describe('CoreJSIviewsCard', () => {
           courseFullName: 'rs-2019',
           courseName: 'rs-2019',
           locationName: 'minsk',
-          interview: {
+          interviews: [{
             answers: [
               {
                 answer: 'yes',
@@ -30,7 +30,7 @@ describe('CoreJSIviewsCard', () => {
             },
             comment: 'test',
             score: 4,
-          },
+          }]
         },
       ]}
     />,
@@ -42,7 +42,7 @@ describe('CoreJSIviewsCard', () => {
     it('should set "state.isCoreJsIviewModalVisible" as "true", "state.courseIndex" as passed', () => {
       const instance: any = wrapper.instance();
       expect(instance.state.isCoreJsIviewModalVisible).toBe(false);
-      instance.showCoreJsIviewModal(0);
+      instance.showCoreJsIviewModal(0, 0);
       expect(instance.state.isCoreJsIviewModalVisible).toBe(true);
     });
   });

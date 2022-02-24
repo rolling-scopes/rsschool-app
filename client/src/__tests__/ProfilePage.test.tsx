@@ -362,7 +362,7 @@ describe('ProfilePage', () => {
         {
           courseFullName: 'test',
           courseName: 'test',
-          interview: {
+          interviews: [{
             answers: {},
             interviewer: {
               name: 'Dima Petrov',
@@ -370,7 +370,7 @@ describe('ProfilePage', () => {
             },
             comment: 'Test',
             score: 9,
-          },
+          }],
           locationName: 'Minsk',
         },
       ]);
