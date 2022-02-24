@@ -75,8 +75,8 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={stats}
-              renderItem={({ courseName, locationName, interviews }, idx) => (
-                interviews.map(({ score, interviewer }, interviewIndex) =>
+              renderItem={({ courseName, locationName, interviews }, idx) =>
+                interviews.map(({ score, interviewer }, interviewIndex) => (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={interviewIndex}>
                     <div style={{ flexGrow: 2 }}>
                       <p style={{ marginBottom: 5 }}>
@@ -100,8 +100,8 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                       <FullscreenOutlined />
                     </Button>
                   </List.Item>
-                )
-              )}
+                ))
+              }
             />
           }
         />

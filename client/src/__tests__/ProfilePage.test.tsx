@@ -362,15 +362,17 @@ describe('ProfilePage', () => {
         {
           courseFullName: 'test',
           courseName: 'test',
-          interviews: [{
-            answers: {},
-            interviewer: {
-              name: 'Dima Petrov',
-              githubId: 'dip',
+          interviews: [
+            {
+              answers: {},
+              interviewer: {
+                name: 'Dima Petrov',
+                githubId: 'dip',
+              },
+              comment: 'Test',
+              score: 9,
             },
-            comment: 'Test',
-            score: 9,
-          }],
+          ],
           locationName: 'Minsk',
         },
       ]);

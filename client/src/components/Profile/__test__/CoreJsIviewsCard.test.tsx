@@ -11,26 +11,28 @@ describe('CoreJSIviewsCard', () => {
           courseFullName: 'rs-2019',
           courseName: 'rs-2019',
           locationName: 'minsk',
-          interviews: [{
-            answers: [
-              {
-                answer: 'yes',
-                questionText: 'test',
-                questionId: 'test',
+          interviews: [
+            {
+              answers: [
+                {
+                  answer: 'yes',
+                  questionText: 'test',
+                  questionId: 'test',
+                },
+                {
+                  answer: 'no',
+                  questionText: 'test',
+                  questionId: 'test',
+                },
+              ],
+              interviewer: {
+                name: 'Dzmitry Petrov',
+                githubId: 'dima',
               },
-              {
-                answer: 'no',
-                questionText: 'test',
-                questionId: 'test',
-              },
-            ],
-            interviewer: {
-              name: 'Dzmitry Petrov',
-              githubId: 'dima',
+              comment: 'test',
+              score: 4,
             },
-            comment: 'test',
-            score: 4,
-          }]
+          ],
         },
       ]}
     />,

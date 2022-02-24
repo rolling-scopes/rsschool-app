@@ -11,26 +11,28 @@ describe('CoreJsIviewsModal', () => {
           courseFullName: 'rs-2019',
           courseName: 'rs-2019',
           locationName: 'minsk',
-          interviews: [{
-            answers: [
-              {
-                answer: 'true',
-                questionText: 'test',
-                questionId: 'test',
+          interviews: [
+            {
+              answers: [
+                {
+                  answer: 'true',
+                  questionText: 'test',
+                  questionId: 'test',
+                },
+                {
+                  answer: 'false',
+                  questionText: 'test',
+                  questionId: 'test',
+                },
+              ],
+              interviewer: {
+                name: 'Dzmitry Petrov',
+                githubId: 'dima',
               },
-              {
-                answer: 'false',
-                questionText: 'test',
-                questionId: 'test',
-              },
-            ],
-            interviewer: {
-              name: 'Dzmitry Petrov',
-              githubId: 'dima',
+              comment: 'test',
+              score: 4,
             },
-            comment: 'test',
-            score: 4,
-          }]
+          ],
         }}
         isVisible={true}
         onHide={jest.fn()}
