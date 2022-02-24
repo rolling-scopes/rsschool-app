@@ -73,11 +73,7 @@ export class CourseTaskRepository extends AbstractRepository<CourseTask> {
       .andWhere('"user"."id" = :userId', { userId })
       .getOne();
 
-    if (!student) {
-      return [];
-    }
-
-    const studentId = student.id;
+    const studentId = student?.id ?? 0;
     const courseTasks = await getRepository(CourseTask)
       .createQueryBuilder('courseTask')
       .addSelect('COUNT(taskResult.id)', 'taskResultCount')
