@@ -255,7 +255,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
                   </Button>
                 )}
                 {currentStep === steps.length - 1 && (
-                  <Button size="large" type="primary" htmlType="submit">
+                  <Button disabled={location?.countryName === 'Russia'} size="large" type="primary" htmlType="submit">
                     Submit
                   </Button>
                 )}

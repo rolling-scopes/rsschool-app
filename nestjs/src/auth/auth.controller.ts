@@ -33,6 +33,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       domain: 'rs.school',
+      sameSite: 'none',
     });
 
     const { loginState } = req;

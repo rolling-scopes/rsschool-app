@@ -270,7 +270,13 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 </Col>
               </Row>
               <Row>
-                <Button size="large" type="primary" htmlType="submit" style={{ marginTop: 16 }}>
+                <Button
+                  disabled={location?.countryName === 'Russia'}
+                  size="large"
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginTop: 16 }}
+                >
                   Submit
                 </Button>
               </Row>
