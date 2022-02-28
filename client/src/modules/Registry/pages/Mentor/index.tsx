@@ -6,17 +6,19 @@ import { useAsync, useUpdate } from 'react-use';
 import css from 'styled-jsx/css';
 import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
-import { CoursesService } from 'services/courses';
 import { UserFull, UserService } from 'services/user';
 import type { Course } from 'services/models';
 import { Location } from 'common/models';
 import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { GeneralMentor, Mentorship } from 'modules/Registry/components';
+import { CdnService } from 'services/cdn';
 
 export type Props = {
   courses?: Course[];
   session: Session;
 };
+
+const cdnService = new CdnService();
 
 export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
@@ -35,7 +37,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
 
   useAsync(async () => {
     setLoading(true);
-    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), new CoursesService().getCourses()]);
+    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), cdnService.getCourses()]);
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
       : courses
