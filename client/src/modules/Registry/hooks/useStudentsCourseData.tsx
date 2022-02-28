@@ -1,25 +1,26 @@
 import { useAsync } from 'react-use';
-import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
 import { UserService } from 'services/user';
 import { StudentStats } from 'common/models';
 import { useState } from 'react';
+import { CdnService } from 'services/cdn';
 
 type IdName = {
   id: number;
   name: string;
 };
 
+const cdnService = new CdnService();
+
 export function useStudentCourseData(githubId: string, courseAlias: string | undefined) {
   const [registered, setRegistered] = useState<boolean | null>(null);
 
   const { value: student, loading } = useAsync(async () => {
     const userService = new UserService();
-    const courseService = new CoursesService();
     const [profile, profileInfo, courses] = await Promise.all([
       userService.getMyProfile(),
       userService.getProfileInfo(githubId),
-      courseService.getCourses(),
+      cdnService.getCourses(),
     ]);
 
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
