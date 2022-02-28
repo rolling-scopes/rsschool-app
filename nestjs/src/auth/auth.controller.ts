@@ -32,6 +32,7 @@ export class AuthController {
       expires: new Date(Date.now() + twoDaysMs),
       httpOnly: true,
       secure: true,
+      domain: 'rs.school',
     });
 
     const { loginState } = req;
