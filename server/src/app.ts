@@ -24,7 +24,9 @@ export class App {
     this.koa.use(paginateMiddleware);
 
     this.koa.use(bodyParser({ jsonLimit: '20mb', enableTypes: ['json', 'form', 'text'] }));
-    this.koa.use(cors({ credentials: true, allowMethods: '*', origin: '*' }));
+    if (process.env.NODE_ENV === 'production') {
+      this.koa.use(cors({ credentials: true, allowMethods: '*', origin: config.host }));
+    }
 
     this.koa.use(
       koaJwt({ key: 'user', cookie: 'auth-token', secret: config.sessionKey, debug: true, passthrough: true }),
