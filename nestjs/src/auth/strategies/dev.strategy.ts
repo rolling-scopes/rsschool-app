@@ -23,8 +23,9 @@ export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
     const user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
     req.user = user;
     const token = this.authService.validateGithub(req);
+
     req.res.writeHead(302, {
-      'Set-Cookie': `${JWT_COOKIE_NAME}=${encodeURI(token)}; HttpOnly; path=/`,
+      'Set-Cookie': `${JWT_COOKIE_NAME}=${encodeURI(token)}; HttpOnly; path=/;`,
       Location: '/',
     });
     return true;

@@ -12,6 +12,7 @@ import { Location } from 'common/models';
 import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { GeneralMentor, Mentorship } from 'modules/Registry/components';
 import { CdnService } from 'services/cdn';
+import { SolidarityUkraine } from 'components/SolidarityUkraine';
 
 export type Props = {
   courses?: Course[];
@@ -188,6 +189,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
               </footer>
             </div>
             <div className="about-mentorship-content">
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3}>About mentorship</Typography.Title>
               </Row>

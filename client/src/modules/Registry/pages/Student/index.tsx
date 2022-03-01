@@ -18,6 +18,7 @@ import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP }
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
 import { useRouter } from 'next/router';
 import { CdnService } from 'services/cdn';
+import { SolidarityUkraine } from 'components/SolidarityUkraine';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -168,6 +169,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
           </div>
           <div className="student-registration-content">
             <Col>
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3} style={{ margin: '8px 0 40px' }}>
                   Welcome to RS School!
