@@ -17,6 +17,7 @@ import css from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
 import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
 import { useRouter } from 'next/router';
+import { CdnService } from 'services/cdn';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -27,6 +28,8 @@ export type Props = {
   courses?: Course[];
   session: Session;
 };
+
+const cdnService = new CdnService();
 
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const { githubId } = props.session;
@@ -107,7 +110,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
           const userResponse = await axios.post<any>('/api/profile/me', userModel);
           const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
           if (githubId) {
-            await axios.post<any>('/api/registry', registryModel);
+            await cdnService.registerStudent(registryModel);
             setSubmitted(true);
           } else {
             message.error('Invalid github id');
@@ -270,13 +273,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 </Col>
               </Row>
               <Row>
-                <Button
-                  disabled={location?.countryName === 'Russia'}
-                  size="large"
-                  type="primary"
-                  htmlType="submit"
-                  style={{ marginTop: 16 }}
-                >
+                <Button size="large" type="primary" htmlType="submit" style={{ marginTop: 16 }}>
                   Submit
                 </Button>
               </Row>

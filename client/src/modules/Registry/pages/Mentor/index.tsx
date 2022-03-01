@@ -110,10 +110,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           aboutMyself: resume.aboutMyself,
         };
 
-        const requests = [
-          axios.post<any>('/api/profile/me', userModel),
-          axios.post<any>('/api/registry/mentor', registryModel),
-        ];
+        const requests = [axios.post<any>('/api/profile/me', userModel), cdnService.registerMentor(registryModel)];
 
         try {
           await Promise.all(requests);
@@ -250,7 +247,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
               {steps[currentStep].content()}
               <div className="steps-action">
                 {currentStep < steps.length - 1 && (
-                  <Button disabled={location?.countryName === 'Russia'} size="large" type="primary" htmlType="submit">
+                  <Button size="large" type="primary" htmlType="submit">
                     Next
                   </Button>
                 )}

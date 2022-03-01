@@ -12,4 +12,22 @@ export class CdnService {
       return [];
     }
   }
+
+  public async registerStudent(payload: any) {
+    try {
+      const result = await this.client.post<CoursesResponse>(`/api/registry`, payload);
+      return result.data.data;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  public async registerMentor(payload: any) {
+    try {
+      const result = await this.client.post<CoursesResponse>(`/api/registry/mentor`, payload);
+      return result.data.data;
+    } catch (e) {
+      return [];
+    }
+  }
 }
