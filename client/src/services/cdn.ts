@@ -1,8 +1,10 @@
 import axios from 'axios';
 import type { CoursesResponse } from './courses';
 
+const baseURL = process.env.CDN_HOST || '';
+
 export class CdnService {
-  constructor(private client = axios.create({ baseURL: process.env.CDN_HOST || '', withCredentials: true })) {}
+  constructor(private client = axios.create({ baseURL, withCredentials: !!baseURL })) {}
 
   public async getCourses() {
     try {

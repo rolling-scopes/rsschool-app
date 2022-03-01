@@ -182,7 +182,6 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
                 <img className="rss-logo" src="/static/images/logo-rsschool3.png" alt="Rolling Scopes School Logo" />
                 <p className="rss-logo-descriptions">Free courses from the developer community</p>
               </header>
-              <SolidarityUkraine />
               <footer>
                 <img className="logo" src="/static/svg/logo-github.svg" alt="GitHub Logo" />
                 <img className="logo-rs" src="/static/svg/logo-rs.svg" alt="Rolling Scopes Logo" />
@@ -190,6 +189,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
               </footer>
             </div>
             <div className="about-mentorship-content">
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3}>About mentorship</Typography.Title>
               </Row>

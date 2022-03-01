@@ -169,11 +169,11 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
           </div>
           <div className="student-registration-content">
             <Col>
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3} style={{ margin: '8px 0 40px' }}>
                   Welcome to RS School!
                 </Typography.Title>
-                <SolidarityUkraine />
               </Row>
               <Row>
                 <Typography.Title level={5}>Course</Typography.Title>

@@ -212,7 +212,6 @@ jobs:
           AWS_LAMBDA: 'true'
           NODE_ENV: production
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
-          CDN_HOST: 'https://cdn.rs.school'
         run: |
           npm run build
 
