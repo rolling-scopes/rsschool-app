@@ -12,6 +12,7 @@ import {
 import { GithubAvatar } from 'components/GithubAvatar';
 import * as React from 'react';
 import { featureToggles } from 'services/features';
+import { SolidarityUkraine } from './SolidarityUkraine';
 
 type Props = {
   username: string;
@@ -135,8 +136,7 @@ export function Header(props: Props) {
           }
         `}</style>
       </nav>
-      <div style={{ textAlign: 'center', backgroundColor: '#0066cc', color: '#ffcc00' }}>#StandWithUkraine</div>
-      <div style={{ textAlign: 'center', backgroundColor: '#ffcc00', color: '#0066cc' }}>#StopWar</div>
+      <SolidarityUkraine />
     </>
   );
 }
