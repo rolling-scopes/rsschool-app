@@ -1,21 +1,22 @@
 import * as React from 'react';
 // import isEqual from 'lodash/isEqual'
-import { CoreJsInterviewData } from './CoreJsIviewsCard';
+import { CoreJsInterviewsData } from './CoreJsIviewsCard';
 import { Modal, Table, Typography, Tag } from 'antd';
 
 const { Text } = Typography;
 
 type Props = {
-  stats: CoreJsInterviewData;
+  stats: CoreJsInterviewsData;
+  interviewIndex: number;
   isVisible: boolean;
   onHide: () => void;
 };
 
 class CoreJsIviewsModal extends React.PureComponent<Props> {
   render() {
-    const { stats, isVisible, onHide } = this.props;
-    const { courseFullName, interview } = stats;
-    const { score, comment, answers, interviewer } = interview;
+    const { stats, isVisible, onHide, interviewIndex } = this.props;
+    const { courseFullName, interviews } = stats;
+    const { score, comment, answers, interviewer } = interviews[interviewIndex];
 
     return (
       <Modal

@@ -35,7 +35,7 @@ import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
-import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
+import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 
@@ -196,15 +196,15 @@ export class ProfilePage extends React.Component<Props, State> {
         courseFullName,
         courseName,
         locationName,
-        interview: tasks
+        interviews: tasks
           .filter(({ interviewFormAnswers }) => interviewFormAnswers)
           .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
             score,
             comment,
             interviewer,
             answers: interviewFormAnswers,
-          }))[0],
-      })) as CoreJsInterviewData[];
+          })),
+      })) as CoreJsInterviewsData[];
 
   private fetchData = async () => {
     this.setState({ isLoading: true });

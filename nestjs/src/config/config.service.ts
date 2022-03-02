@@ -29,6 +29,9 @@ type UsersConfig = {
 type AWSServices = {
   restApiUrl: string;
   restApiKey: string;
+  region: string;
+  secretAccessKey: string;
+  accessKeyId: string;
 };
 
 @Injectable()
@@ -58,6 +61,9 @@ export class ConfigService {
     this.awsServices = {
       restApiUrl: process.env.RSSHCOOL_API_AWS_REST_API_URL || '',
       restApiKey: process.env.RSSHCOOL_API_AWS_REST_API_KEY || '',
+      region: process.env.RSSHCOOL_API_AWS_REGION || '',
+      secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',
+      accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
     };
 
     this.users = {

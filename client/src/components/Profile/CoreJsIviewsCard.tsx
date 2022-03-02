@@ -8,11 +8,11 @@ const { Text } = Typography;
 
 import { QuestionCircleOutlined, FullscreenOutlined } from '@ant-design/icons';
 
-export interface CoreJsInterviewData {
+export interface CoreJsInterviewsData {
   courseFullName: string;
   courseName: string;
   locationName: string;
-  interview: {
+  interviews: {
     answers: {
       answer: string;
       questionText: string;
@@ -24,29 +24,31 @@ export interface CoreJsInterviewData {
     };
     comment: string;
     score: number;
-  };
+  }[];
 }
 
 type Props = {
-  data: CoreJsInterviewData[];
+  data: CoreJsInterviewsData[];
 };
 
 type State = {
   courseIndex: number;
+  interviewIndex: number;
   isCoreJsIviewModalVisible: boolean;
 };
 
 class CoreJSIviewsCard extends React.Component<Props, State> {
   state = {
     courseIndex: 0,
+    interviewIndex: 0,
     isCoreJsIviewModalVisible: false,
   };
 
   shouldComponentUpdate = (_: Props, nextState: State) =>
     !isEqual(nextState.isCoreJsIviewModalVisible, this.state.isCoreJsIviewModalVisible);
 
-  private showCoreJsIviewModal = (courseIndex: number) => {
-    this.setState({ courseIndex, isCoreJsIviewModalVisible: true });
+  private showCoreJsIviewModal = (courseIndex: number, interviewIndex: number) => {
+    this.setState({ courseIndex, isCoreJsIviewModalVisible: true, interviewIndex });
   };
 
   private hideCoreJsIviewModal = () => {
@@ -55,13 +57,14 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
 
   render() {
     const stats = this.props.data;
-    const { isCoreJsIviewModalVisible } = this.state;
+    const { isCoreJsIviewModalVisible, interviewIndex } = this.state;
     const { courseIndex } = this.state;
 
     return (
       <>
         <CoreJsIviewsModal
           stats={stats[courseIndex]}
+          interviewIndex={interviewIndex}
           isVisible={isCoreJsIviewModalVisible}
           onHide={this.hideCoreJsIviewModal}
         />
@@ -72,31 +75,33 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
             <List
               itemLayout="horizontal"
               dataSource={stats}
-              renderItem={({ courseName, locationName, interview: { score, interviewer } }, idx) => (
-                <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div style={{ flexGrow: 2 }}>
-                    <p style={{ marginBottom: 5 }}>
-                      <Text strong>
-                        {courseName}
-                        {locationName && ` / ${locationName}`}
-                      </Text>
-                    </p>
-                    {
-                      <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Score: <Text mark>{score}</Text>
+              renderItem={({ courseName, locationName, interviews }, idx) =>
+                interviews.map(({ score, interviewer }, interviewIndex) => (
+                  <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={interviewIndex}>
+                    <div style={{ flexGrow: 2 }}>
+                      <p style={{ marginBottom: 5 }}>
+                        <Text strong>
+                          {courseName}
+                          {locationName && ` / ${locationName}`}
+                        </Text>
                       </p>
-                    }
-                    {
-                      <p style={{ fontSize: 12, marginBottom: 5 }}>
-                        Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
-                      </p>
-                    }
-                  </div>
-                  <Button type="dashed" onClick={this.showCoreJsIviewModal.bind(null, idx)}>
-                    <FullscreenOutlined />
-                  </Button>
-                </List.Item>
-              )}
+                      {
+                        <p style={{ fontSize: 12, marginBottom: 5 }}>
+                          Score: <Text mark>{score}</Text>
+                        </p>
+                      }
+                      {
+                        <p style={{ fontSize: 12, marginBottom: 5 }}>
+                          Interviewer: <a href={`/profile?githubId=${interviewer.githubId}`}>{interviewer.name}</a>
+                        </p>
+                      }
+                    </div>
+                    <Button type="dashed" onClick={this.showCoreJsIviewModal.bind(null, idx, interviewIndex)}>
+                      <FullscreenOutlined />
+                    </Button>
+                  </List.Item>
+                ))
+              }
             />
           }
         />

@@ -7,58 +7,63 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
       Object {
         "courseFullName": "rs-2019",
         "courseName": "rs-2019",
-        "interview": Object {
-          "answers": Array [
-            Object {
-              "answer": "yes",
-              "questionId": "test",
-              "questionText": "test",
+        "interviews": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "yes",
+                "questionId": "test",
+                "questionText": "test",
+              },
+              Object {
+                "answer": "no",
+                "questionId": "test",
+                "questionText": "test",
+              },
+            ],
+            "comment": "test",
+            "interviewer": Object {
+              "githubId": "dima",
+              "name": "Dzmitry Petrov",
             },
-            Object {
-              "answer": "no",
-              "questionId": "test",
-              "questionText": "test",
-            },
-          ],
-          "comment": "test",
-          "interviewer": Object {
-            "githubId": "dima",
-            "name": "Dzmitry Petrov",
+            "score": 4,
           },
-          "score": 4,
-        },
+        ],
         "locationName": "minsk",
       },
     ]
   }
 >
   <CoreJsIviewsModal
+    interviewIndex={0}
     isVisible={false}
     onHide={[Function]}
     stats={
       Object {
         "courseFullName": "rs-2019",
         "courseName": "rs-2019",
-        "interview": Object {
-          "answers": Array [
-            Object {
-              "answer": "yes",
-              "questionId": "test",
-              "questionText": "test",
+        "interviews": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "yes",
+                "questionId": "test",
+                "questionText": "test",
+              },
+              Object {
+                "answer": "no",
+                "questionId": "test",
+                "questionText": "test",
+              },
+            ],
+            "comment": "test",
+            "interviewer": Object {
+              "githubId": "dima",
+              "name": "Dzmitry Petrov",
             },
-            Object {
-              "answer": "no",
-              "questionId": "test",
-              "questionText": "test",
-            },
-          ],
-          "comment": "test",
-          "interviewer": Object {
-            "githubId": "dima",
-            "name": "Dzmitry Petrov",
+            "score": 4,
           },
-          "score": 4,
-        },
+        ],
         "locationName": "minsk",
       }
     }
@@ -110,26 +115,28 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
             Object {
               "courseFullName": "rs-2019",
               "courseName": "rs-2019",
-              "interview": Object {
-                "answers": Array [
-                  Object {
-                    "answer": "yes",
-                    "questionId": "test",
-                    "questionText": "test",
+              "interviews": Array [
+                Object {
+                  "answers": Array [
+                    Object {
+                      "answer": "yes",
+                      "questionId": "test",
+                      "questionText": "test",
+                    },
+                    Object {
+                      "answer": "no",
+                      "questionId": "test",
+                      "questionText": "test",
+                    },
+                  ],
+                  "comment": "test",
+                  "interviewer": Object {
+                    "githubId": "dima",
+                    "name": "Dzmitry Petrov",
                   },
-                  Object {
-                    "answer": "no",
-                    "questionId": "test",
-                    "questionText": "test",
-                  },
-                ],
-                "comment": "test",
-                "interviewer": Object {
-                  "githubId": "dima",
-                  "name": "Dzmitry Petrov",
+                  "score": 4,
                 },
-                "score": 4,
-              },
+              ],
               "locationName": "minsk",
             },
           ]
@@ -353,26 +360,28 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                 Object {
                   "courseFullName": "rs-2019",
                   "courseName": "rs-2019",
-                  "interview": Object {
-                    "answers": Array [
-                      Object {
-                        "answer": "yes",
-                        "questionId": "test",
-                        "questionText": "test",
+                  "interviews": Array [
+                    Object {
+                      "answers": Array [
+                        Object {
+                          "answer": "yes",
+                          "questionId": "test",
+                          "questionText": "test",
+                        },
+                        Object {
+                          "answer": "no",
+                          "questionId": "test",
+                          "questionText": "test",
+                        },
+                      ],
+                      "comment": "test",
+                      "interviewer": Object {
+                        "githubId": "dima",
+                        "name": "Dzmitry Petrov",
                       },
-                      Object {
-                        "answer": "no",
-                        "questionId": "test",
-                        "questionText": "test",
-                      },
-                    ],
-                    "comment": "test",
-                    "interviewer": Object {
-                      "githubId": "dima",
-                      "name": "Dzmitry Petrov",
+                      "score": 4,
                     },
-                    "score": 4,
-                  },
+                  ],
                   "locationName": "minsk",
                 },
               ]
@@ -399,6 +408,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                       className="ant-list-items"
                     >
                       <Item
+                        key="0"
                         style={
                           Object {
                             "display": "flex",

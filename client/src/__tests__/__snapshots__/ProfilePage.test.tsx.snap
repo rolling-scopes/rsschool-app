@@ -645,12 +645,14 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
                   Object {
                     "courseFullName": "test",
                     "courseName": "test",
-                    "interview": Object {
-                      "answers": Object {},
-                      "comment": undefined,
-                      "interviewer": undefined,
-                      "score": undefined,
-                    },
+                    "interviews": Array [
+                      Object {
+                        "answers": Object {},
+                        "comment": undefined,
+                        "interviewer": undefined,
+                        "score": undefined,
+                      },
+                    ],
                     "locationName": "Minsk",
                   },
                 ]
