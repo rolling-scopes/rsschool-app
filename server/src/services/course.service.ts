@@ -411,16 +411,16 @@ export async function getStudentScore(studentId: number) {
 
   const results = [];
 
-  if (taskResults) {
+  if (taskResults?.length) {
     results.push(...(taskResults.filter(taskResult => !taskResult.courseTask.disabled).map(toTaskScore) ?? []));
   }
 
-  if (taskInterviewResults) {
+  if (taskInterviewResults?.length) {
     results.push(...taskInterviewResults.map(toTaskScore));
   }
 
   // we have a case when technical screening score are set as task result.
-  if (stageInterviews && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+  if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
     results.push({
       score: Math.floor((getStageInterviewRating(stageInterviews) ?? 0) * 10),
       courseTaskId: stageInterviews[0].courseTaskId,
