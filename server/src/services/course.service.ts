@@ -16,6 +16,8 @@ import {
   TaskSolutionResult,
   IUserSession,
   CourseRole,
+  TaskResult,
+  TaskInterviewResult,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
@@ -401,32 +403,33 @@ export async function getStudentScore(studentId: number) {
     .where('student.id = :studentId', { studentId })
     .getOne();
 
-  const taskResults =
-    student?.taskResults
-      ?.filter(({ courseTask: { disabled } }) => !disabled)
-      .map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+  if (!student) return null;
 
-  const preScreeningScore = Math.floor((getStageInterviewRating(student?.stageInterviews ?? []) ?? 0) * 10);
-  const preScreeningInterviews = student?.stageInterviews?.length
-    ? [{ score: preScreeningScore, courseTaskId: student?.stageInterviews[0].courseTaskId }]
-    : [];
+  const { taskResults, taskInterviewResults, stageInterviews } = student;
 
-  const interviewResults =
-    student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
-      courseTaskId,
-      score,
-    })) ?? [];
+  const toTaskScore = ({ courseTaskId, score = 0 }: TaskResult | TaskInterviewResult) => ({ courseTaskId, score });
 
-  let results = taskResults.concat(interviewResults);
+  const results = [];
+
+  if (taskResults) {
+    results.push(...(taskResults.filter(taskResult => !taskResult.courseTask.disabled).map(toTaskScore) ?? []));
+  }
+
+  if (taskInterviewResults) {
+    results.push(...taskInterviewResults.map(toTaskScore));
+  }
 
   // we have a case when technical screening score are set as task result.
-  results = taskResults.concat(
-    preScreeningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
-  );
+  if (stageInterviews && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+    results.push({
+      score: Math.floor((getStageInterviewRating(stageInterviews) ?? 0) * 10),
+      courseTaskId: stageInterviews[0].courseTaskId,
+    });
+  }
 
   return {
-    totalScore: student?.totalScore ?? 0,
-    rank: student?.rank ?? 999999,
+    totalScore: student.totalScore ?? 0,
+    rank: student.rank ?? 999999,
     results,
   };
 }
