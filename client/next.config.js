@@ -12,7 +12,7 @@ const nextConfig = {
     isProd
       ? []
       : [
-          { source: '/certificate/:path*', destination: `${server}/certificate/:path*` },
+          { source: '/certificate/:path*', destination: `${nestjs}/certificate/:path*` },
           { source: '/swagger', destination: `${nestjs}/swagger/` },
           { source: '/swagger-json', destination: `${nestjs}/swagger-json` },
           { source: '/swagger:path', destination: `${nestjs}/swagger/swagger:path` },
