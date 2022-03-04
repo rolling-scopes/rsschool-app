@@ -30,7 +30,6 @@ import DiscordCard from 'components/Profile/DiscordCard';
 // import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
-import ConsentsCard from 'components/Profile/ConsentsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
@@ -41,7 +40,6 @@ import { withGoogleMaps } from 'components/withGoogleMaps';
 
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { checkIsProfileOwner } from 'utils/profile-check';
-import { featureToggles } from 'services/features';
 
 type Props = {
   router: NextRouter;
@@ -145,26 +143,6 @@ export class ProfilePage extends React.Component<Props, State> {
           isInitialProfileSettingsChanged = !isEqual(
             initialProfileSettings?.generalInfo?.educationHistory,
             newProfile.generalInfo?.educationHistory,
-          );
-          break;
-        }
-        case 'consent': {
-          const { id, checked } = event;
-          const consents = profile?.consents ?? [];
-          const [existingConsent] = consents.filter(consent => consent.channelType === id);
-          const otherConsents = consents.filter(consent => consent.channelType !== id);
-          const newConsents = [...otherConsents];
-          if (existingConsent) {
-            const newConsent = cloneDeep(existingConsent);
-            newConsent.optIn = checked;
-            newConsents.push(newConsent);
-          }
-          newProfile.consents = newConsents;
-          const initialConsents = initialProfileSettings?.consents;
-          const getconsentParamsString = ({ optIn, channelType }: Consent) => `${optIn}${channelType}`;
-          const consentParamsStrings = new Set(initialConsents!.map(getconsentParamsString));
-          isInitialProfileSettingsChanged = !newConsents.every(consent =>
-            consentParamsStrings.has(getconsentParamsString(consent)),
           );
           break;
         }
@@ -394,13 +372,6 @@ export class ProfilePage extends React.Component<Props, State> {
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      !featureToggles.notifications && profile?.consents && (
-        <ConsentsCard
-          data={profile.consents}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
       profile?.publicFeedback?.length && (
         <PublicFeedbackCard
           data={profile.publicFeedback}

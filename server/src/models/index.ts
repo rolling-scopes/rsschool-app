@@ -1,6 +1,5 @@
 import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
-import { Consent, ChannelType } from './consent';
 import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
@@ -82,8 +81,6 @@ export {
   TaskSolutionResult,
   TaskVerification,
   User,
-  Consent,
-  ChannelType,
   Resume,
   NotificationUserSettings,
   NotificationChannel,
@@ -129,7 +126,6 @@ export const models = [
   TaskSolutionResult,
   TaskVerification,
   User,
-  Consent,
   Resume,
   NotificationUserSettings,
   NotificationChannel,
