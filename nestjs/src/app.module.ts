@@ -14,6 +14,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
+import { CertificatesModule } from './certificates/certificates.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsersModule } from './users';
     DisciplinesModule,
     NotificationsModule,
     RegistryModule,
+    CertificatesModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
