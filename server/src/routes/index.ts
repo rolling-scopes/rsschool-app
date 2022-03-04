@@ -20,6 +20,7 @@ import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
+import { certificateRoute } from './certificate';
 import { lectureRoute } from './event';
 import { lecturesRoute } from './events';
 import { jwtRoute } from './jwt';
@@ -47,6 +48,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   router.use(userRolesMiddleware, courseMiddleware);
 
   // public routes
+  applyRouter(router, certificateRoute(logger));
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
