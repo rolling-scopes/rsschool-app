@@ -43,7 +43,7 @@ export function MainStatsCard(props: Props) {
               }
               <p style={{ marginBottom: 7 }}>
                 Total Score: <Text mark>{totalScore}</Text>
-                {maxCourseScore && ` / ${maxCourseScore}`}
+                {!!maxCourseScore && ` / ${maxCourseScore}`}
               </p>
             </Col>
           </Row>

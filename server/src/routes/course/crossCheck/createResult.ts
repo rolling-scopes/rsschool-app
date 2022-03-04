@@ -15,7 +15,6 @@ import { setErrorResponse, setResponse } from '../../utils';
 
 export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId, courseId, courseTaskId } = ctx.params;
-  const { newNotification } = ctx.query ?? {};
   const { user } = ctx.state as { user: IUserSession };
   const crossCheckService = new CrossCheckService(courseTaskId);
 
@@ -71,19 +70,15 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     recipientId: taskChecker.studentId,
   });
 
-  if (newNotification) {
-    await notificationService.sendNotificationV2({
-      userId: student.userId,
-      notificationId: 'taskGrade',
-      data: {
-        courseTask,
-        score: data.score,
-        comment: data.comment,
-      },
-    });
-  } else {
-    const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, inputData.comment);
-    await notificationService.sendNotification([githubId], taskResultText);
-  }
+  await notificationService.sendNotificationV2({
+    userId: student.userId,
+    notificationId: 'taskGrade',
+    data: {
+      courseTask,
+      score: data.score,
+      comment: data.comment,
+    },
+  });
+
   setResponse(ctx, OK);
 };
