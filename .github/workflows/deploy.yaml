@@ -228,6 +228,7 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker-compose up -d
+            docker-compose restart nginx
           '
 
       - name: Clean up
