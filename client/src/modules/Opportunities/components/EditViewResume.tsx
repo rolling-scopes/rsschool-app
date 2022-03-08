@@ -1,7 +1,7 @@
-import { Divider, Result, Switch, Typography } from 'antd';
+import { Divider, Switch, Typography } from 'antd';
 import { ResumeDto } from 'api';
-import EditCV from '../../../components/cv/EditCV';
-import NoConsentViewCV from '../../../components/cv/NoConsentViewCV';
+import EditCV from './EditCV';
+import NoConsentViewCV from './NoConsentViewCV';
 import ViewCV from './ViewCV';
 
 const { Text } = Typography;
@@ -19,18 +19,13 @@ type ResumeProps = {
 };
 
 export function EditViewResume(props: ResumeProps) {
-  const { githubId, data, error, consent, editMode, switchView, onUpdateResume, onRemoveConsent, onCreateConsent } =
-    props;
+  const { githubId, data, consent, editMode, switchView, onUpdateResume, onRemoveConsent, onCreateConsent } = props;
 
   if (!consent) {
     return <NoConsentViewCV isOwner={true} giveConsent={onCreateConsent} />;
   }
 
-  if (error) {
-    return <Result status="error" title="Error" subTitle={error.message} />;
-  }
-
-  const editing = editMode || data === null;
+  const editing = editMode || data == null;
 
   return (
     <>
@@ -45,7 +40,7 @@ export function EditViewResume(props: ResumeProps) {
         />
       </Divider>
       {editing ? (
-        <EditCV onUpdateResume={onUpdateResume} githubId={githubId} withdrawConsent={onRemoveConsent} />
+        <EditCV onUpdateResume={onUpdateResume} githubId={githubId} onRemoveConsent={onRemoveConsent} />
       ) : (
         <ViewCV initialData={data} />
       )}

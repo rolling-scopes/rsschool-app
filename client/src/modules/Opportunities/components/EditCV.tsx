@@ -31,7 +31,7 @@ const { Paragraph, Text, Title } = Typography;
 
 type Props = {
   githubId: string;
-  withdrawConsent: () => void;
+  onRemoveConsent: () => void;
   onUpdateResume: () => void;
 };
 
@@ -79,7 +79,7 @@ function EditCV(props: Props) {
       centered: true,
       maskClosable: true,
       okText: 'Delete my CV',
-      onOk: () => props.withdrawConsent(),
+      onOk: () => props.onRemoveConsent(),
     });
   };
 

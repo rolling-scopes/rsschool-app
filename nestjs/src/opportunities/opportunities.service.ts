@@ -44,6 +44,32 @@ export class OpportunitiesService {
     return await this.getFullResume(resume);
   }
 
+  public async getConsent(githubId: string) {
+    const user = await this.userRepository.findOne({ where: { githubId } });
+    if (user == null) {
+      return false;
+    }
+    const value = user.opportunitiesConsent;
+    return Boolean(value);
+  }
+
+  public async createConsent(githubId: string) {
+    const value = true;
+    const user = await this.userRepository.findOne({ where: { githubId } });
+    await this.userRepository.update(user.id, { opportunitiesConsent: value });
+    const current = await this.resumeRepository.findOne({ githubId });
+    await this.resumeRepository.save({ id: current?.id, githubId, userId: user.id });
+    return Boolean(value);
+  }
+
+  public async deleteConsent(githubId: string) {
+    const value = false;
+    const user = await this.userRepository.findOne({ where: { githubId } });
+    await this.userRepository.update(user.id, { opportunitiesConsent: value });
+    await this.resumeRepository.delete({ githubId });
+    return Boolean(value);
+  }
+
   private async getFullResume(resume: Resume) {
     const [students, gratitudes] = await Promise.all([
       this.studentRepository.find({

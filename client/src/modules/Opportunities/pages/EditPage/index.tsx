@@ -1,57 +1,73 @@
-import React, { useState, useContext } from 'react';
 import { Layout } from 'antd';
-import Head from 'next/head';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { OpportunitiesApi, ResumeDto } from 'api';
+import { AxiosError } from 'axios';
 import { Header } from 'components/Header';
-import { EditViewResume } from 'modules/Opportunities/components/EditViewResume';
-
-import { OpportunitiesService } from '../../services/opportunities';
-import { useAsync } from 'react-use';
+import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
 import { SessionContext } from 'modules/Course/contexts';
-import { useResumeData } from 'modules/Opportunities/hooks/useResumeData';
+import { EditViewResume } from 'modules/Opportunities/components/EditViewResume';
+import Head from 'next/head';
+import React, { useContext, useEffect, useState } from 'react';
 
 const { Content } = Layout;
-const service = new OpportunitiesService();
+const service = new OpportunitiesApi();
 
 export function EditPage() {
-  const session = useContext(SessionContext);
-  const githubId = session.githubId;
-
+  const { githubId } = useContext(SessionContext);
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState(false);
   const [consent, setConsent] = useState(false);
-  const [actualTime, setActualTime] = useState(Date.now());
+  const [resume, setResume] = useState<ResumeDto | null>(null);
 
   const switchView = async (checked: boolean) => setEditMode(!checked);
 
-  const handleCreateConsent = withLoading(async () => setConsent(await service.updateConsent(githubId, true)));
-  const handleRemoveConsent = withLoading(async () => setConsent(await service.updateConsent(githubId, false)));
+  const getData = async () => {
+    const { data } = await service.getConsent(githubId);
+    if (data.consent) {
+      try {
+        const { data } = await service.getResume(githubId);
+        setResume(data);
+      } catch (err) {
+        const error = err as AxiosError;
+        if (error.response?.status === 404) {
+          setResume(null);
+          return;
+        }
+        throw err;
+      }
+    }
+    setConsent(data.consent);
+  };
 
-  const getConsent = withLoading(async () => setConsent(await service.getConsent(githubId)));
-  const [resumeData, error, resumeLoading] = useResumeData({ githubId, actualTime });
+  const handleConsentUpdate = withLoading(async (value: boolean) => {
+    value ? await service.createConsent(githubId) : await service.deleteConsent(githubId);
+    await getData();
+  });
 
-  useAsync(getConsent, [githubId]);
+  const loadData = withLoading(getData);
+
+  useEffect(() => {
+    loadData();
+  }, [githubId]);
 
   return (
     <>
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
-      <LoadingScreen show={loading || resumeLoading}>
-        <Header username={session.githubId} />
+      <LoadingScreen show={loading}>
+        <Header username={githubId} />
         <Layout className="cv-layout">
           <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
             <EditViewResume
               githubId={githubId}
               consent={consent}
-              data={resumeData ?? null}
-              error={error}
-              editMode={editMode || resumeData === null}
+              data={resume}
+              editMode={editMode || resume == null}
               switchView={switchView}
-              onRemoveConsent={handleRemoveConsent}
-              onCreateConsent={handleCreateConsent}
-              onUpdateResume={() => setActualTime(Date.now())}
+              onRemoveConsent={() => handleConsentUpdate(false)}
+              onCreateConsent={() => handleConsentUpdate(true)}
+              onUpdateResume={() => loadData()}
             />
           </Content>
         </Layout>
