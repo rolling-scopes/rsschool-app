@@ -6,10 +6,19 @@ const opportunitiesApi = new OpportunitiesApi(getApiConfiguration());
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const uuid = ctx.params?.uuid as string;
-  const { data } = await opportunitiesApi.getPublicResume(uuid);
-  return {
-    props: {
-      data,
-    },
-  };
+  try {
+    const { data } = await opportunitiesApi.getPublicResume(uuid);
+    return {
+      props: { data },
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 };

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard } from 'src/auth';
 import { ResumeDto } from './dto/resume.dto';
@@ -15,7 +15,11 @@ export class OpportunitiesController {
   @ApiOkResponse({ type: ResumeDto })
   @UseGuards(DefaultGuard)
   public async getResume(@Param('githubId') githubId: string) {
-    const { resume, students, gratitudes, feedbacks } = await this.opportunitiesService.getResumeByGithubId(githubId);
+    const data = await this.opportunitiesService.getResumeByGithubId(githubId);
+    if (data == null) {
+      throw new BadRequestException('Resume not found');
+    }
+    const { resume, students, gratitudes, feedbacks } = data;
     return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 
@@ -25,7 +29,11 @@ export class OpportunitiesController {
   @ApiBadRequestResponse()
   @ApiOkResponse({ type: ResumeDto })
   public async getPublicResume(@Param('uuid', ParseUUIDPipe) uuid: string) {
-    const { resume, students, gratitudes, feedbacks } = await this.opportunitiesService.getResumeByUuid(uuid);
+    const data = await this.opportunitiesService.getResumeByUuid(uuid);
+    if (data == null) {
+      throw new BadRequestException('Resume not found');
+    }
+    const { resume, students, gratitudes, feedbacks } = data;
     return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 }

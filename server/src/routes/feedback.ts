@@ -116,7 +116,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
       badgeId: data.badgeId ? data.badgeId : undefined,
       courseId: data.courseId ? data.courseId : undefined,
       fromUser: id,
-      toUser: data.toUserId,
+      toUserId: data.toUserId,
     };
     const result = await getRepository(Feedback).save(feedback);
 

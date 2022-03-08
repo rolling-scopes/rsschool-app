@@ -7,6 +7,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Student } from '@entities/student';
 
+type ResumeData = {
+  resume: Resume;
+  students: Student[];
+  gratitudes: Feedback[];
+  feedbacks: StudentFeedback[];
+};
+
 @Injectable()
 export class OpportunitiesService {
   constructor(
@@ -22,14 +29,17 @@ export class OpportunitiesService {
     private studentRepository: Repository<Student>,
   ) {}
 
-  public async getResumeByUuid(uuid: string) {
+  public async getResumeByUuid(uuid: string): Promise<ResumeData | null> {
     const resume = await this.resumeRepository.findOne({ where: { uuid } });
     return await this.getFullResume(resume);
   }
 
-  public async getResumeByGithubId(githubId: string) {
+  public async getResumeByGithubId(githubId: string): Promise<ResumeData | null> {
     const user = await this.userRepository.findOne({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({ where: { userId: user.id } });
+    if (resume == null) {
+      return null;
+    }
     return await this.getFullResume(resume);
   }
 
