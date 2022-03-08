@@ -30,7 +30,7 @@ const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
 
 type Props = {
-  ownerGithubId: string;
+  githubId: string;
   withdrawConsent: () => void;
 };
 
@@ -93,7 +93,7 @@ function EditCV(props: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const cvData = await cvService.getEditResumeData(props.ownerGithubId);
+    const cvData = await cvService.getEditResumeData(props.githubId);
 
     const {
       notes,
@@ -222,7 +222,7 @@ function EditCV(props: Props) {
       visibleCourses: newVisibleCourses,
     } = newCVData;
 
-    const newUserData: UserData = {
+    const newUserData: Omit<UserData, 'uuid'> = {
       selfIntroLink: newSelfIntroLink,
       militaryService: newMilitaryService,
       avatarLink: newAvatarLink,
@@ -343,7 +343,7 @@ function EditCV(props: Props) {
   const fillFromProfile = async () => {
     setLoading(true);
 
-    const id = props.ownerGithubId;
+    const id = props.githubId;
 
     const profile = await userService.getProfileInfo(id);
 

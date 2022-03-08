@@ -37,6 +37,7 @@ export class OpportunitiesService {
   public async getResumeByGithubId(githubId: string): Promise<ResumeData | null> {
     const user = await this.userRepository.findOne({ where: { githubId } });
     const resume = await this.resumeRepository.findOne({ where: { userId: user.id } });
+    console.log(resume, user.id);
     if (resume == null) {
       return null;
     }

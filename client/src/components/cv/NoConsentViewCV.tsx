@@ -15,12 +15,12 @@ function NoConsentViewCV(props: Props) {
 
   const confirmationModalInfo = {
     en: {
-      header: 'Are you sure? The following information will be available to recruiters:',
+      header: 'Are you sure? The following information will be public:',
       availableDataList: [
-        'Personal information (name, desired position, English level, military service, avatar, link to self-presentation, short self-description, etc.);',
-        'Contact details (phone, email, skype, telegram, linkedIn, location to work, github, website link);',
-        'Information about passed school courses (courses info, mentor, course status, score, position);',
-        'Public feedback information (gratitudes)',
+        'Personal information (Name, Desired Position, English level, Military Service, Avatar, Link to a presentation, Self-Description, etc.);',
+        'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, Github username, Website Link);',
+        'Information about passed school courses (Courses Info, Mentor, Course Status, Score, Position);',
+        'Public feedback information (Gratitudes)',
       ],
     },
     ru: {
@@ -70,9 +70,14 @@ function NoConsentViewCV(props: Props) {
   return isOwner ? (
     <Result
       status="info"
-      title="To create your CV page for recruiters to view, you need to allow the use and processing of your data."
+      title={
+        <>
+          CV is public page. <br />
+          We need your consent to use and process your personal data and make it public.
+        </>
+      }
       extra={
-        <Button htmlType="button" onClick={showConfirmationModal}>
+        <Button type="primary" htmlType="button" onClick={showConfirmationModal}>
           Give consent
         </Button>
       }

@@ -1,76 +1,49 @@
-import * as React from 'react';
-import { Result, Switch, Typography, Divider } from 'antd';
+import { Divider, Result, Switch, Typography } from 'antd';
+import { ResumeDto } from 'api';
 import EditCV from '../../../components/cv/EditCV';
-import ViewCV from './ViewCV';
 import NoConsentViewCV from '../../../components/cv/NoConsentViewCV';
+import ViewCV from './ViewCV';
 
 const { Text } = Typography;
 
 type ResumeProps = {
-  hasPriorityRole: boolean;
-  ownerGithubId?: string;
-  isOwner: boolean;
-  notFound: boolean;
+  githubId: string;
   consent: boolean;
+  error?: Error;
+  data: ResumeDto | null;
   editMode: boolean;
   switchView: (checked: boolean) => Promise<void>;
-  withdrawConsent: (ownerGithubId: string) => void;
-  giveConsent: (ownerGithubId: string) => void;
+  onRemoveConsent: () => void;
+  onCreateConsent: () => void;
 };
 
 export function EditViewResume(props: ResumeProps) {
-  const {
-    hasPriorityRole,
-    ownerGithubId,
-    isOwner,
-    notFound,
-    consent,
-    editMode,
-    switchView,
-    withdrawConsent,
-    giveConsent,
-  } = props;
+  const { githubId, data, error, consent, editMode, switchView, onRemoveConsent, onCreateConsent } = props;
 
-  if (ownerGithubId === undefined) {
-    return <Result status="warning" title="This page doesn't exist" />;
+  if (!consent) {
+    return <NoConsentViewCV isOwner={true} giveConsent={onCreateConsent} />;
   }
 
-  if (!isOwner && !hasPriorityRole) {
-    return <Result status="403" title="Sorry, but you don't have access to this page" />;
+  if (error) {
+    return <Result status="error" title="Error" subTitle={error.message} />;
   }
 
-  if (notFound) {
-    return <Result status={404} title="User not found" />;
-  }
+  const edititing = editMode || data === null;
 
-  if (isOwner) {
-    if (consent) {
-      return (
-        <>
-          <Divider className="no-print" plain>
-            <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
-            <Switch
-              style={{ marginLeft: '5px' }}
-              defaultChecked={!editMode}
-              onChange={switchView}
-              checkedChildren="CV view"
-              unCheckedChildren="Edit view"
-            />
-          </Divider>
-
-          {editMode ? (
-            <EditCV ownerGithubId={ownerGithubId} withdrawConsent={() => withdrawConsent(ownerGithubId as string)} />
-          ) : (
-            <ViewCV githubId={ownerGithubId} />
-          )}
-        </>
-      );
-    }
-    return <NoConsentViewCV isOwner={true} giveConsent={() => giveConsent(ownerGithubId as string)} />;
-  }
-
-  if (consent) {
-    return <ViewCV githubId={ownerGithubId} />;
-  }
-  return <NoConsentViewCV isOwner={false} />;
+  return (
+    <>
+      <Divider className="no-print" plain>
+        <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
+        <Switch
+          disabled={data === null}
+          style={{ marginLeft: '5px' }}
+          defaultChecked={!editMode}
+          onChange={switchView}
+          checkedChildren="CV view"
+          unCheckedChildren="Edit view"
+        />
+      </Divider>
+      {edititing ? <EditCV githubId={githubId} withdrawConsent={onRemoveConsent} /> : <ViewCV initialData={data} />}
+    </>
+  );
 }

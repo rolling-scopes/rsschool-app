@@ -25,11 +25,12 @@ export class ResumeService {
     return result;
   }
 
-  public async saveData(data: any) {
+  public async saveData(userId: number, data: any) {
     const cv = await this.resumeRepository.find(this.githubId);
     const result = await this.resumeRepository.save(this.githubId, {
       ...cv,
       ...data,
+      userId,
     });
 
     const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
@@ -82,7 +83,7 @@ export class ResumeService {
     return value;
   }
 
-  public async updateConsent(consent: boolean) {
+  public async updateConsent(userId: number, consent: boolean) {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({ where: { githubId: this.githubId } });
     if (user == null) {
@@ -90,7 +91,7 @@ export class ResumeService {
     }
 
     if (consent) {
-      await this.createResume(this.githubId);
+      await this.createResume(this.githubId, userId);
       await this.userRepository.update({ githubId: this.githubId }, { opportunitiesConsent: true });
       return true;
     }
@@ -100,14 +101,14 @@ export class ResumeService {
     return false;
   }
 
-  private async createResume(githubId: string) {
+  private async createResume(githubId: string, userId: number) {
     const current = await this.resumeRepository.find(githubId);
 
     if (current != null) {
       throw StatusCodes.CONFLICT;
     }
 
-    return this.resumeRepository.create(githubId);
+    return this.resumeRepository.create(githubId, userId);
   }
 
   private async removeResume(githubId: string) {

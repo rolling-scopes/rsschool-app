@@ -40,7 +40,6 @@ export interface UserData {
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
-  uuid: string;
 }
 
 export type Contacts = {
@@ -69,7 +68,7 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
+export interface AllUserCVData extends Omit<UserData, 'uuid'>, Omit<Contacts, 'github'> {
   githubUsername: string | null;
   visibleCourses: VisibleCourses;
 }

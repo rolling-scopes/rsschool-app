@@ -1,4 +1,4 @@
-import { FeedbackDto, GratitudeDto, OpportunitiesApi, ResumeCourseDto, ResumeDto } from 'api';
+import { FeedbackDto, GratitudeDto, ResumeCourseDto, ResumeDto } from 'api';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Contacts, UserData } from '../models';
@@ -8,20 +8,19 @@ type Props = {
   initialData?: ResumeDto;
 };
 
-const opportunitiesService = new OpportunitiesApi();
-
-export function useViewData({ githubId, initialData: resume }: Props) {
+export function useViewData({ initialData: resume }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [courses, setCourses] = useState<ResumeCourseDto[] | null>(null);
-  const [gratitudes, setGratitudes] = useState<GratitudeDto[] | null>(null);
-  const [feedbacks, setFeedbacks] = useState<FeedbackDto[] | null>(null);
+  const [courses, setCourses] = useState<ResumeCourseDto[]>([]);
+  const [gratitudes, setGratitudes] = useState<GratitudeDto[]>([]);
+  const [feedbacks, setFeedbacks] = useState<FeedbackDto[]>([]);
+  const [uuid, setUuid] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const { data } = githubId ? await opportunitiesService.getResume(githubId) : { data: resume };
+    const { data } = { data: resume };
 
     if (!data) {
       return;
@@ -61,7 +60,6 @@ export function useViewData({ githubId, initialData: resume }: Props) {
       englishLevel,
       startFrom,
       fullTime,
-      uuid,
     };
 
     const contactsList = {
@@ -80,10 +78,11 @@ export function useViewData({ githubId, initialData: resume }: Props) {
     setCourses(courses);
     setGratitudes(gratitudes);
     setFeedbacks(feedbacks);
+    setUuid(uuid);
     setLoading(false);
   }, []);
 
-  useAsync(fetchData, [githubId]);
+  useAsync(fetchData, []);
 
-  return { userData, loading, contacts, courses, feedbacks, gratitudes };
+  return { userData, loading, contacts, courses, feedbacks, gratitudes, uuid };
 }

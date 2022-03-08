@@ -16,7 +16,7 @@ export function PublicPage({ data }: PropsWithChildren<Props>) {
       </Head>
       <Layout className="cv-layout">
         <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
-          <ViewCV initialData={data} />
+          <ViewCV publicMode initialData={data} />
         </Content>
       </Layout>
       <style jsx global>{`

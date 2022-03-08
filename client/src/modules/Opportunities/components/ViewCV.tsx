@@ -14,20 +14,20 @@ import { NameTitle } from './NameTitle';
 import { PersonalSection } from './PersonalSection';
 
 type Props = {
-  initialData?: ResumeDto;
-  githubId?: string;
+  initialData: ResumeDto;
+  publicMode?: boolean;
 };
 
-function ViewCV({ initialData, githubId }: Props) {
-  const { loading, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ githubId, initialData });
+function ViewCV({ initialData, publicMode }: Props) {
+  const { loading, uuid, userData, contacts, courses, feedbacks, gratitudes } = useViewData({ initialData });
   const [, copyToClipboard] = useCopyToClipboard();
   const [url, setUrl] = useState('');
 
   useEffect(() => {
-    if (githubId) {
-      setUrl(`${window.location.origin}/cv/${userData?.uuid}`);
+    if (!publicMode) {
+      setUrl(`${window.location.origin}/cv/${uuid}`);
     }
-  }, [userData?.uuid]);
+  }, [uuid]);
 
   return (
     <LoadingScreen show={loading}>
