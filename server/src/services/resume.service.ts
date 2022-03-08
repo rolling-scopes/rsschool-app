@@ -1,15 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
+import omit from 'lodash/omit';
 import { DateTime } from 'luxon';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models';
-import { FeedbackRepository } from '../repositories/feedback.repository';
 import { ResumeRepository } from '../repositories/resume.repository';
 import { StudentRepository } from '../repositories/student.repository';
-import omit from 'lodash/omit';
 
 export class ResumeService {
   private resumeRepository = getCustomRepository(ResumeRepository);
-  private feedbackRespository = getCustomRepository(FeedbackRepository);
   private studentRepository = getCustomRepository(StudentRepository);
   private userRepository = getRepository(User);
 
@@ -36,27 +34,6 @@ export class ResumeService {
     const dataToSend = omit(result, ['id', 'expires', 'githubId', 'isHidden']);
 
     return dataToSend;
-  }
-
-  public async getViewData() {
-    const resume = await this.resumeRepository.find(this.githubId);
-
-    const [feedback, courses] = await Promise.all([
-      this.feedbackRespository.getResumeFeedback(this.githubId),
-      this.studentRepository.findAndIncludeStatsForResume(this.githubId),
-    ]);
-
-    const selectedCourses = courses
-      .filter(course => resume?.visibleCourses.includes(course.courseId))
-      .map(course => omit(course, ['courseId']));
-
-    const viewData = {
-      ...omit(resume, ['visibleCourses']),
-      feedback,
-      courses: selectedCourses,
-    };
-
-    return viewData;
   }
 
   public async getFormData() {

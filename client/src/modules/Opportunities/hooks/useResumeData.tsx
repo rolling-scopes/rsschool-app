@@ -22,5 +22,5 @@ export function useResumeData({ githubId }: Props) {
     }
   }, [githubId]);
 
-  return [fetchData.value,  fetchData.error, fetchData.loading] as const;
+  return [fetchData.value, fetchData.error, fetchData.loading] as const;
 }
