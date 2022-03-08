@@ -15,8 +15,8 @@ export class OpportunitiesController {
   @ApiOkResponse({ type: ResumeDto })
   @UseGuards(DefaultGuard)
   public async getResume(@Param('githubId') githubId: string) {
-    const { resume, students, gratitude, feedbacks } = await this.opportunitiesService.getResumeByGithubId(githubId);
-    return new ResumeDto(resume, students, gratitude, feedbacks);
+    const { resume, students, gratitudes, feedbacks } = await this.opportunitiesService.getResumeByGithubId(githubId);
+    return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 
   @Get('/public/:uuid')
@@ -25,7 +25,7 @@ export class OpportunitiesController {
   @ApiBadRequestResponse()
   @ApiOkResponse({ type: ResumeDto })
   public async getPublicResume(@Param('uuid', ParseUUIDPipe) uuid: string) {
-    const { resume, students, gratitude, feedbacks } = await this.opportunitiesService.getResumeByUuid(uuid);
-    return new ResumeDto(resume, students, gratitude, feedbacks);
+    const { resume, students, gratitudes, feedbacks } = await this.opportunitiesService.getResumeByUuid(uuid);
+    return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 }

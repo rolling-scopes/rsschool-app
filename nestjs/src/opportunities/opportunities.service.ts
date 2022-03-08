@@ -34,7 +34,7 @@ export class OpportunitiesService {
   }
 
   private async getFullResume(resume: Resume) {
-    const [students, gratitude] = await Promise.all([
+    const [students, gratitudes] = await Promise.all([
       this.studentRepository.find({
         relations: ['course', 'certificate', 'mentor', 'mentor.user'],
         where: {
@@ -53,7 +53,7 @@ export class OpportunitiesService {
     return {
       resume,
       students,
-      gratitude,
+      gratitudes,
       feedbacks,
     };
   }
