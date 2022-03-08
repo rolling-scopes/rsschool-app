@@ -15,10 +15,12 @@ type ResumeProps = {
   switchView: (checked: boolean) => Promise<void>;
   onRemoveConsent: () => void;
   onCreateConsent: () => void;
+  onUpdateResume: () => void;
 };
 
 export function EditViewResume(props: ResumeProps) {
-  const { githubId, data, error, consent, editMode, switchView, onRemoveConsent, onCreateConsent } = props;
+  const { githubId, data, error, consent, editMode, switchView, onUpdateResume, onRemoveConsent, onCreateConsent } =
+    props;
 
   if (!consent) {
     return <NoConsentViewCV isOwner={true} giveConsent={onCreateConsent} />;
@@ -42,7 +44,11 @@ export function EditViewResume(props: ResumeProps) {
           unCheckedChildren="Edit view"
         />
       </Divider>
-      {editing ? <EditCV githubId={githubId} withdrawConsent={onRemoveConsent} /> : <ViewCV initialData={data} />}
+      {editing ? (
+        <EditCV onUpdateResume={onUpdateResume} githubId={githubId} withdrawConsent={onRemoveConsent} />
+      ) : (
+        <ViewCV initialData={data} />
+      )}
     </>
   );
 }

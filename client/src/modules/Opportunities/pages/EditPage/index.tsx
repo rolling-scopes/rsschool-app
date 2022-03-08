@@ -21,6 +21,7 @@ export function EditPage() {
   const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState(false);
   const [consent, setConsent] = useState(false);
+  const [actualTime, setActualTime] = useState(Date.now());
 
   const switchView = async (checked: boolean) => setEditMode(!checked);
 
@@ -28,7 +29,7 @@ export function EditPage() {
   const handleRemoveConsent = withLoading(async () => setConsent(await service.updateConsent(githubId, false)));
 
   const getConsent = withLoading(async () => setConsent(await service.getConsent(githubId)));
-  const [resumeData, error, resumeLoading] = useResumeData({ githubId });
+  const [resumeData, error, resumeLoading] = useResumeData({ githubId, actualTime });
 
   useAsync(getConsent, [githubId]);
 
@@ -50,6 +51,7 @@ export function EditPage() {
               switchView={switchView}
               onRemoveConsent={handleRemoveConsent}
               onCreateConsent={handleCreateConsent}
+              onUpdateResume={() => setActualTime(Date.now())}
             />
           </Content>
         </Layout>

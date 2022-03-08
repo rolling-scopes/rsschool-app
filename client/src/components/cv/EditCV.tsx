@@ -32,6 +32,7 @@ const { Paragraph, Text, Title } = Typography;
 type Props = {
   githubId: string;
   withdrawConsent: () => void;
+  onUpdateResume: () => void;
 };
 
 const cvService = new OpportunitiesService();
@@ -250,6 +251,7 @@ function EditCV(props: Props) {
     setVisibleCourses(newVisibleCourses);
 
     setLoading(false);
+    props.onUpdateResume();
   };
 
   const resetFields = async () => {

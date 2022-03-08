@@ -4,11 +4,12 @@ import { useAsync } from 'react-use';
 
 type Props = {
   githubId: string;
+  actualTime: number;
 };
 
 const opportunitiesService = new OpportunitiesApi();
 
-export function useResumeData({ githubId }: Props) {
+export function useResumeData({ githubId, actualTime }: Props) {
   const fetchData = useAsync(async () => {
     try {
       const { data } = await opportunitiesService.getResume(githubId);
@@ -20,7 +21,7 @@ export function useResumeData({ githubId }: Props) {
       }
       throw err;
     }
-  }, [githubId]);
+  }, [actualTime]);
 
   return [fetchData.value, fetchData.error, fetchData.loading] as const;
 }
