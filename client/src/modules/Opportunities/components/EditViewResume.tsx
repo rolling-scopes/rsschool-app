@@ -28,14 +28,13 @@ export function EditViewResume(props: ResumeProps) {
     return <Result status="error" title="Error" subTitle={error.message} />;
   }
 
-  const edititing = editMode || data === null;
+  const editing = editMode || data === null;
 
   return (
     <>
       <Divider className="no-print" plain>
         <Text style={{ verticalAlign: 'middle' }}>Switch view:</Text>
         <Switch
-          disabled={data === null}
           style={{ marginLeft: '5px' }}
           defaultChecked={!editMode}
           onChange={switchView}
@@ -43,7 +42,7 @@ export function EditViewResume(props: ResumeProps) {
           unCheckedChildren="Edit view"
         />
       </Divider>
-      {edititing ? <EditCV githubId={githubId} withdrawConsent={onRemoveConsent} /> : <ViewCV initialData={data} />}
+      {editing ? <EditCV githubId={githubId} withdrawConsent={onRemoveConsent} /> : <ViewCV initialData={data} />}
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { User } from '@entities/user';
 import { Feedback } from '@entities/feedback';
 import { Resume } from '@entities/resume';
-import { StudentFeedback } from '@entities/student-feedback';
+import { Recommendation, StudentFeedback } from '@entities/student-feedback';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -58,7 +58,7 @@ export class OpportunitiesService {
 
     const feedbacks = await this.studentFeedbackRepository.find({
       relations: ['student', 'student.course', 'mentor', 'mentor.user'],
-      where: { studentId: In(students.map(s => s.id)) },
+      where: { studentId: In(students.map(s => s.id)), recommendation: Recommendation.Hire },
     });
 
     return {
