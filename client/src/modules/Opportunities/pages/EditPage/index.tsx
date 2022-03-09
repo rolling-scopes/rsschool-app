@@ -21,8 +21,12 @@ export function EditPage() {
 
   const switchView = async (checked: boolean) => setEditMode(!checked);
 
+  useEffect(() => {
+    getData();
+  }, [editMode]);
+
   const getData = async () => {
-    const { data } = await service.getConsent(githubId);
+    const { data } = await service.getConsent();
     if (data.consent) {
       try {
         const { data } = await service.getResume(githubId);
@@ -40,15 +44,15 @@ export function EditPage() {
   };
 
   const handleConsentUpdate = withLoading(async (value: boolean) => {
-    value ? await service.createConsent(githubId) : await service.deleteConsent(githubId);
+    value ? await service.createConsent() : await service.deleteConsent();
     await getData();
   });
 
-  const loadData = withLoading(getData);
+  // const loadData = withLoading(getData);
 
-  useEffect(() => {
-    loadData();
-  }, [githubId]);
+  // useEffect(() => {
+  //   loadData();
+  // }, [githubId]);
 
   return (
     <>
@@ -67,7 +71,7 @@ export function EditPage() {
               switchView={switchView}
               onRemoveConsent={() => handleConsentUpdate(false)}
               onCreateConsent={() => handleConsentUpdate(true)}
-              onUpdateResume={() => loadData()}
+              onUpdateResume={() => getData()}
             />
           </Content>
         </Layout>

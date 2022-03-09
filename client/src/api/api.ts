@@ -1082,6 +1082,12 @@ export interface ProfileCourseDto {
 export interface ResumeCourseDto {
     /**
      * 
+     * @type {number}
+     * @memberof ResumeCourseDto
+     */
+    'id': number;
+    /**
+     * 
      * @type {string}
      * @memberof ResumeCourseDto
      */
@@ -1174,6 +1180,12 @@ export interface ResumeDto {
     'avatarLink': string;
     /**
      * 
+     * @type {Array<number>}
+     * @memberof ResumeDto
+     */
+    'visibleCourses': Array<number>;
+    /**
+     * 
      * @type {Array<ResumeCourseDto>}
      * @memberof ResumeDto
      */
@@ -1249,7 +1261,7 @@ export interface ResumeDto {
      * @type {string}
      * @memberof ResumeDto
      */
-    'militaryService': string;
+    'militaryService': ResumeDtoMilitaryServiceEnum;
     /**
      * 
      * @type {string}
@@ -1313,6 +1325,15 @@ export enum ResumeDtoEnglishLevelEnum {
     B2 = 'b2',
     C1 = 'c1',
     C2 = 'c2'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ResumeDtoMilitaryServiceEnum {
+    Served = 'served',
+    Liable = 'liable',
+    NotLiable = 'notLiable'
 }
 
 /**
@@ -4010,15 +4031,11 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
     return {
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createConsent: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'githubId' is not null or undefined
-            assertParamExists('createConsent', 'githubId', githubId)
-            const localVarPath = `/opportunities/{githubId}/consent`
-                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+        createConsent: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/opportunities/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4043,15 +4060,11 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteConsent: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'githubId' is not null or undefined
-            assertParamExists('deleteConsent', 'githubId', githubId)
-            const localVarPath = `/opportunities/{githubId}/consent`
-                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+        deleteConsent: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/opportunities/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4076,15 +4089,11 @@ export const OpportunitiesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getConsent: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'githubId' is not null or undefined
-            assertParamExists('getConsent', 'githubId', githubId)
-            const localVarPath = `/opportunities/{githubId}/consent`
-                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+        getConsent: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/opportunities/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4185,32 +4194,29 @@ export const OpportunitiesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createConsent(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createConsent(githubId, options);
+        async createConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createConsent(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteConsent(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteConsent(githubId, options);
+        async deleteConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteConsent(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getConsent(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getConsent(githubId, options);
+        async getConsent(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getConsent(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4245,30 +4251,27 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
     return {
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createConsent(githubId: string, options?: any): AxiosPromise<ConsentDto> {
-            return localVarFp.createConsent(githubId, options).then((request) => request(axios, basePath));
+        createConsent(options?: any): AxiosPromise<ConsentDto> {
+            return localVarFp.createConsent(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteConsent(githubId: string, options?: any): AxiosPromise<ConsentDto> {
-            return localVarFp.deleteConsent(githubId, options).then((request) => request(axios, basePath));
+        deleteConsent(options?: any): AxiosPromise<ConsentDto> {
+            return localVarFp.deleteConsent(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getConsent(githubId: string, options?: any): AxiosPromise<ConsentDto> {
-            return localVarFp.getConsent(githubId, options).then((request) => request(axios, basePath));
+        getConsent(options?: any): AxiosPromise<ConsentDto> {
+            return localVarFp.getConsent(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4300,35 +4303,32 @@ export const OpportunitiesApiFactory = function (configuration?: Configuration, 
 export class OpportunitiesApi extends BaseAPI {
     /**
      * 
-     * @param {string} githubId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OpportunitiesApi
      */
-    public createConsent(githubId: string, options?: AxiosRequestConfig) {
-        return OpportunitiesApiFp(this.configuration).createConsent(githubId, options).then((request) => request(this.axios, this.basePath));
+    public createConsent(options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).createConsent(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} githubId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OpportunitiesApi
      */
-    public deleteConsent(githubId: string, options?: AxiosRequestConfig) {
-        return OpportunitiesApiFp(this.configuration).deleteConsent(githubId, options).then((request) => request(this.axios, this.basePath));
+    public deleteConsent(options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).deleteConsent(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} githubId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OpportunitiesApi
      */
-    public getConsent(githubId: string, options?: AxiosRequestConfig) {
-        return OpportunitiesApiFp(this.configuration).getConsent(githubId, options).then((request) => request(this.axios, this.basePath));
+    public getConsent(options?: AxiosRequestConfig) {
+        return OpportunitiesApiFp(this.configuration).getConsent(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

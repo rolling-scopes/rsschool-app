@@ -1,4 +1,15 @@
-import { Controller, Delete, Get, NotFoundException, Param, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  ForbiddenException,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -7,7 +18,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { DefaultGuard } from 'src/auth';
+import { CurrentRequest, DefaultGuard } from 'src/auth';
 import { ConsentDto } from './dto/consent.dto';
 import { ResumeDto } from './dto/resume.dto';
 import { OpportunitiesService } from './opportunities.service';
@@ -24,7 +35,11 @@ export class OpportunitiesController {
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: ResumeDto })
   @UseGuards(DefaultGuard)
-  public async getResume(@Param('githubId') githubId: string) {
+  public async getResume(@Req() req: CurrentRequest, @Param('githubId') githubId: string) {
+    if (githubId !== req.user.githubId) {
+      // TODO: limit access to own CV for now
+      throw new ForbiddenException('No access to resume');
+    }
     const data = await this.opportunitiesService.getResumeByGithubId(githubId);
     if (data == null) {
       throw new NotFoundException('Resume not found');
@@ -33,33 +48,33 @@ export class OpportunitiesController {
     return new ResumeDto(resume, students, gratitudes, feedbacks);
   }
 
-  @Get('/:githubId/consent')
+  @Get('/consent')
   @ApiOperation({ operationId: 'getConsent' })
   @ApiOkResponse({ type: ConsentDto })
   @UseGuards(DefaultGuard)
-  public async getConsent(@Param('githubId') githubId: string) {
-    const value = await this.opportunitiesService.getConsent(githubId);
+  public async getConsent(@Req() req: CurrentRequest) {
+    const value = await this.opportunitiesService.getConsent(req.user.githubId);
     if (value == null) {
       throw new NotFoundException('Resume not found');
     }
     return new ConsentDto(value);
   }
 
-  @Post('/:githubId/consent')
+  @Post('/consent')
   @ApiOperation({ operationId: 'createConsent' })
   @ApiOkResponse({ type: ConsentDto })
   @UseGuards(DefaultGuard)
-  public async createConsent(@Param('githubId') githubId: string) {
-    const data = await this.opportunitiesService.createConsent(githubId);
+  public async createConsent(@Req() req: CurrentRequest) {
+    const data = await this.opportunitiesService.createConsent(req.user.githubId);
     return new ConsentDto(data);
   }
 
-  @Delete('/:githubId/consent')
+  @Delete('/consent')
   @ApiOperation({ operationId: 'deleteConsent' })
   @ApiOkResponse({ type: ConsentDto })
   @UseGuards(DefaultGuard)
-  public async deleteConsent(@Param('githubId') githubId: string) {
-    const data = await this.opportunitiesService.deleteConsent(githubId);
+  public async deleteConsent(@Req() req: CurrentRequest) {
+    const data = await this.opportunitiesService.deleteConsent(req.user.githubId);
     return new ConsentDto(data);
   }
 

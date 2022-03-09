@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ResumeDtoEnglishLevelEnum } from 'api';
+import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
 
 export interface CourseData {
   locationName: string;
@@ -26,8 +26,6 @@ export interface VisibleCoursesFormData {
   [id: string]: boolean;
 }
 
-export type MilitaryServiceStatus = 'served' | 'liable' | 'notLiable';
-
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
 
 export interface UserData {
@@ -36,7 +34,7 @@ export interface UserData {
   desiredPosition: string | null;
   selfIntroLink: string | null;
   englishLevel: ResumeDtoEnglishLevelEnum | null;
-  militaryService: MilitaryServiceStatus | null;
+  militaryService: ResumeDtoMilitaryServiceEnum | null;
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;

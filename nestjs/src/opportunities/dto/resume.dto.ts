@@ -102,7 +102,11 @@ class ResumeCourseDto {
     this.completed = student.course.completed;
     this.mentor = new ResumeCourseMentor(student.mentor);
     this.locationName = student.course.locationName;
+    this.id = student.course.id;
   }
+
+  @ApiProperty()
+  public id: number;
 
   @ApiProperty()
   public name: string;
@@ -150,6 +154,7 @@ export class ResumeDto {
     this.startFrom = resume.startFrom;
     this.telegram = resume.telegram;
     this.website = resume.website;
+    this.visibleCourses = resume.visibleCourses ?? [];
     this.gratitudes = gratitudes.map(item => new GratitudeDto(item));
     this.courses = students.map(item => new ResumeCourseDto(item));
     this.feedbacks = feedbacks.map(item => new FeedbackDto(item));
@@ -158,6 +163,8 @@ export class ResumeDto {
   public uuid: string;
   @ApiProperty()
   public avatarLink: string;
+  @ApiProperty({ type: [Number] })
+  public visibleCourses: number[];
   @ApiProperty({ type: [ResumeCourseDto] })
   public courses: ResumeCourseDto[];
   @ApiProperty()
@@ -182,7 +189,7 @@ export class ResumeDto {
   public linkedin: string;
   @ApiProperty()
   public locations: string;
-  @ApiProperty()
+  @ApiProperty({ enum: ['served', 'liable', 'notLiable'] })
   public militaryService: string;
   @ApiProperty()
   public name: string;

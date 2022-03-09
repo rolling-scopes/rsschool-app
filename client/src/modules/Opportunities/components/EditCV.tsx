@@ -9,7 +9,6 @@ import {
   AllUserCVData,
   AllDataToSubmit,
   UserDataToSubmit,
-  CourseDataShortened,
   VisibleCoursesFormData,
   VisibleCourses,
 } from 'modules/Opportunities/models';
@@ -25,14 +24,16 @@ import {
   CopyOutlined,
 } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
+import { ResumeCourseDto, ResumeDto } from 'api';
 
 const { Content } = Layout;
 const { Paragraph, Text, Title } = Typography;
 
 type Props = {
   githubId: string;
+  data: ResumeDto | null;
   onRemoveConsent: () => void;
-  onUpdateResume: () => void;
+  onUpdateResume?: () => void;
 };
 
 const cvService = new OpportunitiesService();
@@ -45,8 +46,8 @@ function EditCV(props: Props) {
   const [contactsList, setContactsList] = useState<Contacts | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [expires, setExpiration] = useState<number | null>(null);
-  const [visibleCourses, setVisibleCourses] = useState<VisibleCourses | null>(null);
-  const [allCourses, setAllCourses] = useState<CourseDataShortened[] | null>(null);
+  const [visibleCourses, setVisibleCourses] = useState<number[] | null>(null);
+  const [allCourses, setAllCourses] = useState<ResumeCourseDto[] | null>(null);
 
   const userFormRef: RefObject<FormInstance> = React.createRef();
   const contactsFormRef: RefObject<FormInstance> = React.createRef();
@@ -94,7 +95,7 @@ function EditCV(props: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const cvData = await cvService.getEditResumeData(props.githubId);
+    const cvData = props.data;
 
     const {
       notes,
@@ -115,31 +116,31 @@ function EditCV(props: Props) {
       startFrom,
       fullTime,
       expires,
-      courses,
-      visibleCourses,
-    } = cvData;
+      courses = [],
+      visibleCourses = [],
+    } = cvData ?? {};
 
     const userData = {
-      notes,
-      name,
-      selfIntroLink,
-      militaryService,
-      avatarLink,
-      desiredPosition,
-      englishLevel,
-      startFrom,
-      fullTime,
+      notes: notes ?? null,
+      name: name ?? null,
+      selfIntroLink: selfIntroLink ?? null,
+      militaryService: militaryService ?? null,
+      avatarLink: avatarLink ?? null,
+      desiredPosition: desiredPosition ?? null,
+      englishLevel: englishLevel ?? null,
+      startFrom: startFrom ?? null,
+      fullTime: !!fullTime,
     };
 
     const contactsList = {
-      email,
-      github: githubUsername,
-      linkedin,
-      locations,
-      phone,
-      skype,
-      telegram,
-      website,
+      email: email ?? null,
+      github: githubUsername ?? null,
+      linkedin: linkedin ?? null,
+      locations: locations ?? null,
+      phone: phone ?? null,
+      skype: skype ?? null,
+      telegram: telegram ?? null,
+      website: website ?? null,
     };
 
     setContactsList(contactsList);
@@ -251,7 +252,7 @@ function EditCV(props: Props) {
     setVisibleCourses(newVisibleCourses);
 
     setLoading(false);
-    props.onUpdateResume();
+    props.onUpdateResume?.();
   };
 
   const resetFields = async () => {
@@ -271,7 +272,7 @@ function EditCV(props: Props) {
           .map(location => location.trim())
           .join('\n');
 
-  const nullifyConditional = (str: string | null) => str?.trim() || null;
+  const nullifyConditional = (str?: string | null) => str?.trim() || null;
 
   const formatDate = (expirationValue: number | null) => {
     if (expirationValue === null || expirationValue === 0) {
@@ -306,7 +307,7 @@ function EditCV(props: Props) {
   const getDataFromForms = () => {
     const userFormData: UserDataToSubmit = userFormRef.current?.getFieldsValue();
     const contactsFormData: Contacts = contactsFormRef.current?.getFieldsValue();
-    const visibleCoursesFormData: VisibleCoursesFormData = visibleCoursesFormRef.current?.getFieldsValue();
+    const visibleCoursesFormData: VisibleCoursesFormData = visibleCoursesFormRef.current?.getFieldsValue() ?? {};
 
     const visibleCourses = Object.entries(visibleCoursesFormData).reduce((acc: VisibleCourses, [id, isVisible]) => {
       if (isVisible) acc.push(Number(id));
