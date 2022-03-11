@@ -6,12 +6,12 @@ import { DiscordServerDto, CreateDiscordServerDto, UpdateDiscordServerDto } from
 
 @Controller('discord-servers')
 @ApiTags('discord-servers')
+@RequiredRoles([Role.Admin])
 @UseGuards(DefaultGuard, RoleGuard)
 export class DiscordServersController {
   constructor(private readonly service: DiscordServersService) {}
 
   @Post()
-  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'createDiscordServer' })
   @ApiOkResponse({ type: DiscordServerDto })
   public async create(@Body() dto: CreateDiscordServerDto) {
@@ -20,7 +20,6 @@ export class DiscordServersController {
   }
 
   @Get()
-  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'getDiscordServers' })
   @ApiOkResponse({ type: [DiscordServerDto] })
   public async getAll() {
@@ -29,7 +28,6 @@ export class DiscordServersController {
   }
 
   @Put(':id')
-  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'updateDiscordServer' })
   @ApiOkResponse({ type: DiscordServerDto })
   public async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDiscordServerDto) {
@@ -38,7 +36,6 @@ export class DiscordServersController {
   }
 
   @Delete(':id')
-  @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'deleteDiscordServer' })
   @ApiOkResponse({ type: DiscordServerDto })
   public async delete(@Param('id', ParseIntPipe) id: number) {

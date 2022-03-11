@@ -11,22 +11,16 @@ export class DiscordServersService {
     private repository: Repository<DiscordServer>,
   ) {}
 
-  public async getById(id: number) {
-    return this.repository.findOne(id);
-  }
-
-  public async getAll() {
+  public getAll() {
     return this.repository.find();
   }
 
-  public async create(data: CreateDiscordServerDto) {
-    const { id } = await this.repository.save(data);
-    return this.getById(id);
+  public create(data: CreateDiscordServerDto) {
+    return this.repository.save(data);
   }
 
-  public async update(id: number, data: UpdateDiscordServerDto) {
-    await this.repository.update(id, data);
-    return this.getById(id);
+  public update(id: number, data: UpdateDiscordServerDto) {
+    return this.repository.save({ id, ...data });
   }
 
   public async delete(id: number): Promise<void> {
