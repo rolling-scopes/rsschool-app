@@ -2,7 +2,7 @@ import { Checker, CourseTask } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindCondition, LessThan, LessThanOrEqual, MoreThan, Repository } from 'typeorm';
+import { FindCondition, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 
 export enum Status {
   Started = 'started',
@@ -52,5 +52,14 @@ export class CourseTasksService {
         break;
     }
     return where;
+  }
+
+  public getUpdatedTasks(courseId: number, lastHours: number) {
+    const date = new Date();
+    date.setHours(date.getHours() - lastHours);
+    return this.courseTaskRepository.find({
+      where: { courseId, updatedDate: MoreThanOrEqual(date.toISOString()) },
+      relations: ['task'],
+    });
   }
 }
