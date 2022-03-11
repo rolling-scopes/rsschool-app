@@ -8,7 +8,7 @@ import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServerService } from 'services/discordServer';
+import { DiscordServersApi } from 'api';
 import { Course, DiscordServer } from 'services/models';
 import { PRIMARY_SKILLS } from 'data/primarySkills';
 
@@ -23,12 +23,12 @@ function Page(props: Props) {
   const [modalLoading, setModalLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
-  const discordServerService = new DiscordServerService();
+  const discordServersService = new DiscordServersApi();
 
   const loadData = async () => {
-    const [courses, discordServers] = await Promise.all([
+    const [courses, { data: discordServers }] = await Promise.all([
       courseService.getCourses(),
-      discordServerService.getDiscordServers(),
+      discordServersService.getDiscordServers(),
     ]);
     setCourses(courses);
     setDiscordServers(discordServers);

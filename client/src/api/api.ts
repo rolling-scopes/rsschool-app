@@ -413,6 +413,31 @@ export interface CreateDisciplineDto {
 /**
  * 
  * @export
+ * @interface CreateDiscordServerDto
+ */
+export interface CreateDiscordServerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDiscordServerDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDiscordServerDto
+     */
+    'gratitudeUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDiscordServerDto
+     */
+    'mentorsChatUrl': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -488,6 +513,49 @@ export interface DisciplineDto {
      * @memberof DisciplineDto
      */
     'updatedDate': string;
+}
+/**
+ * 
+ * @export
+ * @interface DiscordServerDto
+ */
+export interface DiscordServerDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof DiscordServerDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiscordServerDto
+     */
+    'createdDate': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiscordServerDto
+     */
+    'updatedDate': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiscordServerDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiscordServerDto
+     */
+    'gratitudeUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiscordServerDto
+     */
+    'mentorsChatUrl': string;
 }
 /**
  * 
@@ -860,6 +928,43 @@ export interface ProfileCourseDto {
 /**
  * 
  * @export
+ * @interface SaveCertificateDto
+ */
+export interface SaveCertificateDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveCertificateDto
+     */
+    'publicId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof SaveCertificateDto
+     */
+    'studentId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveCertificateDto
+     */
+    's3Bucket': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveCertificateDto
+     */
+    's3Key': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SaveCertificateDto
+     */
+    'issueDate': string;
+}
+/**
+ * 
+ * @export
  * @interface SendNotificationDto
  */
 export interface SendNotificationDto {
@@ -1113,6 +1218,31 @@ export interface UpdateDisciplineDto {
      * @memberof UpdateDisciplineDto
      */
     'name': string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateDiscordServerDto
+ */
+export interface UpdateDiscordServerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDiscordServerDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDiscordServerDto
+     */
+    'gratitudeUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDiscordServerDto
+     */
+    'mentorsChatUrl': string;
 }
 /**
  * 
@@ -1851,6 +1981,172 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * CertificateApi - axios parameter creator
+ * @export
+ */
+export const CertificateApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} publicId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificate: async (publicId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'publicId' is not null or undefined
+            assertParamExists('getCertificate', 'publicId', publicId)
+            const localVarPath = `/certificate/{publicId}`
+                .replace(`{${"publicId"}}`, encodeURIComponent(String(publicId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {SaveCertificateDto} saveCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveCertificate: async (saveCertificateDto: SaveCertificateDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'saveCertificateDto' is not null or undefined
+            assertParamExists('saveCertificate', 'saveCertificateDto', saveCertificateDto)
+            const localVarPath = `/certificate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(saveCertificateDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CertificateApi - functional programming interface
+ * @export
+ */
+export const CertificateApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CertificateApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} publicId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCertificate(publicId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCertificate(publicId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {SaveCertificateDto} saveCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async saveCertificate(saveCertificateDto: SaveCertificateDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.saveCertificate(saveCertificateDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CertificateApi - factory interface
+ * @export
+ */
+export const CertificateApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CertificateApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} publicId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificate(publicId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.getCertificate(publicId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {SaveCertificateDto} saveCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        saveCertificate(saveCertificateDto: SaveCertificateDto, options?: any): AxiosPromise<void> {
+            return localVarFp.saveCertificate(saveCertificateDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CertificateApi - object-oriented interface
+ * @export
+ * @class CertificateApi
+ * @extends {BaseAPI}
+ */
+export class CertificateApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} publicId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public getCertificate(publicId: string, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {SaveCertificateDto} saveCertificateDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public saveCertificate(saveCertificateDto: SaveCertificateDto, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).saveCertificate(saveCertificateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * CoursesApi - axios parameter creator
  * @export
  */
@@ -2507,6 +2803,300 @@ export class DisciplinesApi extends BaseAPI {
      */
     public updateDiscipline(id: number, updateDisciplineDto: UpdateDisciplineDto, options?: AxiosRequestConfig) {
         return DisciplinesApiFp(this.configuration).updateDiscipline(id, updateDisciplineDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DiscordServersApi - axios parameter creator
+ * @export
+ */
+export const DiscordServersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateDiscordServerDto} createDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDiscordServer: async (createDiscordServerDto: CreateDiscordServerDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDiscordServerDto' is not null or undefined
+            assertParamExists('createDiscordServer', 'createDiscordServerDto', createDiscordServerDto)
+            const localVarPath = `/discord-servers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDiscordServerDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDiscordServer: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteDiscordServer', 'id', id)
+            const localVarPath = `/discord-servers/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDiscordServers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/discord-servers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateDiscordServerDto} updateDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDiscordServer: async (id: number, updateDiscordServerDto: UpdateDiscordServerDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateDiscordServer', 'id', id)
+            // verify required parameter 'updateDiscordServerDto' is not null or undefined
+            assertParamExists('updateDiscordServer', 'updateDiscordServerDto', updateDiscordServerDto)
+            const localVarPath = `/discord-servers/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateDiscordServerDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DiscordServersApi - functional programming interface
+ * @export
+ */
+export const DiscordServersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DiscordServersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateDiscordServerDto} createDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createDiscordServer(createDiscordServerDto: CreateDiscordServerDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DiscordServerDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDiscordServer(createDiscordServerDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteDiscordServer(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DiscordServerDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDiscordServer(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDiscordServers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DiscordServerDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDiscordServers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateDiscordServerDto} updateDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateDiscordServer(id: number, updateDiscordServerDto: UpdateDiscordServerDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DiscordServerDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDiscordServer(id, updateDiscordServerDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DiscordServersApi - factory interface
+ * @export
+ */
+export const DiscordServersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DiscordServersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateDiscordServerDto} createDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDiscordServer(createDiscordServerDto: CreateDiscordServerDto, options?: any): AxiosPromise<DiscordServerDto> {
+            return localVarFp.createDiscordServer(createDiscordServerDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDiscordServer(id: number, options?: any): AxiosPromise<DiscordServerDto> {
+            return localVarFp.deleteDiscordServer(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDiscordServers(options?: any): AxiosPromise<Array<DiscordServerDto>> {
+            return localVarFp.getDiscordServers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateDiscordServerDto} updateDiscordServerDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDiscordServer(id: number, updateDiscordServerDto: UpdateDiscordServerDto, options?: any): AxiosPromise<DiscordServerDto> {
+            return localVarFp.updateDiscordServer(id, updateDiscordServerDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DiscordServersApi - object-oriented interface
+ * @export
+ * @class DiscordServersApi
+ * @extends {BaseAPI}
+ */
+export class DiscordServersApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateDiscordServerDto} createDiscordServerDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public createDiscordServer(createDiscordServerDto: CreateDiscordServerDto, options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).createDiscordServer(createDiscordServerDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public deleteDiscordServer(id: number, options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).deleteDiscordServer(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public getDiscordServers(options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).getDiscordServers(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateDiscordServerDto} updateDiscordServerDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public updateDiscordServer(id: number, updateDiscordServerDto: UpdateDiscordServerDto, options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).updateDiscordServer(id, updateDiscordServerDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

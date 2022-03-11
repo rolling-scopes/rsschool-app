@@ -6,7 +6,6 @@ import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
-import { discordServerRoute } from './discordServer';
 import { userGroupRoute } from './userGroup';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
@@ -54,7 +53,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
-  applyRouter(router, discordServerRoute(logger));
   applyRouter(router, userGroupRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));

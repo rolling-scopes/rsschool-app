@@ -15,6 +15,7 @@ import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 import { CertificatesModule } from './certificates/certificates.module';
+import { DiscordServersModule } from './discord-servers/discord-servers.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CertificatesModule } from './certificates/certificates.module';
     NotificationsModule,
     RegistryModule,
     CertificatesModule,
+    DiscordServersModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
