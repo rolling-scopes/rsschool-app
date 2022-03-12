@@ -43,7 +43,7 @@ export class Resume {
   @Column({ nullable: true, type: 'varchar', length: 8 })
   englishLevel: LanguageLevel;
 
-  @Column({ nullable: true, type: 'varchar', length: 256 })
+  @Column({ nullable: true, type: 'varchar', length: 512 })
   avatarLink: string;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })

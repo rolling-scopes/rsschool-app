@@ -14,7 +14,7 @@ export class Opportunitites1645654601903 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "startFrom" TYPE character varying(32)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "militaryService" TYPE character varying(32)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "englishLevel" TYPE character varying(8)`);
-    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "avatarLink" TYPE character varying(256)`);
+    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "avatarLink" TYPE character varying(512)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "desiredPosition" TYPE character varying(256)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "phone" TYPE character varying(32)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "email" TYPE character varying(128)`);
