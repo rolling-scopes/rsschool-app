@@ -114,9 +114,9 @@ const postGratitudeFeedback = (logger: ILogger) => {
     const feedback: Partial<Feedback> = {
       comment: data.comment,
       badgeId: data.badgeId ? data.badgeId : undefined,
-      course: data.courseId ? data.courseId : undefined,
+      courseId: data.courseId ? data.courseId : undefined,
       fromUser: id,
-      toUser: data.toUserId,
+      toUserId: data.toUserId,
     };
     const result = await getRepository(Feedback).save(feedback);
 

@@ -1,5 +1,6 @@
-import { UserData, MilitaryServiceStatus } from '../models';
+import { UserData } from '../models';
 import capitalize from 'lodash/capitalize';
+import { ResumeDtoMilitaryServiceEnum } from 'api';
 
 export function getPersonalToRender(user: UserData) {
   const { selfIntroLink } = user;
@@ -34,7 +35,7 @@ export function getPersonalToRender(user: UserData) {
 }
 
 const militaryServiceDictionary: {
-  [key in MilitaryServiceStatus]: string;
+  [key in ResumeDtoMilitaryServiceEnum]: string;
 } = {
   served: 'served',
   notLiable: 'not liable',

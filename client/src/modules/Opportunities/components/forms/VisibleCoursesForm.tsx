@@ -1,12 +1,12 @@
-import { forwardRef, ForwardedRef } from 'react';
-import { Checkbox, Form, Typography, Card, FormInstance } from 'antd';
-import { CourseDataShortened, VisibleCourses } from 'modules/Opportunities/models';
+import { Card, Checkbox, Form, FormInstance, Typography } from 'antd';
+import { ResumeCourseDto } from 'api';
+import { ForwardedRef, forwardRef } from 'react';
 
 const { Item } = Form;
 
 type Props = {
-  courses: CourseDataShortened[] | null;
-  visibleCourses: VisibleCourses;
+  courses: ResumeCourseDto[] | null;
+  visibleCourses: number[];
 };
 
 const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInstance>) => {
@@ -16,8 +16,8 @@ const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInsta
 
   const [form] = Form.useForm();
 
-  const data = courses.reduce((acc: Record<string, boolean>, { courseId }) => {
-    acc[courseId] = visibleCourses.includes(courseId);
+  const data = courses.reduce((acc: Record<string, boolean>, { id }) => {
+    acc[id] = visibleCourses.includes(id);
     return acc;
   }, {});
 
@@ -39,13 +39,11 @@ const VisibleCoursesForm = forwardRef((props: Props, ref: ForwardedRef<FormInsta
           maxWidth: '314px',
         }}
       >
-        {courses.map(({ courseId, courseFullName }) => (
+        {courses.map(({ id, fullName }) => (
           <Item
-            key={courseId}
-            name={courseId}
-            label={
-              <span style={{ lineHeight: 'normal', whiteSpace: 'normal', textAlign: 'left' }}>{courseFullName}</span>
-            }
+            key={id}
+            name={id}
+            label={<span style={{ lineHeight: 'normal', whiteSpace: 'normal', textAlign: 'left' }}>{fullName}</span>}
             colon={false}
             labelAlign="right"
             style={{ marginBottom: '0', overflow: 'hidden' }}

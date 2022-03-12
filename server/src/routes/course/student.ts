@@ -56,7 +56,7 @@ export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const feedback: Partial<Feedback> = {
     comment: data.comment,
-    course: courseId,
+    courseId,
     fromUser: id,
     toUser: data.toUserId,
   };

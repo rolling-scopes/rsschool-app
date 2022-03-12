@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ENGLISH_LEVELS } from 'data/english';
+import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
 
 export interface CourseData {
   locationName: string;
@@ -26,9 +26,6 @@ export interface VisibleCoursesFormData {
   [id: string]: boolean;
 }
 
-export type EnglishLevel = typeof ENGLISH_LEVELS[number];
-export type MilitaryServiceStatus = 'served' | 'liable' | 'notLiable';
-
 export type ContactType = 'phone' | 'email' | 'skype' | 'telegram' | 'linkedin' | 'locations' | 'github' | 'website';
 
 export interface UserData {
@@ -36,8 +33,8 @@ export interface UserData {
   name: string | null;
   desiredPosition: string | null;
   selfIntroLink: string | null;
-  englishLevel: EnglishLevel | null;
-  militaryService: MilitaryServiceStatus | null;
+  englishLevel: ResumeDtoEnglishLevelEnum | null;
+  militaryService: ResumeDtoMilitaryServiceEnum | null;
   notes: string | null;
   startFrom: string | null;
   fullTime: boolean;
@@ -69,7 +66,7 @@ export interface FieldData {
   errors: string[];
 }
 
-export interface AllUserCVData extends UserData, Omit<Contacts, 'github'> {
+export interface AllUserCVData extends Omit<UserData, 'uuid'>, Omit<Contacts, 'github'> {
   githubUsername: string | null;
   visibleCourses: VisibleCourses;
 }
@@ -114,11 +111,10 @@ export interface JobSeekerData {
   name: string | null;
   desiredPosition: string | null;
   githubId: string;
-  englishlevel: EnglishLevel | null;
+  englishLevel: ResumeDtoEnglishLevelEnum | null;
   fullTime: boolean;
   locations: string | null;
   startFrom: string | null;
-  englishLevel: EnglishLevel;
   courses: JobSeekerStudentStats[];
   feedback: JobSeekerFeedback[];
   expires: number;
