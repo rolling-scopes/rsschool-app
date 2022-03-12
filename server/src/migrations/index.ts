@@ -16,6 +16,7 @@ import { LoginState1643550350939 } from './1643550350939-LoginState';
 import { Notifications1643926895264 } from './1643926895264-Notifications';
 import { NotificationConnection1644695410918 } from './1644695410918-NotificationConnection';
 import { RepositoryEvent1645364514538 } from './1645364514538-RepositoryEvent';
+import { CrossCheckScheduling1647103154082 } from './1647103154082-CrossCheckScheduling';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -36,4 +37,5 @@ export const migrations = [
   Notifications1643926895264,
   NotificationConnection1644695410918,
   RepositoryEvent1645364514538,
+  CrossCheckScheduling1647103154082,
 ];

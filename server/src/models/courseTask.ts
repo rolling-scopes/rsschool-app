@@ -23,6 +23,8 @@ export enum Checker {
   CrossCheck = 'crossCheck',
 }
 
+export type CrossCheckState = 'initial' | 'distributed' | 'completed';
+
 @Entity()
 export class CourseTask {
   @PrimaryGeneratedColumn() id: number;
@@ -58,6 +60,9 @@ export class CourseTask {
 
   @Column({ type: 'timestamptz', nullable: true })
   studentEndDate: Date | string;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  crossCheckEndDate: string;
 
   @Column({ type: 'timestamp', nullable: true })
   mentorStartDate: string;
@@ -98,4 +103,7 @@ export class CourseTask {
 
   @Column({ nullable: true, type: 'int' })
   duration: number;
+
+  @Column({ type: 'varchar', default: 'initial' })
+  crossCheckState: CrossCheckState;
 }
