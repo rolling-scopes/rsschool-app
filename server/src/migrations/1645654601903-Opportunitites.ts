@@ -17,13 +17,13 @@ export class Opportunitites1645654601903 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "avatarLink" TYPE character varying(512)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "desiredPosition" TYPE character varying(256)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "phone" TYPE character varying(32)`);
-    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "email" TYPE character varying(128)`);
+    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "email" TYPE character varying(256)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "skype" TYPE character varying(128)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "telegram" TYPE character varying(128)`);
-    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "linkedin" TYPE character varying(128)`);
-    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "locations" TYPE character varying(256)`);
+    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "linkedin" TYPE character varying(512)`);
+    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "locations" TYPE character varying(512)`);
     await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "githubUsername" TYPE character varying(256)`);
-    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "website" TYPE character varying(256)`);
+    await queryRunner.query(`ALTER TABLE "resume" ALTER COLUMN "website" TYPE character varying(512)`);
 
     await queryRunner.query(`CREATE INDEX "IDX_6543e24d4d8714017acd1a1b39" ON "resume" ("userId") `);
     await queryRunner.query(`CREATE INDEX "IDX_ee6434baa5d6a66edf5c8fa122" ON "resume" ("githubId") `);

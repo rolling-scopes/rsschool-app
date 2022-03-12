@@ -55,7 +55,7 @@ export class Resume {
   @Column({ nullable: true, type: 'varchar', length: 32 })
   phone: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 128 })
+  @Column({ nullable: true, type: 'varchar', length: 256 })
   email: string;
 
   @Column({ nullable: true, type: 'varchar', length: 128 })
@@ -64,16 +64,16 @@ export class Resume {
   @Column({ nullable: true, type: 'varchar', length: 128 })
   telegram: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 128 })
+  @Column({ nullable: true, type: 'varchar', length: 512 })
   linkedin: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 256 })
+  @Column({ nullable: true, type: 'varchar', length: 512 })
   locations: string;
 
   @Column({ nullable: true, type: 'varchar', length: 256 })
   githubUsername: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 256 })
+  @Column({ nullable: true, type: 'varchar', length: 512 })
   website: string;
 
   @Column({ default: false })
