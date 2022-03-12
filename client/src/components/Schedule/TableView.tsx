@@ -136,7 +136,6 @@ const getColumns = ({
     ...getColumnSearchProps('event.name'),
     editable: true,
   },
-  { title: 'Duration', width: 60, dataIndex: 'duration', editable: true },
   {
     title: 'Organizer',
     dataIndex: ['organizer', 'githubId'],
@@ -175,7 +174,6 @@ export function TableView({
       dateTime: moment(record.dateTime),
       time: moment(record.dateTime),
       special: record.special ? record.special.split(',') : [],
-      duration: record.duration ? Number(record.duration) : null,
     });
     setEditingKey(`${record.id}${record.event.type}${record.event.name}`);
   };
@@ -358,7 +356,6 @@ const getCourseEventDataForUpdate = (entity: CourseEvent) => {
     organizerId: entity.organizer ? entity.organizer.githubId : null,
     place: entity.place || '',
     special: entity.special || '',
-    duration: entity.duration || null,
   };
 };
 
@@ -369,7 +366,6 @@ const getCourseTaskDataForUpdate = (entity: CourseEvent) => {
     [taskDate]: entity.dateTime,
     taskOwnerId: entity.organizer ? entity.organizer.githubId : null,
     special: entity.special || '',
-    duration: entity.duration || null,
   };
 
   if (entity.event.type !== 'deadline') {
