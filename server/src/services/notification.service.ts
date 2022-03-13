@@ -12,7 +12,7 @@ export async function sendNotificationV2(notification: NotificationV2) {
 }
 
 type NotificationV2 = {
-  notificationId: 'mentorRegistrationApproval' | 'taskGrade';
+  notificationId: 'mentorRegistrationApproval' | 'taskGrade' | 'interviewerAssigned';
   userId: number;
   data: object;
 };
