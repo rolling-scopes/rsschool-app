@@ -1,1 +1,6 @@
-export type NotificationId = 'mentorRegistrationApproval' | 'taskGrade' | 'courseCertificate' | 'courseScheduleChange';
+export type NotificationId =
+  | 'mentorRegistrationApproval'
+  | 'taskGrade'
+  | 'courseCertificate'
+  | 'courseScheduleChange'
+  | 'taskDeadline';

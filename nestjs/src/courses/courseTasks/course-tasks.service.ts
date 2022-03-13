@@ -2,7 +2,16 @@ import { Checker, CourseTask } from '@entities/courseTask';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindCondition, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  FindCondition,
+  FindConditions,
+  LessThan,
+  LessThanOrEqual,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 
 export enum Status {
   Started = 'started',
@@ -60,6 +69,29 @@ export class CourseTasksService {
     return this.courseTaskRepository.find({
       where: { courseId, updatedDate: MoreThanOrEqual(date.toISOString()) },
       relations: ['task'],
+    });
+  }
+
+  public getTasksPendingDeadline(
+    courseId: number,
+    { deadlineWithinHours = 24 }: { deadlineWithinHours?: number } = {},
+  ) {
+    const now = new Date().toISOString();
+    const endDate = new Date();
+    endDate.setHours(endDate.getHours() + deadlineWithinHours);
+    const where: FindConditions<CourseTask> = {
+      courseId,
+      disabled: false,
+      studentStartDate: LessThanOrEqual(now),
+      studentEndDate: Between(now, endDate.toISOString()),
+    };
+
+    return this.courseTaskRepository.find({
+      where,
+      relations: ['task', 'taskSolutions'],
+      order: {
+        studentEndDate: 'ASC',
+      },
     });
   }
 }

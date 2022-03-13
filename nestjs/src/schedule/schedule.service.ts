@@ -17,9 +17,9 @@ export class ScheduleService {
 
       const updatedTasks = tasks.length > 0;
 
-      if (updatedTasks) {
-        this.logger.log({ message: `course: ${course.id} has ${tasks.length} tasks updated` });
+      this.logger.log({ message: `course: ${course.id} has ${tasks.length} tasks updated` });
 
+      if (updatedTasks) {
         updatedCourseSchedule.push({
           alias: course.alias,
           name: course.name,
