@@ -1,5 +1,5 @@
 import { User } from '@entities/user';
-import { UserGroup } from '@entities/UserGroup';
+import { UserGroup } from '@entities/userGroup';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
@@ -16,7 +16,7 @@ export class UserGroupsService {
 
   public async getAll() {
     const userGroups = await this.repository.find();
-    const usersIds = [...new Set(userGroups.reduce((acc, { users }) => [...acc, ...users], [] as number[]))];
+    const usersIds: number[] = [...new Set(userGroups.reduce((acc, { users }) => [...acc, ...users], [] as number[]))];
     const users = await this.usersService.getUsersByUserIds(usersIds);
 
     return this.formatGroup(userGroups, users);
