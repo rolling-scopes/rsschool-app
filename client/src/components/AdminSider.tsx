@@ -16,7 +16,6 @@ import {
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
-import { featureToggles } from 'services/features';
 
 const { Sider } = Layout;
 
@@ -141,7 +140,7 @@ export function AdminSider(props: Props) {
           </Menu.Item>
         ) : null}
 
-        {featureToggles.notifications && (props.isAdmin || props.isCoursePowerUser) ? (
+        {props.isAdmin || props.isCoursePowerUser ? (
           <Menu.Item key="11">
             <Link prefetch={false} href="/admin/notifications">
               <a>

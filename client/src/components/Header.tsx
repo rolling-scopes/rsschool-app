@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 import * as React from 'react';
-import { featureToggles } from 'services/features';
 import { SolidarityUkraine } from './SolidarityUkraine';
 
 type Props = {
@@ -51,13 +50,11 @@ export function Header(props: Props) {
           <EditOutlined /> Edit
         </Button>
       </Menu.Item>
-      {featureToggles.notifications && (
-        <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
-          <Button type="link" href={'/profile/notifications'} style={{ textAlign: 'left' }}>
-            <NotificationOutlined /> Notifications
-          </Button>
-        </Menu.Item>
-      )}
+      <Menu.Item key="2" style={isProfileEditingModeEnabled ? menuActiveItemStyle : undefined}>
+        <Button type="link" href={'/profile/notifications'} style={{ textAlign: 'left' }}>
+          <NotificationOutlined /> Notifications
+        </Button>
+      </Menu.Item>
       <Menu.Item key="3">
         <Button type="link" href={`/cv/edit`} style={{ textAlign: 'left' }}>
           <SolutionOutlined /> My CV
