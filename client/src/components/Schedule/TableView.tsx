@@ -80,7 +80,7 @@ const getColumns = ({
             isSplitedByWeek={isSplitedByWeek}
           />
         )}
-        placement="bottomRight"
+        placement="bottomLeft"
         trigger={['click']}
       >
         <SettingOutlined />
