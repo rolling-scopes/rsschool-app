@@ -1,12 +1,13 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RoleGuard } from 'src/auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CreateUserGroupDto, UpdateUserGroupDto } from './dto';
 import { UserGroupDto } from './dto/user-group.dto';
 import { UserGroupsService } from './user-groups.service';
 
 @Controller('user-group')
 @ApiTags('user-group')
+@RequiredRoles([Role.Admin])
 @UseGuards(DefaultGuard, RoleGuard)
 export class UserGroupsController {
   constructor(private readonly service: UserGroupsService) {}
@@ -15,7 +16,7 @@ export class UserGroupsController {
   @ApiOperation({ operationId: 'createUserGroup' })
   @ApiOkResponse({ type: UserGroupDto })
   public async create(@Body() dto: CreateUserGroupDto) {
-    const [data] = await this.service.create(dto);
+    const data = await this.service.create(dto);
     return new UserGroupDto(data);
   }
 
@@ -31,7 +32,7 @@ export class UserGroupsController {
   @ApiOperation({ operationId: 'updateUserGroup' })
   @ApiOkResponse({ type: UserGroupDto })
   public async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserGroupDto) {
-    const [data] = await this.service.update(id, dto);
+    const data = await this.service.update(id, dto);
     return new UserGroupDto(data);
   }
 

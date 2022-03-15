@@ -25,13 +25,15 @@ export class UserGroupsService {
   public async create(data: CreateUserGroupDto) {
     const userGroup = await this.repository.save(data);
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
-    return this.formatGroup([userGroup], users);
+    const [group] = this.formatGroup([userGroup], users);
+    return group;
   }
 
   public async update(id: number, data: UpdateUserGroupDto) {
     const userGroup = await this.repository.save({ id, ...data });
     const users = await this.usersService.getUsersByUserIds(userGroup.users);
-    return this.formatGroup([userGroup], users);
+    const [group] = this.formatGroup([userGroup], users);
+    return group;
   }
 
   public async delete(id: number): Promise<void> {
@@ -57,11 +59,11 @@ export class UserGroupsService {
 
   private formatGroup(userGroups: UserGroup[], users: User[]) {
     const usersGroups: UserGroupDto[] = userGroups
-      .map(g => ({
-        id: g.id,
-        name: g.name,
-        roles: g.roles,
-        users: g.users.map(this.formatUser(users)),
+      .map(userGroup => ({
+        id: userGroup.id,
+        name: userGroup.name,
+        roles: userGroup.roles,
+        users: userGroup.users.map(this.formatUser(users)),
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
