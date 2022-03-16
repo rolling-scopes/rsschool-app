@@ -26,15 +26,8 @@ export function CoursesSection({ courses }: Props) {
         size="small"
         style={{ fontSize: '15px' }}
         renderItem={(record: ResumeCourseDto) => {
-          const {
-            fullName,
-            certificateId,
-            completed,
-            totalScore,
-            rank,
-            locationName,
-            mentor: { name: mentorName, githubId: mentorGithubId },
-          } = record;
+          const { fullName, certificateId, completed, totalScore, rank, locationName, mentor } = record;
+
           const title = `${fullName}${locationName ? locationName : ''}`;
           return (
             <Item>
@@ -50,9 +43,9 @@ export function CoursesSection({ courses }: Props) {
                     <Row>
                       <DataTextValue>
                         Mentor:{' '}
-                        {mentorName ? (
-                          <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
-                            {mentorName}
+                        {mentor?.name ? (
+                          <a className="black-on-print" href={`https://github.com/${mentor.githubId}`}>
+                            {mentor.name}
                           </a>
                         ) : (
                           <Text>No mentor</Text>
