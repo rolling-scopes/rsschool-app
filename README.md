@@ -1,3 +1,5 @@
+DEMO
+
 [![Deploy](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml)
 
 <img src="https://www.rs.school/images/rs_school.svg" width="250px"/>
