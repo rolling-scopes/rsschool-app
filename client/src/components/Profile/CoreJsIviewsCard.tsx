@@ -24,6 +24,7 @@ export interface CoreJsInterviewsData {
     };
     comment: string;
     score: number;
+    name: string;
   }[];
 }
 
@@ -76,7 +77,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
               itemLayout="horizontal"
               dataSource={stats}
               renderItem={({ courseName, locationName, interviews }, idx) =>
-                interviews.map(({ score, interviewer }, interviewIndex) => (
+                interviews.map(({ score, interviewer, name }, interviewIndex) => (
                   <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={interviewIndex}>
                     <div style={{ flexGrow: 2 }}>
                       <p style={{ marginBottom: 5 }}>
@@ -85,6 +86,7 @@ class CoreJSIviewsCard extends React.Component<Props, State> {
                           {locationName && ` / ${locationName}`}
                         </Text>
                       </p>
+                      <p style={{ marginBottom: 5 }}>{name}</p>
                       {
                         <p style={{ fontSize: 12, marginBottom: 5 }}>
                           Score: <Text mark>{score}</Text>
