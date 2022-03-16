@@ -176,11 +176,12 @@ export class ProfilePage extends React.Component<Props, State> {
         locationName,
         interviews: tasks
           .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
+          .map(({ interviewFormAnswers, score, comment, interviewer, name }) => ({
             score,
             comment,
             interviewer,
             answers: interviewFormAnswers,
+            name,
           })),
       })) as CoreJsInterviewsData[];
 

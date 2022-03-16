@@ -31,6 +31,7 @@ describe('CoreJSIviewsCard', () => {
               },
               comment: 'test',
               score: 4,
+              name: 'CoreJS Interview',
             },
           ],
         },
