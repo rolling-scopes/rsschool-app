@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
-import { featureToggles } from './features';
 
 export type MentorResponse = {
   preselectedCourses: number[];
@@ -29,7 +28,7 @@ export class MentorRegistryService {
 
   public async updateMentor(githubId: string, data: any) {
     const response = await this.axios.put<any>(`/mentor/${githubId}`, data, {
-      baseURL: featureToggles.notifications ? `/api/v2/registry` : undefined,
+      baseURL: `/api/v2/registry`,
     });
     return response.data.data;
   }
