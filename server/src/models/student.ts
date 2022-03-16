@@ -46,7 +46,7 @@ export class Student {
   userId: number;
 
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
-  mentor: Mentor;
+  mentor: Mentor | null;
 
   @Column({ nullable: true })
   @Index()

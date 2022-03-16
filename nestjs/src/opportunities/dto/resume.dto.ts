@@ -100,7 +100,7 @@ class ResumeCourseDto {
     this.totalScore = student.totalScore;
     this.certificateId = student.certificate?.publicId ?? null;
     this.completed = student.course.completed;
-    this.mentor = new ResumeCourseMentor(student.mentor);
+    this.mentor = student.mentor ? new ResumeCourseMentor(student.mentor) : null;
     this.locationName = student.course.locationName;
     this.id = student.course.id;
   }
@@ -126,7 +126,7 @@ class ResumeCourseDto {
   @ApiProperty()
   public completed: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   public mentor: ResumeCourseMentor;
 
   @ApiProperty()

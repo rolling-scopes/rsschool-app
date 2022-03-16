@@ -1152,7 +1152,7 @@ export interface ResumeCourseDto {
      * @type {ResumeCourseMentor}
      * @memberof ResumeCourseDto
      */
-    'mentor': ResumeCourseMentor;
+    'mentor': ResumeCourseMentor | null;
     /**
      * 
      * @type {string}

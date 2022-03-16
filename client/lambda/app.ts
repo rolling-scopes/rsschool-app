@@ -10,7 +10,7 @@ const nextHandler = app.getRequestHandler();
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<any> => {
   // eslint-disable-next-line no-console
-  console.log('event', event);
+  console.info('event', event);
 
   const { req, res, responsePromise } = eventToReqRes(event);
 
