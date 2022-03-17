@@ -13,14 +13,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import {
-  isStudent,
-  isAdmin,
-  isTaskOwner,
-  isMentor,
-  isCourseManager,
-  isCourseSupervisor,
-} from 'domain/user';
+import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isCourseSupervisor } from 'domain/user';
 
 const anyAccess = () => true;
 const isCourseNotCompleted = (_: Session, course: Course) => !course.completed;

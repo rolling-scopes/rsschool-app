@@ -11,15 +11,15 @@
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
     "install:nestjs": "cd nestjs && npm install",
-    "build": "concurrently  npm:build:*",
+    "build": "concurrently  npm:build:* --kill-others-on-fail",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
     "build:nestjs": "cd nestjs && npm run build",
-    "test": "concurrently  npm:test:*",
+    "test": "concurrently  npm:test:* --kill-others-on-fail",
     "test:client": "cd client && npm test",
     "test:server": "cd server && npm test",
     "test:nestjs": "cd nestjs && npm test",
-    "lint": "concurrently  npm:lint:*",
+    "lint": "concurrently  npm:lint:* --kill-others-on-fail",
     "lint:client": "cd client && npm run lint",
     "lint:server": "cd server && npm run lint",
     "lint:nestjs": "cd nestjs && npm run lint",
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "concurrently": "7.0.0",
-    "prettier": "2.5.1"
+    "prettier": "2.6.0"
   }
 }

@@ -211,14 +211,6 @@ export async function getTaskSolutionFeedback(studentId: number, courseTaskId: n
   return { url: taskSolution?.url, comments };
 }
 
-type TaskResultInput = {
-  studentId: number;
-  courseTaskId: number;
-  score: number;
-  comment: string;
-  githubPrUrl?: string;
-};
-
 type TaskArtefactInput = {
   studentId: number;
   courseTaskId: number;
@@ -226,7 +218,6 @@ type TaskArtefactInput = {
   videoUrl?: string;
   presentationUrl?: string;
 };
-
 
 export function createStudentArtefactTaskResult(data: TaskArtefactInput): Partial<TaskArtefact> {
   return {
