@@ -26,6 +26,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
               "githubId": "dima",
               "name": "Dzmitry Petrov",
             },
+            "name": "CoreJS Interview",
             "score": 4,
           },
         ],
@@ -61,6 +62,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
               "githubId": "dima",
               "name": "Dzmitry Petrov",
             },
+            "name": "CoreJS Interview",
             "score": 4,
           },
         ],
@@ -134,6 +136,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                     "githubId": "dima",
                     "name": "Dzmitry Petrov",
                   },
+                  "name": "CoreJS Interview",
                   "score": 4,
                 },
               ],
@@ -379,6 +382,7 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                         "githubId": "dima",
                         "name": "Dzmitry Petrov",
                       },
+                      "name": "CoreJS Interview",
                       "score": 4,
                     },
                   ],
@@ -504,6 +508,15 @@ exports[`CoreJSIviewsCard Should render correctly 1`] = `
                                   </ResizeObserver>
                                 </ForwardRef>
                               </Text>
+                            </p>
+                            <p
+                              style={
+                                Object {
+                                  "marginBottom": 5,
+                                }
+                              }
+                            >
+                              CoreJS Interview
                             </p>
                             <p
                               style={

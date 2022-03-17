@@ -500,6 +500,31 @@ export enum CreateStudentFeedbackDtoEnglishLevelEnum {
 /**
  * 
  * @export
+ * @interface CreateUserGroupDto
+ */
+export interface CreateUserGroupDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserGroupDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateUserGroupDto
+     */
+    'users': Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateUserGroupDto
+     */
+    'roles': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface DisciplineDto
  */
 export interface DisciplineDto {
@@ -1127,7 +1152,7 @@ export interface ResumeCourseDto {
      * @type {ResumeCourseMentor}
      * @memberof ResumeCourseDto
      */
-    'mentor': ResumeCourseMentor;
+    'mentor': ResumeCourseMentor | null;
     /**
      * 
      * @type {string}
@@ -1770,6 +1795,31 @@ export enum UpdateStudentFeedbackDtoEnglishLevelEnum {
 /**
  * 
  * @export
+ * @interface UpdateUserGroupDto
+ */
+export interface UpdateUserGroupDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserGroupDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateUserGroupDto
+     */
+    'users': Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdateUserGroupDto
+     */
+    'roles': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UpsertNotificationConnectionDto
  */
 export interface UpsertNotificationConnectionDto {
@@ -1797,6 +1847,62 @@ export interface UpsertNotificationConnectionDto {
      * @memberof UpsertNotificationConnectionDto
      */
     'enabled': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UserDto
+ */
+export interface UserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'githubId': string;
+}
+/**
+ * 
+ * @export
+ * @interface UserGroupDto
+ */
+export interface UserGroupDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserGroupDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserGroupDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof UserGroupDto
+     */
+    'users': Array<UserDto>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserGroupDto
+     */
+    'roles': Array<string>;
 }
 /**
  * 
@@ -4922,6 +5028,300 @@ export class StudentsFeedbacksApi extends BaseAPI {
      */
     public updateStudentFeedback(studentId: number, id: number, updateStudentFeedbackDto: UpdateStudentFeedbackDto, options?: AxiosRequestConfig) {
         return StudentsFeedbacksApiFp(this.configuration).updateStudentFeedback(studentId, id, updateStudentFeedbackDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserGroupApi - axios parameter creator
+ * @export
+ */
+export const UserGroupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateUserGroupDto} createUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUserGroup: async (createUserGroupDto: CreateUserGroupDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createUserGroupDto' is not null or undefined
+            assertParamExists('createUserGroup', 'createUserGroupDto', createUserGroupDto)
+            const localVarPath = `/user-group`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createUserGroupDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserGroup: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteUserGroup', 'id', id)
+            const localVarPath = `/user-group/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserGroups: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user-group`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateUserGroupDto} updateUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserGroup: async (id: number, updateUserGroupDto: UpdateUserGroupDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateUserGroup', 'id', id)
+            // verify required parameter 'updateUserGroupDto' is not null or undefined
+            assertParamExists('updateUserGroup', 'updateUserGroupDto', updateUserGroupDto)
+            const localVarPath = `/user-group/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserGroupDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserGroupApi - functional programming interface
+ * @export
+ */
+export const UserGroupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserGroupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateUserGroupDto} createUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createUserGroup(createUserGroupDto: CreateUserGroupDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroupDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createUserGroup(createUserGroupDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUserGroup(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroupDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserGroup(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserGroups(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserGroupDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserGroups(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateUserGroupDto} updateUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUserGroup(id: number, updateUserGroupDto: UpdateUserGroupDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroupDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserGroup(id, updateUserGroupDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserGroupApi - factory interface
+ * @export
+ */
+export const UserGroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserGroupApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateUserGroupDto} createUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUserGroup(createUserGroupDto: CreateUserGroupDto, options?: any): AxiosPromise<UserGroupDto> {
+            return localVarFp.createUserGroup(createUserGroupDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserGroup(id: number, options?: any): AxiosPromise<UserGroupDto> {
+            return localVarFp.deleteUserGroup(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserGroups(options?: any): AxiosPromise<Array<UserGroupDto>> {
+            return localVarFp.getUserGroups(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateUserGroupDto} updateUserGroupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserGroup(id: number, updateUserGroupDto: UpdateUserGroupDto, options?: any): AxiosPromise<UserGroupDto> {
+            return localVarFp.updateUserGroup(id, updateUserGroupDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserGroupApi - object-oriented interface
+ * @export
+ * @class UserGroupApi
+ * @extends {BaseAPI}
+ */
+export class UserGroupApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateUserGroupDto} createUserGroupDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserGroupApi
+     */
+    public createUserGroup(createUserGroupDto: CreateUserGroupDto, options?: AxiosRequestConfig) {
+        return UserGroupApiFp(this.configuration).createUserGroup(createUserGroupDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserGroupApi
+     */
+    public deleteUserGroup(id: number, options?: AxiosRequestConfig) {
+        return UserGroupApiFp(this.configuration).deleteUserGroup(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserGroupApi
+     */
+    public getUserGroups(options?: AxiosRequestConfig) {
+        return UserGroupApiFp(this.configuration).getUserGroups(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateUserGroupDto} updateUserGroupDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserGroupApi
+     */
+    public updateUserGroup(id: number, updateUserGroupDto: UpdateUserGroupDto, options?: AxiosRequestConfig) {
+        return UserGroupApiFp(this.configuration).updateUserGroup(id, updateUserGroupDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
