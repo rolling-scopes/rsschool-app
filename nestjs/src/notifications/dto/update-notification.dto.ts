@@ -1,3 +1,4 @@
+import { NotificationId } from '@entities/notification';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsNotEmpty, IsString } from 'class-validator';
@@ -7,7 +8,7 @@ export class UpdateNotificationDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  public id: string;
+  public id: NotificationId;
 
   @ApiProperty()
   @IsNotEmpty()

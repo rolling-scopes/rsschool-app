@@ -1,4 +1,4 @@
-import { Notification } from '@entities/notification';
+import { Notification, NotificationId } from '@entities/notification';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from 'src/config';
@@ -12,7 +12,6 @@ import { NotificationChannelId } from '@entities/notificationChannel';
 import { UserNotificationsService } from 'src/users/users.notifications.service';
 import { emailTemplate } from './email-template';
 import { lastValueFrom } from 'rxjs';
-import { NotificationId } from './notificationIds';
 
 const compiledEmailTemplate = compile(emailTemplate, { noEscape: true });
 @Injectable()
@@ -45,7 +44,7 @@ export class NotificationsService {
     return this.notificationsRepository.save(notification);
   }
 
-  public deleteNotification(id: string) {
+  public deleteNotification(id: NotificationId) {
     return this.notificationsRepository.delete({ id });
   }
 
