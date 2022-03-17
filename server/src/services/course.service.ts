@@ -242,6 +242,24 @@ export async function getStudentByGithubId(courseId: number, githubId: string): 
   return record;
 }
 
+export async function queryStudentById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
+  const record = await studentQuery()
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+    .where('student.id = :id', { id })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne();
+
+  if (record == null) {
+    return null;
+  }
+
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
+}
+
 export async function queryStudentByGithubId(
   courseId: number,
   githubId: string,
@@ -266,6 +284,22 @@ export async function queryMentorByGithubId(
     .innerJoin('mentor.user', 'user')
     .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
     .where('user.githubId = :githubId', { githubId })
+    .andWhere('mentor.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function queryMentorById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('mentor.id = :id', { id })
     .andWhere('mentor.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {

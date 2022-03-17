@@ -33,7 +33,7 @@ export class CrossMentorDistributionService {
       );
     }
 
-    const randomStudents = shuffleRec(students);
+    const randomStudents = students.length > 1 ? shuffleRec(students) : students;
 
     for (const mentor of mentors) {
       const { maxStudents } = maxStudentsPerMentor.find(str => str.id === mentor.id) ?? {
