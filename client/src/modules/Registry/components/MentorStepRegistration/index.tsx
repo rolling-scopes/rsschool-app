@@ -1,16 +1,18 @@
 import { Button, Steps } from 'antd';
 import { MentorStep } from '../MentorStep';
 import css from 'styled-jsx/css';
+import { FormData } from '../../pages/Mentor/formData';
 
 type Props = {
   currentStep: number;
-  steps: { title: string; content: () => JSX.Element }[];
+  steps: { title: string; content: (data: any) => JSX.Element }[];
+  data: FormData;
   onPrev: () => void;
   onStart: (value: boolean) => void;
 };
 
 export function MentorStepRegistration(props: Props) {
-  const { steps, currentStep, onPrev, onStart } = props;
+  const { steps, data, currentStep, onPrev, onStart } = props;
   const header = (
     <>
       <div className="steps-wrapper">
@@ -25,7 +27,7 @@ export function MentorStepRegistration(props: Props) {
   );
   return (
     <MentorStep type="wider" header={header}>
-      {steps[currentStep].content()}
+      {steps[currentStep].content(data)}
       <div className="steps-action">
         {currentStep < steps.length - 1 && (
           <Button size="large" type="primary" htmlType="submit">

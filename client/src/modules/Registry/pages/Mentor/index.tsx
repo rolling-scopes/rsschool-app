@@ -16,6 +16,7 @@ import { useAsync, useUpdate } from 'react-use';
 import { CdnService } from 'services/cdn';
 import type { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
+import { FormData, getInitialValues } from './formData';
 
 export type Props = {
   courses?: Course[];
@@ -26,16 +27,15 @@ const cdnService = new CdnService();
 
 export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
-  const [isAvailableContact, setIsAvailableContact] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [location, setLocation] = useState(null as Location | null);
   const [courses, setCourses] = useState([] as Course[]);
   const [checkedList, setCheckedListCourse] = useState([] as number[]);
-  const [initialData, setInitialData] = useState(null as Partial<UserFull> | null);
+  const [initialData, setInitialData] = useState<Partial<UserFull> | null>(null);
   const [startPage, setStartPage] = useState(true);
   const [currentStep, setCurrentSteps] = useState(0);
-  const [resume, setResume] = useState(null as any | null);
+  const [resume, setResume] = useState<FormData | null>(null);
 
   const update = useUpdate();
 
@@ -49,15 +49,13 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
 
     setInitialData(profile);
     setCourses(activeCourses);
-
     setCheckedListCourse(checkedListCourse);
+
     if (initialData) {
       setResume(getInitialValues(initialData, checkedList));
     }
 
     setLoading(false);
-
-    setIsAvailableContact(!!profile.contactsSkype.trim() || !!profile.contactsTelegram.trim());
   }, []);
 
   useEffect(() => {
@@ -79,6 +77,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
         setCurrentSteps(currentStep + 1);
       } else {
         setLoading(true);
+
         const {
           technicalMentoring,
           preferedCourses,
@@ -99,15 +98,15 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
         const userModel = {
           cityName: location.cityName,
           countryName: location.countryName,
-          firstName: resume.firstName,
-          lastName: resume.lastName,
+          firstName: resume?.firstName,
+          lastName: resume?.lastName,
 
-          primaryEmail: resume.primaryEmail,
-          contactsTelegram: resume.contactsTelegram,
-          contactsSkype: resume.contactsSkype,
-          contactsEpamEmail: resume.contactsEpamEmail,
-          contactsNotes: resume.contactsNotes,
-          aboutMyself: resume.aboutMyself,
+          primaryEmail: resume?.primaryEmail,
+          contactsTelegram: resume?.contactsTelegram,
+          contactsSkype: resume?.contactsSkype,
+          contactsEpamEmail: resume?.contactsEpamEmail,
+          contactsNotes: resume?.contactsNotes,
+          aboutMyself: resume?.aboutMyself,
         };
 
         const requests = [axios.post<any>('/api/profile/me', userModel), cdnService.registerMentor(registryModel)];
@@ -133,13 +132,12 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
     }
   };
 
-  const getContentGeneral = () => (
+  const getContentGeneral = (data: FormData) => (
     <MentorRegistrationGeneral
       courses={courses}
       checkedList={checkedList}
       location={location}
-      isAvailableContact={isAvailableContact}
-      setIsAvailableContact={setIsAvailableContact}
+      data={data}
       setLocation={setLocation}
     />
   );
@@ -170,6 +168,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           <MentorStepAbout onNext={() => setStartPage(false)} />
         ) : (
           <MentorStepRegistration
+            data={{ ...resume, ...form.getFieldsValue() }}
             currentStep={currentStep}
             steps={steps}
             onPrev={prev}
@@ -193,21 +192,4 @@ function getActiveCourses(courses: CourseDto[], courseAlias?: string) {
     : courses
         .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
-}
-
-function getInitialValues({ countryName, cityName, ...initialData }: Partial<UserFull>, checkedList: number[]) {
-  const location =
-    countryName &&
-    cityName &&
-    ({
-      countryName,
-      cityName,
-    } as Location | null);
-  return {
-    ...initialData,
-    location,
-    preferedCourses: checkedList,
-    englishMentoring: false,
-    technicalMentoring: [],
-  };
 }

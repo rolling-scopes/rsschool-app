@@ -1,5 +1,5 @@
 import { Col, Form, Input, Row, Select, Typography, Tag, Alert } from 'antd';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import {
   TEXT_EPAM_EMAIL_TOOLTIP,
@@ -16,30 +16,19 @@ import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/val
 import { Location } from 'common/models';
 import type { Course } from 'services/models';
 import { Info } from 'modules/Registry/components/Info';
+import { FormData } from '../../pages/Mentor/formData';
 
 type Props = {
   courses: Course[];
   checkedList: number[];
   location: Location | null;
-  isAvailableContact: boolean;
+  data: FormData;
   setLocation: Dispatch<SetStateAction<Location | null>>;
-  setIsAvailableContact: Dispatch<SetStateAction<boolean>>;
 };
 
-export function MentorRegistrationGeneral({
-  courses,
-  checkedList,
-  location,
-  isAvailableContact,
-  setIsAvailableContact,
-  setLocation,
-}: Props) {
-  const [skype, setSkype] = useState('');
-  const [telegram, setTelegram] = useState('');
-
-  useEffect(() => {
-    setIsAvailableContact(skype.length > 1 || telegram.length > 1);
-  }, [skype, telegram, isAvailableContact]);
+export function MentorRegistrationGeneral({ courses, checkedList, location, data, setLocation }: Props) {
+  const isAvailable =
+    data != null && ((data.contactsSkype?.length ?? 0) > 1 || (data.contactsTelegram?.length ?? 0) > 1);
 
   return (
     <>
@@ -173,12 +162,8 @@ export function MentorRegistrationGeneral({
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item
-                name="contactsTelegram"
-                style={{ marginBottom: '0' }}
-                rules={[{ required: !isAvailableContact }]}
-              >
-                <Input addonBefore="@" placeholder="durov" onChange={e => setTelegram(e.target.value)} />
+              <Form.Item name="contactsTelegram" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+                <Input addonBefore="@" placeholder="durov" />
               </Form.Item>
               <Typography.Paragraph style={{ margin: '12px 0 0 0' }}>
                 <Alert
@@ -203,8 +188,8 @@ export function MentorRegistrationGeneral({
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailableContact }]}>
-                <Input placeholder="johnsmith" onChange={e => setSkype(e.target.value)} />
+              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+                <Input placeholder="johnsmith" />
               </Form.Item>
             </Col>
           </Row>
