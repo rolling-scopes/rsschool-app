@@ -18,6 +18,7 @@ import { CertificatesModule } from './certificates/certificates.module';
 import { DiscordServersModule } from './discord-servers/discord-servers.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './userGroups/user-groups.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UserGroupsModule } from './userGroups/user-groups.module';
     DiscordServersModule,
     OpportunitiesModule,
     UserGroupsModule,
+    ScheduleModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

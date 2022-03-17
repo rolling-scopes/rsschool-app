@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '../config';
 
-export async function sendNotificationV2(notification: NotificationV2) {
+export async function sendNotification(notification: NotificationV2) {
   const { password, username } = config.users.cloud;
 
   await axios.post(`${config.host}/api/v2/notifications/send`, notification, {

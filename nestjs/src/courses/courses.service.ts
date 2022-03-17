@@ -29,4 +29,13 @@ export class CoursesService {
       },
     });
   }
+
+  public getActiveCourses(relations?: ('students' | 'mentors')[]) {
+    return this.repository.find({
+      where: {
+        completed: false,
+      },
+      relations,
+    });
+  }
 }
