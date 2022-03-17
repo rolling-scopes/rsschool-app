@@ -139,7 +139,7 @@ export async function sendInteviewerAssignedNotification(
     const [interviewer, student] = await Promise.all([mentorRequest, studentRequest]);
     if (!student || !interviewer) return;
 
-    await notificationService.sendNotificationV2({
+    await notificationService.sendNotification({
       userId: student.userId,
       notificationId: 'interviewerAssigned',
       data: {
