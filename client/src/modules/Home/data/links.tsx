@@ -19,7 +19,6 @@ import {
   isTaskOwner,
   isMentor,
   isCourseManager,
-  isJuryActivist,
   isCourseSupervisor,
 } from 'domain/user';
 
@@ -83,13 +82,6 @@ const links: LinkData[] = [
     icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
     getUrl: (course: Course) => `/course/mentor/submit-review?course=${course.alias}`,
     access: every(some(isMentor, isTaskOwner, isCourseManager)),
-    courseAccess: everyCourse(isCourseNotCompleted),
-  },
-  {
-    name: 'Submit Review By Jury',
-    icon: <CheckCircleTwoTone />,
-    getUrl: (course: Course) => `/course/mentor/submit-review-jury?course=${course.alias}`,
-    access: every(some(isAdmin, isJuryActivist)),
     courseAccess: everyCourse(isCourseNotCompleted),
   },
   {

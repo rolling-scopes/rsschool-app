@@ -107,7 +107,6 @@ const isCheckedByAssigned = (task: CourseTaskDto) => task.checker === 'assigned'
 const isNotAutoChecked = (task: CourseTaskDto) => task.checker !== 'auto-test';
 const isCheckedByTaskOwner = (task: CourseTaskDto) => task.checker === 'taskOwner';
 const hasStudentEndDate = (task: CourseTaskDto) => Boolean(task.studentEndDate);
-const isNotUseJury = (task: CourseTaskDto) => !task.useJury;
 const isNotInterview = (task: CourseTaskDto) => task.type !== 'interview';
 
 const isTaskOwner = (userId: number) => (task?: CourseTaskDto) => {
@@ -121,7 +120,6 @@ const isSubmittedByMentor = (session: Session, courseId: number) => (task: Cours
   return (
     hasStudentEndDate(task) &&
     isNotAutoChecked(task) &&
-    isNotUseJury(task) &&
     isNotInterview(task) &&
     (isCheckedByMentor(task) || isCheckedByAssigned(task)) &&
     (isMentor(session, courseId) || isPowerUser(session, courseId))

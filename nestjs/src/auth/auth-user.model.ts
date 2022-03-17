@@ -11,7 +11,6 @@ export type CourseRoles = Record<string, CourseRole[]>;
 
 export enum CourseRole {
   TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
   Manager = 'manager',
   Supervisor = 'supervisor',
   Student = 'student',
@@ -81,9 +80,6 @@ export class AuthUser {
     return courseUsers
       .flatMap(u => {
         const result: { courseId: number; role: CourseRole }[] = [];
-        if (u.isJuryActivist) {
-          result.push({ courseId: u.courseId, role: CourseRole.JuryActivist });
-        }
         if (u.isManager) {
           result.push({ courseId: u.courseId, role: CourseRole.Manager });
         }

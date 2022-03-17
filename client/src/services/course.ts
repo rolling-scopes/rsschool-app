@@ -10,7 +10,7 @@ import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 import { CoursesTasksApi } from 'api';
 
-type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck';
 
 export interface CourseTask {
   id: number;
@@ -25,7 +25,6 @@ export interface CourseTask {
   descriptionUrl: string | null;
   studentStartDate: string | null;
   studentEndDate: string | null;
-  useJury: boolean;
   checker: Checker;
   taskOwnerId: number | null;
   isVisible?: boolean;
@@ -118,7 +117,6 @@ export interface CourseUser {
   githubId: string;
   courseId: number;
   isManager: boolean;
-  isJuryActivist: boolean;
   isSupervisor: boolean;
 }
 

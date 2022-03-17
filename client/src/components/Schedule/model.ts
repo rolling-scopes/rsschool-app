@@ -84,5 +84,4 @@ export const CHECKER_TYPES = {
   assigned: 'Cross-Mentor',
   taskOwner: 'Task Owner',
   crossCheck: 'Cross-Check',
-  jury: 'Jury',
 };

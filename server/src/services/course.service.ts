@@ -561,7 +561,6 @@ export async function getUsers(courseId: number) {
     id: r.userId,
     name: createName(r.user),
     githubId: r.user.githubId,
-    isJuryActivist: r.isJuryActivist,
     isManager: r.isManager,
     isSupervisor: r.isSupervisor,
   }));

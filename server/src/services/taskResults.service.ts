@@ -227,21 +227,6 @@ type TaskArtefactInput = {
   presentationUrl?: string;
 };
 
-export function createJuryTaskResult(authorId: number, data: TaskResultInput): Partial<TaskResult> {
-  return {
-    courseTaskId: data.courseTaskId,
-    studentId: data.studentId,
-    score: data.score,
-    juryScores: [
-      {
-        authorId,
-        score: data.score,
-        dateTime: Date.now(),
-        comment: data.comment,
-      },
-    ],
-  };
-}
 
 export function createStudentArtefactTaskResult(data: TaskArtefactInput): Partial<TaskArtefact> {
   return {

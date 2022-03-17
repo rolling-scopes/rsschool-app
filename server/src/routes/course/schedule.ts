@@ -23,7 +23,7 @@ type EntityFromCSV = {
   descriptionUrl: string;
   githubId: string | null;
   place: string | null;
-  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury' | null;
+  checker: 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | null;
   pairsCount: number | null;
 };
 
@@ -86,8 +86,9 @@ export const setScheduleFromCsv = (logger: ILogger) => async (ctx: Router.Router
     await saveEvents(events, courseId, timeZone);
     await queryRunner.commitTransaction();
   } catch (err) {
-    logger.error(err.message);
-    response = err.message;
+    const error = err as Error;
+    logger.error(error.message);
+    response = error.message;
     await queryRunner.rollbackTransaction();
     return;
   } finally {

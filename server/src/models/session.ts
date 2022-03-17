@@ -15,7 +15,6 @@ export interface CourseInfo {
 
 export const enum NewCourseRole {
   TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
   Manager = 'manager',
   Supervisor = 'supervisor',
   Student = 'student',
@@ -24,13 +23,8 @@ export const enum NewCourseRole {
 
 export type StundetMentorRoles = { [key: string]: 'student' | 'mentor' };
 
-export interface CourseRoles {
-  [key: string]: CourseRole[] | undefined;
-}
-
 export const enum CourseRole {
   TaskOwner = 'taskOwner',
-  JuryActivist = 'juryActivist',
   Manager = 'manager',
   Supervisor = 'supervisor',
   Student = 'student',
@@ -58,4 +52,3 @@ export const isStudent = (user?: IUserSession, courseId?: number) => hasRole(use
 export const isTaskOwner = (user?: IUserSession, courseId?: number) => hasRole(user, courseId, NewCourseRole.TaskOwner);
 export const isSupervisor = (user?: IUserSession, courseId?: number) =>
   hasRole(user, courseId, NewCourseRole.Supervisor);
-export const isJury = (user?: IUserSession, courseId?: number) => hasRole(user, courseId, NewCourseRole.JuryActivist);
