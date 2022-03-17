@@ -14,6 +14,7 @@ import { TaskChecker } from './taskChecker';
 import { TaskResult } from './taskResult';
 import { User } from './user';
 import { Course } from './course';
+import { TaskSolution } from './taskSolution';
 
 export enum Checker {
   Assigned = 'assigned',
@@ -45,6 +46,9 @@ export class CourseTask {
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;
+
+  @OneToMany(_ => TaskSolution, (taskSolution: TaskSolution) => taskSolution.courseTask, { nullable: true })
+  taskSolutions: TaskSolution[] | null;
 
   @ManyToOne(_ => Course, { nullable: true })
   course: Course;
