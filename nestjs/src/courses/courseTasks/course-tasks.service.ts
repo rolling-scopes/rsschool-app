@@ -12,7 +12,7 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export enum Status {
   Started = 'started',
