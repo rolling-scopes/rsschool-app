@@ -13,7 +13,7 @@ export class ScheduleController {
 
   constructor(private scheduleService: ScheduleService, private notificationService: NotificationsService) {}
 
-  @Post('/check-changes')
+  @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyScheduleChanges' })
   @ApiForbiddenResponse()
   public async notifyScheduleChanges() {
