@@ -12,6 +12,7 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
+import dayjs from 'dayjs';
 
 export enum Status {
   Started = 'started',
@@ -64,8 +65,8 @@ export class CourseTasksService {
   }
 
   public getUpdatedTasks(courseId: number, lastHours: number) {
-    const date = new Date();
-    date.setHours(date.getHours() - lastHours);
+    const date = dayjs().subtract(lastHours, 'hours');
+
     return this.courseTaskRepository.find({
       where: { courseId, updatedDate: MoreThanOrEqual(date.toISOString()) },
       relations: ['task'],
@@ -76,14 +77,14 @@ export class CourseTasksService {
     courseId: number,
     { deadlineWithinHours = 24 }: { deadlineWithinHours?: number } = {},
   ) {
-    const now = new Date().toISOString();
-    const endDate = new Date();
-    endDate.setHours(endDate.getHours() + deadlineWithinHours);
+    const now = dayjs().toISOString();
+    const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
+
     const where: FindConditions<CourseTask> = {
       courseId,
       disabled: false,
       studentStartDate: LessThanOrEqual(now),
-      studentEndDate: Between(now, endDate.toISOString()),
+      studentEndDate: Between(now, endDate),
     };
 
     return this.courseTaskRepository.find({

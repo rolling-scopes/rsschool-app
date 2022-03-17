@@ -13,7 +13,7 @@ export class TasksController {
 
   constructor(private tasksService: TasksService, private notificationService: NotificationsService) {}
 
-  @Post('/check-deadlines')
+  @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyTasksDeadlines' })
   @ApiForbiddenResponse()
   @RequiredRoles([Role.Admin])
