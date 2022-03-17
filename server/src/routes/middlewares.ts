@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { createQueryBuilder, getRepository } from 'typeorm';
 import { Next } from 'koa';
 import { setResponse } from './utils';
-import { IUserSession, CourseUser, NewCourseRole, CourseTask, User } from '../models';
+import { IUserSession, CourseUser, CourseRole, CourseTask, User } from '../models';
 
 export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   if (!ctx.params.courseId) {
@@ -41,28 +41,22 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
   ]);
 
   authDetails.students.forEach(student => {
-    user.roles[student.courseId] = 'student';
     if (user.courses) {
       const current = user.courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [] };
       user.courses[student.courseId] = {
         ...current,
         studentId: student.id,
-        roles: current.roles.includes(NewCourseRole.Student)
-          ? current.roles
-          : current.roles.concat([NewCourseRole.Student]),
+        roles: current.roles.includes(CourseRole.Student) ? current.roles : current.roles.concat([CourseRole.Student]),
       };
     }
   });
   authDetails.mentors.forEach(mentor => {
-    user.roles[mentor.courseId] = 'mentor';
     if (user.courses) {
       const current = user.courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [] };
       user.courses[mentor.courseId] = {
         ...current,
         mentorId: mentor.id,
-        roles: current.roles.includes(NewCourseRole.Mentor)
-          ? current.roles
-          : current.roles.concat([NewCourseRole.Mentor]),
+        roles: current.roles.includes(CourseRole.Mentor) ? current.roles : current.roles.concat([CourseRole.Mentor]),
       };
     }
   });

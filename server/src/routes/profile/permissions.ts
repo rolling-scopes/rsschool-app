@@ -11,7 +11,6 @@ import {
   TaskChecker,
   TaskInterviewResult,
   StageInterview,
-  StundetMentorRoles as StudentMentorRoles,
   MentorRegistry,
   isManager,
   IUserSession,
@@ -140,15 +139,13 @@ export const defineRole = ({
   relationsRoles,
   studentCourses,
   registryCourses,
-  roles,
   session,
   userGithubId,
 }: {
   relationsRoles: Relations | null;
   registryCourses: { courseId: number }[] | null;
   studentCourses: { courseId: number }[] | null;
-  session?: IUserSession;
-  roles: StudentMentorRoles;
+  session: IUserSession;
   userGithubId: string;
 }): RelationRole => {
   if (registryCourses?.some(({ courseId }) => isManager(session, courseId))) {
@@ -167,7 +164,7 @@ export const defineRole = ({
     } else if (new Set([...mentors, ...interviewers, ...stageInterviewers, ...checkers]).has(userGithubId)) {
       return 'mentor';
     }
-  } else if (studentCourses?.some(({ courseId }) => roles[courseId] === 'mentor')) {
+  } else if (studentCourses?.some(({ courseId }) => !!session?.courses?.[courseId]?.mentorId)) {
     return 'coursementor';
   }
 

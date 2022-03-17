@@ -4,7 +4,7 @@ import { getCustomRepository, getRepository } from 'typeorm';
 import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 import { DiscordService } from '../integrations';
 import { ILogger } from '../logger';
-import { Feedback, IUserSession, NewCourseRole, PrivateFeedback, User } from '../models';
+import { Feedback, IUserSession, CourseRole, PrivateFeedback, User } from '../models';
 import { FeedbackRepository } from '../repositories/feedback.repository';
 import { courseService } from '../services';
 import { guard } from './guards';
@@ -65,7 +65,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
     { id: 'Job_Offer', name: 'Job Offer', isManagerOnly: true },
   ];
 
-  const rolesForSpecialBadges = [NewCourseRole.Manager, NewCourseRole.Supervisor];
+  const rolesForSpecialBadges = [CourseRole.Manager, CourseRole.Supervisor];
 
   const getAvailableBadges = ({ courses }: IUserSession, id: number) => {
     const userCourseRoles = courses ? courses[id].roles : [];
