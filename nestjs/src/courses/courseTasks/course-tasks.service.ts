@@ -38,7 +38,7 @@ export class CourseTasksService {
   }
 
   public getById(courseTaskId: number) {
-    return this.courseTaskRepository.findOne(courseTaskId, {
+    return this.courseTaskRepository.findOneOrFail(courseTaskId, {
       relations: ['task'],
     });
   }

@@ -550,25 +550,23 @@ export interface CourseTaskDetailedDto {
     'sourceGithubRepoUrl': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CourseTaskDetailedDtoTypeEnum {
-    Jstask = 'jstask',
-    Kotlintask = 'kotlintask',
-    Objctask = 'objctask',
-    Htmltask = 'htmltask',
-    Ipynb = 'ipynb',
-    Selfeducation = 'selfeducation',
-    Codewars = 'codewars',
-    Test = 'test',
-    Codejam = 'codejam',
-    Interview = 'interview',
-    StageInterview = 'stage-interview',
-    Cvhtml = 'cv:html',
-    Cvmarkdown = 'cv:markdown'
-}
+export const CourseTaskDetailedDtoTypeEnum = {
+    Jstask: 'jstask',
+    Kotlintask: 'kotlintask',
+    Objctask: 'objctask',
+    Htmltask: 'htmltask',
+    Ipynb: 'ipynb',
+    Selfeducation: 'selfeducation',
+    Codewars: 'codewars',
+    Test: 'test',
+    Codejam: 'codejam',
+    Interview: 'interview',
+    StageInterview: 'stage-interview',
+    Cvhtml: 'cv:html',
+    Cvmarkdown: 'cv:markdown'
+} as const;
+
+export type CourseTaskDetailedDtoTypeEnum = typeof CourseTaskDetailedDtoTypeEnum[keyof typeof CourseTaskDetailedDtoTypeEnum];
 
 /**
  * 
