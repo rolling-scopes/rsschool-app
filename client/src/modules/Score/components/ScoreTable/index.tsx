@@ -131,6 +131,11 @@ export function ScoreTable(props: Props) {
           },
           type: 'radio',
         }}
+        onRow={(record) => {
+          return {
+            onClick: () => {setState([record.githubId])},
+          };
+        }}
       />
       <SettingsModal
         courseTasks={courseTasks}
