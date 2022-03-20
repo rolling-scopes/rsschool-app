@@ -131,11 +131,13 @@ export function ScoreTable(props: Props) {
           },
           type: 'radio',
           columnWidth: 0,
-          renderCell: () => "",
+          renderCell: () => '',
         }}
-        onRow={(record) => {
+        onRow={record => {
           return {
-            onClick: () => {setState([record.githubId])},
+            onClick: () => {
+              setState([record.githubId]);
+            },
           };
         }}
       />
