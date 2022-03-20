@@ -130,6 +130,8 @@ export function ScoreTable(props: Props) {
             setState(selectedRows.map(row => row.githubId));
           },
           type: 'radio',
+          columnWidth: 0,
+          renderCell: () => "",
         }}
         onRow={(record) => {
           return {
