@@ -63,6 +63,7 @@ const postGratitudeFeedback = (logger: ILogger) => {
     { id: 'Outstanding_work', name: 'Outstanding work', isManagerOnly: true },
     { id: 'Top_performer', name: 'Top performer', isManagerOnly: true },
     { id: 'Job_Offer', name: 'Job Offer', isManagerOnly: true },
+    { id: 'RS_activist', name: 'RS activist', isManagerOnly: true },
   ];
 
   const rolesForSpecialBadges = ['manager', 'supervisor'];
