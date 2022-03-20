@@ -16,6 +16,7 @@ import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 import { CertificatesModule } from './certificates/certificates.module';
 import { DiscordServersModule } from './discord-servers/discord-servers.module';
+import { CrossCheckModule } from './cross-check/cross-check.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { DiscordServersModule } from './discord-servers/discord-servers.module';
     RegistryModule,
     CertificatesModule,
     DiscordServersModule,
+    CrossCheckModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

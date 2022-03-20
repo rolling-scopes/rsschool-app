@@ -33,6 +33,7 @@
     "@nestjs/mapped-types": "1.0.1",
     "@nestjs/passport": "8.2.1",
     "@nestjs/platform-express": "8.3.1",
+    "@nestjs/schedule": "^1.0.2",
     "@nestjs/swagger": "5.2.0",
     "@nestjs/typeorm": "8.0.3",
     "@vendia/serverless-express": "4.5.3",
