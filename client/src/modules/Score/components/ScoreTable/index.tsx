@@ -106,6 +106,8 @@ export function ScoreTable(props: Props) {
     setIsVisibleSettings(!isVisibleSetting);
   };
 
+  const [state, setState] = useState(['']);
+
   if (!loaded) {
     return null;
   }
@@ -122,6 +124,13 @@ export function ScoreTable(props: Props) {
         dataSource={students.content}
         onChange={getCourseScore as any}
         columns={getVisibleColumns(columns)}
+        rowSelection={{
+          selectedRowKeys: state,
+          onChange: (_, selectedRows) => {
+            setState(selectedRows.map(row => row.githubId));
+          },
+          type: 'radio',
+        }}
       />
       <SettingsModal
         courseTasks={courseTasks}
