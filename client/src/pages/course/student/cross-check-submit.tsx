@@ -1,8 +1,10 @@
 import { Button, Col, Form, Input, message, Row, Modal, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { PageLayout, CrossCheckComments } from 'components';
+import { CrossCheckComments } from 'components/CrossCheckComments';
+import { PageLayout } from 'components/PageLayout';
+
 import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import withSession, { CourseRole } from 'components/withSession';
 import { CriteriaForm } from 'components/CrossCheck/CriteriaForm';
 import { useMemo, useState } from 'react';
 import {
@@ -33,6 +35,7 @@ function Page(props: CoursePageProps) {
   const [newComments, setNewComments] = useState([] as CrossCheckComment[]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [submitDeadlinePassed, setSubmitDeadlinePassed] = useState<boolean>(false);
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
@@ -107,6 +110,8 @@ function Page(props: CoursePageProps) {
 
     const review = submittedSolution?.review ?? [];
     const criteria = taskDetails?.criteria ?? [];
+    const endDate = taskDetails?.studentEndDate ? new Date(taskDetails.studentEndDate) : null;
+    const submitDeadlinePassed = Date.now() > (endDate ? endDate.getTime() : 0);
 
     form.setFieldsValue({ review });
     form.setFieldsValue({ score: calculateFinalScore(review, criteria) });
@@ -116,6 +121,7 @@ function Page(props: CoursePageProps) {
     setSubmittedSolution(submittedSolution);
     setCourseTaskId(courseTask.id);
     setCriteria(criteria);
+    setSubmitDeadlinePassed(submitDeadlinePassed);
     setComments(submittedSolution?.comments ?? []);
     setAuthorId(submittedSolution?.studentId ?? null);
   };
@@ -127,7 +133,8 @@ function Page(props: CoursePageProps) {
 
   const feedbackComments = feedback?.comments ?? [];
   const task = courseTasks.find(task => task.id === courseTaskId);
-  const submitAllowed = !!task;
+  const taskExists = !!task;
+  const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
 
   return (
@@ -141,8 +148,11 @@ function Page(props: CoursePageProps) {
         <Col {...colSizes}>
           <Form form={form} onFinish={handleSubmit} layout="vertical">
             <CourseTaskSelect data={courseTasks} onChange={handleTaskChange} />
-            <SubmittedStatus solution={submittedSolution} />
-
+            <SubmittedStatus
+              taskExists={taskExists}
+              solution={submittedSolution}
+              deadlinePassed={submitDeadlinePassed}
+            />
             {submitAllowed && (
               <Form.Item
                 name="url"
@@ -207,7 +217,7 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, 'student'));
+export default withCourseData(withSession(Page, CourseRole.Student));
 
 function calculateFinalScore(review: { percentage: number; criteriaId: string }[], criteria: CrossCheckCriteria[]) {
   return review?.reduce((acc, r) => {

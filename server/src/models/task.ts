@@ -62,6 +62,9 @@ export class Task {
   @Column({ type: 'simple-array', default: '' })
   tags: string[];
 
+  @Column({ type: 'simple-array', default: '' })
+  skills: string[];
+
   @Column({ nullable: true })
   discipline: string;
 

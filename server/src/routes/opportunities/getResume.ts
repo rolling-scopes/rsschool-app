@@ -7,14 +7,17 @@ import { setResponse } from '../utils';
 const { NOT_FOUND, OK } = StatusCodes;
 
 export const getResume = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { mod } = ctx.query;
-  const { githubId } = ctx.state.user;
-  const isFullDataNeeded = mod === 'all';
+  const { mod, githubId } = ctx.query;
 
   const service = new ResumeService(githubId);
-  const data = await service.getData(isFullDataNeeded);
 
-  if (data == null) {
+  let data = null;
+
+  if (mod === 'form') {
+    data = await service.getFormData();
+  }
+
+  if (data === null) {
     setResponse(ctx, NOT_FOUND);
     return;
   }

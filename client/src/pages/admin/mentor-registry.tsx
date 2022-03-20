@@ -1,17 +1,18 @@
-import { Col, Row, Layout, Select, Spin, Table, Form, message, Checkbox, Button } from 'antd';
-import { AdminSider, GithubUserLink, Header } from 'components';
-import { stringSorter, tagsRenderer, colorTagRenderer, getColumnSearchProps } from 'components/Table';
-import withSession, { Session } from 'components/withSession';
-import { useState, useCallback } from 'react';
+import { SafetyCertificateTwoTone } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, Layout, message, Row, Select, Spin, Table } from 'antd';
+import { AdminSider } from 'components/AdminSider';
+import { ModalForm } from 'components/Forms';
+import { Header } from 'components/Header';
+import { GithubUserLink } from 'components/GithubUserLink';
+import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer } from 'components/Table';
+import { useLoading } from 'components/useLoading';
+import { Session, withSession } from 'components/withSession';
+import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
+import { CoursesService } from 'services/courses';
 import { MentorRegistry, MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
-import { CoursesService } from 'services/courses';
-import { ModalForm } from 'components/Forms';
-import { useLoading } from 'components/useLoading';
-
-import { css } from 'styled-jsx/css';
-import { SafetyCertificateTwoTone } from '@ant-design/icons';
+import css from 'styled-jsx/css';
 import { isAnyCourseManager } from '../../domain/user';
 
 const { Content } = Layout;

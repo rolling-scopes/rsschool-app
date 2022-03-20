@@ -13,10 +13,11 @@ import {
   CourseUser,
   TaskSolutionChecker,
   TaskChecker,
-  Stage,
   TaskSolutionResult,
   IUserSession,
   CourseRole,
+  TaskResult,
+  TaskInterviewResult,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
@@ -241,20 +242,38 @@ export async function getStudentByGithubId(courseId: number, githubId: string): 
   return record;
 }
 
+export async function queryStudentById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
+  const record = await studentQuery()
+    .innerJoin('student.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+    .where('student.id = :id', { id })
+    .andWhere('student.courseId = :courseId', { courseId })
+    .getOne();
+
+  if (record == null) {
+    return null;
+  }
+
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
+}
+
 export async function queryStudentByGithubId(
   courseId: number,
   githubId: string,
-): Promise<{ id: number; name: string; githubId: string } | null> {
+): Promise<{ id: number; name: string; githubId: string; userId: number } | null> {
   const record = await studentQuery()
     .innerJoin('student.user', 'user')
-    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
     .where('user.githubId = :githubId', { githubId })
     .andWhere('student.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
     return null;
   }
-  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId, userId: record.user.id };
 }
 
 export async function queryMentorByGithubId(
@@ -265,6 +284,22 @@ export async function queryMentorByGithubId(
     .innerJoin('mentor.user', 'user')
     .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
     .where('user.githubId = :githubId', { githubId })
+    .andWhere('mentor.courseId = :courseId', { courseId })
+    .getOne();
+  if (record == null) {
+    return null;
+  }
+  return { id: record.id, name: createName(record.user), githubId: record.user.githubId };
+}
+
+export async function queryMentorById(
+  courseId: number,
+  id: number,
+): Promise<{ id: number; name: string; githubId: string } | null> {
+  const record = await mentorQuery()
+    .innerJoin('mentor.user', 'user')
+    .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+    .where('mentor.id = :id', { id })
     .andWhere('mentor.courseId = :courseId', { courseId })
     .getOne();
   if (record == null) {
@@ -402,32 +437,33 @@ export async function getStudentScore(studentId: number) {
     .where('student.id = :studentId', { studentId })
     .getOne();
 
-  const taskResults =
-    student?.taskResults
-      ?.filter(({ courseTask: { disabled } }) => !disabled)
-      .map(({ courseTaskId, score }) => ({ courseTaskId, score })) ?? [];
+  if (!student) return null;
 
-  const preScreeningScore = Math.floor((getStageInterviewRating(student?.stageInterviews ?? []) ?? 0) * 10);
-  const preScreeningInterviews = student?.stageInterviews?.length
-    ? [{ score: preScreeningScore, courseTaskId: student?.stageInterviews[0].courseTaskId }]
-    : [];
+  const { taskResults, taskInterviewResults, stageInterviews } = student;
 
-  const interviewResults =
-    student?.taskInterviewResults?.map(({ courseTaskId, score = 0 }) => ({
-      courseTaskId,
-      score,
-    })) ?? [];
+  const toTaskScore = ({ courseTaskId, score = 0 }: TaskResult | TaskInterviewResult) => ({ courseTaskId, score });
 
-  let results = taskResults.concat(interviewResults);
+  const results = [];
+
+  if (taskResults?.length) {
+    results.push(...(taskResults.filter(taskResult => !taskResult.courseTask.disabled).map(toTaskScore) ?? []));
+  }
+
+  if (taskInterviewResults?.length) {
+    results.push(...taskInterviewResults.map(toTaskScore));
+  }
 
   // we have a case when technical screening score are set as task result.
-  results = taskResults.concat(
-    preScreeningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
-  );
+  if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
+    results.push({
+      score: Math.floor((getStageInterviewRating(stageInterviews) ?? 0) * 10),
+      courseTaskId: stageInterviews[0].courseTaskId,
+    });
+  }
 
   return {
-    totalScore: student?.totalScore ?? 0,
-    rank: student?.rank ?? 999999,
+    totalScore: student.totalScore ?? 0,
+    rank: student.rank ?? 999999,
     results,
   };
 }
@@ -465,15 +501,20 @@ export async function getCourseTasksWithOwner(courseId: number) {
 }
 
 export async function updateScoreStudents(data: { id: number; totalScore: number }[]) {
-  const result = await getRepository(Student).save(data);
-  return result;
+  const chuncks = _.chunk(data, 500);
+
+  // update score in chunks with delays.
+  for (const chunck of chuncks) {
+    await getRepository(Student).save(chunck);
+    await timeout(10000);
+  }
 }
 
 export function isPowerUser(courseId: number, session: IUserSession) {
   return (
     session.isAdmin ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.manager) ||
-    session.coursesRoles?.[courseId]?.includes(CourseRole.supervisor)
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) ||
+    session.coursesRoles?.[courseId]?.includes(CourseRole.Supervisor)
   );
 }
 
@@ -651,33 +692,17 @@ export async function getCrossMentorsByStudent(courseId: number, githubId: strin
   return students;
 }
 
-export async function getStages(courseId: number) {
-  return await getRepository(Stage)
-    .createQueryBuilder('stage')
-    .where('stage."courseId" = :courseId ', { courseId })
-    .getMany();
-}
-
 function shiftDate(date: string, shift: number, format: string): string {
   return moment(date).add(shift, 'days').format(format);
 }
 
-function adjustStage(stage: any, startDateDaysDiff: number, courseId: number) {
-  stage.oldId = stage.id;
-  delete stage.id;
-  stage.startDate = shiftDate(stage.startDate, startDateDaysDiff, 'YYYY-MM-DD');
-  stage.endDate = shiftDate(stage.endDate, startDateDaysDiff, 'YYYY-MM-DD');
-  stage.courseId = courseId;
-}
-
-function adjustEvent(event: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+function adjustEvent(event: any, startDateDaysDiff: number, courseId: number) {
   delete event.id;
   event.dateTime = shiftDate(event.dateTime, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   event.courseId = courseId;
-  event.stageId = stages.find((s: any) => s.oldId === event.stageId);
 }
 
-function adjustTask(task: any, startDateDaysDiff: number, courseId: number, stages: any[]) {
+function adjustTask(task: any, startDateDaysDiff: number, courseId: number) {
   delete task.id;
   task.studentStartDate = shiftDate(task.studentStartDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   task.studentEndDate = shiftDate(task.studentEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
@@ -688,7 +713,6 @@ function adjustTask(task: any, startDateDaysDiff: number, courseId: number, stag
     task.mentorEndDate = shiftDate(task.mentorEndDate, startDateDaysDiff, 'YYYY-MM-DD HH:mmZ');
   }
   task.courseId = courseId;
-  task.stageId = stages.find((s: any) => s.oldId === task.stageId);
 }
 
 export async function createCourseFromCopy(courseId: number, details: any) {
@@ -697,7 +721,6 @@ export async function createCourseFromCopy(courseId: number, details: any) {
   if (courseToCopy && courseToCopy.id) {
     const events: any = await getEvents(courseId);
     const tasks: any = await getCourseTasks(courseId);
-    const stages: any = await getStages(courseId);
     const { id, ...couseWithoutId } = courseToCopy;
     const courseCopy: Course = { ...couseWithoutId, ...details };
     const courseData = await getRepository(Course).insert(courseCopy);
@@ -705,17 +728,16 @@ export async function createCourseFromCopy(courseId: number, details: any) {
     const startDateDaysDiff = moment(details.startDate).diff(moment(courseToCopy.startDate), 'days');
     courseCopy.id = courseData.identifiers[0].id;
 
-    stages.forEach((s: any) => adjustStage(s, startDateDaysDiff, courseCopy.id));
-    const savedStagesData = await getRepository(Stage).insert(stages);
-
-    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id, stages));
+    events.forEach((e: CourseEvent) => adjustEvent(e, startDateDaysDiff, courseCopy.id));
     const savedEventsData = await getRepository(CourseEvent).insert(events);
 
-    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id, stages));
+    tasks.forEach((t: CourseTask) => adjustTask(t, startDateDaysDiff, courseCopy.id));
     const savedTasksData = await getRepository(CourseTask).insert(tasks);
 
-    return { savedStagesData, courseCopy, savedEventsData, savedTasksData };
+    return { courseCopy, savedEventsData, savedTasksData };
   }
 
   throw new Error(`not valid course to copy id: ${courseId}`);
 }
+
+const timeout = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Row, Col, Typography, Tooltip, Button, Checkbox, Divider } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { CourseTaskDetails } from 'services/course';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer, urlRenderer } from 'components/Table';
@@ -37,7 +37,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
     duration,
     checker,
     pairsCount,
-    verification,
     githubRepoName,
     sourceGithubRepoUrl,
     githubPrRequired,
@@ -150,14 +149,6 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
         {isAdmin && (
           <>
             <Divider />
-            {verification && (
-              <Row justify="center" align="middle" gutter={[16, 16]}>
-                <Col>
-                  <Text>Verification: </Text>
-                  <Text strong>{verification} </Text>
-                </Col>
-              </Row>
-            )}
             {githubPrRequired && (
               <Row justify="center" align="middle" gutter={[16, 16]}>
                 <Col>
@@ -197,7 +188,7 @@ const TaskDetails: React.FC<Props> = ({ taskData, alias, isAdmin, isPreview, onE
 
         {!isPreview && (
           <div className="button__close">
-            <Link href={`/course/schedule?course=${alias}`}>
+            <Link prefetch={false} href={`/course/schedule?course=${alias}`}>
               <a>
                 <Button icon={<CloseOutlined />} />
               </a>

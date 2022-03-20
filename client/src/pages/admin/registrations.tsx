@@ -1,7 +1,9 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Layout, Row, Select, Spin, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
-import { AdminSider, GithubUserLink, Header } from 'components';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
+import { GithubUserLink } from 'components/GithubUserLink';
 import { stringSorter } from 'components/Table';
 import withCourses from 'components/withCourses';
 import withSession, { Session } from 'components/withSession';
@@ -55,7 +57,7 @@ function Page(props: Props) {
     const url = `/api/registry?type=mentor&courseId=${courseId}`;
     const {
       data: { data: registrations },
-    } = await axios.get(url);
+    } = await axios.get<any>(url);
     const statistics = { ...DEFAULT_STATISTICS };
 
     for (const registration of registrations) {
@@ -112,7 +114,7 @@ function Page(props: Props) {
     if (selectedIds.length) {
       try {
         setLoading(true);
-        await axios.put('/api/registry', { ids: selectedIds, status });
+        await axios.put<any>('/api/registry', { ids: selectedIds, status });
         await handleCourseChange(courseId as number);
       } catch (e) {
         console.error(e);

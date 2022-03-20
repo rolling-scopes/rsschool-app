@@ -1,7 +1,8 @@
 import * as React from 'react';
 import moment from 'moment';
-import { PublicFeedback } from '../../../../common/models/profile';
-import { Typography, Comment, Avatar, Tooltip, Modal, Row, Col } from 'antd';
+import { PublicFeedback } from 'common/models/profile';
+import { Typography, Comment, Tooltip, Modal, Row, Col } from 'antd';
+import { GithubAvatar } from 'components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
 const { Text } = Typography;
@@ -25,16 +26,11 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
         width={'80%'}
       >
         <Row gutter={[16, 16]}>
-          {badges.map(({ fromUser, comment, feedbackDate, badgeId, heroesUri }, idx) => (
+          {badges.map(({ fromUser, comment, feedbackDate, badgeId }, idx) => (
             <Col key={`modal-comment-${idx}`} xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 8 }} lg={{ span: 6 }}>
               <Comment
                 author={<a href={`/profile?githubId=${fromUser.githubId}`}>{fromUser.name}</a>}
-                avatar={
-                  <Avatar
-                    src={`https://github.com/${fromUser.githubId}.png?size=${48}`}
-                    alt={`${fromUser.githubId} avatar`}
-                  />
-                }
+                avatar={<GithubAvatar size={48} githubId={fromUser.githubId} />}
                 content={
                   <>
                     {badgeId ? (
@@ -45,14 +41,6 @@ class PublicFeedbackModal extends React.PureComponent<Props> {
                       ''
                     )}
                     <p style={{ marginBottom: 5 }}>{comment}</p>
-                    {heroesUri && (
-                      <p style={{ fontSize: 12 }}>
-                        Look at on{' '}
-                        <a href={heroesUri} target="_blank">
-                          heroes.by
-                        </a>
-                      </p>
-                    )}
                   </>
                 }
                 datetime={

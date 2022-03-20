@@ -1,10 +1,14 @@
-name: Deploy RS App
+name: Deploy RS School App
 
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'tools/bumblebee/**'
 
-concurrency: master
+concurrency:
+  group: deploy
+  cancel-in-progress: true
 
 jobs:
   deploy_build_client:
@@ -17,7 +21,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,10 +56,12 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
+          RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
+          CDN_HOST: 'https://cdn.rs.school'
         run: npm run build
 
       - name: Clean modules
-        run: npm ci --production --no-optional
+        run: npm prune --production
 
       - name: Upload to CDN
         env:
@@ -87,7 +93,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -127,26 +133,94 @@ jobs:
       - name: Publish "server" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-server:master
 
+  deploy_build_nestjs:
+    name: Build (Nest.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./nestjs
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore npm cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd ../server && npm ci
+          cd ../nestjs
+
+      # - name: Test (npm test)
+      #   run: npm test
+
+      - name: Build (npm run build)
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Build container
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish "nestjs" container
+        run: docker push ghcr.io/rolling-scopes/rsschool-app-nestjs:master
+
   deploy_aws:
     name: Deploy to AWS
-    needs: [deploy_build_client, deploy_build_server]
+    needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
     runs-on: ubuntu-latest
     env:
       PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
       HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
       USERNAME: ${{ secrets.EC2_USERNAME  }}
+    environment:
+      name: production
+      url: https://app.rs.school
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Pull AWS SSM Params
+        uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        with:
+          ssm-path: /prod/app
+          format: dotenv
+          output: .env
+
       - name: Pull the latest images
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          scp -o StrictHostKeyChecking=no -i private_key ./.env ${USERNAME}@${HOSTNAME}:~/.env
           scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
+          scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:~/nginx/nginx.conf
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             sleep 10
-            docker pull ghcr.io/rolling-scopes/rsschool-app-client:master
-            docker pull ghcr.io/rolling-scopes/rsschool-app-server:master
+            docker-compose pull
           '
 
       - name: Restart
@@ -154,6 +228,7 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker-compose up -d
+            docker-compose restart nginx
           '
 
       - name: Clean up

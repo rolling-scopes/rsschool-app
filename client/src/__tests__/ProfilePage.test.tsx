@@ -6,15 +6,9 @@ import { Session } from 'components/withSession';
 import { ProfilePage } from '../pages/profile';
 
 jest.mock('next/config', () => () => ({}));
-jest.mock('services/user', () => ({
-  UserService: class UserService {
-    getProfileInfo() {
-      return jest.fn();
-    }
-    saveProfileInfo() {
-      return jest.fn();
-    }
-  },
+jest.mock('api', () => ({
+  ProfileApi: jest.fn(),
+  CoursesApi: jest.fn(),
 }));
 
 const profile = {
@@ -71,13 +65,16 @@ const session = {
   isAdmin: true,
   isHirer: false,
   isActivist: false,
-  roles: {
-    1: 'mentor',
-    2: 'student',
-    11: 'mentor',
-  },
-  coursesRoles: {
-    13: ['manager'],
+  courses: {
+    13: {
+      roles: ['manager'],
+    },
+    1: {
+      roles: ['mentor'],
+    },
+    2: {
+      roles: ['student'],
+    },
   },
 } as Session;
 const router = {
@@ -249,6 +246,10 @@ describe('ProfilePage', () => {
   });
   describe('saveProfile', () => {
     it('Should set state correctly', async () => {
+      const saveProfileMock = jest
+        .spyOn(instance['userService'], 'saveProfileInfo')
+        .mockImplementation(() => Promise.resolve());
+
       const profile = {
         generalInfo: {
           aboutMyself: 'Hello',
@@ -288,12 +289,14 @@ describe('ProfilePage', () => {
         isInitialPermissionsSettingsChanged: true,
         isInitialProfileSettingsChanged: true,
       });
+
       await instance.saveProfile();
       expect((wrapper.state() as any).isSaving).toBe(false);
       expect((wrapper.state() as any).isInitialPermissionsSettingsChanged).toBe(false);
       expect((wrapper.state() as any).isInitialProfileSettingsChanged).toBe(false);
       expect((wrapper.state() as any).initialPermissionsSettings).toEqual(profile.permissionsSettings);
       expect((wrapper.state() as any).initialProfileSettings).toEqual(profile);
+      saveProfileMock.mockReset();
     });
   });
   describe('hadStudentCoreJSInterview', () => {
@@ -349,6 +352,7 @@ describe('ProfilePage', () => {
               comment: 'Test',
               score: 9,
               interviewFormAnswers: {},
+              name: 'CoreJS Interview',
             },
             {},
           ],
@@ -359,15 +363,18 @@ describe('ProfilePage', () => {
         {
           courseFullName: 'test',
           courseName: 'test',
-          interview: {
-            answers: {},
-            interviewer: {
-              name: 'Dima Petrov',
-              githubId: 'dip',
+          interviews: [
+            {
+              answers: {},
+              interviewer: {
+                name: 'Dima Petrov',
+                githubId: 'dip',
+              },
+              comment: 'Test',
+              score: 9,
+              name: 'CoreJS Interview',
             },
-            comment: 'Test',
-            score: 9,
-          },
+          ],
           locationName: 'Minsk',
         },
       ]);

@@ -1,13 +1,10 @@
-import { Alert, AlertTypes } from './alert';
+import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
-import { ChannelType, Consent } from './consent';
 import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
-import { CV } from './cv';
-import { Discipline } from './discipline';
 import { Resume } from './resume';
 import { DiscordServer } from './discordServer';
 import { UserGroup } from './userGroup';
@@ -22,12 +19,11 @@ import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Registry } from './registry';
 import { RepositoryEvent } from './repositoryEvent';
-import { Stage } from './stage';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
 import { StageInterviewStudent } from './stageInterviewStudent';
 import { Student } from './student';
-import { StudentFeedback } from './studentFeedback';
+import { StudentFeedback } from './student-feedback';
 import { Task } from './task';
 import { TaskArtefact } from './taskArtefact';
 import { TaskChecker } from './taskChecker';
@@ -38,18 +34,23 @@ import { TaskSolution } from './taskSolution';
 import { TaskSolutionChecker } from './taskSolutionChecker';
 import { TaskSolutionResult } from './taskSolutionResult';
 import { TaskVerification } from './taskVerification';
+import { LoginState } from './loginState';
+import { NotificationUserSettings } from './notificationUserSettings';
+import { NotificationChannel } from './notificationChannel';
+import { Notification } from './notification';
+import { NotificationChannelSettings } from './notificationChannelSettings';
+import { NotificationUserConnection } from './notificationUserConnection';
 
 export * from './session';
 export {
   Alert,
-  AlertTypes,
+  AlertType as AlertTypes,
   Certificate,
   Course,
   CourseEvent,
   CourseManager,
   CourseTask,
   CourseUser,
-  Discipline,
   DiscordServer,
   UserGroup,
   Event,
@@ -57,13 +58,13 @@ export {
   Feedback,
   InterviewQuestion,
   InterviewQuestionCategory,
+  LoginState,
   Mentor,
   MentorRegistry,
   PrivateFeedback,
   ProfilePermissions,
   Registry,
   RepositoryEvent,
-  Stage,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,
@@ -80,9 +81,12 @@ export {
   TaskSolutionResult,
   TaskVerification,
   User,
-  Consent,
-  ChannelType,
   Resume,
+  NotificationUserSettings,
+  NotificationChannel,
+  Notification,
+  NotificationChannelSettings,
+  NotificationUserConnection,
 };
 
 export const models = [
@@ -93,20 +97,19 @@ export const models = [
   CourseManager,
   CourseTask,
   CourseUser,
-  Discipline,
   DiscordServer,
   UserGroup,
   Event,
   Feedback,
   InterviewQuestion,
   InterviewQuestionCategory,
+  LoginState,
   Mentor,
   MentorRegistry,
   PrivateFeedback,
   ProfilePermissions,
   Registry,
   RepositoryEvent,
-  Stage,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,
@@ -123,8 +126,12 @@ export const models = [
   TaskSolutionResult,
   TaskVerification,
   User,
-  Consent,
   Resume,
+  NotificationUserSettings,
+  NotificationChannel,
+  Notification,
+  NotificationChannelSettings,
+  NotificationUserConnection,
 ];
 
 export interface IApiResponse<T> {

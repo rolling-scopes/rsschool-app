@@ -1,14 +1,16 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Layout, message, Radio, Row, Select, Table } from 'antd';
-import { AdminSider, Header, Session, withSession } from 'components';
+import { Header } from 'components/Header';
+import { AdminSider } from 'components/AdminSider';
+import withSession, { Session } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
 import { dateRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
-import { DiscordServerService } from 'services/discordServer';
+import { DiscordServersApi } from 'api';
 import { Course, DiscordServer } from 'services/models';
-import { PRIMARY_SKILLS } from 'services/reference-data';
+import { PRIMARY_SKILLS } from 'data/primarySkills';
 
 const { Content } = Layout;
 type Props = { session: Session };
@@ -21,12 +23,12 @@ function Page(props: Props) {
   const [modalLoading, setModalLoading] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const courseService = new CoursesService();
-  const discordServerService = new DiscordServerService();
+  const discordServersService = new DiscordServersApi();
 
   const loadData = async () => {
-    const [courses, discordServers] = await Promise.all([
+    const [courses, { data: discordServers }] = await Promise.all([
       courseService.getCourses(),
-      discordServerService.getDiscordServers(),
+      discordServersService.getDiscordServers(),
     ]);
     setCourses(courses);
     setDiscordServers(discordServers);
@@ -199,6 +201,10 @@ function Page(props: Props) {
           <Checkbox>Use Private Repositories</Checkbox>
         </Form.Item>
 
+        <Form.Item name="personalMentoring" label="Personal Mentoring" valuePropName="checked">
+          <Checkbox>Personal mentoring</Checkbox>
+        </Form.Item>
+
         <Form.Item name="inviteOnly" label="Invite Only" valuePropName="checked">
           <Checkbox>Invite Only Course</Checkbox>
         </Form.Item>
@@ -248,6 +254,7 @@ function createRecord(values: any) {
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
+    personalMentoring: values.personalMentoring,
   };
   return record;
 }

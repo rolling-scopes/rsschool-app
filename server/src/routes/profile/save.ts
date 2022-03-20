@@ -1,12 +1,11 @@
 import { OK, BAD_REQUEST } from 'http-status-codes';
 import Router from '@koa/router';
-import { getRepository, getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { ProfilePermissions, User, Consent } from '../../models';
+import { ProfilePermissions, User } from '../../models';
 import { SaveProfileInfo } from '../../../../common/models/profile';
 import { IUserSession } from '../../models/session';
 import { setResponse } from '../utils';
-import { ConsentRepository } from '../../repositories/consent.repository';
 
 export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { id: userId } = ctx.state!.user as IUserSession;
@@ -22,7 +21,6 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
     isProfileSettingsChanged,
     permissionsSettings,
     contacts,
-    consents,
     discord,
     generalInfo,
   } = profileInfo;
@@ -41,7 +39,7 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
   if (isProfileSettingsChanged) {
     const [firstName, lastName = ''] = generalInfo.name.split(' ');
     const { location, aboutMyself, educationHistory, englishLevel } = generalInfo;
-    const { skype, phone, email, telegram, notes, linkedIn } = contacts;
+    const { skype, phone, email, epamEmail, telegram, notes, linkedIn } = contacts;
     const { countryName, cityName } = location;
     await getRepository(User)
       .createQueryBuilder()
@@ -61,10 +59,10 @@ export const updateProfile = (_: ILogger) => async (ctx: Router.RouterContext) =
         contactsNotes: notes || '',
         contactsSkype: skype || '',
         contactsLinkedIn: linkedIn || '',
+        contactsEpamEmail: epamEmail || '',
       })
       .where('id = :id', { id: userId })
       .execute();
-    await getCustomRepository(ConsentRepository).saveConsents(consents as Consent[]);
   }
 
   setResponse(ctx, OK);

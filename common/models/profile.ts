@@ -50,6 +50,7 @@ export interface GeneralInfo {
 export interface Contacts {
   phone: string | null;
   email: string | null;
+  epamEmail: string | null;
   skype: string | null;
   telegram: string | null;
   notes: string | null;
@@ -96,7 +97,7 @@ export interface StudentStats {
   certificateId: string | null;
   isCourseCompleted: boolean;
   totalScore: number;
-  position: number | null;
+  rank: number | null;
   mentor: {
     githubId: string;
     name: string;
@@ -126,7 +127,6 @@ export interface PublicFeedback {
   feedbackDate: string;
   badgeId: string;
   comment: string;
-  heroesUri: string;
   fromUser: {
     name: string;
     githubId: string;

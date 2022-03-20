@@ -1,11 +1,14 @@
 import { Button, Form, message } from 'antd';
-import { PageLayoutSimple, Session, UserSearch, withSession } from 'components';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { UserSearch } from 'components/UserSearch';
+import { withSession, Session } from 'components/withSession';
 import { CommentInput, CourseTaskSelect, GithubPrInput, ScoreInput } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseTask, AllStudents, AssignedStudent } from 'services/course';
 import { CoursePageProps, StudentBasic } from 'services/models';
+import { isMentor, isCourseManager, isCourseSupervisor, isPowerUser } from 'domain/user';
 
 function Page({ session, course }: CoursePageProps) {
   const courseId = course.id;
@@ -40,7 +43,7 @@ function Page({ session, course }: CoursePageProps) {
 
   const loadStudents = async (searchText: string) => {
     const task = courseTasks.find(t => t.id === courseTaskId);
-    return isPowerMentor(session, courseId) || isTaskOwner(userId)(task)
+    return isPowerUser(session, courseId) || isTaskOwner(userId)(task)
       ? courseService.searchStudents(searchText)
       : students.filter(({ githubId, firstName, lastName }: any) =>
           `${githubId} ${firstName} ${lastName}`.match(searchText),
@@ -98,26 +101,11 @@ export default withCourseData(withSession(Page));
 
 const isCheckedByMentor = (task: CourseTask) => task.checker === 'mentor';
 const isCheckedByAssigned = (task: CourseTask) => task.checker === 'assigned';
-const isNotAutoChecked = (task: CourseTask) => task.verification !== 'auto' && task.checker !== 'auto-test';
+const isNotAutoChecked = (task: CourseTask) => task.checker !== 'auto-test';
 const isCheckedByTaskOwner = (task: CourseTask) => task.checker === 'taskOwner';
 const hasStudentEndDate = (task: CourseTask) => Boolean(task.studentEndDate);
 const isNotUseJury = (task: CourseTask) => !task.useJury;
 const isNotInterview = (task: CourseTask) => task.type !== 'interview';
-
-const isMentor = (session: Session, courseId: number) => {
-  const { roles } = session;
-  return roles[courseId] === 'mentor';
-};
-
-const isPowerMentor = (session: Session, courseId: number) => {
-  const { roles, coursesRoles, isAdmin } = session;
-  const courseRole = coursesRoles?.[courseId];
-  const isCourseManager =
-    roles[courseId] === 'coursemanager' ||
-    (courseRole?.includes('manager') ?? false) ||
-    (courseRole?.includes('supervisor') ?? false);
-  return isAdmin || isCourseManager;
-};
 
 const isTaskOwner = (userId: number) => (task?: CourseTask) => {
   return task?.taskOwnerId === userId;
@@ -133,18 +121,12 @@ const isSubmittedByMentor = (session: Session, courseId: number) => (task: Cours
     isNotUseJury(task) &&
     isNotInterview(task) &&
     (isCheckedByMentor(task) || isCheckedByAssigned(task)) &&
-    (isMentor(session, courseId) || isPowerMentor(session, courseId))
+    (isMentor(session, courseId) || isPowerUser(session, courseId))
   );
 };
 
 const isSubmittedByPowerAdmin = (session: Session, courseId: number) => (task: CourseTask) => {
-  const { roles, coursesRoles, isAdmin } = session;
-  const courseRole = coursesRoles?.[courseId];
-  const isCourseManager =
-    roles[courseId] === 'coursemanager' ||
-    (courseRole?.includes('manager') ?? false) ||
-    (courseRole?.includes('supervisor') ?? false);
-
-  const isPowerMentor = isAdmin || isCourseManager;
+  const { isAdmin } = session;
+  const isPowerMentor = isAdmin || isCourseManager(session, courseId) || isCourseSupervisor(session, courseId);
   return isPowerMentor && (isCheckedByTaskOwner(task) || isSubmittedByMentor(session, courseId)(task));
 };

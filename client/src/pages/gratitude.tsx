@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
-import { PageLayoutSimple } from 'components';
+import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import withSession, { Session } from 'components/withSession';
+import withSession, { Session, CourseRole } from 'components/withSession';
 import { GratitudeService } from 'services/gratitude';
 import { CoursesService } from 'services/courses';
 import { Course } from 'services/models';
@@ -29,13 +29,14 @@ const heroBadges: Badge[] = [
   { id: 'Thank_you', name: 'Thank you', isManagerOnly: false },
   { id: 'Outstanding_work', name: 'Outstanding work', isManagerOnly: true },
   { id: 'Top_performer', name: 'Top performer', isManagerOnly: true },
+  { id: 'Job_Offer', name: 'Job Offer', isManagerOnly: true },
 ];
 
-const rolesForSpecialBadges = ['coursemanager', 'manager', 'supervisor'];
+const rolesForSpecialBadges = [CourseRole.Manager, CourseRole.Supervisor];
 
-const getAvailableBadges = ({ coursesRoles }: Session, id: number) => {
-  const userCourseRoles = coursesRoles ? coursesRoles[id] : [];
-  const isAvailableSpecialBadges = [...(userCourseRoles ?? [])].some(role => rolesForSpecialBadges.includes(role));
+const getAvailableBadges = ({ courses }: Session, id: number) => {
+  const userCourseRoles = courses?.[id]?.roles ?? [];
+  const isAvailableSpecialBadges = [...userCourseRoles].some(role => rolesForSpecialBadges.includes(role));
 
   return heroBadges.filter((badge: Badge) => (!badge.isManagerOnly ? true : isAvailableSpecialBadges ? true : false));
 };

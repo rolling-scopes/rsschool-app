@@ -3,20 +3,23 @@ import { HeartTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 import { useCallback, useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
-import { css } from 'styled-jsx/css';
-
-import { RegistrationPageLayout } from 'components';
+import css from 'styled-jsx/css';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { Session } from 'components/withSession';
-import { CoursesService } from 'services/courses';
 import { UserFull, UserService } from 'services/user';
-import { Course, Location } from '../../../../../../common/models';
+import type { Course } from 'services/models';
+import { Location } from 'common/models';
 import { DEFAULT_COLUMN_SIZES, DEFAULT_ROW_GUTTER, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
 import { GeneralMentor, Mentorship } from 'modules/Registry/components';
+import { CdnService } from 'services/cdn';
+import { SolidarityUkraine } from 'components/SolidarityUkraine';
 
 export type Props = {
   courses?: Course[];
   session: Session;
 };
+
+const cdnService = new CdnService();
 
 export function MentorRegistry(props: Props & { courseAlias?: string }) {
   const [form] = Form.useForm();
@@ -35,12 +38,11 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
 
   useAsync(async () => {
     setLoading(true);
-    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), new CoursesService().getCourses()]);
-
+    const [profile, courses] = await Promise.all([new UserService().getMyProfile(), cdnService.getCourses()]);
     const activeCourses = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias)
       : courses
-          .filter(course => (course.planned || !course.completed) && !course.inviteOnly)
+          .filter(course => (course.planned || !course.completed) && !course.inviteOnly && course.personalMentoring)
           .sort((a, b) => a.startDate.localeCompare(b.startDate));
     const checkedListCourse = props.courseAlias
       ? courses.filter((course: Course) => course.alias === props.courseAlias).map(({ id }: Course) => id)
@@ -109,7 +111,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
           aboutMyself: resume.aboutMyself,
         };
 
-        const requests = [axios.post('/api/profile/me', userModel), axios.post('/api/registry/mentor', registryModel)];
+        const requests = [axios.post<any>('/api/profile/me', userModel), cdnService.registerMentor(registryModel)];
 
         try {
           await Promise.all(requests);
@@ -187,6 +189,7 @@ export function MentorRegistry(props: Props & { courseAlias?: string }) {
               </footer>
             </div>
             <div className="about-mentorship-content">
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3}>About mentorship</Typography.Title>
               </Row>

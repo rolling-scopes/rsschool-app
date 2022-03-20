@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { PreferredStudentsLocation } from '../../../common/enums/mentor';
+import { PreferredStudentsLocation } from 'common/enums/mentor';
 
 export type MentorResponse = {
   preselectedCourses: number[];
@@ -22,17 +22,19 @@ export class MentorRegistryService {
   }
 
   public async getMentors() {
-    const response = await this.axios.get('/mentors');
+    const response = await this.axios.get<any>('/mentors');
     return response.data.data;
   }
 
   public async updateMentor(githubId: string, data: any) {
-    const response = await this.axios.put(`/mentor/${githubId}`, data);
+    const response = await this.axios.put<any>(`/mentor/${githubId}`, data, {
+      baseURL: `/api/v2/registry`,
+    });
     return response.data.data;
   }
 
   public async cancelMentor(githubId: string) {
-    const response = await this.axios.delete(`/mentor/${githubId}`);
+    const response = await this.axios.delete<any>(`/mentor/${githubId}`);
     return response.data.data;
   }
 

@@ -6,14 +6,15 @@ import { getColumns } from 'modules/Score/data/getColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTask, IColumn, StudentScore } from 'services/course';
+import { CourseService, IColumn, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { css } from 'styled-jsx/css';
-import { IPaginationInfo } from '../../../../../../common/types/pagination';
-import { ScoreOrder, ScoreTableFilters } from '../../../../../../common/types/score';
+import css from 'styled-jsx/css';
+import { IPaginationInfo } from 'common/types/pagination';
+import { ScoreOrder, ScoreTableFilters } from 'common/types/score';
 import { SettingsModal } from 'modules/Score/components/SettingsModal';
 import { Store } from 'rc-field-form/lib/interface';
 import { useLocalStorage } from 'react-use';
+import { CoursesTasksApi, CourseTaskDto } from 'api';
 
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
@@ -26,6 +27,7 @@ export function ScoreTable(props: Props) {
   const { ['mentor.githubId']: mentor, cityName } = router.query;
 
   const courseService = useMemo(() => new CourseService(props.course.id), []);
+  const courseTasksApi = useMemo(() => new CoursesTasksApi(), []);
 
   const [students, setStudents] = useState({
     content: [] as StudentScore[],
@@ -34,7 +36,7 @@ export function ScoreTable(props: Props) {
     orderBy: { field: 'rank', direction: 'asc' },
   });
 
-  const [courseTasks, setCourseTasks] = useState([] as CourseTask[]);
+  const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loaded, setLoaded] = useState(false);
 
   const [getPagedData] = useScorePaging(router, courseService, activeOnly);
@@ -63,9 +65,9 @@ export function ScoreTable(props: Props) {
 
       const [courseScore, courseTasks] = await Promise.all([
         courseService.getCourseScore(students.pagination, filters, students.orderBy),
-        courseService.getCourseTasks(),
+        courseTasksApi.getCourseTasks(props.course.id),
       ]);
-      const sortedTasks = courseTasks
+      const sortedTasks = courseTasks.data
         .filter(task => !!task.studentEndDate || props.course.completed)
         .map(task => ({
           ...task,
@@ -139,7 +141,7 @@ function getTableWidth(columnsCount: number) {
   return tableWidth;
 }
 
-function getTaskColumns(courseTasks: CourseTask[]): IColumn[] {
+function getTaskColumns(courseTasks: CourseTaskDto[]): IColumn[] {
   const columns = courseTasks.map(courseTask => ({
     dataIndex: courseTask.id.toString(),
     title: () => {

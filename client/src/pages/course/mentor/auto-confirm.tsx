@@ -1,5 +1,5 @@
 import { Button, Col, Result, Row, Typography } from 'antd';
-import { PageLayout } from 'components';
+import { PageLayout } from 'components/PageLayout';
 import withSession, { Session } from 'components/withSession';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course } from '../../../../../common/models';
+import { CourseDto as Course } from 'api';
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session }) {

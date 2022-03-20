@@ -1,11 +1,10 @@
-import axios from 'axios';
-import { Alert } from 'domain/alerts';
-
-type Response = { data: Alert[] };
+import { AlertsApi } from 'api';
 
 export class AlertsService {
+  private alertService = new AlertsApi();
+
   async getAll() {
-    const result = await axios.get<Response>(`/api/alerts`);
-    return result.data.data;
+    const result = await this.alertService.getAlerts(true);
+    return result.data;
   }
 }

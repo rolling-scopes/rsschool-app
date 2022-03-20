@@ -88,7 +88,11 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
     }));
   }
 
-  private async getInterviews(courseId: number, githubId: string, type: 'mentor' | 'student') {
+  private async getInterviews(
+    courseId: number,
+    githubId: string,
+    type: 'mentor' | 'student',
+  ): Promise<InterviewDetails[]> {
     const person =
       type === 'mentor'
         ? await courseService.queryMentorByGithubId(courseId, githubId)
@@ -114,6 +118,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
         'task.id',
         'task.name',
         'task.descriptionUrl',
+        'task.attributes',
         ...courseService.getPrimaryUserFields('mUser'),
         ...courseService.getPrimaryUserFields('sUser'),
       ])
@@ -139,8 +144,8 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
         id: courseTask.id,
         name: courseTask.task.name,
         descriptionUrl: courseTask.task.descriptionUrl,
-        startDate: courseTask.studentStartDate,
-        endDate: courseTask.studentEndDate,
+        startDate: courseTask.studentStartDate as string,
+        endDate: courseTask.studentEndDate as string,
         completed: !!taskResult,
         status: taskResult ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
         interviewer: {
@@ -154,7 +159,7 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
         result: taskResult?.score?.toString() ?? null,
       };
     });
-    return students as InterviewDetails[];
+    return students;
   }
 
   private async getInterviewPairs(courseTaskId: number): Promise<InterviewPair[]> {

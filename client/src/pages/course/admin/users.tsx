@@ -1,5 +1,8 @@
 import { Layout, Button, Checkbox, Spin, Col, Form, Row, Table, Tag, Modal } from 'antd';
-import { Header, withSession, GithubAvatar } from 'components';
+import withSession from 'components/withSession';
+import { Header } from 'components/Header';
+
+import { GithubAvatar } from 'components/GithubAvatar';
 import { ModalForm } from 'components/Forms';
 import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
@@ -9,11 +12,11 @@ import { useAsync } from 'react-use';
 import { CourseService, CourseUser } from 'services/course';
 import { CoursePageProps, UserGroup } from 'services/models';
 import { UserService } from 'services/user';
-import { UserGroupService } from 'services/userGroup';
+import { UserGroupApi, UserGroupDto } from 'api';
 
 type Props = CoursePageProps;
 
-const userGroupService = new UserGroupService();
+const userGroupService = new UserGroupApi();
 
 const rolesColors: Record<string, string> = {
   supervisor: 'purple',
@@ -28,15 +31,15 @@ function Page(props: Props) {
   const [loading, setLoading] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
-  const [userGroups, setUserGroups] = useState<UserGroup[] | null>(null);
+  const [userGroups, setUserGroups] = useState<UserGroupDto[] | null>(null);
   const [userModalData, setUserModalData] = useState(null as Partial<CourseUser> | null);
-  const [groupModalData, setGroupModalData] = useState(null as UserGroup[] | null);
+  const [groupModalData, setGroupModalData] = useState(null as UserGroupDto[] | null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
     const [users, groups] = await Promise.all([
       courseService.getUsers(),
-      props.session.isAdmin ? userGroupService.getUserGroups() : null,
+      props.session.isAdmin ? (await userGroupService.getUserGroups()).data : null,
     ]);
     setLoading(false);
     setCourseUsers(users);
@@ -67,7 +70,7 @@ function Page(props: Props) {
     loadData();
   };
 
-  const handleGroupModalSubmit = async (values: UserGroup[]) => {
+  const handleGroupModalSubmit = async (values: UserGroupDto[]) => {
     const records = createRecords(values);
     await courseService.upsertUsers(records);
 
@@ -109,7 +112,7 @@ function Page(props: Props) {
     );
   };
 
-  const renderGroupModal = (modalData: UserGroup[]) => {
+  const renderGroupModal = (modalData: UserGroupDto[]) => {
     const [selectedGroups, setSelectedGroups] = useState<UserGroup[] | null>(null);
     return (
       groupModalData && (
@@ -136,7 +139,7 @@ function Page(props: Props) {
               {
                 title: 'Users',
                 dataIndex: 'users',
-                render: (_: any, record: UserGroup) => (
+                render: (_: any, record: UserGroupDto) => (
                   <>
                     {record.users.map(user => (
                       <Tag key={user.id} style={{ padding: 3, margin: 3 }}>
@@ -150,7 +153,7 @@ function Page(props: Props) {
               {
                 title: 'Roles',
                 dataIndex: 'roles',
-                render: (_: any, record: UserGroup) => (
+                render: (_: any, record: UserGroupDto) => (
                   <>
                     {record.roles.map(role => (
                       <Tag key={role} style={{ padding: 3, margin: 3 }} color={rolesColors[role]}>
@@ -245,7 +248,7 @@ function createRecord(values: any) {
   return data;
 }
 
-function createRecords(groups: UserGroup[]) {
+function createRecords(groups: UserGroupDto[]) {
   const data = groups.reduce((users, group) => {
     group.users.forEach(({ id }) => {
       users[id] = users[id] ?? {};

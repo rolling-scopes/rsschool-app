@@ -1,5 +1,5 @@
 import passport from 'koa-passport';
-import { Strategy as GitHubStrategy } from 'passport-github';
+import { Strategy as GitHubStrategy, Profile } from 'passport-github2';
 import { config } from './config';
 import { createUser } from './rules';
 import { ILogger } from './logger';
@@ -13,7 +13,7 @@ export function setupPassport(logger: ILogger) {
         clientSecret: config.auth.github_client_secret,
         scope: ['read:user', 'user:email'],
       },
-      (_1: string, _2, profile, cb) => {
+      (_1: string, _2: any, profile: Profile, cb: (err: any, value: any) => void) => {
         logger.info('request user');
         createUser(profile)
           .then(result => {
@@ -28,6 +28,6 @@ export function setupPassport(logger: ILogger) {
     ),
   );
   passport.serializeUser((user, cb) => cb(null, user));
-  passport.deserializeUser((obj, cb) => cb(null, obj));
+  passport.deserializeUser<any, any>((obj, cb) => cb(null, obj));
   return passport;
 }

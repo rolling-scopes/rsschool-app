@@ -10,7 +10,6 @@ export const getPublicFeedback = async (githubId: string): Promise<PublicFeedbac
       .select('"feedback"."updatedDate" AS "feedbackDate"')
       .addSelect('"feedback"."badgeId" AS "badgeId"')
       .addSelect('"feedback"."comment" AS "comment"')
-      .addSelect('"feedback"."heroesUrl" AS "heroesUri"')
       .addSelect('"fromUser"."firstName" AS "fromUserFirstName", "fromUser"."lastName" AS "fromUserLastName"')
       .addSelect('"fromUser"."githubId" AS "fromUserGithubId"')
       .leftJoin(User, 'user', '"user"."id" = "feedback"."toUserId"')
@@ -18,15 +17,12 @@ export const getPublicFeedback = async (githubId: string): Promise<PublicFeedbac
       .where('"user"."githubId" = :githubId', { githubId })
       .orderBy('"feedback"."updatedDate"', 'DESC')
       .getRawMany()
-  ).map(
-    ({ feedbackDate, badgeId, comment, heroesUri, fromUserFirstName, fromUserLastName, fromUserGithubId }: any) => ({
-      feedbackDate,
-      badgeId,
-      comment,
-      heroesUri,
-      fromUser: {
-        name: getFullName(fromUserFirstName, fromUserLastName, fromUserGithubId),
-        githubId: fromUserGithubId,
-      },
-    }),
-  );
+  ).map(({ feedbackDate, badgeId, comment, fromUserFirstName, fromUserLastName, fromUserGithubId }: any) => ({
+    feedbackDate,
+    badgeId,
+    comment,
+    fromUser: {
+      name: getFullName(fromUserFirstName, fromUserLastName, fromUserGithubId),
+      githubId: fromUserGithubId,
+    },
+  }));

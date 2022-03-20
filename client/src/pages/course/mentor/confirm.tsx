@@ -1,14 +1,15 @@
-import { Button, Form, Select, message, Typography, Row, Col, Result } from 'antd';
-import { PageLayoutSimple, StudentSearch, PageLayout } from 'components';
-import withSession, { Session } from 'components/withSession';
-import { useState, useMemo } from 'react';
-import { useAsync } from 'react-use';
-import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
-import { useRouter } from 'next/router';
-import { Course } from '../../../../../common/models';
-import { CoursesService } from 'services/courses';
-import { CourseService } from 'services/course';
+import { Button, Col, Form, message, Result, Row, Select, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
+import { CourseDto as Course } from 'api';
+import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
+import { StudentSearch } from 'components/StudentSearch';
+import withSession, { Session } from 'components/withSession';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
+import { CoursesService } from 'services/courses';
+import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 
 const mentorRegistry = new MentorRegistryService();
 function Page(props: { session: Session }) {

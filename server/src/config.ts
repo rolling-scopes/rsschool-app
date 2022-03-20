@@ -3,7 +3,7 @@ export interface IConfig {
     admins: string[];
   };
   users: {
-    verification: {
+    cloud: {
       username: string;
       password: string;
     };
@@ -57,23 +57,17 @@ export interface IConfig {
   name: string;
   sessionAge: number;
   sessionKey: string;
-  integrations: {
-    heroes: {
-      url?: string;
-      username: string;
-      password: string;
-    };
-  };
+  host: string;
 }
 
 export const config: IConfig = {
   app: {
-    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'davojta', 'shastel', 'sonejka', 'forkollaider'],
+    admins: ['apalchys', 'dzmitry-varabei', 'mikhama', 'sonejka', 'aaliakseyenka'],
   },
   users: {
-    verification: {
-      username: process.env.RSSHCOOL_API_VERIFICATION_USERNAME || 'test',
-      password: process.env.RSSHCOOL_API_VERIFICATION_PASSWORD || 'test',
+    cloud: {
+      username: process.env.RSSHCOOL_API_USERS_CLOUD_USERNAME || 'test',
+      password: process.env.RSSHCOOL_API_USERS_CLOUD_PASSWORD || 'test',
     },
   },
   auth: {
@@ -116,15 +110,8 @@ export const config: IConfig = {
     secretAccessKey: process.env.RSSHCOOL_API_AWS_SECRET_ACCESS_KEY || '',
     accessKeyId: process.env.RSSHCOOL_API_AWS_ACCESS_KEY_ID || '',
     region: process.env.RSSHCOOL_API_AWS_REGION || '',
-    restApiUrl: process.env.RSSHCOOL_API_AWS_TASK_API_URL || '',
-    restApiKey: process.env.RSSHCOOL_API_AWS_TASK_API_KEY || '',
-  },
-  integrations: {
-    heroes: {
-      url: '', // turn off.
-      username: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_USERNAME || '',
-      password: process.env.RSSHCOOL_API_INTEGRATIONS_HEROES_PASSWORD || '',
-    },
+    restApiUrl: process.env.RSSHCOOL_API_AWS_REST_API_URL || '',
+    restApiKey: process.env.RSSHCOOL_API_AWS_REST_API_KEY || '',
   },
   name: 'rsschool-api',
   port: parseInt(process.env.NODE_PORT || '3001', 10),
@@ -133,5 +120,6 @@ export const config: IConfig = {
     max: 100,
   },
   sessionAge: 1000 * 60 * 60 * 24 * 2,
-  sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret-session-key',
+  sessionKey: process.env.RSSHCOOL_API_SESSION_KEY || 'secret',
+  host: process.env.RSSHCOOL_HOST || 'http://localhost:3000',
 };

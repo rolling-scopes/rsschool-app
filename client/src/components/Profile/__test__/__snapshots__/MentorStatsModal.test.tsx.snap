@@ -58,11 +58,9 @@ exports[`MentorStatsModal Should render correctly 1`] = `
               }
             }
           >
-            <Avatar
-              alt="alex avatar"
-              shape="circle"
+            <GithubAvatar
+              githubId="alex"
               size={48}
-              src="https://github.com/alex.png?size=128"
               style={
                 Object {
                   "marginRight": 24,
@@ -181,11 +179,9 @@ exports[`MentorStatsModal Should render correctly 1`] = `
               }
             }
           >
-            <Avatar
-              alt="vasya avatar"
-              shape="circle"
+            <GithubAvatar
+              githubId="vasya"
               size={48}
-              src="https://github.com/vasya.png?size=128"
               style={
                 Object {
                   "marginRight": 24,

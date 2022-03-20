@@ -32,6 +32,10 @@ const ModalFormEntity: React.FC<Props> = ({ visible, handleCancel, courseId, edi
     setEntityData(values);
   };
 
+  if (!alias) {
+    return null;
+  }
+
   return (
     <Modal
       visible={visible}
@@ -99,7 +103,6 @@ const getEntityDataForPreview = (entityType: string, entityData: any) => {
       scoreWeight: entityData.scoreWeight,
       maxScore: entityData.maxScore,
       taskOwner: entityData.taskOwner,
-      verification: entityData.verification,
       githubPrRequired: entityData.githubPrRequired,
       sourceGithubRepoUrl: entityData.sourceGithubRepoUrl,
       githubRepoName: entityData.githubRepoName,

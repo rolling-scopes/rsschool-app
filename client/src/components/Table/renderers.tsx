@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import moment from 'moment-timezone';
 import {
   CheckCircleFilled,
@@ -5,10 +6,11 @@ import {
   YoutubeOutlined,
   ChromeOutlined,
   GithubOutlined,
-  QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
+
+const { Text } = Typography;
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -31,6 +33,15 @@ export const dateWithTimeZoneRenderer = (timeZone: string, format: string) => (v
 
 export function boolRenderer(value: string) {
   return value != null ? value.toString() : '';
+}
+
+export function buildCheckBoxRenderer<T>(
+  dataIndex: string[],
+  onChange: (id: string[], record: T, event: ChangeEvent<HTMLInputElement>) => void,
+) {
+  return function (value: boolean = false, record: T) {
+    return <input type="checkbox" checked={value} onChange={event => onChange(dataIndex, record, event)} />;
+  };
 }
 
 export function boolIconRenderer(value: any) {
@@ -60,10 +71,10 @@ export function renderTag(value: number | string, color?: string) {
   );
 }
 
-export function renderTagWithStyle(tagName: string, storedTagColors?: object) {
+export function renderTagWithStyle(tagName: string, storedTagColors?: object, tagMap?: Record<string, string>) {
   return (
     <Tag style={getTagStyle(tagName, storedTagColors)} key={tagName}>
-      {tagName}
+      {tagMap?.[tagName] || tagName}
     </Tag>
   );
 }
@@ -105,15 +116,22 @@ export const urlRenderer = (url: string) =>
     </Tooltip>
   );
 
-export const placeRenderer = (value: string) => {
-  return value === 'Youtube Live' ? (
-    <div>
-      <YoutubeOutlined /> {value}{' '}
-      <Tooltip title="Ссылка будет в Discord">
-        <QuestionCircleOutlined />
-      </Tooltip>
-    </div>
-  ) : (
-    <Tooltip title={value}>{<div style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{value}</div>}</Tooltip>
+export const scoreRenderer = (score: string) => {
+  if (!score) {
+    return;
+  }
+
+  const [num, total] = score.split('/');
+
+  if (!num || !total) {
+    return;
+  }
+
+  const done = ((+num / +total) * 100).toFixed();
+
+  return (
+    <Tooltip placement="topLeft" title={`Done: ${done} %.`}>
+      <Text strong>{score}</Text>
+    </Tooltip>
   );
 };

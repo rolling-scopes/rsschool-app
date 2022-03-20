@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StudentStats } from '../../../../common/models/profile';
+import { StudentStats } from 'common/models/profile';
 import { Modal, Table, Typography, Progress, Row, Col } from 'antd';
 
 const { Text } = Typography;
@@ -15,8 +15,7 @@ type Props = {
 class StudentStatsModal extends React.PureComponent<Props> {
   render() {
     const { stats, courseProgress, scoredTasks } = this.props;
-    const { tasks, courseFullName, mentor, totalScore, isExpelled, expellingReason, position, isCourseCompleted } =
-      stats;
+    const { tasks, courseFullName, mentor, totalScore, isExpelled, expellingReason, rank, isCourseCompleted } = stats;
     const courseTasks = tasks.map((task, idx) => ({ key: `student-stats-modal-task-${idx}`, ...task }));
     const maxCourseScore = tasks.every(({ maxScore }) => maxScore)
       ? tasks.map(({ maxScore, scoreWeight }) => maxScore * scoreWeight).reduce((acc, cur) => acc + cur)
@@ -45,9 +44,9 @@ class StudentStatsModal extends React.PureComponent<Props> {
                 Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
               </p>
             )}
-            {position && (
+            {rank && (
               <p style={{ marginBottom: 5 }}>
-                Position: <Text strong>{position}</Text>
+                Position: <Text strong>{rank}</Text>
               </p>
             )}
             <p style={{ marginBottom: 5 }}>

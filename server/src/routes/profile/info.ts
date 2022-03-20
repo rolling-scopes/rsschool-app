@@ -1,6 +1,5 @@
 import { NOT_FOUND, OK, FORBIDDEN } from 'http-status-codes';
 import Router from '@koa/router';
-import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { setResponse } from '../utils';
 import { IUserSession } from '../../models';
@@ -21,7 +20,6 @@ import {
   RelationRole,
   Permissions,
 } from './permissions';
-import { ConsentRepository } from '../../repositories/consent.repository';
 
 export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { githubId: userGithubId, roles, coursesRoles, isAdmin } = ctx.state!.user as IUserSession;
@@ -57,7 +55,6 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
     isMentorStatsVisible,
     isStudentStatsVisible,
     isStageInterviewFeedbackVisible,
-    isConsentsVisible,
   } = permissions;
 
   if (!isProfileVisible && !isProfileOwner) {
@@ -71,15 +68,11 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   const stageInterviewFeedback = isStageInterviewFeedbackVisible
     ? await getStageInterviewFeedback(requestedGithubId)
     : undefined;
-  const consents = isConsentsVisible
-    ? await getCustomRepository(ConsentRepository).findByGithubIds([requestedGithubId])
-    : undefined;
 
   const profileInfo: ProfileInfo = {
     permissionsSettings,
     generalInfo,
     contacts,
-    consents,
     discord,
     mentorStats,
     publicFeedback,

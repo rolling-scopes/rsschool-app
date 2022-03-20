@@ -1,17 +1,14 @@
-import { disciplineRoute } from './discipline';
+export * from './logging';
+
 import Router from '@koa/router';
 
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseCrudRoute, courseRoute } from './course';
+import { courseRoute, courseCrudRoute } from './course';
 import { coursesRoute } from './courses';
-import { discordServerRoute } from './discordServer';
-import { userGroupRoute } from './userGroup';
-import { stageRoute } from './stage';
-import { stagesRoute } from './stages';
-import { authRoute } from './auth';
 import { usersRoute } from './users';
 import { taskRoute } from './task';
+import { filesRoute } from './file';
 import { taskResultRoute } from './taskResult';
 import { studentRoute } from './student';
 import { tasksRoute } from './tasks';
@@ -21,23 +18,18 @@ import { registryRouter } from './registry';
 import { sessionRoute } from './session';
 import { activityRoute } from './activity';
 import { feedbackRoute } from './feedback';
-import { certificateRoute } from './certificate';
 import { lectureRoute } from './event';
 import { lecturesRoute } from './events';
 import { jwtRoute } from './jwt';
 import { userRoute } from './user';
-import { consentRoute } from './consent';
 import { repositoryRoute } from './repository';
 import { opportunitiesRoute } from './opportunities';
-import { alertsRoute } from './alerts';
 import { interviewQuestionRoute } from './interviewQuestion';
 
 import { ILogger } from '../logger';
-import { courseMiddleware, userRolesMiddleware } from './middlewares';
+import { userRolesMiddleware, courseMiddleware } from './middlewares';
 import { interviewQuestionCategoryRoute } from './interviewQuestionCategory';
 import { checksRoute } from './checks';
-
-export * from './logging';
 
 type RoutesMiddleware = (logger: ILogger) => { publicRouter: Router };
 
@@ -53,9 +45,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   router.use(userRolesMiddleware, courseMiddleware);
 
   // public routes
-  applyRouter(router, certificateRoute(logger));
-  applyRouter(router, authRoute());
-  applyRouter(router, alertsRoute());
 
   applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
@@ -63,8 +52,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, courseCrudRoute(logger));
   applyRouter(router, coursesRoute(logger));
-  applyRouter(router, discordServerRoute(logger));
-  applyRouter(router, userGroupRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, taskResultRoute(logger));
@@ -74,18 +61,15 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, profileRoute(logger));
   applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
-  applyRouter(router, stageRoute(logger));
-  applyRouter(router, stagesRoute(logger));
   applyRouter(router, interviewQuestionRoute(logger));
   applyRouter(router, interviewQuestionCategoryRoute(logger));
   applyRouter(router, checksRoute(logger));
-  applyRouter(router, disciplineRoute(logger));
+  applyRouter(router, filesRoute(logger));
 
   applyRouter(router, lectureRoute(logger));
   applyRouter(router, lecturesRoute(logger));
   applyRouter(router, jwtRoute(logger));
   applyRouter(router, userRoute(logger));
-  applyRouter(router, consentRoute(logger));
   applyRouter(router, repositoryRoute(logger));
   applyRouter(router, opportunitiesRoute(logger));
 

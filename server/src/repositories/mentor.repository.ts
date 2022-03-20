@@ -40,8 +40,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .createQueryBuilder('c')
       .select('c.id')
       .leftJoin('c.task', 't')
-      .where('t.verification = :manual', { manual: 'manual' })
-      .andWhere({ checker: 'mentor', courseId, disabled: false })
+      .where({ checker: 'mentor', courseId, disabled: false })
       .andWhere('c.studentEndDate < NOW()')
       .andWhere("c.type <> 'interview'");
 

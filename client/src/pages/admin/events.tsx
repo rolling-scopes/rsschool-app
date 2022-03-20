@@ -1,14 +1,15 @@
 import { useState, useCallback } from 'react';
 import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 'antd';
-
-import { Header, Session, withSession, AdminSider } from 'components';
+import { Session, withSession } from 'components/withSession';
+import { AdminSider } from 'components/AdminSider';
+import { Header } from 'components/Header';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer } from 'components/Table';
 import { Event, EventService } from 'services/event';
 import { urlPattern } from 'services/validators';
 import { useAsync } from 'react-use';
-import { PRIMARY_SKILLS } from 'services/reference-data/primarySkills';
-import { isAnyCoursePowerUserManager } from '../../domain/user';
+import { PRIMARY_SKILLS } from 'data/primarySkills';
+import { isAnyCoursePowerUser } from '../../domain/user';
 
 const { Content } = Layout;
 
@@ -119,7 +120,7 @@ function Page(props: Props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUserManager(props.session)} />
+      <AdminSider isAdmin={props.session.isAdmin} isCoursePowerUser={isAnyCoursePowerUser(props.session)} />
       <Layout style={{ background: '#fff' }}>
         <Header title="Manage Events" username={props.session.githubId} />
         <Content style={{ margin: 8 }}>

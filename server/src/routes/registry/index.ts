@@ -9,7 +9,6 @@ import { updateSession } from '../../session';
 import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
-import { notificationService } from '../../services';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
 
 export function registryRouter(logger?: ILogger) {
@@ -38,16 +37,6 @@ export function registryRouter(logger?: ILogger) {
     const { githubId } = ctx.state!.user as IUserSession;
     await repository.register(githubId, ctx.request.body);
     setResponse(ctx, OK);
-  });
-
-  router.put('/mentor/:githubId', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
-    const githubId = ctx.params.githubId;
-    const { preselectedCourses } = ctx.request.body;
-    repository.update(githubId, { preselectedCourses });
-    setResponse(ctx, OK);
-
-    const confirmationText = await notificationService.renderMentorConfirmationText(preselectedCourses);
-    await notificationService.sendNotification([githubId], confirmationText, true);
   });
 
   router.delete('/mentor/:githubId', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
@@ -80,7 +69,7 @@ export function registryRouter(logger?: ILogger) {
     } else {
       const coursesRoles = state.coursesRoles ?? {};
       const coursesIds = Object.entries(coursesRoles)
-        .filter(([_, value = []]) => value.includes(CourseRole.manager) || value.includes(CourseRole.supervisor))
+        .filter(([_, value = []]) => value.includes(CourseRole.Manager) || value.includes(CourseRole.Supervisor))
         .map(([key]) => Number(key));
       mentorRegistries = await repository.findByCoursesIds(coursesIds);
     }

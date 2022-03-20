@@ -1,7 +1,9 @@
 import { Button, Form, message } from 'antd';
-import { PageLayoutSimple, StudentSearch, withSession } from 'components';
 import { CommentInput, CourseTaskSelect, ScoreInput } from 'components/Forms';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { StudentSearch } from 'components/StudentSearch';
 import withCourseData from 'components/withCourseData';
+import withSession from 'components/withSession';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CourseTask } from 'services/course';

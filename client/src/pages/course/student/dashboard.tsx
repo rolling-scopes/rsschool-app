@@ -1,18 +1,29 @@
-import { message, Result } from 'antd';
+import { Result } from 'antd';
 import moment from 'moment';
 import Masonry from 'react-masonry-css';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { useAsync } from 'react-use';
 import { useMemo, useState } from 'react';
 
-import { PageLayout, LoadingScreen } from 'components';
+import { LoadingScreen } from 'components/LoadingScreen';
+import { PageLayout } from 'components/PageLayout';
+
 import withCourseData from 'components/withCourseData';
 import withSession from 'components/withSession';
 import { CourseService, StudentSummary, CourseTask, CourseEvent } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { UserService } from 'services/user';
-import { StudentTasksDetail } from '../../../../../common/models';
-import { MainStatsCard, MentorCard, TasksStatsCard, NextEventCard, RepositoryCard } from 'components/Dashboard';
+import { StudentTasksDetail } from 'common/models';
+import {
+  MainStatsCard,
+  MentorCard,
+  TasksStatsCard,
+  NextEventCard,
+  RepositoryCard,
+} from 'modules/StudentDashboard/components';
+import { useLoading } from 'components/useLoading';
+
+const STORAGE_KEY = 'showCountEventsOnStudentsDashboard';
 
 function Page(props: CoursePageProps) {
   const { githubId } = props.session;
@@ -27,7 +38,7 @@ function Page(props: CoursePageProps) {
   const [tasksDetail, setTasksDetail] = useState<StudentTasksDetail[]>([]);
   const [nextEvents, setNextEvent] = useState([] as CourseEvent[]);
   const [countEvents, setCountEvents] = useState(showCountEventsOnStudentsDashboard());
-  const [loading, setLoading] = useState(false);
+  const [loading, withLoading] = useLoading(false);
 
   const updateUrl = async () => {
     const { repository } = await courseService.getStudentSummary(githubId);
@@ -35,14 +46,12 @@ function Page(props: CoursePageProps) {
   };
 
   const changeCountEvents = (value: number) => {
-    localStorage.setItem('showCountEventsOnStudentsDashboard', String(value));
+    localStorage.setItem(STORAGE_KEY, String(value));
     setCountEvents(value);
   };
 
-  useAsync(async () => {
-    try {
-      setLoading(true);
-
+  useAsync(
+    withLoading(async () => {
       const [studentSummary, courseTasks, statisticsCourses, courseEvents] = await Promise.all([
         courseService.getStudentSummary(githubId),
         courseService.getCourseTasks(),
@@ -65,12 +74,9 @@ function Page(props: CoursePageProps) {
       setCourseTasks(courseTasks);
       setTasksDetail(tasksDetailCurrentCourse);
       setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
-    } catch {
-      message.error('An error occurred. Please try later.');
-    } finally {
-      setLoading(false);
-    }
-  }, [props.course.id]);
+    }),
+    [props.course.id],
+  );
 
   const currentDate = new Date();
 
@@ -213,10 +219,6 @@ const createCourseEventFromTask = (task: CourseTask, type: string): CourseEvent 
 };
 
 const showCountEventsOnStudentsDashboard = () =>
-  Number(
-    localStorage.getItem('showCountEventsOnStudentsDashboard')
-      ? localStorage.getItem('showCountEventsOnStudentsDashboard')
-      : 1,
-  );
+  Number(localStorage.getItem(STORAGE_KEY) ? localStorage.getItem(STORAGE_KEY) : 1);
 
 export default withCourseData(withSession(Page));

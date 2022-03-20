@@ -5,25 +5,24 @@ import { ColumnsType } from 'antd/lib/table';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import moment from 'moment-timezone';
 import mergeWith from 'lodash/mergeWith';
-import { GithubUserLink } from 'components';
+import { GithubUserLink } from 'components/GithubUserLink';
 import {
   dateSorter,
   getColumnSearchProps,
   tagsRenderer,
   dateWithTimeZoneRenderer,
-  urlRenderer,
-  placeRenderer,
   renderTagWithStyle,
+  scoreRenderer,
 } from 'components/Table';
 import { CourseEvent, CourseService } from 'services/course';
 import { ScheduleRow } from './model';
 import EditableCell from './EditableCell';
 import FilterComponent from '../Table/FilterComponent';
-import Link from 'next/link';
 import { EventService } from 'services/event';
 import { Task, TaskService } from 'services/task';
 import { useLocalStorage } from 'react-use';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Text } = Typography;
 
@@ -37,6 +36,7 @@ type Props = {
   courseId: number;
   refreshData: Function;
   storedTagColors?: object;
+  limitForDoneTask?: number;
   alias: string;
 };
 
@@ -47,17 +47,25 @@ const styles = {
   padding: '15px',
 };
 
-const getColumns = (
-  timeZone: string,
-  hidenColumnsAndTypes: Array<string> = [],
-  handleFilter: (event: CheckboxChangeEvent) => void,
-  setHidenColumnsAndTypes: (e: Array<string>) => void,
-  storedTagColors: object,
-  distinctTags: Array<string>,
-  alias: string,
-  handleSplitByWeek: (event: CheckboxChangeEvent) => void,
-  isSplitedByWeek: boolean | undefined,
-) => [
+const getColumns = ({
+  timeZone,
+  hidenColumnsAndTypes = [],
+  handleFilter,
+  setHidenColumnsAndTypes,
+  storedTagColors,
+  distinctTags,
+  handleSplitByWeek,
+  isSplitedByWeek,
+}: {
+  timeZone: string;
+  handleFilter: (event: CheckboxChangeEvent) => void;
+  setHidenColumnsAndTypes: (e: Array<string>) => void;
+  storedTagColors: object;
+  distinctTags: Array<string>;
+  handleSplitByWeek: (event: CheckboxChangeEvent) => void;
+  isSplitedByWeek: boolean | undefined;
+  hidenColumnsAndTypes: string[] | undefined;
+}) => [
   {
     title: (
       <Dropdown
@@ -72,7 +80,7 @@ const getColumns = (
             isSplitedByWeek={isSplitedByWeek}
           />
         )}
-        placement="bottomRight"
+        placement="bottomLeft"
         trigger={['click']}
       >
         <SettingOutlined />
@@ -100,7 +108,7 @@ const getColumns = (
   {
     title: 'Type',
     dataIndex: ['event', 'type'],
-    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors),
+    render: (tagName: string) => renderTagWithStyle(tagName, storedTagColors, TASK_TYPES_MAP),
     editable: true,
   },
   {
@@ -114,27 +122,20 @@ const getColumns = (
     dataIndex: ['event', 'name'],
     render: (value: string, row: any) => {
       return (
-        <Link
-          href={`/course/entityDetails?course=${alias}&entityType=${row.isTask ? 'task' : 'event'}&entityId=${row.id}`}
-        >
-          <a>
-            <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
+        <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
+          {row?.event?.descriptionUrl ? (
+            <a target="_blank" href={row.event.descriptionUrl}>
               {value}
-            </Text>
-          </a>
-        </Link>
+            </a>
+          ) : (
+            <span>{value}</span>
+          )}
+        </Text>
       );
     },
     ...getColumnSearchProps('event.name'),
     editable: true,
   },
-  {
-    title: 'Url',
-    dataIndex: ['event', 'descriptionUrl'],
-    render: urlRenderer,
-    editable: true,
-  },
-  { title: 'Duration', width: 60, dataIndex: 'duration', editable: true },
   {
     title: 'Organizer',
     dataIndex: ['organizer', 'githubId'],
@@ -143,24 +144,9 @@ const getColumns = (
     editable: true,
   },
   {
-    title: 'Place',
-    dataIndex: 'place',
-    render: placeRenderer,
-    onCell: () => {
-      return {
-        style: {
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          maxWidth: 250,
-        },
-      };
-    },
-    editable: true,
-  },
-  {
     title: 'Score',
     dataIndex: 'score',
-    render: (value: number) => <Text strong>{value}</Text>,
+    render: scoreRenderer,
   },
 ];
 
@@ -171,7 +157,7 @@ export function TableView({
   courseId,
   refreshData,
   storedTagColors = DEFAULT_COLORS,
-  alias,
+  limitForDoneTask,
 }: Props) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
@@ -188,7 +174,6 @@ export function TableView({
       dateTime: moment(record.dateTime),
       time: moment(record.dateTime),
       special: record.special ? record.special.split(',') : [],
-      duration: record.duration ? Number(record.duration) : null,
     });
     setEditingKey(`${record.id}${record.event.type}${record.event.name}`);
   };
@@ -317,17 +302,16 @@ export function TableView({
     element =>
       element?.event.type && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(element.event.type.toString()),
   );
-  const sortedColumns = getColumns(
+  const sortedColumns = getColumns({
     timeZone,
     hidenColumnsAndTypes,
     handleFilter,
     setHidenColumnsAndTypes,
     storedTagColors,
     distinctTags,
-    alias,
     handleSplitByWeek,
     isSplitedByWeek,
-  ).filter(
+  }).filter(
     element => element?.title && hidenColumnsAndTypes && !hidenColumnsAndTypes.includes(element.title.toString()),
   );
   const columns = [...sortedColumns, ...getAdminColumn(isAdmin)] as ColumnsType<CourseEvent>;
@@ -360,7 +344,7 @@ export function TableView({
         dataSource={filteredData}
         size="middle"
         columns={mergedColumns}
-        rowClassName={record => getTableRowClass(record, isSplitedByWeek)}
+        rowClassName={record => getTableRowClass(record, isSplitedByWeek, limitForDoneTask)}
       />
     </Form>
   );
@@ -372,7 +356,6 @@ const getCourseEventDataForUpdate = (entity: CourseEvent) => {
     organizerId: entity.organizer ? entity.organizer.githubId : null,
     place: entity.place || '',
     special: entity.special || '',
-    duration: entity.duration || null,
   };
 };
 
@@ -383,7 +366,6 @@ const getCourseTaskDataForUpdate = (entity: CourseEvent) => {
     [taskDate]: entity.dateTime,
     taskOwnerId: entity.organizer ? entity.organizer.githubId : null,
     special: entity.special || '',
-    duration: entity.duration || null,
   };
 
   if (entity.event.type !== 'deadline') {
@@ -406,16 +388,24 @@ const getNewDataForUpdate = (entity: CourseEvent) => {
   return dataForUpdate;
 };
 
-const getTableRowClass = (record: CourseEvent, isSplitedByWeek: boolean | undefined): string => {
+const getTableRowClass = (record: CourseEvent, isSplitedByWeek?: boolean, limitForDoneTask?: number): string => {
+  if (limitForDoneTask && record.done && record.done >= limitForDoneTask) {
+    return 'table-row-done';
+  }
+
+  if (moment(record.dateTime).year() === moment().year() && moment(record.dateTime).isoWeek() === moment().isoWeek()) {
+    if (moment(record.dateTime).isoWeekday() === moment().isoWeekday()) {
+      return 'table-row-current-day';
+    } else {
+      return 'table-row-current';
+    }
+  }
+
   if (!isSplitedByWeek) {
     return '';
   }
 
-  if (moment(record.dateTime).week() === moment().week()) {
-    return 'table-row-current';
-  }
-
-  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-dark';
+  return moment(record.dateTime).week() % 2 === 0 ? '' : 'table-row-odd';
 };
 
 export default TableView;

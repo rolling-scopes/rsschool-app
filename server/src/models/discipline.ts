@@ -1,16 +1,19 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Discipline {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ name: 'id' })
+  public id: number;
 
-  @CreateDateColumn()
-  createdDate: number;
+  @CreateDateColumn({ name: 'created_date' })
+  public createdDate: string;
 
-  @UpdateDateColumn()
-  updatedDate: number;
+  @UpdateDateColumn({ name: 'updated_date' })
+  public updatedDate: string;
 
-  @Column({ type: 'text', unique: true })
-  name: string;
+  @DeleteDateColumn({ name: 'deleted_date' })
+  public deletedDate: string;
+
+  @Column({ name: 'name' })
+  public name: string;
 }

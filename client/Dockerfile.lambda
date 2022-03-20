@@ -1,0 +1,31 @@
+FROM node:14-bullseye-slim as builder
+
+WORKDIR /container_out
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+COPY public public
+
+# next.js config
+COPY next.config.prod.js next.config.js
+
+RUN npm ci --production --no-optional
+
+# lambda entry handler (app.js)
+COPY dist .
+
+# .next build folder
+COPY .next .next
+
+# Lambda Container
+FROM public.ecr.aws/lambda/nodejs:14
+
+ENV NODE_ENV production
+ENV TZ utc
+
+WORKDIR /var/task
+
+COPY --from=builder /container_out .
+
+CMD [ "app.handler" ]

@@ -4,6 +4,18 @@ body,
   height: 100%;
 }
 
+.rs-link {
+  background-color: #fff;
+  color: #000;
+  display: inline-block;
+  padding: 1px 2px;
+}
+
+.rs-link:hover {
+  background-color: #10f3ff;
+  color: #000;
+}
+
 .ant-layout-sider-dark h4 {
   color: rgba(255, 255, 255, 0.6);
   background: #07223b;
@@ -71,15 +83,51 @@ thead.ant-table-thead > tr > th {
 
 /* table-row-* are used for Schedule Table view - Split by week feature */
 .table-row-current {
-  background-color: #f6ffed;
+  background-color: #2f8e0017;
 }
 
-.table-row-dark {
-  background-color: #e6f7ff;
+.table-row-current-day {
+  background-color: #2f8e002d;
+}
+
+.table-row-odd {
+  background-color: #f8f8f8;
+}
+
+.table-row-done {
+  background-color: #f6ffed;
 }
 
 @media print {
   .no-print {
     display: none !important;
+  }
+  .print-black {
+    color: black !important;
+    background-color: white !important;
+  }
+  .print-no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* CV */
+
+.cv-card-section {
+  break-inside: avoid;
+}
+
+.cv-sidebar {
+  padding: 16px;
+  background-color: #000;
+  color: #fff;
+  break-inside: avoid;
+}
+
+@media print {
+  .cv-sidebar {
+    background-color: #fff;
+    color: #000;
   }
 }

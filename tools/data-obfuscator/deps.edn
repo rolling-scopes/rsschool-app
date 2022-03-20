@@ -1,2 +1,0 @@
-{:deps
- {com.github.javafaker/javafaker {:mvn/version "0.18"}}}

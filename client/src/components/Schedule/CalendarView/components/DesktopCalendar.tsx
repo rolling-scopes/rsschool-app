@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Badge, Typography, Tooltip } from 'antd';
 import { getMonthValue, getListData } from '../utils/filters';
-import { Scrollbars } from 'react-custom-scrollbars';
 import ModalWindow from './ModalWindow';
 import { CourseEvent } from 'services/course';
 import { Moment } from 'moment';
@@ -32,7 +31,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
 
   const dateCellRender = (date: unknown | Moment) => {
     return (
-      <Scrollbars autoHide autoHideTimeout={500} autoHideDuration={200}>
+      <div>
         <ul style={{ padding: '5px' }}>
           {getListData(date as unknown as Moment, data, timeZone, storedTagColors).map(coloredEvent => {
             return (
@@ -56,7 +55,7 @@ const DesktopCalendar: React.FC<Props> = ({ data, timeZone, storedTagColors, ali
             );
           })}
         </ul>
-      </Scrollbars>
+      </div>
     );
   };
 

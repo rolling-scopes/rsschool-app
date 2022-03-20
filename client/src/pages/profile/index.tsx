@@ -7,7 +7,6 @@ import mapValues from 'lodash/mapValues';
 import clone from 'lodash/clone';
 import pullAt from 'lodash/pullAt';
 import { Result, Spin, message } from 'antd';
-import { css } from 'styled-jsx/css';
 import Masonry from 'react-masonry-css';
 import { Header } from 'components/Header';
 import { NextRouter, withRouter } from 'next/router';
@@ -23,20 +22,19 @@ import {
   GeneralInfo,
   Consent,
   Discord,
-} from '../../../../common/models/profile';
+} from 'common/models/profile';
 
 import MainCard from 'components/Profile/MainCard';
 import AboutCard from 'components/Profile/AboutCard';
 import DiscordCard from 'components/Profile/DiscordCard';
-import EnglishCard from 'components/Profile/EnglishCard';
+// import EnglishCard from 'components/Profile/EnglishCard';
 import EducationCard from 'components/Profile/EducationCard';
 import ContactsCard from 'components/Profile/ContactsCard';
-import ConsentsCard from 'components/Profile/ConsentsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import MentorStatsCard from 'components/Profile/MentorStatsCard';
 import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
-import { CoreJsInterviewData } from 'components/Profile/CoreJsIviewsCard';
+import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 
@@ -148,26 +146,6 @@ export class ProfilePage extends React.Component<Props, State> {
           );
           break;
         }
-        case 'consent': {
-          const { id, checked } = event;
-          const consents = profile?.consents ?? [];
-          const [existingConsent] = consents.filter(consent => consent.channelType === id);
-          const otherConsents = consents.filter(consent => consent.channelType !== id);
-          const newConsents = [...otherConsents];
-          if (existingConsent) {
-            const newConsent = cloneDeep(existingConsent);
-            newConsent.optIn = checked;
-            newConsents.push(newConsent);
-          }
-          newProfile.consents = newConsents;
-          const initialConsents = initialProfileSettings?.consents;
-          const getconsentParamsString = ({ optIn, channelType }: Consent) => `${optIn}${channelType}`;
-          const consentParamsStrings = new Set(initialConsents!.map(getconsentParamsString));
-          isInitialProfileSettingsChanged = !newConsents.every(consent =>
-            consentParamsStrings.has(getconsentParamsString(consent)),
-          );
-          break;
-        }
         default: {
           set(newProfile, path, event.target.value);
           isInitialProfileSettingsChanged = get(newProfile, path) !== get(initialProfileSettings, path);
@@ -196,18 +174,19 @@ export class ProfilePage extends React.Component<Props, State> {
         courseFullName,
         courseName,
         locationName,
-        interview: tasks
+        interviews: tasks
           .filter(({ interviewFormAnswers }) => interviewFormAnswers)
-          .map(({ interviewFormAnswers, score, comment, interviewer }) => ({
+          .map(({ interviewFormAnswers, score, comment, interviewer, name }) => ({
             score,
             comment,
             interviewer,
             answers: interviewFormAnswers,
-          }))[0],
-      })) as CoreJsInterviewData[];
+            name,
+          })),
+      })) as CoreJsInterviewsData[];
 
   private fetchData = async () => {
-    await this.setState({ isLoading: true });
+    this.setState({ isLoading: true });
 
     const { router } = this.props;
 
@@ -235,7 +214,7 @@ export class ProfilePage extends React.Component<Props, State> {
       const initialProfileSettings = profile ? cloneDeep(profile) : null;
       const isEditingModeEnabled = Boolean(router.asPath.match(/#edit/));
 
-      await this.setState({
+      this.setState({
         isLoading: false,
         profile: updateProfile,
         isProfileOwner,
@@ -244,7 +223,7 @@ export class ProfilePage extends React.Component<Props, State> {
         initialProfileSettings,
       });
     } catch (e) {
-      await this.setState({
+      this.setState({
         isLoading: false,
         profile: null,
         initialPermissionsSettings: null,
@@ -268,7 +247,7 @@ export class ProfilePage extends React.Component<Props, State> {
   private saveProfile = async () => {
     const { profile, isInitialPermissionsSettingsChanged, isInitialProfileSettingsChanged } = this.state;
 
-    await this.setState({ isSaving: true });
+    this.setState({ isSaving: true });
 
     if (profile) {
       try {
@@ -285,7 +264,7 @@ export class ProfilePage extends React.Component<Props, State> {
 
         const initialPermissionsSettings = permissionsSettings ? cloneDeep(permissionsSettings) : null;
         const initialProfileSettings = profile ? cloneDeep(profile) : null;
-        await this.setState({
+        this.setState({
           isSaving: false,
           initialPermissionsSettings,
           initialProfileSettings,
@@ -294,7 +273,7 @@ export class ProfilePage extends React.Component<Props, State> {
         });
         this.onSaveSuccess();
       } catch (e) {
-        await this.setState({ isSaving: false });
+        this.setState({ isSaving: false });
         this.onSaveError();
       }
     }
@@ -322,7 +301,7 @@ export class ProfilePage extends React.Component<Props, State> {
     await this.setState({ isLoading: false });
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     // it's a dirty hack to fix an issue with empty query params
     // see: https://nextjs.org/docs/routing/dynamic-routes#caveats
     //
@@ -331,7 +310,7 @@ export class ProfilePage extends React.Component<Props, State> {
     setTimeout(async () => {
       await this.fetchData();
       await this.authorizeDiscord();
-    }, 200);
+    }, 100);
   }
 
   render() {
@@ -365,15 +344,16 @@ export class ProfilePage extends React.Component<Props, State> {
           onProfileSettingsChange={this.onProfileSettingsChange}
         />
       ),
-      profile?.generalInfo?.englishLevel !== undefined && (
-        <EnglishCard
-          data={profile.generalInfo}
-          isEditingModeEnabled={isEditingModeVisible}
-          permissionsSettings={profile.permissionsSettings}
-          onPermissionsSettingsChange={this.onPermissionsSettingsChange}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
+      // TODO: Temporary disabled
+      // profile?.generalInfo?.englishLevel !== undefined && (
+      //   <EnglishCard
+      //     data={profile.generalInfo}
+      //     isEditingModeEnabled={isEditingModeVisible}
+      //     permissionsSettings={profile.permissionsSettings}
+      //     onPermissionsSettingsChange={this.onPermissionsSettingsChange}
+      //     onProfileSettingsChange={this.onProfileSettingsChange}
+      //   />
+      // ),
       profile?.generalInfo?.educationHistory !== undefined && (
         <EducationCard
           data={profile.generalInfo}
@@ -393,13 +373,6 @@ export class ProfilePage extends React.Component<Props, State> {
         />
       ),
       profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-      profile?.consents && (
-        <ConsentsCard
-          data={profile.consents}
-          isEditingModeEnabled={isEditingModeVisible}
-          onProfileSettingsChange={this.onProfileSettingsChange}
-        />
-      ),
       profile?.publicFeedback?.length && (
         <PublicFeedbackCard
           data={profile.publicFeedback}
@@ -453,17 +426,28 @@ export class ProfilePage extends React.Component<Props, State> {
                     700: 2,
                     500: 1,
                   }}
-                  className={masonryClassName}
-                  columnClassName={masonryColumnClassName}
+                  className="masonry"
+                  columnClassName="masonry-column"
                 >
                   {cards.map((card, idx) => (
-                    <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
+                    <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
                       {card}
                     </div>
                   ))}
                 </Masonry>
-                {masonryStyles}
-                {masonryColumnStyles}
+                <style jsx global>{`
+                  .masonry {
+                    display: flex;
+                    margin-left: -16px;
+                    width: auto;
+                  }
+                `}</style>
+                <style jsx global>{`
+                  .masonry-column {
+                    padding-left: 16px;
+                    background-clip: padding-box;
+                  }
+                `}</style>
               </div>
             ) : (
               <>
@@ -476,20 +460,5 @@ export class ProfilePage extends React.Component<Props, State> {
     );
   }
 }
-
-const gapSize = 16;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default withGoogleMaps(withRouter(withSession(ProfilePage)));

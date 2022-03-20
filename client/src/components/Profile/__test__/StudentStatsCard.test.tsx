@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { mountToJson } from 'enzyme-to-json';
 import StudentStatsCard from '../StudentStatsCard';
-import { StudentStats } from '../../../../../common/models/profile';
+import { StudentStats } from 'common/models/profile';
 
 describe('', () => {
   const githubId = 'test';
@@ -16,7 +16,7 @@ describe('', () => {
       expellingReason: '',
       isCourseCompleted: true,
       totalScore: 1201,
-      position: 32,
+      rank: 32,
       mentor: {
         githubId: 'andrew123',
         name: 'Andrey Andreev',
@@ -60,7 +60,7 @@ describe('', () => {
       expellingReason: 'test',
       isCourseCompleted: false,
       totalScore: 101,
-      position: 32,
+      rank: 32,
       mentor: {
         githubId: 'dimon12',
         name: 'Dima Testovich',

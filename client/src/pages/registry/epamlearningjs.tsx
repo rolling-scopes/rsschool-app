@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
-import { PageLayout } from 'components';
+import { PageLayout } from 'components/PageLayout';
 import { GdprCheckbox, LocationSelect } from 'components/Forms';
 import withSession from 'components/withSession';
 import { withGoogleMaps } from 'components/withGoogleMaps';
@@ -11,7 +11,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { Props, TYPES } from './../../configs/registry';
-import { Location } from '../../../../common/models/profile';
+import { Location } from 'common/models/profile';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
@@ -58,10 +58,10 @@ function Page(props: Props & { courseAlias?: string }) {
     };
 
     try {
-      const userResponse = await axios.post('/api/profile/me', userModel);
+      const userResponse = await axios.post<any>('/api/profile/me', userModel);
       const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
       if (githubId) {
-        await axios.post('/api/registry', registryModel);
+        await axios.post<any>('/api/registry', registryModel);
         setSubmitted(true);
       } else {
         message.error('Invalid github id');

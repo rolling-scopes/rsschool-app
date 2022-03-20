@@ -1,8 +1,0 @@
-.cpcache/
-/classes/
-/target/
-.nrepl-port
-.DS_Store
-backup.sql
-out.sql
-schemes.edn

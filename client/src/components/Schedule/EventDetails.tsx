@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { Row, Col, Typography, Tooltip, Button } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment-timezone';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { CourseEvent } from 'services/course';
 import { DEFAULT_COLORS } from './UserSettings/userSettingsHandlers';
 import { renderTagWithStyle, tagsRenderer } from 'components/Table';
 import { GithubUserLink } from '../GithubUserLink';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Title, Text } = Typography;
 
@@ -43,7 +44,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, o
 
         {event.type && (
           <Row justify="center" align="middle" gutter={[24, 20]}>
-            <Col>{renderTagWithStyle(event.type, storedTagColors)}</Col>
+            <Col>{renderTagWithStyle(event.type, storedTagColors, TASK_TYPES_MAP)}</Col>
             {special && <Col>{!!special && tagsRenderer(special.split(','))}</Col>}
           </Row>
         )}
@@ -101,7 +102,7 @@ const EventDetails: React.FC<Props> = ({ eventData, alias, isAdmin, isPreview, o
 
         {!isPreview && (
           <div className="button__close">
-            <Link href={`/course/schedule?course=${alias}`}>
+            <Link prefetch={false} href={`/course/schedule?course=${alias}`}>
               <a>
                 <Button icon={<CloseOutlined />} />
               </a>

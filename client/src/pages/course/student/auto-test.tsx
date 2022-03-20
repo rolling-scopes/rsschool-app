@@ -1,21 +1,9 @@
-import {
-  Button,
-  Col,
-  Table,
-  Form,
-  Input,
-  message,
-  Row,
-  Typography,
-  notification,
-  Radio,
-  Checkbox,
-  Upload,
-  Spin,
-} from 'antd';
+import { Button, Col, Table, Form, Input, message, Row, Typography, notification, Radio, Checkbox, Upload } from 'antd';
 import { ReloadOutlined, UploadOutlined, CloseSquareTwoTone, CheckSquareTwoTone } from '@ant-design/icons';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { PageLayout, withSession } from 'components';
+import moment from 'moment';
+import { PageLayout } from 'components/PageLayout';
+import withSession from 'components/withSession';
 import { CourseTaskSelect } from 'components/Forms';
 import withCourseData from 'components/withCourseData';
 import { useMemo, useState } from 'react';
@@ -34,6 +22,7 @@ import { AxiosError } from 'axios';
 import shuffle from 'lodash/shuffle';
 import snakeCase from 'lodash/snakeCase';
 import { FilesService } from 'services/files';
+import { CourseTaskDtoTypeEnum } from 'api';
 
 function Page(props: CoursePageProps) {
   const courseId = props.course.id;
@@ -115,7 +104,7 @@ function Page(props: CoursePageProps) {
 
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       if (error.response?.status === 429) {
         notification.warn({
           message: (
@@ -131,11 +120,16 @@ function Page(props: CoursePageProps) {
         return;
       }
       if (error.response?.status === 403) {
+        const oneAttemptPerNumberOfHours = courseTask?.publicAttributes?.oneAttemptPerNumberOfHours;
         notification.error({
           message: (
             <>
-              You already submit this task {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times. Attempts limit
-              is over!
+              You can submit this task only {courseTask?.publicAttributes?.maxAttemptsNumber || 0} times.{' '}
+              {!!oneAttemptPerNumberOfHours &&
+                `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hour${
+                  oneAttemptPerNumberOfHours !== 1 && 's'
+                } `}
+              For now your attempts limit is over!
             </>
           ),
         });
@@ -230,8 +224,8 @@ function Page(props: CoursePageProps) {
                         <div>
                           {(item?.metadata as { id: string; url: string; name: string; completed: boolean }[])?.map(
                             ({ id, url, name, completed }, index: number) => (
-                              <div>
-                                <Typography.Link key={id} href={url} target="_blank">
+                              <div key={id}>
+                                <Typography.Link href={url} target="_blank">
                                   {completed ? (
                                     <CheckSquareTwoTone twoToneColor="#52c41a" />
                                   ) : (
@@ -247,7 +241,7 @@ function Page(props: CoursePageProps) {
                     );
                   }
 
-                  return typeof value === 'string' ? value.split('\\n').map(str => <div>{str}</div>) : value;
+                  return typeof value === 'string' ? value.split('\\n').map(str => <div key={str}>{str}</div>) : value;
                 },
               },
             ]}
@@ -272,51 +266,40 @@ function readFile(file: any) {
 
 function UploadJupyterNotebook() {
   const [uploadFile, setUploadFile] = useState<UploadFile | null>(null);
-  const [loading, setLoading] = useState(false);
-  const handleFileChose = async (info: any) => {
-    switch (info.file.status) {
-      case 'done': {
-        setUploadFile(info.file);
-        setLoading(false);
-        break;
-      }
-    }
-  };
+  const handleFileChose = async (info: any) => setUploadFile(info.file);
   return (
-    <Spin spinning={loading}>
-      <Form.Item name="upload">
-        <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
-          <Button>
-            <UploadOutlined /> Select Jupyter Notebook
-          </Button>
-        </Upload>
-      </Form.Item>
-    </Spin>
+    <Form.Item name="upload">
+      <Upload fileList={uploadFile ? [uploadFile] : []} onChange={handleFileChose} multiple={false}>
+        <Button>
+          <UploadOutlined /> Select Jupyter Notebook
+        </Button>
+      </Upload>
+    </Form.Item>
   );
 }
 
 function renderTaskFields(githubId: string, courseTask: CourseTask | undefined, verifications: Verification[]) {
   const repoUrl = `https://github.com/${githubId}/${courseTask?.githubRepoName}`;
   switch (courseTask?.type) {
-    case 'jstask':
+    case CourseTaskDtoTypeEnum.Jstask:
       return renderJsTaskFields(repoUrl);
-    case 'kotlintask':
-    case 'objctask':
+    case CourseTaskDtoTypeEnum.Kotlintask:
+    case CourseTaskDtoTypeEnum.Objctask:
       return renderKotlinTaskFields(repoUrl);
-    case 'ipynb':
+    case CourseTaskDtoTypeEnum.Ipynb:
       return (
         <Row>
           <UploadJupyterNotebook />
         </Row>
       );
-    case 'selfeducation':
+    case CourseTaskDtoTypeEnum.Selfeducation:
       return (
         <>
           {renderDescription(courseTask?.descriptionUrl)}
           {renderSelfEducation(courseTask, verifications)}
         </>
       );
-    case 'codewars': {
+    case CourseTaskDtoTypeEnum.Codewars: {
       return (
         <>
           {renderDescription(courseTask.descriptionUrl)}
@@ -349,16 +332,32 @@ function getAttemptsLeftMessage(value: number, strictAttemptsMode: boolean) {
   return 'Limit of "free" attempts is over. Now you can get only half a score.';
 }
 
+function getTimeToTheNextSubmit(hours: number, lastAttemptTime?: string) {
+  if (!hours || !lastAttemptTime) return 0;
+  const diff = moment(lastAttemptTime).diff(moment().subtract(hours, 'hour'));
+  if (diff < 0) return 0;
+  return diff;
+}
+
+function formatMiliseconds(ms: number) {
+  return moment.utc(ms).format('HH:mm:ss');
+}
+
 function renderSelfEducation(courseTask: CourseTask, verifications: Verification[]) {
   const questions = (courseTask?.publicAttributes?.questions as SelfEducationQuestionWithIndex[]) || [];
   const {
     maxAttemptsNumber = 0,
     tresholdPercentage = 0,
     strictAttemptsMode = true,
+    oneAttemptPerNumberOfHours = 0,
   } = courseTask?.publicAttributes ?? {};
 
-  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId).length;
-  const attemptsLeft = maxAttemptsNumber - attempts;
+  const attempts = verifications.filter(v => courseTask?.id === v.courseTaskId);
+  const attemptsLeft = maxAttemptsNumber - attempts.length;
+  const [lastAttempt] = attempts;
+  const lastAttemptTime = lastAttempt?.createdDate;
+  const timeToTheNextSubmit = getTimeToTheNextSubmit(oneAttemptPerNumberOfHours, lastAttemptTime);
+  const isSubmitAllowed = timeToTheNextSubmit === 0;
 
   return (
     <>
@@ -370,8 +369,20 @@ function renderSelfEducation(courseTask: CourseTask, verifications: Verification
         </Typography.Text>
       </Typography.Paragraph>
       <Typography.Paragraph>
+        {oneAttemptPerNumberOfHours ? (
+          <Typography.Text mark strong>
+            You have only one attempt per {oneAttemptPerNumberOfHours} hour{oneAttemptPerNumberOfHours !== 1 && 's'}.
+          </Typography.Text>
+        ) : (
+          ''
+        )}
+      </Typography.Paragraph>
+      <Typography.Paragraph>
         <Typography.Text strong style={{ fontSize: '2em', color: attemptsLeft > 1 ? '#1890ff' : '#cc0000' }}>
           {getAttemptsLeftMessage(attemptsLeft, strictAttemptsMode)}
+          {!isSubmitAllowed &&
+            attemptsLeft > 0 &&
+            ` Next submit is possible in ${formatMiliseconds(timeToTheNextSubmit)}`}
         </Typography.Text>
       </Typography.Paragraph>
       {questions.map(({ question, answers, multiple, index: questionIndex, questionImage, answersType }) => {
@@ -464,7 +475,7 @@ function renderJsTaskFields(repoUrl: string) {
         </a>
       </Typography.Paragraph>
       <Typography.Paragraph type="warning">
-        IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
+        IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
       </Typography.Paragraph>
       {explanationsSubmissionTasks()}
     </Row>
@@ -503,12 +514,7 @@ function renderDescription(descriptionUrl: string | null | undefined) {
 }
 
 function filterAutoTestTasks(tasks: CourseTask[]) {
-  return tasks.filter(
-    task =>
-      (task.verification === 'auto' || task.checker === 'auto-test') &&
-      task.checker !== 'taskOwner' &&
-      task.type !== 'test',
-  );
+  return tasks.filter(task => task.checker === 'auto-test' && task.type !== 'test');
 }
 
 function getRandomQuestions(questions: SelfEducationQuestion[]) {
@@ -519,7 +525,7 @@ function getRandomQuestions(questions: SelfEducationQuestion[]) {
 function getSubmitData(task: CourseTask, values: any) {
   let data: object = {};
   switch (task.type) {
-    case 'selfeducation':
+    case CourseTaskDtoTypeEnum.Selfeducation:
       data = Object.entries(values)
         .filter(([key]) => /answer/.test(key))
         .map(([key, value]) => {
@@ -527,7 +533,7 @@ function getSubmitData(task: CourseTask, values: any) {
           return { index: Number(index), value };
         });
       break;
-    case 'codewars':
+    case CourseTaskDtoTypeEnum.Codewars:
       if (!values.codewars) {
         message.error('Enter Account');
         return null;
@@ -539,17 +545,17 @@ function getSubmitData(task: CourseTask, values: any) {
       };
       break;
 
-    case 'jstask':
-    case 'kotlintask':
-    case 'objctask':
+    case CourseTaskDtoTypeEnum.Jstask:
+    case CourseTaskDtoTypeEnum.Kotlintask:
+    case CourseTaskDtoTypeEnum.Objctask:
       data = {
         githubRepoName: task.githubRepoName,
         sourceGithubRepoUrl: task.sourceGithubRepoUrl,
       };
       break;
 
-    case 'cv:markdown':
-    case 'cv:html':
+    case CourseTaskDtoTypeEnum.Cvmarkdown:
+    case CourseTaskDtoTypeEnum.Cvhtml:
     case null:
       data = {};
       break;

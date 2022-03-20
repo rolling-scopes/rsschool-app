@@ -2,8 +2,8 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { List, Typography, Input } from 'antd';
 import CommonCard from './CommonCard';
-import { Contacts } from '../../../../common/models/profile';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { Contacts } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
@@ -67,8 +67,9 @@ class ContactsCard extends React.Component<Props> {
   render() {
     const { isEditingModeEnabled, permissionsSettings, onPermissionsSettingsChange, onProfileSettingsChange } =
       this.props;
-    const { email, telegram, phone, skype, notes, linkedIn } = this.props.data;
+    const { email, epamEmail, telegram, phone, skype, notes, linkedIn } = this.props.data;
     const contacts = [
+      { name: 'EPAM E-mail', value: epamEmail, key: 'epamEmail' },
       {
         name: 'E-mail',
         value: email,
@@ -100,6 +101,7 @@ class ContactsCard extends React.Component<Props> {
         key: 'linkedIn',
       },
     ];
+
     const filledContacts = contacts.filter(({ value }: Contact) => value);
 
     return (

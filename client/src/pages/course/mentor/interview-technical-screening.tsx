@@ -2,7 +2,10 @@ import React, { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useAsync } from 'react-use';
 import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber } from 'antd';
 import withCourseData from 'components/withCourseData';
-import { withSession, UserSearch, PageLayoutSimple } from 'components';
+import { PageLayoutSimple } from 'components/PageLayout';
+import withSession, { CourseRole } from 'components/withSession';
+import { UserSearch } from 'components/UserSearch';
+
 import { CoursePageProps, StudentBasic } from 'services/models';
 import { CourseService } from 'services/course';
 import { AxiosError } from 'axios';
@@ -350,7 +353,7 @@ function Page(props: CoursePageProps) {
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);
     }
@@ -429,4 +432,4 @@ function deserializeFromJson(json: any) {
     }, {} as any);
 }
 
-export default withCourseData(withSession(Page, 'mentor'));
+export default withCourseData(withSession(Page, CourseRole.Mentor));

@@ -1,14 +1,14 @@
 import { Session } from 'components/withSession';
 import {
-  Course as CommonCourse,
   StudentBasic as CommonStudentBasic,
   DiscordServer,
   UserGroup,
   InterviewQuestion,
   InterviewQuestionCategory,
-} from '../../../common/models';
+} from 'common/models';
+import type { ProfileCourseDto } from 'api';
 
-export interface Course extends CommonCourse {}
+export interface Course extends ProfileCourseDto {}
 export interface StudentBasic extends CommonStudentBasic {}
 export type { DiscordServer };
 export type { UserGroup };
@@ -34,4 +34,10 @@ export interface PageWithModalState<T> {
 export interface CoursePageProps {
   session: Session;
   course: Course;
+  params: Record<string, string>;
 }
+
+export type CourseOnlyPageProps = {
+  course: Course;
+  params?: Record<string, string>;
+};

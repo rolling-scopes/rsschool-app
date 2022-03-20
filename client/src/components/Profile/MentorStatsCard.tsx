@@ -3,8 +3,8 @@ import isEqual from 'lodash/isEqual';
 import { List, Typography, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
-import { MentorStats, Student } from '../../../../common/models/profile';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { MentorStats, Student } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { TeamOutlined, FullscreenOutlined } from '@ant-design/icons';
@@ -124,7 +124,7 @@ class MentorStatsCard extends React.Component<Props, State> {
                           />
                         )
                       ) : (
-                        <p>Doesn't have students at this course yet</p>
+                        <p>Does not have students at this course yet</p>
                       )}
                     </div>
                     {students && (

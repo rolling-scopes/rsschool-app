@@ -88,6 +88,13 @@ export const createTaskVerification = (_: ILogger) => async (ctx: Router.RouterC
   }
 };
 
+function isNextSubmitAllowed(hours: number, lastAttemptTime?: string) {
+  if (!hours || !lastAttemptTime) return true;
+  const diff = new Date(lastAttemptTime).getTime() - new Date().getTime() + hours * 60 * 60 * 1000;
+  if (diff <= 0) return true;
+  return false;
+}
+
 const createSelfeducationVerification = async ({
   ctx,
   courseId,
@@ -96,20 +103,30 @@ const createSelfeducationVerification = async ({
 }: SelfEducationVerificationParams) => {
   const {
     answers,
-    public: { tresholdPercentage, maxAttemptsNumber, numberOfQuestions, strictAttemptsMode = true },
+    public: {
+      tresholdPercentage,
+      maxAttemptsNumber,
+      numberOfQuestions,
+      strictAttemptsMode = true,
+      oneAttemptPerNumberOfHours = 0,
+    },
   } = courseTask.task.attributes as SelfEducationAttributes;
   const { id: courseTaskId, type: courseTaskType, maxScore } = courseTask;
 
-  const verificationsNumber = (
-    await getRepository(TaskVerification)
-      .createQueryBuilder('v')
-      .select(['v.id'])
-      .andWhere('v.studentId = :studentId', { studentId })
-      .andWhere('v.courseTaskId = :courseTaskId', { courseTaskId })
-      .getMany()
-  ).length;
+  const verifications = await getRepository(TaskVerification)
+    .createQueryBuilder('v')
+    .select(['v.id', 'v.createdDate'])
+    .andWhere('v.studentId = :studentId', { studentId })
+    .andWhere('v.courseTaskId = :courseTaskId', { courseTaskId })
+    .orderBy('v.createdDate', 'DESC')
+    .getMany();
+  const verificationsNumber = verifications.length;
+  const lastVerificationDate = verifications[0]?.createdDate as unknown as string;
 
-  if (strictAttemptsMode && verificationsNumber >= maxAttemptsNumber) {
+  if (
+    !isNextSubmitAllowed(oneAttemptPerNumberOfHours, lastVerificationDate) ||
+    (strictAttemptsMode && verificationsNumber >= maxAttemptsNumber)
+  ) {
     setResponse(ctx, FORBIDDEN);
     return;
   }
@@ -186,9 +203,10 @@ type SelfEducationVerificationParams = {
 type SelfEducationAttributes = {
   public: {
     maxAttemptsNumber: number;
-    strictAttemptsMode?: boolean;
     numberOfQuestions: number;
     tresholdPercentage: number;
+    strictAttemptsMode?: boolean;
+    oneAttemptPerNumberOfHours?: number;
     questions: {
       question: string;
       answers: string[];

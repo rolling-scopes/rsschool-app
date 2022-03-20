@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": { "@entities/*": ["../server/src/models/*"] },
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "strict": true,
+    "strictBindCallApply": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": false,
+    "forceConsistentCasingInFileNames": false
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}

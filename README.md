@@ -1,49 +1,59 @@
 [![Deploy](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/rolling-scopes/rsschool-app/actions/workflows/deploy.yaml)
 
-# Rolling Scopes School Application
+<img src="https://www.rs.school/images/rs_school.svg" width="250px"/>
 
-### UNDER ACTIVE DEVELOPMENT
+# RS School App
 
+The [app.rs.school](https://app.rs.school) is a tool for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
 
-The [web application](https://app.rs.school) which powers [Rolling Scopes School](https://rs.school) education process. It helps thousands students to become JavaScipt developers.
+<img src="https://user-images.githubusercontent.com/618807/138608245-f00471ce-f982-4901-a32e-7246720ed13b.png" width="600px"/>
 
+## Technology Overview
 
----
+### Stack
 
-## Technology stack
- - Typescript
- - Next.js
- - React
- - Node.js
- - Koa.js
- - Docker
- - PostgreSQL
+- Language: [Typescript](https://www.typescriptlang.org/)
+- Front-end: [Next.js](https://nextjs.org/) / [React](https://reactjs.org/)
+- Back-end: [NestJS](https://nestjs.com/) and [Koa.js](https://koajs.com/) (deprecated backend) / [Node.js](https://nodejs.org/en/)
+- End-to-end: [Playwright](https://playwright.dev/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
+- Deployment: [Docker](https://www.docker.com/)
 
----
+### Infrastructure
+
+- Cloud: [AWS EC2](https://aws.amazon.com/ec2/), [AWS RDS](https://aws.amazon.com/rds/postgresql/), [AWS S3](https://aws.amazon.com/s3/), [AWS CloudWatch](https://aws.amazon.com/cloudwatch/)
+- CI/CD: [Github Actions](https://github.com/rolling-scopes/rsschool-app/tree/master/.github/workflows)
 
 ## Getting Started
 
-  ### Prerequisites
+### Prerequisites
 
-  - [Git 2.10+](https://git-scm.com/downloads)
-  - [NodeJS LTS](https://nodejs.org/en/)
-  - [Docker](https://docs.docker.com/install/)
-  - [Docker Compose](https://docs.docker.com/compose/install/)
-  
+Please install the following software before starting development:
 
-  ### Steps
-  - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
-  - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
-  - Run `npm run db:up` (starts local database)
-  - Run `npm run db:restore`  (restore a test DB snapshot)
-  - Make a copy of `server/.env.example` and rename it to `server/.env`
-  - Run `npm start` (starts application by running Next.js and REST API server)
-  - Open `https://localhost:3000` in a browser
+- [Git 2.10+](https://git-scm.com/downloads)
+- [Node.js LTS](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Steps
+
+- Clone [repository](https://github.com/rolling-scopes/rsschool-app)
+- Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
+- Run `npm run db:up` (starts local database)
+- Run `npm run db:restore` (restore a test DB snapshot)
+- Make a copy of `server/.env.example` and `nestjs/.env.example` and rename it to `server/.env` and `nestjs/.env` respectively.
+- Run `npm start` (starts application by running Next.js and REST API server)
+- Open `https://localhost:3000` in a browser
+- See more in [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
+
+### Running docs locally
+
+- Install docsify globally: `npm i -g docsify`
+- Run `docsify serve -p 4000 docs`
 
 ## Contributing
 
 See [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
-
 
 ## Contributors
 
@@ -66,11 +76,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 <a href="https://opencollective.com/rsschool/organization/0/website"><img src="https://opencollective.com/rsschool/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/rsschool/organization/1/website"><img src="https://opencollective.com/rsschool/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/2/website"><img src="https://opencollective.com/rsschool/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/3/website"><img src="https://opencollective.com/rsschool/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/4/website"><img src="https://opencollective.com/rsschool/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/5/website"><img src="https://opencollective.com/rsschool/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/6/website"><img src="https://opencollective.com/rsschool/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/7/website"><img src="https://opencollective.com/rsschool/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/8/website"><img src="https://opencollective.com/rsschool/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/rsschool/organization/9/website"><img src="https://opencollective.com/rsschool/organization/9/avatar.svg"></a>
+
+## License
+
+[Mozilla Public License 2.0](https://github.com/rolling-scopes/rsschool-app/blob/master/LICENSE)

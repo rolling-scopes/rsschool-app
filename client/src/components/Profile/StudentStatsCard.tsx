@@ -4,8 +4,8 @@ import random from 'lodash/random';
 import { Typography, List, Button, Progress, Modal, Input, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
-import { StudentStats } from '../../../../common/models/profile';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { StudentStats } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
@@ -132,7 +132,7 @@ class StudentStatsCard extends React.Component<Props, State> {
 
   private selfExpelStudent = async (gitHubId: string, courseId: number) => {
     const courseService = new CourseService(courseId);
-    const result = await courseService.selfExpel(gitHubId, courseId.toString());
+    const result = await courseService.selfExpel(gitHubId, 'Self expelled from the course');
     if (result.status === 200) {
       window.location.reload();
     }
@@ -177,7 +177,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                   mentor,
                   totalScore,
                   isExpelled,
-                  position,
+                  rank,
                   isCourseCompleted,
                   certificateId,
                   courseId,
@@ -214,9 +214,9 @@ class StudentStatsCard extends React.Component<Props, State> {
                           Mentor: <a href={`/profile?githubId=${mentor.githubId}`}>{mentor.name}</a>
                         </p>
                       )}
-                      {position && (
+                      {rank && (
                         <p style={{ fontSize: 12, marginBottom: 5 }}>
-                          Position: <Text strong>{position}</Text>
+                          Position: <Text strong>{rank}</Text>
                         </p>
                       )}
                       <p style={{ fontSize: 12, marginBottom: 5 }}>

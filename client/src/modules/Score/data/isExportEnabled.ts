@@ -1,14 +1,17 @@
 import { CoursePageProps } from 'services/models';
+import { CourseRole } from 'components/withSession';
+import { isCourseManager } from 'domain/user';
 
 export function isExportEnabled(props: CoursePageProps) {
-  const { isAdmin, isHirer, roles, coursesRoles } = props.session;
+  const { session } = props;
+  const { isAdmin, isHirer, courses } = session;
   const courseId = props.course.id;
-  const courseRole = coursesRoles?.[courseId];
+  const { roles } = courses?.[courseId] ?? { roles: [] };
   const csvEnabled =
     isAdmin ||
     isHirer ||
-    roles[courseId] === 'coursemanager' ||
-    courseRole?.includes('manager') ||
-    courseRole?.includes('supervisor');
+    isCourseManager(session, courseId) ||
+    roles?.includes(CourseRole.Manager) ||
+    roles?.includes(CourseRole.Supervisor);
   return csvEnabled;
 }

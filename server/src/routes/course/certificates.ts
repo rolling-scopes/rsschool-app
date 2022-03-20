@@ -79,7 +79,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       timestamp: Date.now(),
     };
   });
-  await axios.post(`${config.aws.restApiUrl}/certificate`, result, {
+  await axios.post<any>(`${config.aws.restApiUrl}/certificate`, result, {
     headers: { 'x-api-key': config.aws.restApiKey },
   });
   setResponse(ctx, OK, result);
@@ -117,7 +117,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
     studentName: `${student.user.firstName} ${student.user.lastName}`,
     timestamp: Date.now(),
   };
-  await axios.post(`${config.aws.restApiUrl}/certificate`, result, {
+  await axios.post<any>(`${config.aws.restApiUrl}/certificate`, result, {
     headers: { 'x-api-key': config.aws.restApiKey },
   });
   setResponse(ctx, OK, result);

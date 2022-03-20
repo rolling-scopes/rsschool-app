@@ -3,15 +3,6 @@ import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import PublicFeedbackModal from '../PublicFeedbackModal';
 
-jest.mock('moment', () => (value: any) => ({
-  format() {
-    return value;
-  },
-  fromNow() {
-    return 'fromNow';
-  },
-}));
-
 describe('PublicFeedbackModal', () => {
   const data = [
     {
@@ -75,6 +66,10 @@ describe('PublicFeedbackModal', () => {
       },
     },
   ];
+
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2022-01-01T00:00:00Z').getTime());
+  });
 
   it('Should render correctly', () => {
     const output = shallow(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);

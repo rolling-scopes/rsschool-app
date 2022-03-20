@@ -11,27 +11,13 @@ import {
   TaskResult,
   TaskInterviewResult,
   Certificate,
+  StageInterview,
+  StageInterviewFeedback,
 } from '../../models';
 import { Permissions } from './permissions';
+import omit from 'lodash/omit';
 
-type StudentPosition = {
-  courseId: number;
-  position: number;
-};
-
-const getStudentPosition = async ({ totalScore, courseId }: StudentStats): Promise<StudentPosition> =>
-  (
-    await getRepository(Student)
-      .createQueryBuilder('student')
-      .select('"student"."courseId" AS "courseId"')
-      .addSelect('COUNT(*) AS "position"')
-      .where('"student"."courseId" = :courseId', { courseId })
-      .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
-      .groupBy('"student"."courseId"')
-      .getRawMany()
-  ).map(({ courseId, position }) => ({ courseId, position: Number(position) }))[0];
-
-const getStudentStatsWithoutPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
+const getStudentStatsWithPosition = async (githubId: string, permissions: Permissions): Promise<StudentStats[]> => {
   const { isCoreJsFeedbackVisible, isExpellingReasonVisible } = permissions;
 
   const query = await getRepository(Student)
@@ -43,15 +29,21 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
     .addSelect('"student"."isExpelled" AS "isExpelled"')
     .addSelect('"student"."courseCompleted" AS "isCourseCompleted"')
     .addSelect('"student"."totalScore" AS "totalScore"')
+    .addSelect('"student"."rank" AS "rank"')
     .addSelect('"userMentor"."firstName" AS "mentorFirstName"')
     .addSelect('"userMentor"."lastName" AS "mentorLastName"')
     .addSelect('"userMentor"."githubId" AS "mentorGithubId"')
     .addSelect('"certificate"."publicId" AS "certificateId"')
     .addSelect('ARRAY_AGG ("courseTask"."maxScore") AS "taskMaxScores"')
     .addSelect('ARRAY_AGG ("courseTask"."scoreWeight") AS "taskScoreWeights"')
+    .addSelect('ARRAY_AGG ("courseTask"."studentEndDate") AS "taskEndDates"')
     .addSelect('ARRAY_AGG ("task"."name") AS "taskNames"')
     .addSelect('ARRAY_AGG ("task"."descriptionUrl") AS "taskDescriptionUris"')
-    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"');
+    .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"').addSelect(`ARRAY_AGG (COALESCE(
+      "taskResult"."score",
+      "taskInterview"."score",
+      ("stageInterviewFeedback"."json"::json -> 'resume' ->> 'score')::int
+    )) AS "taskScores"`);
 
   if (isExpellingReasonVisible) {
     query.addSelect('"student"."expellingReason" AS "expellingReason"');
@@ -59,16 +51,13 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
 
   if (isCoreJsFeedbackVisible) {
     query
-      .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
       .addSelect('ARRAY_AGG (COALESCE("taskResult"."comment", "taskInterview"."comment")) AS "taskComments"')
       .addSelect('ARRAY_AGG ("taskInterview"."formAnswers") AS "taskInterviewFormAnswers"')
       .addSelect('ARRAY_AGG ("interviewer"."githubId") AS "interviewerGithubId"')
       .addSelect('ARRAY_AGG ("interviewer"."firstName") AS "interviewerFirstName"')
       .addSelect('ARRAY_AGG ("interviewer"."lastName") AS "interviewerLastName"');
   } else {
-    query
-      .addSelect('ARRAY_AGG (COALESCE("taskResult"."score", "taskInterview"."score")) AS "taskScores"')
-      .addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
+    query.addSelect('ARRAY_AGG ("taskResult"."comment") AS "taskComments"');
   }
 
   query
@@ -88,6 +77,16 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
       TaskInterviewResult,
       'taskInterview',
       '"taskInterview"."studentId" = "student"."id" AND "taskInterview"."courseTaskId" = "courseTask"."id"',
+    )
+    .leftJoin(
+      StageInterview,
+      'stageInterview',
+      '"stageInterview"."studentId" = "student"."id" AND "stageInterview"."courseTaskId" = "courseTask"."id"',
+    )
+    .leftJoin(
+      StageInterviewFeedback,
+      'stageInterviewFeedback',
+      '"stageInterviewFeedback"."stageInterviewId" = "stageInterview"."id"',
     );
 
   if (isCoreJsFeedbackVisible) {
@@ -119,6 +118,7 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
       mentorGithubId,
       taskMaxScores,
       taskScoreWeights,
+      taskEndDates,
       taskNames,
       taskDescriptionUris,
       taskGithubPrUris,
@@ -129,9 +129,11 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
       interviewerFirstName,
       interviewerLastName,
       certificateId,
+      rank,
     }: any) => {
-      const tasks = taskMaxScores.map((maxScore: number, idx: number) => ({
+      const tasksWithDates = taskMaxScores.map((maxScore: number, idx: number) => ({
         maxScore,
+        endDate: new Date(taskEndDates[idx]).getTime(),
         scoreWeight: taskScoreWeights[idx],
         name: taskNames[idx],
         descriptionUri: taskDescriptionUris[idx],
@@ -147,6 +149,9 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
               }
             : undefined,
       }));
+      const orderedTasks = tasksWithDates
+        .sort((a: any, b: any) => a.endDate - b.endDate)
+        .map((task: any) => omit(task, 'endDate'));
       return {
         courseId,
         courseName,
@@ -156,9 +161,9 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
         expellingReason,
         isCourseCompleted,
         totalScore,
-        tasks,
+        tasks: orderedTasks,
         certificateId,
-        position: null,
+        rank,
         mentor: {
           githubId: mentorGithubId,
           name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
@@ -169,9 +174,6 @@ const getStudentStatsWithoutPosition = async (githubId: string, permissions: Per
 };
 
 export const getStudentStats = async (githubId: string, permissions: Permissions) => {
-  const studentStats = await getStudentStatsWithoutPosition(githubId, permissions);
-  const studentPositions = await Promise.all(studentStats.map(stats => getStudentPosition(stats)));
-  const studentStatsWithPositions = studentStats.map((stats, idx) => ({ ...stats, ...studentPositions[idx] }));
-
-  return studentStatsWithPositions;
+  const studentStats = await getStudentStatsWithPosition(githubId, permissions);
+  return studentStats;
 };

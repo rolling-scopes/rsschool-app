@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { Collapse, Badge, Button, Row, Typography, Col, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import moment from 'moment-timezone';
 import { CourseEvent } from 'services/course';
 import { dateWithTimeZoneRenderer, renderTagWithStyle } from 'components/Table';
 import Link from 'next/link';
+import { TASK_TYPES_MAP } from 'data/taskTypes';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -147,9 +148,12 @@ const getDayEvents = (events: CourseEvent[], timeZone: string, alias: string, st
       <tbody key={id}>
         <tr>
           <th style={{ width: '10%' }}>{dateWithTimeZoneRenderer(timeZone, 'HH:mm')(dateTime)}</th>
-          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors)}</th>
+          <th style={{ width: '10%' }}>{renderTagWithStyle(type, storedTagColors, TASK_TYPES_MAP)}</th>
           <th style={{ width: '80%' }}>
-            <Link href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}>
+            <Link
+              prefetch={false}
+              href={`/course/entityDetails?course=${alias}&entityType=${isTask ? 'task' : 'event'}&entityId=${id}`}
+            >
               <a>
                 <Text style={{ width: '100%', height: '100%', display: 'block' }} strong>
                   {name}

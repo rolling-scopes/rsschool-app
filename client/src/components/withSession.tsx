@@ -1,9 +1,23 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { LoadingScreen } from './LoadingScreen';
 import Router from 'next/router';
+import React, { useState } from 'react';
+import { useAsync } from 'react-use';
+import { LoadingScreen } from './LoadingScreen';
 
-export type Role = 'student' | 'mentor' | 'coursemanager';
+export const enum CourseRole {
+  TaskOwner = 'taskOwner',
+  JuryActivist = 'juryActivist',
+  Manager = 'manager',
+  Supervisor = 'supervisor',
+  Student = 'student',
+  Mentor = 'mentor',
+}
+
+export interface CourseInfo {
+  mentorId?: number;
+  studentId?: number;
+  roles: CourseRole[];
+}
 
 export interface Session {
   id: number;
@@ -11,46 +25,35 @@ export interface Session {
   isAdmin: boolean;
   isHirer: boolean;
   isActivist: boolean;
-  roles: { [key: number]: Role };
-  coursesRoles?: { [key: string]: ('taskOwner' | 'juryActivist' | 'manager' | 'supervisor')[] | undefined };
+  courses: { [courseId: number | string]: CourseInfo | undefined };
 }
 
 let sessionCache: Session | undefined;
 
-function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: Role) {
+function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: CourseRole) {
   return (props: any) => {
-    const [isLoading, setLoading] = useState(true);
     const [session, setSession] = useState<Session | undefined>();
 
-    useEffect(() => {
-      const load = async () => {
-        if (sessionCache != null) {
-          setLoading(false);
-          setSession(sessionCache);
-          return;
-        }
-        try {
-          const response = await axios.get(`/api/session`);
-          setLoading(false);
-          sessionCache = response.data.data;
-          setSession(sessionCache);
-        } catch (e) {
-          setLoading(false);
-          Router.push('/login', {
-            pathname: '/login',
-            query: {
-              url: encodeURIComponent(document.location.pathname + document.location.search),
-            },
-          });
-        }
-      };
-
-      load();
+    const { loading } = useAsync(async () => {
+      if (sessionCache != null) {
+        setSession(sessionCache);
+        return;
+      }
+      try {
+        const response = await axios.get<{ data: Session }>(`/api/session`);
+        sessionCache = response.data.data;
+        setSession(sessionCache);
+      } catch (e) {
+        const { pathname, search } = document.location;
+        const redirectUrl = encodeURIComponent(`${pathname}${search}`);
+        Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+      }
     }, []);
 
     if (session && requiredRole) {
-      const { roles, isAdmin } = session;
-      if (roles[props.course.id] !== requiredRole && !isAdmin) {
+      const { courses, isAdmin } = session;
+      const id = props.course.id;
+      if (!courses?.[id]?.roles.includes(requiredRole) && !isAdmin) {
         return (
           <h4 className="m-5 d-flex justify-content-center">
             You are not [{requiredRole}] in {props.course.alias}
@@ -58,9 +61,7 @@ function withSession(WrappedComponent: React.ComponentType<any>, requiredRole?: 
         );
       }
     }
-    return (
-      <LoadingScreen show={isLoading}>{session && <WrappedComponent session={session} {...props} />}</LoadingScreen>
-    );
+    return <LoadingScreen show={loading}>{session && <WrappedComponent session={session} {...props} />}</LoadingScreen>;
   };
 }
 

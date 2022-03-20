@@ -5,10 +5,11 @@ import { Typography, Comment, Tooltip, Avatar, Badge } from 'antd';
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
-import { PublicFeedback } from '../../../../common/models/profile';
-import { ConfigurableProfilePermissions } from '../../../../common/models/profile';
+import { PublicFeedback } from 'common/models/profile';
+import { ConfigurableProfilePermissions } from 'common/models/profile';
 import { ChangedPermissionsSettings } from 'pages/profile';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { GithubAvatar } from 'components/GithubAvatar';
 
 const { Text, Paragraph } = Typography;
 
@@ -118,12 +119,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
                 <Comment
                   key={`comment-${idx}`}
                   author={<a href={`/profile?githubId=${fromUser.githubId}`}>{fromUser.name}</a>}
-                  avatar={
-                    <Avatar
-                      src={`https://github.com/${fromUser.githubId}.png?size=${48}`}
-                      alt={`${fromUser.githubId} avatar`}
-                    />
-                  }
+                  avatar={<GithubAvatar size={48} githubId={fromUser.githubId} />}
                   content={
                     <>
                       {badgeId ? (

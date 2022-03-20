@@ -1,5 +1,7 @@
-import { Table } from 'antd';
-import { PageLayout, withSession, Rating } from 'components';
+import { Button, Table } from 'antd';
+import withSession from 'components/withSession';
+import { Rating } from 'components/Rating';
+import { PageLayout } from 'components/PageLayout';
 import {
   getColumnSearchProps,
   numberSorter,
@@ -14,9 +16,11 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
+import { isCourseManager } from 'domain/user';
 
-function Page(props: CoursePageProps) {
-  const courseId = props.course.id;
+function Page({ session, course }: CoursePageProps) {
+  const courseId = course.id;
+  const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session]);
 
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState([] as any[]);
@@ -28,7 +32,12 @@ function Page(props: CoursePageProps) {
   };
 
   const inviteStudent = withLoading(async (githubId: string) => {
-    await courseService.createInterview(githubId, props.session.githubId);
+    await courseService.createInterview(githubId, session.githubId);
+    await loadData();
+  });
+
+  const removeFromList = withLoading(async (githubId: string) => {
+    await courseService.updateMentoringAvailability(githubId, false);
     await loadData();
   });
 
@@ -38,8 +47,8 @@ function Page(props: CoursePageProps) {
     <PageLayout
       loading={loading}
       title="Technical Screening: Available Students"
-      githubId={props.session.githubId}
-      courseName={props.course.name}
+      githubId={session.githubId}
+      courseName={course.name}
     >
       <Table
         pagination={{ pageSize: 100 }}
@@ -84,7 +93,18 @@ function Page(props: CoursePageProps) {
           {
             title: 'Actions',
             dataIndex: 'actions',
-            render: (_, record) => <a onClick={() => inviteStudent(record.githubId)}>Want to interview</a>,
+            render: (_, record) => (
+              <>
+                <Button type="link" onClick={() => inviteStudent(record.githubId)}>
+                  Want to interview
+                </Button>
+                {isPowerUser ? (
+                  <Button type="link" onClick={() => removeFromList(record.githubId)}>
+                    Remove from list
+                  </Button>
+                ) : null}
+              </>
+            ),
           },
         ]}
       />

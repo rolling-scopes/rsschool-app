@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import ContactsCard from '../ContactsCard';
-import { Contacts } from '../../../../../common/models/profile';
+import { Contacts } from 'common/models/profile';
 
 describe('ContactsCard', () => {
   describe('Should render correctly', () => {
@@ -10,6 +10,7 @@ describe('ContactsCard', () => {
       const wrapper: any = mount(
         <ContactsCard
           data={{
+            epamEmail: 'vasya@epam.com',
             phone: '1232422',
             email: 'vasya@tut.by',
             skype: 'skype_vasya',
@@ -28,6 +29,7 @@ describe('ContactsCard', () => {
       const wrapper: any = mount(
         <ContactsCard
           data={{
+            epamEmail: 'vasya@epam.com',
             phone: '1232422',
             email: 'vasya@tut.by',
             skype: 'skype_vasya',

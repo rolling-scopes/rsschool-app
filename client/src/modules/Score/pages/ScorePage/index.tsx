@@ -1,5 +1,5 @@
 import { Row, Switch, Typography } from 'antd';
-import { CourseNoAccess } from 'components/CourseNoAccess';
+import { CourseNoAccess } from 'modules/Course/components/CourseNoAccess';
 import { CoursePageLayout } from 'components/CoursePageLayout';
 import { ExportCsvButton } from 'modules/Score/components/ExportCsvButton';
 import { ScoreTable } from 'modules/Score/components/ScoreTable';
@@ -9,8 +9,8 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { CourseService, StudentScore } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { IPaginationInfo } from '../../../../../../common/types/pagination';
-import { ScoreTableFilters } from '../../../../../../common/types/score';
+import { IPaginationInfo } from 'common/types/pagination';
+import { ScoreTableFilters } from 'common/types/score';
 
 const { Text } = Typography;
 

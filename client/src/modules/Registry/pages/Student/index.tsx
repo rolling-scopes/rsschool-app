@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, message, Modal, Result, Row, Select, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { RegistrationPageLayout } from 'components';
+import { RegistrationPageLayout } from 'components/RegistartionPageLayout';
 import { LocationSelect } from 'components/Forms';
 import { NoCourses } from 'components/Registry/NoCourses';
 import { Session } from 'components/withSession';
@@ -11,11 +11,14 @@ import { formatMonthFriendly } from 'services/formatter';
 import { Course } from 'services/models';
 import { UserFull } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
-import { Location } from '../../../../../../common/models';
+import { Location } from 'common/models';
 import { Info } from 'modules/Registry/components';
-import { css } from 'styled-jsx/css';
+import css from 'styled-jsx/css';
 import { DEFAULT_ROW_GUTTER, TEXT_EMAIL_TOOLTIP, TEXT_LOCATION_STUDENT_TOOLTIP } from 'modules/Registry/constants';
-import { useStudentCourseData } from './hooks/useStudentsCourseData';
+import { useStudentCourseData } from '../../hooks/useStudentsCourseData';
+import { useRouter } from 'next/router';
+import { CdnService } from 'services/cdn';
+import { SolidarityUkraine } from 'components/SolidarityUkraine';
 
 export const TYPES = {
   MENTOR: 'mentor',
@@ -27,16 +30,26 @@ export type Props = {
   session: Session;
 };
 
+const cdnService = new CdnService();
+
 export function StudentRegistry(props: Props & { courseAlias?: string }) {
   const { githubId } = props.session;
   const [form] = Form.useForm();
   const update = useUpdate();
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [location, setLocation] = useState(null as Location | null);
 
   const [loading, setLoading] = useState(false);
 
-  const { student, studentLoading } = useStudentCourseData(githubId, props.courseAlias);
+  const [student, studentLoading, registered] = useStudentCourseData(githubId, props.courseAlias);
+
+  useEffect(() => {
+    if (registered) {
+      message.success('You are already registered to the course. Redirecting to Home page in 5 seconds...');
+      setTimeout(() => router.push('/'), 5000);
+    }
+  }, [registered]);
 
   useEffect(() => {
     setLocation({
@@ -95,10 +108,10 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
       async function confirmRegistration() {
         setLoading(true);
         try {
-          const userResponse = await axios.post('/api/profile/me', userModel);
+          const userResponse = await axios.post<any>('/api/profile/me', userModel);
           const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
           if (githubId) {
-            await axios.post('/api/registry', registryModel);
+            await cdnService.registerStudent(registryModel);
             setSubmitted(true);
           } else {
             message.error('Invalid github id');
@@ -114,7 +127,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
   );
 
   let content: React.ReactNode;
-  if (loading || studentLoading) {
+  if (loading || studentLoading || registered) {
     content = undefined;
   } else if (!student?.courses.length) {
     content = <NoCourses />;
@@ -156,6 +169,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
           </div>
           <div className="student-registration-content">
             <Col>
+              <SolidarityUkraine />
               <Row>
                 <Typography.Title level={3} style={{ margin: '8px 0 40px' }}>
                   Welcome to RS School!
@@ -217,7 +231,7 @@ export function StudentRegistry(props: Props & { courseAlias?: string }) {
                 <Col xs={24} sm={24} md={20} lg={20} xl={20}>
                   <Row>
                     <Typography.Title level={5}>
-                      Location <Info title={TEXT_LOCATION_STUDENT_TOOLTIP} />
+                      City <Info title={TEXT_LOCATION_STUDENT_TOOLTIP} />
                     </Typography.Title>
                   </Row>
                   <Row>

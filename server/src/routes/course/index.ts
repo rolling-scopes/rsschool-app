@@ -14,6 +14,7 @@ import {
   courseManagerGuard,
   basicAuthAws,
   anyCourseMentorGuard,
+  courseSupervisorOrMentorGuard,
 } from '../guards';
 import { setResponse } from '../utils';
 import {
@@ -26,7 +27,6 @@ import {
 } from './mentor';
 import * as mentors from './mentors';
 import * as score from './score';
-import { getCourseStages, postCourseStages } from './stages';
 import { postCertificates, postStudentCertificate } from './certificates';
 import {
   getStudents,
@@ -62,6 +62,7 @@ import {
   getStudent,
   updateStudent,
   postFeedback,
+  updateMentoringAvailability,
 } from './student';
 import * as crossCheck from './crossCheck';
 import { getUsers, putUsers, putUser } from './user';
@@ -89,7 +90,6 @@ export function courseRoute(logger: ILogger) {
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
   addInterviewsApi(router, logger);
-  addStageApi(router, logger);
   addEventApi(router, logger);
   addTaskApi(router, logger);
   addMentorApi(router, logger);
@@ -116,11 +116,6 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
   );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
   router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
-}
-
-function addStageApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/stages', guard, getCourseStages(logger));
-  router.post('/stages', adminGuard, postCourseStages(logger));
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
@@ -226,7 +221,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-  router.put('/student/:githubId', courseSupervisorGuard, updateStudent(logger));
+  router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
   router.get(
     '/student/:githubId/interview/stage',
@@ -256,6 +251,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   );
 
   router.get('/student/:githubId/summary', courseGuard, ...validators, getStudentSummary(logger));
+  router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));

@@ -1,5 +1,6 @@
 import { Button, Divider, message, Row, Statistic, Table, Popconfirm } from 'antd';
-import { PageLayout, withSession } from 'components';
+import { withSession } from 'components/withSession';
+import { PageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
 import withCourseData from 'components/withCourseData';
@@ -162,7 +163,7 @@ function Page(props: CoursePageProps) {
             title: 'Mentor',
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
-            width: 100,
+            width: 200,
             render: (_, record: any) => <PersonCell value={record} />,
             ...getColumnSearchProps(['githubId', 'name']),
           },

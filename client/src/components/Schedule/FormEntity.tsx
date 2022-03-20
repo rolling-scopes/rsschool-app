@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task, TaskService } from 'services/task';
 import { CourseEvent, CourseService } from 'services/course';
-import { withSession } from 'components';
+import { withSession } from 'components/withSession';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { formatTimezoneToUTC } from 'services/formatter';
@@ -12,13 +12,11 @@ import {
   Button,
   DatePicker,
   Select,
-  Alert,
   Row,
   Col,
   message,
   Divider,
   Collapse,
-  Radio,
   Checkbox,
 } from 'antd';
 import moment from 'moment-timezone';
@@ -67,7 +65,6 @@ const FormEntity: React.FC<Props> = ({
   refreshData,
 }) => {
   const checker = editableRecord?.isTask && editableRecord.checker === 'crossCheck' ? true : false;
-  const [isFormSubmitted, setFormSubmitted] = useState(false);
   const [isCrossCheckChecker, setIsCrossCheckChecker] = useState(checker);
   const isUpdateMode = editableRecord ? true : false;
 
@@ -78,13 +75,13 @@ const FormEntity: React.FC<Props> = ({
       } else {
         await createEvent(courseId, values, isUpdateMode, editableRecord);
       }
+      await refreshData();
+      message.success(`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`);
     } catch (error) {
       message.error('An error occurred. Please try later.');
-      return;
+    } finally {
+      handleCancel();
     }
-
-    setFormSubmitted(true);
-    await refreshData();
   };
 
   const handleFormChange = (_changedValues: any, allValues: any) => {
@@ -95,10 +92,6 @@ const FormEntity: React.FC<Props> = ({
 
     onFieldsChange(allValues);
   };
-
-  if (isFormSubmitted) {
-    return <Alert message={`Your task successfully ${isUpdateMode ? 'updated' : 'added'}`} type="success" showIcon />;
-  }
 
   const typesList = entityType === 'task' ? TASK_TYPES : EVENT_TYPES;
   const entityTypes = typesList.map(tag => {
@@ -242,13 +235,6 @@ const FormEntity: React.FC<Props> = ({
 
           <Divider />
 
-          <Form.Item name="verification" label="Verification (deprecated)">
-            <Radio.Group>
-              <Radio value="manual">Manual</Radio>
-              <Radio value="auto">Auto</Radio>
-            </Radio.Group>
-          </Form.Item>
-
           <Collapse>
             <Collapse.Panel header="Github" key="1">
               <Form.Item name="githubPrRequired" label="" valuePropName="checked">
@@ -316,7 +302,6 @@ const getInitialValues = (entityType: string, data: any) => {
       scoreWeight: 1,
       timeZone,
       checker: 'mentor',
-      verification: 'manual',
     };
   }
 
@@ -331,7 +316,6 @@ const getInitialValues = (entityType: string, data: any) => {
       scoreWeight: (data && data.scoreWeight) ?? 1,
       description: data.description ? data.description : '',
       checker: data.checker || 'mentor',
-      verification: data.verification || 'manual',
       range:
         data && data.studentStartDate && data.studentEndDate
           ? [
@@ -363,14 +347,13 @@ const loadUsers = async (searchText: string) => {
 
 const createTask = async (courseId: number, values: any, isUpdateMode: boolean, editableRecord: CourseEvent | null) => {
   const taskService = new TaskService();
-  const serviceCouseTask = new CourseService(courseId);
+  const serviceCourseTask = new CourseService(courseId);
 
   const templateTaskData = {
     name: values.name,
     type: values.type,
     descriptionUrl: values.descriptionUrl || '',
     description: values.description || '',
-    verification: values.verification,
     githubPrRequired: values.githubPrRequired,
     sourceGithubRepoUrl: values.sourceGithubRepoUrl,
     githubRepoName: values.githubRepoName,
@@ -404,9 +387,9 @@ const createTask = async (courseId: number, values: any, isUpdateMode: boolean, 
   };
 
   if (isUpdateMode && editableRecord) {
-    await serviceCouseTask.updateCourseTask(editableRecord.id, values);
+    await serviceCourseTask.updateCourseTask(editableRecord.id, values);
   } else {
-    await serviceCouseTask.createCourseTask(values);
+    await serviceCourseTask.createCourseTask(values);
   }
 };
 

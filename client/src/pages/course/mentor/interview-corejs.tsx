@@ -1,8 +1,9 @@
 import { Button, Checkbox, Form, Input, message, Rate, Typography } from 'antd';
 import _ from 'lodash';
-import { UserSearch, PageLayoutSimple } from 'components';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
-import withSession from 'components/withSession';
+import withSession, { CourseRole } from 'components/withSession';
 import { useMemo, useState, useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
@@ -37,10 +38,10 @@ const questions: { questionId: string; questionText: string }[] = [
 ];
 
 const section1 = ['let-const', 'hoisting', 'closure', 'scope'];
-export const section2 = ['capturing', 'bubbling', 'event-delegation', 'event-prevention', 'event-listener'];
-export const section3 = ['eventloop', 'async', 'promises-microtask'];
+const section2 = ['capturing', 'bubbling', 'event-delegation', 'event-prevention', 'event-listener'];
+const section3 = ['eventloop', 'async', 'promises-microtask'];
 
-export const initialValues: any = {
+const initialValues: any = {
   'call-bind-apply': '',
   'event-delegation': false,
   'event-listener': false,
@@ -101,7 +102,7 @@ function Page(props: CoursePageProps) {
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       const response = error.response;
       const errorMessage = response?.data?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);
@@ -200,4 +201,4 @@ function Page(props: CoursePageProps) {
   );
 }
 
-export default withCourseData(withSession(Page, 'mentor'));
+export default withCourseData(withSession(Page, CourseRole.Mentor));

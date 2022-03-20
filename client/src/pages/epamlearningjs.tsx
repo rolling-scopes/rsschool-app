@@ -1,12 +1,13 @@
 import { Button, Col, Form, message, Row, Table, Typography, Spin } from 'antd';
 import { NextPageContext } from 'next';
-import { withSession } from 'components';
+import { withSession } from 'components/withSession';
 import * as React from 'react';
 import { AxiosError } from 'axios';
 import { CourseService, CourseTask } from 'services/course';
 import { UserService } from 'services/user';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskSelect } from 'components/Forms';
+import { getTokenFromContext } from 'utils/server';
 
 type Props = CoursePageProps;
 type State = { courseTaskId: number | null; courseTasks: (CourseTask & { score: number })[]; loading: boolean };
@@ -22,26 +23,6 @@ class EpamLearningJs extends React.Component<Props, State> {
     super(props);
     this.courseService = new CourseService(props.course.id);
   }
-
-  static async getInitialProps(ctx: NextPageContext) {
-    try {
-      const courses = await new UserService(ctx).getCourses();
-      const course = courses.find(c => c.alias === courseName) || null;
-      if (course == null) {
-        return EpamLearningJs.redirectToRegistry(ctx);
-      }
-      return { course };
-    } catch (e) {
-      console.error(e.message);
-      return { course: null };
-    }
-  }
-
-  static redirectToRegistry = (ctx: NextPageContext) => {
-    ctx.res?.writeHead(302, { Location: registryUrl });
-    ctx.res?.end();
-    return {};
-  };
 
   async componentDidMount() {
     const studentScore = await this.courseService
@@ -91,7 +72,7 @@ class EpamLearningJs extends React.Component<Props, State> {
                     </Typography.Text>
                   </Typography.Paragraph>
                   <Typography.Paragraph type="warning">
-                    IMPORTANT: Tests are run using NodeJS 12. Please make sure your solution works in NodeJS 12.
+                    IMPORTANT: Tests are run using NodeJS 14. Please make sure your solution works in NodeJS 14.
                   </Typography.Paragraph>
                 </>
               )}
@@ -151,6 +132,23 @@ class EpamLearningJs extends React.Component<Props, State> {
 }
 
 const Page = withSession(EpamLearningJs);
-(Page as any).getInitialProps = EpamLearningJs.getInitialProps;
-(Page as any).redirectToRegistry = EpamLearningJs.redirectToRegistry;
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  try {
+    const token = getTokenFromContext(ctx);
+    const courses = await new UserService(token).getCourses();
+    const course = courses.find(c => c.alias === courseName) || null;
+    if (course == null) {
+      ctx.res?.writeHead(302, { Location: registryUrl });
+      ctx.res?.end();
+      return {};
+    }
+    return { course };
+  } catch (err) {
+    const error = err as Error;
+    console.error(error.message);
+    return { course: null };
+  }
+};
+
 export default Page;

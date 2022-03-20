@@ -50,11 +50,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="apetr avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/apetr.png?size=48"
+          <GithubAvatar
+            githubId="apetr"
+            size={48}
           />
         }
         content={
@@ -78,22 +76,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -103,10 +85,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-12-01T12:12:01.000Z"
+            title="2018-12-01 12:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -144,11 +126,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -172,22 +152,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -197,10 +161,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01T11:12:01.000Z"
+            title="2018-11-01 11:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -238,11 +202,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -266,22 +228,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -291,10 +237,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-09-01T11:12:01.000Z"
+            title="2018-09-01 11:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -332,11 +278,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="temap avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/temap.png?size=48"
+          <GithubAvatar
+            githubId="temap"
+            size={48}
           />
         }
         content={
@@ -360,22 +304,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -385,10 +313,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-10-01T11:12:01.000Z"
+            title="2018-10-01 11:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -426,11 +354,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="vasssa avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/vasssa.png?size=48"
+          <GithubAvatar
+            githubId="vasssa"
+            size={48}
           />
         }
         content={
@@ -454,22 +380,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -479,10 +389,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2018-11-01T12:12:01.000Z"
+            title="2018-11-01 12:12:01"
           >
             <span>
-              fromNow
+              3 years ago
             </span>
           </Tooltip>
         }
@@ -520,11 +430,9 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
           </a>
         }
         avatar={
-          <Avatar
-            alt="demaa avatar"
-            shape="circle"
-            size="default"
-            src="https://github.com/demaa.png?size=48"
+          <GithubAvatar
+            githubId="demaa"
+            size={48}
           />
         }
         content={
@@ -548,22 +456,6 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             >
               Test
             </p>
-            <p
-              style={
-                Object {
-                  "fontSize": 12,
-                }
-              }
-            >
-              Look at on
-               
-              <a
-                href="https://heroes.by/"
-                target="_blank"
-              >
-                heroes.by
-              </a>
-            </p>
           </React.Fragment>
         }
         datetime={
@@ -573,10 +465,10 @@ exports[`PublicFeedbackModal Should render correctly 1`] = `
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="top"
-            title="2019-12-01T12:12:01.000Z"
+            title="2019-12-01 12:12:01"
           >
             <span>
-              fromNow
+              2 years ago
             </span>
           </Tooltip>
         }

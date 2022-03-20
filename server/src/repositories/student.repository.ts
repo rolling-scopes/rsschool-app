@@ -4,7 +4,6 @@ import { userService, courseService } from '../services';
 import { Discord, StudentBasic, UserBasic } from '../../../common/models';
 import { StageInterviewRepository } from './stageInterview.repository';
 import { getFullName } from '../rules';
-import { omit } from 'lodash';
 
 @EntityRepository(Student)
 export class StudentRepository extends AbstractRepository<Student> {
@@ -61,13 +60,12 @@ export class StudentRepository extends AbstractRepository<Student> {
 
     const entities = await getRepository(Student)
       .createQueryBuilder('student')
-      .select([
-        `student.id AS "id"`,
-        `user.githubId AS "githubId"`,
-        `user.firstName AS "firstName"`,
-        `user.lastName AS "lastName"`,
-      ])
+      .select([`student.id`, 'mentor.id'])
+      .addSelect(this.getBasicUserFields('user'))
+      .addSelect(this.getBasicUserFields('mUser'))
       .leftJoin('student.user', 'user')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
       .where('student.courseId = :courseId')
       .andWhere('student.isExpelled = false')
       .andWhere(
@@ -79,12 +77,19 @@ export class StudentRepository extends AbstractRepository<Student> {
         { courseId, searchQuery },
       )
       .limit(20)
-      .getRawMany();
+      .getMany();
 
     return entities.map(entity => ({
       id: entity.id,
-      githubId: entity.githubId,
-      name: userService.createName(entity),
+      githubId: entity.user.githubId,
+      name: userService.createName(entity.user),
+      mentor: entity.mentor?.user
+        ? {
+            id: entity.mentor.id,
+            githubId: entity.mentor.user.githubId,
+            name: userService.createName(entity.mentor.user),
+          }
+        : null,
     }));
   }
 
@@ -239,6 +244,7 @@ export class StudentRepository extends AbstractRepository<Student> {
         mentorLastName,
         mentorGithubId,
         certificateId,
+        student_rank,
       }: any) => {
         return {
           courseId,
@@ -248,7 +254,7 @@ export class StudentRepository extends AbstractRepository<Student> {
           isCourseCompleted,
           totalScore,
           certificateId,
-          position: null,
+          rank: student_rank,
           mentor: {
             githubId: mentorGithubId,
             name: getFullName(mentorFirstName, mentorLastName, mentorGithubId),
@@ -257,21 +263,34 @@ export class StudentRepository extends AbstractRepository<Student> {
       },
     );
 
-    const studentPositions = await Promise.all(
-      studentStats.map(async ({ totalScore, courseId }: { totalScore: number; courseId: number }) => {
-        const rawPositions = await getRepository(Student)
-          .createQueryBuilder('student')
-          .select('"student"."courseId" AS "courseId"')
-          .addSelect('COUNT(*) AS "position"')
-          .where('"student"."courseId" = :courseId', { courseId })
-          .andWhere('"student"."totalScore" >= :totalScore', { totalScore })
-          .groupBy('"student"."courseId"')
-          .getRawMany();
-        return rawPositions.map(({ position }) => ({ position: Number(position) }))[0];
-      }),
-    );
+    return studentStats;
+  }
 
-    return studentStats.map((stats, idx) => ({ ...omit(stats, ['courseId']), ...studentPositions[idx] }));
+  public async findStudentCourses(githubId: string) {
+    const query = await getRepository(Student)
+      .createQueryBuilder('student')
+      .addSelect('"course"."id" AS "courseId"')
+      .addSelect('"course"."fullName" AS "courseFullName"');
+
+    query
+      .leftJoin(User, 'user', '"user"."id" = "student"."userId"')
+      .leftJoin(Course, 'course', '"course"."id" = "student"."courseId"');
+
+    query
+      .where('"user"."githubId" = :githubId', { githubId })
+      .andWhere('"student"."isExpelled" != :expelled', { expelled: true })
+      .orderBy('"course"."endDate"', 'DESC');
+
+    const rawStats = await query.getRawMany();
+
+    const studentStats = rawStats.map(({ courseId, courseFullName }: any) => {
+      return {
+        courseId,
+        courseFullName,
+      };
+    });
+
+    return studentStats;
   }
 
   public async save(students: Partial<Student>[]) {
@@ -287,6 +306,10 @@ export class StudentRepository extends AbstractRepository<Student> {
         repositoryLastActivityDate: new Date(),
       },
     );
+  }
+
+  public async updateMentoringAvailability(studentId: number, value: boolean) {
+    await getRepository(Student).update(studentId, { mentoring: value });
   }
 
   private async findByGithubId(courseId: number, githubId: string): Promise<UserBasic | null> {
@@ -306,6 +329,10 @@ export class StudentRepository extends AbstractRepository<Student> {
       name: userService.createName(record.user),
       githubId: record.user.githubId,
     };
+  }
+
+  private getBasicUserFields(modelName = 'user') {
+    return [`${modelName}.id`, `${modelName}.firstName`, `${modelName}.lastName`, `${modelName}.githubId`];
   }
 
   private getPrimaryUserFields(modelName = 'user') {

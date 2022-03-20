@@ -1,9 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
-import { NextPageContext, GetServerSidePropsContext } from 'next';
-import { getServerAxiosProps } from 'utils/axios';
-import { EnglishLevel } from '../../../common/models';
-import { ProfileInfo, SaveProfileInfo } from '../../../common/models/profile';
-import { Course } from './models';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
+import { EnglishLevel } from 'common/models';
+import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
+import { ProfileApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -16,9 +15,13 @@ type SearchResponse = { data: UserBasic[] };
 
 export class UserService {
   private axios: AxiosInstance;
+  private profileApi: ProfileApi;
+  private opts: AxiosRequestConfig;
 
-  constructor(ctx?: GetServerSidePropsContext | NextPageContext) {
-    this.axios = axios.create(getServerAxiosProps(ctx));
+  constructor(private token?: string) {
+    this.opts = getServerAxiosProps(this.token);
+    this.axios = axios.create(this.opts);
+    this.profileApi = new ProfileApi(getApiConfiguration(this.token));
   }
 
   async getDiscordIds() {
@@ -47,8 +50,8 @@ export class UserService {
   }
 
   async getCourses() {
-    const result = await this.axios.get<{ data: Course[] }>(`/api/user/me/courses`);
-    return result.data.data.sort((a, b) => b.id - a.id);
+    const { data } = await this.profileApi.getUserCourses('me');
+    return data;
   }
 
   async searchUser(query: string | null) {
@@ -76,14 +79,7 @@ export class UserService {
   }
 
   async submitPrivateFeedback(data: { toUserId: number; comment: string }) {
-    await this.axios.post(`/api/feedback/private`, {
-      toUserId: Number(data.toUserId),
-      comment: data.comment,
-    });
-  }
-
-  async submitStudentFeedback(data: { toUserId: number; comment: string }, courseId: string) {
-    await this.axios.post(`api/course/${courseId}/student/feedback`, {
+    await this.axios.post<any>(`/api/feedback/private`, {
       toUserId: Number(data.toUserId),
       comment: data.comment,
     });

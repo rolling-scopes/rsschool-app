@@ -7,13 +7,22 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Index,
+  JoinColumn,
 } from 'typeorm';
 import { Task, TaskType } from './task';
-import { Stage } from './stage';
 import { TaskChecker } from './taskChecker';
 import { TaskResult } from './taskResult';
 import { User } from './user';
 import { Course } from './course';
+import { TaskSolution } from './taskSolution';
+
+export enum Checker {
+  Assigned = 'assigned',
+  Mentor = 'mentor',
+  TaskOwner = 'taskOwner',
+  Jury = 'jury',
+  CrossCheck = 'crossCheck',
+}
 
 @Entity()
 export class CourseTask {
@@ -38,12 +47,8 @@ export class CourseTask {
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.courseTask, { nullable: true })
   taskResults: TaskResult[] | null;
 
-  @ManyToOne(_ => Stage, (stage: Stage) => stage.courseTasks, { nullable: true })
-  stage: Stage | number;
-
-  @Column({ nullable: true })
-  @Index()
-  stageId: number;
+  @OneToMany(_ => TaskSolution, (taskSolution: TaskSolution) => taskSolution.courseTask, { nullable: true })
+  taskSolutions: TaskSolution[] | null;
 
   @ManyToOne(_ => Course, { nullable: true })
   course: Course;
@@ -53,10 +58,10 @@ export class CourseTask {
   courseId: number;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentStartDate: string;
+  studentStartDate: Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
-  studentEndDate: string;
+  studentEndDate: Date | string;
 
   @Column({ type: 'timestamp', nullable: true })
   mentorStartDate: string;
@@ -72,13 +77,14 @@ export class CourseTask {
 
   @Column({ default: 'mentor' })
   @Index()
-  checker: 'assigned' | 'mentor' | 'taskOwner' | 'crossCheck' | 'jury';
+  checker: Checker;
 
   @ManyToOne(_ => User, { nullable: true })
   taskOwner: User | null;
 
   @Column({ nullable: true })
   @Index()
+  @JoinColumn({ name: 'taskOwnerId' })
   taskOwnerId: number | null;
 
   @Column({ nullable: true, type: 'int' })
@@ -88,6 +94,7 @@ export class CourseTask {
   type: TaskType;
 
   @Column({ default: false, type: 'boolean' })
+  @Index()
   disabled: boolean;
 
   @Column({ default: '' })

@@ -1,9 +1,9 @@
 import Router from '@koa/router';
-import pinoLogger from 'pino-multi-stream';
-const cloudwatch = require('pino-cloudwatch'); //tslint:disable-line
-import { config } from './config';
 import { AxiosError } from 'axios';
+import pinoLogger from 'pino-multi-stream';
 import { ParsedUrlQuery } from 'querystring';
+import { config } from './config';
+const cloudwatch = require('@apalchys/pino-cloudwatch'); //tslint:disable-line
 
 export interface ILog {
   data?: any;
@@ -48,15 +48,15 @@ export const loggerMiddleware =
       data.status = ctx.status;
     } catch (e) {
       if ((e as AxiosError).isAxiosError) {
-        const error = e as AxiosError;
+        const error = e as AxiosError<any>;
         logger.error(error.message, {
           data: error.response?.data,
           status: error.response?.status,
         });
       } else {
-        logger.error(e);
+        logger.error(e as any);
       }
-      data.status = e.status;
+      data.status = (e as any).status;
     }
     logger.info({
       msg: 'Processed request',
@@ -76,6 +76,7 @@ export function createDefaultLogger() {
       aws_secret_access_key: secretAccessKey,
       aws_region: region,
       group: '/app/rsschool-api',
+      stream: `${new Date().toISOString().split('T')[0]}-server`,
     });
     streams.push(writeStream);
   }

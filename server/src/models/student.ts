@@ -17,13 +17,10 @@ import { Certificate } from './certificate';
 import { TaskResult } from './taskResult';
 import { TaskChecker } from './taskChecker';
 import { TaskInterviewResult } from './taskInterviewResult';
-import { StudentFeedback } from './studentFeedback';
+import { StudentFeedback } from './student-feedback';
 import { StageInterview } from './stageInterview';
 
 @Entity()
-@Index(['courseId'])
-@Index(['userId'])
-@Index(['mentorId'])
 @Unique(['courseId', 'userId'])
 export class Student {
   @PrimaryGeneratedColumn() id: number;
@@ -38,18 +35,21 @@ export class Student {
   course: Course;
 
   @Column({ nullable: true })
+  @Index()
   courseId: number;
 
   @ManyToOne(_ => User)
   user: User;
 
   @Column()
+  @Index()
   userId: number;
 
   @ManyToOne(_ => Mentor, (mentor: Mentor) => mentor.students, { nullable: true })
-  mentor: Mentor;
+  mentor: Mentor | null;
 
   @Column({ nullable: true })
+  @Index()
   mentorId: number | null;
 
   @OneToMany(_ => TaskResult, (taskResult: TaskResult) => taskResult.student, { nullable: true })
@@ -67,9 +67,11 @@ export class Student {
   taskInterviewResults: TaskInterviewResult[] | null;
 
   @Column({ default: false })
+  @Index()
   isFailed: boolean;
 
   @Column({ default: false })
+  @Index()
   isExpelled: boolean;
 
   @Column({ nullable: true })
@@ -115,7 +117,7 @@ export class Student {
   totalScoreChangeDate: Date;
 
   @OneToMany(_ => StudentFeedback, (studentFeedback: StudentFeedback) => studentFeedback.student, { nullable: true })
-  feedback: StudentFeedback[] | null;
+  feedbacks: StudentFeedback[] | null;
 
   @Column({ default: () => "'1970-01-01 00:00:00+00'", type: 'timestamptz' })
   startDate: Date;
@@ -128,4 +130,7 @@ export class Student {
 
   @OneToOne(() => Certificate, certificate => certificate.student)
   certificate: Certificate | null;
+
+  @Column({ nullable: true, default: true })
+  mentoring: boolean;
 }

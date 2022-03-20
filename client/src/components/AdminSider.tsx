@@ -12,6 +12,7 @@ import {
   TrophyOutlined,
   UserOutlined,
   ProfileFilled,
+  NotificationFilled,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
@@ -40,7 +41,7 @@ export function AdminSider(props: Props) {
 
       <Menu theme="dark" mode="inline">
         <Menu.Item key="1">
-          <Link href="/">
+          <Link prefetch={false} href="/">
             <a>
               <HomeOutlined />
               <span>Main</span>
@@ -50,7 +51,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin ? (
           <Menu.Item key="2">
-            <Link href="/admin/courses">
+            <Link prefetch={false} href="/admin/courses">
               <a>
                 <GlobalOutlined />
                 <span>Courses</span>
@@ -61,7 +62,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin || props.isCoursePowerUser ? (
           <Menu.Item key="3">
-            <Link href="/admin/interview-questions">
+            <Link prefetch={false} href="/admin/interview-questions">
               <a>
                 <QuestionOutlined />
                 <span>Interview questions</span>
@@ -80,7 +81,7 @@ export function AdminSider(props: Props) {
         </Menu.Item>
 
         <Menu.Item key="4">
-          <Link href="/admin/tasks">
+          <Link prefetch={false} href="/admin/tasks">
             <a>
               <AlertOutlined />
               <span>Tasks</span>
@@ -89,7 +90,7 @@ export function AdminSider(props: Props) {
         </Menu.Item>
 
         <Menu.Item key="5">
-          <Link href="/admin/events">
+          <Link prefetch={false} href="/admin/events">
             <a>
               <BellOutlined />
               <span>Events</span>
@@ -99,7 +100,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin ? (
           <Menu.Item key="6">
-            <Link href="/admin/users">
+            <Link prefetch={false} href="/admin/users">
               <a>
                 <UserOutlined />
                 <span>Users</span>
@@ -110,7 +111,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin || props.isCoursePowerUser ? (
           <Menu.Item key="7">
-            <Link href="/admin/mentor-registry">
+            <Link prefetch={false} href="/admin/mentor-registry">
               <a>
                 <IdcardFilled />
                 <span>Mentor Registry</span>
@@ -121,7 +122,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin ? (
           <Menu.Item key="8">
-            <Link href="/admin/discord-server">
+            <Link prefetch={false} href="/admin/discord-server">
               <a>
                 <RobotFilled />
                 <span>Discord Servers</span>
@@ -132,7 +133,7 @@ export function AdminSider(props: Props) {
 
         {props.isAdmin ? (
           <Menu.Item key="9">
-            <Link href="/admin/user-group">
+            <Link prefetch={false} href="/admin/user-group">
               <a>
                 <TeamOutlined />
                 <span>User Groups</span>
@@ -147,6 +148,17 @@ export function AdminSider(props: Props) {
               <ProfileFilled />
               <span>Employer Page</span>
             </a>
+          </Menu.Item>
+        ) : null}
+
+        {props.isAdmin || props.isCoursePowerUser ? (
+          <Menu.Item key="11">
+            <Link prefetch={false} href="/admin/notifications">
+              <a>
+                <NotificationFilled />
+                <span>Notifications</span>
+              </a>
+            </Link>
           </Menu.Item>
         ) : null}
       </Menu>

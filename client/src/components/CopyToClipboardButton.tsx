@@ -1,7 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 import { Button } from 'antd';
 import { CopyTwoTone } from '@ant-design/icons';
-import { css } from 'styled-jsx/css';
 
 type Props = {
   value: string;
@@ -26,19 +25,17 @@ export default function CopyToClipboardButton({ value }: Props) {
     <>
       <Button type="dashed" icon={<CopyTwoTone />} htmlType="button" onClick={copyToClipboard} />
       <textarea className="visually-hidden" ref={textAreaRef} value={value} />
-      <style jsx>{styles}</style>
+      <style jsx>{`
+        .visually-hidden {
+          position: absolute;
+          clip: rect(0 0 0 0);
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+        }
+      `}</style>
     </>
   ) : (
     <></>
   );
 }
-
-const styles = css`
-  .visually-hidden {
-    position: absolute;
-    clip: rect(0 0 0 0);
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-  }
-`;

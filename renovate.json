@@ -1,0 +1,17 @@
+{
+  "extends": ["config:base"],
+  "ignorePaths": ["tools/**", "server/**"],
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
+  "lockFileMaintenance": { "enabled": true },
+  "labels": ["renovate"],
+  "transitiveRemediation": true,
+  "platform": "github",
+  "repositories": ["rolling-scopes/rsschool-app"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["react-"],
+      "groupName": "react libs"
+    }
+  ]
+}

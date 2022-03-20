@@ -5,7 +5,14 @@ export interface IUserSession {
   githubId: string;
   roles: StundetMentorRoles;
   coursesRoles?: CourseRoles;
+  courses?: Record<number, CourseInfo>;
   isGuest?: boolean;
+}
+
+interface CourseInfo {
+  mentorId: number | null;
+  studentId: number | null;
+  roles: CourseRole[];
 }
 
 export type StundetMentorRoles = { [key: string]: 'student' | 'mentor' };
@@ -15,8 +22,10 @@ export interface CourseRoles {
 }
 
 export const enum CourseRole {
-  taskOwner = 'taskOwner',
-  juryActivist = 'juryActivist',
-  manager = 'manager',
-  supervisor = 'supervisor',
+  TaskOwner = 'taskOwner',
+  JuryActivist = 'juryActivist',
+  Manager = 'manager',
+  Supervisor = 'supervisor',
+  Student = 'student',
+  Mentor = 'mentor',
 }

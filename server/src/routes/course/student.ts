@@ -1,4 +1,4 @@
-import { BAD_REQUEST, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK, FORBIDDEN } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
@@ -6,6 +6,7 @@ import { Feedback, TaskInterviewResult } from '../../models';
 import { courseService, taskService, studentService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
+import { userGuards } from '../guards';
 
 type FeedbackInput = { toUserId: number; comment: string };
 
@@ -55,7 +56,7 @@ export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) =>
 
   const feedback: Partial<Feedback> = {
     comment: data.comment,
-    course: courseId,
+    courseId,
     fromUser: id,
     toUser: data.toUserId,
   };
@@ -94,6 +95,24 @@ export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
   if (student == null || data.mentorGithuId === undefined) {
     setResponse(ctx, BAD_REQUEST, null);
     return;
+  }
+  const user = ctx.state!.user;
+  const guard = userGuards(user);
+  const [isPowerUser, isSupervisor, isCourseMentor] = [
+    guard.isPowerUser(courseId),
+    guard.isSupervisor(courseId),
+    guard.isMentor(courseId),
+  ];
+  const isPowerUserOrSupervisor = isPowerUser || isSupervisor;
+  if (!isPowerUserOrSupervisor && isCourseMentor) {
+    const mentorStudents = await getCustomRepository(StudentRepository).findByMentor(courseId, user.githubId);
+    const isUpdatedStudentMenteeOfRequestor = mentorStudents.some(
+      ({ githubId: studentGithubId }) => studentGithubId === githubId,
+    );
+    if (!isUpdatedStudentMenteeOfRequestor) {
+      setResponse(ctx, FORBIDDEN, null);
+      return;
+    }
   }
   const studentRepository = getCustomRepository(StudentRepository);
   await studentRepository.setMentor(courseId, githubId, data.mentorGithuId);
@@ -179,6 +198,19 @@ export const getCrossMentors = (_: ILogger) => async (ctx: Router.RouterContext)
   const taskCheckers = await courseService.getCrossMentorsByStudent(courseId, githubId);
 
   setResponse(ctx, OK, taskCheckers);
+};
+
+export const updateMentoringAvailability = (_: ILogger) => async (ctx: Router.RouterContext) => {
+  const { courseId, githubId } = ctx.params;
+  const student = await courseService.queryStudentByGithubId(courseId, githubId);
+  const { mentoring = false } = ctx.request.body as { mentoring: boolean };
+  if (student == null || mentoring === undefined) {
+    setResponse(ctx, BAD_REQUEST, null);
+    return;
+  }
+  const studentRepository = getCustomRepository(StudentRepository);
+  await studentRepository.updateMentoringAvailability(student.id, mentoring);
+  setResponse(ctx, OK, {});
 };
 
 type InterviewResultInput = {

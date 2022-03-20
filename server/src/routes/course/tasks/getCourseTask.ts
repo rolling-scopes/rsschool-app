@@ -26,7 +26,6 @@ export const getCourseTask = (_: ILogger) => async (ctx: Router.RouterContext) =
     maxScore: courseTask?.maxScore,
     scoreWeight: courseTask?.scoreWeight,
     githubPrRequired: !!(courseTask?.task as Task).githubPrRequired,
-    verification: (courseTask?.task as Task).verification,
     descriptionUrl: (courseTask?.task as Task).descriptionUrl,
     description: (courseTask?.task as Task).description,
     studentStartDate: courseTask?.studentStartDate,

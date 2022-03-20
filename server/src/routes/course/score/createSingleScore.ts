@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import { AxiosError } from 'axios';
 import { BAD_REQUEST, OK } from 'http-status-codes';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../../logger';
@@ -46,7 +47,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   }
 
   if (courseTask.checker === 'jury') {
-    if (!coursesRoles?.[courseId]?.includes(CourseRole.juryActivist)) {
+    if (!coursesRoles?.[courseId]?.includes(CourseRole.JuryActivist)) {
       setResponse(ctx, BAD_REQUEST, { message: 'not jury activist' });
       return;
     }
@@ -89,11 +90,11 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   const mentor = await courseService.getMentorByUserId(courseId, authorId);
   const session = ctx.state.user as IUserSession;
 
-  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.taskOwner);
+  const isNotTaskOwner = !session.coursesRoles?.[courseId]?.includes(CourseRole.TaskOwner);
   if (
     mentor == null &&
     !session.isAdmin &&
-    !session.coursesRoles?.[courseId]?.includes(CourseRole.manager) &&
+    !session.coursesRoles?.[courseId]?.includes(CourseRole.Manager) &&
     isNotTaskOwner
   ) {
     setResponse(ctx, BAD_REQUEST, { message: 'not valid submitter' });
@@ -102,6 +103,18 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
 
   const result = scoreService.saveScore(student.id, courseTask.id, { ...data, authorId });
   setResponse(ctx, OK, result);
-  const taskResultText = await notificationService.renderTaskResultText(courseTask, data.score, data.comment);
-  await notificationService.sendNotification([githubId], taskResultText);
+
+  try {
+    await notificationService.sendNotification({
+      userId: student.userId,
+      notificationId: 'taskGrade',
+      data: {
+        courseTask,
+        score: data.score,
+        comment: data.comment,
+      },
+    });
+  } catch (e) {
+    logger.error(`Failed to publish notification ${(e as AxiosError).message}`);
+  }
 };
