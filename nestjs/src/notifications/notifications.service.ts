@@ -48,7 +48,10 @@ export class NotificationsService {
     return this.notificationsRepository.delete({ id });
   }
 
-  public async sendNotification(notification: SendNotificationDto) {
+  /**
+   * Automatic user notification based on triggers. sent to subscribed channels based on subscription
+   */
+  public async sendEventNotification(notification: SendNotificationDto) {
     const { userId, data, notificationId, expireDate } = notification;
     const channels = await this.userNotificationsService.getUserNotificationSettings(userId, notificationId);
 
