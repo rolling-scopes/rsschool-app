@@ -4,7 +4,14 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
 import { withSession } from 'components/withSession';
 import { ModalForm } from 'components/Forms';
-import { dateRenderer, idFromArrayRenderer, stringSorter, tagsRenderer } from 'components/Table';
+import {
+  dateRenderer,
+  crossCheckDateRenderer,
+  idFromArrayRenderer,
+  stringSorter,
+  tagsRenderer,
+  crossCheckStateRenderer,
+} from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import withCourseData from 'components/withCourseData';
 import moment from 'moment-timezone';
@@ -216,6 +223,11 @@ function Page(props: CoursePageProps) {
         >
           <DatePicker.RangePicker format="YYYY-MM-DD HH:mm" showTime={{ format: 'HH:mm' }} />
         </Form.Item>
+        {modalData?.checker === 'crossCheck' ? (
+          <Form.Item name="crossCheckEndDate" label="Cross-Check End Date">
+            <DatePicker format="YYYY-MM-DD" />
+          </Form.Item>
+        ) : null}
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item name="maxScore" label="Score" rules={[{ required: true, message: 'Please enter max score' }]}>
@@ -282,6 +294,18 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
       sorter: stringSorter('studentStartDate'),
     },
     { title: 'End Date', dataIndex: 'studentEndDate', render: dateRenderer, sorter: stringSorter('studentEndDate') },
+    {
+      title: 'Cross-Check End Date',
+      dataIndex: 'crossCheckEndDate',
+      render: crossCheckDateRenderer,
+      sorter: stringSorter('crossCheckEndDate'),
+    },
+    {
+      title: 'Cross-Check State',
+      dataIndex: 'crossCheckState',
+      render: crossCheckStateRenderer,
+      sorter: stringSorter('crossCheckState'),
+    },
     { title: 'Max Score', dataIndex: 'maxScore' },
     {
       title: 'Type',
@@ -310,10 +334,14 @@ function getColumns(getDropdownMenu: (record: CourseTaskDetails) => any, { tasks
 
 function createRecord(values: any, courseId: number) {
   const [startDate, endDate] = values.range || [null, null];
+
   const data = {
     courseId,
     studentStartDate: startDate ? formatTimezoneToUTC(startDate, values.timeZone) : null,
     studentEndDate: endDate ? formatTimezoneToUTC(endDate, values.timeZone) : null,
+    crossCheckEndDate: values.crossCheckEndDate
+      ? formatTimezoneToUTC(values.crossCheckEndDate.set({ hour: 23, minute: 59 }), values.timeZone)
+      : null,
     taskId: values.taskId,
     taskOwnerId: values.taskOwnerId,
     checker: values.checker,
@@ -322,17 +350,20 @@ function createRecord(values: any, courseId: number) {
     type: values.type,
     pairsCount: values.pairsCount,
   };
+
   return data;
 }
 
 function getInitialValues(modalData: Partial<CourseTaskDetails>) {
   const timeZone = 'UTC';
+
   return {
     ...modalData,
     timeZone,
     taskOwnerId: modalData.taskOwner ? modalData.taskOwner.id : undefined,
     maxScore: modalData.maxScore || 100,
     scoreWeight: modalData.scoreWeight ?? 1,
+    crossCheckEndDate: modalData.crossCheckEndDate ? moment.tz(modalData.crossCheckEndDate, timeZone) : null,
     range:
       modalData.studentStartDate && modalData.studentEndDate
         ? [

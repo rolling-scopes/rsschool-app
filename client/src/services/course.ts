@@ -10,7 +10,9 @@ import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
 import { featureToggles } from './features';
 
-type Checker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+export type CourseTaskChecker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
+
+export type CrossCheckState = 'initial' | 'distributed' | 'completed';
 
 export interface CourseTask {
   id: number;
@@ -25,8 +27,10 @@ export interface CourseTask {
   descriptionUrl: string | null;
   studentStartDate: string | null;
   studentEndDate: string | null;
+  crossCheckEndDate: string | null;
+  crossCheckState: CrossCheckState;
   useJury: boolean;
-  checker: Checker;
+  checker: CourseTaskChecker;
   taskOwnerId: number | null;
   publicAttributes?: SelfEducationPublicAttributes;
   isVisible?: boolean;
@@ -108,7 +112,7 @@ export interface CourseEvent {
   special?: string;
   duration?: number;
   isTask?: boolean;
-  checker?: Checker;
+  checker?: CourseTaskChecker;
   score?: string;
   done?: number;
 }

@@ -9,11 +9,27 @@ import {
 } from '@ant-design/icons';
 import { Tag, Tooltip, Typography } from 'antd';
 import { getTagStyle } from '../Schedule/UserSettings/userSettingsHandlers';
+import { CourseTaskChecker, CrossCheckState } from '../../services/course';
 
 const { Text } = Typography;
 
 export function dateRenderer(value: string | null) {
   return value ? moment(value).format('YYYY-MM-DD') : '';
+}
+
+export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CourseTaskChecker }) {
+  if (checker !== 'crossCheck') return 'NA';
+  return value ? moment(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
+}
+
+export function crossCheckStateRenderer(value: CrossCheckState, { checker }: { checker: CourseTaskChecker }) {
+  return checker !== 'crossCheck' ? (
+    'NA'
+  ) : value === 'initial' ? (
+    'Not distributed'
+  ) : (
+    <span style={{ textTransform: 'capitalize' }}>{value}</span>
+  );
 }
 
 export function timeRenderer(value: string) {
