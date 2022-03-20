@@ -41,5 +41,8 @@ export const createDistribution = (_: ILogger) => async (ctx: Router.RouterConte
     }));
 
   await getRepository(TaskSolutionChecker).save(crossCheckPairs);
+
+  await taskService.changeCourseTaskState(courseTask, 'distributed');
+
   setResponse(ctx, StatusCodes.OK, { crossCheckPairs });
 };
