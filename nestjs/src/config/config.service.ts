@@ -7,6 +7,7 @@ type AuthConfig = {
     clientSecret: string;
     callbackUrl: string;
     scope: string[];
+    activityWebhookSecret: string;
   };
   dev: {
     username: string;
@@ -48,6 +49,7 @@ export class ConfigService {
         clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
         callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
         scope: ['user:email'],
+        activityWebhookSecret: conf.get('process.env.ACTIVITY_WEBHOOK_SECRET', 'activity-webhook'),
       },
       dev: {
         username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME'),
