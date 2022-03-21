@@ -87,6 +87,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
         ...mentorBasic,
         cityName: user.cityName ?? '',
         countryName: user.countryName ?? '',
+        contactsEpamEmail: user.contactsEpamEmail ?? '',
         maxStudentsLimit: mentor.maxStudentsLimit,
         studentsPreference: mentor.studentsPreference ?? 'any',
         studentsCount: activeStudents.length,
