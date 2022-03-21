@@ -134,17 +134,19 @@ export class AuthService {
     });
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
-    await lastValueFrom(
-      this.httpService.post(
-        `${restApiUrl}/connection/complete`,
-        {
-          channelId,
-          externalId,
-        },
-        {
-          headers: { 'x-api-key': restApiKey },
-        },
-      ),
-    );
+    if (channelId === 'telegram') {
+      await lastValueFrom(
+        this.httpService.post(
+          `${restApiUrl}/connection/complete`,
+          {
+            channelId,
+            externalId,
+          },
+          {
+            headers: { 'x-api-key': restApiKey },
+          },
+        ),
+      );
+    }
   }
 }
