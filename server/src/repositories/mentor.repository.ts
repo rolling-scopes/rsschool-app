@@ -51,6 +51,7 @@ export class MentorRepository extends AbstractRepository<Mentor> {
       .createQueryBuilder('mentor')
       .innerJoin('mentor.user', 'user')
       .addSelect(this.getPrimaryUserFields())
+      .addSelect(['user.contactsEpamEmail'])
       .leftJoin('mentor.students', 's')
       .leftJoin('mentor.stageInterviews', 'si')
       .leftJoin('mentor.taskChecker', 'tc')
