@@ -2,6 +2,7 @@
 - Features
   - [CV](features/cv.md)
   - [Choose kata languages](features/choose-kata-languages.md)
+  - [Cross-Check Scheduling](features/cross-check-scheduling.md)
 - RS School App Platform
   - [About](platform/about.md)
   - [Schedule](platform/shedule.md)
