@@ -7,13 +7,19 @@ export class Feedback {
   @PrimaryGeneratedColumn() id: number;
 
   @ManyToOne(_ => Course, { nullable: true })
-  course?: Course | number;
+  course?: Course;
+
+  @Column({ nullable: true })
+  courseId: number;
 
   @ManyToOne(_ => User)
   fromUser: User | number;
 
   @ManyToOne(_ => User)
   toUser: User | number;
+
+  @Column({ nullable: true })
+  toUserId: number;
 
   @Column({ nullable: true })
   comment: string;
@@ -25,7 +31,7 @@ export class Feedback {
   heroesUrl: string;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
   updatedDate: number;

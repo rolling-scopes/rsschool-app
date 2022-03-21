@@ -1,5 +1,5 @@
-import { Notification } from '@entities/notification';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Notification, NotificationId } from '@entities/notification';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from 'src/config';
 import { Repository } from 'typeorm';
@@ -16,6 +16,8 @@ import { lastValueFrom } from 'rxjs';
 const compiledEmailTemplate = compile(emailTemplate, { noEscape: true });
 @Injectable()
 export class NotificationsService {
+  private readonly logger = new Logger('notifications');
+
   constructor(
     @InjectRepository(Notification)
     private notificationsRepository: Repository<Notification>,
@@ -42,7 +44,7 @@ export class NotificationsService {
     return this.notificationsRepository.save(notification);
   }
 
-  public deleteNotification(id: string) {
+  public deleteNotification(id: NotificationId) {
     return this.notificationsRepository.delete({ id });
   }
 
@@ -62,6 +64,7 @@ export class NotificationsService {
     if (channelMap.size === 0) return;
 
     await this.publishNotification({
+      notificationId,
       channelId: Array.from(channelMap.keys()),
       userId,
       expireDate,
@@ -92,16 +95,18 @@ export class NotificationsService {
     if (this.configService.isDev) return;
 
     const { restApiKey, restApiUrl } = this.configService.awsServices;
-
     await lastValueFrom(
       this.httpService.post(`${restApiUrl}/v2/notification`, notification, {
         headers: { 'x-api-key': restApiKey },
       }),
     );
+
+    this.logger.log({ message: `notification ${notification.notificationId} sent to ${notification.userId}` });
   }
 }
 
 type NotificationPayload = {
+  notificationId: NotificationId;
   channelId: NotificationChannelId[];
   userId: number;
   expireDate?: number;

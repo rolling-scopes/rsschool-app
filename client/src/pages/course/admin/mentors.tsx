@@ -163,7 +163,7 @@ function Page(props: CoursePageProps) {
             title: 'Mentor',
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
-            width: 100,
+            width: 200,
             render: (_, record: any) => <PersonCell value={record} />,
             ...getColumnSearchProps(['githubId', 'name']),
           },

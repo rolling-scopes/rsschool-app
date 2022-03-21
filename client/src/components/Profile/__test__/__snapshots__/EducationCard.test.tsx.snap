@@ -1157,19 +1157,63 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value={null}
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value={null}
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value={null}
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value=""
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -1182,40 +1226,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               }
                                                             }
                                                             type="text"
-                                                            value={null}
+                                                            value=""
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                   <p
                                                     style={
@@ -1293,19 +1308,63 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value={null}
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value={null}
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value={null}
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value=""
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -1318,40 +1377,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               }
                                                             }
                                                             type="text"
-                                                            value={null}
+                                                            value=""
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                   <p
                                                     style={
@@ -1429,19 +1459,63 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value={null}
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value={null}
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value={null}
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value=""
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -1454,40 +1528,11 @@ exports[`EducationCard Should render correctly if "educationHistory" has element
                                                               }
                                                             }
                                                             type="text"
-                                                            value={null}
+                                                            value=""
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value=""
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value=""
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                 </div>
                                               </li>
@@ -3427,19 +3472,63 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value="MIT"
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value="MIT"
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value="MIT"
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value="MIT"
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -3454,38 +3543,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             type="text"
                                                             value="MIT"
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value="MIT"
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="MIT"
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                   <p
                                                     style={
@@ -3563,19 +3623,63 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value="POIT"
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value="POIT"
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value="POIT"
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value="POIT"
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -3590,38 +3694,9 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                             type="text"
                                                             value="POIT"
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value="POIT"
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="POIT"
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                   <p
                                                     style={
@@ -3699,19 +3774,63 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                       }
                                                     }
                                                   >
-                                                    <Input
+                                                    <ForwardRef
                                                       onChange={[Function]}
                                                       style={
                                                         Object {
                                                           "width": "100%",
                                                         }
                                                       }
-                                                      type="text"
                                                       value={2002}
                                                     >
-                                                      <ClearableLabeledInput
-                                                        bordered={true}
-                                                        element={
+                                                      <ForwardRef
+                                                        affixWrapperClassName=""
+                                                        groupClassName=""
+                                                        inputClassName=""
+                                                        onBlur={[Function]}
+                                                        onChange={[Function]}
+                                                        onFocus={[Function]}
+                                                        prefixCls="ant-input"
+                                                        style={
+                                                          Object {
+                                                            "width": "100%",
+                                                          }
+                                                        }
+                                                        value={2002}
+                                                        wrapperClassName=""
+                                                      >
+                                                        <BaseInput
+                                                          affixWrapperClassName=""
+                                                          focused={false}
+                                                          groupClassName=""
+                                                          handleReset={[Function]}
+                                                          inputElement={
+                                                            <input
+                                                              className="ant-input"
+                                                              onBlur={[Function]}
+                                                              onChange={[Function]}
+                                                              onFocus={[Function]}
+                                                              onKeyDown={[Function]}
+                                                              style={
+                                                                Object {
+                                                                  "width": "100%",
+                                                                }
+                                                              }
+                                                              type="text"
+                                                              value={2002}
+                                                            />
+                                                          }
+                                                          prefixCls="ant-input"
+                                                          style={
+                                                            Object {
+                                                              "width": "100%",
+                                                            }
+                                                          }
+                                                          suffix={null}
+                                                          triggerFocus={[Function]}
+                                                          value="2002"
+                                                          wrapperClassName=""
+                                                        >
                                                           <input
                                                             className="ant-input"
                                                             onBlur={[Function]}
@@ -3724,40 +3843,11 @@ exports[`EducationCard Should render correctly if editing mode is enabled 1`] = 
                                                               }
                                                             }
                                                             type="text"
-                                                            value={2002}
+                                                            value="2002"
                                                           />
-                                                        }
-                                                        focused={false}
-                                                        handleReset={[Function]}
-                                                        inputType="input"
-                                                        onChange={[Function]}
-                                                        prefixCls="ant-input"
-                                                        style={
-                                                          Object {
-                                                            "width": "100%",
-                                                          }
-                                                        }
-                                                        suffix={null}
-                                                        triggerFocus={[Function]}
-                                                        type="text"
-                                                        value="2002"
-                                                      >
-                                                        <input
-                                                          className="ant-input"
-                                                          onBlur={[Function]}
-                                                          onChange={[Function]}
-                                                          onFocus={[Function]}
-                                                          onKeyDown={[Function]}
-                                                          style={
-                                                            Object {
-                                                              "width": "100%",
-                                                            }
-                                                          }
-                                                          type="text"
-                                                          value="2002"
-                                                        />
-                                                      </ClearableLabeledInput>
-                                                    </Input>
+                                                        </BaseInput>
+                                                      </ForwardRef>
+                                                    </ForwardRef>
                                                   </p>
                                                 </div>
                                               </li>

@@ -37,10 +37,19 @@ export class CertifcationsService {
   }
 
   public async saveCertificate(data: SaveCertificateDto) {
-    const certificate = await this.getByPublicId(data.publicId);
-    await (!!certificate
-      ? this.certificateRepository.update(certificate.id, data)
-      : this.certificateRepository.save(data));
+    let certificate = await this.getByPublicId(data.publicId);
+    if (certificate) {
+      await this.certificateRepository.update(certificate.id, data);
+      return;
+    }
+
+    certificate = await this.certificateRepository.findOne({ where: { studentId: data.studentId } });
+    if (certificate) {
+      await this.certificateRepository.update(certificate.id, data);
+      return;
+    }
+
+    await this.certificateRepository.save(data);
   }
 
   public async buildNotificationData(data: SaveCertificateDto) {

@@ -1,7 +1,7 @@
-import { Form, Input, Select } from 'antd';
+import { Form, Input } from 'antd';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import TextArea from 'antd/lib/input/TextArea';
-import { NotificationDto, NotificationScope } from 'api';
+import { NotificationDto } from 'api';
 import { ModalForm } from 'components/Forms';
 import React from 'react';
 import { NotificationTemlate } from '../services/notifications';
@@ -44,18 +44,9 @@ export function NotificationSettingsModal(props: Props) {
             <Form.Item name="enabled" valuePropName="checked">
               <Checkbox>Active</Checkbox>
             </Form.Item>
-            <Form.Item name="scope" rules={[{ required: true, message: 'Please select scope' }]} label="Scope">
-              <Select placeholder="Please select scope">
-                {Object.values(NotificationScope).map(scope => (
-                  <Select.Option key={scope} value={scope}>
-                    {scope}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
           </TabPane>
           {(channels.length ? channels : defaultChannels).map((channel, index) => (
-            <TabPane tab={channel.channelId} key={channel.channelId}>
+            <TabPane tab={channel.channelId} key={channel.channelId} forceRender>
               <Form.Item hidden label={channel.channelId} name={['channels', index, 'channelId']}>
                 <Input></Input>
               </Form.Item>

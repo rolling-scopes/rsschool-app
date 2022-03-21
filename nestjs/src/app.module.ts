@@ -17,6 +17,9 @@ import { UsersModule } from './users';
 import { CertificatesModule } from './certificates/certificates.module';
 import { DiscordServersModule } from './discord-servers/discord-servers.module';
 import { CrossCheckModule } from './cross-check/cross-check.module';
+import { OpportunitiesModule } from './opportunities/opportunities.module';
+import { UserGroupsModule } from './userGroups/user-groups.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -39,6 +42,9 @@ import { CrossCheckModule } from './cross-check/cross-check.module';
     CertificatesModule,
     DiscordServersModule,
     CrossCheckModule,
+    OpportunitiesModule,
+    UserGroupsModule,
+    ScheduleModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

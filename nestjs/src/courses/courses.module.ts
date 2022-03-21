@@ -12,8 +12,11 @@ import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
 import { MentorsService, MentorsController } from './mentors';
 import { CourseAccessService } from './course-access.service';
-import { CourseTasksController, CourseTasksService } from './tasks';
+import { CourseTasksController, CourseTasksService } from './courseTasks';
 import { InterviewsController, InterviewsService } from './interviews';
+import { TasksController } from './tasks/tasks.controller';
+import { NotificationsModule } from 'src/notifications/notifications.module';
+import { TasksService } from './tasks/tasks.service';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import { InterviewsController, InterviewsService } from './interviews';
       TaskChecker,
       StudentFeedback,
     ]),
+    NotificationsModule,
   ],
   controllers: [
     FeedbacksController,
@@ -38,6 +42,7 @@ import { InterviewsController, InterviewsService } from './interviews';
     MentorsController,
     CourseTasksController,
     InterviewsController,
+    TasksController,
   ],
   providers: [
     CourseTasksService,
@@ -48,6 +53,7 @@ import { InterviewsController, InterviewsService } from './interviews';
     MentorsService,
     CourseAccessService,
     InterviewsService,
+    TasksService,
   ],
   exports: [CourseTasksService, CourseUsersService, CoursesService],
 })

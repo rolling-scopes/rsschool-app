@@ -174,10 +174,9 @@ exports[`MainCard Should render correctly if is editing mode enabled 1`] = `
                 }
               }
             >
-              <Input
+              <ForwardRef
                 onChange={[Function]}
                 placeholder="Firstname Lastname"
-                type="text"
                 value="Petr Pervyi"
               />
             </Row>

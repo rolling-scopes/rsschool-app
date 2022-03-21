@@ -8,7 +8,6 @@ import { IPaginationInfo, Pagination } from 'common/types/pagination';
 import { onlyDefined } from '../utils/onlyDefined';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
 import { CrossCheckFieldsTypes } from '../pages/course/admin/cross-check-table';
-import { featureToggles } from './features';
 
 export type CourseTaskChecker = 'auto-test' | 'mentor' | 'assigned' | 'taskOwner' | 'crossCheck' | 'jury';
 
@@ -300,8 +299,7 @@ export class CourseService {
   }
 
   async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
-    const query = featureToggles.notifications ? '?newNotification=on' : '';
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/result${query}`, data);
+    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/result`, data);
   }
 
   async postMultipleScores(courseTaskId: number, data: any) {
@@ -389,8 +387,7 @@ export class CourseService {
       comments: CrossCheckComment[];
     },
   ) {
-    const query = featureToggles.notifications ? '?newNotification=on' : '';
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result${query}`, data);
+    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
   }
 
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {

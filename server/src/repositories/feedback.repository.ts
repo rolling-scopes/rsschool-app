@@ -5,38 +5,35 @@ import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
 @EntityRepository(Feedback)
 export class FeedbackRepository extends AbstractRepository<Feedback> {
   public async getGratitude({ courseId, githubId, name, pageSize = 20, current = 1 }: IGratitudeGetRequest) {
-    const count = await getManager()
+    const queryCount = getManager()
       .createQueryBuilder()
       .select('COUNT(*)')
-      .from(qb => {
-        const query = qb
-          .subQuery()
-          .from(Feedback, 'feedback')
-          .select('"user"."id"', 'user_id')
-          .innerJoin('feedback.toUser', 'user')
-          .innerJoin('feedback.fromUser', 'fromUser');
+      .from(Feedback, 'feedback')
+      .innerJoin('feedback.toUser', 'user')
+      .innerJoin('feedback.fromUser', 'fromUser');
 
-        if (githubId) {
-          query.andWhere('"user"."githubId" ILIKE :githubId', {
-            githubId: `%${githubId}%`,
-          });
-        }
+    if (githubId) {
+      queryCount.andWhere('"user"."githubId" ILIKE :githubId', {
+        githubId: `%${githubId}%`,
+      });
+    }
 
-        if (name) {
-          query.andWhere('"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText', {
-            searchText: `%${name}%`,
-          });
-        }
+    if (name) {
+      queryCount.andWhere(
+        '"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText OR CONCAT("user"."firstName", \' \', "user"."lastName") ILIKE :searchText',
+        {
+          searchText: `%${name}%`,
+        },
+      );
+    }
 
-        if (courseId) {
-          query.andWhere('"feedback"."courseId" = :courseId', {
-            courseId,
-          });
-        }
+    if (courseId) {
+      queryCount.andWhere('"feedback"."courseId" = :courseId', {
+        courseId,
+      });
+    }
 
-        return query.groupBy('"user_id"');
-      }, 'u')
-      .getRawOne();
+    const count = await queryCount.getRawOne();
 
     if (!count.count || Number(count.count) === 0) {
       return {
@@ -71,9 +68,12 @@ export class FeedbackRepository extends AbstractRepository<Feedback> {
     }
 
     if (name) {
-      query.andWhere('"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText', {
-        searchText: `%${name}%`,
-      });
+      query.andWhere(
+        '"user"."firstName" ILIKE :searchText OR "user"."lastName" ILIKE :searchText OR CONCAT("user"."firstName", \' \', "user"."lastName") ILIKE :searchText',
+        {
+          searchText: `%${name}%`,
+        },
+      );
     }
 
     if (courseId) {

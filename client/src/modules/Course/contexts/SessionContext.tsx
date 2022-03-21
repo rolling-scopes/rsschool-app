@@ -13,7 +13,7 @@ let sessionCache: Session | undefined;
 
 type Props = React.PropsWithChildren<{
   allowedRoles?: CourseRole[];
-  course: ProfileCourseDto;
+  course?: ProfileCourseDto;
 }>;
 
 export function SessionProvider(props: Props) {
@@ -41,9 +41,10 @@ export function SessionProvider(props: Props) {
     Router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
   }, [error]);
 
-  if (session && allowedRoles) {
+  if (session && allowedRoles && props.course) {
     const { courses, isAdmin } = session;
     const id = props.course.id;
+
     const roles = courses?.[id]?.roles ?? [];
     if (!allowedRoles.some(role => roles.includes(role)) && !isAdmin) {
       return (

@@ -1,16 +1,17 @@
 import { StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
-import { CVStudentStats } from '../models';
 import Section from 'modules/Opportunities/components/Section';
 import * as React from 'react';
 import css from 'styled-jsx/css';
 import { StudentStatus } from './StudentStatus';
+import { ResumeCourseDto } from 'api';
+import { DataTextValue } from './DataTextValue';
 
 const { Text } = Typography;
 const { Item } = List;
 
 type Props = {
-  courses: CVStudentStats[];
+  courses: ResumeCourseDto[];
 };
 
 export function CoursesSection({ courses }: Props) {
@@ -18,68 +19,61 @@ export function CoursesSection({ courses }: Props) {
     return null;
   }
 
-  const sectionContent = (
-    <List
-      dataSource={courses}
-      size="small"
-      style={{ fontSize: '15px' }}
-      renderItem={(record: CVStudentStats) => {
-        const {
-          courseFullName,
-          locationName,
-          certificateId,
-          isCourseCompleted,
-          totalScore,
-          rank,
-          mentor: { name: mentorName, githubId: mentorGithubId },
-        } = record;
-        const title = `${courseFullName}${locationName ? locationName : ''}`;
-        return (
-          <Item>
-            <Col flex="1">
-              <Text strong>{title}</Text>
-              <Row justify="space-between" style={{ marginTop: 8, width: '100%' }}>
-                <Col flex={1}>
-                  <Row>
-                    <span className="course-data-key">
-                      Status: <StudentStatus certificateId={certificateId} isCourseCompleted={isCourseCompleted} />
-                    </span>
-                  </Row>
-                  <Row>
-                    <span className="course-data-key">
-                      Mentor:{' '}
-                      {mentorName ? (
-                        <a className="black-on-print" href={`https://github.com/${mentorGithubId}`}>
-                          {mentorName}
-                        </a>
-                      ) : (
-                        <Text>No mentor</Text>
-                      )}
-                    </span>
-                  </Row>
-                </Col>
-                <Col style={{ minWidth: 130, maxWidth: 130 }}>
-                  <Row>
-                    <span className="course-data-key">
-                      <TrophyOutlined /> Position: {rank}
-                    </span>
-                  </Row>
-                  <Row>
-                    <span className="course-data-key">
-                      <StarOutlined /> Score: {totalScore}
-                    </span>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-            <style jsx>{styles}</style>
-          </Item>
-        );
-      }}
-    />
-  );
+  return (
+    <Section title="RS School Courses">
+      <List
+        dataSource={courses}
+        size="small"
+        style={{ fontSize: '15px' }}
+        renderItem={(record: ResumeCourseDto) => {
+          const { fullName, certificateId, completed, totalScore, rank, locationName, mentor } = record;
 
-  return <Section content={sectionContent} title="RS School Courses" />;
+          const title = `${fullName}${locationName ? locationName : ''}`;
+          return (
+            <Item>
+              <Col flex="1">
+                <Text strong>{title}</Text>
+                <Row justify="space-between" style={{ marginTop: 8, width: '100%' }}>
+                  <Col flex={1}>
+                    <Row>
+                      <span className="course-data-key">
+                        Status: <StudentStatus certificateId={certificateId} isCourseCompleted={completed} />
+                      </span>
+                    </Row>
+                    <Row>
+                      <DataTextValue>
+                        Mentor:{' '}
+                        {mentor?.name ? (
+                          <a className="black-on-print" href={`https://github.com/${mentor.githubId}`}>
+                            {mentor.name}
+                          </a>
+                        ) : (
+                          <Text>No mentor</Text>
+                        )}
+                      </DataTextValue>
+                    </Row>
+                  </Col>
+                  <Col style={{ minWidth: 130, maxWidth: 130 }}>
+                    <Row>
+                      <DataTextValue>
+                        <TrophyOutlined /> Position: {rank}
+                      </DataTextValue>
+                    </Row>
+                    <Row>
+                      <DataTextValue>
+                        <StarOutlined /> Score: {totalScore}
+                      </DataTextValue>
+                    </Row>
+                  </Col>
+                </Row>
+              </Col>
+              <style jsx>{styles}</style>
+            </Item>
+          );
+        }}
+      />
+    </Section>
+  );
 }
 
 const styles = css`

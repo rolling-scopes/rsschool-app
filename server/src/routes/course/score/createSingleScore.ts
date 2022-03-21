@@ -105,7 +105,7 @@ export const createSingleScore = (logger: ILogger) => async (ctx: Router.RouterC
   setResponse(ctx, OK, result);
 
   try {
-    await notificationService.sendNotificationV2({
+    await notificationService.sendNotification({
       userId: student.userId,
       notificationId: 'taskGrade',
       data: {

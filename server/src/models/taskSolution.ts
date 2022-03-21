@@ -1,4 +1,5 @@
 import { Entity, CreateDateColumn, ManyToOne, Column, UpdateDateColumn, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { CourseTask } from './courseTask';
 import { Student } from './student';
 
 export interface TaskSolutionComment {
@@ -42,4 +43,7 @@ export class TaskSolution {
 
   @Column({ type: 'json', default: [] })
   comments: TaskSolutionComment[];
+
+  @ManyToOne(_ => CourseTask, courseTask => courseTask.taskSolutions)
+  courseTask: CourseTask;
 }

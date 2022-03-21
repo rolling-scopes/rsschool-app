@@ -1,5 +1,5 @@
 import { ToolTwoTone } from '@ant-design/icons';
-import { Alert, Button, Col, Layout, List, Row, Select, Typography } from 'antd';
+import { Alert, Button, Col, Layout, List, Row, Typography } from 'antd';
 import type { AlertDto } from 'api';
 import { AdminSider } from 'components/AdminSider';
 import { FooterLayout } from 'components/Footer';
@@ -8,6 +8,7 @@ import { Session } from 'components/withSession';
 import { isAdmin, isAnyCoursePowerUser, isAnyMentor, isHirer } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
+import { CourseSelector } from 'modules/Home/components/CourseSelector';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
 import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
 import { getAdminLinks, getCourseLinks } from 'modules/Home/data/links';
@@ -94,21 +95,7 @@ export function HomePage(props: Props) {
 
           {hasRegistryBanner && <RegistryBanner style={{ margin: '16px 0' }} />}
 
-          {activeCourse && (
-            <Select
-              showSearch
-              optionFilterProp="children"
-              style={{ width: 250, marginBottom: 16 }}
-              defaultValue={activeCourse.id}
-              onChange={saveActiveCouseId}
-            >
-              {courses.map(course => (
-                <Select.Option key={course.id} value={course.id}>
-                  {course.name} ({getStatus(course)})
-                </Select.Option>
-              ))}
-            </Select>
-          )}
+          <CourseSelector course={activeCourse} onChangeCourse={saveActiveCouseId} courses={courses} />
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
@@ -162,13 +149,3 @@ export function HomePage(props: Props) {
     </Layout>
   );
 }
-
-const getStatus = (course: Course) => {
-  if (course.completed) {
-    return 'Completed';
-  }
-  if (course.planned) {
-    return 'Planned';
-  }
-  return 'Active';
-};

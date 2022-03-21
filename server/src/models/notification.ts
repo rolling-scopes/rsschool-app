@@ -7,10 +7,18 @@ export enum NotificationScope {
   student = 'student',
 }
 
+export type NotificationId =
+  | 'mentorRegistrationApproval'
+  | 'taskGrade'
+  | 'courseCertificate'
+  | 'courseScheduleChange'
+  | 'taskDeadline'
+  | 'interviewerAssigned';
+
 @Entity()
 export class Notification {
   @PrimaryColumn()
-  id: string;
+  id: NotificationId;
 
   @Column()
   @Index()

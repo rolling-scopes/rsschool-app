@@ -41,6 +41,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",
     "cookie-parser": "1.4.6",
+    "dayjs": "1.11.0",
     "dotenv": "16.0.0",
     "express": "4.17.2",
     "handlebars": "4.7.7",

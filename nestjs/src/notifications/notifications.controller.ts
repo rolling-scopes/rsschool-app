@@ -1,3 +1,4 @@
+import { NotificationId } from '@entities/notification';
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -45,7 +46,7 @@ export class NotificationsController {
   @ApiOperation({ operationId: 'deleteNotification' })
   @ApiOkResponse()
   @ApiForbiddenResponse()
-  public async deleteNotification(@Param('id') id: string) {
+  public async deleteNotification(@Param('id') id: NotificationId) {
     await this.notificationsService.deleteNotification(id);
   }
 

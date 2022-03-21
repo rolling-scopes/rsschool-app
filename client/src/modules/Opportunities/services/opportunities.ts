@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { getServerAxiosProps } from 'utils/axios';
-import { JobSeekerData, GetFullCVData, AllUserCVData, EditCVData } from '../models';
+import { JobSeekerData, AllUserCVData } from '../models';
 
 export class OpportunitiesService {
   private axios: AxiosInstance;
@@ -24,20 +24,6 @@ export class OpportunitiesService {
 
   public async getApplicants() {
     const response = await this.axios.get<{ data: JobSeekerData[] }>(`/applicants`);
-    return response.data.data;
-  }
-
-  public async getEditResumeData(githubId: string) {
-    const response = await this.axios.get<{ data: EditCVData }>(`/resume?mod=form`, {
-      params: { githubId },
-    });
-    return response.data.data;
-  }
-
-  public async getFullResumeData(githubId: string) {
-    const response = await this.axios.get<{ data: GetFullCVData }>(`/resume?mod=view`, {
-      params: { githubId },
-    });
     return response.data.data;
   }
 

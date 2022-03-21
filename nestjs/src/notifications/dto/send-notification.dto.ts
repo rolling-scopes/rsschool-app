@@ -1,6 +1,6 @@
+import { NotificationId } from '@entities/notification';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { NotificationId } from '../notificationIds';
 
 export class SendNotificationDto {
   @ApiProperty()

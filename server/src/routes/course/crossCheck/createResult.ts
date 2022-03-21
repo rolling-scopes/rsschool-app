@@ -70,7 +70,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     recipientId: taskChecker.studentId,
   });
 
-  await notificationService.sendNotificationV2({
+  await notificationService.sendNotification({
     userId: student.userId,
     notificationId: 'taskGrade',
     data: {
