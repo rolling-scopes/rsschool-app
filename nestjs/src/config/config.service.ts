@@ -49,7 +49,7 @@ export class ConfigService {
         clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET'),
         callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK'),
         scope: ['user:email'],
-        activityWebhookSecret: conf.get('process.env.ACTIVITY_WEBHOOK_SECRET', 'activity-webhook'),
+        activityWebhookSecret: conf.get('process.env.RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
       },
       dev: {
         username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME'),
