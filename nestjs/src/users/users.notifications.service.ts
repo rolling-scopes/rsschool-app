@@ -1,4 +1,4 @@
-import { Notification } from '@entities/notification';
+import { Notification, NotificationType } from '@entities/notification';
 import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,7 +33,7 @@ export class UserNotificationsService {
         'userSettings.notificationId = notification.id and userSettings.userId = :userId',
         { userId },
       )
-      .where({ enabled: true })
+      .where({ enabled: true, type: NotificationType.event })
       .orderBy('name')
       .getMany() as Promise<(Notification & { settings: NotificationUserSettings[] })[]>;
   }
