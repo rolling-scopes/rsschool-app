@@ -19,6 +19,7 @@ import { DiscordServersModule } from './discord-servers/discord-servers.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './userGroups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { ActivityModule } from './activity/activity.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ScheduleModule } from './schedule/schedule.module';
       ...config,
       autoLoadEntities: true,
     }),
+    ActivityModule,
     ConfigModule,
     AlertsModule,
     UsersModule,
