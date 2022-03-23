@@ -41,7 +41,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     _refreshToken: string,
     profile: Profile,
   ): Promise<AuthUser> {
-    const state = await this.authService.getLoginState(request.query.state as string);
+    const state = await this.authService.getLoginStateById(request.query.state as string);
     if (!state) {
       throw new UnauthorizedException();
     }

@@ -6,8 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
 import type { Profile } from 'passport';
-import { UserNotificationsService } from '../users/users.notifications.service';
-import { MoreThanOrEqual } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
@@ -15,6 +14,8 @@ import { AuthUser } from './auth-user.model';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
 import { lastValueFrom } from 'rxjs';
+import * as dayjs from 'dayjs';
+import { NotificationUserConnection } from '@entities/notificationUserConnection';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -34,7 +35,8 @@ export class AuthService {
     readonly configService: ConfigService,
     @InjectRepository(AuthRepository)
     private readonly authRepository: AuthRepository,
-    readonly userNotificationsService: UserNotificationsService,
+    @InjectRepository(NotificationUserConnection)
+    private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private httpService: HttpService,
   ) {
     this.admins = configService.users.admins;
@@ -93,24 +95,39 @@ export class AuthService {
     return this.jwtService.createToken(req.user);
   }
 
-  public async createLoginState(data: LoginData) {
+  public async createLoginState(data: LoginData & { userId?: number }) {
     const id = await nanoid();
+
+    const { userId, ...rest } = data;
 
     await this.authRepository.save({
       id,
-      data,
+      data: rest,
+      userId,
     });
 
     return id;
   }
 
-  public getLoginState(id: string) {
+  public getLoginStateById(id: string) {
     const date = new Date();
     date.setHours(date.getHours() - 1);
     return this.authRepository.findOne({
       where: {
         id,
         createdDate: MoreThanOrEqual(date.toISOString()),
+      },
+    });
+  }
+
+  public getLoginStateByUserId(id: number, sinceMunites: number = 1) {
+    return this.authRepository.findOne({
+      where: {
+        id,
+        createdDate: MoreThanOrEqual(dayjs().subtract(sinceMunites, 'minute').toISOString()),
+      },
+      order: {
+        createdDate: 'DESC',
       },
     });
   }
@@ -126,12 +143,13 @@ export class AuthService {
   public async onConnectionComplete(loginData: LoginData, userId: number) {
     const { channelId, externalId } = loginData;
 
-    await this.userNotificationsService.saveUserConnection({
+    this.notificationUserConnectionRepository.save({
       channelId,
       enabled: true,
       externalId,
       userId,
     });
+
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
     if (channelId === 'telegram') {
