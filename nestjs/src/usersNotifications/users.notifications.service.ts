@@ -2,14 +2,15 @@ import { Notification, NotificationType } from '@entities/notification';
 import { NotificationUserSettings } from '@entities/notificationUserSettings';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateNotificationUserSettingsDto } from 'src/users/dto/update-notification-user-settings.dto';
+import { UpdateNotificationUserSettingsDto } from 'src/usersNotifications/dto/update-notification-user-settings.dto';
 import { Repository } from 'typeorm';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
-import { UsersService } from './users.service';
 import { NotificationChannelId } from '@entities/notificationChannel';
-import { NotificationConnectionExistsDto } from 'src/users/dto/notification-connection-exists.dto';
+import { NotificationConnectionExistsDto } from 'src/usersNotifications/dto/notification-connection-exists.dto';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
-import { UpsertNotificationConnectionDto } from 'src/users/dto/upsert-notification-connection.dto';
+import { UpsertNotificationConnectionDto } from 'src/usersNotifications/dto/upsert-notification-connection.dto';
+import { NotificationData, NotificationsService } from 'src/notifications/notifications.service';
+import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
 
 @Injectable()
 export class UserNotificationsService {
@@ -20,7 +21,7 @@ export class UserNotificationsService {
     private userNotificationsRepository: Repository<NotificationUserSettings>,
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
-    private usersService: UsersService,
+    private notificationsService: NotificationsService,
   ) {}
 
   public getUserNotificationsSettings(userId: number) {
@@ -83,45 +84,72 @@ export class UserNotificationsService {
   }
 
   public async getUserNotificationSettings(userId: number, notificationId: string) {
-    const [notificationChannels, user] = await Promise.all([
-      this.userNotificationsRepository
-        .createQueryBuilder('userNotifications')
-        .where({
-          notificationId,
-          enabled: true,
-          userId,
-        })
-        .leftJoinAndMapOne(
-          'userNotifications.connection',
-          NotificationUserConnection,
-          'connection',
-          `userNotifications.userId = connection.userId and
+    const notificationChannels = (await this.userNotificationsRepository
+      .createQueryBuilder('userNotifications')
+      .where({
+        notificationId,
+        enabled: true,
+        userId,
+      })
+      .innerJoin('userNotifications.notification', 'notification', 'notification.type = :type', {
+        type: NotificationType.event,
+      })
+      .leftJoinAndMapOne(
+        'userNotifications.connection',
+        NotificationUserConnection,
+        'connection',
+        `userNotifications.userId = connection.userId and
            userNotifications.channelId = connection.channelId and
            connection.enabled = true
         `,
-        )
-        .innerJoinAndMapOne(
-          'userNotifications.settings',
-          NotificationChannelSettings,
-          'channelSettings',
-          'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
-        )
-        .getMany() as unknown as {
-        id: string;
-        channelId: NotificationChannelId;
-        settings: NotificationChannelSettings;
-        connection: NotificationUserConnection;
-      }[],
-      this.usersService.getUserByUserId(userId),
-    ]);
+      )
+      .innerJoinAndMapOne(
+        'userNotifications.settings',
+        NotificationChannelSettings,
+        'channelSettings',
+        'channelSettings.notificationId = userNotifications.notificationId and channelSettings.channelId = userNotifications.channelId',
+      )
+      .getMany()) as unknown as {
+      id: string;
+      channelId: NotificationChannelId;
+      settings: NotificationChannelSettings;
+      connection: NotificationUserConnection;
+    }[];
     return notificationChannels
       .flatMap(notification => {
         const { connection, settings } = notification;
         return {
           ...settings,
-          externalId: notification.channelId === 'email' ? user.contactsEmail : connection?.externalId,
+          externalId: connection?.externalId,
         };
       })
       .filter(notification => !!notification.externalId);
+  }
+
+  /**
+   * Automatic user notification based on triggers. sent to subscribed channels based on subscription
+   */
+  public async sendEventNotification(notification: SendUserNotificationDto) {
+    const { userId, data, notificationId, expireDate } = notification;
+    const channels = await this.getUserNotificationSettings(userId, notificationId);
+
+    const channelMap = new Map<NotificationChannelId, NotificationData>();
+    channels.forEach(channel => {
+      const message = this.notificationsService.buildChannelMessage(channel, data);
+      if (message) {
+        const { channelId, template, to } = message;
+        channelMap.set(channelId, { template, to });
+      }
+    });
+
+    if (channelMap.size === 0) return;
+
+    await this.notificationsService.publishNotification({
+      notificationId,
+      channelId: Array.from(channelMap.keys()),
+      userId,
+      expireDate,
+      data: Object.fromEntries(channelMap) as Record<NotificationChannelId, NotificationData>,
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { NotificationsService } from 'src/notifications/notifications.service';
+import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
@@ -11,7 +11,7 @@ import { ScheduleService } from './schedule.service';
 export class ScheduleController {
   private readonly logger = new Logger('schedule');
 
-  constructor(private scheduleService: ScheduleService, private notificationService: NotificationsService) {}
+  constructor(private scheduleService: ScheduleService, private notificationService: UserNotificationsService) {}
 
   @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyScheduleChanges' })

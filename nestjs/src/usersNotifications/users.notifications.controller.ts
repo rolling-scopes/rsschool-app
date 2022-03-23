@@ -1,26 +1,14 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  NotFoundException,
-  Param,
-  Post,
-  Put,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpCode, NotFoundException, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UpdateNotificationUserSettingsDto } from './dto/update-notification-user-settings.dto';
 import { NotificationUserSettingsDto, UserNotificationsDto } from './dto/notification-user-settings.dto';
 import { NotificationConnectionExistsDto } from './dto/notification-connection-exists.dto';
 import { UpsertNotificationConnectionDto } from './dto/upsert-notification-connection.dto';
 import { NotificationConnectionDto } from './dto/notification-connection.dto';
-import { NotificationChannelId } from '@entities/notificationChannel';
 import { UserNotificationsService } from './users.notifications.service';
-import { UsersService } from './users.service';
+import { SendUserNotificationDto } from './dto/send-user-notification.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('users/notifications')
 @ApiTags('users notifications')
@@ -80,12 +68,11 @@ export class UsersNotificationsController {
     return new NotificationConnectionDto(connection);
   }
 
-  @Delete('/connection/:channelId')
+  @Post('/send')
+  @ApiOperation({ operationId: 'sendNotification' })
   @ApiOkResponse()
-  public async deleteUserConnection(@Req() req: CurrentRequest, @Param('channelId') channelId: NotificationChannelId) {
-    await this.userNotificationsService.deleteUserConnection({
-      channelId,
-      userId: req.user.id,
-    });
+  @ApiForbiddenResponse()
+  public async sendNotification(@Body() dto: SendUserNotificationDto) {
+    await this.userNotificationsService.sendEventNotification(dto);
   }
 }
