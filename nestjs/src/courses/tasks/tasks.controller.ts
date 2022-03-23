@@ -22,7 +22,7 @@ export class TasksController {
 
     for (const [userId, tasks] of students) {
       try {
-        await this.notificationService.sendNotification({
+        await this.notificationService.sendEventNotification({
           data: { tasks },
           notificationId: 'taskDeadline',
           userId,
