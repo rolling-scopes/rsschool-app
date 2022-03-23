@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
-import { ProfileInfo, SaveProfileInfo } from 'common/models/profile';
-import { ProfileApi } from 'api';
+import { ProfileInfo } from 'common/models/profile';
+import { ProfileApi, ProfileInfoDto } from 'api';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -97,9 +97,8 @@ export class UserService {
     return response.data.data;
   }
 
-  async saveProfileInfo(profile: SaveProfileInfo) {
-    const response = await this.axios.post<{ data: SaveProfileInfo }>(`/api/profile/info`, profile);
-    return response.data.data;
+  async saveProfileInfo(profile: ProfileInfoDto) {
+    await this.profileApi.updateProfileInfo(profile);
   }
 }
 
