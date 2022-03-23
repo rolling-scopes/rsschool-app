@@ -38,7 +38,7 @@ export class CertificatesController {
 
     const { userId, notification } = notificationData;
 
-    await this.notificationService.sendNotification({
+    await this.notificationService.sendEventNotification({
       data: notification,
       notificationId: 'courseCertificate',
       userId: userId,
