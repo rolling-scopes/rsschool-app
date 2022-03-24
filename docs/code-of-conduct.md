@@ -9,6 +9,7 @@ We are expecting cooperation from all participants to help ensuring a friendly, 
 * disability
 * ethnicity
 * religion
+* politic (war, elections, sanctions and so on)
 * preferred operating system
 * programming language
 * text editor
