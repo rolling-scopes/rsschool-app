@@ -97,9 +97,14 @@ export class UserNotificationsService {
         enabled: true,
         userId,
       })
-      .innerJoin('userNotifications.notification', 'notification', 'notification.type = :type', {
-        type: NotificationType.event,
-      })
+      .innerJoin(
+        'userNotifications.notification',
+        'notification',
+        'notification.type = :type and notification.enabled = true',
+        {
+          type: NotificationType.event,
+        },
+      )
       .leftJoinAndMapOne(
         'userNotifications.connection',
         NotificationUserConnection,
