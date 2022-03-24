@@ -19,6 +19,8 @@ export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
     private notificationsRepository: Repository<Notification>,
+    @InjectRepository(NotificationChannelSettings)
+    private channelSettingsRepository: Repository<NotificationChannelSettings>,
     private configService: ConfigService,
     private httpService: HttpService,
   ) {}
@@ -43,6 +45,50 @@ export class NotificationsService {
 
   public deleteNotification(id: NotificationId) {
     return this.notificationsRepository.delete({ id });
+  }
+
+  /**
+   * Messages to users regarless on user subscription status to specific channel
+   */
+  public async sendMessage(notification: {
+    notificationId: NotificationId;
+    userId: number;
+    data: object;
+    channelId: NotificationChannelId;
+    channelValue: string;
+  }) {
+    const { userId, data, notificationId, channelId, channelValue } = notification;
+    const channelSettings = await this.getChannelSettings(channelId, notificationId);
+
+    const message = this.buildChannelMessage({ ...channelSettings, externalId: channelValue }, data);
+
+    if (!message) {
+      this.logger.error({
+        message: `failed to build message fo notification ${notification.notificationId} and user ${notification.userId}`,
+      });
+      return;
+    }
+
+    await this.publishNotification({
+      notificationId,
+      channelId: [channelId],
+      userId,
+      data: {
+        [channelId]: {
+          template: message.template,
+          to: message.to,
+        },
+      },
+    });
+  }
+
+  private getChannelSettings(channelId: NotificationChannelId, notificationId: NotificationId) {
+    return this.channelSettingsRepository.findOne({
+      where: {
+        notificationId,
+        channelId,
+      },
+    });
   }
 
   public buildChannelMessage(channel: NotificationChannelSettings & { externalId: string }, data: object) {

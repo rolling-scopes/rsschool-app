@@ -1,20 +1,23 @@
 import { Body, Controller, Get, HttpCode, NotFoundException, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { UpdateNotificationUserSettingsDto } from './dto/update-notification-user-settings.dto';
-import { NotificationUserSettingsDto, UserNotificationsDto } from './dto/notification-user-settings.dto';
-import { NotificationConnectionExistsDto } from './dto/notification-connection-exists.dto';
-import { UpsertNotificationConnectionDto } from './dto/upsert-notification-connection.dto';
-import { NotificationConnectionDto } from './dto/notification-connection.dto';
+import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard, AuthService } from 'src/auth';
+import { UpdateNotificationUserSettingsDto } from '../usersNotifications/dto/update-notification-user-settings.dto';
+import {
+  NotificationUserSettingsDto,
+  UserNotificationsDto,
+} from '../usersNotifications/dto/notification-user-settings.dto';
+import { NotificationConnectionExistsDto } from '../usersNotifications/dto/notification-connection-exists.dto';
+import { UpsertNotificationConnectionDto } from '../usersNotifications/dto/upsert-notification-connection.dto';
+import { NotificationConnectionDto } from '../usersNotifications/dto/notification-connection.dto';
 import { UserNotificationsService } from './users.notifications.service';
-import { SendUserNotificationDto } from './dto/send-user-notification.dto';
-import { UsersService } from 'src/users/users.service';
+import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
+import { NotificationUserConnectionsDto } from './dto/notification-user-connections.dto';
 
 @Controller('users/notifications')
 @ApiTags('users notifications')
 @UseGuards(DefaultGuard)
 export class UsersNotificationsController {
-  constructor(private userNotificationsService: UserNotificationsService, private userService: UsersService) {}
+  constructor(private userNotificationsService: UserNotificationsService, private authService: AuthService) {}
 
   @Get('/')
   @ApiOperation({ operationId: 'getUserNotifications' })
@@ -23,17 +26,39 @@ export class UsersNotificationsController {
     const {
       user: { id },
     } = req;
-    const [notifications, connections, profile] = await Promise.all([
+    const [notifications, connectionsResponse] = await Promise.all([
       this.userNotificationsService.getUserNotificationsSettings(id),
-      this.userNotificationsService.getUserActiveConnections(id),
-      this.userService.getUserByUserId(id),
+      this.getUserConnections(req),
     ]);
 
     return {
       notifications: notifications.map(notification => new NotificationUserSettingsDto(notification)),
-      contacts: Object.fromEntries([
-        ...connections.map(connection => [connection.channelId, connection.externalId]),
-        ['email', profile.contactsEmail],
+      connections: connectionsResponse.connections,
+    };
+  }
+
+  @Get('/connections')
+  @ApiOperation({ operationId: 'getUserNotificationConnections' })
+  @ApiOkResponse({ type: NotificationUserConnectionsDto })
+  public async getUserConnections(@Req() req: CurrentRequest) {
+    const {
+      user: { id },
+    } = req;
+    const [connections, lastLink] = await Promise.all([
+      this.userNotificationsService.getUserConnections(id),
+      this.authService.getLoginStateByUserId(id),
+    ]);
+
+    return {
+      connections: Object.fromEntries([
+        ...connections.map(connection => [
+          connection.channelId,
+          {
+            value: connection.externalId,
+            enabled: connection.enabled,
+            lastLinkSentAt: lastLink?.data.channelId === connection.channelId ? lastLink.createdDate : undefined,
+          },
+        ]),
       ]),
     };
   }
@@ -44,6 +69,14 @@ export class UsersNotificationsController {
   @ApiBody({ type: [UpdateNotificationUserSettingsDto] })
   public async updateUserNotifications(@Req() req: CurrentRequest, @Body() dto: UpdateNotificationUserSettingsDto[]) {
     return await this.userNotificationsService.saveUserNotificationSettings(req.user.id, dto);
+  }
+
+  @Post('/confirmation/email')
+  @ApiOperation({ operationId: 'sendEmailConfirmationLink' })
+  public async sendEmailConfirmation(@Req() req: CurrentRequest) {
+    const { id } = req.user;
+
+    await this.userNotificationsService.sendEmailConfirmation(id);
   }
 
   @Post('/connection/find')

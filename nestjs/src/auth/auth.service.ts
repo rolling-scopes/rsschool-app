@@ -24,6 +24,12 @@ export type CurrentRequest = Request & {
   loginState?: LoginData;
 };
 
+export type LoginStateParams = {
+  userId?: number;
+  expires?: string;
+  data: LoginData;
+};
+
 @Injectable()
 export class AuthService {
   private readonly admins: string[] = [];
@@ -95,36 +101,37 @@ export class AuthService {
     return this.jwtService.createToken(req.user);
   }
 
-  public async createLoginState(data: LoginData & { userId?: number }) {
+  public async createLoginState(params: LoginStateParams) {
     const id = await nanoid();
-
-    const { userId, ...rest } = data;
+    const { data, expires, userId } = params;
 
     await this.authRepository.save({
       id,
-      data: rest,
+      data,
       userId,
+      expires,
     });
 
     return id;
   }
 
   public getLoginStateById(id: string) {
-    const date = new Date();
-    date.setHours(date.getHours() - 1);
     return this.authRepository.findOne({
       where: {
         id,
-        createdDate: MoreThanOrEqual(date.toISOString()),
+        expires: MoreThanOrEqual(dayjs().toISOString()),
+      },
+      order: {
+        createdDate: 'DESC',
       },
     });
   }
 
-  public getLoginStateByUserId(id: number, sinceMunites: number = 1) {
+  public getLoginStateByUserId(id: number) {
     return this.authRepository.findOne({
       where: {
-        id,
-        createdDate: MoreThanOrEqual(dayjs().subtract(sinceMunites, 'minute').toISOString()),
+        userId: id,
+        expires: MoreThanOrEqual(dayjs().toISOString()),
       },
       order: {
         createdDate: 'DESC',

@@ -1,6 +1,6 @@
 import { Notification, NotificationType } from '@entities/notification';
 import { NotificationUserSettings } from '@entities/notificationUserSettings';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateNotificationUserSettingsDto } from 'src/usersNotifications/dto/update-notification-user-settings.dto';
 import { Repository } from 'typeorm';
@@ -11,6 +11,10 @@ import { NotificationUserConnection } from '@entities/notificationUserConnection
 import { UpsertNotificationConnectionDto } from 'src/usersNotifications/dto/upsert-notification-connection.dto';
 import { NotificationData, NotificationsService } from 'src/notifications/notifications.service';
 import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
+import { AuthService } from 'src/auth';
+import * as dayjs from 'dayjs';
+import { UsersService } from 'src/users/users.service';
+import { GithubStrategy } from 'src/auth/strategies/github.strategy';
 
 @Injectable()
 export class UserNotificationsService {
@@ -22,6 +26,9 @@ export class UserNotificationsService {
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private notificationsService: NotificationsService,
+    private authService: AuthService,
+    private userService: UsersService,
+    private githubService: GithubStrategy,
   ) {}
 
   public getUserNotificationsSettings(userId: number) {
@@ -66,11 +73,10 @@ export class UserNotificationsService {
     });
   }
 
-  public getUserActiveConnections(userId: number) {
+  public getUserConnections(userId: number) {
     return this.notificationUserConnectionRepository.find({
       where: {
         userId,
-        enabled: true,
       },
     });
   }
@@ -150,6 +156,41 @@ export class UserNotificationsService {
       userId,
       expireDate,
       data: Object.fromEntries(channelMap) as Record<NotificationChannelId, NotificationData>,
+    });
+  }
+
+  public async sendEmailConfirmation(userId: number) {
+    const [user, lastLink, connections] = await Promise.all([
+      this.userService.getUserByUserId(userId),
+      this.authService.getLoginStateByUserId(userId),
+      this.getUserConnections(userId),
+    ]);
+    const email = user.contactsEmail;
+    if (!email) return;
+
+    if (connections.find(connection => connection.channelId === 'email' && connection.enabled)) return;
+
+    if (lastLink && dayjs().diff(lastLink.createdDate) < 1000 * 60) {
+      throw new BadRequestException('Link was just sent. Please try later');
+    }
+
+    const link = await this.githubService.getAuthorizeUrl({
+      data: {
+        channelId: 'email',
+        externalId: email,
+      },
+      userId,
+      expires: dayjs().add(24, 'hours').toISOString(),
+    });
+
+    await this.notificationsService.sendMessage({
+      notificationId: 'emailConfirmation',
+      userId,
+      data: {
+        confirmationLink: link,
+      },
+      channelId: 'email',
+      channelValue: email,
     });
   }
 }

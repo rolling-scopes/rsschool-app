@@ -45,6 +45,11 @@ export class NotificationsService {
     return data;
   }
 
+  async getUserConnections() {
+    const { data } = await this.usersApi.getUserNotificationConnections();
+    return data.connections;
+  }
+
   // messenger
   async sendMessage(channel: NotificationChannel, payload: MessagePayload) {
     await this.axios.post('/api/v2/notification/send', {
