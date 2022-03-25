@@ -2,14 +2,17 @@ import { Body, Controller, Get, NotFoundException, Param, Post, Res, UseGuards }
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { NotificationsService } from 'src/notifications/notifications.service';
+import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
 import { CertifcationsService } from './certificates.service';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 
 @Controller('certificate')
 @ApiTags('certificate')
 export class CertificatesController {
-  constructor(private certificatesService: CertifcationsService, private notificationService: NotificationsService) {}
+  constructor(
+    private certificatesService: CertifcationsService,
+    private notificationService: UserNotificationsService,
+  ) {}
 
   @Get('/:publicId')
   @ApiOperation({ operationId: 'getCertificate' })

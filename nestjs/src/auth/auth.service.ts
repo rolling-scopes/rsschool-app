@@ -6,8 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
 import type { Profile } from 'passport';
-import { UserNotificationsService } from '../users/users.notifications.service';
-import { MoreThanOrEqual } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 import { ConfigService } from '../config';
 import { CourseTasksService } from '../courses';
 import { UsersService } from '../users/users.service';
@@ -15,12 +14,20 @@ import { AuthUser } from './auth-user.model';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from './jwt.service';
 import { lastValueFrom } from 'rxjs';
+import * as dayjs from 'dayjs';
+import { NotificationUserConnection } from '@entities/notificationUserConnection';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export type CurrentRequest = Request & {
   user: AuthUser;
   loginState?: LoginData;
+};
+
+export type LoginStateParams = {
+  userId?: number;
+  expires?: string;
+  data: LoginData;
 };
 
 @Injectable()
@@ -34,7 +41,8 @@ export class AuthService {
     readonly configService: ConfigService,
     @InjectRepository(AuthRepository)
     private readonly authRepository: AuthRepository,
-    readonly userNotificationsService: UserNotificationsService,
+    @InjectRepository(NotificationUserConnection)
+    private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private httpService: HttpService,
   ) {
     this.admins = configService.users.admins;
@@ -93,24 +101,40 @@ export class AuthService {
     return this.jwtService.createToken(req.user);
   }
 
-  public async createLoginState(data: LoginData) {
+  public async createLoginState(params: LoginStateParams) {
     const id = await nanoid();
+    const { data, expires, userId } = params;
 
     await this.authRepository.save({
       id,
       data,
+      userId,
+      expires,
     });
 
     return id;
   }
 
-  public getLoginState(id: string) {
-    const date = new Date();
-    date.setHours(date.getHours() - 1);
+  public getLoginStateById(id: string) {
     return this.authRepository.findOne({
       where: {
         id,
-        createdDate: MoreThanOrEqual(date.toISOString()),
+        expires: MoreThanOrEqual(dayjs().toISOString()),
+      },
+      order: {
+        createdDate: 'DESC',
+      },
+    });
+  }
+
+  public getLoginStateByUserId(id: number) {
+    return this.authRepository.findOne({
+      where: {
+        userId: id,
+        expires: MoreThanOrEqual(dayjs().toISOString()),
+      },
+      order: {
+        createdDate: 'DESC',
       },
     });
   }
@@ -126,12 +150,13 @@ export class AuthService {
   public async onConnectionComplete(loginData: LoginData, userId: number) {
     const { channelId, externalId } = loginData;
 
-    await this.userNotificationsService.saveUserConnection({
+    this.notificationUserConnectionRepository.save({
       channelId,
       enabled: true,
       externalId,
       userId,
     });
+
     const { restApiKey, restApiUrl } = this.configService.awsServices;
 
     if (channelId === 'telegram') {

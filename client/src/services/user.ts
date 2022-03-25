@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from 'common/models';
 import { ProfileInfo } from 'common/models/profile';
-import { ProfileApi, ProfileInfoDto } from 'api';
+import { ProfileApi, ProfileInfoDto, UsersNotificationsApi } from 'api';
 import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
@@ -17,11 +17,13 @@ export class UserService {
   private axios: AxiosInstance;
   private profileApi: ProfileApi;
   private opts: AxiosRequestConfig;
+  private usersApi: UsersNotificationsApi;
 
   constructor(private token?: string) {
     this.opts = getServerAxiosProps(this.token);
     this.axios = axios.create(this.opts);
     this.profileApi = new ProfileApi(getApiConfiguration(this.token));
+    this.usersApi = new UsersNotificationsApi(getApiConfiguration(this.token));
   }
 
   async getDiscordIds() {
@@ -104,6 +106,10 @@ export class UserService {
 
   async saveProfileInfo(profile: ProfileInfoDto) {
     await this.profileApi.updateProfileInfo(profile);
+  }
+
+  async sendEmailConfirmationLink() {
+    return this.usersApi.sendEmailConfirmationLink();
   }
 }
 
