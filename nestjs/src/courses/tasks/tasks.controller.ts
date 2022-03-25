@@ -1,6 +1,6 @@
 import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 import { CourseGuard, DefaultGuard, RequiredRoles, Role } from '../../auth';
 import { CheckTasksDeadlineDto } from './dto/check-tasks-deadline';
 import { TasksService } from './tasks.service';
@@ -11,7 +11,7 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   private readonly logger = new Logger('tasks');
 
-  constructor(private tasksService: TasksService, private notificationService: UserNotificationsService) {}
+  constructor(private tasksService: TasksService, private notificationService: NotificationsService) {}
 
   @Post('/notify/changes')
   @ApiOperation({ operationId: 'notifyTasksDeadlines' })

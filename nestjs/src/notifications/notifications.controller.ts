@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { NotificationDto } from './dto/notification.dto';
+import { SendNotificationDto } from './dto/send-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 import { NotificationsService } from './notifications.service';
@@ -47,5 +48,21 @@ export class NotificationsController {
   @ApiForbiddenResponse()
   public async deleteNotification(@Param('id') id: NotificationId) {
     await this.notificationsService.deleteNotification(id);
+  }
+
+  @Post('/send')
+  @ApiOperation({ operationId: 'sendNotification' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  public async sendNotification(@Body() dto: SendNotificationDto) {
+    await this.notificationsService.sendEventNotification(dto);
+  }
+
+  @Post('/send/bulk')
+  @ApiOperation({ operationId: 'sendNotificationBulk' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  public async sendNotificationBulk() {
+    throw new Error('not implemented');
   }
 }

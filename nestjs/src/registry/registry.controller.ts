@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
-import { UserNotificationsService } from 'src/usersNotifications/users.notifications.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { RegistryService } from './registry.service';
 
@@ -9,7 +9,7 @@ import { RegistryService } from './registry.service';
 @ApiTags('registry')
 @UseGuards(DefaultGuard, RoleGuard)
 export class RegistryController {
-  constructor(private mentorsService: RegistryService, private notificationService: UserNotificationsService) {}
+  constructor(private mentorsService: RegistryService, private notificationService: NotificationsService) {}
 
   @Put('mentor/:githubId')
   @ApiOperation({ operationId: 'approveMentor' })

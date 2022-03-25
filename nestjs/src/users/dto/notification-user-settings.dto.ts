@@ -29,20 +29,11 @@ export class NotificationUserSettingsDto {
   public settings: Record<string, boolean>;
 }
 
-export class ConnectionDetails {
-  @ApiProperty()
-  value: string;
-
-  @ApiProperty()
-  @IsBoolean()
-  enabled: boolean;
-}
-
 export class UserNotificationsDto {
   @ApiProperty({ type: [NotificationUserSettingsDto] })
   @IsArray()
   public notifications: NotificationUserSettingsDto[];
 
   @ApiProperty({ type: Map })
-  public connections: Record<NotificationChannelId, ConnectionDetails>;
+  public contacts: Record<NotificationChannelId, string>;
 }

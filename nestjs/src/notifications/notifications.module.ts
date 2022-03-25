@@ -5,10 +5,10 @@ import { NotificationsController } from './notifications.controller';
 import { Notification } from '@entities/notification';
 import { ConfigModule } from 'src/config';
 import { HttpModule } from '@nestjs/axios';
-import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
+import { UsersModule } from 'src/users';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Notification, NotificationChannelSettings]), ConfigModule, HttpModule],
+  imports: [TypeOrmModule.forFeature([Notification]), ConfigModule, HttpModule, UsersModule],
   controllers: [NotificationsController],
   providers: [NotificationsService],
   exports: [NotificationsService],

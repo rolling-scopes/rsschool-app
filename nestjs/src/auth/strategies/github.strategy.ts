@@ -2,10 +2,10 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '../../config';
 import { Strategy, Profile } from 'passport-github2';
-import { AuthService, LoginStateParams } from '../auth.service';
+import { AuthService } from '../auth.service';
 import { AuthUser, CurrentRequest } from '..';
+import { AuthConnectionDto } from '../dto/AuthConnectionDto';
 import passport from 'passport';
-import * as dayjs from 'dayjs';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -27,10 +27,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 
     if (!code) {
       const id = await this.authService.createLoginState({
-        data: {
-          redirectUrl: url as string,
-        },
-        expires: dayjs().add(1, 'hour').toISOString(),
+        redirectUrl: url as string,
       });
       opts.state = id;
     }
@@ -44,7 +41,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     _refreshToken: string,
     profile: Profile,
   ): Promise<AuthUser> {
-    const state = await this.authService.getLoginStateById(request.query.state as string);
+    const state = await this.authService.getLoginState(request.query.state as string);
     if (!state) {
       throw new UnauthorizedException();
     }
@@ -60,8 +57,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     return user;
   }
 
-  public async getAuthorizeUrl(params: LoginStateParams) {
-    const id = await this.authService.createLoginState(params);
+  public async getAuthorizeUrl(dto: AuthConnectionDto) {
+    const id = await this.authService.createLoginState(dto);
 
     const url = this._oauth2.getAuthorizeUrl({
       redirect_uri: this.config.auth.github.callbackUrl,

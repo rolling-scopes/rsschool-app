@@ -15,9 +15,8 @@ import { CourseAccessService } from './course-access.service';
 import { CourseTasksController, CourseTasksService } from './courseTasks';
 import { InterviewsController, InterviewsService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 import { TasksService } from './tasks/tasks.service';
-import { UsersModule } from 'src/users';
-import { UsersNotificationsModule } from 'src/usersNotifications/usersNotifications.module';
 
 @Module({
   imports: [
@@ -34,8 +33,7 @@ import { UsersNotificationsModule } from 'src/usersNotifications/usersNotificati
       TaskChecker,
       StudentFeedback,
     ]),
-    UsersModule,
-    UsersNotificationsModule,
+    NotificationsModule,
   ],
   controllers: [
     FeedbacksController,
