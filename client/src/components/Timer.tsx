@@ -4,6 +4,10 @@ export function Timer({ onElapsed, seconds }: { onElapsed: () => void; seconds: 
   const [leftSeconds, setLeftSeconds] = useState(seconds);
 
   useEffect(() => {
+    setLeftSeconds(seconds);
+  }, [seconds]);
+
+  useEffect(() => {
     let timeout: NodeJS.Timer | undefined;
 
     if (leftSeconds > 0) {
