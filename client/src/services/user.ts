@@ -90,11 +90,6 @@ export class UserService {
     return response.data.data;
   }
 
-  async updateMyProfile(data: Partial<UserFull>) {
-    const response = await this.axios.post<{ data: UserFull }>(`/api/profile/me`, data);
-    return response.data.data;
-  }
-
   async getProfileInfo(githubId?: string) {
     const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
       params: { githubId },
