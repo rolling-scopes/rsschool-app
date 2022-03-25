@@ -16,28 +16,19 @@ import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/val
 import { Location } from 'common/models';
 import type { Course } from 'services/models';
 import { Info } from 'modules/Registry/components/Info';
+import { FormData } from '../../pages/Mentor/formData';
 
-export type Props = {
+type Props = {
   courses: Course[];
   checkedList: number[];
   location: Location | null;
-  isAvailableContact: boolean;
+  data: FormData;
   setLocation: Dispatch<SetStateAction<Location | null>>;
-  setIsAvailableContact: Dispatch<SetStateAction<boolean>>;
 };
 
-export function GeneralMentor({
-  courses,
-  checkedList,
-  location,
-  isAvailableContact,
-  setIsAvailableContact,
-  setLocation,
-}: Props) {
-  const checkKeyMatch = (e: any) => {
-    // The length of the nickname in telegrams or skype must be more than 2 or more characters
-    setIsAvailableContact(e.target.value.length >= 2);
-  };
+export function MentorRegistrationGeneral({ courses, checkedList, location, data, setLocation }: Props) {
+  const isAvailable =
+    data != null && ((data.contactsSkype?.length ?? 0) > 1 || (data.contactsTelegram?.length ?? 0) > 1);
 
   return (
     <>
@@ -171,12 +162,8 @@ export function GeneralMentor({
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item
-                name="contactsTelegram"
-                style={{ marginBottom: '0' }}
-                rules={[{ required: !isAvailableContact }]}
-              >
-                <Input addonBefore="@" placeholder="durov" onChange={checkKeyMatch} />
+              <Form.Item name="contactsTelegram" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+                <Input addonBefore="@" placeholder="durov" />
               </Form.Item>
               <Typography.Paragraph style={{ margin: '12px 0 0 0' }}>
                 <Alert
@@ -201,8 +188,8 @@ export function GeneralMentor({
           </Row>
           <Row>
             <Col {...DEFAULT_COLUMN_SIZES}>
-              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailableContact }]}>
-                <Input placeholder="johnsmith" onChange={checkKeyMatch} />
+              <Form.Item name="contactsSkype" style={{ marginBottom: '0' }} rules={[{ required: !isAvailable }]}>
+                <Input placeholder="johnsmith" />
               </Form.Item>
             </Col>
           </Row>
