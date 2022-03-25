@@ -1,7 +1,7 @@
 import { Notification, NotificationId } from '@entities/notification';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigService } from 'src/config';
+import { ConfigService } from '../config';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { HttpService } from '@nestjs/axios';

@@ -9,12 +9,12 @@ import { NotificationChannelId } from '@entities/notificationChannel';
 import { NotificationConnectionExistsDto } from 'src/usersNotifications/dto/notification-connection-exists.dto';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { UpsertNotificationConnectionDto } from 'src/usersNotifications/dto/upsert-notification-connection.dto';
-import { NotificationData, NotificationsService } from 'src/notifications/notifications.service';
 import { SendUserNotificationDto } from '../usersNotifications/dto/send-user-notification.dto';
-import { AuthService } from 'src/auth';
 import * as dayjs from 'dayjs';
-import { UsersService } from 'src/users/users.service';
-import { GithubStrategy } from 'src/auth/strategies/github.strategy';
+import { NotificationData, NotificationsService } from '../notifications/notifications.service';
+import { AuthService } from '../auth';
+import { UsersService } from '../users/users.service';
+import { GithubStrategy } from '../auth/strategies/github.strategy';
 
 @Injectable()
 export class UserNotificationsService {
