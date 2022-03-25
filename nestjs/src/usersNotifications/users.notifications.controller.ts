@@ -1,4 +1,16 @@
-import { Body, Controller, Get, HttpCode, NotFoundException, Post, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard, AuthService } from 'src/auth';
 import { UpdateNotificationUserSettingsDto } from '../usersNotifications/dto/update-notification-user-settings.dto';
@@ -76,6 +88,14 @@ export class UsersNotificationsController {
   public async sendEmailConfirmation(@Req() req: CurrentRequest) {
     const { id } = req.user;
 
+    await this.userNotificationsService.sendEmailConfirmation(id);
+  }
+
+  @Post('/confirmation/email/:id')
+  @UseGuards(RoleGuard)
+  @RequiredRoles([Role.Admin])
+  @ApiOperation({ operationId: 'sendEmailConfirmationLink' })
+  public async sendEmailConfirmationToUser(@Param('id', ParseIntPipe) id: number) {
     await this.userNotificationsService.sendEmailConfirmation(id);
   }
 
